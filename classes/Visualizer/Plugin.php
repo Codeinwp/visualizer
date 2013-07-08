@@ -2,7 +2,8 @@
 
 class Visualizer_Plugin {
 
-	const VERSION          = '1.0.0.0';
+	const VERSION = '1.0.0.0';
+	const CPT     = 'visualizer';
 
 	private static $_instance = null;
 
