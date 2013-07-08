@@ -25,8 +25,18 @@ function visualizer_autoloader( $class ) {
 }
 
 function visualizer_launch() {
+	$doing_autosave = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE;
+	$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
+	$doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
+	if ( $doing_ajax || $doing_autosave || $doing_cron ) {
+		return;
+	}
+
 	$plugin = Visualizer_Plugin::instance();
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
+	if ( is_admin() ) {
+		$plugin->setModule( Visualizer_Module_Admin::NAME );
+	}
 }
 
 spl_autoload_register( 'visualizer_autoloader' );
