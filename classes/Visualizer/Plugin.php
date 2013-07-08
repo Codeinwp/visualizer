@@ -2,6 +2,7 @@
 
 class Visualizer_Plugin {
 
+	const NAME    = 'visualizer';
 	const VERSION = '1.0.0.0';
 	const CPT     = 'visualizer';
 
