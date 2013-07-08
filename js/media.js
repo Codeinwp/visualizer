@@ -1,7 +1,7 @@
 (function(wpmv, g) {
-	var mediaFrame, wpmvtg;
+	var mediaFrame, wpmvtv;
 
-	wpmvtg = wpmv.Toolbar.Visualizer;
+	wpmvtv = wpmv.toolbar.visualizer;
 	mediaFrame = wpmv.MediaFrame.Post;
 
 	g.load("visualization", "1", { packages: ["corechart", "geochart", "gauge"] });
@@ -45,10 +45,7 @@
 		contentCreateLibrary: function(region) {
 			var self = this;
 
-			self.toolbar.set(new wpmvtg({
-				controller: self,
-				items: wpmvtg.Items.Library(self)
-			}));
+			self.toolbar.set(new wpmvtv.Library({controller: self}));
 
 			region.view = new wpmv.visualizer.Library({
 				controller: self,
@@ -59,10 +56,7 @@
 		contentCreateBuilder: function(region) {
 			var self = this;
 
-			self.toolbar.set(new wpmvtg({
-				controller: self,
-				items: wpmvtg.Items.Builder(self)
-			}));
+			self.toolbar.set(new wpmvtv.builder.Types({controller: self}));
 
 			region.view = new wpmv.visualizer.Builder({
 				controller: self,
