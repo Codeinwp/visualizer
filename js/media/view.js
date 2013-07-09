@@ -508,7 +508,9 @@
 		render: function() {
 			var self = this, view;
 
-			view = _.isUndefined(self.model.get('type')) ? new wpmvvb.TypePicker() : new wpmvvb.Form();
+			view = _.isUndefined(self.controller.state().chart.get('type'))
+				? new wpmvvb.TypePicker()
+				: new wpmvvb.Form();
 			view.render();
 
 			self.$el.html(view.$el);
@@ -518,7 +520,7 @@
 		setType: function() {
 			var self = this;
 
-			self.model.set('type', self.views.get('#visualizer-chart-type-picker')[0].getType());
+			self.controller.state().chart.set('type', self.views.get('#visualizer-chart-type-picker')[0].getType());
 			self.views.dispose();
 			self.render();
 		}

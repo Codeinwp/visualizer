@@ -14,10 +14,12 @@
 
 		initialize: function() {
 			this.library = new wpmmv.Charts();
+			this.chart = new wpmmv.Chart();
+			this.chart.on('change:type', this.refresh, this);
 		},
 
-		createChart: function() {
-			return this.chart = new wpmmv.Chart();
+		refresh: function() {
+			this.frame.toolbar.get().refresh();
 		}
 	});
 })(wp.media);

@@ -56,12 +56,8 @@
 		contentCreateBuilder: function(region) {
 			var self = this;
 
-			self.toolbar.set(new wpmvtv.builder.Types({controller: self}));
-
-			region.view = new wpmv.visualizer.Builder({
-				controller: self,
-				model: self.state().createChart()
-			});
+			self.toolbar.set(new wpmvtv.Builder({controller: self}));
+			region.view = new wpmv.visualizer.Builder({controller: self});
 		}
 	});
 })(wp.media.view, google);

@@ -1,7 +1,8 @@
 (function(wpmv, wpmvt) {
-	var wpmvvl, wpmvtv, wpmvtvb;
+	var wpmvvl, wpmvtv, wpmvlvb;
 
 	wpmvvl = wpmv.visualizer.Library;
+	wpmvlvb = wpmv.l10n.visualizer.button;
 
 	wpmv.toolbar = wpmv.toolbar || {};
 	wpmvtv = wpmv.toolbar.visualizer = {};
@@ -38,17 +39,15 @@
 	 * Builders toolbars
 	 * =========================================================================
 	 */
-	wpmvtvb = wpmvtv.builder = {};
-
-	wpmvtvb.Types = wpmvt.extend({
+	wpmvtv.Builder = wpmvt.extend({
 		initialize: function() {
 			var self = this;
 
 			_.defaults(self.options, {
 				close: false,
 				items: {
-					custom_event: {
-						text: wpmv.l10n.visualizer.button.selecttype,
+					button: {
+						text: wpmvlvb.selecttype,
 						style: 'primary',
 						priority: 80,
 						requires: false,
@@ -60,8 +59,19 @@
 			wpmvt.prototype.initialize.apply(self, arguments);
 		},
 
+		refresh: function() {
+			var self = this,
+				type = self.controller.state().chart.get('type');
+
+			if (!_.isUndefined(type)) {
+				self.get('button').$el.text(wpmvlvb.create);
+			}
+
+			wpmvt.prototype.refresh.apply(self, arguments);
+		},
+
 		selectType: function() {
-			this.trigger('visualizer:builder:settype');
+			this.controller.trigger('visualizer:builder:settype');
 		}
 	});
 })(wp.media.view, wp.media.view.Toolbar);

@@ -55,6 +55,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			),
 			'button' => array(
 				'selecttype' => __( 'Select Chart Type', Visualizer_Plugin::NAME ),
+				'create'     => __( 'Create And Insert', Visualizer_Plugin::NAME ),
 			),
 			'nonce' => Visualizer_Security::createNonce(),
 		);
