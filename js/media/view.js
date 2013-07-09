@@ -1,5 +1,5 @@
 (function($, wpm) {
-	var libraryWidth, libraryHeight, wpmv, wpmV, wpmvv, wpmvvl, wpmvvb, l10n;
+	var libraryWidth, libraryHeight, wpmv, wpmV, wpmvv, wpmvvl, wpmvvb, wpmvvbs, l10n;
 
 	wpmv = wpm.view;
 	wpmV = wpm.View;
@@ -15,9 +15,9 @@
 	wpmvv.Chart = wpmV.extend({
 		className: 'visualizer-library-chart-canvas',
 
-		constructor: function( options ) {
+		constructor: function(options) {
 			this.id = 'visualizer-chart-' + options.model.get('id');
-			wpmV.apply( this, arguments );
+			wpmV.apply(this, arguments);
 		},
 
 		render: function() {
@@ -551,11 +551,55 @@
 
 	wpmvvb.Form = wpmV.extend({
 		id: 'visualizer-builder-form',
-		template: wpm.template('visualizer-builder-form'),
+
+		render: function() {
+			var self = this, sidebar;
+
+			self.$el.html('');
+
+			sidebar = new wpmvvb.Sidebar();
+			self.views.set('#' + sidebar.id, sidebar, { silent: true });
+
+			sidebar.render();
+			self.$el.append(sidebar.$el);
+		}
+	});
+
+	wpmvvb.Sidebar = wpmV.extend({
+		id: 'visualizer-sidebar',
+		tagName: 'ul',
+
+		initialize: function() {
+			var self = this;
+
+			self.$el.html('');
+
+			wpmV.prototype.initialize.apply(this, arguments);
+		}
+	});
+
+	wpmvvbs = wpmvvb.sidebar = {};
+
+	wpmvvbs.Section = wpmV.extend({
+		tagName: 'li',
+		className: 'visualizer-sidebar-section',
+		template: wpm.template('visualizer-sidebar-section'),
+
+		events: {
+			'click .visualizer-section-title': 'toggleGroup'
+		},
 
 		render: function() {
 			var self = this;
-			self.$el.html(self.template({}));
+
+			self.$el.html(self.template({
+			}));
+		},
+
+		toggleGroup: function(e) {
+			var $this = $(e.target);
+
+			$this.parents('.visualizer-sidebar-section').toggleClass('open');
 		}
 	});
 
