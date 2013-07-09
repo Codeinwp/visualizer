@@ -1,5 +1,5 @@
 (function($, wpm) {
-	var libraryWidth, libraryHeight, wpmv, wpmV, wpmvv, wpmvvl, wpmvvb, wpmvvbs, l10n;
+	var libraryWidth, libraryHeight, wpmv, wpmV, wpmvv, wpmvvl, wpmvvb, l10n;
 
 	wpmv = wpm.view;
 	wpmV = wpm.View;
@@ -487,119 +487,6 @@
 			}
 
 			return options;
-		}
-	});
-
-	/**
-	 * =========================================================================
-	 * BUILDER
-	 * =========================================================================
-	 */
-
-	wpmvvb = wpmvv.Builder = wpmV.extend({
-		id: 'visualizer-builder-view',
-
-		initialize: function() {
-			var self = this;
-
-			self.controller.on('visualizer:builder:settype', self.setType, self);
-		},
-
-		render: function() {
-			var self = this, view;
-
-			view = _.isUndefined(self.controller.state().chart.get('type'))
-				? new wpmvvb.TypePicker()
-				: new wpmvvb.Form();
-			view.render();
-
-			self.$el.html(view.$el);
-			self.views.set('#' + view.id, view, { silent: true });
-		},
-
-		setType: function() {
-			var self = this;
-
-			self.controller.state().chart.set('type', self.views.get('#visualizer-chart-type-picker')[0].getType());
-			self.views.dispose();
-			self.render();
-		}
-	});
-
-	wpmvvb.TypePicker = wpmV.extend({
-		id: 'visualizer-chart-type-picker',
-		template: wpm.template('visualizer-chart-type-picker'),
-		className: 'visualizer-clearfix',
-
-		events: {
-			'change .visualizer-type-radio': 'onTypeSelected'
-		},
-
-		render: function() {
-			this.$el.html(this.template({}));
-		},
-
-		onTypeSelected: function(e) {
-			this.$el.find('.visualizer-type-label').removeClass('visualizer-type-label-selected');
-			$(e.target).parent().addClass('visualizer-type-label-selected');
-		},
-
-		getType: function() {
-			return $.trim(this.$el.find('input[type="radio"]:checked').val());
-		}
-	});
-
-	wpmvvb.Form = wpmV.extend({
-		id: 'visualizer-builder-form',
-
-		render: function() {
-			var self = this, sidebar;
-
-			self.$el.html('');
-
-			sidebar = new wpmvvb.Sidebar();
-			self.views.set('#' + sidebar.id, sidebar, { silent: true });
-
-			sidebar.render();
-			self.$el.append(sidebar.$el);
-		}
-	});
-
-	wpmvvb.Sidebar = wpmV.extend({
-		id: 'visualizer-sidebar',
-		tagName: 'ul',
-
-		initialize: function() {
-			var self = this;
-
-			self.$el.html('');
-
-			wpmV.prototype.initialize.apply(this, arguments);
-		}
-	});
-
-	wpmvvbs = wpmvvb.sidebar = {};
-
-	wpmvvbs.Section = wpmV.extend({
-		tagName: 'li',
-		className: 'visualizer-sidebar-section',
-		template: wpm.template('visualizer-sidebar-section'),
-
-		events: {
-			'click .visualizer-section-title': 'toggleGroup'
-		},
-
-		render: function() {
-			var self = this;
-
-			self.$el.html(self.template({
-			}));
-		},
-
-		toggleGroup: function(e) {
-			var $this = $(e.target);
-
-			$this.parents('.visualizer-sidebar-section').toggleClass('open');
 		}
 	});
 

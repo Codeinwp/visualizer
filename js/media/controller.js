@@ -14,12 +14,6 @@
 
 		initialize: function() {
 			this.library = new wpmmv.Charts();
-			this.chart = new wpmmv.Chart();
-			this.chart.on('change:type', this.refresh, this);
-		},
-
-		refresh: function() {
-			this.frame.toolbar.get().refresh();
 		}
 	});
 })(wp.media);

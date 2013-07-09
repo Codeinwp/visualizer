@@ -18,7 +18,8 @@
 					menu: 'default',
 					title: wpmv.l10n.visualizer.controller.title,
 					priority: 200,
-					type: 'link'
+					type: 'link',
+					src: wpmv.l10n.visualizer.buildurl
 				})
 			]);
 
@@ -26,7 +27,7 @@
 			self.on('router:render:visualizer', self.visualizerRouter, self);
 
 			self.on('content:create:library', self.contentCreateLibrary, self);
-			self.on('content:create:builder', self.contentCreateBuilder, self);
+			self.on('content:create:builder', self.iframeContent, self);
 		},
 
 		visualizerRouter: function(view) {
@@ -46,18 +47,12 @@
 			var self = this;
 
 			self.toolbar.set(new wpmvtv.Library({controller: self}));
+			self.$el.removeClass('hide-toolbar');
 
 			region.view = new wpmv.visualizer.Library({
 				controller: self,
 				collection: self.state().library
 			});
-		},
-
-		contentCreateBuilder: function(region) {
-			var self = this;
-
-			self.toolbar.set(new wpmvtv.Builder({controller: self}));
-			region.view = new wpmv.visualizer.Builder({controller: self});
 		}
 	});
 })(wp.media.view, google);
