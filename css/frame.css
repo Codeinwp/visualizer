@@ -1,0 +1,103 @@
+#content {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 60px;
+	left: 0;
+	z-index: 75;
+	overflow: auto;
+}
+
+body.with-sidebar #content {
+	rigth: 300px;
+}
+
+#toolbar {
+	height: 36px;
+	padding: 12px 16px;
+	position: absolute;
+	z-index: 100;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-top: 1px solid #DFDFDF;
+	overflow: hidden;
+	-webkit-box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
+	text-align: right;
+}
+
+/******************************************************************************/
+/********************************  TYPE PICKER   ******************************/
+/******************************************************************************/
+
+#type-picker {
+	margin: 50px auto;
+	width: 952px;
+}
+
+.type-box {
+	float: left;
+	margin: 0 20px 20px 0;
+	border: 1px dashed #ddd;
+	-webkit-box-shadow: 0px 0px 8px #ddd;
+	box-shadow: 0px 0px 8px #ddd;
+	background-color: #efefef;
+}
+
+.type-box:nth-child(3n+3) {
+	margin-right: 0px;
+}
+
+.type-label {
+	display: block;
+	width: 270px;
+	height: 195px;
+	padding: 15px;
+	background-color: white;
+	background-image: url(../images/chart_types_g.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+	border: 1px solid #e0e0e0;
+}
+
+.type-label-selected,
+.type-label:hover {
+	background-image: url(../images/chart_types.png);
+}
+
+.type-box-area .type-label {
+	background-position: 0px -225px;
+}
+
+.type-box-line .type-label {
+	background-position: -600px 0px;
+}
+
+.type-box-scatter .type-label {
+	background-position: -300px 0px;
+}
+
+.type-box-pie .type-label {
+	background-position: 0px 0px;
+}
+
+.type-box-gauge .type-label {
+	background-position: 0px -450px;
+}
+
+.type-box-geo .type-label {
+	background-position: -600px -450px;
+}
+
+.type-box-candlestick .type-label {
+	background-position: -300px -450px;
+}
+
+.type-box-bar .type-label {
+	background-position: -300px -225px;
+}
+
+.type-box-column .type-label {
+	background-position: -600px -225px;
+}

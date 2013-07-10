@@ -27,8 +27,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	public function setupMediaViewStrings( $strings ) {
-		$nonce = Visualizer_Security::createNonce();
-
 		$strings['visualizer'] = array(
 			'actions' => array(
 				'get_charts'   => VISUALIZER_ACTION_GET_CHARTS,
@@ -59,11 +57,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'selecttype' => __( 'Select Chart Type', Visualizer_Plugin::NAME ),
 				'create'     => __( 'Create And Insert', Visualizer_Plugin::NAME ),
 			),
-			'nonce'    => $nonce,
-			'buildurl' => add_query_arg( array(
-				'action' => VISUALIZER_ACTION_SELECT_CHART_TYPE,
-				'nonce'  => $nonce,
-			), admin_url( 'admin-ajax.php' ) ),
+			'nonce'    => Visualizer_Security::createNonce(),
+			'buildurl' => add_query_arg( 'action', VISUALIZER_ACTION_SELECT_CHART_TYPE, admin_url( 'admin-ajax.php' ) ),
 		);
 
 		return $strings;
@@ -77,7 +72,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		$render = new Visualizer_Render_Templates();
-		$render->types = apply_filters( VISUALIZER_FILTER_GET_CHART_TYPES, array() );
 		$render->render();
 	}
 

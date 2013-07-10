@@ -12,6 +12,7 @@ class Visualizer_Module_Builder extends Visualizer_Module {
 
 	public function renderChartTypeSelect() {
 		$render = new Visualizer_Render_Page_Types();
+		$render->types = apply_filters( VISUALIZER_FILTER_GET_CHART_TYPES, array() );
 		$render->render();
 		exit;
 	}
