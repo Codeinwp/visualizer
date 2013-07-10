@@ -29,9 +29,9 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 
-	define( 'VISUALIZER_ACTION_GET_CHARTS',        'visualizer-get-charts' );
-	define( 'VISUALIZER_ACTION_SELECT_CHART_TYPE', 'visualizer-select-chart-type' );
-	define( 'VISUALIZER_ACTION_DELETE_CHART',      'visualizer-delete-chart' );
+	define( 'VISUALIZER_ACTION_GET_CHARTS',   'visualizer-get-charts' );
+	define( 'VISUALIZER_ACTION_CREATE_CHART', 'visualizer-create-chart' );
+	define( 'VISUALIZER_ACTION_DELETE_CHART', 'visualizer-delete-chart' );
 
 	define( 'VISUALIZER_FILTER_GET_CHART_TYPES', 'visualizer-get-chart-types' );
 

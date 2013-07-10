@@ -58,7 +58,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'create'     => __( 'Create And Insert', Visualizer_Plugin::NAME ),
 			),
 			'nonce'    => Visualizer_Security::createNonce(),
-			'buildurl' => add_query_arg( 'action', VISUALIZER_ACTION_SELECT_CHART_TYPE, admin_url( 'admin-ajax.php' ) ),
+			'buildurl' => add_query_arg( 'action', VISUALIZER_ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
 		);
 
 		return $strings;
