@@ -5,6 +5,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	const NAME          = __CLASS__;
 	const CF_CHART_TYPE = 'visualizer-chart-type';
 
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param Visualizer_Plugin $plugin The instance of the plugin.
+	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
@@ -14,6 +22,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addFilter( VISUALIZER_FILTER_GET_CHART_TYPES, 'getChartTypes' );
 	}
 
+	/**
+	 * Sends json response.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 * @param array $results The response array.
+	 */
 	private function _sendResponse( $results ) {
 		header( 'Content-type: application/json' );
 		header( 'Cache-Control: no-cache, must-revalidate' );
@@ -23,10 +39,25 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		exit;
 	}
 
+	/**
+	 * Returns chart types.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @return array
+	 */
 	public function getChartTypes() {
 		return array( 'line', 'area', 'bar', 'column', 'pie', 'geo', 'scatter', 'candlestick', 'gauge' );
 	}
 
+	/**
+	 * Fetches charts from database.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
 	public function getCharts() {
 		$query_args = array(
 			'post_type'      => Visualizer_Plugin::CPT,
@@ -65,6 +96,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		) );
 	}
 
+	/**
+	 * Deletes a chart from database.
+	 *
+	 * @since 1.0.0
+	 * @uses wp_delete_post() To delete a chart.
+	 *
+	 * @access public
+	 */
 	public function deleteChart() {
 		$success = false;
 

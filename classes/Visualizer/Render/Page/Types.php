@@ -2,6 +2,13 @@
 
 class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
+	/**
+	 * Renders page body.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
 	protected function _renderBody() {
 		echo '<div id="type-picker">';
 			foreach ( $this->types as $type ) {
@@ -14,6 +21,13 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		echo '</div>';
 	}
 
+	/**
+	 * Renders toolbar content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
 	protected function _renderToolbar() {
 		echo '<input type="submit" class="button button-primary button-large" value="', esc_attr__( 'Select Chart Type', Visualizer_Plugin::NAME ), '">';
 	}

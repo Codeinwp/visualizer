@@ -4,6 +4,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 	const NAME = __CLASS__;
 
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param Visualizer_Plugin $plugin The instance of the plugin.
+	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
@@ -14,6 +22,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 	}
 
+	/**
+	 * Enqueues media scripts and styles.
+	 *
+	 * @since 1.0.0
+	 * @uses wp_enqueue_style To enqueue style file.
+	 * @uses wp_enqueue_script To enqueue script file.
+	 *
+	 * @access public
+	 */
 	public function enqueueScripts() {
 		wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
 
@@ -26,6 +43,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-media',            VISUALIZER_ABSURL . 'js/media.js',            array( 'visualizer-media-toolbar' ),    Visualizer_Plugin::VERSION );
 	}
 
+	/**
+	 * Extends media view strings with visualizer strings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $strings The array of media view strings.
+	 * @return array The extended array of media view strings.
+	 */
 	public function setupMediaViewStrings( $strings ) {
 		$strings['visualizer'] = array(
 			'actions' => array(
@@ -64,6 +90,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		return $strings;
 	}
 
+	/**
+	 * Renders templates to use in media popup.
+	 *
+	 * @since 1.0.0
+	 * @global string $pagenow The name of the current page.
+	 *
+	 * @access public
+	 */
 	public function renderTempaltes() {
 		global $pagenow;
 

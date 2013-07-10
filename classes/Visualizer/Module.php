@@ -5,6 +5,8 @@ class Visualizer_Module {
 	/**
 	 * The instance of wpdb class.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @access protected
 	 * @var wpdb
 	 */
@@ -13,11 +15,22 @@ class Visualizer_Module {
 	/**
 	 * The plugin instance.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @access protected
 	 * @var Visualizer_Plugin
 	 */
 	protected $_plugin = null;
 
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 * @global wpdb $wpdb Current database connection.
+	 *
+	 * @access public
+	 * @param Visualizer_Plugin $plugin The instance of the plugin.
+	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		global $wpdb;
 
@@ -26,7 +39,10 @@ class Visualizer_Module {
 	}
 
 	/**
-	 * Register action hook.
+	 * Registers an action hook.
+	 *
+	 * @since 1.0.0
+	 * @uses add_action() To register action hook.
 	 *
 	 * @access protected
 	 * @param string $tag The name of the action to which the $method is hooked.
@@ -41,7 +57,9 @@ class Visualizer_Module {
 	}
 
 	/**
-	 * Register AJAX action hook.
+	 * Registers AJAX action hook.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @access public
 	 * @param string $tag The name of the AJAX action to which the $method is hooked.
@@ -63,7 +81,10 @@ class Visualizer_Module {
 	}
 
 	/**
-	 * Register filter hook.
+	 * Registers a filter hook.
+	 *
+	 * @since 1.0.0
+	 * @uses add_filter() To register filter hook.
 	 *
 	 * @access protected
 	 * @param string $tag The name of the filter to hook the $method to.
@@ -78,7 +99,10 @@ class Visualizer_Module {
 	}
 
 	/**
-	 * Add hook for shortcode tag.
+	 * Registers a hook for shortcode tag.
+	 *
+	 * @since 1.0.0
+	 * @uses add_shortcode() To register shortcode hook.
 	 *
 	 * @access protected
 	 * @param string $tag Shortcode tag to be searched in post content.
