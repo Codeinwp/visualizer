@@ -48,6 +48,7 @@ function visualizer_launch() {
 
 	if ( $doing_ajax ) {
 		$plugin->setModule( Visualizer_Module_Chart::NAME );
+		$plugin->setModule( Visualizer_Module_Builder::NAME );
 	} else {
 		if ( is_admin() ) {
 			$plugin->setModule( Visualizer_Module_Chart::NAME );
