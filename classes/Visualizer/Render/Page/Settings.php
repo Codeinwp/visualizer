@@ -30,6 +30,15 @@
  */
 class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 
-
+	/**
+	 * Renders toolbar content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderToolbar() {
+		echo '<input type="submit" class="button button-primary button-large" value="', esc_attr__( 'Create Chart', Visualizer_Plugin::NAME ), '">';
+	}
 
 }

@@ -61,14 +61,7 @@ class Visualizer_Render_Page extends Visualizer_Render {
 				wp_print_head_scripts();
 			echo '</head>';
 			echo '<body class="wp-core-ui ', implode( ' ', $this->_getBodyClasses() ), '">';
-				echo '<form method="post">';
-					echo '<div id="content">';
-						$this->_renderBody();
-					echo '</div>';
-					echo '<div id="toolbar">';
-						$this->_renderToolbar();
-					echo '</div>';
-				echo '</form>';
+				$this->_renderBody();
 				wp_print_footer_scripts();
 			echo '</body>';
 		echo '</html>';
@@ -93,7 +86,26 @@ class Visualizer_Render_Page extends Visualizer_Render {
 	 *
 	 * @access protected
 	 */
-	protected function _renderBody() {}
+	protected function _renderBody() {
+		echo '<form method="post">';
+			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
+			echo '<div id="content">';
+				$this->_renderContent();
+			echo '</div>';
+			echo '<div id="toolbar">';
+				$this->_renderToolbar();
+			echo '</div>';
+		echo '</form>';
+	}
+
+	/**
+	 * Renders page content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderContent() {}
 
 	/**
 	 * Renders toolbar content.

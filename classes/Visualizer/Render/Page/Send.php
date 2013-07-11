@@ -21,24 +21,49 @@
 // +----------------------------------------------------------------------+
 
 /**
- * Renders chart data setup page.
+ * Renders page which sends a text to editor.
  *
  * @category Visualizer
  * @package Render
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
+class Visualizer_Render_Page_Send extends Visualizer_Render_Page {
 
 	/**
-	 * Renders toolbar content.
+	 * Renders page head.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
-	protected function _renderToolbar() {
-		echo '<input type="submit" class="button button-primary button-large" value="', esc_attr__( 'Upload Data', Visualizer_Plugin::NAME ), '">';
+	protected function _renderHead() {
+		echo '<script type="text/javascript">';
+			echo '(function() {';
+				echo 'var win = window.dialogArguments || opener || parent || top;';
+				echo 'if (win.send_to_editor) {';
+					echo "win.send_to_editor('", $this->text, "');";
+				echo '}';
+			echo '})();';
+		echo '</script>';
 	}
+
+	/**
+	 * Enqueues scripts and styles what will be used in a page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _enqueueScripts() {}
+
+	/**
+	 * Renders page body.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderBody() {}
 
 }

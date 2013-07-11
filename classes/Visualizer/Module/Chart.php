@@ -33,6 +33,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	const NAME = __CLASS__;
 
 	/**
+	 * The chart object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 * @var WP_Post
+	 */
+	private $_chart;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -167,27 +177,85 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			exit;
 		}
 
-		// creates a render object and renders page
+		// dispatch pages
+		$this->_chart = $chart;
 		switch ( filter_input( INPUT_GET, 'tab' ) ) {
 			case 'data':
-				$render = new Visualizer_Render_Page_Data();
+				$this->_handleDataPage();
 				break;
 			case 'settings':
-				$render = new Visualizer_Render_Page_Settings();
-				$render->type = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+				$this->_handleSettingsPage();
 				break;
 			case 'type':
 			default:
-				$render = new Visualizer_Render_Page_Types();
-				$render->type = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-				$render->types = Visualizer_Plugin::getChartTypes();
+				$this->_handleTypesPage();
 				break;
 		}
 
-		$render->chart = $chart;
-		$render->render();
-
 		exit;
+	}
+
+	/**
+	 * Handles chart type selection page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 */
+	private function _handleTypesPage() {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+			$type = filter_input( INPUT_POST, 'type' );
+			if ( in_array( $type, Visualizer_Plugin::getChartTypes() ) ) {
+				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, $type );
+				wp_redirect( add_query_arg( 'tab', 'data' ) );
+				return;
+			}
+		}
+
+		$render = new Visualizer_Render_Page_Types();
+		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$render->types = Visualizer_Plugin::getChartTypes();
+		$render->chart = $this->_chart;
+		$render->render();
+	}
+
+	/**
+	 * Handles chart data page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 */
+	private function _handleDataPage() {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+			wp_redirect( add_query_arg( 'tab', 'settings' ) );
+			return;
+		}
+
+		$render = new Visualizer_Render_Page_Data();
+		$render->chart = $this->_chart;
+		$render->render();
+	}
+
+	/**
+	 * Handles chart settigns page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 */
+	private function _handleSettingsPage() {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+			$render = new Visualizer_Render_Page_Send();
+			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );
+			$render->render();
+			return;
+		}
+
+		$render = new Visualizer_Render_Page_Settings();
+		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$render->chart = $this->_chart;
+		$render->render();
 	}
 
 }

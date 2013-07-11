@@ -37,7 +37,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 *
 	 * @access protected
 	 */
-	protected function _renderBody() {
+	protected function _renderContent() {
 		echo '<div id="type-picker">';
 			foreach ( $this->types as $type ) {
 				echo '<div class="type-box type-box-', $type, '">';
