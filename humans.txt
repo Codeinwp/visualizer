@@ -1,0 +1,12 @@
+/* TEAM */
+	Chef:			Eugene Manuilov
+	Contact:		eugene@manuilov.org
+	From:			Kyiv, Ukraine
+
+/* THANKS */
+
+/* PLUGIN */
+	Created:		2013
+	Components:		jQuery, Backbone.js, Underscore.js, Google Visualization API
+	IDE:			NetBeans IDE 7.3.1 (Ubuntu)
+	VCS:			Git (Bitbucket.org)
