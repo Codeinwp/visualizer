@@ -1,12 +1,34 @@
 <?php
 /*
 Plugin Name: WordPress Visualizer
-Plugin URI:
-Description: This plugin is easy and powerful tool to create charts.
+Plugin URI: http://visualizer.madpixels.net
+Description: A simple, easy and quite powerful tool to create, manage and embed charts into your WordPress posts and pages.
 Version: 1.0
 Author: Madpixels
 Author URI: http://madpixels.net
+License: GPL v2.0 or later
+License URI: http://www.opensource.org/licenses/gpl-license.php
 */
+
+// +----------------------------------------------------------------------+
+// | Copyright 2013  Madpixels  (email : visualizer@madpixels.net)        |
+// +----------------------------------------------------------------------+
+// | This program is free software; you can redistribute it and/or modify |
+// | it under the terms of the GNU General Public License, version 2, as  |
+// | published by the Free Software Foundation.                           |
+// |                                                                      |
+// | This program is distributed in the hope that it will be useful,      |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+// | GNU General Public License for more details.                         |
+// |                                                                      |
+// | You should have received a copy of the GNU General Public License    |
+// | along with this program; if not, write to the Free Software          |
+// | Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,               |
+// | MA 02110-1301 USA                                                    |
+// +----------------------------------------------------------------------+
+// | Author: Eugene Manuilov <eugene@manuilov.org>                        |
+// +----------------------------------------------------------------------+
 
 // don't load the plugin, if it has been already loaded
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
