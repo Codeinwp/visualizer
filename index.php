@@ -62,7 +62,6 @@ function visualizer_launch() {
 	if ( $doing_ajax ) {
 		// set ajax modules
 		$plugin->setModule( Visualizer_Module_Chart::NAME );
-		$plugin->setModule( Visualizer_Module_Builder::NAME );
 	} else {
 		if ( is_admin() ) {
 			// set admin modules
