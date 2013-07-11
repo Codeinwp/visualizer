@@ -42,7 +42,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
+
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
+		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
 	}
 
 	/**
@@ -57,6 +59,18 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		register_post_type( Visualizer_Plugin::CPT_VISUALIZER, array(
 			'public' => false,
 		) );
+	}
+
+	/**
+	 * Loads plugin text domain translations.
+	 *
+	 * @since 1.0.0
+	 * @uses load_plugin_textdomain() To load translations for the plugin.
+	 *
+	 * @access public
+	 */
+	public function loadTextDomain() {
+		load_plugin_textdomain( Visualizer_Plugin::NAME, false, dirname( plugin_basename( VISUALIZER_BASEFILE ) ) . '/languages/' );
 	}
 
 }
