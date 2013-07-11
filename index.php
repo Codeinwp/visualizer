@@ -18,7 +18,7 @@ if ( class_exists( 'Visualizer_Plugin', false ) ) {
  * approved classes.
  *
  * @since 1.0.0
- * 
+ *
  * @param string $class The class name to autoload.
  * @return boolean Returns TRUE if the class is located. Otherwise FALSE.
  */
@@ -45,12 +45,6 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 
-	define( 'VISUALIZER_ACTION_GET_CHARTS',   'visualizer-get-charts' );
-	define( 'VISUALIZER_ACTION_CREATE_CHART', 'visualizer-create-chart' );
-	define( 'VISUALIZER_ACTION_DELETE_CHART', 'visualizer-delete-chart' );
-
-	define( 'VISUALIZER_FILTER_GET_CHART_TYPES', 'visualizer-get-chart-types' );
-
 	// don't load the plugin if cron job is running or doing autosave
 	$doing_autosave = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE;
 	$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
@@ -72,7 +66,6 @@ function visualizer_launch() {
 	} else {
 		if ( is_admin() ) {
 			// set admin modules
-			$plugin->setModule( Visualizer_Module_Chart::NAME );
 			$plugin->setModule( Visualizer_Module_Admin::NAME );
 		}
 	}

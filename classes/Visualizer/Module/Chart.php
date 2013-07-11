@@ -2,8 +2,7 @@
 
 class Visualizer_Module_Chart extends Visualizer_Module {
 
-	const NAME          = __CLASS__;
-	const CF_CHART_TYPE = 'visualizer-chart-type';
+	const NAME = __CLASS__;
 
 	/**
 	 * Constructor.
@@ -16,10 +15,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->_addAjaxAction( VISUALIZER_ACTION_GET_CHARTS, 'getCharts' );
-		$this->_addAjaxAction( VISUALIZER_ACTION_DELETE_CHART, 'deleteChart' );
-
-		$this->_addFilter( VISUALIZER_FILTER_GET_CHART_TYPES, 'getChartTypes' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_GET_CHARTS, 'getCharts' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_DELETE_CHART, 'deleteChart' );
 	}
 
 	/**
@@ -40,18 +37,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	}
 
 	/**
-	 * Returns chart types.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function getChartTypes() {
-		return array( 'line', 'area', 'bar', 'column', 'pie', 'geo', 'scatter', 'candlestick', 'gauge' );
-	}
-
-	/**
 	 * Fetches charts from database.
 	 *
 	 * @since 1.0.0
@@ -60,7 +45,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function getCharts() {
 		$query_args = array(
-			'post_type'      => Visualizer_Plugin::CPT,
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
 			'posts_per_page' => 9,
 			'paged'          => filter_input( INPUT_GET, 'page', FILTER_VALIDATE_INT, array(
 				'options' => array(
@@ -71,10 +56,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		);
 
 		$filter = filter_input( INPUT_GET, 'filter' );
-		if ( $filter && in_array( $filter, apply_filter( VISUALIZER_FILTER_GET_CHART_TYPES, array() ) ) ) {
+		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
 			$query_args['meta_query'] = array(
 				array(
-					'key'     => self::CF_CHART_TYPE,
+					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
 					'value'   => $filter,
 					'compare' => '=',
 				),
@@ -114,7 +99,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$chart_id = filter_input( INPUT_POST, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
 			if ( $chart_id ) {
 				$chart = get_post( $chart_id );
-				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT;
+				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
 			}
 		}
 

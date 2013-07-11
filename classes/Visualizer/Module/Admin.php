@@ -55,8 +55,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function setupMediaViewStrings( $strings ) {
 		$strings['visualizer'] = array(
 			'actions' => array(
-				'get_charts'   => VISUALIZER_ACTION_GET_CHARTS,
-				'delete_chart' => VISUALIZER_ACTION_DELETE_CHART,
+				'get_charts'   => Visualizer_Plugin::ACTION_GET_CHARTS,
+				'delete_chart' => Visualizer_Plugin::ACTION_DELETE_CHART,
 			),
 			'controller' => array(
 				'title' => __( 'Visualizations', Visualizer_Plugin::NAME ),
@@ -84,7 +84,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'create'     => __( 'Create And Insert', Visualizer_Plugin::NAME ),
 			),
 			'nonce'    => Visualizer_Security::createNonce(),
-			'buildurl' => add_query_arg( 'action', VISUALIZER_ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
+			'buildurl' => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
 		);
 
 		return $strings;

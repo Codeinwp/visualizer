@@ -4,7 +4,17 @@ class Visualizer_Plugin {
 
 	const NAME    = 'visualizer';
 	const VERSION = '1.0.0.0';
-	const CPT     = 'visualizer';
+
+	// custom post types
+	const CPT_VISUALIZER = 'visualizer';
+
+	// custom meta fields
+	const CF_CHART_TYPE = 'visualizer-chart-type';
+
+	// custom actions
+	const ACTION_GET_CHARTS   = 'visualizer-get-charts';
+	const ACTION_CREATE_CHART = 'visualizer-create-chart';
+	const ACTION_DELETE_CHART = 'visualizer-delete-chart';
 
 	/**
 	 * Singletone instance of the plugin.
@@ -97,6 +107,19 @@ class Visualizer_Plugin {
 	 */
 	public function setModule( $class ) {
 		$this->_modules[$class] = new $class( $this );
+	}
+
+	/**
+	 * Returns chart types.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @static
+	 * @access public
+	 * @return array
+	 */
+	public static function getChartTypes() {
+		return array( 'line', 'area', 'bar', 'column', 'pie', 'geo', 'scatter', 'candlestick', 'gauge' );
 	}
 
 }
