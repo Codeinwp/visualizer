@@ -31,6 +31,16 @@
 class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 	/**
+	 * Renders page content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderContent() {
+	}
+
+	/**
 	 * Renders toolbar content.
 	 *
 	 * @since 1.0.0
@@ -38,7 +48,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		echo '<input type="submit" class="button button-primary button-large" value="', esc_attr__( 'Upload Data', Visualizer_Plugin::NAME ), '">';
+		echo '<a class="button button-large" href="', add_query_arg( 'tab', false ), '">';
+			esc_html_e( 'Back', Visualizer_Plugin::NAME );
+		echo '</a>';
+		echo '<a class="button button-large button-primary push-right" href="', add_query_arg( 'tab', 'settings' ), '">';
+			esc_html_e( 'Next', Visualizer_Plugin::NAME );
+		echo '</a>';
 	}
 
 }

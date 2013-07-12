@@ -107,10 +107,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'candlestick' => __( 'Candelstick', Visualizer_Plugin::NAME ),
 				),
 			),
-			'button' => array(
-				'selecttype' => __( 'Select Chart Type', Visualizer_Plugin::NAME ),
-				'create'     => __( 'Create And Insert', Visualizer_Plugin::NAME ),
-			),
 			'nonce'    => Visualizer_Security::createNonce(),
 			'buildurl' => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
 		);

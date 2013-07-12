@@ -8,8 +8,21 @@
 	overflow: auto;
 }
 
-body.with-sidebar #content {
+body.has-sidebar #content {
 	rigth: 300px;
+}
+
+#sidebar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 60px;
+	width: 299px;
+	z-index: 75;
+	background: whitesmoke;
+	border-left: 1px solid #DFDFDF;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 #toolbar {
@@ -24,7 +37,10 @@ body.with-sidebar #content {
 	overflow: hidden;
 	-webkit-box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
 	box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.1);
-	text-align: right;
+}
+
+#toolbar .push-right {
+	float: right;
 }
 
 /******************************************************************************/

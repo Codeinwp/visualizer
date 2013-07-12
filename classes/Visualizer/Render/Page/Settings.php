@@ -38,7 +38,10 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		echo '<input type="submit" class="button button-primary button-large" value="', esc_attr__( 'Create Chart', Visualizer_Plugin::NAME ), '">';
+		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'data' ), '">';
+			esc_html_e( 'Back', Visualizer_Plugin::NAME );
+		echo '</a>';
+		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Save Chart And Insert', Visualizer_Plugin::NAME ), '">';
 	}
 
 }

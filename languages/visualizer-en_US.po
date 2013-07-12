@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-11 12:10+0300\n"
-"PO-Revision-Date: 2013-07-11 12:13+0300\n"
+"POT-Creation-Date: 2013-07-12 08:47+0300\n"
+"PO-Revision-Date: 2013-07-12 08:48+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -32,10 +32,19 @@ msgstr "Clone"
 msgid "Click to select"
 msgstr "Click to select"
 
-#: classes/Visualizer/Render/Page/Types.php:60
-#: classes/Visualizer/Module/Admin.php:111
-msgid "Select Chart Type"
-msgstr "Select Chart Type"
+#: classes/Visualizer/Render/Page/Data.php:54
+#: classes/Visualizer/Render/Page/Settings.php:42
+msgid "Back"
+msgstr "Back"
+
+#: classes/Visualizer/Render/Page/Data.php:57
+#: classes/Visualizer/Render/Page/Types.php:74
+msgid "Next"
+msgstr "Next"
+
+#: classes/Visualizer/Render/Page/Settings.php:44
+msgid "Save Chart And Insert"
+msgstr "Save Chart And Insert"
 
 #: classes/Visualizer/Module/Admin.php:90
 msgid "Visualizations"
@@ -88,8 +97,4 @@ msgstr "Scatter"
 #: classes/Visualizer/Module/Admin.php:107
 msgid "Candelstick"
 msgstr "Candelstick"
-
-#: classes/Visualizer/Module/Admin.php:112
-msgid "Create And Insert"
-msgstr "Create And Insert"
 

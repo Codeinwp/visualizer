@@ -31,7 +31,33 @@
 class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 	/**
+	 * Renturns page body classes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @return string The classes string for page body.
+	 */
+	protected function _getBodyClasses() {
+		return 'wp-core-ui';
+	}
+
+	/**
 	 * Renders page body.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderBody() {
+		echo '<form method="post">';
+			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
+			parent::_renderBody();
+		echo '</form>';
+	}
+
+	/**
+	 * Renders page content.
 	 *
 	 * @since 1.0.0
 	 *
@@ -50,6 +76,15 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	}
 
 	/**
+	 * Renders page sidebar.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderSiderbar() {}
+
+	/**
 	 * Renders toolbar content.
 	 *
 	 * @since 1.0.0
@@ -57,7 +92,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		echo '<input type="submit" class="button button-primary button-large" value="', esc_attr__( 'Select Chart Type', Visualizer_Plugin::NAME ), '">';
+		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', Visualizer_Plugin::NAME ), '">';
 	}
 
 }
