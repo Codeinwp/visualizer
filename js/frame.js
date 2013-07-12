@@ -4,5 +4,9 @@
 			$('.type-label-selected').removeClass('type-label-selected');
 			$(this).parent().addClass('type-label-selected');
 		});
+
+		$('.group-title').click(function() {
+			$(this).parent().toggleClass('open');
+		});
 	});
 })(jQuery);

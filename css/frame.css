@@ -12,6 +12,10 @@ body.has-sidebar #content {
 	rigth: 300px;
 }
 
+/******************************************************************************/
+/********************************  SIDEBAR  ***********************************/
+/******************************************************************************/
+
 #sidebar {
 	position: absolute;
 	top: 0;
@@ -24,6 +28,187 @@ body.has-sidebar #content {
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
 }
+
+.group-wrapper {
+	border-top: 1px solid #DFDFDF;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.group {
+	margin: 0;
+	list-style: none;
+}
+
+.group.open {
+	border-bottom: 1px solid #DFDFDF;
+}
+
+.group-title {
+	border-top: 1px solid white;
+	border-bottom: 1px solid #DFDFDF;
+	position: relative;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	margin: 0;
+	padding: 10px 20px;
+	font-size: 15px;
+	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
+	font-weight: normal;
+	text-shadow: 0 1px 0 white;
+	background: whiteSmoke;
+	background-image: -webkit-gradient(linear, left bottom, left top, from(#EEE), to(whiteSmoke));
+	background-image: -webkit-linear-gradient(bottom, #EEE, whiteSmoke);
+	background-image: -moz-linear-gradient(bottom, #EEE, whiteSmoke);
+	background-image: -o-linear-gradient(bottom, #EEE, whiteSmoke);
+	background-image: -ms-linear-gradient(bottom, #EEE, whiteSmoke);
+	background-image: linear-gradient(bottom, #EEE, whiteSmoke);
+}
+
+.group-title:hover,
+.group.open .group-title {
+	color: white;
+	text-shadow: 0 -1px 0 #333;
+	background: gray;
+	background-image: -webkit-gradient(linear, left bottom, left top, from(#6D6D6D), to(gray));
+	background-image: -webkit-linear-gradient(bottom, #6D6D6D, gray);
+	background-image: -moz-linear-gradient(bottom, #6D6D6D, gray);
+	background-image: -o-linear-gradient(bottom, #6D6D6D, gray);
+	background-image: -ms-linear-gradient(bottom, #6D6D6D, gray);
+	background-image: linear-gradient(bottom, #6D6D6D, gray);
+}
+
+.group-title::after {
+	content: '';
+	width: 0;
+	height: 0;
+	border-color: #CCC transparent;
+	border-style: solid;
+	border-width: 6px 6px 0;
+	position: absolute;
+	top: 15px;
+	right: 20px;
+	z-index: 1;
+}
+
+.group-title:hover::after,
+.group.open .group-title::after {
+	border-color: #EEE transparent;
+}
+
+.group:hover .group-title {
+	border-top-color: gray;
+}
+
+.group.open .group-title {
+	border-top-color: #6D6D6D;
+}
+
+.group.open .group-title::after {
+	border-width: 0 6px 6px;
+}
+
+.group-content {
+	margin: 0;
+	display: none;
+	background-color: #FDFDFD;
+	padding: 10px 0 20px 0;
+	overflow: hidden;
+}
+
+div.group-content {
+	padding: 10px 20px 20px;
+}
+
+.group.open .group-content {
+	display: block;
+}
+
+.group-description {
+	font-size: 12px;
+	color: #555;
+	padding: 5px 20px 10px;
+	margin: 0;
+}
+
+div.group-content .group-description {
+	padding: 0;
+	margin-bottom: 20px;
+}
+
+.section-title {
+	display: block;
+	font-weight: bold;
+	line-height: 22px;
+	position: relative;
+	cursor: pointer;
+	padding: 4px 20px;
+	margin-bottom: 5px;
+	background-color: rgba(0, 0, 0, 0.02);
+	border-top: 1px solid #eeeeee;
+	-webkit-box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid #eeeeee;
+}
+
+.section-title::after {
+	content: '';
+	width: 0;
+	height: 0;
+	border-color: #CCC transparent;
+	border-style: solid;
+	border-width: 4px 4px 0;
+	position: absolute;
+	top: 13px;
+	right: 20px;
+	z-index: 1;
+}
+
+.section-title.open::after {
+	border-width: 0 4px 4px;
+}
+
+.section-items {
+	display: none;
+	padding: 5px 20px 10px 20px;
+}
+
+.more-info {
+	text-decoration: none;
+	color: #21759B;
+	font-size: 85%;
+	font-weight: normal;
+	float: right;
+}
+
+.control-description {
+	display: none;
+	padding: 0;
+}
+
+.control-table {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.control-table-column {
+	width: 50%;
+	text-align: left;
+	vertical-align: top;
+	padding: 0 1px;
+}
+
+.control-item {
+	margin-bottom: 10px;
+}
+
+/******************************************************************************/
+/********************************  TOOLBAR  ***********************************/
+/******************************************************************************/
 
 #toolbar {
 	height: 36px;
