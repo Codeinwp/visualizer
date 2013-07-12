@@ -90,7 +90,7 @@ class Visualizer_Render_Page extends Visualizer_Render {
 		echo '<div id="content">';
 			$this->_renderContent();
 		echo '</div>';
-		$this->_renderSiderbar();
+		$this->_renderSidebar();
 		echo '<div id="toolbar">';
 			$this->_renderToolbar();
 		echo '</div>';
@@ -112,10 +112,22 @@ class Visualizer_Render_Page extends Visualizer_Render {
 	 *
 	 * @access protected
 	 */
-	protected function _renderSiderbar() {
+	protected function _renderSidebar() {
 		echo '<div id="sidebar">';
+			echo '<ul class="group-wrapper">';
+				$this->_renderSidebarContent();
+			echo '</ul>';
 		echo '</div>';
 	}
+
+	/**
+	 * Renders sidebar content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderSidebarContent() {}
 
 	/**
 	 * Renders toolbar content.

@@ -234,6 +234,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$render = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
+		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$render->render();
 	}
 

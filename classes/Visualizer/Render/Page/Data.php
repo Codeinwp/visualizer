@@ -41,6 +41,25 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	}
 
 	/**
+	 * Renders sidebar content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderSidebarContent() {
+		echo '<li class="group">';
+			echo '<h3 class="group-title">', esc_html__( 'CSV file', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<ul class="group-content">';
+				echo '<p class="group-description">';
+					esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. If you are unsure about how to format your data CSV then please take a look at this sample:", Visualizer_Plugin::NAME );
+					echo ' <a href="', VISUALIZER_ABSURL, 'samples/', $this->type, '.csv">', $this->type, '.csv</a>';
+				echo '</p>';
+			echo '</ul>';
+		echo '</li>';
+	}
+
+	/**
 	 * Renders toolbar content.
 	 *
 	 * @since 1.0.0
