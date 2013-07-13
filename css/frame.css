@@ -20,6 +20,14 @@ body.has-sidebar #content {
 	bottom: 2%;
 }
 
+.loader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -16px;
+	margin-top: -16px;
+}
+
 /******************************************************************************/
 /********************************  SIDEBAR  ***********************************/
 /******************************************************************************/
@@ -309,4 +317,54 @@ div.group-content .group-description {
 
 .type-box-column .type-label {
 	background-position: -600px -225px;
+}
+
+/******************************************************************************/
+/********************************  OTHER STYLES  ******************************/
+/******************************************************************************/
+
+#thehole {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1px;
+	height: 1px;
+	border: 0;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+.locker, .locker-loader {
+	left: 0;
+	top: 0;
+	position: absolute;
+}
+
+.locker {
+	z-index: 1000;
+	background-color: white;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+}
+
+.locker-loader {
+	z-index: 1001;
+	background: url(../images/ajax-loader.gif) no-repeat center center;
+}
+
+.file-wrapper {
+	position: relative;
+}
+
+.file {
+    position: absolute;
+    top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 }

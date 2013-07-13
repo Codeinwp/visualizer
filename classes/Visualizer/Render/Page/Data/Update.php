@@ -20,8 +20,9 @@
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
 
+
 /**
- * Renders chart type picker page.
+ * Renders data uploading respond.
  *
  * @category Visualizer
  * @package Render
@@ -29,18 +30,39 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
+class Visualizer_Render_Page_Data_Update extends Visualizer_Render_Page {
 
 	/**
-	 * Renturns page body classes.
+	 * Enqueues scripts and styles what will be used in a page.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
-	 * @return string The classes string for page body.
 	 */
-	protected function _getBodyClasses() {
-		return 'wp-core-ui';
+	protected function _enqueueScripts() {	}
+
+	/**
+	 * Renders page head.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderHead() {
+		echo '<script type="text/javascript">';
+			echo '(function() {';
+				if ( empty( $this->message ) ) {
+					echo 'var win = window.dialogArguments || opener || parent || top;';
+					echo 'if (win.visualizer) {';
+						echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
+						echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
+						echo 'win.visualizer.render();';
+					echo '}';
+				} else {
+					echo 'alert("', $this->message, '");';
+				}
+			echo '})();';
+		echo '</script>';
 	}
 
 	/**
@@ -50,50 +72,6 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 *
 	 * @access protected
 	 */
-	protected function _renderBody() {
-		echo '<form method="post">';
-			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
-			parent::_renderBody();
-		echo '</form>';
-	}
-
-	/**
-	 * Renders page content.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderContent() {
-		echo '<div id="type-picker">';
-			foreach ( $this->types as $type ) {
-				echo '<div class="type-box type-box-', $type, '">';
-					echo '<label class="type-label', $type == $this->type ? ' type-label-selected' : '', '">';
-						echo '<input type="radio" class="type-radio" name="type" value="', $type, '"', checked( $type, $this->type, false ), '>';
-					echo '</label>';
-				echo '</div>';
-			}
-		echo '</div>';
-	}
-
-	/**
-	 * Renders page sidebar.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderSidebar() {}
-
-	/**
-	 * Renders toolbar content.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderToolbar() {
-		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', Visualizer_Plugin::NAME ), '">';
-	}
+	protected function _renderBody() {}
 
 }

@@ -25,6 +25,7 @@
  *
  * @category Visualizer
  * @package Render
+ * @subpackage Page
  *
  * @since 1.0.0
  */
@@ -69,7 +70,9 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
-		echo '<div id="canvas"></div>';
+		echo '<div id="canvas">';
+			echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
+		echo '</div>';
 	}
 
 	/**

@@ -56,6 +56,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_GET_CHARTS, 'getCharts' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_DELETE_CHART, 'deleteChart' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CREATE_CHART, 'renderChartPages' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_UPLOAD_DATA, 'uploadData' );
 	}
 
 	/**
@@ -288,6 +289,51 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->chart = $this->_chart;
 		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$render->render();
+	}
+
+	/**
+	 * Parses uploaded CSV file and saves new data for the chart.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
+	public function uploadData() {
+		// validate nonce
+		if ( !Visualizer_Security::verifyNonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
+			status_header( 403 );
+			exit;
+		}
+
+		// check chart, if chart exists
+		$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT );
+		if ( !$chart_id || !( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+			status_header( 400 );
+			exit;
+		}
+
+		$render = new Visualizer_Render_Page_Data_Update();
+		if ( !isset( $_FILES['data'] ) || $_FILES['data']['error'] != 0 ) {
+			$render->message = esc_html__( "CSV file with chart data was not uploaded. Please, try again.", Visualizer_Plugin::NAME );
+		} else {
+			$source = new Visualizer_Source_Csv( $_FILES['data']['tmp_name'] );
+			if ( $source->fetch() ) {
+				$chart->post_content = $source->getData();
+				wp_update_post( $chart->to_array() );
+
+				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
+				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+
+				$render->data = $source->getData();
+				$render->series = $source->getSeries();
+			} else {
+				$render->message = esc_html__( "CSV file is broken or incorrect. Please, try again.", Visualizer_Plugin::NAME );
+			}
+		}
+
+		$render->render();
+		exit;
 	}
 
 }

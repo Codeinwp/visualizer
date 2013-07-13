@@ -45,6 +45,7 @@ class Visualizer_Plugin {
 	const ACTION_GET_CHARTS   = 'visualizer-get-charts';
 	const ACTION_CREATE_CHART = 'visualizer-create-chart';
 	const ACTION_DELETE_CHART = 'visualizer-delete-chart';
+	const ACTION_UPLOAD_DATA  = 'visualizer-upload-data';
 
 	/**
 	 * Singletone instance of the plugin.

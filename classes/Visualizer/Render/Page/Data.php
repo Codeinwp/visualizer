@@ -25,6 +25,7 @@
  *
  * @category Visualizer
  * @package Render
+ * @subpackage Page
  *
  * @since 1.0.0
  */
@@ -69,7 +70,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
-		echo '<div id="canvas"></div>';
+		echo '<div id="canvas">';
+			echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
+		echo '</div>';
 	}
 
 	/**
@@ -80,14 +83,29 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderSidebarContent() {
+		$upload_link = add_query_arg( array(
+			'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
+			'nonce'  => Visualizer_Security::createNonce(),
+			'chart'  => $this->chart->ID,
+		), admin_url( 'admin-ajax.php' ) );
+
 		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'CSV file', Visualizer_Plugin::NAME ), '</h3>';
-			echo '<ul class="group-content">';
+			echo '<h3 class="group-title">', esc_html__( 'Upload CSV file', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<div class="group-content">';
 				echo '<p class="group-description">';
 					esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. If you are unsure about how to format your data CSV then please take a look at this sample:", Visualizer_Plugin::NAME );
 					echo ' <a href="', VISUALIZER_ABSURL, 'samples/', $this->type, '.csv">', $this->type, '.csv</a>';
 				echo '</p>';
-			echo '</ul>';
+				echo '<div>';
+					echo '<iframe id="thehole" name="thehole"></iframe>';
+					echo '<form action="', $upload_link, '" method="post" target="thehole" enctype="multipart/form-data">';
+						echo '<div class="button button-primary file-wrapper">';
+							echo '<input type="file" name="data" class="file">';
+							esc_attr_e( 'Upload CSV file', Visualizer_Plugin::NAME );
+						echo '</div>';
+					echo '</form>';
+				echo '</div>';
+			echo '</div>';
 		echo '</li>';
 	}
 

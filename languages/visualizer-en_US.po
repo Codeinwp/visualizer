@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-12 10:36+0300\n"
-"PO-Revision-Date: 2013-07-12 10:36+0300\n"
+"POT-Creation-Date: 2013-07-13 16:51+0300\n"
+"PO-Revision-Date: 2013-07-13 16:51+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -32,25 +32,26 @@ msgstr "Clone"
 msgid "Click to select"
 msgstr "Click to select"
 
-#: classes/Visualizer/Render/Page/Data.php:52
-msgid "CSV file"
-msgstr "CSV file"
+#: classes/Visualizer/Render/Page/Data.php:93
+#: classes/Visualizer/Render/Page/Data.php:104
+msgid "Upload CSV file"
+msgstr "Upload CSV file"
 
-#: classes/Visualizer/Render/Page/Data.php:55
+#: classes/Visualizer/Render/Page/Data.php:96
 msgid "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. If you are unsure about how to format your data CSV then please take a look at this sample:"
 msgstr "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. If you are unsure about how to format your data CSV then please take a look at this sample:"
 
-#: classes/Visualizer/Render/Page/Data.php:71
-#: classes/Visualizer/Render/Page/Settings.php:42
+#: classes/Visualizer/Render/Page/Data.php:121
+#: classes/Visualizer/Render/Page/Settings.php:87
 msgid "Back"
 msgstr "Back"
 
-#: classes/Visualizer/Render/Page/Data.php:74
-#: classes/Visualizer/Render/Page/Types.php:95
+#: classes/Visualizer/Render/Page/Data.php:124
+#: classes/Visualizer/Render/Page/Types.php:96
 msgid "Next"
 msgstr "Next"
 
-#: classes/Visualizer/Render/Page/Settings.php:44
+#: classes/Visualizer/Render/Page/Settings.php:89
 msgid "Save Chart And Insert"
 msgstr "Save Chart And Insert"
 
@@ -105,4 +106,12 @@ msgstr "Scatter"
 #: classes/Visualizer/Module/Admin.php:107
 msgid "Candelstick"
 msgstr "Candelstick"
+
+#: classes/Visualizer/Module/Chart.php:317
+msgid "CSV file with chart data was not uploaded. Please, try again."
+msgstr "CSV file with chart data was not uploaded. Please, try again."
+
+#: classes/Visualizer/Module/Chart.php:331
+msgid "CSV file is broken or incorrect. Please, try again."
+msgstr "CSV file is broken or incorrect. Please, try again."
 

@@ -25,6 +25,7 @@
  *
  * @category Visualizer
  * @package Render
+ * @subpackage Page
  *
  * @since 1.0.0
  */
