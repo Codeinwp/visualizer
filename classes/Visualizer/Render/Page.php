@@ -35,12 +35,19 @@ class Visualizer_Render_Page extends Visualizer_Render {
 	 * Enqueues scripts and styles what will be used in a page.
 	 *
 	 * @since 1.0.0
+	 * @uses wp_enqueue_style() To enqueue CSS styles file.
+	 * @uses wp_enqueue_script() To enqueue JS file.
+	 * @uses wp_register_script() To register chart rendering JS files.
 	 *
 	 * @access protected
 	 */
 	protected function _enqueueScripts() {
 		wp_enqueue_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'buttons' ), Visualizer_Plugin::VERSION );
+
 		wp_enqueue_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
+		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
 	}
 
 	/**

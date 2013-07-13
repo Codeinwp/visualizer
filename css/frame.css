@@ -9,7 +9,15 @@
 }
 
 body.has-sidebar #content {
-	rigth: 300px;
+	right: 300px;
+}
+
+#canvas {
+	position: absolute;
+	left: 2%;
+	right: 2%;
+	top: 2%;
+	bottom: 2%;
 }
 
 /******************************************************************************/

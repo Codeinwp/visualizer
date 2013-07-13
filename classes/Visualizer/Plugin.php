@@ -30,13 +30,16 @@
 class Visualizer_Plugin {
 
 	const NAME    = 'visualizer';
-	const VERSION = '1.0.0.0';
+	const VERSION = '1.0.0';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
 
 	// custom meta fields
-	const CF_CHART_TYPE = 'visualizer-chart-type';
+	const CF_CHART_TYPE   = 'visualizer-chart-type';
+	const CF_SOURCE       = 'visualizer-source';
+	const CF_SERIES       = 'visualizer-series';
+	const CF_DEFAULT_DATA = 'visualizer-default-data';
 
 	// custom actions
 	const ACTION_GET_CHARTS   = 'visualizer-get-charts';

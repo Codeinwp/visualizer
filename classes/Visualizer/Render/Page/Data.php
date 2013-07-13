@@ -31,6 +31,37 @@
 class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 	/**
+	 * Enqueues scripts and styles what will be used in a page.
+	 *
+	 * @since 1.0.0
+	 * @uses wp_enqueue_script() To enqueue chart rendering JS files.
+	 *
+	 * @access protected
+	 */
+	protected function _enqueueScripts() {
+		parent::_enqueueScripts();
+		wp_enqueue_script( 'visualizer-preview' );
+	}
+
+	/**
+	 * Renders page head.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderHead() {
+		parent::_renderHead();
+		echo '<script type="text/javascript">';
+			echo 'window.visualizer = {charts: {canvas: {';
+				echo "type: '", $this->type, "', ";
+				echo 'series: ', $this->series, ', ';
+				echo 'data: ', $this->chart->post_content;
+			echo '}}};';
+		echo '</script>';
+	}
+
+	/**
 	 * Renders page content.
 	 *
 	 * @since 1.0.0
@@ -38,6 +69,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
+		echo '<div id="canvas"></div>';
 	}
 
 	/**

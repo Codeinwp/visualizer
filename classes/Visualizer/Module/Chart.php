@@ -162,15 +162,24 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT );
 		if ( !$chart_id || !( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+			$default_type = 'line';
+
+			$source = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $default_type . '.csv' );
+			$source->fetch();
+
 			$chart_id = wp_insert_post( array(
-				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
-				'post_title'  => 'Visualization',
-				'post_author' => get_current_user_id(),
-				'post_status' => 'auto-draft',
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_title'   => 'Visualization',
+				'post_author'  => get_current_user_id(),
+				'post_status'  => 'auto-draft',
+				'post_content' => $source->getData(),
 			) );
 
 			if ( $chart_id && !is_wp_error( $chart_id ) ) {
-				add_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'line' );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, $default_type );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int)$chart_id ) );
@@ -203,10 +212,25 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 */
 	private function _handleTypesPage() {
+		// process post request
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			if ( in_array( $type, Visualizer_Plugin::getChartTypes() ) ) {
+				// save new chart type
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, $type );
+
+				// if the chart has default data, update it with appropriate default data for new type
+				if ( filter_var( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, true ), FILTER_VALIDATE_BOOLEAN ) ) {
+					$source = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $type . '.csv' );
+					$source->fetch();
+
+					$this->_chart->post_content = $source->getData();
+					wp_update_post( $this->_chart->to_array() );
+
+					update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+				}
+
+				// redirect to next tab
 				wp_redirect( add_query_arg( 'tab', 'data' ) );
 				return;
 			}
@@ -235,6 +259,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
 		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$render->render();
 	}
 
@@ -247,6 +272,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function _handleSettingsPage() {
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+			if ( $this->_chart->post_status == 'auto-draft' ) {
+				$this->_chart->post_status = 'publish';
+				wp_update_post( $this->_chart->to_array() );
+			}
+
 			$render = new Visualizer_Render_Page_Send();
 			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );
 			$render->render();
@@ -256,6 +286,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render = new Visualizer_Render_Page_Settings();
 		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$render->chart = $this->_chart;
+		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$render->render();
 	}
 

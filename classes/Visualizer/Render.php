@@ -28,6 +28,7 @@
  * @package Render
  *
  * @since 1.0.0
+ * @abstract
  */
 abstract class Visualizer_Render {
 
