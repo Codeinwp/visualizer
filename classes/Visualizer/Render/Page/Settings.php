@@ -45,24 +45,6 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	}
 
 	/**
-	 * Renders page head.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderHead() {
-		parent::_renderHead();
-		echo '<script type="text/javascript">';
-			echo 'window.visualizer = {charts: {canvas: {';
-				echo "type: '", $this->type, "', ";
-				echo 'series: ', $this->series, ', ';
-				echo 'data: ', $this->chart->post_content;
-			echo '}}};';
-		echo '</script>';
-	}
-
-	/**
 	 * Renders page content.
 	 *
 	 * @since 1.0.0
@@ -87,6 +69,20 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 			esc_html_e( 'Back', Visualizer_Plugin::NAME );
 		echo '</a>';
 		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Save Chart And Insert', Visualizer_Plugin::NAME ), '">';
+	}
+
+	/**
+	 * Renders page body.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderBody() {
+		echo '<form method="post">';
+			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
+			parent::_renderBody();
+		echo '</form>';
 	}
 
 }

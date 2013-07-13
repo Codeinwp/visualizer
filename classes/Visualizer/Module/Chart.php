@@ -181,6 +181,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, '{}' );
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int)$chart_id ) );
@@ -261,6 +262,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->chart = $this->_chart;
 		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
+		$render->settings = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 		$render->render();
 	}
 
@@ -288,6 +290,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$render->chart = $this->_chart;
 		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
+		$render->settings = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 		$render->render();
 	}
 

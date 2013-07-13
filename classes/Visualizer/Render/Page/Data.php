@@ -45,24 +45,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	}
 
 	/**
-	 * Renders page head.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderHead() {
-		parent::_renderHead();
-		echo '<script type="text/javascript">';
-			echo 'window.visualizer = {charts: {canvas: {';
-				echo "type: '", $this->type, "', ";
-				echo 'series: ', $this->series, ', ';
-				echo 'data: ', $this->chart->post_content;
-			echo '}}};';
-		echo '</script>';
-	}
-
-	/**
 	 * Renders page content.
 	 *
 	 * @since 1.0.0

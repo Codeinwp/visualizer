@@ -48,6 +48,17 @@ class Visualizer_Render_Page extends Visualizer_Render {
 		wp_register_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
+
+		wp_localize_script( 'visualizer-render', 'visualizer', array(
+			'charts' => array(
+				'canvas' => array(
+					'type'     => $this->type,
+					'series'   => json_decode( $this->series, true ),
+					'data'     => json_decode( $this->chart->post_content, true ),
+					'settings' => json_decode( $this->settings, true ),
+				),
+			),
+		) );
 	}
 
 	/**
