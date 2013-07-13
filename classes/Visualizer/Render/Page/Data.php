@@ -98,9 +98,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				echo '</p>';
 				echo '<div>';
 					echo '<iframe id="thehole" name="thehole"></iframe>';
-					echo '<form action="', $upload_link, '" method="post" target="thehole" enctype="multipart/form-data">';
+					echo '<form id="csv-form" action="', $upload_link, '" method="post" target="thehole" enctype="multipart/form-data">';
 						echo '<div class="button button-primary file-wrapper">';
-							echo '<input type="file" name="data" class="file">';
+							echo '<input type="file" name="data" id="csv-file" class="file">';
 							esc_attr_e( 'Upload CSV file', Visualizer_Plugin::NAME );
 						echo '</div>';
 					echo '</form>';

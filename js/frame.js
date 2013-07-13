@@ -9,16 +9,15 @@
 			$(this).parent().toggleClass('open');
 		});
 
-		$('.file').change(function() {
+		$('#csv-file').change(function() {
 			if ($.trim($(this).val()) != '') {
 				$('#content').lock();
-				$(this).parents('form').submit();
+				$('#csv-form').submit();
 			}
 		});
 
 		$('#thehole').load(function() {
 			$('#content').unlock();
-			$('.file').parents('form').reset();
 		});
 	});
 })(jQuery);
