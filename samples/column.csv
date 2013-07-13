@@ -1,4 +1,5 @@
 City,Population in 2012,Population in 2011,Population in 2010
+string,number,number,number
 Milan,1324110,907563,607906
 Naples,959574,1324110,1137128
 Turin,907563,959574,1080181

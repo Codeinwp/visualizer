@@ -1,4 +1,5 @@
 Country,Popularity
+string,number
 Germany,200
 United States,300
 Brazil,400

@@ -1,4 +1,5 @@
 Year,Requests,Sales
+date,number,number
 2004,1000,400
 2005,1170,750
 2006,860,1120
