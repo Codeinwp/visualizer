@@ -20,80 +20,25 @@
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
 
+
 /**
- * Renders chart settings page.
+ * Base class for all chart sidebar groups.
  *
  * @category Visualizer
  * @package Render
- * @subpackage Page
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
+class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 	/**
-	 * Enqueues scripts and styles what will be used in a page.
-	 *
-	 * @since 1.0.0
-	 * @uses wp_enqueue_script() To enqueue chart rendering JS files.
-	 *
-	 * @access protected
-	 */
-	protected function _enqueueScripts() {
-		parent::_enqueueScripts();
-		wp_enqueue_script( 'visualizer-preview' );
-	}
-
-	/**
-	 * Renders page content.
+	 * Renders template.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
-	protected function _renderContent() {
-		echo '<div id="canvas">';
-			echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
-		echo '</div>';
-	}
-
-	/**
-	 * Renders toolbar content.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderToolbar() {
-		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'data' ), '">';
-			esc_html_e( 'Back', Visualizer_Plugin::NAME );
-		echo '</a>';
-		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Save Chart And Insert', Visualizer_Plugin::NAME ), '">';
-	}
-
-	/**
-	 * Renders page body.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderBody() {
-		echo '<form method="post">';
-			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
-			parent::_renderBody();
-		echo '</form>';
-	}
-
-	/**
-	 * Renders sidebar content.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderSidebarContent() {
-		echo $this->sidebar;
+	protected function _toHTML() {
 	}
 
 }

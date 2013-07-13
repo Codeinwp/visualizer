@@ -48,8 +48,11 @@ function visualizer_autoloader( $class ) {
 	$namespaces = array( 'Visualizer' );
 	foreach ( $namespaces as $namespace ) {
 		if ( substr( $class, 0, strlen( $namespace ) ) == $namespace ) {
-			require dirname( __FILE__ ) . str_replace( '_', DIRECTORY_SEPARATOR, "_classes_{$class}.php" );
-			return true;
+			$filename = dirname( __FILE__ ) . str_replace( '_', DIRECTORY_SEPARATOR, "_classes_{$class}.php" );
+			if ( is_readable( $filename ) ) {
+				require $filename;
+				return true;
+			}
 		}
 	}
 

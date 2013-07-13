@@ -286,11 +286,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return;
 		}
 
+		$type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$sidebar_class = 'Visualizer_Render_Sidebar_' . ucfirst( $type );
+
 		$render = new Visualizer_Render_Page_Settings();
-		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+
+		$render->sidebar = class_exists( $sidebar_class, true ) ? new $sidebar_class() : '';
+		$render->type = $type;
 		$render->chart = $this->_chart;
 		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$render->settings = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
 		$render->render();
 	}
 
