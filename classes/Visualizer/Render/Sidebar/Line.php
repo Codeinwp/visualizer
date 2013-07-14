@@ -41,6 +41,7 @@ class Visualizer_Render_Sidebar_Line extends Visualizer_Render_Sidebar {
 	 */
 	protected function _toHTML() {
 		$this->_renderGeneralSettings();
+		$this->_renderAxesSettings();
 		$this->_renderViewSettings();
 	}
 

@@ -93,14 +93,14 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access public
 	 * @param array $data The data what has to be associated with this render.
 	 */
-	public function __construct( $data = array( ) ) {
+	public function __construct( $data = array() ) {
 		parent::__construct( $data );
 
 		$this->_axisPositions = array(
 			''     => '',
-			'in'   => esc_html__( 'Inside the chart area', Visualizer_Plugin::NAME ),
-			'out'  => esc_html__( 'Outside the chart area', Visualizer_Plugin::NAME ),
-			'none' => esc_html__( 'Omit the axis titles', Visualizer_Plugin::NAME ),
+			'in'   => esc_html__( 'Inside the chart', Visualizer_Plugin::NAME ),
+			'out'  => esc_html__( 'Outside the chart', Visualizer_Plugin::NAME ),
+			'none' => esc_html__( 'None', Visualizer_Plugin::NAME ),
 		);
 
 		$this->_legendPositions = array(
@@ -344,6 +344,120 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 							echo '<p class="section-description">';
 								esc_html_e( 'Determines the width and hight of the chart area.', Visualizer_Plugin::NAME );
 							echo '</p>';
+						echo '</div>';
+					echo '</div>';
+				echo '</li>';
+			echo '</ul>';
+		echo '</li>';
+	}
+
+	/**
+	 * Renders chart axes settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderAxesSettings() {
+		echo '<li class="group">';
+			echo '<h3 class="group-title">', esc_html__( 'Axes Settings', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<ul class="group-content">';
+				echo '<li>';
+					echo '<span class="section-title">', esc_html__( 'Horizontal Axis', Visualizer_Plugin::NAME ), '</span>';
+					echo '<div class="section-items">';
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Axis Title', Visualizer_Plugin::NAME ), '</b>';
+							echo '<input type="text" class="control-text control-onkeyup" name="hAxis[title]" value="">';
+							echo '<p class="section-description">';
+								esc_html_e( 'The title of the horizontal axis.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Axis Title', Visualizer_Plugin::NAME ), '</b>';
+							echo '<select class="control-select" name="vAxis[textPosition]">';
+								foreach ( $this->_axisPositions as $position => $label ) {
+									echo '<option value="', $position, '">', $label, '</option>';
+								}
+							echo '</select>';
+							echo '<p class="section-description">';
+								esc_html_e( 'Position of the horizontal axis text, relative to the chart area.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ), '</b>';
+							echo '<input type="text" class="control-text control-onkeyup" name="vAxis[gridlines][count]" value="" placeholder="5">';
+							echo '<p class="section-description">';
+								esc_html_e( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<b>', esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ), '</b>';
+							echo '<div>';
+								echo '<input type="text" class="color-picker-hex" name="vAxis[gridlines][color]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#ccc" data-default-color="#ccc">';
+							echo '</div>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<b>', esc_html__( 'Base Lines Color', Visualizer_Plugin::NAME ), '</b>';
+							echo '<div>';
+								echo '<input type="text" class="color-picker-hex" name="vAxis[gridlines][baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
+							echo '</div>';
+						echo '</div>';
+					echo '</div>';
+				echo '</li>';
+
+				echo '<li>';
+					echo '<span class="section-title">', esc_html__( 'Vertical Axis', Visualizer_Plugin::NAME ), '</span>';
+					echo '<div class="section-items">';
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Axis Title', Visualizer_Plugin::NAME ), '</b>';
+							echo '<input type="text" class="control-text control-onkeyup" name="vAxis[title]" value="">';
+							echo '<p class="section-description">';
+								esc_html_e( 'The title of the vertical axis.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Axis Title', Visualizer_Plugin::NAME ), '</b>';
+							echo '<select class="control-select" name="hAxis[textPosition]">';
+								foreach ( $this->_axisPositions as $position => $label ) {
+									echo '<option value="', $position, '">', $label, '</option>';
+								}
+							echo '</select>';
+							echo '<p class="section-description">';
+								esc_html_e( 'Position of the horizontal axis text, relative to the chart area.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ), '</b>';
+							echo '<input type="text" class="control-text control-onkeyup" name="hAxis[gridlines][count]" value="" placeholder="5">';
+							echo '<p class="section-description">';
+								esc_html_e( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<b>', esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ), '</b>';
+							echo '<div>';
+								echo '<input type="text" class="color-picker-hex" name="hAxis[gridlines][color]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#ccc" data-default-color="#ccc">';
+							echo '</div>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<b>', esc_html__( 'Base Lines Color', Visualizer_Plugin::NAME ), '</b>';
+							echo '<div>';
+								echo '<input type="text" class="color-picker-hex" name="hAxis[gridlines][baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
+							echo '</div>';
 						echo '</div>';
 					echo '</div>';
 				echo '</li>';
