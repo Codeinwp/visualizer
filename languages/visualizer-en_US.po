@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-14 17:20+0300\n"
-"PO-Revision-Date: 2013-07-14 17:20+0300\n"
+"POT-Creation-Date: 2013-07-14 18:13+0300\n"
+"PO-Revision-Date: 2013-07-14 18:14+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -159,6 +159,7 @@ msgstr "Stroke Color"
 #: classes/Visualizer/Render/Sidebar.php:431
 #: classes/Visualizer/Render/Sidebar.php:487
 #: classes/Visualizer/Render/Sidebar.php:494
+#: classes/Visualizer/Render/Sidebar.php:594
 msgid "Hex Value"
 msgstr "Hex Value"
 
@@ -274,6 +275,59 @@ msgstr "The title of the vertical axis."
 msgid "The direction in which the values along the vertical axis grow."
 msgstr "The direction in which the values along the vertical axis grow."
 
+#: classes/Visualizer/Render/Sidebar.php:512
+msgid "Series"
+msgstr "Series"
+
+#: classes/Visualizer/Render/Sidebar.php:537
+msgid "No"
+msgstr "No"
+
+#: classes/Visualizer/Render/Sidebar.php:538
+msgid "Yes"
+msgstr "Yes"
+
+#: classes/Visualizer/Render/Sidebar.php:543
+msgid "Visible In Legend"
+msgstr "Visible In Legend"
+
+#: classes/Visualizer/Render/Sidebar.php:550
+#: classes/Visualizer/Render/Sidebar.php:587
+msgid "Determines whether the series has to be presented in the legend or not."
+msgstr "Determines whether the series has to be presented in the legend or not."
+
+#: classes/Visualizer/Render/Sidebar.php:556
+msgid "Line Width"
+msgstr "Line Width"
+
+#: classes/Visualizer/Render/Sidebar.php:559
+msgid "Overrides the global line width value for this series."
+msgstr "Overrides the global line width value for this series."
+
+#: classes/Visualizer/Render/Sidebar.php:565
+msgid "Point Size"
+msgstr "Point Size"
+
+#: classes/Visualizer/Render/Sidebar.php:568
+msgid "Overrides the global point size value for this series."
+msgstr "Overrides the global point size value for this series."
+
+#: classes/Visualizer/Render/Sidebar.php:574
+msgid "Straight line without curve"
+msgstr "Straight line without curve"
+
+#: classes/Visualizer/Render/Sidebar.php:575
+msgid "The angles of the line will be smoothed"
+msgstr "The angles of the line will be smoothed"
+
+#: classes/Visualizer/Render/Sidebar.php:580
+msgid "Curve Type"
+msgstr "Curve Type"
+
+#: classes/Visualizer/Render/Sidebar.php:592
+msgid "Color"
+msgstr "Color"
+
 #: classes/Visualizer/Render/Page/Data.php:62
 #: classes/Visualizer/Render/Page/Data.php:73
 msgid "Upload CSV file"
@@ -349,11 +403,11 @@ msgstr "Scatter"
 msgid "Candelstick"
 msgstr "Candelstick"
 
-#: classes/Visualizer/Module/Chart.php:362
+#: classes/Visualizer/Module/Chart.php:371
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr "CSV file with chart data was not uploaded. Please, try again."
 
-#: classes/Visualizer/Module/Chart.php:376
+#: classes/Visualizer/Module/Chart.php:385
 msgid "CSV file is broken or incorrect. Please, try again."
 msgstr "CSV file is broken or incorrect. Please, try again."
 
