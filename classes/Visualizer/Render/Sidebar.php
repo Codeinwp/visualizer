@@ -134,7 +134,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				echo '<li>';
 					echo '<div class="section-items open">';
 						echo '<div class="section-description visible section-group">';
-							esc_html_e( 'Configure title, general font styles and elements positioning settings for the chart.', Visualizer_Plugin::NAME );
+							esc_html_e( 'Configure title, general font styles and legend positioning settings for the chart.', Visualizer_Plugin::NAME );
 						echo '</div>';
 
 						echo '<div class="section-item section-group">';
@@ -173,19 +173,6 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 							echo '<p class="section-description">';
 								esc_html_e( 'The default font family and size for all text in the chart.', Visualizer_Plugin::NAME );
-							echo '</p>';
-						echo '</div>';
-
-						echo '<div class="section-item">';
-							echo '<a class="more-info" href="javascript:;">[?]</a>';
-							echo '<b>', esc_html__( 'Axes Titles Position', Visualizer_Plugin::NAME ), '</b>';
-							echo '<select class="control-select" name="axisTitlesPosition">';
-								foreach ( $this->_axisPositions as $position => $label ) {
-									echo '<option value="', $position, '">', $label, '</option>';
-								}
-							echo '</select>';
-							echo '<p class="section-description">';
-								esc_html_e( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME );
 							echo '</p>';
 						echo '</div>';
 					echo '</div>';
@@ -233,7 +220,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function _renderViewSettings() {
 		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'View Settings', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<h3 class="group-title">', esc_html__( 'Layout & Chart Area', Visualizer_Plugin::NAME ), '</h3>';
 			echo '<ul class="group-content">';
 				echo '<li>';
 					echo '<span class="section-title">', esc_html__( 'Layout', Visualizer_Plugin::NAME ), '</span>';
@@ -360,8 +347,24 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function _renderAxesSettings() {
 		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'Axes Settings', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<h3 class="group-title">', esc_html__( 'Horizontal & Vertical Axes', Visualizer_Plugin::NAME ), '</h3>';
 			echo '<ul class="group-content">';
+				echo '<li>';
+					echo '<div class="section-items open">';
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Axes Titles Position', Visualizer_Plugin::NAME ), '</b>';
+							echo '<select class="control-select" name="axisTitlesPosition">';
+								foreach ( $this->_axisPositions as $position => $label ) {
+									echo '<option value="', $position, '">', $label, '</option>';
+								}
+							echo '</select>';
+							echo '<p class="section-description">';
+								esc_html_e( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+					echo '</div>';
+				echo '</li>';
 				echo '<li>';
 					echo '<span class="section-title">', esc_html__( 'Horizontal Axis', Visualizer_Plugin::NAME ), '</span>';
 					echo '<div class="section-items">';
@@ -376,7 +379,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 						echo '<div class="section-item">';
 							echo '<a class="more-info" href="javascript:;">[?]</a>';
-							echo '<b>', esc_html__( 'Axis Title', Visualizer_Plugin::NAME ), '</b>';
+							echo '<b>', esc_html__( 'Text Position', Visualizer_Plugin::NAME ), '</b>';
 							echo '<select class="control-select" name="vAxis[textPosition]">';
 								foreach ( $this->_axisPositions as $position => $label ) {
 									echo '<option value="', $position, '">', $label, '</option>';
@@ -406,7 +409,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 						echo '<div class="section-item">';
 							echo '<b>', esc_html__( 'Base Lines Color', Visualizer_Plugin::NAME ), '</b>';
 							echo '<div>';
-								echo '<input type="text" class="color-picker-hex" name="vAxis[gridlines][baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
+								echo '<input type="text" class="color-picker-hex" name="vAxis[baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
 							echo '</div>';
 						echo '</div>';
 					echo '</div>';
@@ -426,7 +429,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 						echo '<div class="section-item">';
 							echo '<a class="more-info" href="javascript:;">[?]</a>';
-							echo '<b>', esc_html__( 'Axis Title', Visualizer_Plugin::NAME ), '</b>';
+							echo '<b>', esc_html__( 'Text Position', Visualizer_Plugin::NAME ), '</b>';
 							echo '<select class="control-select" name="hAxis[textPosition]">';
 								foreach ( $this->_axisPositions as $position => $label ) {
 									echo '<option value="', $position, '">', $label, '</option>';
@@ -456,7 +459,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 						echo '<div class="section-item">';
 							echo '<b>', esc_html__( 'Base Lines Color', Visualizer_Plugin::NAME ), '</b>';
 							echo '<div>';
-								echo '<input type="text" class="color-picker-hex" name="hAxis[gridlines][baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
+								echo '<input type="text" class="color-picker-hex" name="hAxis[baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
 							echo '</div>';
 						echo '</div>';
 					echo '</div>';
