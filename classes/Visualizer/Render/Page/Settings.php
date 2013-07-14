@@ -66,8 +66,7 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _toHTML() {
-		echo '<form method="post">';
-			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
+		echo '<form id="settings-form" action="', add_query_arg( 'nonce', Visualizer_Security::createNonce() ), '" method="post">';
 			parent::_toHTML();
 		echo '</form>';
 	}

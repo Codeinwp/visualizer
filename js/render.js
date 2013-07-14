@@ -61,7 +61,7 @@
 			table.addRow(row);
         }
 
-        chart.draw(table, {});
+        chart.draw(table, v.charts[id].settings);
 	};
 
 	v.render = function() {
