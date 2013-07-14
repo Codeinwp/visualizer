@@ -5,7 +5,7 @@
 		function updateChart() {
 			clearTimeout(timeout);
 			timeout = setTimeout(function() {
-				v.charts.canvas.settings = $.extend(v.charts.canvas.settings, $('#settings-form').serializeObject());
+				v.charts.canvas.settings = $('#settings-form').serializeObject();
 				v.render();
 			}, 1000);
 		}
