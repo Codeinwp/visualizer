@@ -6,7 +6,14 @@
 		});
 
 		$('.group-title').click(function() {
-			$(this).parent().toggleClass('open');
+			var parent = $(this).parent();
+
+			if (parent.hasClass('open')) {
+				parent.removeClass('open');
+			} else {
+				$('.group.open').removeClass('open');
+				parent.addClass('open');
+			}
 		});
 
 		$('#csv-file').change(function() {
