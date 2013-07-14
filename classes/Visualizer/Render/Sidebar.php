@@ -86,6 +86,16 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	protected $_alignments;
 
 	/**
+	 * The array of available curve types.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_curveTypes;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -117,6 +127,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			'start'  => esc_html__( 'Aligned to the start of the allocated area', Visualizer_Plugin::NAME ),
 			'center' => esc_html__( 'Centered in the allocated area', Visualizer_Plugin::NAME ),
 			'end'    => esc_html__( 'Aligned to the end of the allocated area', Visualizer_Plugin::NAME ),
+		);
+
+		$this->_curveTypes = array(
+			''         => '',
+			'none'     => esc_html__( 'Straight line without curve', Visualizer_Plugin::NAME ),
+			'function' => esc_html__( 'The angles of the line will be smoothed', Visualizer_Plugin::NAME ),
 		);
 	}
 
@@ -509,7 +525,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function _renderSeriesSettings() {
 		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'Series', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<h3 class="group-title">', esc_html__( 'Series Settings', Visualizer_Plugin::NAME ), '</h3>';
 			echo '<ul class="group-content">';
 				for ( $i = 1, $cnt = count( $this->series ); $i < $cnt; $i++ ) {
 					echo '<li>';
@@ -554,7 +570,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="section-item section-group">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', esc_html__( 'Line Width', Visualizer_Plugin::NAME ), '</b>';
-			echo '<input type="text" class="control-text control-onkeyup" name="series[', $index, '][lineWidth]" value="">';
+			echo '<input type="text" class="control-text control-onkeyup" name="series[', $index, '][lineWidth]" value="" placeholder="2">';
 			echo '<p class="section-description">';
 				esc_html_e( 'Overrides the global line width value for this series.', Visualizer_Plugin::NAME );
 			echo '</p>';
@@ -563,23 +579,17 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="section-item section-group">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', esc_html__( 'Point Size', Visualizer_Plugin::NAME ), '</b>';
-			echo '<input type="text" class="control-text control-onkeyup" name="series[', $index, '][pointSize]" value="">';
+			echo '<input type="text" class="control-text control-onkeyup" name="series[', $index, '][pointSize]" value="" placeholder="0">';
 			echo '<p class="section-description">';
 				esc_html_e( 'Overrides the global point size value for this series.', Visualizer_Plugin::NAME );
 			echo '</p>';
 		echo '</div>';
 
-		$curve_types = array(
-			''         => '',
-			'none'     => esc_html__( 'Straight line without curve', Visualizer_Plugin::NAME ),
-			'function' => esc_html__( 'The angles of the line will be smoothed', Visualizer_Plugin::NAME ),
-		);
-
 		echo '<div class="section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', esc_html__( 'Curve Type', Visualizer_Plugin::NAME ), '</b>';
 			echo '<select class="control-select" name="series[', $index, '][curveType]">';
-				foreach ( $curve_types as $key => $label ) {
+				foreach ( $this->_curveTypes as $key => $label ) {
 					echo '<option value="', $key, '">', $label, '</option>';
 				}
 			echo '</select>';
@@ -594,6 +604,55 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				echo '<input type="text" class="color-picker-hex" name="series[', $index, '][color]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="" data-default-color="">';
 			echo '</div>';
 		echo '</div>';
+	}
+
+	/**
+	 * Renders line settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderLineSettings() {
+		echo '<li class="group">';
+			echo '<h3 class="group-title">', esc_html__( 'General Line Settings', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<ul class="group-content">';
+				echo '<li>';
+					echo '<div class="section-items open">';
+						echo '<div class="section-item section-group">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Line Width', Visualizer_Plugin::NAME ), '</b>';
+							echo '<input type="text" class="control-text control-onkeyup" name="lineWidth" value="" placeholder="2">';
+							echo '<p class="section-description">';
+								esc_html_e( 'Data line width in pixels. Use zero to hide all lines and show only the points.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item section-group">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Point Size', Visualizer_Plugin::NAME ), '</b>';
+							echo '<input type="text" class="control-text control-onkeyup" name="pointSize" value="" placeholder="0">';
+							echo '<p class="section-description">';
+								esc_html_e( 'Diameter of displayed points in pixels. Use zero to hide all points.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Curve Type', Visualizer_Plugin::NAME ), '</b>';
+							echo '<select class="control-select" name="curveType">';
+								foreach ( $this->_curveTypes as $key => $label ) {
+									echo '<option value="', $key, '">', $label, '</option>';
+								}
+							echo '</select>';
+							echo '<p class="section-description">';
+								esc_html_e( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+					echo '</div>';
+				echo '</li>';
+			echo '</ul>';
+		echo '</li>';
 	}
 
 }
