@@ -332,4 +332,75 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '</li>';
 	}
 
+	/**
+	 * Renders select item.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @static
+	 * @access protected
+	 * @param string $title The title of the select item.
+	 * @param string $name The name of the select item.
+	 * @param string $value The actual value of the select item.
+	 * @param array $options The array of select options.
+	 * @param string $desc The description of the select item.
+	 */
+	protected static function _renderSelectItem( $title, $name, $value, array $options, $desc ) {
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', $title, '</b>';
+			echo '<select class="control-select" name="', $name, '">';
+				foreach ( $options as $key => $label ) {
+					echo '<option value="', $key, '"', selected( $key, $value, false ), '>';
+						echo $label;
+					echo '</option>';
+				}
+			echo '</select>';
+			echo '<p class="section-description">', $desc, '</p>';
+		echo '</div>';
+	}
+
+	/**
+	 * Renders color picker item.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @static
+	 * @access protected
+	 * @param string $title The title of the select item.
+	 * @param string $name The name of the select item.
+	 * @param string $value The actual value of the select item.
+	 * @param string $default The default value of the color picker.
+	 */
+	protected static function _renderColorPickerItem( $title, $name, $value, $default ) {
+		echo '<div class="section-item">';
+			echo '<b>', $title, '</b>';
+			echo '<div>';
+				echo '<input type="text" class="color-picker-hex" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="', is_null( $value ) ? $default : $value, '" data-default-color="', $default, '">';
+			echo '</div>';
+		echo '</div>';
+	}
+
+	/**
+	 * Renders text item.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @static
+	 * @access protected
+	 * @param string $title The title of the select item.
+	 * @param string $name The name of the select item.
+	 * @param string $value The actual value of the select item.
+	 * @param string $desc The description of the select item.
+	 * @param string $placeholder The placeholder for the input.
+	 */
+	protected static function _renderTextItem( $title, $name, $value, $desc, $placeholder = '' ) {
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', $title, '</b>';
+			echo '<input type="text" class="control-text" name="', $name, '" value="', $value, '" placeholder="', $placeholder, '">';
+			echo '<p class="section-description">', $desc, '</p>';
+		echo '</div>';
+	}
+
 }

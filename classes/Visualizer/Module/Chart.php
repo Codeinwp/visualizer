@@ -312,11 +312,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$series_decoded = json_decode( $series, true );
 
+		$data_decoded = json_decode( $this->_chart->post_content, true );
+
 		$sidebar = '';
 		$sidebar_class = 'Visualizer_Render_Sidebar_' . ucfirst( $type );
 		if ( class_exists( $sidebar_class, true ) ) {
 			$sidebar = new $sidebar_class();
-			$sidebar->series = $series_decoded;
+			$sidebar->__series = $series_decoded;
+			$sidebar->__data = $data_decoded;
 		}
 
 		$render = new Visualizer_Render_Page_Settings();
@@ -336,7 +339,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'canvas' => array(
 					'type'     => $render->type,
 					'series'   => $series_decoded,
-					'data'     => json_decode( $render->chart->post_content, true ),
+					'data'     => $data_decoded,
 					'settings' => json_decode( $render->settings, true ),
 				),
 			),

@@ -289,9 +289,9 @@ class Visualizer_Render_Sidebar_Line extends Visualizer_Render_Sidebar {
 		echo '<li class="group">';
 			echo '<h3 class="group-title">', esc_html__( 'Series Settings', Visualizer_Plugin::NAME ), '</h3>';
 			echo '<ul class="group-content">';
-				for ( $i = 1, $cnt = count( $this->series ); $i < $cnt; $i++ ) {
+				for ( $i = 1, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
 					echo '<li>';
-						echo '<span class="section-title">', esc_html( $this->series[$i]['label'] ), '</span>';
+						echo '<span class="section-title">', esc_html( $this->__series[$i]['label'] ), '</span>';
 						echo '<div class="section-items">';
 							$this->_renderSeries( $i - 1 );
 						echo '</div>';

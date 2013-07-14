@@ -10,9 +10,19 @@
 				delete settings['width'];
 				delete settings['height'];
 
-				for (i in settings.series) {
-					if (settings.series[i]['color'] == '') {
-						delete settings.series[i]['color'];
+				if (settings.series) {
+					for (i in settings.series) {
+						if (settings.series[i]['color'] == '') {
+							delete settings.series[i]['color'];
+						}
+					}
+				}
+
+				if (settings.slices) {
+					for (i in settings.slices) {
+						if (settings.slices[i]['color'] == '') {
+							delete settings.slices[i]['color'];
+						}
 					}
 				}
 
