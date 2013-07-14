@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 16:51+0300\n"
-"PO-Revision-Date: 2013-07-13 16:51+0300\n"
+"POT-Creation-Date: 2013-07-14 16:00+0300\n"
+"PO-Revision-Date: 2013-07-14 16:01+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -32,26 +32,244 @@ msgstr "Clone"
 msgid "Click to select"
 msgstr "Click to select"
 
-#: classes/Visualizer/Render/Page/Data.php:93
-#: classes/Visualizer/Render/Page/Data.php:104
+#: classes/Visualizer/Render/Sidebar.php:101
+#: classes/Visualizer/Render/Sidebar.php:111
+msgid "Inside the chart"
+msgstr "Inside the chart"
+
+#: classes/Visualizer/Render/Sidebar.php:102
+msgid "Outside the chart"
+msgstr "Outside the chart"
+
+#: classes/Visualizer/Render/Sidebar.php:103
+msgid "None"
+msgstr "None"
+
+#: classes/Visualizer/Render/Sidebar.php:108
+msgid "Right of the chart"
+msgstr "Right of the chart"
+
+#: classes/Visualizer/Render/Sidebar.php:109
+msgid "Above the chart"
+msgstr "Above the chart"
+
+#: classes/Visualizer/Render/Sidebar.php:110
+msgid "Below the chart"
+msgstr "Below the chart"
+
+#: classes/Visualizer/Render/Sidebar.php:112
+msgid "Omit the legend"
+msgstr "Omit the legend"
+
+#: classes/Visualizer/Render/Sidebar.php:117
+msgid "Aligned to the start of the allocated area"
+msgstr "Aligned to the start of the allocated area"
+
+#: classes/Visualizer/Render/Sidebar.php:118
+msgid "Centered in the allocated area"
+msgstr "Centered in the allocated area"
+
+#: classes/Visualizer/Render/Sidebar.php:119
+msgid "Aligned to the end of the allocated area"
+msgstr "Aligned to the end of the allocated area"
+
+#: classes/Visualizer/Render/Sidebar.php:132
+msgid "General Settings"
+msgstr "General Settings"
+
+#: classes/Visualizer/Render/Sidebar.php:137
+msgid "Configure title, general font styles and elements positioning settings for the chart."
+msgstr "Configure title, general font styles and elements positioning settings for the chart."
+
+#: classes/Visualizer/Render/Sidebar.php:142
+msgid "Chart Title"
+msgstr "Chart Title"
+
+#: classes/Visualizer/Render/Sidebar.php:145
+msgid "Text to display above the chart."
+msgstr "Text to display above the chart."
+
+#: classes/Visualizer/Render/Sidebar.php:151
+msgid "Font Family And Size"
+msgstr "Font Family And Size"
+
+#: classes/Visualizer/Render/Sidebar.php:175
+msgid "The default font family and size for all text in the chart."
+msgstr "The default font family and size for all text in the chart."
+
+#: classes/Visualizer/Render/Sidebar.php:181
+msgid "Axes Titles Position"
+msgstr "Axes Titles Position"
+
+#: classes/Visualizer/Render/Sidebar.php:188
+msgid "Determines where to place the axis titles, compared to the chart area."
+msgstr "Determines where to place the axis titles, compared to the chart area."
+
+#: classes/Visualizer/Render/Sidebar.php:194
+msgid "Legend"
+msgstr "Legend"
+
+#: classes/Visualizer/Render/Sidebar.php:198
+msgid "Position"
+msgstr "Position"
+
+#: classes/Visualizer/Render/Sidebar.php:205
+msgid "Determines where to place the legend, compared to the chart area."
+msgstr "Determines where to place the legend, compared to the chart area."
+
+#: classes/Visualizer/Render/Sidebar.php:211
+msgid "Alignment"
+msgstr "Alignment"
+
+#: classes/Visualizer/Render/Sidebar.php:218
+msgid "Determines the alignment of the legend."
+msgstr "Determines the alignment of the legend."
+
+#: classes/Visualizer/Render/Sidebar.php:236
+msgid "View Settings"
+msgstr "View Settings"
+
+#: classes/Visualizer/Render/Sidebar.php:239
+msgid "Layout"
+msgstr "Layout"
+
+#: classes/Visualizer/Render/Sidebar.php:242
+msgid "Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage."
+msgstr "Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage."
+
+#: classes/Visualizer/Render/Sidebar.php:248
+msgid "Width And Height Of Chart"
+msgstr "Width And Height Of Chart"
+
+#: classes/Visualizer/Render/Sidebar.php:262
+msgid "Determines the total width and height of the chart."
+msgstr "Determines the total width and height of the chart."
+
+#: classes/Visualizer/Render/Sidebar.php:270
+msgid "Configure the background color for the main area of the chart and the chart border width and color."
+msgstr "Configure the background color for the main area of the chart and the chart border width and color."
+
+#: classes/Visualizer/Render/Sidebar.php:276
+msgid "Stroke Width"
+msgstr "Stroke Width"
+
+#: classes/Visualizer/Render/Sidebar.php:279
+msgid "The chart border width in pixels."
+msgstr "The chart border width in pixels."
+
+#: classes/Visualizer/Render/Sidebar.php:284
+msgid "Stroke Color"
+msgstr "Stroke Color"
+
+#: classes/Visualizer/Render/Sidebar.php:286
+#: classes/Visualizer/Render/Sidebar.php:293
+#: classes/Visualizer/Render/Sidebar.php:402
+#: classes/Visualizer/Render/Sidebar.php:409
+#: classes/Visualizer/Render/Sidebar.php:452
+#: classes/Visualizer/Render/Sidebar.php:459
+msgid "Hex Value"
+msgstr "Hex Value"
+
+#: classes/Visualizer/Render/Sidebar.php:291
+msgid "Background Color"
+msgstr "Background Color"
+
+#: classes/Visualizer/Render/Sidebar.php:301
+msgid "Chart Area"
+msgstr "Chart Area"
+
+#: classes/Visualizer/Render/Sidebar.php:304
+msgid "Configure the placement and size of the chart area (where the chart itself is drawn, excluding axis and legends). Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage."
+msgstr "Configure the placement and size of the chart area (where the chart itself is drawn, excluding axis and legends). Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage."
+
+#: classes/Visualizer/Render/Sidebar.php:310
+msgid "Left And Top Margins"
+msgstr "Left And Top Margins"
+
+#: classes/Visualizer/Render/Sidebar.php:324
+msgid "Determines how far to draw the chart from the left and top borders."
+msgstr "Determines how far to draw the chart from the left and top borders."
+
+#: classes/Visualizer/Render/Sidebar.php:331
+msgid "Width And Height Of Chart Area"
+msgstr "Width And Height Of Chart Area"
+
+#: classes/Visualizer/Render/Sidebar.php:345
+msgid "Determines the width and hight of the chart area."
+msgstr "Determines the width and hight of the chart area."
+
+#: classes/Visualizer/Render/Sidebar.php:363
+msgid "Axes Settings"
+msgstr "Axes Settings"
+
+#: classes/Visualizer/Render/Sidebar.php:366
+msgid "Horizontal Axis"
+msgstr "Horizontal Axis"
+
+#: classes/Visualizer/Render/Sidebar.php:370
+#: classes/Visualizer/Render/Sidebar.php:379
+#: classes/Visualizer/Render/Sidebar.php:420
+#: classes/Visualizer/Render/Sidebar.php:429
+msgid "Axis Title"
+msgstr "Axis Title"
+
+#: classes/Visualizer/Render/Sidebar.php:373
+msgid "The title of the horizontal axis."
+msgstr "The title of the horizontal axis."
+
+#: classes/Visualizer/Render/Sidebar.php:386
+#: classes/Visualizer/Render/Sidebar.php:436
+msgid "Position of the horizontal axis text, relative to the chart area."
+msgstr "Position of the horizontal axis text, relative to the chart area."
+
+#: classes/Visualizer/Render/Sidebar.php:392
+#: classes/Visualizer/Render/Sidebar.php:442
+msgid "Grid Lines Count"
+msgstr "Grid Lines Count"
+
+#: classes/Visualizer/Render/Sidebar.php:395
+#: classes/Visualizer/Render/Sidebar.php:445
+msgid "The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
+msgstr "The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
+
+#: classes/Visualizer/Render/Sidebar.php:400
+#: classes/Visualizer/Render/Sidebar.php:450
+msgid "Grid Lines Color"
+msgstr "Grid Lines Color"
+
+#: classes/Visualizer/Render/Sidebar.php:407
+#: classes/Visualizer/Render/Sidebar.php:457
+msgid "Base Lines Color"
+msgstr "Base Lines Color"
+
+#: classes/Visualizer/Render/Sidebar.php:416
+msgid "Vertical Axis"
+msgstr "Vertical Axis"
+
+#: classes/Visualizer/Render/Sidebar.php:423
+msgid "The title of the vertical axis."
+msgstr "The title of the vertical axis."
+
+#: classes/Visualizer/Render/Page/Data.php:62
+#: classes/Visualizer/Render/Page/Data.php:73
 msgid "Upload CSV file"
 msgstr "Upload CSV file"
 
-#: classes/Visualizer/Render/Page/Data.php:96
+#: classes/Visualizer/Render/Page/Data.php:65
 msgid "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. If you are unsure about how to format your data CSV then please take a look at this sample:"
 msgstr "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. If you are unsure about how to format your data CSV then please take a look at this sample:"
 
-#: classes/Visualizer/Render/Page/Data.php:121
-#: classes/Visualizer/Render/Page/Settings.php:87
+#: classes/Visualizer/Render/Page/Data.php:90
+#: classes/Visualizer/Render/Page/Settings.php:56
 msgid "Back"
 msgstr "Back"
 
-#: classes/Visualizer/Render/Page/Data.php:124
-#: classes/Visualizer/Render/Page/Types.php:96
+#: classes/Visualizer/Render/Page/Data.php:93
+#: classes/Visualizer/Render/Page/Types.php:84
 msgid "Next"
 msgstr "Next"
 
-#: classes/Visualizer/Render/Page/Settings.php:89
+#: classes/Visualizer/Render/Page/Settings.php:58
 msgid "Save Chart And Insert"
 msgstr "Save Chart And Insert"
 
@@ -107,11 +325,11 @@ msgstr "Scatter"
 msgid "Candelstick"
 msgstr "Candelstick"
 
-#: classes/Visualizer/Module/Chart.php:317
+#: classes/Visualizer/Module/Chart.php:362
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr "CSV file with chart data was not uploaded. Please, try again."
 
-#: classes/Visualizer/Module/Chart.php:331
+#: classes/Visualizer/Module/Chart.php:376
 msgid "CSV file is broken or incorrect. Please, try again."
 msgstr "CSV file is broken or incorrect. Please, try again."
 
