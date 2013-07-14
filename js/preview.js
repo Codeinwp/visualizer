@@ -5,22 +5,28 @@
 		function updateChart() {
 			clearTimeout(timeout);
 			timeout = setTimeout(function() {
-				var settings = $('#settings-form').serializeObject(),
-					series = settings.series;
+				var i, settings = $('#settings-form').serializeObject();
 
-				delete settings['series'];
 				delete settings['width'];
 				delete settings['height'];
 
+				for (i in settings.series) {
+					if (settings.series[i]['color'] == '') {
+						delete settings.series[i]['color'];
+					}
+				}
+
 				v.charts.canvas.settings = settings;
-//				v.charts.canvas.series = series;
 				v.render();
 			}, 1000);
 		}
 
 		$('.control-text').change(updateChart).keyup(updateChart);
 		$('.control-select').change(updateChart);
-		$('.color-picker-hex').wpColorPicker({change: updateChart});
+		$('.color-picker-hex').wpColorPicker({
+			change: updateChart,
+			clear: updateChart
+		});
 	});
 })(jQuery, visualizer);
 

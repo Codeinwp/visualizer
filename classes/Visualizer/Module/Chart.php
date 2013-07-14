@@ -295,7 +295,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 */
 	private function _handleSettingsPage() {
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
 			if ( $this->_chart->post_status == 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
 				wp_update_post( $this->_chart->to_array() );
@@ -309,24 +309,33 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
+		$series_decoded = json_decode( $series, true );
+
+		$sidebar = '';
 		$sidebar_class = 'Visualizer_Render_Sidebar_' . ucfirst( $type );
+		if ( class_exists( $sidebar_class, true ) ) {
+			$sidebar = new $sidebar_class();
+			$sidebar->series = $series_decoded;
+		}
 
 		$render = new Visualizer_Render_Page_Settings();
 
-		$render->sidebar = class_exists( $sidebar_class, true ) ? new $sidebar_class() : '';
+		$render->sidebar = $sidebar;
 		$render->type = $type;
 		$render->chart = $this->_chart;
-		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
+		$render->series = $series;
 		$render->settings = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'visualizer-frame' );
+
 		wp_enqueue_script( 'visualizer-preview' );
 		wp_localize_script( 'visualizer-render', 'visualizer', array(
 			'charts' => array(
 				'canvas' => array(
 					'type'     => $render->type,
-					'series'   => json_decode( $render->series, true ),
+					'series'   => $series_decoded,
 					'data'     => json_decode( $render->chart->post_content, true ),
 					'settings' => json_decode( $render->settings, true ),
 				),

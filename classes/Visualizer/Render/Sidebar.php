@@ -270,14 +270,14 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 							echo '<div class="section-item">';
 								echo '<b>', esc_html__( 'Stroke Color', Visualizer_Plugin::NAME ), '</b>';
 								echo '<div>';
-									echo '<input type="text" class="color-picker-hex" name="backgroundColor[stroke]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#666" data-default-color="#666">';
+									echo '<input type="text" class="color-picker-hex" name="backgroundColor[stroke]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#666" data-default-color="#666">';
 								echo '</div>';
 							echo '</div>';
 
 							echo '<div class="section-item">';
 								echo '<b>', esc_html__( 'Background Color', Visualizer_Plugin::NAME ), '</b>';
 								echo '<div>';
-									echo '<input type="text" class="color-picker-hex" name="backgroundColor[fill]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#fff" data-default-color="#fff">';
+									echo '<input type="text" class="color-picker-hex" name="backgroundColor[fill]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#fff" data-default-color="#fff">';
 								echo '</div>';
 							echo '</div>';
 						echo '</div>';
@@ -421,14 +421,14 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 						echo '<div class="section-item">';
 							echo '<b>', esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ), '</b>';
 							echo '<div>';
-								echo '<input type="text" class="color-picker-hex" name="vAxis[gridlines][color]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#ccc" data-default-color="#ccc">';
+								echo '<input type="text" class="color-picker-hex" name="vAxis[gridlines][color]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#ccc" data-default-color="#ccc">';
 							echo '</div>';
 						echo '</div>';
 
 						echo '<div class="section-item">';
 							echo '<b>', esc_html__( 'Base Lines Color', Visualizer_Plugin::NAME ), '</b>';
 							echo '<div>';
-								echo '<input type="text" class="color-picker-hex" name="vAxis[baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
+								echo '<input type="text" class="color-picker-hex" name="vAxis[baselineColor]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#000" data-default-color="#000">';
 							echo '</div>';
 						echo '</div>';
 					echo '</div>';
@@ -484,20 +484,116 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 						echo '<div class="section-item">';
 							echo '<b>', esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ), '</b>';
 							echo '<div>';
-								echo '<input type="text" class="color-picker-hex" name="hAxis[gridlines][color]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#ccc" data-default-color="#ccc">';
+								echo '<input type="text" class="color-picker-hex" name="hAxis[gridlines][color]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#ccc" data-default-color="#ccc">';
 							echo '</div>';
 						echo '</div>';
 
 						echo '<div class="section-item">';
 							echo '<b>', esc_html__( 'Base Lines Color', Visualizer_Plugin::NAME ), '</b>';
 							echo '<div>';
-								echo '<input type="text" class="color-picker-hex" name="hAxis[baselineColor]" maxlength="7" placeholder="<?php', esc_attr__( 'Hex Value' ), '" value="#000" data-default-color="#000">';
+								echo '<input type="text" class="color-picker-hex" name="hAxis[baselineColor]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#000" data-default-color="#000">';
 							echo '</div>';
 						echo '</div>';
 					echo '</div>';
 				echo '</li>';
 			echo '</ul>';
 		echo '</li>';
+	}
+
+	/**
+	 * Renders series settings group.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderSeriesSettings() {
+		echo '<li class="group">';
+			echo '<h3 class="group-title">', esc_html__( 'Series', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<ul class="group-content">';
+				for ( $i = 1, $cnt = count( $this->series ); $i < $cnt; $i++ ) {
+					echo '<li>';
+						echo '<span class="section-title">', esc_html( $this->series[$i]['label'] ), '</span>';
+						echo '<div class="section-items">';
+							$this->_renderSeries( $i - 1 );
+						echo '</div>';
+					echo '</li>';
+				}
+			echo '</ul>';
+		echo '</li>';
+	}
+
+	/**
+	 * Renders concreate series settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @param int $index The series index.
+	 */
+	protected function _renderSeries( $index ) {
+		$visibility = array(
+			''  => '',
+			'0' => esc_html__( 'No', Visualizer_Plugin::NAME ),
+			'1' => esc_html__( 'Yes', Visualizer_Plugin::NAME ),
+		);
+
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', esc_html__( 'Visible In Legend', Visualizer_Plugin::NAME ), '</b>';
+			echo '<select class="control-select" name="series[', $index, '][visibleInLegend]">';
+				foreach ( $visibility as $key => $label ) {
+					echo '<option value="', $key, '">', $label, '</option>';
+				}
+			echo '</select>';
+			echo '<p class="section-description">';
+				esc_html_e( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME );
+			echo '</p>';
+		echo '</div>';
+
+		echo '<div class="section-item section-group">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', esc_html__( 'Line Width', Visualizer_Plugin::NAME ), '</b>';
+			echo '<input type="text" class="control-text control-onkeyup" name="series[', $index, '][lineWidth]" value="">';
+			echo '<p class="section-description">';
+				esc_html_e( 'Overrides the global line width value for this series.', Visualizer_Plugin::NAME );
+			echo '</p>';
+		echo '</div>';
+
+		echo '<div class="section-item section-group">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', esc_html__( 'Point Size', Visualizer_Plugin::NAME ), '</b>';
+			echo '<input type="text" class="control-text control-onkeyup" name="series[', $index, '][pointSize]" value="">';
+			echo '<p class="section-description">';
+				esc_html_e( 'Overrides the global point size value for this series.', Visualizer_Plugin::NAME );
+			echo '</p>';
+		echo '</div>';
+
+		$curve_types = array(
+			''         => '',
+			'none'     => esc_html__( 'Straight line without curve', Visualizer_Plugin::NAME ),
+			'function' => esc_html__( 'The angles of the line will be smoothed', Visualizer_Plugin::NAME ),
+		);
+
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', esc_html__( 'Curve Type', Visualizer_Plugin::NAME ), '</b>';
+			echo '<select class="control-select" name="series[', $index, '][curveType]">';
+				foreach ( $curve_types as $key => $label ) {
+					echo '<option value="', $key, '">', $label, '</option>';
+				}
+			echo '</select>';
+			echo '<p class="section-description">';
+				esc_html_e( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME );
+			echo '</p>';
+		echo '</div>';
+
+		echo '<div class="section-item">';
+			echo '<b>', esc_html__( 'Color', Visualizer_Plugin::NAME ), '</b>';
+			echo '<div>';
+				echo '<input type="text" class="color-picker-hex" name="series[', $index, '][color]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="" data-default-color="">';
+			echo '</div>';
+		echo '</div>';
 	}
 
 }
