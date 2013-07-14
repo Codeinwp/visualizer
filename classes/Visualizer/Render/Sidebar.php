@@ -637,7 +637,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 							echo '</p>';
 						echo '</div>';
 
-						echo '<div class="section-item">';
+						echo '<div class="section-item section-group">';
 							echo '<a class="more-info" href="javascript:;">[?]</a>';
 							echo '<b>', esc_html__( 'Curve Type', Visualizer_Plugin::NAME ), '</b>';
 							echo '<select class="control-select" name="curveType">';
@@ -647,6 +647,25 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 							echo '</select>';
 							echo '<p class="section-description">';
 								esc_html_e( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						$focus = array(
+							''         => '',
+							'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
+							'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
+						);
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Focus Target', Visualizer_Plugin::NAME ), '</b>';
+							echo '<select class="control-select" name="focusTarget">';
+								foreach ( $focus as $key => $label ) {
+									echo '<option value="', $key, '">', $label, '</option>';
+								}
+							echo '</select>';
+							echo '<p class="section-description">';
+								esc_html_e( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME );
 							echo '</p>';
 						echo '</div>';
 					echo '</div>';

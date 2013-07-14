@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-14 18:35+0300\n"
-"PO-Revision-Date: 2013-07-14 18:36+0300\n"
+"POT-Creation-Date: 2013-07-14 18:59+0300\n"
+"PO-Revision-Date: 2013-07-14 18:59+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -343,6 +343,22 @@ msgstr "Data line width in pixels. Use zero to hide all lines and show only the 
 #: classes/Visualizer/Render/Sidebar.php:636
 msgid "Diameter of displayed points in pixels. Use zero to hide all points."
 msgstr "Diameter of displayed points in pixels. Use zero to hide all points."
+
+#: classes/Visualizer/Render/Sidebar.php:655
+msgid "Focus on a single data point."
+msgstr "Focus on a single data point."
+
+#: classes/Visualizer/Render/Sidebar.php:656
+msgid "Focus on a grouping of all data points along the major axis."
+msgstr "Focus on a grouping of all data points along the major axis."
+
+#: classes/Visualizer/Render/Sidebar.php:661
+msgid "Focus Target"
+msgstr "Focus Target"
+
+#: classes/Visualizer/Render/Sidebar.php:668
+msgid "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
+msgstr "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 
 #: classes/Visualizer/Render/Page/Data.php:62
 #: classes/Visualizer/Render/Page/Data.php:73
