@@ -346,6 +346,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderAxesSettings() {
+		$directions = array(
+			''   => '',
+			'1'  => esc_html__( 'Identical Direction', Visualizer_Plugin::NAME ),
+			'-1' => esc_html__( 'Reverse Direction', Visualizer_Plugin::NAME ),
+		);
+
 		echo '<li class="group">';
 			echo '<h3 class="group-title">', esc_html__( 'Horizontal & Vertical Axes', Visualizer_Plugin::NAME ), '</h3>';
 			echo '<ul class="group-content">';
@@ -387,6 +393,19 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 							echo '</select>';
 							echo '<p class="section-description">';
 								esc_html_e( 'Position of the horizontal axis text, relative to the chart area.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Direction', Visualizer_Plugin::NAME ), '</b>';
+							echo '<select class="control-select" name="hAxis[direction]">';
+								foreach ( $directions as $direction => $label ) {
+									echo '<option value="', $direction, '">', $label, '</option>';
+								}
+							echo '</select>';
+							echo '<p class="section-description">';
+								esc_html_e( 'The direction in which the values along the horizontal axis grow.', Visualizer_Plugin::NAME );
 							echo '</p>';
 						echo '</div>';
 
@@ -437,6 +456,19 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 							echo '</select>';
 							echo '<p class="section-description">';
 								esc_html_e( 'Position of the horizontal axis text, relative to the chart area.', Visualizer_Plugin::NAME );
+							echo '</p>';
+						echo '</div>';
+
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Direction', Visualizer_Plugin::NAME ), '</b>';
+							echo '<select class="control-select" name="vAxis[direction]">';
+								foreach ( $directions as $direction => $label ) {
+									echo '<option value="', $direction, '">', $label, '</option>';
+								}
+							echo '</select>';
+							echo '<p class="section-description">';
+								esc_html_e( 'The direction in which the values along the vertical axis grow.', Visualizer_Plugin::NAME );
 							echo '</p>';
 						echo '</div>';
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-14 16:46+0300\n"
-"PO-Revision-Date: 2013-07-14 16:47+0300\n"
+"POT-Creation-Date: 2013-07-14 17:20+0300\n"
+"PO-Revision-Date: 2013-07-14 17:20+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -155,10 +155,10 @@ msgstr "Stroke Color"
 
 #: classes/Visualizer/Render/Sidebar.php:273
 #: classes/Visualizer/Render/Sidebar.php:280
-#: classes/Visualizer/Render/Sidebar.php:405
-#: classes/Visualizer/Render/Sidebar.php:412
-#: classes/Visualizer/Render/Sidebar.php:455
-#: classes/Visualizer/Render/Sidebar.php:462
+#: classes/Visualizer/Render/Sidebar.php:424
+#: classes/Visualizer/Render/Sidebar.php:431
+#: classes/Visualizer/Render/Sidebar.php:487
+#: classes/Visualizer/Render/Sidebar.php:494
 msgid "Hex Value"
 msgstr "Hex Value"
 
@@ -190,68 +190,89 @@ msgstr "Width And Height Of Chart Area"
 msgid "Determines the width and hight of the chart area."
 msgstr "Determines the width and hight of the chart area."
 
-#: classes/Visualizer/Render/Sidebar.php:350
+#: classes/Visualizer/Render/Sidebar.php:351
+msgid "Identical Direction"
+msgstr "Identical Direction"
+
+#: classes/Visualizer/Render/Sidebar.php:352
+msgid "Reverse Direction"
+msgstr "Reverse Direction"
+
+#: classes/Visualizer/Render/Sidebar.php:356
 msgid "Horizontal & Vertical Axes"
 msgstr "Horizontal & Vertical Axes"
 
-#: classes/Visualizer/Render/Sidebar.php:356
+#: classes/Visualizer/Render/Sidebar.php:362
 msgid "Axes Titles Position"
 msgstr "Axes Titles Position"
 
-#: classes/Visualizer/Render/Sidebar.php:363
+#: classes/Visualizer/Render/Sidebar.php:369
 msgid "Determines where to place the axis titles, compared to the chart area."
 msgstr "Determines where to place the axis titles, compared to the chart area."
 
-#: classes/Visualizer/Render/Sidebar.php:369
+#: classes/Visualizer/Render/Sidebar.php:375
 msgid "Horizontal Axis"
 msgstr "Horizontal Axis"
 
-#: classes/Visualizer/Render/Sidebar.php:373
-#: classes/Visualizer/Render/Sidebar.php:423
+#: classes/Visualizer/Render/Sidebar.php:379
+#: classes/Visualizer/Render/Sidebar.php:442
 msgid "Axis Title"
 msgstr "Axis Title"
 
-#: classes/Visualizer/Render/Sidebar.php:376
+#: classes/Visualizer/Render/Sidebar.php:382
 msgid "The title of the horizontal axis."
 msgstr "The title of the horizontal axis."
 
-#: classes/Visualizer/Render/Sidebar.php:382
-#: classes/Visualizer/Render/Sidebar.php:432
+#: classes/Visualizer/Render/Sidebar.php:388
+#: classes/Visualizer/Render/Sidebar.php:451
 msgid "Text Position"
 msgstr "Text Position"
 
-#: classes/Visualizer/Render/Sidebar.php:389
-#: classes/Visualizer/Render/Sidebar.php:439
+#: classes/Visualizer/Render/Sidebar.php:395
+#: classes/Visualizer/Render/Sidebar.php:458
 msgid "Position of the horizontal axis text, relative to the chart area."
 msgstr "Position of the horizontal axis text, relative to the chart area."
 
-#: classes/Visualizer/Render/Sidebar.php:395
-#: classes/Visualizer/Render/Sidebar.php:445
+#: classes/Visualizer/Render/Sidebar.php:401
+#: classes/Visualizer/Render/Sidebar.php:464
+msgid "Direction"
+msgstr "Direction"
+
+#: classes/Visualizer/Render/Sidebar.php:408
+msgid "The direction in which the values along the horizontal axis grow."
+msgstr "The direction in which the values along the horizontal axis grow."
+
+#: classes/Visualizer/Render/Sidebar.php:414
+#: classes/Visualizer/Render/Sidebar.php:477
 msgid "Grid Lines Count"
 msgstr "Grid Lines Count"
 
-#: classes/Visualizer/Render/Sidebar.php:398
-#: classes/Visualizer/Render/Sidebar.php:448
+#: classes/Visualizer/Render/Sidebar.php:417
+#: classes/Visualizer/Render/Sidebar.php:480
 msgid "The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
 msgstr "The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
 
-#: classes/Visualizer/Render/Sidebar.php:403
-#: classes/Visualizer/Render/Sidebar.php:453
+#: classes/Visualizer/Render/Sidebar.php:422
+#: classes/Visualizer/Render/Sidebar.php:485
 msgid "Grid Lines Color"
 msgstr "Grid Lines Color"
 
-#: classes/Visualizer/Render/Sidebar.php:410
-#: classes/Visualizer/Render/Sidebar.php:460
+#: classes/Visualizer/Render/Sidebar.php:429
+#: classes/Visualizer/Render/Sidebar.php:492
 msgid "Base Lines Color"
 msgstr "Base Lines Color"
 
-#: classes/Visualizer/Render/Sidebar.php:419
+#: classes/Visualizer/Render/Sidebar.php:438
 msgid "Vertical Axis"
 msgstr "Vertical Axis"
 
-#: classes/Visualizer/Render/Sidebar.php:426
+#: classes/Visualizer/Render/Sidebar.php:445
 msgid "The title of the vertical axis."
 msgstr "The title of the vertical axis."
+
+#: classes/Visualizer/Render/Sidebar.php:471
+msgid "The direction in which the values along the vertical axis grow."
+msgstr "The direction in which the values along the vertical axis grow."
 
 #: classes/Visualizer/Render/Page/Data.php:62
 #: classes/Visualizer/Render/Page/Data.php:73

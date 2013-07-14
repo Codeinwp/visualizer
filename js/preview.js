@@ -5,7 +5,15 @@
 		function updateChart() {
 			clearTimeout(timeout);
 			timeout = setTimeout(function() {
-				v.charts.canvas.settings = $('#settings-form').serializeObject();
+				var settings = $('#settings-form').serializeObject(),
+					series = settings.series;
+
+				delete settings['series'];
+				delete settings['width'];
+				delete settings['height'];
+
+				v.charts.canvas.settings = settings;
+//				v.charts.canvas.series = series;
 				v.render();
 			}, 1000);
 		}
