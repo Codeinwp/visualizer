@@ -11,13 +11,22 @@
 
 		$('#csv-file').change(function() {
 			if ($.trim($(this).val()) != '') {
-				$('#content').lock();
+				$('#canvas').lock();
 				$('#csv-form').submit();
 			}
 		});
 
 		$('#thehole').load(function() {
-			$('#content').unlock();
+			$('#canvas').unlock();
+		});
+
+		$('.section-title').click(function() {
+			$(this).toggleClass('open').parent().find('.section-items').toggle();
+		});
+
+		$('.more-info').click(function() {
+			$(this).parent().nextAll('.control-description:first').toggle();
+			return false;
 		});
 	});
 })(jQuery);

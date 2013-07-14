@@ -30,48 +30,36 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Page_Data_Update extends Visualizer_Render_Page {
+class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 
 	/**
-	 * Enqueues scripts and styles what will be used in a page.
+	 * Renders page template.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
-	protected function _enqueueScripts() {	}
-
-	/**
-	 * Renders page head.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderHead() {
-		echo '<script type="text/javascript">';
-			echo '(function() {';
-				if ( empty( $this->message ) ) {
-					echo 'var win = window.dialogArguments || opener || parent || top;';
-					echo 'if (win.visualizer) {';
-						echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
-						echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
-						echo 'win.visualizer.render();';
-					echo '}';
-				} else {
-					echo 'alert("', $this->message, '");';
-				}
-			echo '})();';
-		echo '</script>';
+	protected function _toHTML() {
+		echo '<!DOCTYPE html>';
+		echo '<html>';
+			echo '<head>';
+				echo '<script type="text/javascript">';
+					echo '(function() {';
+						if ( empty( $this->message ) ) {
+							echo 'var win = window.dialogArguments || opener || parent || top;';
+							echo 'if (win.visualizer) {';
+								echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
+								echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
+								echo 'win.visualizer.render();';
+							echo '}';
+						} else {
+							echo 'alert("', $this->message, '");';
+						}
+					echo '})();';
+				echo '</script>';
+			echo '</head>';
+			echo '<body></body>';
+		echo '</html>';
 	}
-
-	/**
-	 * Renders page body.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderBody() {}
 
 }

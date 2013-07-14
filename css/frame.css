@@ -8,16 +8,12 @@
 	overflow: auto;
 }
 
-body.has-sidebar #content {
-	right: 300px;
-}
-
 #canvas {
 	position: absolute;
-	left: 2%;
-	right: 2%;
-	top: 2%;
-	bottom: 2%;
+	left: 10px;
+	right: 310px;
+	top: 10px;
+	bottom: 10px;
 }
 
 .loader {
@@ -159,7 +155,8 @@ div.group-content .group-description {
 .section-title {
 	display: block;
 	font-weight: bold;
-	line-height: 22px;
+	font-size: 14px;
+	line-height: 21px;
 	position: relative;
 	cursor: pointer;
 	padding: 4px 20px;
@@ -220,6 +217,11 @@ div.group-content .group-description {
 
 .control-item {
 	margin-bottom: 10px;
+}
+
+.control-select,
+.control-text {
+	width: 100%;
 }
 
 /******************************************************************************/

@@ -32,19 +32,6 @@
 class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 	/**
-	 * Enqueues scripts and styles what will be used in a page.
-	 *
-	 * @since 1.0.0
-	 * @uses wp_enqueue_script() To enqueue chart rendering JS files.
-	 *
-	 * @access protected
-	 */
-	protected function _enqueueScripts() {
-		parent::_enqueueScripts();
-		wp_enqueue_script( 'visualizer-preview' );
-	}
-
-	/**
 	 * Renders page content.
 	 *
 	 * @since 1.0.0

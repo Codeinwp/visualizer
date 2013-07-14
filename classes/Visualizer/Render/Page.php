@@ -32,79 +32,13 @@
 class Visualizer_Render_Page extends Visualizer_Render {
 
 	/**
-	 * Enqueues scripts and styles what will be used in a page.
-	 *
-	 * @since 1.0.0
-	 * @uses wp_enqueue_style() To enqueue CSS styles file.
-	 * @uses wp_enqueue_script() To enqueue JS file.
-	 * @uses wp_register_script() To register chart rendering JS files.
-	 *
-	 * @access protected
-	 */
-	protected function _enqueueScripts() {
-		wp_enqueue_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'buttons' ), Visualizer_Plugin::VERSION );
-
-		wp_enqueue_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
-		wp_register_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'jquery' ), Visualizer_Plugin::VERSION, true );
-		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
-
-		wp_localize_script( 'visualizer-render', 'visualizer', array(
-			'charts' => array(
-				'canvas' => array(
-					'type'     => $this->type,
-					'series'   => json_decode( $this->series, true ),
-					'data'     => json_decode( $this->chart->post_content, true ),
-					'settings' => json_decode( $this->settings, true ),
-				),
-			),
-		) );
-	}
-
-	/**
-	 * Renders a page.
+	 * Renders the page.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
 	protected function _toHTML() {
-		$this->_enqueueScripts();
-
-		echo '<!DOCTYPE html>';
-		echo '<html>';
-			echo '<head>';
-				$this->_renderHead();
-				wp_print_styles();
-				wp_print_head_scripts();
-			echo '</head>';
-			echo '<body class="', $this->_getBodyClasses(), '">';
-				$this->_renderBody();
-				wp_print_footer_scripts();
-			echo '</body>';
-		echo '</html>';
-	}
-
-	/**
-	 * Renders page head.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderHead() {
-		echo '<meta charset="', get_bloginfo( 'charset' ), '">';
-		echo '<title>Visualizer Chart Builder</title>';
-	}
-
-	/**
-	 * Renders page body.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderBody() {
 		echo '<div id="content">';
 			$this->_renderContent();
 		echo '</div>';
@@ -155,17 +89,5 @@ class Visualizer_Render_Page extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {}
-
-	/**
-	 * Renturns page body classes.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 * @return string The classes string for page body.
-	 */
-	protected function _getBodyClasses() {
-		return 'wp-core-ui has-sidebar';
-	}
 
 }

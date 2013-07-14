@@ -32,28 +32,16 @@
 class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 	/**
-	 * Renturns page body classes.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 * @return string The classes string for page body.
-	 */
-	protected function _getBodyClasses() {
-		return 'wp-core-ui';
-	}
-
-	/**
-	 * Renders page body.
+	 * Renders page template.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
-	protected function _renderBody() {
+	protected function _toHTML() {
 		echo '<form method="post">';
 			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
-			parent::_renderBody();
+			parent::_toHTML();
 		echo '</form>';
 	}
 

@@ -32,39 +32,27 @@
 class Visualizer_Render_Page_Send extends Visualizer_Render_Page {
 
 	/**
-	 * Renders page head.
+	 * Renders page template.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
-	protected function _renderHead() {
-		echo '<script type="text/javascript">';
-			echo '(function() {';
-				echo 'var win = window.dialogArguments || opener || parent || top;';
-				echo 'if (win.send_to_editor) {';
-					echo "win.send_to_editor('", $this->text, "');";
-				echo '}';
-			echo '})();';
-		echo '</script>';
+	protected function _toHTML() {
+		echo '<!DOCTYPE html>';
+		echo '<html>';
+			echo '<head>';
+				echo '<script type="text/javascript">';
+					echo '(function() {';
+						echo 'var win = window.dialogArguments || opener || parent || top;';
+						echo 'if (win.send_to_editor) {';
+							echo "win.send_to_editor('", $this->text, "');";
+						echo '}';
+					echo '})();';
+				echo '</script>';
+			echo '</head>';
+			echo '<body></body>';
+		echo '</html>';
 	}
-
-	/**
-	 * Enqueues scripts and styles what will be used in a page.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _enqueueScripts() {}
-
-	/**
-	 * Renders page body.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderBody() {}
 
 }

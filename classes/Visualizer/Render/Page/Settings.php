@@ -32,19 +32,6 @@
 class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 
 	/**
-	 * Enqueues scripts and styles what will be used in a page.
-	 *
-	 * @since 1.0.0
-	 * @uses wp_enqueue_script() To enqueue chart rendering JS files.
-	 *
-	 * @access protected
-	 */
-	protected function _enqueueScripts() {
-		parent::_enqueueScripts();
-		wp_enqueue_script( 'visualizer-preview' );
-	}
-
-	/**
 	 * Renders page content.
 	 *
 	 * @since 1.0.0
@@ -72,16 +59,16 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	}
 
 	/**
-	 * Renders page body.
+	 * Renders page template.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
-	protected function _renderBody() {
+	protected function _toHTML() {
 		echo '<form method="post">';
 			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
-			parent::_renderBody();
+			parent::_toHTML();
 		echo '</form>';
 	}
 
