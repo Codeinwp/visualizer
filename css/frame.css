@@ -190,6 +190,10 @@ div.group-content .group-description {
 	padding: 5px 20px 10px 20px;
 }
 
+.section-items.open {
+	display: block;
+}
+
 .more-info {
 	text-decoration: none;
 	color: #21759B;
