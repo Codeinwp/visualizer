@@ -25,7 +25,7 @@
 		});
 
 		$('.more-info').click(function() {
-			$(this).parent().nextAll('.control-description:first').toggle();
+			$(this).parent().find('.section-description:first').toggle();
 			return false;
 		});
 	});

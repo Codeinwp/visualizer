@@ -32,4 +32,15 @@
  */
 class Visualizer_Render_Sidebar_Area extends Visualizer_Render_Sidebar {
 
+	/**
+	 * Renders template.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _toHTML() {
+		$this->_renderViewSettings();
+	}
+
 }

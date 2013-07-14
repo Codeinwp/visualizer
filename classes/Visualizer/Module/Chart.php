@@ -194,7 +194,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'visualizer-frame' ), Visualizer_Plugin::VERSION, true );
-		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'wp-color-picker', 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
 
 		// dispatch pages
 		$this->_chart = $chart;
@@ -319,6 +319,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->series = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$render->settings = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 
+		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-preview' );
 		wp_localize_script( 'visualizer-render', 'visualizer', array(

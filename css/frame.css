@@ -51,6 +51,8 @@
 .group {
 	margin: 0;
 	list-style: none;
+	font-size: 12px;
+	line-height: 18px;
 }
 
 .group.open {
@@ -155,8 +157,6 @@ div.group-content .group-description {
 .section-title {
 	display: block;
 	font-weight: bold;
-	font-size: 14px;
-	line-height: 21px;
 	position: relative;
 	cursor: pointer;
 	padding: 4px 20px;
@@ -198,24 +198,39 @@ div.group-content .group-description {
 	float: right;
 }
 
-.control-description {
+.section-description {
 	display: none;
 	padding: 0;
+	margin: 0;
+	font-size: 11px;
+	color: gray;
 }
 
-.control-table {
-	width: 100%;
+.section-group {
 	margin-bottom: 10px;
 }
 
-.control-table-column {
+.section-description.visible {
+	display: block;
+}
+
+.section-table {
+	width: 100%;
+}
+
+.section-delimiter {
+	margin: 15px 0;
+	border-top: 1px dashed #ccc;
+}
+
+.section-table-column {
 	width: 50%;
 	text-align: left;
 	vertical-align: top;
 	padding: 0 1px;
 }
 
-.control-item {
+.section-item {
 	margin-bottom: 10px;
 }
 
