@@ -4,10 +4,12 @@
 	v.objects = {};
 
 	v.renderChart = function(id) {
-		var chart, container, series, data, table, i, j, row, date;
+		var chart, container, series, data, table, settings, i, j, row, date;
 
 		series = v.charts[id].series;
 		data = v.charts[id].data;
+		settings = v.charts[id].settings;
+
 		chart = v.objects[id] || null;
 		container = document.getElementById(id);
 		table = new gv.DataTable({cols: series});
@@ -15,9 +17,23 @@
 		switch (v.charts[id].type) {
 			case 'pie':
 				if (!chart) chart = new gv.PieChart(container);
+				if (settings.slices) {
+					for (i in settings.slices) {
+						if (settings.slices[i]['color'] == '') {
+							delete settings.slices[i]['color'];
+						}
+					}
+				}
 				break;
 			case 'line':
 				if (!chart) chart = new gv.LineChart(container);
+				if (settings.series) {
+					for (i in settings.series) {
+						if (settings.series[i]['color'] == '') {
+							delete settings.series[i]['color'];
+						}
+					}
+				}
 				break;
 			case 'bar':
 				if (!chart) chart = new gv.BarChart(container);
@@ -61,7 +77,7 @@
 			table.addRow(row);
         }
 
-        chart.draw(table, v.charts[id].settings);
+        chart.draw(table, settings);
 	};
 
 	v.render = function() {
