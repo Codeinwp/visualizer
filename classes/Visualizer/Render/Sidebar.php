@@ -111,14 +111,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderChartTitleSettings() {
-		echo '<div class="section-item section-group">';
-			echo '<a class="more-info" href="javascript:;">[?]</a>';
-			echo '<b>', esc_html__( 'Chart Title', Visualizer_Plugin::NAME ), '</b>';
-			echo '<input type="text" class="control-text control-onkeyup" name="title" value="">';
-			echo '<p class="section-description">';
-				esc_html_e( 'Text to display above the chart.', Visualizer_Plugin::NAME );
-			echo '</p>';
-		echo '</div>';
+		self::_renderTextItem(
+			esc_html__( 'Chart Title', Visualizer_Plugin::NAME ),
+			'title',
+			$this->title,
+			esc_html__( 'Text to display above the chart.', Visualizer_Plugin::NAME )
+		);
 	}
 
 	/**
@@ -134,13 +132,15 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<ul class="group-content">';
 				echo '<li>';
 					echo '<div class="section-items open">';
-						echo '<div class="section-description visible section-group">';
-							esc_html_e( 'Configure title, font styles and legend positioning settings for the chart.', Visualizer_Plugin::NAME );
+						echo '<div class="section-item">';
+							echo '<div class="section-description">';
+								esc_html_e( 'Configure title, font styles and legend positioning settings for the chart.', Visualizer_Plugin::NAME );
+							echo '</div>';
 						echo '</div>';
 
 						$this->_renderChartTitleSettings();
 
-						echo '<div class="section-item section-group">';
+						echo '<div class="section-item">';
 							echo '<a class="more-info" href="javascript:;">[?]</a>';
 							echo '<b>', esc_html__( 'Font Family And Size', Visualizer_Plugin::NAME ), '</b>';
 
@@ -150,7 +150,9 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 										echo '<select name="fontName" class="control-select">';
 											echo '<option></option>';
 											foreach ( self::$_fontFamilies as $font => $label ) {
-												echo '<option value="', $font, '">', $label, '</option>';
+												echo '<option value="', $font, '"', selected( $font, $this->fontName, false ), '>';
+													echo $label;
+												echo '</option>';
 											}
 										echo '</select>';
 									echo '</td>';
@@ -158,7 +160,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 										echo '<select name="fontSize" class="control-select">';
 											echo '<option></option>';
 											for	( $i = 7; $i <= 20; $i++ ) {
-												echo '<option value="', $i, '">', $i, '</option>';
+												echo '<option value="', $i, '"', selected( $font, $this->fontSize, false ), '>', $i, '</option>';
 											}
 										echo '</select>';
 									echo '</td>';
@@ -174,31 +176,21 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				echo '<li>';
 					echo '<span class="section-title">', esc_html__( 'Legend', Visualizer_Plugin::NAME ), '</span>';
 					echo '<div class="section-items">';
-						echo '<div class="section-item">';
-							echo '<a class="more-info" href="javascript:;">[?]</a>';
-							echo '<b>', esc_html__( 'Position', Visualizer_Plugin::NAME ), '</b>';
-							echo '<select class="control-select" name="legend[position]">';
-								foreach ( $this->_legendPositions as $position => $label ) {
-									echo '<option value="', $position, '">', $label, '</option>';
-								}
-							echo '</select>';
-							echo '<p class="section-description">';
-								esc_html_e( 'Determines where to place the legend, compared to the chart area.', Visualizer_Plugin::NAME );
-							echo '</p>';
-						echo '</div>';
+						self::_renderSelectItem(
+							esc_html__( 'Position', Visualizer_Plugin::NAME ),
+							'legend[position]',
+							$this->legend['position'],
+							$this->_legendPositions,
+							esc_html__( 'Determines where to place the legend, compared to the chart area.', Visualizer_Plugin::NAME )
+						);
 
-						echo '<div class="section-item">';
-							echo '<a class="more-info" href="javascript:;">[?]</a>';
-							echo '<b>', esc_html__( 'Alignment', Visualizer_Plugin::NAME ), '</b>';
-							echo '<select class="control-select" name="legend[alignment]">';
-								foreach ( $this->_alignments as $position => $label ) {
-									echo '<option value="', $position, '">', $label, '</option>';
-								}
-							echo '</select>';
-							echo '<p class="section-description">';
-								esc_html_e( 'Determines the alignment of the legend.', Visualizer_Plugin::NAME );
-							echo '</p>';
-						echo '</div>';
+						self::_renderSelectItem(
+							esc_html__( 'Alignment', Visualizer_Plugin::NAME ),
+							'legend[alignment]',
+							$this->legend['alignment'],
+							$this->_alignments,
+							esc_html__( 'Determines the alignment of the legend.', Visualizer_Plugin::NAME )
+						);
 					echo '</div>';
 				echo '</li>';
 			echo '</ul>';
@@ -219,92 +211,91 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				echo '<li>';
 					echo '<span class="section-title">', esc_html__( 'Layout', Visualizer_Plugin::NAME ), '</span>';
 					echo '<div class="section-items">';
-						echo '<div class="section-description visible section-group">';
-							esc_html_e( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', Visualizer_Plugin::NAME );
+						echo '<div class="section-item">';
+							echo '<div class="section-description">';
+								esc_html_e( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', Visualizer_Plugin::NAME );
+							echo '</div>';
 						echo '</div>';
 
-						echo '<div class="section-group">';
-							echo '<div class="section-item">';
-								echo '<a class="more-info" href="javascript:;">[?]</a>';
-								echo '<b>', esc_html__( 'Width And Height Of Chart', Visualizer_Plugin::NAME ), '</b>';
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Width And Height Of Chart', Visualizer_Plugin::NAME ), '</b>';
 
-								echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
-									echo '<tr>';
-										echo '<td class="section-table-column">';
-											echo '<input type="text" name="width" class="control-text control-onkeyup" value="" placeholder="100%">';
-										echo '</td>';
-										echo '<td class="section-table-column">';
-											echo '<input type="text" name="height" class="control-text control-onkeyup" value="" placeholder="400">';
-										echo '</td>';
-									echo '</tr>';
-								echo '</table>';
+							echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+								echo '<tr>';
+									echo '<td class="section-table-column">';
+										echo '<input type="text" name="width" class="control-text" value="', esc_attr( $this->width ), '" placeholder="100%">';
+									echo '</td>';
+									echo '<td class="section-table-column">';
+										echo '<input type="text" name="height" class="control-text" value="', esc_attr( $this->height ), '" placeholder="400">';
+									echo '</td>';
+								echo '</tr>';
+							echo '</table>';
 
-								echo '<p class="section-description">';
-									esc_html_e( 'Determines the total width and height of the chart.', Visualizer_Plugin::NAME );
-								echo '</p>';
-							echo '</div>';
+							echo '<p class="section-description">';
+								esc_html_e( 'Determines the total width and height of the chart.', Visualizer_Plugin::NAME );
+							echo '</p>';
 						echo '</div>';
 
 						echo '<div class="section-delimiter"></div>';
 
-						echo '<div class="section-description visible section-group">';
-							esc_html_e( 'Configure the background color for the main area of the chart and the chart border width and color.', Visualizer_Plugin::NAME );
-						echo '</div>';
-
-						echo '<div class="section-group">';
-							echo '<div class="section-item">';
-								echo '<a class="more-info" href="javascript:;">[?]</a>';
-								echo '<b>', esc_html__( 'Stroke Width', Visualizer_Plugin::NAME ), '</b>';
-								echo '<input type="text" class="control-text control-onkeyup" name="backgroundColor[strokeWidth]" value="" placeholder="0">';
-								echo '<p class="section-description">';
-									esc_html_e( 'The chart border width in pixels.', Visualizer_Plugin::NAME );
-								echo '</p>';
-							echo '</div>';
-
-							echo '<div class="section-item">';
-								echo '<b>', esc_html__( 'Stroke Color', Visualizer_Plugin::NAME ), '</b>';
-								echo '<div>';
-									echo '<input type="text" class="color-picker-hex" name="backgroundColor[stroke]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#666" data-default-color="#666">';
-								echo '</div>';
-							echo '</div>';
-
-							echo '<div class="section-item">';
-								echo '<b>', esc_html__( 'Background Color', Visualizer_Plugin::NAME ), '</b>';
-								echo '<div>';
-									echo '<input type="text" class="color-picker-hex" name="backgroundColor[fill]" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="#fff" data-default-color="#fff">';
-								echo '</div>';
+						echo '<div class="section-item">';
+							echo '<div class="section-description">';
+								esc_html_e( 'Configure the background color for the main area of the chart and the chart border width and color.', Visualizer_Plugin::NAME );
 							echo '</div>';
 						echo '</div>';
+
+						self::_renderTextItem(
+							esc_html__( 'Stroke Width', Visualizer_Plugin::NAME ),
+							'backgroundColor[strokeWidth]',
+							isset( $this->backgroundColor['strokeWidth'] ) ? $this->backgroundColor['strokeWidth'] : null,
+							esc_html__( 'The chart border width in pixels.', Visualizer_Plugin::NAME ),
+							'0'
+						);
+
+						self::_renderColorPickerItem(
+							esc_html__( 'Stroke Color', Visualizer_Plugin::NAME ),
+							'backgroundColor[stroke]',
+							!empty( $this->backgroundColor['stroke'] ) ? $this->backgroundColor['stroke'] : null,
+							'#666'
+						);
+
+						self::_renderColorPickerItem(
+							esc_html__( 'Background Color', Visualizer_Plugin::NAME ),
+							'backgroundColor[fill]',
+							!empty( $this->backgroundColor['fill'] ) ? $this->backgroundColor['fill'] : null,
+							'#fff'
+						);
 					echo '</div>';
 				echo '</li>';
 
 				echo '<li>';
 					echo '<span class="section-title">', esc_html__( 'Chart Area', Visualizer_Plugin::NAME ), '</span>';
 					echo '<div class="section-items">';
-						echo '<div class="section-description visible section-group">';
-							esc_html_e( 'Configure the placement and size of the chart area (where the chart itself is drawn, excluding axis and legends). Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', Visualizer_Plugin::NAME );
+						echo '<div class="section-item">';
+							echo '<div class="section-description">';
+								esc_html_e( 'Configure the placement and size of the chart area (where the chart itself is drawn, excluding axis and legends). Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', Visualizer_Plugin::NAME );
+							echo '</div>';
 						echo '</div>';
 
-						echo '<div class="section-group">';
-							echo '<div class="section-item">';
-								echo '<a class="more-info" href="javascript:;">[?]</a>';
-								echo '<b>', esc_html__( 'Left And Top Margins', Visualizer_Plugin::NAME ), '</b>';
+						echo '<div class="section-item">';
+							echo '<a class="more-info" href="javascript:;">[?]</a>';
+							echo '<b>', esc_html__( 'Left And Top Margins', Visualizer_Plugin::NAME ), '</b>';
 
-								echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
-									echo '<tr>';
-										echo '<td class="section-table-column">';
-											echo '<input type="text" name="chartArea[left]" class="control-text control-onkeyup" value="" placeholder="20%">';
-										echo '</td>';
-										echo '<td class="section-table-column">';
-											echo '<input type="text" name="chartArea[top]" class="control-text control-onkeyup" value="" placeholder="20%">';
-										echo '</td>';
-									echo '</tr>';
-								echo '</table>';
+							echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+								echo '<tr>';
+									echo '<td class="section-table-column">';
+										echo '<input type="text" name="chartArea[left]" class="control-text" value="', !empty( $this->chartArea['left'] ) ? esc_attr( $this->chartArea['left'] ) : '', '" placeholder="20%">';
+									echo '</td>';
+									echo '<td class="section-table-column">';
+										echo '<input type="text" name="chartArea[top]" class="control-text" value="', !empty( $this->chartArea['top'] ) ? esc_attr( $this->chartArea['top'] ) : '', '" placeholder="20%">';
+									echo '</td>';
+								echo '</tr>';
+							echo '</table>';
 
-								echo '<p class="section-description">';
-									esc_html_e( 'Determines how far to draw the chart from the left and top borders.', Visualizer_Plugin::NAME );
-								echo '</p>';
-							echo '</div>';
+							echo '<p class="section-description">';
+								esc_html_e( 'Determines how far to draw the chart from the left and top borders.', Visualizer_Plugin::NAME );
+							echo '</p>';
 						echo '</div>';
 
 						echo '<div class="section-item">';
@@ -314,10 +305,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 							echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 								echo '<tr>';
 									echo '<td class="section-table-column">';
-										echo '<input type="text" name="chartArea[width]" class="control-text control-onkeyup" value="" placeholder="60%">';
+										echo '<input type="text" name="chartArea[width]" class="control-text" value="', !empty( $this->chartArea['width'] ) ? esc_attr( $this->chartArea['width'] ) : '', '" placeholder="60%">';
 									echo '</td>';
 									echo '<td class="section-table-column">';
-										echo '<input type="text" name="chartArea[height]" class="control-text control-onkeyup" value="" placeholder="60%">';
+										echo '<input type="text" name="chartArea[height]" class="control-text" value="', !empty( $this->chartArea['height'] ) ? esc_attr( $this->chartArea['height'] ) : '', '" placeholder="60%">';
 									echo '</td>';
 								echo '</tr>';
 							echo '</table>';
@@ -376,7 +367,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="section-item">';
 			echo '<b>', $title, '</b>';
 			echo '<div>';
-				echo '<input type="text" class="color-picker-hex" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="', is_null( $value ) ? $default : $value, '" data-default-color="', $default, '">';
+				echo '<input type="text" class="color-picker-hex" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', Visualizer_Plugin::NAME ), '" value="', is_null( $value ) ? $default : esc_attr( $value ), '" data-default-color="', $default, '">';
 			echo '</div>';
 		echo '</div>';
 	}
@@ -398,7 +389,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<input type="text" class="control-text" name="', $name, '" value="', $value, '" placeholder="', $placeholder, '">';
+			echo '<input type="text" class="control-text" name="', $name, '" value="', esc_attr( $value ), '" placeholder="', $placeholder, '">';
 			echo '<p class="section-description">', $desc, '</p>';
 		echo '</div>';
 	}

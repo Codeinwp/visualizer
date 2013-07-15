@@ -211,10 +211,6 @@ div.group-content .group-description {
 	color: gray;
 }
 
-.section-description.visible {
-	display: block;
-}
-
 .section-table {
 	width: 100%;
 }
