@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-14 22:49+0300\n"
-"PO-Revision-Date: 2013-07-14 22:49+0300\n"
+"POT-Creation-Date: 2013-07-15 10:06+0300\n"
+"PO-Revision-Date: 2013-07-15 10:06+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -473,6 +473,67 @@ msgstr "Focus Target"
 #: classes/Visualizer/Render/Sidebar/Line.php:430
 msgid "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 msgstr "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:66
+msgid "Min And Max Values"
+msgstr "Min And Max Values"
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:80
+msgid "The maximal and minimal values of the gauge."
+msgstr "The maximal and minimal values of the gauge."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:85
+msgid "Minor Ticks"
+msgstr "Minor Ticks"
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:88
+msgid "The number of minor tick section in each major tick section."
+msgstr "The number of minor tick section in each major tick section."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:107
+#: classes/Visualizer/Render/Sidebar/Gauge.php:136
+msgid "Green Color"
+msgstr "Green Color"
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:112
+msgid "Configure the green section of the gauge chart."
+msgstr "Configure the green section of the gauge chart."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:117
+#: classes/Visualizer/Render/Sidebar/Gauge.php:166
+#: classes/Visualizer/Render/Sidebar/Gauge.php:215
+msgid "From And To Range"
+msgstr "From And To Range"
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:131
+msgid "The lowest and highest values for a range marked by a green color."
+msgstr "The lowest and highest values for a range marked by a green color."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:156
+#: classes/Visualizer/Render/Sidebar/Gauge.php:185
+msgid "Yellow Color"
+msgstr "Yellow Color"
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:161
+msgid "Configure the yellow section of the gauge chart."
+msgstr "Configure the yellow section of the gauge chart."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:180
+msgid "The lowest and highest values for a range marked by a yellow color."
+msgstr "The lowest and highest values for a range marked by a yellow color."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:205
+#: classes/Visualizer/Render/Sidebar/Gauge.php:234
+msgid "Red Color"
+msgstr "Red Color"
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:210
+msgid "Configure the red section of the gauge chart."
+msgstr "Configure the red section of the gauge chart."
+
+#: classes/Visualizer/Render/Sidebar/Gauge.php:229
+msgid "The lowest and highest values for a range marked by a red color."
+msgstr "The lowest and highest values for a range marked by a red color."
 
 #: classes/Visualizer/Module/Admin.php:90
 msgid "Visualizations"
