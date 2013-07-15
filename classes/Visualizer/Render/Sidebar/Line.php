@@ -125,119 +125,109 @@ class Visualizer_Render_Sidebar_Line extends Visualizer_Render_Sidebar {
 			'-1' => esc_html__( 'Reverse Direction', Visualizer_Plugin::NAME ),
 		);
 
-		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'Horizontal & Vertical Axes', Visualizer_Plugin::NAME ), '</h3>';
-			echo '<ul class="group-content">';
-				echo '<li>';
-					echo '<div class="section-items open">';
-						self::_renderSelectItem(
-							esc_html__( 'Axes Titles Position', Visualizer_Plugin::NAME ),
-							'axisTitlesPosition',
-							$this->axisTitlesPosition,
-							$this->_positions,
-							esc_html__( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME )
-						);
-					echo '</div>';
-				echo '</li>';
-				echo '<li>';
-					echo '<span class="section-title">', esc_html__( 'Horizontal Axis', Visualizer_Plugin::NAME ), '</span>';
-					echo '<div class="section-items">';
-						self::_renderTextItem(
-							esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
-							'hAxis[title]',
-							isset( $this->hAxis['title'] ) ? $this->hAxis['title'] : '',
-							esc_html__( 'The title of the horizontal axis.', Visualizer_Plugin::NAME )
-						);
+		self::_renderGroupStart( esc_html__( 'Horizontal & Vertical Axes', Visualizer_Plugin::NAME ) );
+			self::_renderSectionStart();
+				self::_renderSelectItem(
+					esc_html__( 'Axes Titles Position', Visualizer_Plugin::NAME ),
+					'axisTitlesPosition',
+					$this->axisTitlesPosition,
+					$this->_positions,
+					esc_html__( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME )
+				);
+			self::_renderSectionEnd();
 
-						self::_renderSelectItem(
-							esc_html__( 'Text Position', Visualizer_Plugin::NAME ),
-							'vAxis[textPosition]',
-							isset( $this->vAxis['textPosition'] ) ? $this->vAxis['textPosition'] : '',
-							$this->_positions,
-							esc_html__( 'Position of the horizontal axis text, relative to the chart area.', Visualizer_Plugin::NAME )
-						);
+			self::_renderSectionStart( esc_html__( 'Horizontal Axis', Visualizer_Plugin::NAME ), false );
+				self::_renderTextItem(
+					esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
+					'hAxis[title]',
+					isset( $this->hAxis['title'] ) ? $this->hAxis['title'] : '',
+					esc_html__( 'The title of the horizontal axis.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderSelectItem(
-							esc_html__( 'Direction', Visualizer_Plugin::NAME ),
-							'hAxis[direction]',
-							isset( $this->hAxis['direction'] ) ? $this->hAxis['direction'] : '',
-							$directions,
-							esc_html__( 'The direction in which the values along the horizontal axis grow.', Visualizer_Plugin::NAME )
-						);
+				self::_renderSelectItem(
+					esc_html__( 'Text Position', Visualizer_Plugin::NAME ),
+					'vAxis[textPosition]',
+					isset( $this->vAxis['textPosition'] ) ? $this->vAxis['textPosition'] : '',
+					$this->_positions,
+					esc_html__( 'Position of the horizontal axis text, relative to the chart area.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderTextItem(
-							esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
-							'vAxis[gridlines][count]',
-							isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
-							esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME )
-						);
+				self::_renderSelectItem(
+					esc_html__( 'Direction', Visualizer_Plugin::NAME ),
+					'hAxis[direction]',
+					isset( $this->hAxis['direction'] ) ? $this->hAxis['direction'] : '',
+					$directions,
+					esc_html__( 'The direction in which the values along the horizontal axis grow.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderColorPickerItem(
-							esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
-							'vAxis[gridlines][color]',
-							isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
-							'#ccc'
-						);
+				self::_renderTextItem(
+					esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
+					'vAxis[gridlines][count]',
+					isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
+					esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderColorPickerItem(
-							esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
-							'vAxis[baselineColor]',
-							isset( $this->vAxis['baselineColor'] ) ? $this->vAxis['baselineColor'] : null,
-							'#000'
-						);
-					echo '</div>';
-				echo '</li>';
+				self::_renderColorPickerItem(
+					esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
+					'vAxis[gridlines][color]',
+					isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
+					'#ccc'
+				);
 
-				echo '<li>';
-					echo '<span class="section-title">', esc_html__( 'Vertical Axis', Visualizer_Plugin::NAME ), '</span>';
-					echo '<div class="section-items">';
-						self::_renderTextItem(
-							esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
-							'vAxis[title]',
-							isset( $this->vAxis['title'] ) ? $this->vAxis['title'] : '',
-							esc_html__( 'The title of the vertical axis.', Visualizer_Plugin::NAME )
-						);
+				self::_renderColorPickerItem(
+					esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
+					'vAxis[baselineColor]',
+					isset( $this->vAxis['baselineColor'] ) ? $this->vAxis['baselineColor'] : null,
+					'#000'
+				);
+			self::_renderSectionEnd();
 
-						self::_renderSelectItem(
-							esc_html__( 'Text Position', Visualizer_Plugin::NAME ),
-							'hAxis[textPosition]',
-							isset( $this->hAxis['textPosition'] ) ? $this->hAxis['textPosition'] : '',
-							$this->_positions,
-							esc_html__( 'Position of the vertical axis text, relative to the chart area.', Visualizer_Plugin::NAME )
-						);
+			self::_renderSectionStart( esc_html__( 'Vertical Axis', Visualizer_Plugin::NAME ), false );
+				self::_renderTextItem(
+					esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
+					'vAxis[title]',
+					isset( $this->vAxis['title'] ) ? $this->vAxis['title'] : '',
+					esc_html__( 'The title of the vertical axis.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderSelectItem(
-							esc_html__( 'Direction', Visualizer_Plugin::NAME ),
-							'vAxis[direction]',
-							isset( $this->vAxis['direction'] ) ? $this->vAxis['direction'] : '',
-							$directions,
-							esc_html__( 'The direction in which the values along the vertical axis grow.', Visualizer_Plugin::NAME )
-						);
+				self::_renderSelectItem(
+					esc_html__( 'Text Position', Visualizer_Plugin::NAME ),
+					'hAxis[textPosition]',
+					isset( $this->hAxis['textPosition'] ) ? $this->hAxis['textPosition'] : '',
+					$this->_positions,
+					esc_html__( 'Position of the vertical axis text, relative to the chart area.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderTextItem(
-							esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
-							'hAxis[gridlines][count]',
-							isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
-							esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME )
-						);
+				self::_renderSelectItem(
+					esc_html__( 'Direction', Visualizer_Plugin::NAME ),
+					'vAxis[direction]',
+					isset( $this->vAxis['direction'] ) ? $this->vAxis['direction'] : '',
+					$directions,
+					esc_html__( 'The direction in which the values along the vertical axis grow.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderColorPickerItem(
-							esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
-							'hAxis[gridlines][color]',
-							isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
-							'#ccc'
-						);
+				self::_renderTextItem(
+					esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
+					'hAxis[gridlines][count]',
+					isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
+					esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderColorPickerItem(
-							esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
-							'hAxis[baselineColor]',
-							isset( $this->hAxis['baselineColor'] ) ? $this->hAxis['baselineColor'] : null,
-							'#000'
-						);
-					echo '</div>';
-				echo '</li>';
-			echo '</ul>';
-		echo '</li>';
+				self::_renderColorPickerItem(
+					esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
+					'hAxis[gridlines][color]',
+					isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
+					'#ccc'
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
+					'hAxis[baselineColor]',
+					isset( $this->hAxis['baselineColor'] ) ? $this->hAxis['baselineColor'] : null,
+					'#000'
+				);
+			self::_renderSectionEnd();
+		self::_renderGroupEnd();
 	}
 
 	/**
@@ -248,19 +238,13 @@ class Visualizer_Render_Sidebar_Line extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderSeriesSettings() {
-		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'Series Settings', Visualizer_Plugin::NAME ), '</h3>';
-			echo '<ul class="group-content">';
-				for ( $i = 1, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
-					echo '<li>';
-						echo '<span class="section-title">', esc_html( $this->__series[$i]['label'] ), '</span>';
-						echo '<div class="section-items">';
-							$this->_renderSeries( $i - 1 );
-						echo '</div>';
-					echo '</li>';
-				}
-			echo '</ul>';
-		echo '</li>';
+		self::_renderGroupStart( esc_html__( 'Series Settings', Visualizer_Plugin::NAME ) );
+			for ( $i = 1, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
+				self::_renderSectionStart( esc_html( $this->__series[$i]['label'] ), false );
+					$this->_renderSeries( $i - 1 );
+				self::_renderSectionEnd();
+			}
+		self::_renderGroupEnd();
 	}
 
 	/**
@@ -324,50 +308,45 @@ class Visualizer_Render_Sidebar_Line extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderLineSettings() {
-		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'General Line Settings', Visualizer_Plugin::NAME ), '</h3>';
-			echo '<ul class="group-content">';
-				echo '<li>';
-					echo '<div class="section-items open">';
-						self::_renderTextItem(
-							esc_html__( 'Line Width', Visualizer_Plugin::NAME ),
-							'lineWidth',
-							$this->lineWidth,
-							esc_html__( 'Data line width in pixels. Use zero to hide all lines and show only the points.', Visualizer_Plugin::NAME ),
-							2
-						);
+		self::_renderGroupStart( esc_html__( 'General Line Settings', Visualizer_Plugin::NAME ) );
+			self::_renderSectionStart();
+				self::_renderTextItem(
+					esc_html__( 'Line Width', Visualizer_Plugin::NAME ),
+					'lineWidth',
+					$this->lineWidth,
+					esc_html__( 'Data line width in pixels. Use zero to hide all lines and show only the points.', Visualizer_Plugin::NAME ),
+					2
+				);
 
-						self::_renderTextItem(
-							esc_html__( 'Point Size', Visualizer_Plugin::NAME ),
-							'pointSize',
-							$this->pointSize,
-							esc_html__( 'Diameter of displayed points in pixels. Use zero to hide all points.', Visualizer_Plugin::NAME ),
-							0
-						);
+				self::_renderTextItem(
+					esc_html__( 'Point Size', Visualizer_Plugin::NAME ),
+					'pointSize',
+					$this->pointSize,
+					esc_html__( 'Diameter of displayed points in pixels. Use zero to hide all points.', Visualizer_Plugin::NAME ),
+					0
+				);
 
-						self::_renderSelectItem(
-							esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
-							'curveType',
-							$this->curveType,
-							$this->_curveTypes,
-							esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
-						);
+				self::_renderSelectItem(
+					esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
+					'curveType',
+					$this->curveType,
+					$this->_curveTypes,
+					esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+				);
 
-						self::_renderSelectItem(
-							esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
-							'focusTarget',
-							$this->focusTarget,
-							array(
-								''         => '',
-								'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
-								'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
-							),
-							esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
-						);
-					echo '</div>';
-				echo '</li>';
-			echo '</ul>';
-		echo '</li>';
+				self::_renderSelectItem(
+					esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
+					'focusTarget',
+					$this->focusTarget,
+					array(
+						''         => '',
+						'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
+						'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
+					),
+					esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
+				);
+			self::_renderSectionEnd();
+		self::_renderGroupEnd();
 	}
 
 }
