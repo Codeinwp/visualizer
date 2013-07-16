@@ -30,7 +30,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Candlestick extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_Column extends Visualizer_Render_Sidebar {
 
 	/**
 	 * Renders template.

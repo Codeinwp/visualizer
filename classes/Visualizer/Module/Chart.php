@@ -315,7 +315,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$data_decoded = json_decode( $this->_chart->post_content, true );
 
 		$sidebar = '';
-		$sidebar_class = 'Visualizer_Render_Sidebar_' . ucfirst( $type );
+		$sidebar_class = 'Visualizer_Render_Sidebar_Type_' . ucfirst( $type );
 		if ( class_exists( $sidebar_class, true ) ) {
 			$sidebar = new $sidebar_class();
 			$sidebar->__series = $series_decoded;

@@ -30,7 +30,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Line extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_Line extends Visualizer_Render_Sidebar {
 
 	/**
 	 * The array of available axis positions.

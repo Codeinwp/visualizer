@@ -30,7 +30,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Area extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_Area extends Visualizer_Render_Sidebar {
 
 	/**
 	 * Renders template.
