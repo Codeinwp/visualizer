@@ -30,20 +30,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Candlestick extends Visualizer_Render_Sidebar {
-
-	/**
-	 * Constructor.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
-	 * @param array $data The data what has to be associated with this render.
-	 */
-	public function __construct( $data = array( ) ) {
-		parent::__construct( $data );
-		$this->_includeCurveTypes = false;
-	}
+class Visualizer_Render_Sidebar_Type_Candlestick extends Visualizer_Render_Sidebar_Linear {
 
 	/**
 	 * Renders template.
@@ -54,7 +41,112 @@ class Visualizer_Render_Sidebar_Type_Candlestick extends Visualizer_Render_Sideb
 	 */
 	protected function _toHTML() {
 		$this->_renderGeneralSettings();
+		$this->_renderAxesSettings();
+		$this->_renderLineSettings();
+		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
+	}
+
+	/**
+	 * Renders lines settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderLineSettings() {
+		self::_renderGroupStart( esc_html__( 'Candles Settings', Visualizer_Plugin::NAME ) );
+			self::_renderSectionStart();
+				self::_renderSelectItem(
+					esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
+					'focusTarget',
+					$this->focusTarget,
+					array(
+						''         => '',
+						'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
+						'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
+					),
+					esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
+				);
+			self::_renderSectionEnd();
+
+			self::_renderSectionStart( esc_html__( 'Failing Candles', Visualizer_Plugin::NAME ), false );
+				self::_renderTextItem(
+					esc_html__( 'Stroke Width', Visualizer_Plugin::NAME ),
+					'candlestick[fallingColor][strokeWidth]',
+					isset( $this->candlestick['fallingColor']['strokeWidth'] ) ? $this->candlestick['fallingColor']['strokeWidth'] : null,
+					esc_html__( 'The stroke width of falling candles.', Visualizer_Plugin::NAME ),
+					'2'
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Stroke Color', Visualizer_Plugin::NAME ),
+					'candlestick[fallingColor][stroke]',
+					!empty( $this->candlestick['fallingColor']['stroke'] ) ? $this->candlestick['fallingColor']['stroke'] : null,
+					null
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Fill Color', Visualizer_Plugin::NAME ),
+					'candlestick[fallingColor][fill]',
+					!empty( $this->candlestick['fallingColor']['fill'] ) ? $this->candlestick['fallingColor']['fill'] : null,
+					null
+				);
+			self::_renderSectionEnd();
+
+			self::_renderSectionStart( esc_html__( 'Rising Candles', Visualizer_Plugin::NAME ), false );
+				self::_renderTextItem(
+					esc_html__( 'Stroke Width', Visualizer_Plugin::NAME ),
+					'candlestick[risingColor][strokeWidth]',
+					isset( $this->candlestick['risingColor']['strokeWidth'] ) ? $this->candlestick['risingColor']['strokeWidth'] : null,
+					esc_html__( 'The stroke width of rising candles.', Visualizer_Plugin::NAME ),
+					'2'
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Stroke Color', Visualizer_Plugin::NAME ),
+					'candlestick[risingColor][stroke]',
+					!empty( $this->candlestick['risingColor']['stroke'] ) ? $this->candlestick['risingColor']['stroke'] : null,
+					null
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Fill Color', Visualizer_Plugin::NAME ),
+					'candlestick[risingColor][fill]',
+					!empty( $this->candlestick['risingColor']['fill'] ) ? $this->candlestick['risingColor']['fill'] : null,
+					null
+				);
+			self::_renderSectionEnd();
+		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders concreate series settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @param int $index The series index.
+	 */
+	protected function _renderSeries( $index ) {
+		self::_renderSelectItem(
+			esc_html__( 'Visible In Legend', Visualizer_Plugin::NAME ),
+			'series[' . $index . '][visibleInLegend]',
+			isset( $this->series[$index]['visibleInLegend'] ) ? $this->series[$index]['visibleInLegend'] : '',
+			array(
+				''  => '',
+				'0' => esc_html__( 'No', Visualizer_Plugin::NAME ),
+				'1' => esc_html__( 'Yes', Visualizer_Plugin::NAME ),
+			),
+			esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+		);
+
+		self::_renderColorPickerItem(
+			esc_html__( 'Color', Visualizer_Plugin::NAME ),
+			'series[' . $index . '][color]',
+			isset( $this->series[$index]['color'] ) ? $this->series[$index]['color'] : null,
+			null
+		);
 	}
 
 }

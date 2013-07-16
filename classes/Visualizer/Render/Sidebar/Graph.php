@@ -239,9 +239,11 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	protected function _renderSeriesSettings() {
 		self::_renderGroupStart( esc_html__( 'Series Settings', Visualizer_Plugin::NAME ) );
 			for ( $i = 1, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
-				self::_renderSectionStart( esc_html( $this->__series[$i]['label'] ), false );
-					$this->_renderSeries( $i - 1 );
-				self::_renderSectionEnd();
+				if ( !empty( $this->__series[$i]['label'] ) ) {
+					self::_renderSectionStart( esc_html( $this->__series[$i]['label'] ), false );
+						$this->_renderSeries( $i - 1 );
+					self::_renderSectionEnd();
+				}
 			}
 		self::_renderGroupEnd();
 	}

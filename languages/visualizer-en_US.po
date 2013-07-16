@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 17:42+0300\n"
-"PO-Revision-Date: 2013-07-16 17:42+0300\n"
+"POT-Creation-Date: 2013-07-16 18:20+0300\n"
+"PO-Revision-Date: 2013-07-16 18:20+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -275,8 +275,8 @@ msgid "The type of the entity that receives focus on mouse hover. Also affects w
 msgstr "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:144
-msgid "General Line Settings"
-msgstr "General Line Settings"
+msgid "Lines Settings"
+msgstr "Lines Settings"
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:161
 msgid "Visible In Legend"
@@ -483,6 +483,31 @@ msgstr "Residue Slice Color"
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:144
 msgid "Slices Colors"
 msgstr "Slices Colors"
+
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:58
+msgid "Candles Settings"
+msgstr "Candles Settings"
+
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:73
+msgid "Failing Candles"
+msgstr "Failing Candles"
+
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:78
+msgid "The stroke width of falling candles."
+msgstr "The stroke width of falling candles."
+
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:90
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:114
+msgid "Fill Color"
+msgstr "Fill Color"
+
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:97
+msgid "Rising Candles"
+msgstr "Rising Candles"
+
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:102
+msgid "The stroke width of rising candles."
+msgstr "The stroke width of rising candles."
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:63
 msgid "Min And Max Values"

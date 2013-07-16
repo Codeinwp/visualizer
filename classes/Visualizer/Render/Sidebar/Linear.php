@@ -134,14 +134,14 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	}
 
 	/**
-	 * Renders line settings.
+	 * Renders lines settings.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access protected
 	 */
 	protected function _renderLineSettings() {
-		self::_renderGroupStart( esc_html__( 'General Line Settings', Visualizer_Plugin::NAME ) );
+		self::_renderGroupStart( esc_html__( 'Lines Settings', Visualizer_Plugin::NAME ) );
 			self::_renderSectionStart();
 				$this->_renderLineSettingsItems();
 			self::_renderSectionEnd();
