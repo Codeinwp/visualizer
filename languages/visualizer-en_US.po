@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 16:49+0300\n"
-"PO-Revision-Date: 2013-07-16 16:49+0300\n"
+"POT-Creation-Date: 2013-07-16 17:26+0300\n"
+"PO-Revision-Date: 2013-07-16 17:26+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -282,115 +282,129 @@ msgstr "Overrides the global point size value for this series."
 msgid "Color"
 msgstr "Color"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:60
+#: classes/Visualizer/Render/Sidebar/Graph.php:83
 msgid "Outside the chart"
 msgstr "Outside the chart"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:61
+#: classes/Visualizer/Render/Sidebar/Graph.php:84
 msgid "None"
 msgstr "None"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:76
+#: classes/Visualizer/Render/Sidebar/Graph.php:99
 msgid "Chart Title Position"
 msgstr "Chart Title Position"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:80
+#: classes/Visualizer/Render/Sidebar/Graph.php:103
 msgid "Where to place the chart title, compared to the chart area."
 msgstr "Where to place the chart title, compared to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:94
+#: classes/Visualizer/Render/Sidebar/Graph.php:117
 msgid "Identical Direction"
 msgstr "Identical Direction"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:95
+#: classes/Visualizer/Render/Sidebar/Graph.php:118
 msgid "Reverse Direction"
 msgstr "Reverse Direction"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:98
+#: classes/Visualizer/Render/Sidebar/Graph.php:121
 msgid "Horizontal & Vertical Axes"
 msgstr "Horizontal & Vertical Axes"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:101
+#: classes/Visualizer/Render/Sidebar/Graph.php:124
 msgid "Axes Titles Position"
 msgstr "Axes Titles Position"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:105
+#: classes/Visualizer/Render/Sidebar/Graph.php:128
 msgid "Determines where to place the axis titles, compared to the chart area."
 msgstr "Determines where to place the axis titles, compared to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:109
+#: classes/Visualizer/Render/Sidebar/Graph.php:132
 msgid "Horizontal Axis"
 msgstr "Horizontal Axis"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:111
-#: classes/Visualizer/Render/Sidebar/Graph.php:157
+#: classes/Visualizer/Render/Sidebar/Graph.php:134
+#: classes/Visualizer/Render/Sidebar/Graph.php:183
 msgid "Axis Title"
 msgstr "Axis Title"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:114
+#: classes/Visualizer/Render/Sidebar/Graph.php:137
 msgid "The title of the horizontal axis."
 msgstr "The title of the horizontal axis."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:118
-#: classes/Visualizer/Render/Sidebar/Graph.php:164
+#: classes/Visualizer/Render/Sidebar/Graph.php:141
+#: classes/Visualizer/Render/Sidebar/Graph.php:190
 msgid "Text Position"
 msgstr "Text Position"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:122
+#: classes/Visualizer/Render/Sidebar/Graph.php:145
 msgid "Position of the horizontal axis text, relative to the chart area."
 msgstr "Position of the horizontal axis text, relative to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:126
-#: classes/Visualizer/Render/Sidebar/Graph.php:172
+#: classes/Visualizer/Render/Sidebar/Graph.php:149
+#: classes/Visualizer/Render/Sidebar/Graph.php:198
 msgid "Direction"
 msgstr "Direction"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:130
+#: classes/Visualizer/Render/Sidebar/Graph.php:153
 msgid "The direction in which the values along the horizontal axis grow."
 msgstr "The direction in which the values along the horizontal axis grow."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:134
-#: classes/Visualizer/Render/Sidebar/Graph.php:180
+#: classes/Visualizer/Render/Sidebar/Graph.php:158
+#: classes/Visualizer/Render/Sidebar/Graph.php:207
 msgid "Grid Lines Count"
 msgstr "Grid Lines Count"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:137
+#: classes/Visualizer/Render/Sidebar/Graph.php:161
 msgid "The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
 msgstr "The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:141
-#: classes/Visualizer/Render/Sidebar/Graph.php:187
+#: classes/Visualizer/Render/Sidebar/Graph.php:166
+#: classes/Visualizer/Render/Sidebar/Graph.php:215
 msgid "Grid Lines Color"
 msgstr "Grid Lines Color"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:148
-#: classes/Visualizer/Render/Sidebar/Graph.php:194
+#: classes/Visualizer/Render/Sidebar/Graph.php:174
+#: classes/Visualizer/Render/Sidebar/Graph.php:223
 msgid "Base Line Color"
 msgstr "Base Line Color"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:155
+#: classes/Visualizer/Render/Sidebar/Graph.php:181
 msgid "Vertical Axis"
 msgstr "Vertical Axis"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:160
+#: classes/Visualizer/Render/Sidebar/Graph.php:186
 msgid "The title of the vertical axis."
 msgstr "The title of the vertical axis."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:168
+#: classes/Visualizer/Render/Sidebar/Graph.php:194
 msgid "Position of the vertical axis text, relative to the chart area."
 msgstr "Position of the vertical axis text, relative to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:176
+#: classes/Visualizer/Render/Sidebar/Graph.php:202
 msgid "The direction in which the values along the vertical axis grow."
 msgstr "The direction in which the values along the vertical axis grow."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:183
+#: classes/Visualizer/Render/Sidebar/Graph.php:210
 msgid "The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
 msgstr "The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:211
+#: classes/Visualizer/Render/Sidebar/Graph.php:240
 msgid "Series Settings"
 msgstr "Series Settings"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:286
+msgid "Bars Settings"
+msgstr "Bars Settings"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:289
+#: classes/Visualizer/Render/Sidebar/Type/Area.php:74
+msgid "Is Stacked"
+msgstr "Is Stacked"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:293
+#: classes/Visualizer/Render/Sidebar/Type/Area.php:78
+msgid "If set to yes, series elements are stacked."
+msgstr "If set to yes, series elements are stacked."
 
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:58
 msgid "Pie Settings"
@@ -471,14 +485,6 @@ msgstr "Residue Slice Color"
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:144
 msgid "Slices Colors"
 msgstr "Slices Colors"
-
-#: classes/Visualizer/Render/Sidebar/Type/Area.php:74
-msgid "Is Stacked"
-msgstr "Is Stacked"
-
-#: classes/Visualizer/Render/Sidebar/Type/Area.php:78
-msgid "If set to yes, series elements are stacked."
-msgstr "If set to yes, series elements are stacked."
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:63
 msgid "Min And Max Values"

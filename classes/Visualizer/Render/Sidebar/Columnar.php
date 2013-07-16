@@ -33,4 +33,25 @@
  */
 abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Sidebar_Graph {
 
+	/**
+	 * Renders columnar settings group.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderColumnarSettings() {
+		self::_renderGroupStart( esc_html__( 'Bars Settings', Visualizer_Plugin::NAME ) );
+			self::_renderSectionStart();
+				self::_renderSelectItem(
+					esc_html__( 'Is Stacked', Visualizer_Plugin::NAME ),
+					'isStacked',
+					$this->isStacked,
+					$this->_yesno,
+					esc_html__( 'If set to yes, series elements are stacked.', Visualizer_Plugin::NAME )
+				);
+			self::_renderSectionEnd();
+		self::_renderGroupEnd();
+	}
+	
 }

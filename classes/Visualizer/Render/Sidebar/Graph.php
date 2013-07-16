@@ -34,6 +34,26 @@
 abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar {
 
 	/**
+	 * Determines whether we need to render vertical gridlines options or not.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var boolean
+	 */
+	protected $_verticalGridLines;
+
+	/**
+	 * Determines whether we need to render horizontal gridlines options or not.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var boolean
+	 */
+	protected $_horizontalGridLines;
+
+	/**
 	 * The array of available axis positions.
 	 *
 	 * @since 1.0.0
@@ -53,6 +73,9 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	public function __construct( $data = array() ) {
 		parent::__construct( $data );
+
+		$this->_verticalGridLines = true;
+		$this->_horizontalGridLines = true;
 
 		$this->_positions = array(
 			''     => '',
@@ -130,19 +153,22 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 					esc_html__( 'The direction in which the values along the horizontal axis grow.', Visualizer_Plugin::NAME )
 				);
 
-				self::_renderTextItem(
-					esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
-					'vAxis[gridlines][count]',
-					isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
-					esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME )
-				);
+				if ( $this->_horizontalGridLines ) {
+					self::_renderTextItem(
+						esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
+						'vAxis[gridlines][count]',
+						isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
+						esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
+						5
+					);
 
-				self::_renderColorPickerItem(
-					esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
-					'vAxis[gridlines][color]',
-					isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
-					'#ccc'
-				);
+					self::_renderColorPickerItem(
+						esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
+						'vAxis[gridlines][color]',
+						isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
+						'#ccc'
+					);
+				}
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
@@ -176,19 +202,22 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 					esc_html__( 'The direction in which the values along the vertical axis grow.', Visualizer_Plugin::NAME )
 				);
 
-				self::_renderTextItem(
-					esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
-					'hAxis[gridlines][count]',
-					isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
-					esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME )
-				);
+				if ( $this->_verticalGridLines ) {
+					self::_renderTextItem(
+						esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
+						'hAxis[gridlines][count]',
+						isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
+						esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
+						5
+					);
 
-				self::_renderColorPickerItem(
-					esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
-					'hAxis[gridlines][color]',
-					isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
-					'#ccc'
-				);
+					self::_renderColorPickerItem(
+						esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
+						'hAxis[gridlines][color]',
+						isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
+						'#ccc'
+					);
+				}
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),

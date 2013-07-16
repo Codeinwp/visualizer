@@ -33,6 +33,21 @@
 class Visualizer_Render_Sidebar_Type_Bar extends Visualizer_Render_Sidebar_Columnar {
 
 	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $data The data what has to be associated with this render.
+	 */
+	public function __construct( $data = array( ) ) {
+		parent::__construct( $data );
+
+		// disable horizontal gridlines settings
+		$this->_horizontalGridLines = false;
+	}
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0
@@ -42,6 +57,7 @@ class Visualizer_Render_Sidebar_Type_Bar extends Visualizer_Render_Sidebar_Colum
 	protected function _toHTML() {
 		$this->_renderGeneralSettings();
 		$this->_renderAxesSettings();
+		$this->_renderColumnarSettings();
 		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
 	}
