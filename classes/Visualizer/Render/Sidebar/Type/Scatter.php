@@ -22,7 +22,7 @@
 
 
 /**
- * Base class for all chart builder pages.
+ * Class for scatter chart sidebar settings.
  *
  * @category Visualizer
  * @package Render
