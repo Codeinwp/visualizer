@@ -33,6 +33,19 @@
 class Visualizer_Render_Sidebar_Type_Candlestick extends Visualizer_Render_Sidebar {
 
 	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $data The data what has to be associated with this render.
+	 */
+	public function __construct( $data = array( ) ) {
+		parent::__construct( $data );
+		$this->_includeCurveTypes = false;
+	}
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0

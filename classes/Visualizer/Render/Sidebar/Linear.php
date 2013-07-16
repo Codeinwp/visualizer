@@ -34,6 +34,16 @@
 abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sidebar_Graph {
 
 	/**
+	 * Determines whether we need to render curve type option or not.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var boolean
+	 */
+	protected $_includeCurveTypes;
+
+	/**
 	 * The array of available curve types.
 	 *
 	 * @since 1.0.0
@@ -54,10 +64,58 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	public function __construct( $data = array() ) {
 		parent::__construct( $data );
 
+		$this->_includeCurveTypes = true;
 		$this->_curveTypes = array(
 			''         => '',
 			'none'     => esc_html__( 'Straight line without curve', Visualizer_Plugin::NAME ),
 			'function' => esc_html__( 'The angles of the line will be smoothed', Visualizer_Plugin::NAME ),
+		);
+	}
+
+	/**
+	 * Renders line settings items.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderLineSettingsItems() {
+		self::_renderTextItem(
+			esc_html__( 'Line Width', Visualizer_Plugin::NAME ),
+			'lineWidth',
+			$this->lineWidth,
+			esc_html__( 'Data line width in pixels. Use zero to hide all lines and show only the points.', Visualizer_Plugin::NAME ),
+			2
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Point Size', Visualizer_Plugin::NAME ),
+			'pointSize',
+			$this->pointSize,
+			esc_html__( 'Diameter of displayed points in pixels. Use zero to hide all points.', Visualizer_Plugin::NAME ),
+			0
+		);
+
+		if ( $this->_includeCurveTypes ) {
+			self::_renderSelectItem(
+				esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
+				'curveType',
+				$this->curveType,
+				$this->_curveTypes,
+				esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+			);
+		}
+
+		self::_renderSelectItem(
+			esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
+			'focusTarget',
+			$this->focusTarget,
+			array(
+				''         => '',
+				'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
+				'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
+			),
+			esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
 		);
 	}
 
@@ -71,41 +129,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	protected function _renderLineSettings() {
 		self::_renderGroupStart( esc_html__( 'General Line Settings', Visualizer_Plugin::NAME ) );
 			self::_renderSectionStart();
-				self::_renderTextItem(
-					esc_html__( 'Line Width', Visualizer_Plugin::NAME ),
-					'lineWidth',
-					$this->lineWidth,
-					esc_html__( 'Data line width in pixels. Use zero to hide all lines and show only the points.', Visualizer_Plugin::NAME ),
-					2
-				);
-
-				self::_renderTextItem(
-					esc_html__( 'Point Size', Visualizer_Plugin::NAME ),
-					'pointSize',
-					$this->pointSize,
-					esc_html__( 'Diameter of displayed points in pixels. Use zero to hide all points.', Visualizer_Plugin::NAME ),
-					0
-				);
-
-				self::_renderSelectItem(
-					esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
-					'curveType',
-					$this->curveType,
-					$this->_curveTypes,
-					esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
-				);
-
-				self::_renderSelectItem(
-					esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
-					'focusTarget',
-					$this->focusTarget,
-					array(
-						''         => '',
-						'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
-						'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
-					),
-					esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
-				);
+				$this->_renderLineSettingsItems();
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}
@@ -147,13 +171,15 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			0
 		);
 
-		self::_renderSelectItem(
-			esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
-			'series[' . $index . '][curveType]',
-			isset( $this->series[$index]['curveType'] ) ? $this->series[$index]['curveType'] : '',
-			$this->_curveTypes,
-			esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
-		);
+		if ( $this->_includeCurveTypes ) {
+			self::_renderSelectItem(
+				esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
+				'series[' . $index . '][curveType]',
+				isset( $this->series[$index]['curveType'] ) ? $this->series[$index]['curveType'] : '',
+				$this->_curveTypes,
+				esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+			);
+		}
 
 		self::_renderColorPickerItem(
 			esc_html__( 'Color', Visualizer_Plugin::NAME ),

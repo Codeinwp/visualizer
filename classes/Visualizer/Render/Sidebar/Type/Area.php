@@ -33,6 +33,19 @@
 class Visualizer_Render_Sidebar_Type_Area extends Visualizer_Render_Sidebar_Linear {
 
 	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $data The data what has to be associated with this render.
+	 */
+	public function __construct( $data = array( ) ) {
+		parent::__construct( $data );
+		$this->_includeCurveTypes = false;
+	}
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0
@@ -45,6 +58,25 @@ class Visualizer_Render_Sidebar_Type_Area extends Visualizer_Render_Sidebar_Line
 		$this->_renderLineSettings();
 		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
+	}
+
+	/**
+	 * Renders line settings items.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderLineSettingsItems() {
+		parent::_renderLineSettingsItems();
+
+		self::_renderSelectItem(
+			esc_html__( 'Is Stacked', Visualizer_Plugin::NAME ),
+			'isStacked',
+			$this->isStacked,
+			$this->_yesno,
+			esc_html__( 'If set to yes, series elements are stacked.', Visualizer_Plugin::NAME )
+		);
 	}
 
 }
