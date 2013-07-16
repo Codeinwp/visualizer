@@ -56,6 +56,16 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	);
 
 	/**
+	 * The Yes/No array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_yesno;
+
+	/**
 	 * The array of available legend positions.
 	 *
 	 * @since 1.0.0
@@ -100,6 +110,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			'start'  => esc_html__( 'Aligned to the start of the allocated area', Visualizer_Plugin::NAME ),
 			'center' => esc_html__( 'Centered in the allocated area', Visualizer_Plugin::NAME ),
 			'end'    => esc_html__( 'Aligned to the end of the allocated area', Visualizer_Plugin::NAME ),
+		);
+
+		$this->_yesno = array(
+			''  => '',
+			'1' => esc_html__( 'Yes', Visualizer_Plugin::NAME ),
+			'0' => esc_html__( 'No', Visualizer_Plugin::NAME ),
 		);
 	}
 

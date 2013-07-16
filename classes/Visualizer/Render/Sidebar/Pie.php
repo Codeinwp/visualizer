@@ -33,34 +33,6 @@
 class Visualizer_Render_Sidebar_Pie extends Visualizer_Render_Sidebar {
 
 	/**
-	 * The Yes/No array.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_yesno;
-
-	/**
-	 * Constructor.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
-	 * @param array $data The data what has to be associated with this render.
-	 */
-	public function __construct( $data = array( ) ) {
-		parent::__construct( $data );
-
-		$this->_yesno = array(
-			''  => '',
-			'1' => esc_html__( 'Yes', Visualizer_Plugin::NAME ),
-			'0' => esc_html__( 'No', Visualizer_Plugin::NAME ),
-		);
-	}
-
-	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0

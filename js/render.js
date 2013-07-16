@@ -46,6 +46,9 @@
 				break;
 			case 'geo':
 				if (!chart) chart = new gv.GeoChart(container);
+				if (settings.region != undefined && settings.region.replace(/^\s+|\s+$/g, '') == '') {
+					settings['region'] = 'world';
+				}
 				break;
 			case 'scatter':
 				if (!chart) chart = new gv.ScatterChart(container);
