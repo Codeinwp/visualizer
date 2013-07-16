@@ -169,7 +169,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 								echo '<select name="fontSize" class="control-select">';
 									echo '<option></option>';
 									for	( $i = 7; $i <= 20; $i++ ) {
-										echo '<option value="', $i, '"', selected( $font, $this->fontSize, false ), '>', $i, '</option>';
+										echo '<option value="', $i, '"', selected( $i, $this->fontSize, false ), '>', $i, '</option>';
 									}
 								echo '</select>';
 							echo '</td>';

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 18:20+0300\n"
-"PO-Revision-Date: 2013-07-16 18:20+0300\n"
+"POT-Creation-Date: 2013-07-16 23:24+0300\n"
+"PO-Revision-Date: 2013-07-16 23:24+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -821,11 +821,11 @@ msgstr "Scatter"
 msgid "Candelstick"
 msgstr "Candelstick"
 
-#: classes/Visualizer/Module/Chart.php:374
+#: classes/Visualizer/Module/Chart.php:372
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr "CSV file with chart data was not uploaded. Please, try again."
 
-#: classes/Visualizer/Module/Chart.php:388
+#: classes/Visualizer/Module/Chart.php:386
 msgid "CSV file is broken or incorrect. Please, try again."
 msgstr "CSV file is broken or incorrect. Please, try again."
 
