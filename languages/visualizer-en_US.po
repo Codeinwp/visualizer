@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 17:26+0300\n"
-"PO-Revision-Date: 2013-07-16 17:26+0300\n"
+"POT-Creation-Date: 2013-07-16 17:42+0300\n"
+"PO-Revision-Date: 2013-07-16 17:42+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -65,12 +65,12 @@ msgid "Aligned to the end of the allocated area"
 msgstr "Aligned to the end of the allocated area"
 
 #: classes/Visualizer/Render/Sidebar.php:117
-#: classes/Visualizer/Render/Sidebar/Linear.php:153
+#: classes/Visualizer/Render/Sidebar/Linear.php:167
 msgid "Yes"
 msgstr "Yes"
 
 #: classes/Visualizer/Render/Sidebar.php:118
-#: classes/Visualizer/Render/Sidebar/Linear.php:152
+#: classes/Visualizer/Render/Sidebar/Linear.php:166
 msgid "No"
 msgstr "No"
 
@@ -209,76 +209,88 @@ msgstr "Next"
 msgid "Insert Chart"
 msgstr "Insert Chart"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:70
+#: classes/Visualizer/Render/Sidebar/Columnar.php:44
+msgid "Bars Settings"
+msgstr "Bars Settings"
+
+#: classes/Visualizer/Render/Sidebar/Columnar.php:47
+msgid "Is Stacked"
+msgstr "Is Stacked"
+
+#: classes/Visualizer/Render/Sidebar/Columnar.php:51
+msgid "If set to yes, series elements are stacked."
+msgstr "If set to yes, series elements are stacked."
+
+#: classes/Visualizer/Render/Sidebar/Linear.php:82
 msgid "Straight line without curve"
 msgstr "Straight line without curve"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:71
+#: classes/Visualizer/Render/Sidebar/Linear.php:83
 msgid "The angles of the line will be smoothed"
 msgstr "The angles of the line will be smoothed"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:84
-#: classes/Visualizer/Render/Sidebar/Linear.php:159
+#: classes/Visualizer/Render/Sidebar/Linear.php:96
+#: classes/Visualizer/Render/Sidebar/Linear.php:173
 msgid "Line Width"
 msgstr "Line Width"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:87
+#: classes/Visualizer/Render/Sidebar/Linear.php:99
 msgid "Data line width in pixels. Use zero to hide all lines and show only the points."
 msgstr "Data line width in pixels. Use zero to hide all lines and show only the points."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:92
-#: classes/Visualizer/Render/Sidebar/Linear.php:167
+#: classes/Visualizer/Render/Sidebar/Linear.php:104
+#: classes/Visualizer/Render/Sidebar/Linear.php:181
 msgid "Point Size"
 msgstr "Point Size"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:95
+#: classes/Visualizer/Render/Sidebar/Linear.php:107
 msgid "Diameter of displayed points in pixels. Use zero to hide all points."
 msgstr "Diameter of displayed points in pixels. Use zero to hide all points."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:101
-#: classes/Visualizer/Render/Sidebar/Linear.php:176
+#: classes/Visualizer/Render/Sidebar/Linear.php:113
+#: classes/Visualizer/Render/Sidebar/Linear.php:190
 msgid "Curve Type"
 msgstr "Curve Type"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:105
-#: classes/Visualizer/Render/Sidebar/Linear.php:155
-#: classes/Visualizer/Render/Sidebar/Linear.php:180
+#: classes/Visualizer/Render/Sidebar/Linear.php:117
+#: classes/Visualizer/Render/Sidebar/Linear.php:169
+#: classes/Visualizer/Render/Sidebar/Linear.php:194
 msgid "Determines whether the series has to be presented in the legend or not."
 msgstr "Determines whether the series has to be presented in the legend or not."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:110
+#: classes/Visualizer/Render/Sidebar/Linear.php:123
 msgid "Focus Target"
 msgstr "Focus Target"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:115
+#: classes/Visualizer/Render/Sidebar/Linear.php:128
 msgid "Focus on a single data point."
 msgstr "Focus on a single data point."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:116
+#: classes/Visualizer/Render/Sidebar/Linear.php:129
 msgid "Focus on a grouping of all data points along the major axis."
 msgstr "Focus on a grouping of all data points along the major axis."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:118
+#: classes/Visualizer/Render/Sidebar/Linear.php:131
 msgid "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 msgstr "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:130
+#: classes/Visualizer/Render/Sidebar/Linear.php:144
 msgid "General Line Settings"
 msgstr "General Line Settings"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:147
+#: classes/Visualizer/Render/Sidebar/Linear.php:161
 msgid "Visible In Legend"
 msgstr "Visible In Legend"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:162
+#: classes/Visualizer/Render/Sidebar/Linear.php:176
 msgid "Overrides the global line width value for this series."
 msgstr "Overrides the global line width value for this series."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:170
+#: classes/Visualizer/Render/Sidebar/Linear.php:184
 msgid "Overrides the global point size value for this series."
 msgstr "Overrides the global point size value for this series."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:185
+#: classes/Visualizer/Render/Sidebar/Linear.php:199
 msgid "Color"
 msgstr "Color"
 
@@ -391,20 +403,6 @@ msgstr "The number of vertical gridlines inside the chart area. Minimum value is
 #: classes/Visualizer/Render/Sidebar/Graph.php:240
 msgid "Series Settings"
 msgstr "Series Settings"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:286
-msgid "Bars Settings"
-msgstr "Bars Settings"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:289
-#: classes/Visualizer/Render/Sidebar/Type/Area.php:74
-msgid "Is Stacked"
-msgstr "Is Stacked"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:293
-#: classes/Visualizer/Render/Sidebar/Type/Area.php:78
-msgid "If set to yes, series elements are stacked."
-msgstr "If set to yes, series elements are stacked."
 
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:58
 msgid "Pie Settings"

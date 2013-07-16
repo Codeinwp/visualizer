@@ -54,6 +54,16 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	protected $_curveTypes;
 
 	/**
+	 * Determines whether we need to render focus target option or not.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var boolean
+	 */
+	protected $_includeFocusTarget;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -65,6 +75,8 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 		parent::__construct( $data );
 
 		$this->_includeCurveTypes = true;
+		$this->_includeFocusTarget = true;
+
 		$this->_curveTypes = array(
 			''         => '',
 			'none'     => esc_html__( 'Straight line without curve', Visualizer_Plugin::NAME ),
@@ -106,17 +118,19 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			);
 		}
 
-		self::_renderSelectItem(
-			esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
-			'focusTarget',
-			$this->focusTarget,
-			array(
-				''         => '',
-				'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
-				'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
-			),
-			esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
-		);
+		if ( $this->_includeFocusTarget ) {
+			self::_renderSelectItem(
+				esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
+				'focusTarget',
+				$this->focusTarget,
+				array(
+					''         => '',
+					'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
+					'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
+				),
+				esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
+			);
+		}
 	}
 
 	/**
