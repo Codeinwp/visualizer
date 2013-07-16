@@ -22,28 +22,15 @@
 
 
 /**
- * Class for bar chart sidebar settings.
+ * Base class for sidebar settings of columnar based charts.
  *
  * @category Visualizer
  * @package Render
  * @subpackage Sidebar
  *
  * @since 1.0.0
+ * @abstract
  */
-class Visualizer_Render_Sidebar_Type_Bar extends Visualizer_Render_Sidebar_Columnar {
-
-	/**
-	 * Renders template.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access protected
-	 */
-	protected function _toHTML() {
-		$this->_renderGeneralSettings();
-		$this->_renderAxesSettings();
-		$this->_renderSeriesSettings();
-		$this->_renderViewSettings();
-	}
+abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Sidebar_Graph {
 
 }

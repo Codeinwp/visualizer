@@ -10,13 +10,16 @@
 		data = v.charts[id].data;
 		settings = v.charts[id].settings;
 
-		chart = v.objects[id] || null;
 		container = document.getElementById(id);
 		table = new gv.DataTable({cols: series});
 
+		chart = v.objects[id] || null;
+		if (!chart) {
+			chart = new gv[v.charts[id].type.charAt(0).toUpperCase() + v.charts[id].type.slice(1) + 'Chart'](container);
+		}
+
 		switch (v.charts[id].type) {
 			case 'pie':
-				if (!chart) chart = new gv.PieChart(container);
 				if (settings.slices) {
 					for (i in settings.slices) {
 						if (settings.slices[i]['color'] == '') {
@@ -26,7 +29,11 @@
 				}
 				break;
 			case 'line':
-				if (!chart) chart = new gv.LineChart(container);
+			case 'bar':
+			case 'column':
+			case 'area':
+			case 'scatter':
+			case 'candlestick':
 				if (settings.series) {
 					for (i in settings.series) {
 						if (settings.series[i]['color'] == '') {
@@ -35,29 +42,12 @@
 					}
 				}
 				break;
-			case 'bar':
-				if (!chart) chart = new gv.BarChart(container);
-				break;
-			case 'column':
-				if (!chart) chart = new gv.ColumnChart(container);
-				break;
-			case 'area':
-				if (!chart) chart = new gv.AreaChart(container);
-				break;
 			case 'geo':
-				if (!chart) chart = new gv.GeoChart(container);
 				if (settings.region != undefined && settings.region.replace(/^\s+|\s+$/g, '') == '') {
 					settings['region'] = 'world';
 				}
 				break;
-			case 'scatter':
-				if (!chart) chart = new gv.ScatterChart(container);
-				break;
 			case 'gauge':
-				if (!chart) chart = new gv.Gauge(container);
-				break;
-			case 'candlestick':
-				if (!chart) chart = new gv.CandlestickChart(container);
 				break;
 			default:
 				return;

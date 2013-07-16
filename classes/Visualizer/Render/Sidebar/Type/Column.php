@@ -30,7 +30,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Column extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_Column extends Visualizer_Render_Sidebar_Columnar {
 
 	/**
 	 * Renders template.
@@ -41,6 +41,8 @@ class Visualizer_Render_Sidebar_Type_Column extends Visualizer_Render_Sidebar {
 	 */
 	protected function _toHTML() {
 		$this->_renderGeneralSettings();
+		$this->_renderAxesSettings();
+		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
 	}
 
