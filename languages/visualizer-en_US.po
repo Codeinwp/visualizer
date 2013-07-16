@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 13:04+0300\n"
-"PO-Revision-Date: 2013-07-16 13:04+0300\n"
+"POT-Creation-Date: 2013-07-16 16:49+0300\n"
+"PO-Revision-Date: 2013-07-16 16:49+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -65,12 +65,12 @@ msgid "Aligned to the end of the allocated area"
 msgstr "Aligned to the end of the allocated area"
 
 #: classes/Visualizer/Render/Sidebar.php:117
-#: classes/Visualizer/Render/Sidebar/Linear.php:129
+#: classes/Visualizer/Render/Sidebar/Linear.php:153
 msgid "Yes"
 msgstr "Yes"
 
 #: classes/Visualizer/Render/Sidebar.php:118
-#: classes/Visualizer/Render/Sidebar/Linear.php:128
+#: classes/Visualizer/Render/Sidebar/Linear.php:152
 msgid "No"
 msgstr "No"
 
@@ -206,79 +206,79 @@ msgid "Next"
 msgstr "Next"
 
 #: classes/Visualizer/Render/Page/Settings.php:58
-msgid "Save Chart And Insert"
-msgstr "Save Chart And Insert"
+msgid "Insert Chart"
+msgstr "Insert Chart"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:59
+#: classes/Visualizer/Render/Sidebar/Linear.php:70
 msgid "Straight line without curve"
 msgstr "Straight line without curve"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:60
+#: classes/Visualizer/Render/Sidebar/Linear.php:71
 msgid "The angles of the line will be smoothed"
 msgstr "The angles of the line will be smoothed"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:72
-msgid "General Line Settings"
-msgstr "General Line Settings"
-
-#: classes/Visualizer/Render/Sidebar/Linear.php:75
-#: classes/Visualizer/Render/Sidebar/Linear.php:135
+#: classes/Visualizer/Render/Sidebar/Linear.php:84
+#: classes/Visualizer/Render/Sidebar/Linear.php:159
 msgid "Line Width"
 msgstr "Line Width"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:78
+#: classes/Visualizer/Render/Sidebar/Linear.php:87
 msgid "Data line width in pixels. Use zero to hide all lines and show only the points."
 msgstr "Data line width in pixels. Use zero to hide all lines and show only the points."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:83
-#: classes/Visualizer/Render/Sidebar/Linear.php:143
+#: classes/Visualizer/Render/Sidebar/Linear.php:92
+#: classes/Visualizer/Render/Sidebar/Linear.php:167
 msgid "Point Size"
 msgstr "Point Size"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:86
+#: classes/Visualizer/Render/Sidebar/Linear.php:95
 msgid "Diameter of displayed points in pixels. Use zero to hide all points."
 msgstr "Diameter of displayed points in pixels. Use zero to hide all points."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:91
-#: classes/Visualizer/Render/Sidebar/Linear.php:151
+#: classes/Visualizer/Render/Sidebar/Linear.php:101
+#: classes/Visualizer/Render/Sidebar/Linear.php:176
 msgid "Curve Type"
 msgstr "Curve Type"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:95
-#: classes/Visualizer/Render/Sidebar/Linear.php:131
+#: classes/Visualizer/Render/Sidebar/Linear.php:105
 #: classes/Visualizer/Render/Sidebar/Linear.php:155
+#: classes/Visualizer/Render/Sidebar/Linear.php:180
 msgid "Determines whether the series has to be presented in the legend or not."
 msgstr "Determines whether the series has to be presented in the legend or not."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:99
+#: classes/Visualizer/Render/Sidebar/Linear.php:110
 msgid "Focus Target"
 msgstr "Focus Target"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:104
+#: classes/Visualizer/Render/Sidebar/Linear.php:115
 msgid "Focus on a single data point."
 msgstr "Focus on a single data point."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:105
+#: classes/Visualizer/Render/Sidebar/Linear.php:116
 msgid "Focus on a grouping of all data points along the major axis."
 msgstr "Focus on a grouping of all data points along the major axis."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:107
+#: classes/Visualizer/Render/Sidebar/Linear.php:118
 msgid "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 msgstr "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:123
+#: classes/Visualizer/Render/Sidebar/Linear.php:130
+msgid "General Line Settings"
+msgstr "General Line Settings"
+
+#: classes/Visualizer/Render/Sidebar/Linear.php:147
 msgid "Visible In Legend"
 msgstr "Visible In Legend"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:138
+#: classes/Visualizer/Render/Sidebar/Linear.php:162
 msgid "Overrides the global line width value for this series."
 msgstr "Overrides the global line width value for this series."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:146
+#: classes/Visualizer/Render/Sidebar/Linear.php:170
 msgid "Overrides the global point size value for this series."
 msgstr "Overrides the global point size value for this series."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:159
+#: classes/Visualizer/Render/Sidebar/Linear.php:185
 msgid "Color"
 msgstr "Color"
 
@@ -471,6 +471,14 @@ msgstr "Residue Slice Color"
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:144
 msgid "Slices Colors"
 msgstr "Slices Colors"
+
+#: classes/Visualizer/Render/Sidebar/Type/Area.php:74
+msgid "Is Stacked"
+msgstr "Is Stacked"
+
+#: classes/Visualizer/Render/Sidebar/Type/Area.php:78
+msgid "If set to yes, series elements are stacked."
+msgstr "If set to yes, series elements are stacked."
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:63
 msgid "Min And Max Values"
