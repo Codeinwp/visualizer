@@ -91,6 +91,9 @@ function visualizer_launch() {
 		if ( is_admin() ) {
 			// set admin modules
 			$plugin->setModule( Visualizer_Module_Admin::NAME );
+		} else {
+			// set frontend modules
+			$plugin->setModule( Visualizer_Module_Frontend::NAME );
 		}
 	}
 }
