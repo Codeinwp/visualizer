@@ -38,7 +38,8 @@
 			settings = model.get('settings');
 
 			table = new gv.DataTable({cols: series});
-			chart = new gv[type.charAt(0).toUpperCase() + type.slice(1) + 'Chart'](self.el);
+			chart = type == 'gauge' ? 'Gauge' : type.charAt(0).toUpperCase() + type.slice(1) + 'Chart';
+			chart = new gv[chart](self.el);
 
 			switch (type) {
 				case 'pie':
@@ -150,8 +151,11 @@
 		},
 
 		resetCollection: function() {
-			var self = this;
+			var self = this,
+				controller = self.controller,
+				content = controller.$el.find(controller.content.selector);
 
+			content.lock();
 			self.collection.fetch({
 				silent: false,
 				data: {
@@ -160,7 +164,7 @@
 				},
 				statusCode: {
 					200: function(response) {
-						var paginationView = self.controller.toolbar.get('toolbar').get('pagination');
+						var paginationView = controller.toolbar.get('toolbar').get('pagination');
 
 						if (self.options.page > response.total) {
 							self.options.page = response.total;
@@ -170,6 +174,8 @@
 							paginationView.options.total = response.total || 1;
 							paginationView.render();
 						}
+
+						content.unlock();
 					}
 				}
 			});
@@ -369,3 +375,49 @@
 		}
 	});
 })(jQuery, wp.media);
+
+(function($) {
+    $.fn.lock = function() {
+        $(this).each(function() {
+            var locker = $('<div class="locker"></div>'),
+				loader = $('<div class="locker-loader"></div>'),
+				$this = $(this),
+				position = $this.css('position');
+
+			if ($this.find('.locker').length > 0) {
+				return;
+			}
+
+            if (!position) {
+                position = 'static';
+            }
+
+            switch(position) {
+                case 'absolute':
+                case 'relative':
+                    break;
+                default:
+                    $this.css('position', 'relative');
+                    break;
+            }
+            $this.data('position', position);
+
+            locker.append(loader);
+            $this.append(locker);
+//            $(window).resize(function() {
+//                $this.find('.locker,.locker-loader').outerWidth($this.width()).outerHeight($this.height());
+//            });
+        });
+
+        return $(this);
+    }
+
+    $.fn.unlock = function() {
+        $(this).each(function() {
+            $(this).find('.locker').remove();
+            $(this).css('position', $(this).data('position'));
+        });
+
+        return $(this);
+    }
+})(jQuery);

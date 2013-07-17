@@ -4,18 +4,23 @@
 	v.objects = {};
 
 	v.renderChart = function(id) {
-		var chart, container, series, data, table, settings, i, j, row, date;
+		var chart, render, container, series, data, table, settings, i, j, row, date;
 
-		series = v.charts[id].series;
-		data = v.charts[id].data;
-		settings = v.charts[id].settings;
+		chart = v.charts[id];
+		series = chart.series;
+		data = chart.data;
+		settings = chart.settings;
 
 		container = document.getElementById(id);
 		table = new gv.DataTable({cols: series});
 
-		chart = v.objects[id] || null;
-		if (!chart) {
-			chart = new gv[v.charts[id].type.charAt(0).toUpperCase() + v.charts[id].type.slice(1) + 'Chart'](container);
+		render = v.objects[id] || null;
+		if (!render) {
+			render = chart.type == 'gauge'
+				? 'Gauge'
+				: chart.type.charAt(0).toUpperCase() + chart.type.slice(1) + 'Chart';
+
+			render = new gv[render](container);
 		}
 
 		switch (v.charts[id].type) {
@@ -70,7 +75,7 @@
 			table.addRow(row);
         }
 
-        chart.draw(table, settings);
+        render.draw(table, settings);
 	};
 
 	v.render = function() {

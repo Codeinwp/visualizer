@@ -107,3 +107,24 @@ a.visualizer-library-pagination-page:hover {
 	background-color: lightcoral;
 	box-shadow: 0 0 5px lightpink;
 }
+
+.locker, .locker-loader {
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+}
+
+.locker {
+	z-index: 1000;
+	background-color: white;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+}
+
+.locker-loader {
+	z-index: 1001;
+	background: url(../images/ajax-loader.gif) no-repeat center center;
+}
