@@ -33,6 +33,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	const NAME = __CLASS__;
 
 	/**
+	 * Library page suffix.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $_libraryPage;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -43,9 +53,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->_addAction( 'load-post.php', 'enqueueScripts' );
-		$this->_addAction( 'load-post-new.php', 'enqueueScripts' );
+		$this->_addAction( 'load-post.php', 'enqueueMediaScripts' );
+		$this->_addAction( 'load-post-new.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'admin_footer', 'renderTempaltes' );
+		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts' );
+		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
+		$this->_addAction( 'plugin_action_links', 'getActionLinks', 10, 2 );
 
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 	}
@@ -59,7 +72,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @access public
 	 */
-	public function enqueueScripts() {
+	public function enqueueMediaScripts() {
 		wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
 
 		wp_enqueue_script( 'google-jsapi',               '//www.google.com/jsapi',                      array( 'media-editor' ),                null );
@@ -131,6 +144,71 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$render = new Visualizer_Render_Templates();
 		$render->render();
+	}
+
+	/**
+	 * Enqueues library scripts and styles.
+	 *
+	 * @since 1.0.0
+	 * @uses wp_enqueue_style() To enqueue library stylesheet.
+	 *
+	 * @access public
+	 * @param string $suffix The current page suffix.
+	 */
+	public function enqueueLibraryScripts( $suffix ) {
+		if ( $suffix == $this->_libraryPage ) {
+			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
+		}
+	}
+
+	/**
+	 * Registers admin menu for visualizer library.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
+	public function registerAdminMenu() {
+		$title = esc_html__( 'Visualizer Library', Visualizer_Plugin::NAME );
+		$callback = array( $this, 'renderLibraryPage' );
+		$this->_libraryPage = add_submenu_page( 'upload.php', $title, $title, 'edit_posts', Visualizer_Plugin::NAME, $callback );
+	}
+
+	/**
+	 * Renders visualizer library page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
+	public function renderLibraryPage() {
+		$render = new Visualizer_Render_Library();
+		$render->render();
+	}
+
+	/**
+	 * Updates the plugin's action links, which will be rendered in the plugins table.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $links The array of original action links.
+	 * @param string $file The plugin basename.
+	 * @return array Updated array of action links.
+	 */
+	public function getActionLinks( $links, $file ) {
+		if ( $file == plugin_basename( VISUALIZER_BASEFILE ) ) {
+			array_unshift(
+				$links,
+				sprintf(
+					'<a href="%s">%s</a>',
+					admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ),
+					__( 'Library', Visualizer_Plugin::NAME )
+				)
+			);
+		}
+
+		return $links;
 	}
 
 }
