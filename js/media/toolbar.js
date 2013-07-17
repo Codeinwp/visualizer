@@ -20,11 +20,11 @@
 				close: false,
 				items: {
 					type_filter: new wpmvvl.Types({
-						controller: self,
+						controller: self.controller,
 						priority: -100
 					}),
 					pagination: new wpmvvl.Pagination({
-						controller: self,
+						controller: self.controller,
 						priority: 100
 					})
 				}

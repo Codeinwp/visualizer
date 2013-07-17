@@ -7,7 +7,7 @@
 	wpmc.Visualizer = wpmc.State.extend({
 		defaults: {
 			toolbar: 'visualizer',
-			content: 'builder',
+			content: 'library',
 			sidebar: 'visualizer',
 			router: 'visualizer'
 		},

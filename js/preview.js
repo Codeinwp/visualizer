@@ -5,7 +5,7 @@
 		function updateChart() {
 			clearTimeout(timeout);
 			timeout = setTimeout(function() {
-				var i, settings = $('#settings-form').serializeObject();
+				var settings = $('#settings-form').serializeObject();
 
 				delete settings['width'];
 				delete settings['height'];

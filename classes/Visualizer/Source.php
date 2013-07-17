@@ -81,7 +81,7 @@ abstract class Visualizer_Source {
 	 * @return array The array of series.
 	 */
 	public function getSeries() {
-		return json_encode( $this->_series );
+		return $this->_series;
 	}
 
 	/**
@@ -90,10 +90,10 @@ abstract class Visualizer_Source {
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @return array The array of data.
+	 * @return string The serialized array of data.
 	 */
 	public function getData() {
-		return json_encode( $this->_data );
+		return serialize( $this->_data );
 	}
 
 	/**

@@ -69,11 +69,32 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function _sendResponse( $results ) {
 		header( 'Content-type: application/json' );
-		header( 'Cache-Control: no-cache, must-revalidate' );
-		header( 'Expires: Mon, 26 Jul 1997 05:00:00 GMT' );
+		nocache_headers();
 
 		echo json_encode( $results );
 		exit;
+	}
+
+	/**
+	 * Returns chart data required for rendering.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 * @param WP_Post $chart The chart object.
+	 * @return array The array of chart data.
+	 */
+	private function _getChartArray( WP_Post $chart = null ) {
+		if ( is_null( $chart ) ) {
+			$chart = $this->_chart;
+		}
+
+		return array(
+			'type'     => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
+			'series'   => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ),
+			'settings' => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true ),
+			'data'     => unserialize( $chart->post_content ),
+		);
 	}
 
 	/**
@@ -110,8 +131,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$charts = array();
 		while( $query->have_posts() ) {
-			$query->the_post();
-			// $charts[] = array();
+			$chart = $query->next_post();
+
+			$chart_data = $this->_getChartArray( $chart );
+			$chart_data['id'] = $chart->ID;
+
+			$charts[] = $chart_data;
 		}
 
 		$this->_sendResponse( array(
@@ -181,7 +206,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
-				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, '{}' );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array() );
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int)$chart_id ) );
@@ -265,23 +290,19 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 */
 	private function _handleDataPage() {
+		$data = $this->_getChartArray();
+
 		$render = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
-		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$render->type = $data['type'];
 
-		$settings = json_decode( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true ), true );
-		unset( $settings['width'], $settings['height'] );
+		unset( $data['settings']['width'], $data['settings']['height'] );
 
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script( 'visualizer-render', 'visualizer', array(
 			'charts' => array(
-				'canvas' => array(
-					'type'     => $render->type,
-					'series'   => json_decode( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true ), true ),
-					'data'     => json_decode( $render->chart->post_content, true ),
-					'settings' => $settings,
-				),
+				'canvas' => $data,
 			),
 		) );
 
@@ -302,7 +323,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				wp_update_post( $this->_chart->to_array() );
 			}
 
-			update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, json_encode( $_POST ) );
+			update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
 
 			$render = new Visualizer_Render_Page_Send();
 			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );
@@ -311,20 +332,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return;
 		}
 
-		$type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
-		$series = json_decode( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, true ), true );
-		$settings = json_decode( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true ), true );
-		$data = json_decode( $this->_chart->post_content, true );
+		$data = $this->_getChartArray();
 
 		$sidebar = '';
-		$sidebar_class = 'Visualizer_Render_Sidebar_Type_' . ucfirst( $type );
+		$sidebar_class = 'Visualizer_Render_Sidebar_Type_' . ucfirst( $data['type'] );
 		if ( class_exists( $sidebar_class, true ) ) {
-			$sidebar = new $sidebar_class( $settings );
-			$sidebar->__series = $series;
-			$sidebar->__data = $data;
+			$sidebar = new $sidebar_class( $data['settings'] );
+			$sidebar->__series = $data['series'];
+			$sidebar->__data = $data['data'];
 		}
 
-		unset( $settings['width'], $settings['height'] );
+		unset( $data['settings']['width'], $data['settings']['height'] );
 
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'visualizer-frame' );
@@ -332,12 +350,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-preview' );
 		wp_localize_script( 'visualizer-render', 'visualizer', array(
 			'charts' => array(
-				'canvas' => array(
-					'type'     => $type,
-					'series'   => $series,
-					'data'     => $data,
-					'settings' => $settings,
-				),
+				'canvas' => $data,
 			),
 		) );
 

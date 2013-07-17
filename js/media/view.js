@@ -21,472 +21,78 @@
 		},
 
 		render: function() {
-			var self = this, obj, chart;
+			var self, model, chart, gv, type, series, data, table, settings, i, j, row, date;
+
+			self = this;
+			gv = google.visualization;
+			model = self.model;
 
 			self.$el
 				.width(self.options.width)
 				.height(self.options.height)
 				.css('background-image', 'none');
 
-			obj = self.model.get('data');
-			if (_.isUndefined(obj.options)) {
-				return;
-			}
+			type = model.get('type');
+			series = model.get('series');
+			data = model.get('data');
+			settings = model.get('settings');
 
-			obj.options.width = self.options.width || obj.options.width;
-			obj.options.height = self.options.height || obj.options.height;
+			table = new gv.DataTable({cols: series});
+			chart = new gv[type.charAt(0).toUpperCase() + type.slice(1) + 'Chart'](self.el);
 
-			switch (obj.type) {
+			switch (type) {
 				case 'pie':
+					if (settings.slices) {
+						for (i in settings.slices) {
+							if (settings.slices[i]['color'] == '') {
+								delete settings.slices[i]['color'];
+							}
+						}
+					}
+					break;
 				case 'line':
 				case 'bar':
 				case 'column':
 				case 'area':
-				case 'geo':
 				case 'scatter':
 				case 'candlestick':
-					chart = new google.visualization[obj.type.charAt(0).toUpperCase() + obj.type.slice(1) + 'Chart'](self.el);
+					if (settings.series) {
+						for (i in settings.series) {
+							if (settings.series[i]['color'] == '') {
+								delete settings.series[i]['color'];
+							}
+						}
+					}
+					break;
+				case 'geo':
+					if (settings.region != undefined && settings.region.replace(/^\s+|\s+$/g, '') == '') {
+						settings['region'] = 'world';
+					}
 					break;
 				case 'gauge':
-					chart = new google.visualization.Gauge(self.el);
 					break;
 				default:
 					return;
 			}
 
-			chart.draw(self._prepareData(obj), self['_' + obj.type + 'Options'](obj));
-		},
-
-		_prepareData: function(obj) {
-			var data_table, data_view, i, j, series_len, data_len, row, rows;
-
-			data_table = new google.visualization.DataTable();
-
-			for (i = 0, series_len = obj.series.length; i < series_len; i++) {
-				data_table.addColumn(obj.series[i]);
-			}
-
-			for (i = 0, data_len = obj.data.length; i < data_len; i++) {
+			for (i = 0; i < data.length; i++) {
 				row = [];
-				for (j = 0; j < series_len; j++) {
-					row.push(this._format(obj.series[j].type, obj.data[i][j]));
-				}
-				data_table.addRow(row);
-			}
-
-			switch (obj.type) {
-				case 'pie':
-					data_view = new google.visualization.DataView(data_table);
-					data_view.setColumns([{
-						calc: function(dataTable, row) { return dataTable.getFormattedValue(row, 0); },
-						type: 'string'
-					}, 1]);
-					break;
-				case 'column':
-				case 'bar':
-					data_view = new google.visualization.DataView(data_table);
-					rows = [{
-						calc: function(dataTable, row) { return dataTable.getFormattedValue(row, 0); },
-						type: 'string'
-					}];
-					for (i = 1; i < series_len; i++) rows.push(i);
-					data_view.setColumns(rows);
-					break;
-				case 'scatter':
-					data_view = new google.visualization.DataView(data_table);
-					rows = [];
-					for (i = 0; i < series_len; i++) rows.push((function(column_num) {
-						return {
-							calc: function(dataTable, row) {
-								var val = $.trim(dataTable.getValue(row, column_num));
-								return val == '' ? null : parseFloat(val);
-							},
-							type: 'number',
-							label: data_table.getColumnLabel(column_num)
-						};
-					})(i));
-					data_view.setColumns(rows);
-					break;
-				default:
-					data_view = data_table;
-					break;
-			}
-
-			return data_view;
-		},
-
-		_format: function(type, value) {
-			var date, formatter, _float, _int, value;
-			switch (type) {
-				case 'boolean':
-					return value ? true : false;
-				case 'number':
-					formatter = new google.visualization.NumberFormat({ pattern: '#,###' });
-					_float = parseFloat(value);
-					_int = parseInt(value);
-					value = _int == _float ? _int : _float;
-					return { v: value, f: formatter.formatValue(value) };
-				case 'date':
-				case 'datetime':
-					date = new Date(value);
-					if (Object.prototype.toString.call(date) === "[object Date]") {
-						if (isNaN(date.getTime())) {
-							return null;
+				for (j = 0; j < series.length; j++) {
+					if (series[j].type == 'date' || series[j].type == 'datetime') {
+						date = new Date(data[i][j]);
+						data[i][j] = null;
+						if (Object.prototype.toString.call(date) === "[object Date]") {
+							if (!isNaN(date.getTime())) {
+								data[i][j] = date;
+							}
 						}
-					} else {
-						return null;
 					}
-					return date;
-				case 'timeofday':
-					date = new Date('16 Mar 1984 ' + value);
-					if (Object.prototype.toString.call(date) === "[object Date]") {
-						if (isNaN(date.getTime())) {
-							return null;
-						}
-					} else {
-						return null;
-					}
-					return [date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()];
-			}
-			return value;
-		},
-
-		_defaultOptions: function(settings) {
-			return {
-				title: settings.title || '',
-				width: settings.width || 'auto',
-				height: settings.height || 'auto',
-				fontName: settings.font_name || 'Arial',
-				fontSize: settings.font_size || 'automatic',
-				backgroundColor: {
-					fill: settings.background_color || 'white',
-					stroke: settings.stroke_color || '#666',
-					strokeWidth: settings.stroke_width || 0
-				},
-				chartArea: {
-					left: settings.chart_area_left || 'auto',
-					top: settings.chart_area_top || 'auto',
-					width: settings.chart_area_width || 'auto',
-					height: settings.chart_area_height || 'auto'
-				},
-				legend: {
-					position: settings.legend_position || 'right'
+					row.push(data[i][j]);
 				}
-			};
-		},
-
-		_lineOptions: function(obj) {
-			var settings, options, series, i, legend = {}, title = {};
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['axisTitlesPosition'] = settings.axis_titles_position || 'out';
-			options['curveType'] = settings.curve_type || 'none';
-			options['lineWidth'] = settings.line_width || 2;
-			options['pointSize'] = settings.point_size || 0;
-
-			if (settings.legend_color) legend['color'] = settings.legend_color;
-			if (parseInt(settings.legend_font_size) > 0) legend['fontSize'] = settings.legend_font_size;
-			options['legend']['textStyle'] = legend;
-			options['legend']['alignment'] = settings.legend_aligment || false;
-
-			if (settings.title_color) title['color'] = settings.title_color;
-			if (parseInt(settings.title_font_size) > 0) title['fontSize'] = settings.title_font_size;
-			options['titleTextStyle'] = title;
-			options['titlePosition'] = settings.title_position || 'out';
-
-			options['hAxis'] = {
-				title: settings.xaxis_title || '',
-				textPosition: settings.xtext_position || 'out',
-				baselineColor: settings.xbaseline_color || 'black',
-				gridlines: {
-					color: settings.xgridlines_color || '#CCC',
-					count: settings.xgridlines_count || '5'
-				},
-				direction: settings.reverse || '1',
-				logScale: settings.xlog_scale || false,
-				viewWindow: {
-					min: settings.ymin_val || false,
-					max: settings.ymax_val || false
-				}
+				table.addRow(row);
 			}
 
-			options['vAxis'] = {
-				title: settings.yaxis_title || '',
-				textPosition: settings.ytext_position || 'out',
-				baselineColor: settings.ybaseline_color || 'black',
-				gridlines: {
-					color: settings.ygridlines_color || '#CCC',
-					count: settings.ygridlines_count || '5'
-				},
-				logScale: settings.ylog_scale || false,
-				viewWindow: {
-					min: settings.xmin_val || false,
-					max: settings.xmax_val || false
-				}
-			}
-
-			options['series'] = {};
-			for (i = 1; i < obj.series.length; i++) {
-				series = {};
-				if (settings['series_' + i + '_curve_type'])        series['curveType'] = settings['series_' + i + '_curve_type'];
-				if (settings['series_' + i + '_line_width'])        series['lineWidth'] = settings['series_' + i + '_line_width'];
-				if (settings['series_' + i + '_point_size'])        series['pointSize'] = settings['series_' + i + '_point_size'];
-				if (settings['series_' + i + '_color'])             series['color'] = settings['series_' + i + '_color'];
-				if (settings['series_' + i + '_visible_in_legend']) series['visibleInLegend'] = settings['series_' + i + '_visible_in_legend'];
-				options.series[i - 1] = series;
-			}
-
-			return options;
-		},
-
-		_areaOptions: function(obj) {
-			var series, i, settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['axisTitlesPosition'] = settings.axis_titles_position || 'out';
-			options['isStacked'] = settings.is_stacked == '1' ? true : false;
-			options['lineWidth'] = settings.line_width || 2;
-			options['pointSize'] = settings.point_size || 0;
-			options['areaOpacity'] = settings.area_opacity || 0.3;
-
-			options['hAxis'] = {
-				title: settings.xaxis_title || '',
-				textPosition: settings.xtext_position || 'out',
-				baselineColor: settings.xbaseline_color || 'black',
-				gridlines: {
-					color: settings.xgridlines_color || '#CCC',
-					count: settings.xgridlines_count || '5'
-				}
-			};
-
-			options['vAxis'] = {
-				title: settings.yaxis_title || '',
-				textPosition: settings.ytext_position || 'out',
-				baselineColor: settings.ybaseline_color || 'black',
-				gridlines: {
-					color: settings.ygridlines_color || '#CCC',
-					count: settings.ygridlines_count || '5'
-				}
-			};
-
-			options['series'] = {};
-			for (i = 1; i < obj.series.length; i++) {
-				series = {};
-				if (settings['series_' + i + '_area_opacity'])      series['areaOpacity'] = settings['series_' + i + '_area_opacity'];
-				if (settings['series_' + i + '_line_width'])        series['lineWidth'] = settings['series_' + i + '_line_width'];
-				if (settings['series_' + i + '_point_size'])        series['pointSize'] = settings['series_' + i + '_point_size'];
-				if (settings['series_' + i + '_color'])             series['color'] = settings['series_' + i + '_color'];
-				if (settings['series_' + i + '_visible_in_legend']) series['visibleInLegend'] = settings['series_' + i + '_visible_in_legend'];
-				options.series[i - 1] = series;
-			}
-
-			return options;
-		},
-
-		_pieOptions: function(obj) {
-			var settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['is3D'] = settings.is_3d == '1' ? true : false;
-			options['reverseCategories'] = settings.reverse == '1' ? true : false;
-
-			options['pieSliceBorderColor'] = settings.slice_border_color || 'white';
-			options['pieSliceText'] = settings.slice_text || 'percentage';
-
-			options['sliceVisibilityThreshold'] = parseFloat(settings.visibility_threshold) || 1 / 720;
-			options['pieResidueSliceColor'] = settings.residue_slice_color || 'white';
-			options['pieResidueSliceLabel'] = $.trim(settings.residue_slice_label) != ''
-				? settings.residue_slice_label
-				: 'Other';
-
-			return options;
-		},
-
-		_candlestickOptions: function(obj) {
-			var settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['axisTitlesPosition'] = settings.axis_titles_position || 'out';
-
-			options['hAxis'] = {
-				title: settings.xaxis_title || '',
-				textPosition: settings.xtext_position || 'out'
-			};
-
-			options['vAxis'] = {
-				title: settings.yaxis_title || '',
-				textPosition: settings.ytext_position || 'out',
-				baselineColor: settings.ybaseline_color || 'black',
-				gridlines: {
-					color: settings.ygridlines_color || '#CCC',
-					count: settings.ygridlines_count || '5'
-				}
-			};
-
-			return options;
-		},
-
-		_gaugeOptions: function(obj) {
-			var settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['min'] = settings.min || 0;
-			options['max'] = settings.max || 100;
-
-			options['greenColor'] = settings.green_color || '#109618';
-			options['greenFrom'] = settings.green_from || '';
-			options['greenTo'] = settings.green_to || '';
-
-			options['yellowColor'] = settings.yellow_color || '#109618';
-			options['yellowFrom'] = settings.yellow_from || '';
-			options['yellowTo'] = settings.yellow_to || '';
-
-			options['redColor'] = settings.red_color || '#109618';
-			options['redFrom'] = settings.red_from || '';
-			options['redTo'] = settings.red_to || '';
-
-			options['minorTicks'] = settings.minor_ticks || 2;
-
-			return options;
-		},
-
-		_scatterOptions: function(obj) {
-			var settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['axisTitlesPosition'] = settings.axis_titles_position || 'out';
-			options['curveType'] = settings.curve_type || 'none';
-			options['lineWidth'] = settings.line_width || 0;
-			options['pointSize'] = settings.point_size || 7;
-
-			options['hAxis'] = {
-				title: settings.xaxis_title || '',
-				textPosition: settings.xtext_position || 'out',
-				baselineColor: settings.xbaseline_color || 'black',
-				gridlines: {
-					color: settings.xgridlines_color || '#CCC',
-					count: settings.xgridlines_count || '5'
-				}
-			};
-
-			options['vAxis'] = {
-				title: settings.yaxis_title || '',
-				textPosition: settings.ytext_position || 'out',
-				baselineColor: settings.ybaseline_color || 'black',
-				gridlines: {
-					color: settings.ygridlines_color || '#CCC',
-					count: settings.ygridlines_count || '5'
-				}
-			};
-
-			return options;
-		},
-
-		_geoOptions: function(obj) {
-			var settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['region'] = settings.region || 'world';
-			options['displayMode'] = settings.display_mode || 'auto';
-			options['datalessRegionColor'] = settings.dataless_region_color || 'F5F5F5';
-			options['keepAspectRatio'] = true;
-			options['resolution'] = settings.resolution || 'countries';
-
-			options['colorAxis'] = {
-				minValue: settings.min_value || false,
-				maxValue: settings.max_value || false,
-				colors: [
-					settings.min_value_color || '#99BF93',
-					settings.mid_value_color || '#58B551',
-					settings.max_value_color || '#059100'
-				]
-			};
-
-			return options;
-		},
-
-		_columnOptions: function(obj) {
-			var series, i, settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['axisTitlesPosition'] = settings.axis_titles_position || 'out';
-			options['isStacked'] = settings.is_stacked == '1' ? true : false;
-
-			options['hAxis'] = {
-				title: settings.xaxis_title || '',
-				textPosition: settings.xtext_position || 'out'
-			};
-
-			options['vAxis'] = {
-				title: settings.yaxis_title || '',
-				textPosition: settings.ytext_position || 'out',
-				baselineColor: settings.ybaseline_color || 'black',
-				gridlines: {
-					color: settings.ygridlines_color || '#CCC',
-					count: settings.ygridlines_count || '5'
-				}
-			};
-
-			options['series'] = {};
-			for (i = 1; i < obj.series.length; i++) {
-				series = {};
-				if (settings['series_' + i + '_color'])             series['color'] = settings['series_' + i + '_color'];
-				if (settings['series_' + i + '_visible_in_legend']) series['visibleInLegend'] = settings['series_' + i + '_visible_in_legend'];
-				options.series[i - 1] = series;
-			}
-
-			return options;
-		},
-
-		_barOptions: function(obj) {
-			var series, i, settings, options;
-
-			settings = obj.options || {};
-			options = this._defaultOptions(settings);
-
-			options['axisTitlesPosition'] = settings.axis_titles_position || 'out';
-			options['isStacked'] = settings.is_stacked == '1' ? true : false;
-
-			options['hAxis'] = {
-				title: settings.xaxis_title || '',
-				textPosition: settings.xtext_position || 'out',
-				baselineColor: settings.xbaseline_color || 'black',
-				gridlines: {
-					color: settings.xgridlines_color || '#CCC',
-					count: settings.xgridlines_count || '5'
-				}
-			};
-
-			options['vAxis'] = {
-				title: settings.yaxis_title || '',
-				textPosition: settings.ytext_position || 'out'
-			};
-
-			options['series'] = {};
-			for (i = 1; i < obj.series.length; i++) {
-				series = {};
-				if (settings['series_' + i + '_color'])             series['color'] = settings['series_' + i + '_color'];
-				if (settings['series_' + i + '_visible_in_legend']) series['visibleInLegend'] = settings['series_' + i + '_visible_in_legend'];
-				options.series[i - 1] = series;
-			}
-
-			return options;
+			chart.draw(table, settings);
 		}
 	});
 
@@ -577,7 +183,6 @@
 		events: {
 			'click .visualizer-library-chart-delete': 'deleteChart',
 			'click .visualizer-library-chart-insert': 'insertChart',
-			'click .visualizer-library-chart-clone': 'cloneChart',
 			'click .visualizer-library-chart-shortcode': 'selectShortcode'
 		},
 
@@ -621,10 +226,6 @@
 
 		insertChart: function() {
 			wpm.editor.insert('[visualizer id="' + this.model.get('id') + '"]');
-		},
-
-		cloneChart: function() {
-			console.log('clone chart #' + this.model.get('id'));
 		},
 
 		selectShortcode: function(e) {

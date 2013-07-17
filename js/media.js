@@ -34,11 +34,11 @@
 			view.set({
 				builder: {
 					text: wpmv.l10n.visualizer.routers.create,
-					priority: 20
+					priority: 40
 				},
 				library: {
 					text: wpmv.l10n.visualizer.routers.library,
-					priority: 40
+					priority: 20
 				}
 			});
 		},
