@@ -8,11 +8,13 @@ Stable tag:
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
-Create charts with Google Visualization API
+A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
 == Description ==
 
+WordPress Visualizer plugin is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
+The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
 
 == Installation ==
 
