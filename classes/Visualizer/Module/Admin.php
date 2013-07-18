@@ -58,9 +58,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_footer', 'renderTempaltes' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts' );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
-		$this->_addAction( 'plugin_action_links', 'getActionLinks', 10, 2 );
 
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
+		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
+		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
 	}
 
 	/**
@@ -271,7 +272,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
-	 * Updates the plugin's action links, which will be rendered in the plugins table.
+	 * Updates the plugin's action links, which will be rendered at the plugins table.
 	 *
 	 * @since 1.0.0
 	 *
@@ -280,7 +281,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @param string $file The plugin basename.
 	 * @return array Updated array of action links.
 	 */
-	public function getActionLinks( $links, $file ) {
+	public function getPluginActionLinks( $links, $file ) {
 		if ( $file == plugin_basename( VISUALIZER_BASEFILE ) ) {
 			array_unshift(
 				$links,
@@ -293,6 +294,32 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Updates the plugin's meta links, which will be rendered at the plugins table.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $plugin_meta The array of a plugin meta links.
+	 * @param string $plugin_file The plugin's basename.
+	 * @return array Updated array of plugin meta links.
+	 */
+	public function getPluginMetaLinks( $plugin_meta, $plugin_file ) {
+		if ( $plugin_file == plugin_basename( VISUALIZER_BASEFILE ) ) {
+			$plugin_meta[] = sprintf(
+				'<a href="http://visualizer.madpixels.net/knowledgebase/">%s</a>',
+				esc_html__( 'Knowledge Base' )
+			);
+
+			$plugin_meta[] = sprintf(
+				'<a href="http://visualizer.madpixels.net/forums/">%s</a>',
+				esc_html__( 'Community', Visualizer_Plugin::NAME )
+			);
+		}
+
+		return $plugin_meta;
 	}
 
 }
