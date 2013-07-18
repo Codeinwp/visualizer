@@ -31,6 +31,31 @@
 class Visualizer_Render_Library extends Visualizer_Render {
 
 	/**
+	 * Renders chart's box block.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 * @param string $placeholder_id The placeholder's id for the chart.
+	 */
+	private function _renderChartBox( $placeholder_id ) {
+		echo '<div class="visualizer-chart">';
+			echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
+				echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
+			echo '</div>';
+			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
+				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="javascript:;" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="javascript:;" title="', esc_attr__( 'Clone', Visualizer_Plugin::NAME ), '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', Visualizer_Plugin::NAME ), '"></a>';
+
+				echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">';
+					echo '&nbsp;[visualizer id=&quot;', end( explode( '-', $placeholder_id ) ), '&quot;]&nbsp;';
+				echo '</span>';
+			echo '</div>';
+		echo '</div>';
+	}
+
+	/**
 	 * Renders library content.
 	 *
 	 * @since 1.0.0
@@ -38,7 +63,56 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 */
 	private function _renderLibrary() {
+		echo '<div id="visualizer-types" class="visualizer-clearfix">';
+			echo '<ul>';
+				foreach ( $this->types as $type => $label ) {
+					echo '<li class="visualizer-list-item">';
+						if ( $type == $this->type ) {
+							echo '<a class="page-numbers current" href="', add_query_arg( 'vpage', false ), '">';
+								echo $label;
+							echo '</a>';
+						} else {
+							echo '<a class="page-numbers" href="', add_query_arg( array( 'type' => $type, 'vpage' => false ) ), '">';
+								echo $label;
+							echo '</a>';
+						}
+					echo '</li>';
+				}
+			echo '</ul>';
+		echo '</div>';
 
+		if ( !empty( $this->charts ) ) {
+			echo '<div id="visualizer-library" class="visualizer-clearfix">';
+				foreach ( $this->charts as $chart_id  => $chart_info ) {
+					$this->_renderChartBox( $chart_id );
+				}
+			echo '</div>';
+
+			if ( is_array( $this->pagination ) ) {
+				echo '<ul>';
+					foreach ( $this->pagination as $page ) {
+						echo '<li class="visualizer-list-item">', $page, '</li>';
+					}
+				echo '</ul>';
+			}
+		} else {
+			echo '<div id="visualizer-library" class="visualizer-clearfix">';
+				echo '<div class="visualizer-chart">';
+					echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
+						echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', Visualizer_Plugin::NAME ), '</div>';
+					echo '</div>';
+					echo '<div class="visualizer-chart-footer visualizer-clearfix">';
+						echo '<span class="visualizer-chart-action visualizer-nochart-delete"></span>';
+						echo '<span class="visualizer-chart-action visualizer-nochart-clone"></span>';
+						echo '<span class="visualizer-chart-action visualizer-nochart-edit"></span>';
+
+						echo '<span class="visualizer-chart-shortcode">';
+							echo '&nbsp;[visualizer]&nbsp;';
+						echo '</span>';
+					echo '</div>';
+				echo '</div>';
+			echo '</div>';
+		}
 	}
 
 	/**

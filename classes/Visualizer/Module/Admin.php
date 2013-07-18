@@ -64,6 +64,30 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
+	 * Returns associated array of chart types and localized names.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @static
+	 * @access private
+	 * @return array The associated array of chart types with localized names.
+	 */
+	private static function _getChartTypesLocalized() {
+		return array(
+			'all'         => esc_html__( 'All', Visualizer_Plugin::NAME ),
+			'pie'         => esc_html__( 'Pie', Visualizer_Plugin::NAME ),
+			'line'        => esc_html__( 'Line', Visualizer_Plugin::NAME ),
+			'area'        => esc_html__( 'Area', Visualizer_Plugin::NAME ),
+			'geo'         => esc_html__( 'Geo', Visualizer_Plugin::NAME ),
+			'bar'         => esc_html__( 'Bar', Visualizer_Plugin::NAME ),
+			'column'      => esc_html__( 'Column', Visualizer_Plugin::NAME ),
+			'gauge'       => esc_html__( 'Gauge', Visualizer_Plugin::NAME ),
+			'scatter'     => esc_html__( 'Scatter', Visualizer_Plugin::NAME ),
+			'candlestick' => esc_html__( 'Candelstick', Visualizer_Plugin::NAME ),
+		);
+	}
+
+	/**
 	 * Enqueues media scripts and styles.
 	 *
 	 * @since 1.0.0
@@ -100,25 +124,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'delete_chart' => Visualizer_Plugin::ACTION_DELETE_CHART,
 			),
 			'controller' => array(
-				'title' => __( 'Visualizations', Visualizer_Plugin::NAME ),
+				'title' => esc_html__( 'Visualizations', Visualizer_Plugin::NAME ),
 			),
 			'routers' => array(
-				'library' => __( 'From Library', Visualizer_Plugin::NAME ),
-				'create'  => __( 'Create New', Visualizer_Plugin::NAME ),
+				'library' => esc_html__( 'From Library', Visualizer_Plugin::NAME ),
+				'create'  => esc_html__( 'Create New', Visualizer_Plugin::NAME ),
 			),
 			'library' => array(
-				'filters' => array(
-					'all'         => __( 'All', Visualizer_Plugin::NAME ),
-					'pie'         => __( 'Pie', Visualizer_Plugin::NAME ),
-					'line'        => __( 'Line', Visualizer_Plugin::NAME ),
-					'area'        => __( 'Area', Visualizer_Plugin::NAME ),
-					'geo'         => __( 'Geo', Visualizer_Plugin::NAME ),
-					'bar'         => __( 'Bar', Visualizer_Plugin::NAME ),
-					'column'      => __( 'Column', Visualizer_Plugin::NAME ),
-					'gauge'       => __( 'Gauge', Visualizer_Plugin::NAME ),
-					'scatter'     => __( 'Scatter', Visualizer_Plugin::NAME ),
-					'candlestick' => __( 'Candelstick', Visualizer_Plugin::NAME ),
-				),
+				'filters' => self::_getChartTypesLocalized(),
 			),
 			'nonce'    => Visualizer_Security::createNonce(),
 			'buildurl' => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
@@ -151,6 +164,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @since 1.0.0
 	 * @uses wp_enqueue_style() To enqueue library stylesheet.
+	 * @uses wp_enqueue_script() To enqueue javascript file.
 	 *
 	 * @access public
 	 * @param string $suffix The current page suffix.
@@ -158,6 +172,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function enqueueLibraryScripts( $suffix ) {
 		if ( $suffix == $this->_libraryPage ) {
 			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
+
+			wp_enqueue_script( 'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+			wp_enqueue_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
+			wp_enqueue_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'visualizer-library' ), Visualizer_Plugin::VERSION, true );
 		}
 	}
 
@@ -182,7 +200,71 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access public
 	 */
 	public function renderLibraryPage() {
+		// get current page
+		$page = filter_input( INPUT_GET, 'vpage', FILTER_VALIDATE_INT, array(
+			'options' => array(
+				'min_range' => 1,
+				'default'   => 1,
+			)
+		) );
+
+		// the initial query arguments to fetch charts
+		$query_args = array(
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+			'posts_per_page' => 6,
+			'paged'          => $page,
+		);
+
+		// add chart type filter to the query arguments
+		$type = filter_input( INPUT_GET, 'type' );
+		if ( $type && in_array( $type, Visualizer_Plugin::getChartTypes() ) ) {
+			$query_args['meta_query'] = array(
+				array(
+					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
+					'value'   => $type,
+					'compare' => '=',
+				),
+			);
+		} else {
+			$type = 'all';
+		}
+
+		// fetch charts
+		$charts = array();
+		$query = new WP_Query( $query_args );
+		while( $query->have_posts() ) {
+			$chart = $query->next_post();
+
+			// faetch and update settings
+			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+			unset( $settings['height'], $settings['width'] );
+
+			// add chart to the array
+			$charts['visualizer-' . $chart->ID] = array(
+				'type'     => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
+				'series'   => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ),
+				'settings' => $settings,
+				'data'     => unserialize( $chart->post_content ),
+			);
+		}
+
+		// enqueue charts array
+		wp_localize_script( 'visualizer-render', 'visualizer', array( 'charts' => $charts ) );
+
+		// render library page
 		$render = new Visualizer_Render_Library();
+
+		$render->charts = $charts;
+		$render->type = $type;
+		$render->types = self::_getChartTypesLocalized();
+		$render->pagination = paginate_links( array(
+			'base'    => add_query_arg( 'vpage', '%#%' ),
+			'format'  => '',
+			'current' => $page,
+			'total'   => $query->max_num_pages,
+			'type'    => 'array',
+		) );
+
 		$render->render();
 	}
 
@@ -203,7 +285,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				sprintf(
 					'<a href="%s">%s</a>',
 					admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ),
-					__( 'Library', Visualizer_Plugin::NAME )
+					esc_html__( 'Library', Visualizer_Plugin::NAME )
 				)
 			);
 		}

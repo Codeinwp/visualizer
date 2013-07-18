@@ -1,3 +1,137 @@
 #visualizer-icon {
 	background-image: url('../images/icon.png');
 }
+
+.visualizer-clearfix {
+	*zoom: 1;
+}
+
+.visualizer-clearfix:before,
+.visualizer-clearfix:after {
+	display: table;
+	line-height: 0;
+	content: "";
+}
+
+.visualizer-clearfix:after {
+	clear: both;
+}
+
+#visualizer-types {
+	margin: 20px 0 10px;
+}
+
+#visualizer-library {
+	margin: 20px 0;
+}
+
+.loader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -16px;
+	margin-top: -16px;
+}
+
+.visualizer-chart {
+	float: left;
+	padding: 5px;
+	border: 1px solid #ddd;
+	-webkit-box-shadow: 0px 0px 8px #ddd;
+	box-shadow: 0px 0px 8px #ddd;
+	background-color: #efefef;
+}
+
+.visualizer-chart-canvas {
+	border: 1px solid #ddd;
+	background-color: white;
+	position: relative;
+}
+
+.visualizer-nochart-canvas {
+	background-image: url('../images/notfound.png?v=4');
+	background-repeat: repeat;
+}
+
+.visualizer-notfound {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+	margin-top: -7px;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+}
+
+.visualizer-chart-action {
+	float: right;
+	display: block;
+	height: 16px;
+	width: 16px;
+	background-repeat: no-repeat;
+	background-image: url('../images/ui-icons.png');
+	margin: 2px 5px 0;
+}
+
+.visualizer-nochart-delete,
+.visualizer-chart-delete {
+	background-position: -176px -96px;
+}
+
+.visualizer-nochart-clone,
+.visualizer-chart-clone {
+	background-position: -176px -128px;
+}
+
+.visualizer-nochart-edit,
+.visualizer-chart-edit {
+	background-position: -64px -112px;
+}
+
+.visualizer-nochart-clone,
+.visualizer-nochart-delete,
+.visualizer-nochart-edit {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    opacity: 0.5
+}
+
+.visualizer-chart-footer {
+	margin-top: 4px;
+}
+
+.visualizer-chart-shortcode {
+	color: #aaa;
+	text-shadow: 0 1px 0 #fff;
+	cursor: pointer;
+	padding: 3px 0;
+}
+
+.visualizer-chart-shortcode::selection,
+.visualizer-chart-shortcode::-moz-selection {
+	background-color: #a8d1ff;
+	color: black;
+	text-shadow: none;
+}
+
+.visualizer-list-item {
+	float: left;
+	margin-right: 20px;
+}
+
+.page-numbers {
+	padding: 5px 10px;
+	background-color: #aaa;
+	color: white !important;
+	text-decoration: none;
+	border-radius: 2px;
+	box-shadow: 0 0 5px #ccc;
+	font-weight: bold;
+}
+
+.page-numbers.current,
+a.page-numbers:hover {
+	background-color: lightcoral;
+	box-shadow: 0 0 5px lightpink;
+}
