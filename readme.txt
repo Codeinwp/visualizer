@@ -16,8 +16,10 @@ Create charts with Google Visualization API
 
 == Installation ==
 
-1. Upload `visualizer` folder to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Upload the files to the `/wp-content/plugins/visualizer/` directory.
+1. Activate the plugin through the 'Plugins' menu in WordPress.
+1. Go to post/page edit form and open "Add Media" popup.
+1. Then go to "Visualizations" tab and click on "Create New" link.
 
 == Frequently asked questions ==
 
@@ -29,7 +31,8 @@ Create charts with Google Visualization API
 
 == Changelog ==
 
-
+= 1.0.0 =
+* The first version of the plugin was implemented.
 
 == Upgrade notice ==
 
