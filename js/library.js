@@ -12,6 +12,22 @@
 	$('.visualizer-chart-canvas').adjust();
 
 	$(document).ready(function() {
+		$('.visualizer-chart-shortcode').click(function(e) {
+			var range, selection;
+
+			if (window.getSelection && document.createRange) {
+				selection = window.getSelection();
+				range = document.createRange();
+				range.selectNodeContents(e.target);
+				selection.removeAllRanges();
+				selection.addRange(range);
+			} else if (document.selection && document.body.createTextRange) {
+				range = document.body.createTextRange();
+				range.moveToElementText(e.target);
+				range.select();
+			}
+		});
+
 		$(window).resize(function() {
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(function() {

@@ -37,19 +37,26 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 *
 	 * @access private
 	 * @param string $placeholder_id The placeholder's id for the chart.
+	 * @param int $chart_id The id of the chart.
 	 */
-	private function _renderChartBox( $placeholder_id ) {
+	private function _renderChartBox( $placeholder_id, $chart_id ) {
+		$delete_url = add_query_arg( array(
+			'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
+			'nonce' => $this->nonce,
+			'chart' => $chart_id,
+		), admin_url( 'admin-ajax.php' ) );
+
 		echo '<div class="visualizer-chart">';
 			echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 				echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 			echo '</div>';
 			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
-				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="javascript:;" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '" onclick="return showNotice.warn();"></a>';
 				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="javascript:;" title="', esc_attr__( 'Clone', Visualizer_Plugin::NAME ), '"></a>';
 				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', Visualizer_Plugin::NAME ), '"></a>';
 
 				echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">';
-					echo '&nbsp;[visualizer id=&quot;', end( explode( '-', $placeholder_id ) ), '&quot;]&nbsp;';
+					echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
 				echo '</span>';
 			echo '</div>';
 		echo '</div>';
@@ -83,8 +90,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 
 		if ( !empty( $this->charts ) ) {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
-				foreach ( $this->charts as $chart_id  => $chart_info ) {
-					$this->_renderChartBox( $chart_id );
+				foreach ( $this->charts as $placeholder_id  => $chart ) {
+					$this->_renderChartBox( $placeholder_id, $chart['id'] );
 				}
 			echo '</div>';
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 23:24+0300\n"
-"PO-Revision-Date: 2013-07-16 23:24+0300\n"
+"POT-Creation-Date: 2013-07-18 11:55+0300\n"
+"PO-Revision-Date: 2013-07-18 11:55+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -16,21 +16,39 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: classes/Visualizer\n"
 
+#: classes/Visualizer/Render/Library.php:54
 #: classes/Visualizer/Render/Templates.php:68
 msgid "Delete"
 msgstr "Delete"
 
-#: classes/Visualizer/Render/Templates.php:69
-msgid "Insert"
-msgstr "Insert"
-
-#: classes/Visualizer/Render/Templates.php:70
+#: classes/Visualizer/Render/Library.php:55
 msgid "Clone"
 msgstr "Clone"
 
-#: classes/Visualizer/Render/Templates.php:72
+#: classes/Visualizer/Render/Library.php:56
+msgid "Edit"
+msgstr "Edit"
+
+#: classes/Visualizer/Render/Library.php:58
+#: classes/Visualizer/Render/Templates.php:71
 msgid "Click to select"
 msgstr "Click to select"
+
+#: classes/Visualizer/Render/Library.php:109
+msgid "No charts found"
+msgstr "No charts found"
+
+#: classes/Visualizer/Render/Library.php:136
+msgid "Visualizer Library"
+msgstr "Visualizer Library"
+
+#: classes/Visualizer/Render/Library.php:137
+msgid "Add New"
+msgstr "Add New"
+
+#: classes/Visualizer/Render/Templates.php:69
+msgid "Insert"
+msgstr "Insert"
 
 #: classes/Visualizer/Render/Sidebar.php:101
 msgid "Right of the chart"
@@ -65,12 +83,10 @@ msgid "Aligned to the end of the allocated area"
 msgstr "Aligned to the end of the allocated area"
 
 #: classes/Visualizer/Render/Sidebar.php:117
-#: classes/Visualizer/Render/Sidebar/Linear.php:167
 msgid "Yes"
 msgstr "Yes"
 
 #: classes/Visualizer/Render/Sidebar.php:118
-#: classes/Visualizer/Render/Sidebar/Linear.php:166
 msgid "No"
 msgstr "No"
 
@@ -255,22 +271,28 @@ msgstr "Curve Type"
 #: classes/Visualizer/Render/Sidebar/Linear.php:117
 #: classes/Visualizer/Render/Sidebar/Linear.php:169
 #: classes/Visualizer/Render/Sidebar/Linear.php:194
+#: classes/Visualizer/Render/Sidebar/Graph.php:269
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:141
 msgid "Determines whether the series has to be presented in the legend or not."
 msgstr "Determines whether the series has to be presented in the legend or not."
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:123
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:61
 msgid "Focus Target"
 msgstr "Focus Target"
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:128
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:66
 msgid "Focus on a single data point."
 msgstr "Focus on a single data point."
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:129
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:67
 msgid "Focus on a grouping of all data points along the major axis."
 msgstr "Focus on a grouping of all data points along the major axis."
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:131
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:69
 msgid "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 msgstr "The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click."
 
@@ -279,6 +301,8 @@ msgid "Lines Settings"
 msgstr "Lines Settings"
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:161
+#: classes/Visualizer/Render/Sidebar/Graph.php:261
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:133
 msgid "Visible In Legend"
 msgstr "Visible In Legend"
 
@@ -291,6 +315,8 @@ msgid "Overrides the global point size value for this series."
 msgstr "Overrides the global point size value for this series."
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:199
+#: classes/Visualizer/Render/Sidebar/Graph.php:273
+#: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:145
 msgid "Color"
 msgstr "Color"
 
@@ -769,63 +795,67 @@ msgstr "If yes, the map will be drawn at the largest size that can fit inside th
 msgid "If no, the map will be stretched to the exact size of the chart as specified by the width and height options."
 msgstr "If no, the map will be stretched to the exact size of the chart as specified by the width and height options."
 
-#: classes/Visualizer/Module/Admin.php:90
-msgid "Visualizations"
-msgstr "Visualizations"
-
-#: classes/Visualizer/Module/Admin.php:93
-msgid "From Library"
-msgstr "From Library"
-
-#: classes/Visualizer/Module/Admin.php:94
-msgid "Create New"
-msgstr "Create New"
-
-#: classes/Visualizer/Module/Admin.php:98
+#: classes/Visualizer/Module/Admin.php:77
 msgid "All"
 msgstr "All"
 
-#: classes/Visualizer/Module/Admin.php:99
+#: classes/Visualizer/Module/Admin.php:78
 msgid "Pie"
 msgstr "Pie"
 
-#: classes/Visualizer/Module/Admin.php:100
+#: classes/Visualizer/Module/Admin.php:79
 msgid "Line"
 msgstr "Line"
 
-#: classes/Visualizer/Module/Admin.php:101
+#: classes/Visualizer/Module/Admin.php:80
 msgid "Area"
 msgstr "Area"
 
-#: classes/Visualizer/Module/Admin.php:102
+#: classes/Visualizer/Module/Admin.php:81
 msgid "Geo"
 msgstr "Geo"
 
-#: classes/Visualizer/Module/Admin.php:103
+#: classes/Visualizer/Module/Admin.php:82
 msgid "Bar"
 msgstr "Bar"
 
-#: classes/Visualizer/Module/Admin.php:104
+#: classes/Visualizer/Module/Admin.php:83
 msgid "Column"
 msgstr "Column"
 
-#: classes/Visualizer/Module/Admin.php:105
+#: classes/Visualizer/Module/Admin.php:84
 msgid "Gauge"
 msgstr "Gauge"
 
-#: classes/Visualizer/Module/Admin.php:106
+#: classes/Visualizer/Module/Admin.php:85
 msgid "Scatter"
 msgstr "Scatter"
 
-#: classes/Visualizer/Module/Admin.php:107
+#: classes/Visualizer/Module/Admin.php:86
 msgid "Candelstick"
 msgstr "Candelstick"
 
-#: classes/Visualizer/Module/Chart.php:372
+#: classes/Visualizer/Module/Admin.php:127
+msgid "Visualizations"
+msgstr "Visualizations"
+
+#: classes/Visualizer/Module/Admin.php:130
+msgid "From Library"
+msgstr "From Library"
+
+#: classes/Visualizer/Module/Admin.php:131
+msgid "Create New"
+msgstr "Create New"
+
+#: classes/Visualizer/Module/Admin.php:290
+msgid "Library"
+msgstr "Library"
+
+#: classes/Visualizer/Module/Chart.php:391
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr "CSV file with chart data was not uploaded. Please, try again."
 
-#: classes/Visualizer/Module/Chart.php:386
+#: classes/Visualizer/Module/Chart.php:405
 msgid "CSV file is broken or incorrect. Please, try again."
 msgstr "CSV file is broken or incorrect. Please, try again."
 

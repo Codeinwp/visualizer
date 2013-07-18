@@ -155,13 +155,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function deleteChart() {
-		$success = false;
+		$is_post = $_SERVER['REQUEST_METHOD'] == 'POST';
+		$input_method = $is_post ? INPUT_POST : INPUT_GET;
 
-		$chart_id = false;
-		$nonce = Visualizer_Security::verifyNonces( filter_input( INPUT_POST, 'nonce' ) );
+		$chart_id = $success = false;
+		$nonce = Visualizer_Security::verifyNonce( filter_input( $input_method, 'nonce' ) );
 		$capable = current_user_can( 'delete_posts' );
 		if ( $nonce && $capable ) {
-			$chart_id = filter_input( INPUT_POST, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+			$chart_id = filter_input( $input_method, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
 			if ( $chart_id ) {
 				$chart = get_post( $chart_id );
 				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
@@ -169,11 +170,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		if ( $success && $chart_id ) {
-			$deleted = wp_delete_post( $chart_id, true );
-			$success = $deleted > 0;
+			wp_delete_post( $chart_id, true );
+			$success = true;
 		}
 
-		$this->_sendResponse( array( 'success' => $success ) );
+		if ( $is_post ) {
+			$this->_sendResponse( array( 'success' => $success ) );
+		}
+
+		wp_redirect( wp_get_referer() );
+		exit;
 	}
 
 	/**

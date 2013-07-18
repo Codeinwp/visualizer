@@ -241,6 +241,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 			// add chart to the array
 			$charts['visualizer-' . $chart->ID] = array(
+				'id'       => $chart->ID,
 				'type'     => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
 				'series'   => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ),
 				'settings' => $settings,
@@ -254,6 +255,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		// render library page
 		$render = new Visualizer_Render_Library();
 
+		$render->nonce = Visualizer_Security::createNonce();
 		$render->charts = $charts;
 		$render->type = $type;
 		$render->types = self::_getChartTypesLocalized();
