@@ -392,6 +392,7 @@
                 position = 'static';
             }
 
+			$this.css('overflow', 'hidden');
             switch(position) {
                 case 'absolute':
                 case 'relative':
@@ -402,11 +403,8 @@
             }
             $this.data('position', position);
 
-            locker.append(loader);
+            locker.css('top', $this.scrollTop() + 'px').append(loader);
             $this.append(locker);
-//            $(window).resize(function() {
-//                $this.find('.locker,.locker-loader').outerWidth($this.width()).outerHeight($this.height());
-//            });
         });
 
         return $(this);
@@ -414,8 +412,12 @@
 
     $.fn.unlock = function() {
         $(this).each(function() {
-            $(this).find('.locker').remove();
-            $(this).css('position', $(this).data('position'));
+			var $this = $(this);
+
+            $this.css({
+				position: $this.data('position'),
+				overflow: 'auto'
+			}).find('.locker').remove();
         });
 
         return $(this);
