@@ -166,6 +166,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @since 1.0.0
 	 * @uses wp_enqueue_style() To enqueue library stylesheet.
 	 * @uses wp_enqueue_script() To enqueue javascript file.
+	 * @uses wp_enqueue_media() To enqueue media stuff.
 	 *
 	 * @access public
 	 * @param string $suffix The current page suffix.
@@ -174,10 +175,27 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $suffix == $this->_libraryPage ) {
 			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
 
-			wp_enqueue_script( 'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
+
+			wp_enqueue_media();
+			wp_enqueue_script( 'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array( 'jquery', 'media-views' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
 			wp_enqueue_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'visualizer-library' ), Visualizer_Plugin::VERSION, true );
 		}
+	}
+
+	/**
+	 * Adds visualizer tab for media upload tabs array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $tabs The array of media upload tabs.
+	 * @return array Extended array of media upload tabs.
+	 */
+	public function setupVisualizerTab( $tabs ) {
+		$tabs['visualizer'] = 'Visualizer';
+		return $tabs;
 	}
 
 	/**
@@ -251,7 +269,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		// enqueue charts array
-		wp_localize_script( 'visualizer-render', 'visualizer', array( 'charts' => $charts ) );
+		$ajaxurl = admin_url( 'admin-ajax.php' );
+		wp_localize_script( 'visualizer-library', 'visualizer', array(
+			'charts'  => $charts,
+			'actions' => array(
+				'create' => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_CREATE_CHART, 'library' => 'yes', 'type' => $type ), $ajaxurl ),
+				'edit'   => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_EDIT_CHART,   'library' => 'yes', 'type' => $type ), $ajaxurl ),
+			),
+		) );
 
 		// render library page
 		$render = new Visualizer_Render_Library();
