@@ -40,11 +40,20 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @param int $chart_id The id of the chart.
 	 */
 	private function _renderChartBox( $placeholder_id, $chart_id ) {
+		$ajax_url = admin_url( 'admin-ajax.php' );
+
 		$delete_url = add_query_arg( array(
 			'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
-			'nonce' => $this->nonce,
-			'chart' => $chart_id,
-		), admin_url( 'admin-ajax.php' ) );
+			'nonce'  => Visualizer_Security::createNonce( Visualizer_Plugin::ACTION_DELETE_CHART ),
+			'chart'  => $chart_id,
+		), $ajax_url );
+
+		$clone_url = add_query_arg( array(
+			'action' => Visualizer_Plugin::ACTION_CLONE_CHART,
+			'nonce'  => Visualizer_Security::createNonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
+			'chart'  => $chart_id,
+			'type'   => $this->type,
+		), $ajax_url );
 
 		echo '<div class="visualizer-chart">';
 			echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
@@ -52,7 +61,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '" onclick="return showNotice.warn();"></a>';
-				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="javascript:;" title="', esc_attr__( 'Clone', Visualizer_Plugin::NAME ), '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', Visualizer_Plugin::NAME ), '"></a>';
 				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', Visualizer_Plugin::NAME ), '"></a>';
 
 				echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">';

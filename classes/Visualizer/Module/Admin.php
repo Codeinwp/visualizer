@@ -281,7 +281,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		// render library page
 		$render = new Visualizer_Render_Library();
 
-		$render->nonce = Visualizer_Security::createNonce();
 		$render->charts = $charts;
 		$render->type = $type;
 		$render->types = self::_getChartTypesLocalized();
