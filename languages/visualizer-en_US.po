@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-18 11:55+0300\n"
-"PO-Revision-Date: 2013-07-18 11:55+0300\n"
+"POT-Creation-Date: 2013-07-20 15:53+0300\n"
+"PO-Revision-Date: 2013-07-20 15:53+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -16,37 +16,38 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: classes/Visualizer\n"
 
-#: classes/Visualizer/Render/Library.php:54
-#: classes/Visualizer/Render/Templates.php:68
+#: classes/Visualizer/Render/Library.php:63
+#: classes/Visualizer/Render/Templates.php:69
 msgid "Delete"
 msgstr "Delete"
 
-#: classes/Visualizer/Render/Library.php:55
+#: classes/Visualizer/Render/Library.php:64
 msgid "Clone"
 msgstr "Clone"
 
-#: classes/Visualizer/Render/Library.php:56
+#: classes/Visualizer/Render/Library.php:65
 msgid "Edit"
 msgstr "Edit"
 
-#: classes/Visualizer/Render/Library.php:58
-#: classes/Visualizer/Render/Templates.php:71
+#: classes/Visualizer/Render/Library.php:67
+#: classes/Visualizer/Render/Templates.php:72
 msgid "Click to select"
 msgstr "Click to select"
 
-#: classes/Visualizer/Render/Library.php:109
+#: classes/Visualizer/Render/Library.php:118
+#: classes/Visualizer/Render/Templates.php:86
 msgid "No charts found"
 msgstr "No charts found"
 
-#: classes/Visualizer/Render/Library.php:136
+#: classes/Visualizer/Render/Library.php:145
 msgid "Visualizer Library"
 msgstr "Visualizer Library"
 
-#: classes/Visualizer/Render/Library.php:137
+#: classes/Visualizer/Render/Library.php:146
 msgid "Add New"
 msgstr "Add New"
 
-#: classes/Visualizer/Render/Templates.php:69
+#: classes/Visualizer/Render/Templates.php:70
 msgid "Insert"
 msgstr "Insert"
 
@@ -220,10 +221,6 @@ msgstr "Back"
 #: classes/Visualizer/Render/Page/Types.php:84
 msgid "Next"
 msgstr "Next"
-
-#: classes/Visualizer/Render/Page/Settings.php:58
-msgid "Insert Chart"
-msgstr "Insert Chart"
 
 #: classes/Visualizer/Render/Sidebar/Columnar.php:44
 msgid "Bars Settings"
@@ -795,67 +792,87 @@ msgstr "If yes, the map will be drawn at the largest size that can fit inside th
 msgid "If no, the map will be stretched to the exact size of the chart as specified by the width and height options."
 msgstr "If no, the map will be stretched to the exact size of the chart as specified by the width and height options."
 
-#: classes/Visualizer/Module/Admin.php:77
+#: classes/Visualizer/Module/Admin.php:78
 msgid "All"
 msgstr "All"
 
-#: classes/Visualizer/Module/Admin.php:78
+#: classes/Visualizer/Module/Admin.php:79
 msgid "Pie"
 msgstr "Pie"
 
-#: classes/Visualizer/Module/Admin.php:79
+#: classes/Visualizer/Module/Admin.php:80
 msgid "Line"
 msgstr "Line"
 
-#: classes/Visualizer/Module/Admin.php:80
+#: classes/Visualizer/Module/Admin.php:81
 msgid "Area"
 msgstr "Area"
 
-#: classes/Visualizer/Module/Admin.php:81
+#: classes/Visualizer/Module/Admin.php:82
 msgid "Geo"
 msgstr "Geo"
 
-#: classes/Visualizer/Module/Admin.php:82
+#: classes/Visualizer/Module/Admin.php:83
 msgid "Bar"
 msgstr "Bar"
 
-#: classes/Visualizer/Module/Admin.php:83
+#: classes/Visualizer/Module/Admin.php:84
 msgid "Column"
 msgstr "Column"
 
-#: classes/Visualizer/Module/Admin.php:84
+#: classes/Visualizer/Module/Admin.php:85
 msgid "Gauge"
 msgstr "Gauge"
 
-#: classes/Visualizer/Module/Admin.php:85
+#: classes/Visualizer/Module/Admin.php:86
 msgid "Scatter"
 msgstr "Scatter"
 
-#: classes/Visualizer/Module/Admin.php:86
+#: classes/Visualizer/Module/Admin.php:87
 msgid "Candelstick"
 msgstr "Candelstick"
 
-#: classes/Visualizer/Module/Admin.php:127
+#: classes/Visualizer/Module/Admin.php:128
 msgid "Visualizations"
 msgstr "Visualizations"
 
-#: classes/Visualizer/Module/Admin.php:130
+#: classes/Visualizer/Module/Admin.php:131
 msgid "From Library"
 msgstr "From Library"
 
-#: classes/Visualizer/Module/Admin.php:131
+#: classes/Visualizer/Module/Admin.php:132
 msgid "Create New"
 msgstr "Create New"
 
-#: classes/Visualizer/Module/Admin.php:290
+#: classes/Visualizer/Module/Admin.php:316
 msgid "Library"
 msgstr "Library"
 
-#: classes/Visualizer/Module/Chart.php:391
+#: classes/Visualizer/Module/Admin.php:338
+msgid "Knowledge Base"
+msgstr "Knowledge Base"
+
+#: classes/Visualizer/Module/Admin.php:343
+msgid "Community"
+msgstr "Community"
+
+#: classes/Visualizer/Module/Chart.php:369
+msgid "Save Chart"
+msgstr "Save Chart"
+
+#: classes/Visualizer/Module/Chart.php:370
+msgid "Create Chart"
+msgstr "Create Chart"
+
+#: classes/Visualizer/Module/Chart.php:372
+msgid "Insert Chart"
+msgstr "Insert Chart"
+
+#: classes/Visualizer/Module/Chart.php:401
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr "CSV file with chart data was not uploaded. Please, try again."
 
-#: classes/Visualizer/Module/Chart.php:405
+#: classes/Visualizer/Module/Chart.php:415
 msgid "CSV file is broken or incorrect. Please, try again."
 msgstr "CSV file is broken or incorrect. Please, try again."
 

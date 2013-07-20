@@ -40,6 +40,7 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 */
 	private $_templates = array(
 		'library-chart',
+		'library-empty',
 	);
 
 	/**
@@ -69,6 +70,29 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 			echo '<a class="visualizer-library-chart-action visualizer-library-chart-insert" href="javascript:;" title="', esc_attr__( 'Insert', Visualizer_Plugin::NAME ), '"></a>';
 
 			echo '<span class="visualizer-library-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">&nbsp;[visualizer id=&quot;{{data.id}}&quot;]&nbsp;</span>';
+		echo '</div>';
+	}
+
+	/**
+	 * Renders library-empty template.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderLibraryEmpty() {
+		echo '<div class="visualizer-library-chart">';
+			echo '<div class="visualizer-library-chart-canvas visualizer-library-nochart-canvas">';
+				echo '<div class="visualizer-library-notfound">', esc_html__( 'No charts found', Visualizer_Plugin::NAME ), '</div>';
+			echo '</div>';
+			echo '<div class="visualizer-library-chart-footer visualizer-clearfix">';
+				echo '<span class="visualizer-library-chart-action visualizer-library-nochart-delete"></span>';
+				echo '<span class="visualizer-library-chart-action visualizer-library-nochart-insert"></span>';
+
+				echo '<span class="visualizer-library-chart-shortcode">';
+					echo '&nbsp;[visualizer]&nbsp;';
+				echo '</span>';
+			echo '</div>';
 		echo '</div>';
 	}
 

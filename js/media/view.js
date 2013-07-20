@@ -106,6 +106,7 @@
 	wpmvvl = wpmvv.Library = wpmV.extend({
 		id: 'visualizer-library-view',
 		className: 'visualizer-clearfix',
+		template: wpm.template('visualizer-library-empty'),
 
 		initialize: function() {
 			var self = this;
@@ -133,12 +134,19 @@
 			this.resetCollection();
 		},
 
+		render: function() {},
+
 		renderCollection: function() {
 			var self = this;
 
 			self.views.dispose();
-			self.$el.html('');
-			self.collection.each(self.addChart, self);
+
+			if (self.collection.length > 0) {
+				self.$el.html('');
+				self.collection.each(self.addChart, self);
+			} else {
+				self.$el.html(self.template({}));
+			}
 		},
 
 		addChart: function(chart) {

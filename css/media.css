@@ -42,6 +42,23 @@
 	background-repeat: no-repeat;
 }
 
+.visualizer-library-nochart-canvas {
+	background-image: url('../images/notfound.png?v=4');
+	background-repeat: repeat;
+	position: relative;
+}
+
+.visualizer-library-notfound {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+	margin-top: -7px;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+}
+
 .visualizer-library-chart-action {
 	float: right;
 	display: block;
@@ -52,16 +69,21 @@
 	margin: 2px 5px 0;
 }
 
+.visualizer-library-nochart-delete,
 .visualizer-library-chart-delete {
 	background-position: -176px -96px;
 }
 
+.visualizer-library-nochart-insert,
 .visualizer-library-chart-insert {
 	background-position: -48px -48px;
 }
 
-.visualizer-library-chart-edit {
-	background-position: -64px -112px;
+.visualizer-library-nochart-delete,
+.visualizer-library-nochart-insert {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    opacity: 0.5
 }
 
 .visualizer-library-chart-footer {
