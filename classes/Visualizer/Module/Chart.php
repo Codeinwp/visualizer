@@ -56,6 +56,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_GET_CHARTS, 'getCharts' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_DELETE_CHART, 'deleteChart' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CREATE_CHART, 'renderChartPages' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EDIT_CHART, 'renderChartPages' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_UPLOAD_DATA, 'uploadData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CLONE_CHART, 'cloneChart' );
 	}
@@ -361,7 +362,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		) );
 
 		$render = new Visualizer_Render_Page_Settings();
+
 		$render->sidebar = $sidebar;
+		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
+			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
+				? esc_html__( 'Save Chart', Visualizer_Plugin::NAME )
+				: esc_html__( 'Create Chart', Visualizer_Plugin::NAME );
+		} else {
+			$render->button = esc_attr__( 'Insert Chart', Visualizer_Plugin::NAME );
+		}
+
 		wp_iframe( array( $render, 'render') );
 	}
 

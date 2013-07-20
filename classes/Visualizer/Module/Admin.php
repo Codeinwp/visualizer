@@ -271,10 +271,11 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
 		wp_localize_script( 'visualizer-library', 'visualizer', array(
-			'charts'  => $charts,
-			'actions' => array(
-				'create' => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_CREATE_CHART, 'library' => 'yes', 'type' => $type ), $ajaxurl ),
-				'edit'   => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_EDIT_CHART,   'library' => 'yes', 'type' => $type ), $ajaxurl ),
+			'charts' => $charts,
+			'urls'   => array(
+				'base'   => add_query_arg( 'vpage', false ),
+				'create' => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_CREATE_CHART, 'library' => 'yes' ), $ajaxurl ),
+				'edit'   => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_EDIT_CHART,   'library' => 'yes' ), $ajaxurl ),
 			),
 		) );
 

@@ -26,7 +26,7 @@
 	});
 })(wp.media.view);
 
-(function($, vmv) {
+(function($, vmv, vu) {
 	var resizeTimeout;
 
 	$.fn.adjust = function() {
@@ -57,8 +57,27 @@
 		});
 
 		$('.add-new-h2').click(function() {
-			var view = new vmv.Chart({action: visualizer.actions.create});
+			var wnd = window,
+				view = new vmv.Chart({action: vu.create});
+
+			wnd.send_to_editor = function() {
+				wnd.location.href = vu.base;
+			};
 			view.open();
+
+			return false;
+		});
+
+		$('.visualizer-chart-edit').click(function() {
+			var wnd = window,
+				view = new vmv.Chart({action: vu.edit + '&chart=' + $(this).attr('data-chart')});
+
+			wnd.send_to_editor = function() {
+				wnd.location.reload();
+			};
+
+			view.open();
+
 			return false;
 		});
 
@@ -69,4 +88,4 @@
 			}, 100);
 		});
 	});
-})(jQuery, visualizer.media.view);
+})(jQuery, visualizer.media.view, visualizer.urls);

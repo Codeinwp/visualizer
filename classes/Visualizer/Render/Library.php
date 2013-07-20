@@ -62,7 +62,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '" onclick="return showNotice.warn();"></a>';
 				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', Visualizer_Plugin::NAME ), '"></a>';
-				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', Visualizer_Plugin::NAME ), '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', Visualizer_Plugin::NAME ), '" data-chart="', $chart_id, '"></a>';
 
 				echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">';
 					echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
