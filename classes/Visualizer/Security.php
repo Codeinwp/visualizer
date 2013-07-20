@@ -25,7 +25,7 @@
  *
  * @category Visualizer
  * @package Security
- * 
+ *
  * @since 1.0.0
  */
 class Visualizer_Security {
@@ -37,13 +37,15 @@ class Visualizer_Security {
 	 *
 	 * @static
 	 * @access private
+	 * @param string $action The action what requires the nonce.
 	 * @return array
 	 */
-	private static function _getSalt() {
+	private static function _getSalt( $action = '' ) {
 		return array(
 			'__ip'     => @$_SERVER['REMOTE_ADDR'],
 			'__agent'  => urlencode( @$_SERVER['HTTP_USER_AGENT'] ),
 			'__userid' => get_current_user_id(),
+			'__action' => $action,
 		);
 	}
 
@@ -54,10 +56,11 @@ class Visualizer_Security {
 	 *
 	 * @static
 	 * @access public
+	 * @param string $action The action what requires the nonce.
 	 * @return string
 	 */
-	public static function createNonce() {
-		return wp_create_nonce( implode( '/', array_slice( explode( '/', home_url() ), 0, 3 ) ) . add_query_arg( self::_getSalt() ) );
+	public static function createNonce( $action = '' ) {
+		return wp_create_nonce( implode( '/', array_slice( explode( '/', home_url() ), 0, 3 ) ) . add_query_arg( self::_getSalt( $action ) ) );
 	}
 
 	/**
@@ -68,10 +71,11 @@ class Visualizer_Security {
 	 * @static
 	 * @access public
 	 * @param string $nonce The nonce to verify.
+	 * @param string $action The action what requires the nonce.
 	 * @return boolean TRUE if nonce is correct. Otherwise FALSE.
 	 */
-	public static function verifyNonce( $nonce ) {
-		return wp_verify_nonce( $nonce, add_query_arg( self::_getSalt(), $_SERVER['HTTP_REFERER'] ) );
+	public static function verifyNonce( $nonce, $action = '' ) {
+		return wp_verify_nonce( $nonce, add_query_arg( self::_getSalt( $action ), $_SERVER['HTTP_REFERER'] ) );
 	}
 
 }
