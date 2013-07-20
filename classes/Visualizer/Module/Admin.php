@@ -333,15 +333,20 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function getPluginMetaLinks( $plugin_meta, $plugin_file ) {
 		if ( $plugin_file == plugin_basename( VISUALIZER_BASEFILE ) ) {
+			// knowledge base link
 			$plugin_meta[] = sprintf(
 				'<a href="http://visualizer.madpixels.net/knowledgebase/">%s</a>',
 				esc_html__( 'Knowledge Base' )
 			);
 
+			// community link
 			$plugin_meta[] = sprintf(
 				'<a href="http://visualizer.madpixels.net/forums/">%s</a>',
 				esc_html__( 'Community', Visualizer_Plugin::NAME )
 			);
+
+			// github link
+			$plugin_meta[] = '<a href="https://github.com/madpixelslabs/visualizer">GitHub Repository</a>';
 		}
 
 		return $plugin_meta;
