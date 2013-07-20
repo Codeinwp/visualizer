@@ -46,14 +46,19 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * Constructor.
 	 *
 	 * @since 1.0.0
+	 * @uses add_filter() To add "do_shortcode" hook for "widget_text" and "term_description" filters.
 	 *
 	 * @access public
 	 * @param Visualizer_Plugin $plugin The instance of the plugin.
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
+
 		$this->_addAction( 'wp_enqueue_scripts', 'enqueueScripts' );
 		$this->_addShortcode( 'visualizer', 'renderChart' );
+
+		add_filter( 'widget_text', 'do_shortcode' );
+		add_filter( 'term_description', 'do_shortcode' );
 	}
 
 	/**
