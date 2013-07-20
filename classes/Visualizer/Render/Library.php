@@ -44,7 +44,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 
 		$delete_url = add_query_arg( array(
 			'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
-			'nonce'  => Visualizer_Security::createNonce( Visualizer_Plugin::ACTION_DELETE_CHART ),
+			'nonce'  => Visualizer_Security::createNonce(),
 			'chart'  => $chart_id,
 		), $ajax_url );
 

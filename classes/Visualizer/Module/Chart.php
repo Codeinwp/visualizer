@@ -160,7 +160,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$input_method = $is_post ? INPUT_POST : INPUT_GET;
 
 		$chart_id = $success = false;
-		$nonce = Visualizer_Security::verifyNonce( filter_input( $input_method, 'nonce' ), Visualizer_Plugin::ACTION_DELETE_CHART );
+		$nonce = Visualizer_Security::verifyNonce( filter_input( $input_method, 'nonce' ) );
 		$capable = current_user_can( 'delete_posts' );
 		if ( $nonce && $capable ) {
 			$chart_id = filter_input( $input_method, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
