@@ -4,7 +4,7 @@ Donate link:
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
 Tested up to: 3.5.2
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
@@ -41,6 +41,9 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 5. Charts library
 
 == Changelog ==
+
+= 1.1.0 =
+* Ability to hook chart series and data was implemented.
 
 = 1.0.1 =
 * The bug with CSV file uploading was fixed.
