@@ -4,7 +4,7 @@ Donate link:
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
 Tested up to: 3.5.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
@@ -32,7 +32,18 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 1. Upload the files to the `/wp-content/plugins/visualizer/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 
+== Screenshots ==
+
+1. Chart type selection
+2. Chart data uploading
+3. Chart options editing
+4. Charts media library
+5. Charts library
+
 == Changelog ==
+
+= 1.0.1 =
+* The bug with CSV file uploading was fixed.
 
 = 1.0.0 =
 * The first version of the plugin was implemented.
