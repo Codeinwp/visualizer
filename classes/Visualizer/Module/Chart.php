@@ -409,8 +409,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 
-				$render->data = $source->getData();
-				$render->series = $source->getSeries();
+				$render->data = json_encode( unserialize( $source->getData() ) );
+				$render->series = json_encode( $source->getSeries() );
 			} else {
 				$render->message = esc_html__( "CSV file is broken or incorrect. Please, try again.", Visualizer_Plugin::NAME );
 			}
