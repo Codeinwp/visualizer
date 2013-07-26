@@ -143,4 +143,25 @@ abstract class Visualizer_Source {
 		return $data;
 	}
 
+	/**
+	 * Validates series tyeps.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @static
+	 * @access protected
+	 * @param array $types The icoming series types.
+	 * @return boolean TRUE if sereis types are valid, otherwise FALSE.
+	 */
+	protected static function _validateTypes( $types ) {
+		$allowed_types = array( 'string', 'number', 'boolean', 'date', 'datetime', 'timeofday' );
+		foreach ( $types as $type ) {
+			if ( !in_array( $type, $allowed_types ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }

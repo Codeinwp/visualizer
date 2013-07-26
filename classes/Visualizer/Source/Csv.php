@@ -71,10 +71,18 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 			return false;
 		}
 
+		// if no types were setup, re read labels and empty types array
+		if ( !self::_validateTypes( $types ) ) {
+			fseek( $handle, 0 );
+			$labels = fgetcsv( $handle );
+			$types = array();
+		}
+
 		for ( $i = 0, $len = count( $labels ); $i < $len; $i++ ) {
+			$default_type = $i == 0 ? 'string' : 'number';
 			$this->_series[] = array(
 				'label' => $labels[$i],
-				'type'  => isset( $types[$i] ) ? $types[$i] : 'string',
+				'type'  => isset( $types[$i] ) ? $types[$i] : $default_type,
 			);
 		}
 
