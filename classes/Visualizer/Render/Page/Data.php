@@ -59,19 +59,27 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		), admin_url( 'admin-ajax.php' ) );
 
 		echo '<li class="group">';
-			echo '<h3 class="group-title">', esc_html__( 'Upload CSV file', Visualizer_Plugin::NAME ), '</h3>';
+			echo '<h3 class="group-title">', esc_html__( 'Upload CSV File', Visualizer_Plugin::NAME ), '</h3>';
 			echo '<div class="group-content">';
+				echo '<iframe id="thehole" name="thehole"></iframe>';
+
 				echo '<p class="group-description">';
-					esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. If you are unsure about how to format your data CSV then please take a look at this sample:", Visualizer_Plugin::NAME );
+					esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).", Visualizer_Plugin::NAME );
+				echo '</p>';
+
+				echo '<p class="group-description">';
+					esc_html_e( 'If you are unsure about how to format your data CSV then please take a look at this sample:', Visualizer_Plugin::NAME );
 					echo ' <a href="', VISUALIZER_ABSURL, 'samples/', $this->type, '.csv">', $this->type, '.csv</a>';
 				echo '</p>';
+
 				echo '<div>';
-					echo '<iframe id="thehole" name="thehole"></iframe>';
 					echo '<form id="csv-form" action="', $upload_link, '" method="post" target="thehole" enctype="multipart/form-data">';
+						echo '<input type="hidden" id="remote-data" name="remote_data">';
 						echo '<div class="button button-primary file-wrapper">';
-							echo '<input type="file" name="data" id="csv-file" class="file">';
-							esc_attr_e( 'Upload CSV file', Visualizer_Plugin::NAME );
+							echo '<input type="file" id="csv-file" class="file" name="local_data">';
+							esc_attr_e( 'From Computer', Visualizer_Plugin::NAME );
 						echo '</div>';
+						echo '<a id="remote-file" class="button" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
 					echo '</form>';
 				echo '</div>';
 			echo '</div>';

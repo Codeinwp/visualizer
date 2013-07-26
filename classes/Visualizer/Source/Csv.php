@@ -21,7 +21,7 @@
 // +----------------------------------------------------------------------+
 
 /**
- * Source manager for CSV files.
+ * Source manager for local CSV files.
  *
  * @category Visualizer
  * @package Source

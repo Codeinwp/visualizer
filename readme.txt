@@ -44,6 +44,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 
 = 1.1.0 =
 * Ability to hook chart series and data was implemented.
+* Ability to upload CSV files from web was implemented.
 
 = 1.0.1 =
 * The bug with CSV file uploading was fixed.

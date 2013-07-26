@@ -380,6 +380,7 @@ div.group-content .group-description {
 
 .file-wrapper {
 	position: relative;
+	margin-right: 10px !important;
 }
 
 .file {
