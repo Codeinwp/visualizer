@@ -79,12 +79,20 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 *
 	 * @since 1.0.0
 	 * @uses shortcode_atts() To parse income shortocdes.
+	 * @uses apply_filters() To filter chart's data and series arrays.
+	 * @uses get_post_meta() To fetch chart's meta information.
+	 * @uses wp_enqueue_script() To enqueue charts render script.
+	 * @uses wp_localize_script() To add chart data to the page inline script.
 	 *
 	 * @access public
 	 * @param array $atts The array of shortcode attributes.
 	 */
 	public function renderChart( $atts ) {
-		$atts = shortcode_atts( array( 'id' => false ), $atts );
+		$atts = shortcode_atts( array(
+			'id'     => false, // chart id
+			'series' => false, // series filter hook
+			'data'   => false, // data filter hook
+		), $atts );
 
 		// if empty id or chart does not exists, then return empty string
 		if ( !$atts['id'] || !( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
@@ -92,6 +100,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		$id = 'visualizer-' . $atts['id'];
+		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 
 		// faetch and update settings
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
@@ -99,12 +108,24 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$settings['height'] = '400';
 		}
 
+		// handle series filter hooks
+		$series = apply_filters( 'visualizer_get_series', get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
+		if ( !empty( $atts['series'] ) ) {
+			$series = apply_filters( $atts['series'], $series, $chart->ID, $type );
+		}
+
+		// handle data filter hooks
+		$data = apply_filters( 'visualizer_get_data', unserialize( $chart->post_content ), $chart->ID, $type );
+		if ( !empty( $atts['data'] ) ) {
+			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
+		}
+
 		// add chart to the array
 		$this->_charts[$id] = array(
-			'type'     => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
-			'series'   => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ),
+			'type'     => $type,
+			'series'   => $series,
 			'settings' => $settings,
-			'data'     => unserialize( $chart->post_content ),
+			'data'     => $data,
 		);
 
 		// enqueue visualizer render and update render localizations
