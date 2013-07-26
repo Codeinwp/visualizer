@@ -21,98 +21,100 @@
 // +----------------------------------------------------------------------+
 
 /**
- * Source manager for remote CSV files.
+ * Sources module class.
  *
  * @category Visualizer
- * @package Source
+ * @package Module
  *
  * @since 1.1.0
  */
-class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
+class Visualizer_Module_Sources extends Visualizer_Module {
+
+	const NAME = __CLASS__;
 
 	/**
-	 * Returns data parsed from source.
+	 * The array of fetched sources.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @access private
+	 * @var array
+	 */
+	private $_sources = array();
+
+	/**
+	 * Constructor.
 	 *
 	 * @since 1.1.0
 	 *
 	 * @access public
-	 * @return string The serialized array of data.
+	 * @param Visualizer_Plugin $plugin The instance of the plugin.
 	 */
-	public function getData() {
-		return serialize( array(
-			'source' => $this->_filename,
-			'data'   => $this->_data,
-		) );
+	public function __construct( Visualizer_Plugin $plugin ) {
+		parent::__construct( $plugin );
+
+		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SERIES, 'filterChartSeries', 1, 2 );
+		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA, 'filterChartData', 1, 2 );
 	}
 
 	/**
-	 * Re populates data and series.
+	 * Returns appropriate source object for a chart.
 	 *
 	 * @since 1.1.0
 	 *
 	 * @access private
 	 * @param int $chart_id The chart id.
-	 * @return boolean TRUE on success, otherwise FALSE.
+	 * @return Visualizer_Source The source object if source exists, otherwise FALSE.
 	 */
-	private function _repopulate( $chart_id ) {
-		// if it has been already populated, then just return true
-		if ( !empty( $this->_data ) && !empty( $this->_series ) ) {
-			return true;
-		}
-
-		// if filename is empty, extract it from chart content
-		if ( empty( $this->_filename ) ) {
-			$chart = get_post( $chart_id );
-			$data = unserialize( $chart->post_content );
-			if ( !isset( $data['source'] ) ) {
+	private function _getSource( $chart_id ) {
+		if ( !isset( $this->_sources[$chart_id] ) ) {
+			$class = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
+			if ( !class_exists( $class, true ) ) {
 				return false;
 			}
 
-			$this->_filename = $data['source'];
+			$this->_sources[$chart_id] = new $class();
 		}
 
-		// populate series and data information
-		return $this->fetch();
+		return $this->_sources[$chart_id];
 	}
 
 	/**
-	 * Re populates data.
+	 * Filters chart sereis.
 	 *
 	 * @since 1.1.0
 	 *
 	 * @access public
-	 * @param array $data The actual array of data.
+	 * @param array $series The array of chart series.
 	 * @param int $chart_id The chart id.
-	 * @return array The re populated array of data or old one.
+	 * @return array The array of filtered series.
 	 */
-	public function repopulateData( $data, $chart_id ) {
-		return $this->_repopulate( $chart_id ) ? $this->_data : $data;
+	public function filterChartSeries( $series, $chart_id ) {
+		$source = $this->_getSource( $chart_id );
+		if ( !$source ) {
+			return $series;
+		}
+
+		return $source->repopulateSeries( $series, $chart_id );
 	}
 
 	/**
-	 * Re populates series.
+	 * Filters chart data.
 	 *
 	 * @since 1.1.0
 	 *
 	 * @access public
-	 * @param array $series The actual array of series.
+	 * @param array $data The array of chart data.
 	 * @param int $chart_id The chart id.
-	 * @return array The re populated array of series or old one.
+	 * @return array The array of filtered data.
 	 */
-	public function repopulateSeries( $series, $chart_id ) {
-		return $this->_repopulate( $chart_id ) ? $this->_series : $series;
-	}
+	public function filterChartData( $data, $chart_id ) {
+		$source = $this->_getSource( $chart_id );
+		if ( !$source ) {
+			return $data;
+		}
 
-	/**
-	 * Returns source name.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
-	 * @return string The name of source.
-	 */
-	public function getSourceName() {
-		return __CLASS__;
+		return $source->repopulateData( $data, $chart_id );
 	}
 
 }

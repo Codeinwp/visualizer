@@ -97,6 +97,18 @@ abstract class Visualizer_Source {
 	}
 
 	/**
+	 * Returns raw data array.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getRawData() {
+		return $this->_data;
+	}
+
+	/**
 	 * Normalizes values according to series' type.
 	 *
 	 * @since 1.0.0
@@ -162,6 +174,34 @@ abstract class Visualizer_Source {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Re populates series if the source is dynamic.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @access public
+	 * @param array $series The actual array of series.
+	 * @param int $chart_id The chart id.
+	 * @return array The re populated array of series or old one.
+	 */
+	public function repopulateSeries( $series, $chart_id ) {
+		return $series;
+	}
+
+	/**
+	 * Re populates data if the source is dynamic.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @access public
+	 * @param array $data The actual array of data.
+	 * @param int $chart_id The chart id.
+	 * @return array The re populated array of data or old one.
+	 */
+	public function repopulateData( $data, $chart_id ) {
+		return $data;
 	}
 
 }

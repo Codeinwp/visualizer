@@ -91,11 +91,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$chart = $this->_chart;
 		}
 
+		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
+		$data = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
+
 		return array(
-			'type'     => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
-			'series'   => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ),
+			'type'     => $type,
+			'series'   => $series,
 			'settings' => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true ),
-			'data'     => unserialize( $chart->post_content ),
+			'data'     => $data,
 		);
 	}
 
@@ -419,7 +423,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 
-				$render->data = json_encode( unserialize( $source->getData() ) );
+				$render->data = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
 			} else {
 				$render->message = esc_html__( "CSV file is broken or invalid. Please, try again.", Visualizer_Plugin::NAME );

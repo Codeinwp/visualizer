@@ -43,6 +43,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 == Changelog ==
 
 = 1.1.0 =
+* Auto population was added for remote CSV file source.
 * Ability to hook chart series and data was implemented.
 * Ability to upload CSV files from web was implemented.
 

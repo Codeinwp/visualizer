@@ -83,6 +83,7 @@ function visualizer_launch() {
 
 	// set general modules
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
+	$plugin->setModule( Visualizer_Module_Sources::NAME );
 
 	if ( $doing_ajax ) {
 		// set ajax modules

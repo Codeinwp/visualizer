@@ -50,6 +50,10 @@ class Visualizer_Plugin {
 	const ACTION_DELETE_CHART = 'visualizer-delete-chart';
 	const ACTION_UPLOAD_DATA  = 'visualizer-upload-data';
 
+	// custom filters
+	const FILTER_GET_CHART_SERIES = 'visualizer-get-chart-series';
+	const FILTER_GET_CHART_DATA   = 'visualizer-get-chart-data';
+
 	/**
 	 * Singletone instance of the plugin.
 	 *

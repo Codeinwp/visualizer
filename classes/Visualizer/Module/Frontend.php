@@ -109,13 +109,13 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// handle series filter hooks
-		$series = apply_filters( 'visualizer_get_series', get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
+		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 		if ( !empty( $atts['series'] ) ) {
 			$series = apply_filters( $atts['series'], $series, $chart->ID, $type );
 		}
 
 		// handle data filter hooks
-		$data = apply_filters( 'visualizer_get_data', unserialize( $chart->post_content ), $chart->ID, $type );
+		$data = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
 		if ( !empty( $atts['data'] ) ) {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}

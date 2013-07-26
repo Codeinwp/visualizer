@@ -35,10 +35,10 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $_filename;
+	protected $_filename;
 
 	/**
 	 * Constructor.
@@ -48,8 +48,8 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 * @access public
 	 * @param string $filename The path to the file.
 	 */
-	public function __construct( $filename ) {
-		$this->_filename = $filename;
+	public function __construct( $filename = null ) {
+		$this->_filename = trim( $filename );
 	}
 
 	/**
@@ -98,6 +98,11 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 * @return boolean TRUE on success, otherwise FALSE.
 	 */
 	public function fetch() {
+		// if filename is empty return false
+		if ( empty( $this->_filename ) ) {
+			return false;
+		}
+
 		// set line endings auto detect mode
 		@ini_set( 'auto_detect_line_endings', true );
 
