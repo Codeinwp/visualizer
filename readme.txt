@@ -27,6 +27,14 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 
 *above descriptions were partially taken from Google Visualization API site*
 
+### Knowledge Base ###
+Read how to [create a chart](http://visualizer.madpixels.net/knowledgebase/how-can-i-create-a-chart/) in the [Knowledge Base](http://visualizer.madpixels.net/knowledgebase/). More helpful articles:
+1. [How can I edit a chart?](http://visualizer.madpixels.net/knowledgebase/how-can-i-edit-a-chart/)
+1. [How can I clone a chart?](http://visualizer.madpixels.net/knowledgebase/how-can-i-clone-a-chart/)
+1. [How can I delete a chart?](http://visualizer.madpixels.net/knowledgebase/how-can-i-delete-a-chart/)
+1. [How can I populate data from Google Spreadsheet?](http://visualizer.madpixels.net/knowledgebase/how-can-i-populate-data-from-google-spreadsheet/)
+1. [How can I populate chart series and data dynamically?](http://visualizer.madpixels.net/knowledgebase/how-can-i-populate-chart-series-and-data-dynamically/)
+
 == Installation ==
 
 1. Upload the files to the `/wp-content/plugins/visualizer/` directory.
@@ -52,19 +60,3 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 
 = 1.0.0 =
 * The first version of the plugin was implemented.
-
-== Usage ==
-
-The plugin is very simple in use. To create a chart you just need to complete three steps wizard, which walks you through chart type selection, data uploading and settings configuration screens.
-
-= Create Chart  =
-
-1. Create or edit existing post/page;
-1. Click on "Add Media" button above post/page content editor;
-1. Go to "Visualizations" menu item at left sidebar;
-1. Click on "Create New" at the top of popup, below "Visualization" title;
-1. Chart type selection sheet appears. Select a chart type and click on "Next" button at the right bottom corner;
-1. Data uploading screen appears. Expand "Upload CSV file" section at right sidebar. Upload your CSV file. You can find a link on a sample in the text above "Upload CSV file" button;
-1. After you've uploaded your csv file, click on "Next" button and go to settings screen;
-1. At this screen you can configure appropriate settings and change a look of your chart;
-1. When you have finished, click on "Insert Chart" button and save your post/page. That's all, your chart will appear at front end.
