@@ -235,17 +235,17 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		);
 
 		// add chart type filter to the query arguments
-		$type = filter_input( INPUT_GET, 'type' );
-		if ( $type && in_array( $type, Visualizer_Plugin::getChartTypes() ) ) {
+		$filter = filter_input( INPUT_GET, 'type' );
+		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
 			$query_args['meta_query'] = array(
 				array(
 					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
-					'value'   => $type,
+					'value'   => $filter,
 					'compare' => '=',
 				),
 			);
 		} else {
-			$type = 'all';
+			$filter = 'all';
 		}
 
 		// fetch charts
@@ -287,7 +287,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render = new Visualizer_Render_Library();
 
 		$render->charts = $charts;
-		$render->type = $type;
+		$render->type = $filter;
 		$render->types = self::_getChartTypesLocalized();
 		$render->pagination = paginate_links( array(
 			'base'    => add_query_arg( 'vpage', '%#%' ),
