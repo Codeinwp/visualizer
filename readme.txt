@@ -52,6 +52,10 @@ Read how to [create a chart](http://visualizer.madpixels.net/knowledgebase/how-c
 
 == Changelog ==
 
+= 1.1.1 =
+* Active type tab in the charts library was fixed.
+* Library styles were updated.
+
 = 1.1.0 =
 * Auto population was added for remote CSV file source.
 * Ability to hook chart series and data was implemented.
