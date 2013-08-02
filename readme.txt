@@ -52,6 +52,9 @@ Read how to [create a chart](http://visualizer.madpixels.net/knowledgebase/how-c
 
 == Changelog ==
 
+= 1.1.2 =
+* Compatibility issues with WordPress version 3.6 has been fixed.
+
 = 1.1.1 =
 * Active type tab in the charts library was fixed.
 * Library styles were updated.
