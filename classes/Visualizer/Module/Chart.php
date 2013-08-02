@@ -196,6 +196,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function renderChartPages() {
+		define ( 'IFRAME_REQUEST', 1 );
+
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT );
 		if ( !$chart_id || !( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
