@@ -60,7 +60,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 * @access private
 	 * @param resource $handle The file handle resource.
 	 */
-	private function _fetchSeries( $handle ) {
+	private function _fetchSeries( &$handle ) {
 		// read column titles
 		$labels = fgetcsv( $handle );
 
@@ -73,7 +73,11 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 
 		// if no types were setup, re read labels and empty types array
 		if ( !self::_validateTypes( $types ) ) {
-			fseek( $handle, 0 );
+			// re open the file
+			fclose( $handle );
+			$handle = fopen( $this->_filename, 'rb' );
+
+			// re read the labels and empty types array
 			$labels = fgetcsv( $handle );
 			$types = array();
 		}
