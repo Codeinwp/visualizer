@@ -131,9 +131,7 @@ abstract class Visualizer_Source {
 
 			switch ( $series['type'] ) {
 				case 'number':
-					$data[$i] = is_float( $data[$i] )
-						? floatval( $data[$i] )
-						: intval( $data[$i] );
+					$data[$i] = floatval( $data[$i] );
 					break;
 				case 'boolean':
 					$data[$i] = filter_validate( $data[$i], FILTER_VALIDATE_BOOLEAN );
