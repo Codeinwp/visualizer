@@ -168,6 +168,21 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 						isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
 						'#ccc'
 					);
+
+					self::_renderTextItem(
+						esc_html__( 'Minor Grid Lines Count', Visualizer_Plugin::NAME ),
+						'vAxis[minorGridlines][count]',
+						isset( $this->vAxis['minorGridlines']['count'] ) ? $this->vAxis['minorGridlines']['count'] : '',
+						esc_html__( 'The number of horizontal minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
+						0
+					);
+
+					self::_renderColorPickerItem(
+						esc_html__( 'Minor Grid Lines Color', Visualizer_Plugin::NAME ),
+						'vAxis[minorGridlines][color]',
+						isset( $this->vAxis['minorGridlines']['color'] ) ? $this->vAxis['minorGridlines']['color'] : null,
+						null
+					);
 				}
 
 				self::_renderColorPickerItem(
@@ -216,6 +231,21 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 						'hAxis[gridlines][color]',
 						isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
 						'#ccc'
+					);
+
+					self::_renderTextItem(
+						esc_html__( 'Minor Grid Lines Count', Visualizer_Plugin::NAME ),
+						'hAxis[minorGridlines][count]',
+						isset( $this->hAxis['minorGridlines']['count'] ) ? $this->hAxis['minorGridlines']['count'] : '',
+						esc_html__( 'The number of vertical minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
+						0
+					);
+
+					self::_renderColorPickerItem(
+						esc_html__( 'Minor Grid Lines Color', Visualizer_Plugin::NAME ),
+						'hAxis[minorGridlines][color]',
+						isset( $this->hAxis['minorGridlines']['color'] ) ? $this->hAxis['minorGridlines']['color'] : null,
+						null
 					);
 				}
 
