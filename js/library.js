@@ -42,7 +42,7 @@
 	$('.visualizer-chart-canvas').adjust();
 
 	$(document).ready(function() {
-		$('.visualizer-chart').fadeIn(500);
+		$('.visualizer-chart, .visualizer-library-pagination').fadeIn(500);
 
 		$('.visualizer-chart-shortcode').click(function(e) {
 			var range, selection;

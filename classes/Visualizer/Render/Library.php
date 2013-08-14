@@ -105,7 +105,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 
 			if ( is_array( $this->pagination ) ) {
-				echo '<ul>';
+				echo '<ul class="visualizer-library-pagination">';
 					foreach ( $this->pagination as $page ) {
 						echo '<li class="visualizer-list-item">', $page, '</li>';
 					}

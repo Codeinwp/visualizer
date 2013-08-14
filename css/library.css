@@ -139,3 +139,7 @@ a.page-numbers:hover {
 	background-color: lightcoral;
 	box-shadow: 0 0 5px lightpink;
 }
+
+.visualizer-library-pagination {
+	display: none;
+}
