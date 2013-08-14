@@ -102,34 +102,30 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			$this->_positions,
 			esc_html__( 'Where to place the chart title, compared to the chart area.', Visualizer_Plugin::NAME )
 		);
+
+		echo '<div class="section-delimiter"></div>';
+
+		self::_renderSelectItem(
+			esc_html__( 'Axes Titles Position', Visualizer_Plugin::NAME ),
+			'axisTitlesPosition',
+			$this->axisTitlesPosition,
+			$this->_positions,
+			esc_html__( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME )
+		);
+
+		echo '<div class="section-delimiter"></div>';
 	}
 
 	/**
-	 * Renders chart axes settings.
+	 * Renders horizontal axis settings.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 *
 	 * @access protected
 	 */
-	protected function _renderAxesSettings() {
-		$directions = array(
-			''   => '',
-			'1'  => esc_html__( 'Identical Direction', Visualizer_Plugin::NAME ),
-			'-1' => esc_html__( 'Reverse Direction', Visualizer_Plugin::NAME ),
-		);
-
-		self::_renderGroupStart( esc_html__( 'Horizontal & Vertical Axes', Visualizer_Plugin::NAME ) );
-			self::_renderSectionStart();
-				self::_renderSelectItem(
-					esc_html__( 'Axes Titles Position', Visualizer_Plugin::NAME ),
-					'axisTitlesPosition',
-					$this->axisTitlesPosition,
-					$this->_positions,
-					esc_html__( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME )
-				);
-			self::_renderSectionEnd();
-
-			self::_renderSectionStart( esc_html__( 'Horizontal Axis', Visualizer_Plugin::NAME ), false );
+	protected function _renderHorizontalAxisSettings() {
+		self::_renderGroupStart( esc_html__( 'Horizontal Axis Settings', Visualizer_Plugin::NAME ) );
+			self::_renderSectionStart( esc_html__( 'General Settings', Visualizer_Plugin::NAME ), false );
 				self::_renderTextItem(
 					esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
 					'hAxis[title]',
@@ -149,41 +145,13 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 					esc_html__( 'Direction', Visualizer_Plugin::NAME ),
 					'hAxis[direction]',
 					isset( $this->hAxis['direction'] ) ? $this->hAxis['direction'] : '',
-					$directions,
+					array(
+						''   => '',
+						'1'  => esc_html__( 'Identical Direction', Visualizer_Plugin::NAME ),
+						'-1' => esc_html__( 'Reverse Direction', Visualizer_Plugin::NAME ),
+					),
 					esc_html__( 'The direction in which the values along the horizontal axis grow.', Visualizer_Plugin::NAME )
 				);
-
-				if ( $this->_horizontalGridLines ) {
-					self::_renderTextItem(
-						esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
-						'vAxis[gridlines][count]',
-						isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
-						esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
-						5
-					);
-
-					self::_renderColorPickerItem(
-						esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
-						'vAxis[gridlines][color]',
-						isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
-						'#ccc'
-					);
-
-					self::_renderTextItem(
-						esc_html__( 'Minor Grid Lines Count', Visualizer_Plugin::NAME ),
-						'vAxis[minorGridlines][count]',
-						isset( $this->vAxis['minorGridlines']['count'] ) ? $this->vAxis['minorGridlines']['count'] : '',
-						esc_html__( 'The number of horizontal minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
-						0
-					);
-
-					self::_renderColorPickerItem(
-						esc_html__( 'Minor Grid Lines Color', Visualizer_Plugin::NAME ),
-						'vAxis[minorGridlines][color]',
-						isset( $this->vAxis['minorGridlines']['color'] ) ? $this->vAxis['minorGridlines']['color'] : null,
-						null
-					);
-				}
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
@@ -193,7 +161,72 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				);
 			self::_renderSectionEnd();
 
-			self::_renderSectionStart( esc_html__( 'Vertical Axis', Visualizer_Plugin::NAME ), false );
+			if ( $this->_horizontalGridLines ) {
+				self::_renderSectionStart( esc_html__( 'Grid Lines', Visualizer_Plugin::NAME ), false );
+					self::_renderTextItem(
+						esc_html__( 'Count', Visualizer_Plugin::NAME ),
+						'vAxis[gridlines][count]',
+						isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
+						esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
+						5
+					);
+
+					self::_renderColorPickerItem(
+						esc_html__( 'Color', Visualizer_Plugin::NAME ),
+						'vAxis[gridlines][color]',
+						isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
+						'#ccc'
+					);
+				self::_renderSectionEnd();
+
+				self::_renderSectionStart( esc_html__( 'Minor Grid Lines', Visualizer_Plugin::NAME ), false );
+					self::_renderTextItem(
+						esc_html__( 'Count', Visualizer_Plugin::NAME ),
+						'vAxis[minorGridlines][count]',
+						isset( $this->vAxis['minorGridlines']['count'] ) ? $this->vAxis['minorGridlines']['count'] : '',
+						esc_html__( 'The number of horizontal minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
+						0
+					);
+
+					self::_renderColorPickerItem(
+						esc_html__( 'Color', Visualizer_Plugin::NAME ),
+						'vAxis[minorGridlines][color]',
+						isset( $this->vAxis['minorGridlines']['color'] ) ? $this->vAxis['minorGridlines']['color'] : null,
+						null
+					);
+				self::_renderSectionEnd();
+			}
+
+			if ( $this->_verticalGridLines ) {
+				self::_renderSectionStart( esc_html__( 'View Window', Visualizer_Plugin::NAME ), false );
+					self::_renderTextItem(
+						esc_html__( 'Maximum Value', Visualizer_Plugin::NAME ),
+						'hAxis[viewWindow][max]',
+						isset( $this->hAxis['viewWindow']['max'] ) ? $this->hAxis['viewWindow']['max'] : '',
+						'The maximum vertical data value to render.'
+					);
+
+					self::_renderTextItem(
+						esc_html__( 'Minimum Value', Visualizer_Plugin::NAME ),
+						'hAxis[viewWindow][min]',
+						isset( $this->hAxis['viewWindow']['min'] ) ? $this->hAxis['viewWindow']['min'] : '',
+						'The minimum vertical data value to render.'
+					);
+				self::_renderSectionEnd();
+			}
+		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders vertical axis settings.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderVerticalAxisSettings() {
+		self::_renderGroupStart( esc_html__( 'Vertical Axis Settings', Visualizer_Plugin::NAME ) );
+			self::_renderSectionStart( esc_html__( 'General Settings', Visualizer_Plugin::NAME ), false );
 				self::_renderTextItem(
 					esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
 					'vAxis[title]',
@@ -213,41 +246,13 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 					esc_html__( 'Direction', Visualizer_Plugin::NAME ),
 					'vAxis[direction]',
 					isset( $this->vAxis['direction'] ) ? $this->vAxis['direction'] : '',
-					$directions,
+					array(
+						''   => '',
+						'1'  => esc_html__( 'Identical Direction', Visualizer_Plugin::NAME ),
+						'-1' => esc_html__( 'Reverse Direction', Visualizer_Plugin::NAME ),
+					),
 					esc_html__( 'The direction in which the values along the vertical axis grow.', Visualizer_Plugin::NAME )
 				);
-
-				if ( $this->_verticalGridLines ) {
-					self::_renderTextItem(
-						esc_html__( 'Grid Lines Count', Visualizer_Plugin::NAME ),
-						'hAxis[gridlines][count]',
-						isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
-						esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
-						5
-					);
-
-					self::_renderColorPickerItem(
-						esc_html__( 'Grid Lines Color', Visualizer_Plugin::NAME ),
-						'hAxis[gridlines][color]',
-						isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
-						'#ccc'
-					);
-
-					self::_renderTextItem(
-						esc_html__( 'Minor Grid Lines Count', Visualizer_Plugin::NAME ),
-						'hAxis[minorGridlines][count]',
-						isset( $this->hAxis['minorGridlines']['count'] ) ? $this->hAxis['minorGridlines']['count'] : '',
-						esc_html__( 'The number of vertical minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
-						0
-					);
-
-					self::_renderColorPickerItem(
-						esc_html__( 'Minor Grid Lines Color', Visualizer_Plugin::NAME ),
-						'hAxis[minorGridlines][color]',
-						isset( $this->hAxis['minorGridlines']['color'] ) ? $this->hAxis['minorGridlines']['color'] : null,
-						null
-					);
-				}
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
@@ -256,7 +261,73 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 					'#000'
 				);
 			self::_renderSectionEnd();
+
+			if ( $this->_verticalGridLines ) {
+				self::_renderSectionStart( esc_html__( 'Grid Lines', Visualizer_Plugin::NAME ), false );
+					self::_renderTextItem(
+						esc_html__( 'Count', Visualizer_Plugin::NAME ),
+						'hAxis[gridlines][count]',
+						isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
+						esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
+						5
+					);
+
+					self::_renderColorPickerItem(
+						esc_html__( 'Color', Visualizer_Plugin::NAME ),
+						'hAxis[gridlines][color]',
+						isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
+						'#ccc'
+					);
+				self::_renderSectionEnd();
+
+				self::_renderSectionStart( esc_html__( 'Minor Grid Lines', Visualizer_Plugin::NAME ), false );
+					self::_renderTextItem(
+						esc_html__( 'Count', Visualizer_Plugin::NAME ),
+						'hAxis[minorGridlines][count]',
+						isset( $this->hAxis['minorGridlines']['count'] ) ? $this->hAxis['minorGridlines']['count'] : '',
+						esc_html__( 'The number of vertical minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
+						0
+					);
+
+					self::_renderColorPickerItem(
+						esc_html__( 'Color', Visualizer_Plugin::NAME ),
+						'hAxis[minorGridlines][color]',
+						isset( $this->hAxis['minorGridlines']['color'] ) ? $this->hAxis['minorGridlines']['color'] : null,
+						null
+					);
+				self::_renderSectionEnd();
+			}
+
+			if ( $this->_horizontalGridLines ) {
+				self::_renderSectionStart( esc_html__( 'View Window', Visualizer_Plugin::NAME ), false );
+					self::_renderTextItem(
+						esc_html__( 'Maximum Value', Visualizer_Plugin::NAME ),
+						'vAxis[viewWindow][max]',
+						isset( $this->vAxis['viewWindow']['max'] ) ? $this->vAxis['viewWindow']['max'] : '',
+						'The maximum vertical data value to render.'
+					);
+
+					self::_renderTextItem(
+						esc_html__( 'Minimum Value', Visualizer_Plugin::NAME ),
+						'vAxis[viewWindow][min]',
+						isset( $this->vAxis['viewWindow']['min'] ) ? $this->vAxis['viewWindow']['min'] : '',
+						'The minimum vertical data value to render.'
+					);
+				self::_renderSectionEnd();
+			}
 		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders chart axes settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderAxesSettings() {
+		$this->_renderHorizontalAxisSettings();
+		$this->_renderVerticalAxisSettings();
 	}
 
 	/**
