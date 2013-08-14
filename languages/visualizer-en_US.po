@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-26 12:56+0300\n"
-"PO-Revision-Date: 2013-07-26 12:56+0300\n"
+"POT-Creation-Date: 2013-08-14 10:03+0300\n"
+"PO-Revision-Date: 2013-08-14 10:03+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -51,14 +51,14 @@ msgstr "Aligned to the end of the allocated area"
 
 #: classes/Visualizer/Render/Sidebar.php:117
 #: classes/Visualizer/Render/Sidebar/Linear.php:167
-#: classes/Visualizer/Render/Sidebar/Graph.php:267
+#: classes/Visualizer/Render/Sidebar/Graph.php:368
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:139
 msgid "Yes"
 msgstr "Yes"
 
 #: classes/Visualizer/Render/Sidebar.php:118
 #: classes/Visualizer/Render/Sidebar/Linear.php:166
-#: classes/Visualizer/Render/Sidebar/Graph.php:266
+#: classes/Visualizer/Render/Sidebar/Graph.php:367
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:138
 msgid "No"
 msgstr "No"
@@ -72,6 +72,8 @@ msgid "Text to display above the chart."
 msgstr "Text to display above the chart."
 
 #: classes/Visualizer/Render/Sidebar.php:146
+#: classes/Visualizer/Render/Sidebar/Graph.php:128
+#: classes/Visualizer/Render/Sidebar/Graph.php:229
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:58
 msgid "General Settings"
 msgstr "General Settings"
@@ -286,7 +288,7 @@ msgstr "Curve Type"
 #: classes/Visualizer/Render/Sidebar/Linear.php:117
 #: classes/Visualizer/Render/Sidebar/Linear.php:169
 #: classes/Visualizer/Render/Sidebar/Linear.php:194
-#: classes/Visualizer/Render/Sidebar/Graph.php:269
+#: classes/Visualizer/Render/Sidebar/Graph.php:370
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:141
 msgid "Determines whether the series has to be presented in the legend or not."
 msgstr ""
@@ -321,7 +323,7 @@ msgid "Lines Settings"
 msgstr "Lines Settings"
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:161
-#: classes/Visualizer/Render/Sidebar/Graph.php:261
+#: classes/Visualizer/Render/Sidebar/Graph.php:362
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:133
 msgid "Visible In Legend"
 msgstr "Visible In Legend"
@@ -335,7 +337,11 @@ msgid "Overrides the global point size value for this series."
 msgstr "Overrides the global point size value for this series."
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:199
-#: classes/Visualizer/Render/Sidebar/Graph.php:273
+#: classes/Visualizer/Render/Sidebar/Graph.php:175
+#: classes/Visualizer/Render/Sidebar/Graph.php:192
+#: classes/Visualizer/Render/Sidebar/Graph.php:276
+#: classes/Visualizer/Render/Sidebar/Graph.php:293
+#: classes/Visualizer/Render/Sidebar/Graph.php:374
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:145
 msgid "Color"
 msgstr "Color"
@@ -370,97 +376,124 @@ msgstr "Chart Title Position"
 msgid "Where to place the chart title, compared to the chart area."
 msgstr "Where to place the chart title, compared to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:117
-msgid "Identical Direction"
-msgstr "Identical Direction"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:118
-msgid "Reverse Direction"
-msgstr "Reverse Direction"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:121
-msgid "Horizontal & Vertical Axes"
-msgstr "Horizontal & Vertical Axes"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:124
+#: classes/Visualizer/Render/Sidebar/Graph.php:109
 msgid "Axes Titles Position"
 msgstr "Axes Titles Position"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:128
+#: classes/Visualizer/Render/Sidebar/Graph.php:113
 msgid "Determines where to place the axis titles, compared to the chart area."
 msgstr "Determines where to place the axis titles, compared to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:132
-msgid "Horizontal Axis"
-msgstr "Horizontal Axis"
+#: classes/Visualizer/Render/Sidebar/Graph.php:127
+msgid "Horizontal Axis Settings"
+msgstr "Horizontal Axis Settings"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:134
-#: classes/Visualizer/Render/Sidebar/Graph.php:183
+#: classes/Visualizer/Render/Sidebar/Graph.php:130
+#: classes/Visualizer/Render/Sidebar/Graph.php:231
 msgid "Axis Title"
 msgstr "Axis Title"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:137
+#: classes/Visualizer/Render/Sidebar/Graph.php:133
 msgid "The title of the horizontal axis."
 msgstr "The title of the horizontal axis."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:141
-#: classes/Visualizer/Render/Sidebar/Graph.php:190
+#: classes/Visualizer/Render/Sidebar/Graph.php:137
+#: classes/Visualizer/Render/Sidebar/Graph.php:238
 msgid "Text Position"
 msgstr "Text Position"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:145
+#: classes/Visualizer/Render/Sidebar/Graph.php:141
 msgid "Position of the horizontal axis text, relative to the chart area."
 msgstr "Position of the horizontal axis text, relative to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:149
-#: classes/Visualizer/Render/Sidebar/Graph.php:198
+#: classes/Visualizer/Render/Sidebar/Graph.php:145
+#: classes/Visualizer/Render/Sidebar/Graph.php:246
 msgid "Direction"
 msgstr "Direction"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:150
+#: classes/Visualizer/Render/Sidebar/Graph.php:251
+msgid "Identical Direction"
+msgstr "Identical Direction"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:151
+#: classes/Visualizer/Render/Sidebar/Graph.php:252
+msgid "Reverse Direction"
+msgstr "Reverse Direction"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:153
 msgid "The direction in which the values along the horizontal axis grow."
 msgstr "The direction in which the values along the horizontal axis grow."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:158
-#: classes/Visualizer/Render/Sidebar/Graph.php:207
-msgid "Grid Lines Count"
-msgstr "Grid Lines Count"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:161
-msgid ""
-"The number of horizontal gridlines inside the chart area. Minimum value is "
-"2. Specify -1 to automatically compute the number of gridlines."
-msgstr ""
-"The number of horizontal gridlines inside the chart area. Minimum value is "
-"2. Specify -1 to automatically compute the number of gridlines."
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:166
-#: classes/Visualizer/Render/Sidebar/Graph.php:215
-msgid "Grid Lines Color"
-msgstr "Grid Lines Color"
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:174
-#: classes/Visualizer/Render/Sidebar/Graph.php:223
+#: classes/Visualizer/Render/Sidebar/Graph.php:157
+#: classes/Visualizer/Render/Sidebar/Graph.php:258
 msgid "Base Line Color"
 msgstr "Base Line Color"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:181
-msgid "Vertical Axis"
-msgstr "Vertical Axis"
+#: classes/Visualizer/Render/Sidebar/Graph.php:165
+#: classes/Visualizer/Render/Sidebar/Graph.php:266
+msgid "Grid Lines"
+msgstr "Grid Lines"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:186
+#: classes/Visualizer/Render/Sidebar/Graph.php:167
+#: classes/Visualizer/Render/Sidebar/Graph.php:184
+#: classes/Visualizer/Render/Sidebar/Graph.php:268
+#: classes/Visualizer/Render/Sidebar/Graph.php:285
+msgid "Count"
+msgstr "Count"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:170
+msgid ""
+"The number of horizontal gridlines inside the chart area. Minimum value is "
+"2. Specify -1 to automatically compute the number of gridlines."
+msgstr ""
+"The number of horizontal gridlines inside the chart area. Minimum value is "
+"2. Specify -1 to automatically compute the number of gridlines."
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:182
+#: classes/Visualizer/Render/Sidebar/Graph.php:283
+msgid "Minor Grid Lines"
+msgstr "Minor Grid Lines"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:187
+msgid "The number of horizontal minor gridlines between two regular gridlines."
+msgstr ""
+"The number of horizontal minor gridlines between two regular gridlines."
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:201
+#: classes/Visualizer/Render/Sidebar/Graph.php:302
+msgid "View Window"
+msgstr "View Window"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:203
+#: classes/Visualizer/Render/Sidebar/Graph.php:304
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:178
+msgid "Maximum Value"
+msgstr "Maximum Value"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:210
+#: classes/Visualizer/Render/Sidebar/Graph.php:311
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:164
+msgid "Minimum Value"
+msgstr "Minimum Value"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:228
+msgid "Vertical Axis Settings"
+msgstr "Vertical Axis Settings"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:234
 msgid "The title of the vertical axis."
 msgstr "The title of the vertical axis."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:194
+#: classes/Visualizer/Render/Sidebar/Graph.php:242
 msgid "Position of the vertical axis text, relative to the chart area."
 msgstr "Position of the vertical axis text, relative to the chart area."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:202
+#: classes/Visualizer/Render/Sidebar/Graph.php:254
 msgid "The direction in which the values along the vertical axis grow."
 msgstr "The direction in which the values along the vertical axis grow."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:210
+#: classes/Visualizer/Render/Sidebar/Graph.php:271
 msgid ""
 "The number of vertical gridlines inside the chart area. Minimum value is 2. "
 "Specify -1 to automatically compute the number of gridlines."
@@ -468,7 +501,11 @@ msgstr ""
 "The number of vertical gridlines inside the chart area. Minimum value is 2. "
 "Specify -1 to automatically compute the number of gridlines."
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:240
+#: classes/Visualizer/Render/Sidebar/Graph.php:288
+msgid "The number of vertical minor gridlines between two regular gridlines."
+msgstr "The number of vertical minor gridlines between two regular gridlines."
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:341
 msgid "Series Settings"
 msgstr "Series Settings"
 
@@ -615,17 +652,9 @@ msgstr "Minimum And Maximum Values"
 msgid "Determines the minimum and maximum values of color axis."
 msgstr "Determines the minimum and maximum values of color axis."
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:164
-msgid "Minimum Value"
-msgstr "Minimum Value"
-
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:171
 msgid "Intermediate Value"
 msgstr "Intermediate Value"
-
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:178
-msgid "Maximum Value"
-msgstr "Maximum Value"
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:185
 msgid "Dateless Region"
@@ -1022,30 +1051,30 @@ msgstr "Knowledge Base"
 msgid "Community"
 msgstr "Community"
 
-#: classes/Visualizer/Module/Chart.php:316
+#: classes/Visualizer/Module/Chart.php:318
 msgid "Please, enter the URL of CSV file:"
 msgstr "Please, enter the URL of CSV file:"
 
-#: classes/Visualizer/Module/Chart.php:317
+#: classes/Visualizer/Module/Chart.php:319
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr "You have entered invalid URL. Please, insert proper URL."
 
-#: classes/Visualizer/Module/Chart.php:377
+#: classes/Visualizer/Module/Chart.php:379
 msgid "Save Chart"
 msgstr "Save Chart"
 
-#: classes/Visualizer/Module/Chart.php:378
+#: classes/Visualizer/Module/Chart.php:380
 msgid "Create Chart"
 msgstr "Create Chart"
 
-#: classes/Visualizer/Module/Chart.php:380
+#: classes/Visualizer/Module/Chart.php:382
 msgid "Insert Chart"
 msgstr "Insert Chart"
 
-#: classes/Visualizer/Module/Chart.php:414
+#: classes/Visualizer/Module/Chart.php:416
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr "CSV file with chart data was not uploaded. Please, try again."
 
-#: classes/Visualizer/Module/Chart.php:429
+#: classes/Visualizer/Module/Chart.php:431
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr "CSV file is broken or invalid. Please, try again."
