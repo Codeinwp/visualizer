@@ -253,12 +253,20 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					'#666'
 				);
 
+				$background_color = !empty( $this->backgroundColor['fill'] ) ? $this->backgroundColor['fill'] : null;
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', Visualizer_Plugin::NAME ),
 					'backgroundColor[fill]',
-					!empty( $this->backgroundColor['fill'] ) ? $this->backgroundColor['fill'] : null,
+					$background_color,
 					'#fff'
 				);
+
+				echo '<div class="section-item">';
+					echo '<label>';
+						echo '<input type="checkbox" class="control-checkbox" name="backgroundColor[fill]" value="transparent"', checked( $background_color, 'transparent', false ), '> ';
+						esc_html_e( 'Transparent background' );
+					echo '</label>';
+				echo '</div>';
 			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Chart Area', Visualizer_Plugin::NAME ), false );

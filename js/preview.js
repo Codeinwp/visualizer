@@ -16,7 +16,7 @@
 		}
 
 		$('.control-text').change(updateChart).keyup(updateChart);
-		$('.control-select').change(updateChart);
+		$('.control-select, .control-checkbox').change(updateChart);
 		$('.color-picker-hex').wpColorPicker({
 			change: updateChart,
 			clear: updateChart
