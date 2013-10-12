@@ -92,21 +92,25 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	 * @access protected
 	 */
 	protected function _renderLineSettingsItems() {
-		self::_renderTextItem(
-			esc_html__( 'Line Width', Visualizer_Plugin::NAME ),
-			'lineWidth',
-			$this->lineWidth,
-			esc_html__( 'Data line width in pixels. Use zero to hide all lines and show only the points.', Visualizer_Plugin::NAME ),
-			2
-		);
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', esc_html__( 'Line Width And Point Size', Visualizer_Plugin::NAME ), '</b>';
 
-		self::_renderTextItem(
-			esc_html__( 'Point Size', Visualizer_Plugin::NAME ),
-			'pointSize',
-			$this->pointSize,
-			esc_html__( 'Diameter of displayed points in pixels. Use zero to hide all points.', Visualizer_Plugin::NAME ),
-			0
-		);
+			echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+				echo '<tr>';
+					echo '<td class="section-table-column">';
+						echo '<input type="text" name="lineWidth" class="control-text" value="', esc_attr( $this->lineWidth ), '" placeholder="2">';
+					echo '</td>';
+					echo '<td class="section-table-column">';
+						echo '<input type="text" name="pointSize" class="control-text" value="', esc_attr( $this->pointSize ), '" placeholder="0">';
+					echo '</td>';
+				echo '</tr>';
+			echo '</table>';
+
+			echo '<p class="section-description">';
+				esc_html_e( 'Data line width and diameter of displayed points in pixels. Use zero to hide all lines or points.', Visualizer_Plugin::NAME );
+			echo '</p>';
+		echo '</div>';
 
 		if ( $this->_includeCurveTypes ) {
 			self::_renderSelectItem(
@@ -169,21 +173,29 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
 		);
 
-		self::_renderTextItem(
-			esc_html__( 'Line Width', Visualizer_Plugin::NAME ),
-			'series[' . $index . '][lineWidth]',
-			isset( $this->series[$index]['lineWidth'] ) ? $this->series[$index]['lineWidth'] : '',
-			esc_html__( 'Overrides the global line width value for this series.', Visualizer_Plugin::NAME ),
-			2
-		);
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', esc_html__( 'Line Width And Point Size', Visualizer_Plugin::NAME ), '</b>';
 
-		self::_renderTextItem(
-			esc_html__( 'Point Size', Visualizer_Plugin::NAME ),
-			'series[' . $index . '][pointSize]',
-			isset( $this->series[$index]['pointSize'] ) ? $this->series[$index]['pointSize'] : '',
-			esc_html__( 'Overrides the global point size value for this series.', Visualizer_Plugin::NAME ),
-			0
-		);
+			echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+				echo '<tr>';
+					echo '<td class="section-table-column">';
+						$line_width = isset( $this->series[$index]['lineWidth'] ) ? $this->series[$index]['lineWidth'] : '';
+						echo '<input type="text" name="series[', $index, '][lineWidth]" class="control-text" value="', esc_attr( $line_width ), '" placeholder="2">';
+					echo '</td>';
+					echo '<td class="section-table-column">';
+						$point_size = isset( $this->series[$index]['pointSize'] ) ? $this->series[$index]['pointSize'] : '';
+						echo '<input type="text" name="series[', $index, '][pointSize]" class="control-text" value="', esc_attr( $point_size ), '" placeholder="0">';
+					echo '</td>';
+				echo '</tr>';
+			echo '</table>';
+
+			echo '<p class="section-description">';
+				esc_html_e( 'Overrides the global line width and point size values for this series.', Visualizer_Plugin::NAME );
+			echo '</p>';
+		echo '</div>';
+
+		$this->_renderFormatField( $index );
 
 		if ( $this->_includeCurveTypes ) {
 			self::_renderSelectItem(

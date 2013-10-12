@@ -370,6 +370,8 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
 		);
 
+		$this->_renderFormatField( $index );
+
 		self::_renderColorPickerItem(
 			esc_html__( 'Color', Visualizer_Plugin::NAME ),
 			'series[' . $index . '][color]',

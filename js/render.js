@@ -4,7 +4,7 @@
 	v.objects = {};
 
 	v.renderChart = function(id) {
-		var chart, render, container, series, data, table, settings, i, j, row, date, axis, property;
+		var chart, render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
 
 		chart = v.charts[id];
 		series = chart.series;
@@ -104,6 +104,31 @@
 			}
 			table.addRow(row);
         }
+
+		if (settings.series) {
+			for (i = 0; i < settings.series.length; i++) {
+				format = settings.series[i].format;
+				if (!format || format == '') {
+					continue;
+				}
+
+				formatter = null;
+				switch (series[i + 1].type) {
+					case 'number':
+						formatter = new g.visualization.NumberFormat({pattern: format});
+						break;
+					case 'date':
+					case 'datetime':
+					case 'timeofday':
+						formatter = new g.visualization.DateFormat({pattern: format});
+						break;
+				}
+
+				if (formatter) {
+					formatter.format(table, i + 1);
+				}
+			}
+		}
 
         render.draw(table, settings);
 	};

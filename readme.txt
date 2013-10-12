@@ -53,6 +53,7 @@ Read how to [create a chart](http://visualizer.madpixels.net/knowledgebase/how-c
 == Changelog ==
 
 = 1.3.0 =
+* Implemented ability to set number and date formatters
 * Implemented ability to select transparent background for a chart
 * Fixed JS bugs which appear when post type editor support is disabled
 * Fixed issue with NULL values for numeric series

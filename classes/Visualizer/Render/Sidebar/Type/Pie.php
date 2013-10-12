@@ -87,6 +87,8 @@ class Visualizer_Render_Sidebar_Type_Pie extends Visualizer_Render_Sidebar {
 					esc_html__( 'The content of the text displayed on the slice.', Visualizer_Plugin::NAME )
 				);
 
+				$this->_renderFormatField();
+
 				self::_renderColorPickerItem(
 					esc_html__( 'Slice Border Color', Visualizer_Plugin::NAME ),
 					'pieSliceBorderColor',

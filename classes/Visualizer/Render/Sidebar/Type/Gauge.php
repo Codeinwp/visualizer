@@ -86,6 +86,8 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 					2
 				);
 
+				$this->_renderFormatField();
+
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}

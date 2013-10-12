@@ -252,6 +252,8 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 					'1.0'
 				);
 
+				$this->_renderFormatField();
+
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}

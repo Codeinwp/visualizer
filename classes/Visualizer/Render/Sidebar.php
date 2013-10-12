@@ -460,4 +460,35 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '</div>';
 	}
 
+	/**
+	 * Renders format field according to series type.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @access protected
+	 * @param int $index The index of the series.
+	 */
+	protected function _renderFormatField( $index = 0 ) {
+		switch ( $this->__series[$index + 1]['type'] ) {
+			case 'number':
+				self::_renderTextItem(
+					esc_html__( 'Number Format', Visualizer_Plugin::NAME ),
+					'series[' . $index . '][format]',
+					isset( $this->series[$index]['format'] ) ? $this->series[$index]['format'] : '',
+					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %sICU pattern set%s.', Visualizer_Plugin::NAME ), '<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">', '</a>' )
+				);
+				break;
+			case 'date':
+			case 'datetime':
+			case 'timeofday':
+				self::_renderTextItem(
+					esc_html__( 'Date Format', Visualizer_Plugin::NAME ),
+					'series[' . $index . '][format]',
+					isset( $this->series[$index]['format'] ) ? $this->series[$index]['format'] : '',
+					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %sICU date and time format%s.', Visualizer_Plugin::NAME ), '<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">', '</a>' )
+				);
+				break;
+		}
+	}
+
 }
