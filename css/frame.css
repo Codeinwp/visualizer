@@ -246,6 +246,27 @@ div.group-content .group-description {
 	margin: 0;
 }
 
+#rate-the-plugin {
+	margin-top: 40px;
+	padding: 20px;
+	border-top: 1px dashed #ddd;
+}
+
+#rate-stars {
+	float: right;
+	width: 100px;
+	height: 20px;
+	background-image: url('../images/star.png');
+	background-repeat: repeat-x;
+	background-position: right center;
+}
+
+#rate-link {
+	text-decoration: none;
+	display: block;
+	margin-top: 3px;
+}
+
 /******************************************************************************/
 /********************************  TOOLBAR  ***********************************/
 /******************************************************************************/
