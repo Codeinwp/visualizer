@@ -131,10 +131,10 @@ abstract class Visualizer_Source {
 
 			switch ( $series['type'] ) {
 				case 'number':
-					$data[$i] = floatval( $data[$i] );
+					$data[$i] = !empty( $data[$i] ) ? floatval( $data[$i] ) : null;
 					break;
 				case 'boolean':
-					$data[$i] = filter_validate( $data[$i], FILTER_VALIDATE_BOOLEAN );
+					$data[$i] = !empty( $data[$i] ) ? filter_validate( $data[$i], FILTER_VALIDATE_BOOLEAN ) : null;
 					break;
 				case 'timeofday':
 					$date = new DateTime( '1984-03-16T' . $data[$i] );
