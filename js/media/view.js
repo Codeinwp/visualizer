@@ -35,7 +35,7 @@
 		},
 
 		render: function() {
-			var self, model, chart, gv, type, series, data, table, settings, i, j, row, date;
+			var self, model, chart, gv, type, series, data, table, settings, i, j, row, date, format, formatter, axis, property;
 
 			self = this;
 			gv = google.visualization;
@@ -50,6 +50,9 @@
 			series = model.get('series');
 			data = model.get('data');
 			settings = model.get('settings');
+
+			settings.width = self.options.width;
+			settings.height = self.options.height;
 
 			table = new gv.DataTable({cols: series});
 			chart = type == 'gauge' ? 'Gauge' : type.charAt(0).toUpperCase() + type.slice(1) + 'Chart';
@@ -90,6 +93,36 @@
 					return;
 			}
 
+			if (series[0] && (series[0].type == 'date' || series[0].type == 'datetime')) {
+				axis = false;
+				switch (type) {
+					case 'line':
+					case 'area':
+					case 'scatter':
+					case 'candlestick':
+					case 'column':
+						axis = settings.hAxis;
+						break;
+					case 'bar':
+						axis = settings.vAxis;
+						break;
+				}
+
+				if (axis) {
+					for (property in axis.viewWindow) {
+						date = new Date(axis.viewWindow[property]);
+						if (Object.prototype.toString.call(date) === "[object Date]") {
+							if (!isNaN(date.getTime())) {
+								axis.viewWindow[property] = date;
+								continue;
+							}
+						}
+
+						delete axis.viewWindow[property];
+					}
+				}
+			}
+
 			for (i = 0; i < data.length; i++) {
 				row = [];
 				for (j = 0; j < series.length; j++) {
@@ -105,6 +138,31 @@
 					row.push(data[i][j]);
 				}
 				table.addRow(row);
+			}
+
+			if (settings.series) {
+				for (i = 0; i < settings.series.length; i++) {
+					format = settings.series[i].format;
+					if (!format || format == '') {
+						continue;
+					}
+
+					formatter = null;
+					switch (series[i + 1].type) {
+						case 'number':
+							formatter = new gv.NumberFormat({pattern: format});
+							break;
+						case 'date':
+						case 'datetime':
+						case 'timeofday':
+							formatter = new gv.DateFormat({pattern: format});
+							break;
+					}
+
+					if (formatter) {
+						formatter.format(table, i + 1);
+					}
+				}
 			}
 
 			chart.draw(table, settings);

@@ -57,6 +57,7 @@ Read how to [create a chart](http://visualizer.madpixels.net/knowledgebase/how-c
 * Implemented ability to select transparent background for a chart
 * Fixed JS bugs which appear when post type editor support is disabled
 * Fixed issue with NULL values for numeric series
+* Fixed invalid charts rendering at "Add Media" library
 * Added "rate the plugin" box
 
 = 1.2.0 =
