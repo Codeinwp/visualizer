@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-12 20:57+0300\n"
-"PO-Revision-Date: 2013-10-12 20:57+0300\n"
+"POT-Creation-Date: 2013-10-13 19:27+0300\n"
+"PO-Revision-Date: 2013-10-13 19:27+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -226,16 +226,20 @@ msgstr "Number Format"
 #, php-format
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
-"%sICU pattern set%s."
+"%sICU pattern set%s. Use something like #,### to get 1,234 as output, or $# "
+"to add dollar sign before digits. Pay attention that if you use #%% "
+"percentage format then your values will be multiplied by 100."
 msgstr ""
 "Enter custom format pattern to apply to this series value, similar to the "
-"%sICU pattern set%s."
+"%sICU pattern set%s. Use something like #,### to get 1,234 as output, or $# "
+"to add dollar sign before digits. Pay attention that if you use #%% "
+"percentage format then your values will be multiplied by 100."
 
-#: classes/Visualizer/Render/Sidebar.php:485
+#: classes/Visualizer/Render/Sidebar.php:486
 msgid "Date Format"
 msgstr "Date Format"
 
-#: classes/Visualizer/Render/Sidebar.php:488
+#: classes/Visualizer/Render/Sidebar.php:489
 #, php-format
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
@@ -281,10 +285,10 @@ msgid "Insert"
 msgstr "Insert"
 
 #: classes/Visualizer/Render/Page.php:74
-msgid "Like the plugin?"
-msgstr "Like the plugin?"
+msgid "Like the plugin? Show us your love!"
+msgstr "Like the plugin? Show us your love!"
 
-#: classes/Visualizer/Render/Page.php:76
+#: classes/Visualizer/Render/Page.php:77
 msgid "Rate it on WordPress.org"
 msgstr "Rate it on WordPress.org"
 

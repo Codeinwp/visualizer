@@ -475,7 +475,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					esc_html__( 'Number Format', Visualizer_Plugin::NAME ),
 					'series[' . $index . '][format]',
 					isset( $this->series[$index]['format'] ) ? $this->series[$index]['format'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %sICU pattern set%s.', Visualizer_Plugin::NAME ), '<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">', '</a>' )
+					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %sICU pattern set%s. Use something like #,### to get 1,234 as output, or $# to add dollar sign before digits. Pay attention that if you use #%% percentage format then your values will be multiplied by 100.', Visualizer_Plugin::NAME ), '<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">', '</a>' ),
+					'#,###.##'
 				);
 				break;
 			case 'date':
@@ -485,7 +486,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					esc_html__( 'Date Format', Visualizer_Plugin::NAME ),
 					'series[' . $index . '][format]',
 					isset( $this->series[$index]['format'] ) ? $this->series[$index]['format'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %sICU date and time format%s.', Visualizer_Plugin::NAME ), '<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">', '</a>' )
+					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %sICU date and time format%s.', Visualizer_Plugin::NAME ), '<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">', '</a>' ),
+					'eeee, dd LLLL yyyy'
 				);
 				break;
 		}
