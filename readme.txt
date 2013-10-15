@@ -42,6 +42,12 @@ Read how to [create a chart](http://visualizer.madpixels.net/knowledgebase/how-c
 1. Upload the files to the `/wp-content/plugins/visualizer/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 
+== Frequently Asked Questions ==
+
+= Shortcode does not turn into graph =
+
+Pay attention that to turn your shortcodes into graphs, your theme has to have `<?php wp_footer(); ?>` call at the bottom of **footer.php** file.
+
 == Screenshots ==
 
 1. Chart type selection
