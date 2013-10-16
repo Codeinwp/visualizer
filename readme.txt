@@ -64,6 +64,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * Fixed JS bugs which appear when post type editor support is disabled
 * Fixed issue with NULL values for numeric series
 * Fixed invalid charts rendering at "Add Media" library
+* Fixed compatibility issue with another Google API related plugins
 * Added "rate the plugin" box
 
 = 1.2.0 =
