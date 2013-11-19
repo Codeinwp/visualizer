@@ -3,8 +3,8 @@ Contributors: madpixels, straightforward
 Donate link: https://flattr.com/submit/auto?user_id=madpixels&url=http%3A%2F%2Fwordpress.org%2Fplugins%2Fvisualizer%2F&category=software&title=WordPress+Visualizer&description=WordPress+Visualizer+plugin+is+a+simple%2C+easy+to+use+and+quite+powerful+tool+to+create%2C+manage+and+embed+interactive+charts+into+your+WordPress+posts+and+pages.
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
-Tested up to: 3.6.1
-Stable tag: 1.3.0
+Tested up to: 3.7.1
+Stable tag: 1.3.0.1
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
@@ -57,6 +57,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+
+= 1.3.0.1 =
+* Added Flattr button
 
 = 1.3.0 =
 * Implemented ability to set number and date formatters
