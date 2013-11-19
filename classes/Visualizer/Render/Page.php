@@ -76,6 +76,11 @@ class Visualizer_Render_Page extends Visualizer_Render {
 				echo '<a id="rate-link" href="http://wordpress.org/support/view/plugin-reviews/visualizer" target="_blank">';
 					esc_html_e( 'Rate it on WordPress.org', Visualizer_Plugin::NAME );
 				echo '</a>';
+				echo '<div id="flattr">';
+					echo '<a href="https://flattr.com/submit/auto?user_id=madpixels&url=http%3A%2F%2Fwordpress.org%2Fplugins%2Fvisualizer%2F&category=software&title=WordPress+Visualizer&description=', urlencode( 'WordPress Visualizer plugin is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.' ), '" target="_blank">';
+						echo '<img src="//api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0">';
+					echo '</a>';
+				echo '</div>';
 			echo '</div>';
 		echo '</div>';
 	}

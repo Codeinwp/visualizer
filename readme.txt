@@ -1,6 +1,6 @@
 === Visualizer ===
 Contributors: madpixels, straightforward
-Donate link:
+Donate link: https://flattr.com/submit/auto?user_id=madpixels&url=http%3A%2F%2Fwordpress.org%2Fplugins%2Fvisualizer%2F&category=software&title=WordPress+Visualizer&description=WordPress+Visualizer+plugin+is+a+simple%2C+easy+to+use+and+quite+powerful+tool+to+create%2C+manage+and+embed+interactive+charts+into+your+WordPress+posts+and+pages.
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
 Tested up to: 3.6.1
