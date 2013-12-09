@@ -1,6 +1,6 @@
 === Visualizer ===
 Contributors: madpixels, straightforward
-Donate link: https://flattr.com/submit/auto?user_id=madpixels&url=http%3A%2F%2Fwordpress.org%2Fplugins%2Fvisualizer%2F&category=software&title=WordPress+Visualizer&description=WordPress+Visualizer+plugin+is+a+simple%2C+easy+to+use+and+quite+powerful+tool+to+create%2C+manage+and+embed+interactive+charts+into+your+WordPress+posts+and+pages.
+Donate link: http://goo.gl/hN9FYf
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
 Tested up to: 3.7.1
@@ -29,13 +29,13 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 
 ### Knowledge Base ###
 
-Read how to [create a chart](http://visualizer.madpixels.net/knowledgebase/how-can-i-create-a-chart/) in the [Knowledge Base](http://visualizer.madpixels.net/knowledgebase/). More helpful articles:
-
-1. [How can I edit a chart?](http://visualizer.madpixels.net/knowledgebase/how-can-i-edit-a-chart/)
-1. [How can I clone a chart?](http://visualizer.madpixels.net/knowledgebase/how-can-i-clone-a-chart/)
-1. [How can I delete a chart?](http://visualizer.madpixels.net/knowledgebase/how-can-i-delete-a-chart/)
-1. [How can I populate data from Google Spreadsheet?](http://visualizer.madpixels.net/knowledgebase/how-can-i-populate-data-from-google-spreadsheet/)
-1. [How can I populate chart series and data dynamically?](http://visualizer.madpixels.net/knowledgebase/how-can-i-populate-chart-series-and-data-dynamically/)
+1. [How can I create a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-create-a-chart%3F)
+1. [How can I edit a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-edit-a-chart%3F)
+1. [How can I clone a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-clone-a-chart%3F)
+1. [How can I delete a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-delete-a-chart%3F)
+1. [How can I highlight a single bar?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-highlight-a-single-bar%3F)
+1. [How can I populate chart series and data dynamically?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-chart-series-and-data-dynamically%3F)
+1. [How can I populate data from Google Spreadsheet?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F)
 
 == Installation ==
 
