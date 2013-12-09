@@ -4,7 +4,7 @@ Donate link: http://goo.gl/hN9FYf
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
 Tested up to: 3.7.1
-Stable tag: 1.3.0.1
+Stable tag: 1.3.0.2
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
@@ -57,6 +57,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+
+= 1.3.0.2 =
+* Replaced links to github wiki
 
 = 1.3.0.1 =
 * Added Flattr button
