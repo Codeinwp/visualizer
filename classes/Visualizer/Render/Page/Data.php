@@ -70,7 +70,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				echo '<p class="group-description">';
 					esc_html_e( 'If you are unsure about how to format your data CSV then please take a look at this sample:', Visualizer_Plugin::NAME );
 					echo ' <a href="', VISUALIZER_ABSURL, 'samples/', $this->type, '.csv" target="_blank">', $this->type, '.csv</a> ';
-					printf( esc_html__( 'or read how you can add Google spreadsheet in following %sarticle%s.', Visualizer_Plugin::NAME ), '<a href="http://visualizer.madpixels.net/knowledgebase/how-can-i-populate-data-from-google-spreadsheet/" target="_blank">', '</a>' );
+					printf( esc_html__( 'or read how you can add Google spreadsheet in following %sarticle%s.', Visualizer_Plugin::NAME ), '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' );
 				echo '</p>';
 
 				echo '<div>';
