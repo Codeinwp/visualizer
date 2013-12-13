@@ -133,6 +133,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			$this->title,
 			esc_html__( 'Text to display above the chart.', Visualizer_Plugin::NAME )
 		);
+
+		self::_renderColorPickerItem(
+			esc_html__( 'Chart Title Color', Visualizer_Plugin::NAME ),
+			'titleTextStyle[color]',
+			isset( $this->titleTextStyle['color'] ) ? $this->titleTextStyle['color'] : null,
+			'#000'
+		);
 	}
 
 	/**
@@ -197,6 +204,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					$this->legend['alignment'],
 					$this->_alignments,
 					esc_html__( 'Determines the alignment of the legend.', Visualizer_Plugin::NAME )
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Font Color', Visualizer_Plugin::NAME ),
+					'legend[textStyle][color]',
+					isset( $this->legend['textStyle']['color'] ) ? $this->legend['textStyle']['color'] : null,
+					'#000'
 				);
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
