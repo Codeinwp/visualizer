@@ -6,6 +6,7 @@
 	left: 0;
 	z-index: 75;
 	overflow: auto;
+	background-color: white;
 }
 
 #canvas {
