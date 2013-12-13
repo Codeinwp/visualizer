@@ -11,6 +11,10 @@
 		data = chart.data;
 		settings = chart.settings;
 
+		if (settings.tooltip == undefined) {
+			settings.tooltip = {trigger: 'selection'};
+		}
+
 		container = document.getElementById(id);
 		table = new gv.DataTable({cols: series});
 

@@ -54,6 +54,10 @@
 			settings.width = self.options.width;
 			settings.height = self.options.height;
 
+			if (settings.tooltip == undefined) {
+				settings.tooltip = {trigger: 'selection'};
+			}
+
 			table = new gv.DataTable({cols: series});
 			chart = type == 'gauge' ? 'Gauge' : type.charAt(0).toUpperCase() + type.slice(1) + 'Chart';
 			chart = new gv[chart](self.el);
