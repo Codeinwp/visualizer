@@ -179,4 +179,28 @@ class Visualizer_Render_Sidebar_Type_Pie extends Visualizer_Render_Sidebar {
 		self::_renderGroupEnd();
 	}
 
+	/**
+	 * Renders tooltip settings section.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderTooltipSettigns() {
+		parent::_renderTooltipSettigns();
+
+		self::_renderSelectItem(
+			esc_html__( 'Text', Visualizer_Plugin::NAME ),
+			'tooltip[text]',
+			isset( $this->tooltip['text'] ) ? $this->tooltip['text'] : null,
+			array(
+				''           => '',
+				'both'       => esc_html__( 'Display both the absolute value of the slice and the percentage of the whole', Visualizer_Plugin::NAME ),
+				'value'      => esc_html__( 'Display only the absolute value of the slice', Visualizer_Plugin::NAME ),
+				'percentage' => esc_html__( 'Display only the percentage of the whole represented by the slice', Visualizer_Plugin::NAME ),
+			),
+			esc_html__( 'Determines what information to display when the user hovers over a pie slice.', Visualizer_Plugin::NAME )
+		);
+	}
+
 }

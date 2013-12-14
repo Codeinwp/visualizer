@@ -59,6 +59,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 == Changelog ==
 
 = 1.4 =
+* Implemented ability to edit tooltip settings
 * Implemented new settings for linear charts like selection mode and aggregation target
 * Implemented area opacity setting for area chart
 * Implemented new settings for pie chart like pie hole, start angle and slice offset

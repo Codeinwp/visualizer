@@ -213,7 +213,41 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					'#000'
 				);
 			self::_renderSectionEnd();
+
+			self::_renderSectionStart( esc_html__( 'Tooltip', Visualizer_Plugin::NAME ), false );
+				$this->_renderTooltipSettigns();
+			self::_renderSectionEnd();
 		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders tooltip settings section.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderTooltipSettigns() {
+		self::_renderSelectItem(
+			esc_html__( 'Trigger', Visualizer_Plugin::NAME ),
+			'tooltip[trigger]',
+			isset( $this->tooltip['trigger'] ) ? $this->tooltip['trigger'] : null,
+			array(
+				''          => '',
+				'focus'     => esc_html__( 'The tooltip will be displayed when the user hovers over an element', Visualizer_Plugin::NAME ),
+				'selection' => esc_html__( 'The tooltip will be displayed when the user selects an element', Visualizer_Plugin::NAME ),
+				'none'      => esc_html__( 'The tooltip will not be displayed', Visualizer_Plugin::NAME ),
+			),
+			esc_html__( 'Determines the user interaction that causes the tooltip to be displayed.', Visualizer_Plugin::NAME )
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Show Color Code', Visualizer_Plugin::NAME ),
+			'tooltip[showColorCode]',
+			isset( $this->tooltip['showColorCode'] ) ? $this->tooltip['showColorCode'] : null,
+			$this->_yesno,
+			esc_html__( 'If set to yes, will show colored squares next to the slice information in the tooltip.', Visualizer_Plugin::NAME )
+		);
 	}
 
 	/**
