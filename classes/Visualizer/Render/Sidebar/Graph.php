@@ -93,7 +93,12 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 * @access protected
 	 */
 	protected function _renderChartTitleSettings() {
-		parent::_renderChartTitleSettings();
+		self::_renderTextItem(
+			esc_html__( 'Chart Title', Visualizer_Plugin::NAME ),
+			'title',
+			$this->title,
+			esc_html__( 'Text to display above the chart.', Visualizer_Plugin::NAME )
+		);
 
 		self::_renderSelectItem(
 			esc_html__( 'Chart Title Position', Visualizer_Plugin::NAME ),
@@ -101,6 +106,13 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			$this->titlePosition,
 			$this->_positions,
 			esc_html__( 'Where to place the chart title, compared to the chart area.', Visualizer_Plugin::NAME )
+		);
+
+		self::_renderColorPickerItem(
+			esc_html__( 'Chart Title Color', Visualizer_Plugin::NAME ),
+			'titleTextStyle[color]',
+			isset( $this->titleTextStyle['color'] ) ? $this->titleTextStyle['color'] : null,
+			'#000'
 		);
 
 		echo '<div class="section-delimiter"></div>';
@@ -112,8 +124,6 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			$this->_positions,
 			esc_html__( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME )
 		);
-
-		echo '<div class="section-delimiter"></div>';
 	}
 
 	/**

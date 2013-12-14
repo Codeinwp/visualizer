@@ -65,6 +65,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * Implemented new settings for pie chart like pie hole, start angle and slice offset
 * Implemented ability to select a color for chart title and legend items
 * Fixed number formatting settings for linear charts, from now it works only for axis labels
+* Reworked general settings section by moving title and font settings into separate groups
 
 = 1.3.0.2 =
 * Replaced links to github wiki
