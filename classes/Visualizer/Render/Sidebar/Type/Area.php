@@ -70,12 +70,24 @@ class Visualizer_Render_Sidebar_Type_Area extends Visualizer_Render_Sidebar_Line
 	protected function _renderLineSettingsItems() {
 		parent::_renderLineSettingsItems();
 
+		echo '<div class="section-delimiter"></div>';
+
 		self::_renderSelectItem(
 			esc_html__( 'Is Stacked', Visualizer_Plugin::NAME ),
 			'isStacked',
 			$this->isStacked,
 			$this->_yesno,
 			esc_html__( 'If set to yes, series elements are stacked.', Visualizer_Plugin::NAME )
+		);
+
+		echo '<div class="section-delimiter"></div>';
+
+		self::_renderTextItem(
+			esc_html__( 'Point Opacity', Visualizer_Plugin::NAME ),
+			'dataOpacity',
+			$this->dataOpacity,
+			esc_html__( 'The transparency of data points, with 1.0 being completely opaque and 0.0 fully transparent.', Visualizer_Plugin::NAME ),
+			'1.0'
 		);
 
 		self::_renderTextItem(

@@ -179,6 +179,8 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			);
 		}
 
+		echo '<div class="section-delimiter"></div>';
+
 		if ( $this->_includeFocusTarget ) {
 			self::_renderSelectItem(
 				esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),

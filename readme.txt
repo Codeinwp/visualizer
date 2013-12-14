@@ -61,7 +61,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 = 1.4 =
 * Implemented ability to edit tooltip settings
 * Implemented new settings for linear charts like selection mode and aggregation target
-* Implemented area opacity setting for area chart
+* Implemented area and point opacity settings for area chart
 * Implemented new settings for pie chart like pie hole, start angle and slice offset
 * Implemented ability to select a color for chart title and legend items
 * Fixed number formatting settings for linear charts, from now it works only for axis labels
