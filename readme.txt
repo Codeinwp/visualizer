@@ -59,6 +59,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 == Changelog ==
 
 = 1.4 =
+* Implemented data opacity and interpolate nulls settings for line chart
 * Implemented ability to edit tooltip settings
 * Implemented new settings for linear charts like selection mode and aggregation target
 * Implemented area and point opacity settings for area chart

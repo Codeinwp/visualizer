@@ -220,6 +220,16 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			),
 			esc_html__( 'Determines how multiple data selections are rolled up into tooltips. To make it working you need to set multiple selection mode and tooltip trigger to display it when an user selects an element.', Visualizer_Plugin::NAME )
 		);
+
+		echo '<div class="section-delimiter"></div>';
+
+		self::_renderTextItem(
+			esc_html__( 'Point Opacity', Visualizer_Plugin::NAME ),
+			'dataOpacity',
+			$this->dataOpacity,
+			esc_html__( 'The transparency of data points, with 1.0 being completely opaque and 0.0 fully transparent.', Visualizer_Plugin::NAME ),
+			'1.0'
+		);
 	}
 
 	/**

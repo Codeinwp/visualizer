@@ -47,4 +47,25 @@ class Visualizer_Render_Sidebar_Type_Line extends Visualizer_Render_Sidebar_Line
 		$this->_renderViewSettings();
 	}
 
+	/**
+	 * Renders line settings items.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderLineSettingsItems() {
+		parent::_renderLineSettingsItems();
+
+		echo '<div class="section-delimiter"></div>';
+
+		self::_renderSelectItem(
+			esc_html__( 'Interpolate Nulls', Visualizer_Plugin::NAME ),
+			'interpolateNulls',
+			$this->interpolateNulls,
+			$this->_yesno,
+			esc_html__( 'Whether to guess the value of missing points. If yes, it will guess the value of any missing data based on neighboring points. If no, it will leave a break in the line at the unknown point.', Visualizer_Plugin::NAME )
+		);
+	}
+
 }
