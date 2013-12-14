@@ -130,6 +130,8 @@ class Visualizer_Render_Sidebar_Type_Area extends Visualizer_Render_Sidebar_Line
 			echo '</p>';
 		echo '</div>';
 
+		$this->_renderFormatField( $index );
+
 		self::_renderTextItem(
 			esc_html__( 'Area Opacity', Visualizer_Plugin::NAME ),
 			'series[' . $index . '][areaOpacity]',

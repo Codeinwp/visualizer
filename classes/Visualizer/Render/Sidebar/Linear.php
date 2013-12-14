@@ -278,6 +278,8 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			echo '</p>';
 		echo '</div>';
 
+		$this->_renderFormatField( $index );
+
 		if ( $this->_includeCurveTypes ) {
 			self::_renderSelectItem(
 				esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
