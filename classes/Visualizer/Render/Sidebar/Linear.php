@@ -216,7 +216,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 				'auto'     => esc_html__( 'Group selected data by x-value if all selections have the same x-value, and by series otherwise', Visualizer_Plugin::NAME ),
 				'none'     => esc_html__( 'Show only one tooltip per selection', Visualizer_Plugin::NAME ),
 			),
-			esc_html__( 'Determines how multiple data selections are rolled up into tooltips.', Visualizer_Plugin::NAME )
+			esc_html__( 'Determines how multiple data selections are rolled up into tooltips. To make it working you need to set multiple selection mode and tooltip trigger to display it when an user selects an element.', Visualizer_Plugin::NAME )
 		);
 	}
 
