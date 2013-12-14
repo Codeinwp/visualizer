@@ -59,6 +59,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 == Changelog ==
 
 = 1.4 =
+* Implemented aggregation target and selection mode options for candlestick chart
 * Implemented focus target and data opacity for columnar chars
 * Implemented data opacity and interpolate nulls settings for line chart
 * Implemented ability to edit tooltip settings
