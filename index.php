@@ -70,6 +70,18 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 
+	if ( !defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
+		define( 'VISUALIZER_CSV_DELIMITER', ',' );
+	}
+
+	if ( !defined( 'VISUALIZER_CSV_ENCLOSURE' ) ) {
+		define( 'VISUALIZER_CSV_ENCLOSURE', '"' );
+	}
+
+	if ( !defined( 'VISUALIZER_CSV_ESCAPRE' ) ) {
+		define( 'VISUALIZER_CSV_ESCAPRE', '\\' );
+	}
+
 	// don't load the plugin if cron job is running or doing autosave
 	$doing_autosave = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE;
 	$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;

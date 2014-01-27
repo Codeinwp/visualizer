@@ -61,6 +61,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 = 1.4.1 =
 * Fixed issue which prevents the plugin working on SSL backend
 * Fixed issue with CSV file uploading in IE and other browsers
+* Added ability to define custom delimiter, enclosure and escape variables for CSV parsing
 
 = 1.4 =
 * Implemented aggregation target and selection mode options for candlestick chart
