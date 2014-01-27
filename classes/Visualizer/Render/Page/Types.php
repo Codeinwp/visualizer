@@ -40,7 +40,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 */
 	protected function _toHTML() {
 		echo '<form method="post">';
-			echo '<input type="hidden" name="nonce" value="', Visualizer_Security::createNonce(), '">';
+			echo '<input type="hidden" name="nonce" value="', wp_create_nonce(), '">';
 			parent::_toHTML();
 		echo '</form>';
 	}

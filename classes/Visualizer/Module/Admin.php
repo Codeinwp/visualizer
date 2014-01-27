@@ -138,7 +138,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'library' => array(
 				'filters' => self::_getChartTypesLocalized(),
 			),
-			'nonce'    => Visualizer_Security::createNonce(),
+			'nonce'    => wp_create_nonce(),
 			'buildurl' => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
 		);
 

@@ -165,7 +165,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$input_method = $is_post ? INPUT_POST : INPUT_GET;
 
 		$chart_id = $success = false;
-		$nonce = Visualizer_Security::verifyNonce( filter_input( $input_method, 'nonce' ) );
+		$nonce = wp_verify_nonce( filter_input( $input_method, 'nonce' ) );
 		$capable = current_user_can( 'delete_posts' );
 		if ( $nonce && $capable ) {
 			$chart_id = filter_input( $input_method, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
@@ -261,7 +261,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function _handleTypesPage() {
 		// process post request
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			if ( in_array( $type, Visualizer_Plugin::getChartTypes() ) ) {
 				// save new chart type
@@ -334,7 +334,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 */
 	private function _handleSettingsPage() {
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && Visualizer_Security::verifyNonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
 			if ( $this->_chart->post_status == 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
 				wp_update_post( $this->_chart->to_array() );
@@ -394,7 +394,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function uploadData() {
 		// validate nonce
-		if ( !Visualizer_Security::verifyNonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
+		if ( !wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
 			status_header( 403 );
 			exit;
 		}
@@ -445,7 +445,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function cloneChart() {
 		$chart_id = $success = false;
-		$nonce = Visualizer_Security::verifyNonce( filter_input( INPUT_GET, 'nonce' ), Visualizer_Plugin::ACTION_CLONE_CHART );
+		$nonce = wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ), Visualizer_Plugin::ACTION_CLONE_CHART );
 		$capable = current_user_can( 'edit_posts' );
 		if ( $nonce && $capable ) {
 			$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );

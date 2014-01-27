@@ -66,7 +66,7 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _toHTML() {
-		echo '<form id="settings-form" action="', add_query_arg( 'nonce', Visualizer_Security::createNonce() ), '" method="post">';
+		echo '<form id="settings-form" action="', add_query_arg( 'nonce', wp_create_nonce() ), '" method="post">';
 			parent::_toHTML();
 		echo '</form>';
 	}
