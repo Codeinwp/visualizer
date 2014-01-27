@@ -58,7 +58,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			'chart'  => $this->chart->ID,
 		), admin_url( 'admin-ajax.php' ) );
 
-		echo '<li class="group">';
+		echo '<li class="group open">';
 			echo '<h3 class="group-title">', esc_html__( 'Upload CSV File', Visualizer_Plugin::NAME ), '</h3>';
 			echo '<div class="group-content">';
 				echo '<iframe id="thehole" name="thehole"></iframe>';
@@ -80,7 +80,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							echo '<input type="file" id="csv-file" class="file" name="local_data">';
 							esc_attr_e( 'From Computer', Visualizer_Plugin::NAME );
 						echo '</div>';
-						echo '<a id="remote-file" class="button" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
+						
+						echo '<div>';
+							echo '<a id="remote-file" class="button" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
+						echo '</div>';
 					echo '</form>';
 				echo '</div>';
 			echo '</div>';

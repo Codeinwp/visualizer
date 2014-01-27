@@ -407,16 +407,20 @@ div.group-content .group-description {
 
 .file-wrapper {
 	position: relative;
-	margin-right: 10px !important;
+	overflow: hidden;
 }
 
 .file {
+	font-size: 200px;
     position: absolute;
     top: 0;
-	left: 0;
 	right: 0;
-	bottom: 0;
     opacity: 0;
     -moz-opacity: 0;
     filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+#remote-file {
+	margin-top: 10px;
+	clear: both;
 }
