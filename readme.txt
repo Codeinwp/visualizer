@@ -58,6 +58,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.4.1.1 =
+* Removed CSV parser escape constant to prevent warnings which appears when PHP 5.2.x or less is used
+
 = 1.4.1 =
 * Fixed issue which prevents the plugin working on SSL backend
 * Fixed issue with CSV file uploading in IE and other browsers
