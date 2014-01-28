@@ -63,7 +63,6 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	private function _fetchSeries( &$handle ) {
 		// read column titles
 		$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE, VISUALIZER_CSV_ESCAPRE );
-
 		// read series types
 		$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE, VISUALIZER_CSV_ESCAPRE );
 
@@ -72,6 +71,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		}
 
 		// if no types were setup, re read labels and empty types array
+		$types = array_map( 'trim', $types );
 		if ( !self::_validateTypes( $types ) ) {
 			// re open the file
 			fclose( $handle );
