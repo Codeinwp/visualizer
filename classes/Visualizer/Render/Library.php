@@ -146,8 +146,26 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				echo ' <a href="javascript:;" class="add-new-h2">', esc_html__( 'Add New', Visualizer_Plugin::NAME ), '</a>';
 			echo '</h2>';
 
+			$this->_renderMessages();
 			$this->_renderLibrary();
 		echo '</div>';
+	}
+
+	/**
+	 * Renders notification messages if need be.
+	 *
+	 * @since 1.4.2
+	 *
+	 * @access private
+	 */
+	private function _renderMessages() {
+		if ( !filter_var( ini_get( 'allow_url_fopen' ), FILTER_VALIDATE_BOOLEAN ) ) {
+			echo '<div class="updated error">';
+				echo '<p>';
+					printf( esc_html__( '%s option is disabled in your php.ini config. Please, enable it by change its value to 1. This option increases the speed of remote CSV uploading.', Visualizer_Plugin::NAME ), '<b>allow_url_fopen</b>' );
+				echo '</p>';
+			echo '</div>';
+		}
 	}
 
 }

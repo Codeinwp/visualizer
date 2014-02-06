@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-06 11:31+0300\n"
-"PO-Revision-Date: 2014-02-06 11:31+0300\n"
+"POT-Creation-Date: 2014-02-06 12:33+0300\n"
+"PO-Revision-Date: 2014-02-06 12:33+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -350,6 +350,15 @@ msgstr "Visualizer Library"
 #: classes/Visualizer/Render/Library.php:146
 msgid "Add New"
 msgstr "Add New"
+
+#: classes/Visualizer/Render/Library.php:165
+#, php-format
+msgid ""
+"%s option is disabled in your php.ini config. Please, enable it by change "
+"its value to 1. This option increases the speed of remote CSV uploading."
+msgstr ""
+"%s option is disabled in your php.ini config. Please, enable it by change "
+"its value to 1. This option increases the speed of remote CSV uploading."
 
 #: classes/Visualizer/Render/Templates.php:70
 msgid "Insert"
