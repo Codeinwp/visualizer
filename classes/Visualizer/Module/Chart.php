@@ -323,6 +323,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			),
 		) );
 
+		$this->_addAction( 'admin_head', 'render_flattr_script' );
+
 		wp_iframe( array( $render, 'render') );
 	}
 
@@ -382,7 +384,33 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = esc_attr__( 'Insert Chart', Visualizer_Plugin::NAME );
 		}
 
+		$this->_addAction( 'admin_head', 'render_flattr_script' );
+
 		wp_iframe( array( $render, 'render') );
+	}
+
+	/**
+	 * Renders flattr script in the iframe <head>
+	 *
+	 * @since 1.4.2
+	 * @action admin_head
+	 *
+	 * @access public
+	 */
+	public function render_flattr_script() {
+		echo <<<EOL
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script>
+EOL;
 	}
 
 	/**

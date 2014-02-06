@@ -77,9 +77,7 @@ class Visualizer_Render_Page extends Visualizer_Render {
 					esc_html_e( 'Rate it on WordPress.org', Visualizer_Plugin::NAME );
 				echo '</a>';
 				echo '<div id="flattr">';
-					echo '<a href="http://goo.gl/hN9FYf" target="_blank">';
-						echo '<img src="//api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0">';
-					echo '</a>';
+					echo '<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://wordpress.org/plugins/visualizer/"></a>';
 				echo '</div>';
 			echo '</div>';
 		echo '</div>';

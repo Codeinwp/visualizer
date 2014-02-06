@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-14 23:05+0300\n"
-"PO-Revision-Date: 2013-12-14 23:05+0300\n"
+"POT-Creation-Date: 2014-02-06 11:31+0300\n"
+"PO-Revision-Date: 2014-02-06 11:31+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -1270,7 +1270,7 @@ msgid "The stroke width of rising candles."
 msgstr "The stroke width of rising candles."
 
 #: classes/Visualizer/Render/Page/Settings.php:56
-#: classes/Visualizer/Render/Page/Data.php:99
+#: classes/Visualizer/Render/Page/Data.php:102
 msgid "Back"
 msgstr "Back"
 
@@ -1305,11 +1305,11 @@ msgstr "or read how you can add Google spreadsheet in following %sarticle%s."
 msgid "From Computer"
 msgstr "From Computer"
 
-#: classes/Visualizer/Render/Page/Data.php:83
+#: classes/Visualizer/Render/Page/Data.php:85
 msgid "From Web"
 msgstr "From Web"
 
-#: classes/Visualizer/Render/Page/Data.php:102
+#: classes/Visualizer/Render/Page/Data.php:105
 #: classes/Visualizer/Render/Page/Types.php:84
 msgid "Next"
 msgstr "Next"
@@ -1374,6 +1374,10 @@ msgstr "Library"
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
+#: classes/Visualizer/Module/Admin.php:352
+msgid "Donate"
+msgstr "Donate"
+
 #: classes/Visualizer/Module/Chart.php:318
 msgid "Please, enter the URL of CSV file:"
 msgstr "Please, enter the URL of CSV file:"
@@ -1382,22 +1386,22 @@ msgstr "Please, enter the URL of CSV file:"
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr "You have entered invalid URL. Please, insert proper URL."
 
-#: classes/Visualizer/Module/Chart.php:379
+#: classes/Visualizer/Module/Chart.php:381
 msgid "Save Chart"
 msgstr "Save Chart"
 
-#: classes/Visualizer/Module/Chart.php:380
+#: classes/Visualizer/Module/Chart.php:382
 msgid "Create Chart"
 msgstr "Create Chart"
 
-#: classes/Visualizer/Module/Chart.php:382
+#: classes/Visualizer/Module/Chart.php:384
 msgid "Insert Chart"
 msgstr "Insert Chart"
 
-#: classes/Visualizer/Module/Chart.php:416
+#: classes/Visualizer/Module/Chart.php:444
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr "CSV file with chart data was not uploaded. Please, try again."
 
-#: classes/Visualizer/Module/Chart.php:431
+#: classes/Visualizer/Module/Chart.php:459
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr "CSV file is broken or invalid. Please, try again."

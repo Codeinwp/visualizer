@@ -6,6 +6,7 @@ Description: A simple, easy to use and quite powerful tool to create, manage and
 Version: 1.4.1.1
 Author: Madpixels
 Author URI: http://madpixels.net
+Donate link: http://flattr.com/thing/2574985/WordPress-Visualizer
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 */
