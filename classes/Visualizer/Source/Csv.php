@@ -75,7 +75,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		if ( !self::_validateTypes( $types ) ) {
 			// re open the file
 			fclose( $handle );
-			$handle = fopen( $this->_filename, 'rb' );
+			$handle = $this->_get_file_handle();
 
 			// re read the labels and empty types array
 			$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
