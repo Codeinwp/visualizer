@@ -58,6 +58,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.4.2 =
+* Fixed remote CSV uploading issue when allow_url_fopen option is disabled in php.ini
+
 = 1.4.1.1 =
 * Removed CSV parser escape constant to prevent warnings which appears when PHP 5.2.x or less is used
 

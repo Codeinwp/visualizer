@@ -115,4 +115,25 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 		return __CLASS__;
 	}
 
+	/**
+	 * Returns file handle to fetch data from.
+	 *
+	 * @since 1.4.2
+	 *
+	 * @access protected
+	 * @param string $filename Optional file name to get handle. If omitted, $_filename is used.
+	 * @return resource File handle resource on success, otherwise FALSE.
+	 */
+	protected function _get_file_handle( $filename = false ) {
+		$scheme = parse_url( $this->_filename, PHP_URL_SCHEME );
+		$allow_url_fopen = filter_var( ini_get( 'allow_url_fopen' ), FILTER_VALIDATE_BOOLEAN );
+		if ( $allow_url_fopen && in_array( $scheme, stream_get_wrappers() ) ) {
+			return parent::_get_file_handle( $filename );
+		}
+
+		$filename = download_url( $this->_filename );
+
+		return !is_wp_error( $filename ) ? parent::_get_file_handle( $filename ) : false;
+	}
+
 }

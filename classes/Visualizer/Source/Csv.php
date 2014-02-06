@@ -94,6 +94,22 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	}
 
 	/**
+	 * Returns file handle to fetch data from.
+	 *
+	 * @since 1.4.2
+	 *
+	 * @access protected
+	 * @param string $filename Optional file name to get handle. If omitted, $_filename is used.
+	 * @return resource File handle resource on success, otherwise FALSE.
+	 */
+	protected function _get_file_handle( $filename = false ) {
+		// set line endings auto detect mode
+		@ini_set( 'auto_detect_line_endings', true );
+		// open file and return handle
+		return fopen( $filename ? $filename : $this->_filename, 'rb' );
+	}
+
+	/**
 	 * Fetches information from source, parses it and builds series and data arrays.
 	 *
 	 * @since 1.0.0
@@ -107,11 +123,8 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 			return false;
 		}
 
-		// set line endings auto detect mode
-		@ini_set( 'auto_detect_line_endings', true );
-
 		// read file and fill arrays
-		$handle = fopen( $this->_filename, 'rb' );
+		$handle = $this->_get_file_handle();
 		if ( $handle ) {
 			// fetch series
 			if ( !$this->_fetchSeries( $handle ) ) {
