@@ -60,6 +60,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 = 1.4.2.1 =
 * Fixed issue with download_url function which not exists at front end
+* Added functionality which prevents direct access to the plugin folder
 
 = 1.4.2 =
 * Fixed remote CSV uploading issue when allow_url_fopen option is disabled in php.ini

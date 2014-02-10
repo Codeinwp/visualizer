@@ -31,6 +31,12 @@ License URI: http://www.opensource.org/licenses/gpl-license.php
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
 
+// prevent direct access to the plugin folder
+if ( !defined( 'ABSPATH' ) ) {
+	header( 'HTTP/1.0 404 Not Found', true, 404 );
+	exit;
+}
+
 // don't load the plugin, if it has been already loaded
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
    return;
