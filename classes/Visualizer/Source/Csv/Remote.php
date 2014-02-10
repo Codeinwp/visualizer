@@ -151,6 +151,8 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 			return parent::_get_file_handle( $filename );
 		}
 
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
 		$this->_tmpfile = download_url( $this->_filename );
 
 		return !is_wp_error( $this->_tmpfile ) ? parent::_get_file_handle( $this->_tmpfile ) : false;
