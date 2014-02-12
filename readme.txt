@@ -58,6 +58,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.4.3 =
+* Added ability to pass a class for chart wrapper div
+
 = 1.4.2.1 =
 * Fixed issue with download_url function which not exists at front end
 * Added functionality which prevents direct access to the plugin folder
