@@ -57,8 +57,15 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$this->_addAction( 'wp_enqueue_scripts', 'enqueueScripts' );
 		$this->_addShortcode( 'visualizer', 'renderChart' );
 
-		add_filter( 'widget_text', 'do_shortcode' );
-		add_filter( 'term_description', 'do_shortcode' );
+		// add do_shortocde hook for widget_text filter
+		if ( !has_filter( 'widget_text', 'do_shortcode' ) ) {
+			add_filter( 'widget_text', 'do_shortcode' );
+		}
+
+		// add do_shortcode hook for term_description filter
+		if ( !has_filter( 'term_description', 'do_shortcode' ) ) {
+			add_filter( 'term_description', 'do_shortcode' );
+		}
 	}
 
 	/**
