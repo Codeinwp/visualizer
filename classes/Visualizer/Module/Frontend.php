@@ -77,8 +77,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access public
 	 */
 	public function enqueueScripts() {
-		wp_register_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-google-jsapi', '//www.google.com/jsapi', array(), null, true );
+		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi', 'jquery' ), Visualizer_Plugin::VERSION, true );
 	}
 
 	/**
