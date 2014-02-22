@@ -323,7 +323,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			),
 		) );
 
-		$this->_addAction( 'admin_head', 'render_flattr_script' );
+		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 
 		wp_iframe( array( $render, 'render') );
 	}
@@ -384,7 +384,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = esc_attr__( 'Insert Chart', Visualizer_Plugin::NAME );
 		}
 
-		$this->_addAction( 'admin_head', 'render_flattr_script' );
+		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 
 		wp_iframe( array( $render, 'render') );
 	}
@@ -397,7 +397,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @access public
 	 */
-	public function render_flattr_script() {
+	public function renderFlattrScript() {
 		echo <<<EOL
 <script type="text/javascript">
 /* <![CDATA[ */
