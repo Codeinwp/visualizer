@@ -48,6 +48,18 @@ class Visualizer_Render_Sidebar_Type_Bar extends Visualizer_Render_Sidebar_Colum
 	}
 
 	/**
+	 * Renders general settings block for horizontal axis settings.
+	 *
+	 * @since 1.4.3
+	 *
+	 * @access protected
+	 */
+	protected function _renderHorizontalAxisGeneratSettings() {
+		parent::_renderHorizontalAxisGeneratSettings();
+		$this->_renderHorizontalAxisFormatField();
+	}
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0

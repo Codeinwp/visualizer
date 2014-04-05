@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-06 12:33+0300\n"
-"PO-Revision-Date: 2014-02-06 12:33+0300\n"
+"POT-Creation-Date: 2014-04-05 14:41+0300\n"
+"PO-Revision-Date: 2014-04-05 14:41+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language: en_US\n"
@@ -53,7 +53,7 @@ msgid "Aligned to the end of the allocated area"
 msgstr "Aligned to the end of the allocated area"
 
 #: classes/Visualizer/Render/Sidebar.php:117
-#: classes/Visualizer/Render/Sidebar/Linear.php:266
+#: classes/Visualizer/Render/Sidebar/Linear.php:233
 #: classes/Visualizer/Render/Sidebar/Graph.php:400
 #: classes/Visualizer/Render/Sidebar/Type/Area.php:108
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:167
@@ -61,7 +61,7 @@ msgid "Yes"
 msgstr "Yes"
 
 #: classes/Visualizer/Render/Sidebar.php:118
-#: classes/Visualizer/Render/Sidebar/Linear.php:265
+#: classes/Visualizer/Render/Sidebar/Linear.php:232
 #: classes/Visualizer/Render/Sidebar/Graph.php:399
 #: classes/Visualizer/Render/Sidebar/Type/Area.php:107
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:166
@@ -288,8 +288,8 @@ msgid "Hex Value"
 msgstr "Hex Value"
 
 #: classes/Visualizer/Render/Sidebar.php:527
-#: classes/Visualizer/Render/Sidebar/Linear.php:98
-#: classes/Visualizer/Render/Sidebar/Linear.php:129
+#: classes/Visualizer/Render/Sidebar/Graph.php:424
+#: classes/Visualizer/Render/Sidebar/Graph.php:453
 msgid "Number Format"
 msgstr "Number Format"
 
@@ -380,44 +380,13 @@ msgstr "Straight line without curve"
 msgid "The angles of the line will be smoothed"
 msgstr "The angles of the line will be smoothed"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:103
-msgid "Enter custom format pattern to apply to horizontal axis labels."
-msgstr "Enter custom format pattern to apply to horizontal axis labels."
-
-#: classes/Visualizer/Render/Sidebar/Linear.php:105
-#: classes/Visualizer/Render/Sidebar/Linear.php:136
-#, php-format
-msgid ""
-"For number axis labels, this is a subset of the decimal formatting %sICU "
-"pattern set%s. For instance, $#,###.## will display values $1,234.56 for "
-"value 1234.56. Pay attention that if you use #%% percentage format then your "
-"values will be multiplied by 100."
-msgstr ""
-"For number axis labels, this is a subset of the decimal formatting %sICU "
-"pattern set%s. For instance, $#,###.## will display values $1,234.56 for "
-"value 1234.56. Pay attention that if you use #%% percentage format then your "
-"values will be multiplied by 100."
-
-#: classes/Visualizer/Render/Sidebar/Linear.php:110
-#, php-format
-msgid ""
-"For date axis labels, this is a subset of the date formatting %sICU date and "
-"time format%s."
-msgstr ""
-"For date axis labels, this is a subset of the date formatting %sICU date and "
-"time format%s."
-
-#: classes/Visualizer/Render/Sidebar/Linear.php:134
-msgid "Enter custom format pattern to apply to vertical axis labels."
-msgstr "Enter custom format pattern to apply to vertical axis labels."
-
-#: classes/Visualizer/Render/Sidebar/Linear.php:154
-#: classes/Visualizer/Render/Sidebar/Linear.php:273
+#: classes/Visualizer/Render/Sidebar/Linear.php:121
+#: classes/Visualizer/Render/Sidebar/Linear.php:240
 #: classes/Visualizer/Render/Sidebar/Type/Area.php:115
 msgid "Line Width And Point Size"
 msgstr "Line Width And Point Size"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:168
+#: classes/Visualizer/Render/Sidebar/Linear.php:135
 msgid ""
 "Data line width and diameter of displayed points in pixels. Use zero to hide "
 "all lines or points."
@@ -425,14 +394,14 @@ msgstr ""
 "Data line width and diameter of displayed points in pixels. Use zero to hide "
 "all lines or points."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:174
-#: classes/Visualizer/Render/Sidebar/Linear.php:297
+#: classes/Visualizer/Render/Sidebar/Linear.php:141
+#: classes/Visualizer/Render/Sidebar/Linear.php:264
 msgid "Curve Type"
 msgstr "Curve Type"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:178
+#: classes/Visualizer/Render/Sidebar/Linear.php:145
+#: classes/Visualizer/Render/Sidebar/Linear.php:235
 #: classes/Visualizer/Render/Sidebar/Linear.php:268
-#: classes/Visualizer/Render/Sidebar/Linear.php:301
 #: classes/Visualizer/Render/Sidebar/Graph.php:402
 #: classes/Visualizer/Render/Sidebar/Type/Area.php:110
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:169
@@ -440,25 +409,25 @@ msgid "Determines whether the series has to be presented in the legend or not."
 msgstr ""
 "Determines whether the series has to be presented in the legend or not."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:186
+#: classes/Visualizer/Render/Sidebar/Linear.php:153
 #: classes/Visualizer/Render/Sidebar/Columnar.php:47
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:61
 msgid "Focus Target"
 msgstr "Focus Target"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:191
+#: classes/Visualizer/Render/Sidebar/Linear.php:158
 #: classes/Visualizer/Render/Sidebar/Columnar.php:52
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:66
 msgid "Focus on a single data point."
 msgstr "Focus on a single data point."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:192
+#: classes/Visualizer/Render/Sidebar/Linear.php:159
 #: classes/Visualizer/Render/Sidebar/Columnar.php:53
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:67
 msgid "Focus on a grouping of all data points along the major axis."
 msgstr "Focus on a grouping of all data points along the major axis."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:194
+#: classes/Visualizer/Render/Sidebar/Linear.php:161
 #: classes/Visualizer/Render/Sidebar/Columnar.php:55
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:69
 msgid ""
@@ -468,42 +437,42 @@ msgstr ""
 "The type of the entity that receives focus on mouse hover. Also affects "
 "which entity is selected by mouse click."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:199
+#: classes/Visualizer/Render/Sidebar/Linear.php:166
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:75
 msgid "Selection Mode"
 msgstr "Selection Mode"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:204
+#: classes/Visualizer/Render/Sidebar/Linear.php:171
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:80
 msgid "Single data point"
 msgstr "Single data point"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:205
+#: classes/Visualizer/Render/Sidebar/Linear.php:172
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:81
 msgid "Multiple data points"
 msgstr "Multiple data points"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:207
+#: classes/Visualizer/Render/Sidebar/Linear.php:174
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:83
 msgid "Determines how many data points an user can select on a chart."
 msgstr "Determines how many data points an user can select on a chart."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:211
+#: classes/Visualizer/Render/Sidebar/Linear.php:178
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:87
 msgid "Aggregation Target"
 msgstr "Aggregation Target"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:216
+#: classes/Visualizer/Render/Sidebar/Linear.php:183
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:92
 msgid "Group selected data by x-value"
 msgstr "Group selected data by x-value"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:217
+#: classes/Visualizer/Render/Sidebar/Linear.php:184
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:93
 msgid "Group selected data by series"
 msgstr "Group selected data by series"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:218
+#: classes/Visualizer/Render/Sidebar/Linear.php:185
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:94
 msgid ""
 "Group selected data by x-value if all selections have the same x-value, and "
@@ -512,12 +481,12 @@ msgstr ""
 "Group selected data by x-value if all selections have the same x-value, and "
 "by series otherwise"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:219
+#: classes/Visualizer/Render/Sidebar/Linear.php:186
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:95
 msgid "Show only one tooltip per selection"
 msgstr "Show only one tooltip per selection"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:221
+#: classes/Visualizer/Render/Sidebar/Linear.php:188
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:97
 msgid ""
 "Determines how multiple data selections are rolled up into tooltips. To make "
@@ -528,11 +497,11 @@ msgstr ""
 "it working you need to set multiple selection mode and tooltip trigger to "
 "display it when an user selects an element."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:227
+#: classes/Visualizer/Render/Sidebar/Linear.php:194
 msgid "Point Opacity"
 msgstr "Point Opacity"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:230
+#: classes/Visualizer/Render/Sidebar/Linear.php:197
 msgid ""
 "The transparency of data points, with 1.0 being completely opaque and 0.0 "
 "fully transparent."
@@ -540,23 +509,23 @@ msgstr ""
 "The transparency of data points, with 1.0 being completely opaque and 0.0 "
 "fully transparent."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:243
+#: classes/Visualizer/Render/Sidebar/Linear.php:210
 msgid "Lines Settings"
 msgstr "Lines Settings"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:260
+#: classes/Visualizer/Render/Sidebar/Linear.php:227
 #: classes/Visualizer/Render/Sidebar/Graph.php:394
 #: classes/Visualizer/Render/Sidebar/Type/Area.php:102
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:161
 msgid "Visible In Legend"
 msgstr "Visible In Legend"
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:289
+#: classes/Visualizer/Render/Sidebar/Linear.php:256
 #: classes/Visualizer/Render/Sidebar/Type/Area.php:131
 msgid "Overrides the global line width and point size values for this series."
 msgstr "Overrides the global line width and point size values for this series."
 
-#: classes/Visualizer/Render/Sidebar/Linear.php:306
+#: classes/Visualizer/Render/Sidebar/Linear.php:273
 #: classes/Visualizer/Render/Sidebar/Graph.php:196
 #: classes/Visualizer/Render/Sidebar/Graph.php:213
 #: classes/Visualizer/Render/Sidebar/Graph.php:308
@@ -741,6 +710,38 @@ msgstr "The number of vertical minor gridlines between two regular gridlines."
 #: classes/Visualizer/Render/Sidebar/Graph.php:373
 msgid "Series Settings"
 msgstr "Series Settings"
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:429
+msgid "Enter custom format pattern to apply to horizontal axis labels."
+msgstr "Enter custom format pattern to apply to horizontal axis labels."
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:431
+#: classes/Visualizer/Render/Sidebar/Graph.php:460
+#, php-format
+msgid ""
+"For number axis labels, this is a subset of the decimal formatting %sICU "
+"pattern set%s. For instance, $#,###.## will display values $1,234.56 for "
+"value 1234.56. Pay attention that if you use #%% percentage format then your "
+"values will be multiplied by 100."
+msgstr ""
+"For number axis labels, this is a subset of the decimal formatting %sICU "
+"pattern set%s. For instance, $#,###.## will display values $1,234.56 for "
+"value 1234.56. Pay attention that if you use #%% percentage format then your "
+"values will be multiplied by 100."
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:436
+#: classes/Visualizer/Render/Sidebar/Graph.php:465
+#, php-format
+msgid ""
+"For date axis labels, this is a subset of the date formatting %sICU date and "
+"time format%s."
+msgstr ""
+"For date axis labels, this is a subset of the date formatting %sICU date and "
+"time format%s."
+
+#: classes/Visualizer/Render/Sidebar/Graph.php:458
+msgid "Enter custom format pattern to apply to vertical axis labels."
+msgstr "Enter custom format pattern to apply to vertical axis labels."
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:58
 msgid "Map Settings"

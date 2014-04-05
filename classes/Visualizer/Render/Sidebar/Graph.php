@@ -412,4 +412,62 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 		);
 	}
 
+	/**
+	 * Renders format field for horizontal axis.
+	 *
+	 * @since 1.4.3
+	 *
+	 * @access protected
+	 */
+	protected function _renderHorizontalAxisFormatField() {
+		self::_renderTextItem(
+			esc_html__( 'Number Format', Visualizer_Plugin::NAME ),
+			'hAxis[format]',
+			isset( $this->hAxis['format'] ) ? $this->hAxis['format'] : '',
+			sprintf(
+				'%s<br><br>%s<br><br>%s',
+				esc_html__( 'Enter custom format pattern to apply to horizontal axis labels.', Visualizer_Plugin::NAME ),
+				sprintf(
+					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %sICU pattern set%s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #%% percentage format then your values will be multiplied by 100.', Visualizer_Plugin::NAME ),
+					'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
+					'</a>'
+				),
+				sprintf(
+					esc_html__( 'For date axis labels, this is a subset of the date formatting %sICU date and time format%s.', Visualizer_Plugin::NAME ),
+					'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
+					'</a>'
+				)
+			)
+		);
+	}
+
+	/**
+	 * Renders format field for vertical axis settings.
+	 *
+	 * @since 1.4.3
+	 *
+	 * @access protected
+	 */
+	protected function _renderVerticalAxisFormatField() {
+		self::_renderTextItem(
+			esc_html__( 'Number Format', Visualizer_Plugin::NAME ),
+			'vAxis[format]',
+			isset( $this->vAxis['format'] ) ? $this->vAxis['format'] : '',
+			sprintf(
+				'%s<br><br>%s<br><br>%s',
+				esc_html__( 'Enter custom format pattern to apply to vertical axis labels.', Visualizer_Plugin::NAME ),
+				sprintf(
+					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %sICU pattern set%s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #%% percentage format then your values will be multiplied by 100.', Visualizer_Plugin::NAME ),
+					'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
+					'</a>'
+				),
+				sprintf(
+					esc_html__( 'For date axis labels, this is a subset of the date formatting %sICU date and time format%s.', Visualizer_Plugin::NAME ),
+					'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
+					'</a>'
+				)
+			)
+		);
+	}
+
 }

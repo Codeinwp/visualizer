@@ -58,6 +58,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.4.3 =
+* Implemented ability to edit horizontal and vertical axis number format for bar and column charts
+
 = 1.4.2.2 =
 * Added ability to pass a class for chart wrapper div
 * Added proper label for custom post type
