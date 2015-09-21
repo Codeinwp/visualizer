@@ -59,6 +59,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EDIT_CHART, 'renderChartPages' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_UPLOAD_DATA, 'uploadData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CLONE_CHART, 'cloneChart' );
+
+        // Added by Ash/Upwork
+        if( defined( 'Visualizer_Pro' ) ){
+            global $Visualizer_Pro;
+            list($action, $name, $class) = $Visualizer_Pro->_getAjaxAction($this);
+            $this->_addAjaxAction($action, $name, $class);
+        }
+        // Added by Ash/Upwork
+
 	}
 
 	/**
@@ -69,7 +78,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 * @param array $results The response array.
 	 */
-	private function _sendResponse( $results ) {
+	public function _sendResponse( $results ) {
 		header( 'Content-type: application/json' );
 		nocache_headers();
 
@@ -234,6 +243,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'visualizer-frame' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'wp-color-picker', 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
 
+        // added by Ash/Upwork
+        if( defined( 'Visualizer_Pro' ) ){
+            global $Visualizer_Pro;
+            $Visualizer_Pro->_addScriptsAndStyles();
+        }
+
 		// dispatch pages
 		$this->_chart = $chart;
 		switch ( filter_input( INPUT_GET, 'tab' ) ) {
@@ -322,6 +337,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'canvas' => $data,
 			),
 		) );
+
+        // Added by Ash/Upwork
+        if( defined( 'Visualizer_Pro' ) ){
+            global $Visualizer_Pro;
+            $Visualizer_Pro->_enqueueScriptsAndStyles($data);
+        }
+        // Added by Ash/Upwork
 
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 
@@ -440,6 +462,13 @@ EOL;
 			$source =  new Visualizer_Source_Csv_Remote( $_POST['remote_data'] );
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source =  new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
+
+        // Added by Ash/Upwork
+		} elseif ( defined( 'Visualizer_Pro' ) && isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0){
+            global $Visualizer_Pro;
+            $source = $Visualizer_Pro->_handleChartData($_POST['chart_data']);
+        // Added by Ash/Upwork
+
 		} else  {
 			$render->message = esc_html__( "CSV file with chart data was not uploaded. Please, try again.", Visualizer_Plugin::NAME );
 		}

@@ -39,7 +39,14 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
-		echo '<div id="canvas">';
+        // Added by Ash/Upwork
+        if( defined( 'Visualizer_Pro' ) ){
+            global $Visualizer_Pro;
+            $Visualizer_Pro->_addEditor();
+        }
+        // Added by Ash/Upwork
+
+        echo '<div id="canvas">';
 			echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
 	}
@@ -81,10 +88,31 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							esc_attr_e( 'From Computer', Visualizer_Plugin::NAME );
 						echo '</div>';
 
+                        // Added by Ash/Upwork
+                        if( defined( 'Visualizer_Pro' ) ){
+                            global $Visualizer_Pro;
+                            $Visualizer_Pro->_addFormElements();
+                        }
+                        // Added by Ash/Upwork
+
 						echo '<div>';
 							echo '<a id="remote-file" class="button" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
 						echo '</div>';
 					echo '</form>';
+
+                    // added by Ash/Upwork
+                    if( defined( 'Visualizer_Pro' ) ){
+                        global $Visualizer_Pro;
+                        $Visualizer_Pro->_addEditorElements();
+                    }else{
+?>
+                    <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL;?>" title="<?php echo Visualizer_Plugin::PRO_TEASER_TITLE;?>" target="_new">
+                        <input type="button" class="button" id="existing-chart-free" value="<?php esc_attr_e( 'From Chart', Visualizer_Plugin::NAME );?>:"><select id="chart-id-free"></select>
+                    </a>
+<?php
+                    }
+                    // Added by Ash/Upwork
+
 				echo '</div>';
 			echo '</div>';
 		echo '</li>';

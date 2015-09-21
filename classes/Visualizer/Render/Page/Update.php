@@ -52,6 +52,14 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 								echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
 								echo 'win.visualizer.render();';
 							echo '}';
+
+                            // added by Ash/Upwork
+                            if( defined( 'Visualizer_Pro' ) ){
+                                global $Visualizer_Pro;
+                                $Visualizer_Pro->_addUpdateHook($this->series, $this->data);
+                            }
+                            // Added by Ash/Upwork
+
 						} else {
 							echo 'alert("', $this->message, '");';
 						}

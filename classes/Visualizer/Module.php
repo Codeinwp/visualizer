@@ -79,8 +79,8 @@ class Visualizer_Module {
 	 * @param int $accepted_args optional. The number of arguments the function accept (default 1).
 	 * @return Visualizer_Module
 	 */
-	protected function _addAction( $tag, $method, $priority = 10, $accepted_args = 1 ) {
-		add_action( $tag, array( $this, $method ), $priority, $accepted_args );
+	protected function _addAction( $tag, $method, $methodClass=NULL, $priority = 10, $accepted_args = 1 ) {
+		add_action( $tag, array( $methodClass ? $methodClass : $this, $method ), $priority, $accepted_args );
 		return $this;
 	}
 
@@ -96,13 +96,13 @@ class Visualizer_Module {
 	 * @param boolean $public Optional. Determines if we should register hook for not logged in users.
 	 * @return Visualizer_Module
 	 */
-	protected function _addAjaxAction( $tag, $method = '', $private = true, $public = false ) {
+	protected function _addAjaxAction( $tag, $method = '', $methodClass=NULL, $private = true, $public = false ) {
 		if ( $private ) {
-			$this->_addAction( 'wp_ajax_' . $tag, $method );
+			$this->_addAction( 'wp_ajax_' . $tag, $method, $methodClass );
 		}
 
 		if ( $public ) {
-			$this->_addAction( 'wp_ajax_nopriv_' . $tag, $method );
+			$this->_addAction( 'wp_ajax_nopriv_' . $tag, $method, $methodClass );
 		}
 
 		return $this;

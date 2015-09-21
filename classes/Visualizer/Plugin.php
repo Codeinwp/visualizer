@@ -55,6 +55,11 @@ class Visualizer_Plugin {
 	const FILTER_GET_CHART_SERIES    = 'visualizer-get-chart-series';
 	const FILTER_GET_CHART_DATA      = 'visualizer-get-chart-data';
 
+    // Added by Ash/Upwork
+    const PRO_TEASER_URL    = "http://www.google.com";
+    const PRO_TEASER_TITLE  = "blah";
+    // Added by Ash/Upwork
+
 	/**
 	 * Singletone instance of the plugin.
 	 *

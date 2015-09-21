@@ -42,6 +42,12 @@ if ( class_exists( 'Visualizer_Plugin', false ) ) {
    return;
 }
 
+// Added by Ash/Upwork
+if ( class_exists( 'Visualizer_Pro', false ) ){
+    define( 'Visualizer_Pro', true);
+}
+// Added by Ash/Upwork
+
 /**
  * Automatically loads classes for the plugin. Checks a namespace and loads only
  * approved classes.
