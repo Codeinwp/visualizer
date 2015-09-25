@@ -83,7 +83,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				echo '<div>';
 					echo '<form id="csv-form" action="', $upload_link, '" method="post" target="thehole" enctype="multipart/form-data">';
 						echo '<input type="hidden" id="remote-data" name="remote_data">';
-						echo '<div class="button button-primary file-wrapper">';
+						echo '<div class="form-inline">';
+						echo '<div class="button button-primary file-wrapper computer-btn">';
 							echo '<input type="file" id="csv-file" class="file" name="local_data">';
 							esc_attr_e( 'From Computer', Visualizer_Plugin::NAME );
 						echo '</div>';
@@ -95,8 +96,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                         }
                         // Added by Ash/Upwork
 
-						echo '<div>';
-							echo '<a id="remote-file" class="button" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
+					
+							echo '<a id="" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
+					
+						
 						echo '</div>';
 					echo '</form>';
 
@@ -107,7 +110,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                     }else{
 ?>
                     <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL;?>" title="<?php echo Visualizer_Plugin::PRO_TEASER_TITLE;?>" target="_new">
-                        <input type="button" class="button" id="existing-chart-free" value="<?php esc_attr_e( 'From Chart', Visualizer_Plugin::NAME );?>:"><select id="chart-id-free"></select>
+                        <input type="button" class="button preview preview-btn" id="existing-chart-free" value="<?php esc_attr_e( 'PREVIEW', Visualizer_Plugin::NAME );?>">
                     </a>
 <?php
                     }
