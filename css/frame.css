@@ -58,6 +58,7 @@
 
 .group.open {
 	border-bottom: 1px solid #DFDFDF;
+	
 }
 
 .group-title {
@@ -491,7 +492,7 @@ div.group-content .group-description {
 
  .from-web-btn:hover{
 	color: white !important;
-	background: #84d700  url("../images/web.png") no-repeat scroll 7px -38px !important;
+	background: #89B158   url("../images/web.png") no-repeat scroll 7px -38px !important;
 	transition: all 0.3s ease 0s;
 	padding-left: 25px !important;
 	-webkit-transition: all .3s ease;
@@ -500,7 +501,7 @@ div.group-content .group-description {
 	-o-transition: all .3s ease;
 	transition: all .3s ease;
 	margin-left: 2px !important;
-	border: 1px solid #84d700 !important;
+	border: 1px solid #89B158  !important;
 	box-shadow: none !important;
 }
 
@@ -511,4 +512,30 @@ div.group-content .group-description {
 .preview-btn{
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
+}
+
+.show-live-btn{
+	margin-top: 15px !important;
+	width: 100%;
+	background-color: #F90 !important;
+	border-color: #E98B00 !important;
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	box-shadow: none !important;
+}
+
+
+.show-live-btn:hover{
+	margin-top: 15px !important;
+	width: 100%;
+	background-color: #ea8c00 !important;
+	border-color: #E98B00 !important;
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	box-shadow: none !important;
+		-webkit-transition: all .3s ease;
+	-moz-transition: all .3s ease;
+	-ms-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	transition: all .3s ease;
 }
