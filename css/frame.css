@@ -58,6 +58,7 @@
 
 .group.open {
 	border-bottom: 1px solid #DFDFDF;
+	
 }
 
 .group-title {
@@ -82,6 +83,8 @@
 	background-image: -o-linear-gradient(bottom, #EEE, whiteSmoke);
 	background-image: -ms-linear-gradient(bottom, #EEE, whiteSmoke);
 	background-image: linear-gradient(bottom, #EEE, whiteSmoke);
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
 }
 
 .group-title:hover,
@@ -95,6 +98,8 @@
 	background-image: -o-linear-gradient(bottom, #6D6D6D, gray);
 	background-image: -ms-linear-gradient(bottom, #6D6D6D, gray);
 	background-image: linear-gradient(bottom, #6D6D6D, gray);
+	font-family: "Open Sans", sans-serif;
+	font-weight: 700;
 }
 
 .group-title::after {
@@ -153,6 +158,8 @@ div.group-content {
 div.group-content .group-description {
 	padding: 0;
 	margin-bottom: 20px;
+	font-weight: 300;
+	font-family: "Montserrat",sans-serif;
 }
 
 .section-title {
@@ -254,7 +261,7 @@ div.group-content .group-description {
 }
 
 #rate-stars {
-	float: right;
+	margin: 10px 0px 10px 55px;
 	width: 100px;
 	height: 20px;
 	background-image: url('../images/star.png');
@@ -266,6 +273,9 @@ div.group-content .group-description {
 	text-decoration: none;
 	display: block;
 	margin-top: 3px;
+	margin-left: 35px;
+	font-family: "Montserrat",sans-serif;
+	font-weight: 300;
 }
 
 #flattr {
@@ -423,4 +433,109 @@ div.group-content .group-description {
 #remote-file {
 	margin-top: 10px;
 	clear: both;
+}
+
+ .form-inline {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+  }
+  
+ .computer-btn{
+	color: #646464 !important;
+	border: medium none rgb(100, 100, 100) !important;
+	background: #E6E6E6 url("../images/computer.png") no-repeat scroll 7px 1px !important;
+	padding-left: 27px !important;
+	transition: all 0.3s ease 0s;
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	border: 1px solid #B0B0B0 !important;
+	box-shadow: none !important;
+	
+ }
+
+ .computer-btn:hover{
+	color: white !important;
+	background: #2f8cea  url("../images/computer.png") no-repeat scroll 7px -36px !important;
+	transition: all 0.3s ease 0s;
+	padding-left: 27px !important;
+	-webkit-transition: all .3s ease;
+	-moz-transition: all .3s ease;
+	-ms-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	transition: all .3s ease;
+	box-shadow: 0px 1px 0px rgba(171, 171, 171, 0.5) inset, 0px 1px 0px rgba(0, 0, 0, 0.15) !important;
+	border: 1px solid #2f8cea !important;
+	box-shadow: none !important;
+	
+	
+ }
+
+ 
+ .from-web{
+	margin-top: 0px;
+	margin-bottom: 15px !important;
+}
+
+ .from-web-btn{
+	color: #646464 !important;
+	border: medium none #646464 !important;
+	background: #E6E6E6 url("../images/web.png") no-repeat scroll 7px 1px !important;
+	padding-left: 25px !important;
+	transition: all 0.3s ease 0s;
+	border: 1px solid #B0B0B0 !important;
+	box-shadow: none !important;
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	margin-left: 2px !important;
+}
+
+ .from-web-btn:hover{
+	color: white !important;
+	background: #89B158   url("../images/web.png") no-repeat scroll 7px -38px !important;
+	transition: all 0.3s ease 0s;
+	padding-left: 25px !important;
+	-webkit-transition: all .3s ease;
+	-moz-transition: all .3s ease;
+	-ms-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	transition: all .3s ease;
+	margin-left: 2px !important;
+	border: 1px solid #89B158  !important;
+	box-shadow: none !important;
+}
+
+.preview{
+	width: 100%;
+}
+
+.preview-btn{
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+}
+
+.show-live-btn{
+	margin-top: 15px !important;
+	width: 100%;
+	background-color: #F90 !important;
+	border-color: #E98B00 !important;
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	box-shadow: none !important;
+}
+
+
+.show-live-btn:hover{
+	margin-top: 15px !important;
+	width: 100%;
+	background-color: #ea8c00 !important;
+	border-color: #E98B00 !important;
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	box-shadow: none !important;
+		-webkit-transition: all .3s ease;
+	-moz-transition: all .3s ease;
+	-ms-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	transition: all .3s ease;
 }
