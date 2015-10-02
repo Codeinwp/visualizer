@@ -428,6 +428,7 @@ div.group-content .group-description {
     opacity: 0;
     -moz-opacity: 0;
     filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+	 cursor: pointer;
 }
 
 #remote-file {
@@ -451,7 +452,7 @@ div.group-content .group-description {
 	font-weight: 700;
 	border: 1px solid #B0B0B0 !important;
 	box-shadow: none !important;
-	
+
  }
 
  .computer-btn:hover{
@@ -467,10 +468,20 @@ div.group-content .group-description {
 	box-shadow: 0px 1px 0px rgba(171, 171, 171, 0.5) inset, 0px 1px 0px rgba(0, 0, 0, 0.15) !important;
 	border: 1px solid #2f8cea !important;
 	box-shadow: none !important;
-	
+
 	
  }
 
+ .just-on-pro{
+	background: #FFF  url("../images/available_pro.png") no-repeat scroll 0px 1px !important;
+	width: 250px;
+	height: 100px;
+	cursor:not-allowed;
+	opacity: 0.6;
+	margin-bottom: 10px;
+ }
+ 
+ 
  
  .from-web{
 	margin-top: 0px;
@@ -512,6 +523,29 @@ div.group-content .group-description {
 .preview-btn{
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
+	background-color: #2f8cea  !important;
+	color: white !important;
+	border: 1px solid #2c80d6 !important;
+	box-shadow: none !important;
+	-webkit-transition: all .3s ease;
+	-moz-transition: all .3s ease;
+	-ms-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	transition: all .3s ease;
+}
+
+.preview-btn:hover{
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	background-color: #2c80d6 !important;
+	color: white !important;
+	border: 1px solid #2c80d6 !important;
+	box-shadow: none !important;
+	-webkit-transition: all .3s ease;
+	-moz-transition: all .3s ease;
+	-ms-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	transition: all .3s ease;
 }
 
 .show-live-btn{
