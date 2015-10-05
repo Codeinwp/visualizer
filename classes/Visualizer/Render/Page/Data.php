@@ -99,7 +99,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					
 							echo '<a id="" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
 					
-						
+						echo '<div class="just-on-pro"> </div>';
 						echo '</div>';
 					echo '</form>';
 
