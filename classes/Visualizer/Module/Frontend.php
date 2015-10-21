@@ -100,6 +100,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'class'  => false, // chart class
 			'series' => false, // series filter hook
 			'data'   => false, // data filter hook
+			'settings'   => false, // data filter hook
 		), $atts );
 
 		// if empty id or chart does not exists, then return empty string
@@ -123,6 +124,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 		if ( !empty( $atts['series'] ) ) {
 			$series = apply_filters( $atts['series'], $series, $chart->ID, $type );
+		}
+		// handle settings filter hooks
+		$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
+		if ( !empty( $atts['settings'] ) ) {
+			$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
 		}
 
 		// handle data filter hooks

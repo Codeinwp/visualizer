@@ -1,15 +1,15 @@
 <?php
 /*
-Plugin Name: WordPress Visualizer
-Plugin URI: https://github.com/madpixelslabs/visualizer
+Plugin Name: Visualizer: Charts and Graphs
+Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs/
 Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-Version: 1.4.4
-Author: Madpixels
-Author URI: http://madpixels.net
-Donate link: http://flattr.com/thing/2574985/WordPress-Visualizer
+Version: 1.5
+Author: Themeisle
+Author URI: http://themeisle.com
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 */
+
 
 // +----------------------------------------------------------------------+
 // | Copyright 2013  Madpixels  (email : visualizer@madpixels.net)        |

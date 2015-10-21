@@ -119,19 +119,20 @@ abstract class Visualizer_Source {
 	 */
 	protected function _normalizeData( $data ) {
 		// normalize values
+		//print_r($data);
 		foreach ( $this->_series as $i => $series ) {
 			// if no value exists for the seires, then add null
 			if ( !isset( $data[$i] ) ) {
 				$data[$i] = null;
 			}
 
-			if ( is_null( $data[$i] ) ) {
+			if ( is_null( $data[$i] ) && !is_numeric($data[$i])) {
 				continue;
 			}
 
 			switch ( $series['type'] ) {
 				case 'number':
-					$data[$i] = !empty( $data[$i] ) ? floatval( $data[$i] ) : null;
+					$data[$i] = (  is_numeric($data[$i]) ) ? floatval( $data[$i] ) : null;
 					break;
 				case 'boolean':
 					$data[$i] = !empty( $data[$i] ) ? filter_validate( $data[$i], FILTER_VALIDATE_BOOLEAN ) : null;
@@ -149,7 +150,6 @@ abstract class Visualizer_Source {
 					break;
 			}
 		}
-
 		return $data;
 	}
 

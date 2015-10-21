@@ -30,7 +30,7 @@
 class Visualizer_Plugin {
 
 	const NAME    = 'visualizer';
-	const VERSION = '1.4.2.3';
+	const VERSION = '1.5';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -54,6 +54,7 @@ class Visualizer_Plugin {
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';
 	const FILTER_GET_CHART_SERIES    = 'visualizer-get-chart-series';
 	const FILTER_GET_CHART_DATA      = 'visualizer-get-chart-data';
+	const FILTER_GET_CHART_SETTINGS      = 'visualizer-get-chart-settings';
 
     // Added by Ash/Upwork
     const PRO_TEASER_URL    = "http://www.google.com";

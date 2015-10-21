@@ -58,6 +58,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.5 =
+* Added support for live editor
+* Added support for importing data from other charts
+* Added filter for chart settings
+* Fixed bug when zero was not working on the charts
+
 = 1.4.2.3 =
 * Implemented ability to edit horizontal and vertical axis number format for bar and column charts
 
