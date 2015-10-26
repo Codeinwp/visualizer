@@ -477,7 +477,7 @@ div.group-content .group-description {
 	width: 250px;
 	height: 100px;
 	cursor:not-allowed;
-	opacity: 0.6;
+	opacity: 0.8;
 	margin-bottom: 10px;
  }
  
@@ -519,6 +519,35 @@ div.group-content .group-description {
 .preview{
 	width: 100%;
 }
+.from-chart-btn{
+	color: #646464 !important;
+	border: medium none #646464 !important;
+	background: #E6E6E6 url("../images/from_chart.png") no-repeat scroll 7px 1px !important;
+	padding-left: 25px !important;
+	transition: all 0.3s ease 0s;
+	border: 1px solid #B0B0B0 !important;
+	box-shadow: none !important;
+	font-family: "Open Sans",sans-serif;
+	font-weight: 700;
+	margin-left: 2px !important;
+	margin-top: 2px !important;
+}
+
+ .from-chart-btn:hover{
+  	color: white !important;
+  	background: #10aecb   url("../images/from_chart.png") no-repeat scroll 7px -36px !important;
+  	transition: all 0.3s ease 0s;
+  	padding-left: 25px !important;
+  	-webkit-transition: all .3s ease;
+  	-moz-transition: all .3s ease;
+  	-ms-transition: all .3s ease;
+  	-o-transition: all .3s ease;
+  	transition: all .3s ease;
+  	margin-left: 2px !important;
+  	border: 1px solid #10aecb  !important;
+  	box-shadow: none !important;
+  	margin-top: 2px !important;
+  }
 
 .preview-btn{
 	font-family: "Open Sans",sans-serif;
