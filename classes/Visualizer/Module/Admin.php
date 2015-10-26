@@ -62,6 +62,30 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
+		$this->_addFilter( 'visualizer_admin_pointers', 'visualizerAdminPointers', 10, 2 );
+	}
+
+	/**
+	 * Returns wp pointers for visualizer
+	 *
+	 * @since 1.5
+	 *
+	 * @static
+	 * @access private
+	 * @return array The associated array of pointer
+	 */
+	function visualizerAdminPointers( $p ) {
+		$p['visualizer'] = array(
+			'target' => '#menu-media',
+			'options' => array(
+				'content' => sprintf( '<h3> %s </h3> <p> %s </p>',
+					__( 'Visualizer New Features ' , Visualizer_Plugin::NAME),
+					__( 'Right now the Visualizer Charts and Graphics plugin integrates a live editor and a new importing option for your charts. ',Visualizer_Plugin::NAME)
+				),
+				'position' => array( 'edge' => 'top', 'align' => 'middle' )
+			)
+		);
+		return $p;
 	}
 
 	/**
@@ -186,6 +210,46 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			wp_enqueue_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
 			wp_enqueue_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'visualizer-library' ), Visualizer_Plugin::VERSION, true );
 		}
+		if ( get_bloginfo( 'version' ) < '3.3' )
+			return;
+
+
+		// Get pointers for this screen
+		$pointers = apply_filters( 'visualizer_admin_pointers', array() );
+
+		if ( ! $pointers || ! is_array( $pointers ) )
+			return;
+
+		// Get dismissed pointers
+		$dismissed = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
+		$valid_pointers =array();
+		// Check pointers and remove dismissed ones.
+		foreach ( $pointers as $pointer_id => $pointer ) {
+
+			// Sanity check
+			if ( in_array( $pointer_id, $dismissed ) || empty( $pointer )  || empty( $pointer_id ) || empty( $pointer['target'] ) || empty( $pointer['options'] ) )
+				continue;
+
+			$pointer['pointer_id'] = $pointer_id;
+
+			// Add the pointer to $valid_pointers array
+			$valid_pointers['pointers'][] =  $pointer;
+		}
+
+		// No valid pointers? Stop here.
+		if ( empty( $valid_pointers ) )
+			return;
+
+		// Add pointers style to queue.
+		wp_enqueue_style( 'wp-pointer' );
+		// Add pointers script to queue. Add custom script.
+		wp_enqueue_script( 'visualizer-pointer', VISUALIZER_ABSURL."js/visualizer-pointer.js", array( 'wp-pointer' ),Visualizer_Plugin::VERSION );
+
+		// Add pointer options to script.
+		wp_localize_script( 'visualizer-pointer', 'visualizer', $valid_pointers );
+
+
+
 	}
 
 	/**
