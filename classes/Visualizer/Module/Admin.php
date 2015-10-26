@@ -343,13 +343,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $plugin_file == plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
-				'<a href="https://github.com/madpixelslabs/visualizer/wiki" target="_blank">%s</a>',
+				'<a href="https://github.com/codeinwp/visualizer/wiki" target="_blank">%s</a>',
 				esc_html__( 'Knowledge Base', Visualizer_Plugin::NAME )
 			);
 			// flattr link
 			$plugin_meta[] = sprintf(
-				'<a href="http://flattr.com/thing/2574985/WordPress-Visualizer" target="_blank">%s</a>',
-				esc_html__( 'Donate', Visualizer_Plugin::NAME )
+				'<a style="color:red" href="https://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/" target="_blank">%s</a>',
+				esc_html__( 'Pro Addon', Visualizer_Plugin::NAME )
 			);
 		}
 
