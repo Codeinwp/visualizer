@@ -93,13 +93,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                         if( defined( 'Visualizer_Pro' ) ){
                             global $Visualizer_Pro;
                             $Visualizer_Pro->_addFormElements();
-                        }
+                        }else{
                         // Added by Ash/Upwork
-
-					
 							echo '<a id="" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
-					
-						echo '<div class="just-on-pro"> </div>';
+							echo '<div class="just-on-pro"> </div>';
+                        }
 						echo '</div>';
 					echo '</form>';
 
@@ -110,7 +108,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                     }else{
 ?>
                     <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL;?>" title="<?php echo Visualizer_Plugin::PRO_TEASER_TITLE;?>" target="_new">
-                        <input type="button" class="button preview preview-btn" id="existing-chart-free" value="<?php esc_attr_e( 'PREVIEW', Visualizer_Plugin::NAME );?>">
+                        <input type="button" class="button preview preview-btn" id="existing-chart-free" value="<?php esc_attr_e( 'Check PRO Version ', Visualizer_Plugin::NAME );?>">
                     </a>
 <?php
                     }

@@ -57,8 +57,8 @@ class Visualizer_Plugin {
 	const FILTER_GET_CHART_SETTINGS      = 'visualizer-get-chart-settings';
 
     // Added by Ash/Upwork
-    const PRO_TEASER_URL    = "http://www.google.com";
-    const PRO_TEASER_TITLE  = "blah";
+    const PRO_TEASER_URL    = "http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/";
+    const PRO_TEASER_TITLE  = "Check PRO version ";
     // Added by Ash/Upwork
 
 	/**
