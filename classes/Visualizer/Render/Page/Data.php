@@ -89,7 +89,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							esc_attr_e( 'From Computer', Visualizer_Plugin::NAME );
 						echo '</div>';
 
-						echo '<a id="" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
+						echo '<a id="remote-file" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
                         // Added by Ash/Upwork
                         if( defined( 'Visualizer_Pro' ) ){
                             global $Visualizer_Pro;

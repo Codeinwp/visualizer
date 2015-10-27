@@ -431,8 +431,7 @@ div.group-content .group-description {
 	 cursor: pointer;
 }
 
-#remote-file {
-	margin-top: 10px;
+#remote-file { 
 	clear: both;
 }
 
