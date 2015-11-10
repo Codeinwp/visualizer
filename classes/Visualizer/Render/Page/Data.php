@@ -71,13 +71,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				echo '<iframe id="thehole" name="thehole"></iframe>';
 
 				echo '<p class="group-description">';
-					esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).", Visualizer_Plugin::NAME );
-				echo '</p>';
-
-				echo '<p class="group-description">';
-					esc_html_e( 'If you are unsure about how to format your data CSV then please take a look at this sample:', Visualizer_Plugin::NAME );
-					echo ' <a href="', VISUALIZER_ABSURL, 'samples/', $this->type, '.csv" target="_blank">', $this->type, '.csv</a> ';
-					printf( esc_html__( 'or read how you can add Google spreadsheet in following %sarticle%s.', Visualizer_Plugin::NAME ), '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' );
+                    echo '<a href="">something here</a>';
 				echo '</p>';
 
 				echo '<div>';
@@ -117,6 +111,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				echo '</div>';
 			echo '</div>';
 		echo '</li>';
+
+        // changed by Ash/Upwork
+		echo '<form id="settings-form" action="', add_query_arg( 'nonce', wp_create_nonce() ), '" method="post">';
+        echo $this->sidebar;
+		echo '</form>';
+        // changed by Ash/Upwork
 	}
 
 	/**
@@ -127,12 +127,23 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		echo '<a class="button button-large" href="', add_query_arg( 'tab', false ), '">';
+        // changed by Ash/Upwork
+        echo '<div class="toolbar-div">';
+		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'types' ), '">';
 			esc_html_e( 'Back', Visualizer_Plugin::NAME );
 		echo '</a>';
-		echo '<a class="button button-large button-primary push-right" href="', add_query_arg( 'tab', 'settings' ), '">';
-			esc_html_e( 'Next', Visualizer_Plugin::NAME );
-		echo '</a>';
+        echo '</div>';
+
+        echo '<div class="toolbar-div rate-the-plugin">';
+            echo '<div><b>', esc_html__( 'Like the plugin? Show us your love!', Visualizer_Plugin::NAME ), '</b>';
+            echo '<a id="rate-link" href="http://wordpress.org/support/view/plugin-reviews/visualizer" target="_blank">';
+                esc_html_e( 'Rate it on WordPress.org', Visualizer_Plugin::NAME );
+            echo '</a>';
+            echo '</div>';
+            echo '<div id="rate-stars">&nbsp;</div>';
+        echo '</div>';
+
+		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 	}
 
 }
