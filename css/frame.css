@@ -263,6 +263,7 @@ div.group-content .group-description {
 .rate-the-plugin{
 	text-align: center;
 	width: 40% !important;
+    margin-top: -5px;
 }
 
 #rate-stars {
@@ -277,7 +278,7 @@ div.group-content .group-description {
 #rate-link {
 	text-decoration: none;
 	font-family: "Montserrat",sans-serif;
-	font-weight: 300;
+    font-weight: 400;
 	margin: 0px 0px 0px 20px;
 }
 
@@ -609,4 +610,30 @@ div.group-content .group-description {
 	-ms-transition: all .3s ease;
 	-o-transition: all .3s ease;
 	transition: all .3s ease;
+}
+
+
+
+
+/* ====== RESPONSIVE ======  */
+
+
+@media (max-width: 1366px) {
+  .group-title {
+    padding: 4px 20px;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  .group-title::after {
+    top: 10px; 
+  }
+  #rate-stars {
+  	margin: 3px 0 10px 40%;
+  }
+  .rate-the-plugin {
+    margin-left: -8%;
+  }
+
+
+
 }
