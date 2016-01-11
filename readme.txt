@@ -1,20 +1,30 @@
-=== Visualizer: Charts and Graphs ===
-Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle
+=== Visualizer ===
+Contributors: madpixels, straightforward
 Donate link: http://flattr.com/thing/2574985/WordPress-Visualizer
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
-Tested up to: 4.3.1
-Stable tag: trunk
+Tested up to: 3.9.1
+Stable tag: 1.4.2.3
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
 A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
 == Description ==
- 
-WordPress Visualizer plugin is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
+
+<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs/" rel="friend">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
 The plugin uses Google Visualization API to render charts, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
+
+
+> **Time-saving features available in the Pro version:**
+>
+> * Import data from other charts
+> * Easy edit the data using a live editor
+> * Priority email support from the developer of the plugin
+> * Support and updates for 1 year
+>
+> **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/)**
 
 ### 9 Chart types ###
 The plugin provides a variety of charts that are optimized to address your data visualization needs. It is line chart, area chart, bar chart, column chart, pie chart, geo chart, gauge chart, candlestick chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
@@ -26,6 +36,8 @@ Make the charts your own. Configure an extensive set of options to perfectly mat
 Charts are rendered using HTML5/SVG technology to provide cross-browser compatibility (including VML for older IE versions) and cross platform portability to iPhones, iPads and Android. Your users will never have to mess with extra plugins or any software. If they have a web browser, they can see your charts.
 
 *above descriptions were partially taken from Google Visualization API site*
+
+The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="friend">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="friend">premium WordPress themes</a>
 
 ### Knowledge Base ###
 
@@ -57,9 +69,6 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
-
-= 1.5.1 =
-* Fixed bug with from web button
 
 = 1.5 =
 * Added support for live editor
