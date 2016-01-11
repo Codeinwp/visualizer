@@ -1,21 +1,20 @@
-=== Visualizer ===
-Contributors: madpixels, straightforward
+=== Visualizer: Charts and Graphs ===
+Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle
 Donate link: http://flattr.com/thing/2574985/WordPress-Visualizer
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
-Tested up to: 3.9.1
-Stable tag: 1.4.2.3
+Tested up to: 4.3.1
+Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
 A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
 == Description ==
-
+ 
 <a href="http://themeisle.com/plugins/visualizer-charts-and-graphs/" rel="friend">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
 The plugin uses Google Visualization API to render charts, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-
 
 > **Time-saving features available in the Pro version:**
 >
@@ -25,6 +24,7 @@ The plugin uses Google Visualization API to render charts, which support cross-b
 > * Support and updates for 1 year
 >
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/)**
+
 
 ### 9 Chart types ###
 The plugin provides a variety of charts that are optimized to address your data visualization needs. It is line chart, area chart, bar chart, column chart, pie chart, geo chart, gauge chart, candlestick chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
@@ -69,6 +69,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+
+= 1.5.1 =
+* Fixed bug with from web button
 
 = 1.5 =
 * Added support for live editor
