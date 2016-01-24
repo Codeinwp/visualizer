@@ -71,7 +71,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				echo '<iframe id="thehole" name="thehole"></iframe>';
 
 				echo '<p class="group-description">';
-                    echo '<a href="">something here</a>';
+                    esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).", Visualizer_Plugin::NAME );
+				echo '</p>';
+
+				echo '<p class="group-description">';
+					esc_html_e( 'If you are unsure about how to format your data CSV then please take a look at this sample:', Visualizer_Plugin::NAME );
+					echo ' <a href="', VISUALIZER_ABSURL, 'samples/', $this->type, '.csv" target="_blank">', $this->type, '.csv</a> ';
+					printf( esc_html__( 'or read how you can add Google spreadsheet in following %sarticle%s.', Visualizer_Plugin::NAME ), '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' );
 				echo '</p>';
 
 				echo '<div>';
@@ -140,7 +146,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                 esc_html_e( 'Rate it on WordPress.org', Visualizer_Plugin::NAME );
             echo '</a>';
             echo '</div>';
-            echo '<div id="rate-stars">&nbsp;</div>';
         echo '</div>';
 
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';

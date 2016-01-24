@@ -261,13 +261,12 @@ div.group-content .group-description {
 }
 
 .rate-the-plugin{
-	text-align: center;
 	width: 40% !important;
     margin-top: -5px;
 }
 
 #rate-stars {
-	margin: 10px 0px 10px 40%;
+	margin: 10px 0px 10px 55px;
 	width: 100px;
 	height: 20px;
 	background-image: url('../images/star.png');
@@ -279,7 +278,7 @@ div.group-content .group-description {
 	text-decoration: none;
 	font-family: "Montserrat",sans-serif;
     font-weight: 400;
-	margin: 0px 0px 0px 20px;
+	margin: 0px 0px 0px 30px;
 }
 
 #flattr {
@@ -461,6 +460,7 @@ div.group-content .group-description {
 	font-weight: 700;
 	border: 1px solid #B0B0B0 !important;
 	box-shadow: none !important;
+	text-shadow:none!important;
 
  }
 
