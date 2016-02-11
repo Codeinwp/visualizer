@@ -58,7 +58,7 @@
 
 .group.open {
 	border-bottom: 1px solid #DFDFDF;
-	
+
 }
 
 .group-title {
@@ -157,9 +157,15 @@ div.group-content {
 
 div.group-content .group-description {
 	padding: 0;
-	margin-bottom: 20px;
 	font-weight: 300;
 	font-family: "Montserrat",sans-serif;
+}
+
+.initial-screen .group-description {
+	padding: 0;
+	font-weight: 300;
+	font-family: "Montserrat",sans-serif;
+	padding: 10px 20px 20px;
 }
 
 .section-title {
@@ -258,10 +264,16 @@ div.group-content .group-description {
 	margin-top: 40px;
 	padding: 20px;
 	border-top: 1px dashed #ddd;
+	text-align: center;
+}
+
+.rate-the-plugin{
+	width: 40% !important;
+    margin-top: -5px;
 }
 
 #rate-stars {
-	margin: 10px 0px 10px 55px;
+  margin: 15px auto;
 	width: 100px;
 	height: 20px;
 	background-image: url('../images/star.png');
@@ -271,11 +283,8 @@ div.group-content .group-description {
 
 #rate-link {
 	text-decoration: none;
-	display: block;
-	margin-top: 3px;
-	margin-left: 35px;
 	font-family: "Montserrat",sans-serif;
-	font-weight: 300;
+    font-weight: 400;
 }
 
 #flattr {
@@ -303,6 +312,12 @@ div.group-content .group-description {
 
 #toolbar .push-right {
 	float: right;
+}
+
+.toolbar-div{
+    display: inline-block;
+    vertical-align: top;
+	width: 30%;
 }
 
 /******************************************************************************/
@@ -432,16 +447,16 @@ div.group-content .group-description {
 }
 
 #remote-file {
-	margin-top: 10px;
+	float: right;
 	clear: both;
 }
 
  .form-inline {
-    display: inline-block;
-    margin-bottom: 0;
+	  margin: 0 auto;
+	  display: table;
     vertical-align: middle;
   }
-  
+
  .computer-btn{
 	color: #646464 !important;
 	border: medium none rgb(100, 100, 100) !important;
@@ -452,6 +467,7 @@ div.group-content .group-description {
 	font-weight: 700;
 	border: 1px solid #B0B0B0 !important;
 	box-shadow: none !important;
+	text-shadow:none!important;
 
  }
 
@@ -469,7 +485,7 @@ div.group-content .group-description {
 	border: 1px solid #2f8cea !important;
 	box-shadow: none !important;
 
-	
+
  }
 
  .just-on-pro{
@@ -480,9 +496,9 @@ div.group-content .group-description {
 	opacity: 0.8;
 	margin-bottom: 10px;
  }
- 
- 
- 
+
+
+
  .from-web{
 	margin-top: 0px;
 	margin-bottom: 15px !important;
@@ -549,6 +565,34 @@ div.group-content .group-description {
   	margin-top: 2px !important;
   }
 
+	input#existing-chart {
+		left: 18px;
+		width: 110px;
+    position: relative;
+	}
+
+	select#chart-id {
+		left: 44px;
+    	position: relative;
+		width: 120px;
+	}
+
+	button#editor-chart-button {
+    width: 260px;
+    margin: 0 auto;
+    display: block;
+    background-color: #2f8cea !important;
+    color: white !important;
+    border: 1px solid #2c80d6 !important;
+    box-shadow: none !important;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    text-shadow: none;
+	}
+
 .preview-btn{
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
@@ -601,4 +645,60 @@ div.group-content .group-description {
 	-ms-transition: all .3s ease;
 	-o-transition: all .3s ease;
 	transition: all .3s ease;
+}
+
+.check-pro-btn {
+	height: 40px;
+	width: 245px;
+	display: block;
+	margin: 0 auto;
+}
+
+.advanced-settings-btn, .return-settings-btn {
+	cursor: pointer;
+	display: block;
+	margin: 0 auto;
+	width: 260px;
+	line-height: 34px;
+	font-size: 17px;
+	width: 260px;
+	height: auto;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-bottom: 20px;
+	margin-top:5px;
+}
+
+.return-settings-btn {
+	margin: 10px auto;
+}
+
+.hidden-setting {
+	display:none;
+}
+
+
+
+/* ====== RESPONSIVE ======  */
+
+
+@media (max-width: 1366px) {
+  .group-title {
+    padding: 4px 20px;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  .group-title::after {
+    top: 10px;
+  }
+  #rate-stars {
+  	margin: 3px 0 10px 40%;
+  }
+  .rate-the-plugin {
+    margin-left: -8%;
+  }
+
+
+
 }

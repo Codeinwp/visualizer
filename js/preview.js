@@ -2,6 +2,10 @@
 	var timeout;
 
 	$(document).ready(function() {
+        $('#settings-button').click(function() {
+			$('#settings-form').submit();
+		});
+
 		function updateChart() {
 			clearTimeout(timeout);
 			timeout = setTimeout(function() {

@@ -252,11 +252,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// dispatch pages
 		$this->_chart = $chart;
 		switch ( filter_input( INPUT_GET, 'tab' ) ) {
-			case 'data':
-				$this->_handleDataPage();
-				break;
 			case 'settings':
-				$this->_handleSettingsPage();
+                // changed by Ash/Upwork
+				$this->_handleDataAndSettingsPage();
 				break;
 			case 'type':
 			default:
@@ -294,7 +292,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				}
 
 				// redirect to next tab
-				wp_redirect( add_query_arg( 'tab', 'data' ) );
+				// changed by Ash/Upwork
+                wp_redirect( add_query_arg( 'tab', 'settings' ) );
 				return;
 			}
 		}
@@ -410,6 +409,76 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		wp_iframe( array( $render, 'render') );
 	}
+
+
+    // changed by Ash/Upwork
+    private function _handleDataAndSettingsPage(){
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
+			if ( $this->_chart->post_status == 'auto-draft' ) {
+				$this->_chart->post_status = 'publish';
+				wp_update_post( $this->_chart->to_array() );
+			}
+
+			update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
+
+			$render = new Visualizer_Render_Page_Send();
+			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );
+
+			wp_iframe( array( $render, 'render') );
+			return;
+		}
+
+		$data = $this->_getChartArray();
+
+		$sidebar = '';
+		$sidebar_class = 'Visualizer_Render_Sidebar_Type_' . ucfirst( $data['type'] );
+		if ( class_exists( $sidebar_class, true ) ) {
+			$sidebar = new $sidebar_class( $data['settings'] );
+			$sidebar->__series = $data['series'];
+			$sidebar->__data = $data['data'];
+		}
+
+		unset( $data['settings']['width'], $data['settings']['height'] );
+
+		wp_enqueue_style( 'visualizer-frame' );
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_style( 'visualizer-frame' );
+
+		wp_enqueue_script( 'visualizer-preview' );
+		wp_enqueue_script( 'visualizer-render' );
+		wp_localize_script( 'visualizer-render', 'visualizer', array(
+			'l10n'   => array(
+				'remotecsv_prompt' => esc_html__( 'Please, enter the URL of CSV file:', Visualizer_Plugin::NAME ),
+				'invalid_source'   => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', Visualizer_Plugin::NAME ),
+			),
+			'charts' => array(
+				'canvas' => $data,
+			),
+		) );
+
+		$render = new Visualizer_Render_Page_Data();
+		$render->chart = $this->_chart;
+		$render->type = $data['type'];
+
+		$render->sidebar = $sidebar;
+		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
+			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
+				? esc_html__( 'Save Chart', Visualizer_Plugin::NAME )
+				: esc_html__( 'Create Chart', Visualizer_Plugin::NAME );
+		} else {
+			$render->button = esc_attr__( 'Insert Chart', Visualizer_Plugin::NAME );
+		}
+
+        if( defined( 'Visualizer_Pro' ) ){
+            global $Visualizer_Pro;
+            $Visualizer_Pro->_enqueueScriptsAndStyles($data);
+        }
+
+		$this->_addAction( 'admin_head', 'renderFlattrScript' );
+
+		wp_iframe( array( $render, 'render') );
+    }
+    // changed by Ash/Upwork
 
 	/**
 	 * Renders flattr script in the iframe <head>

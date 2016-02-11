@@ -65,13 +65,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			'chart'  => $this->chart->ID,
 		), admin_url( 'admin-ajax.php' ) );
 
-		echo '<li class="group open">';
-			echo '<h3 class="group-title">', esc_html__( 'Upload CSV File', Visualizer_Plugin::NAME ), '</h3>';
-			echo '<div class="group-content">';
+				echo '<input type="button" name="back_button" class="return-settings-btn preview-btn hidden-setting" value="&laquo; Back">';
+				echo '<div class="initial-screen">';
 				echo '<iframe id="thehole" name="thehole"></iframe>';
-
 				echo '<p class="group-description">';
-					esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).", Visualizer_Plugin::NAME );
+                    esc_html_e( "Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).", Visualizer_Plugin::NAME );
 				echo '</p>';
 
 				echo '<p class="group-description">';
@@ -89,7 +87,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							esc_attr_e( 'From Computer', Visualizer_Plugin::NAME );
 						echo '</div>';
 
-						echo '<a id="" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
+						echo '<a id="remote-file" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', Visualizer_Plugin::NAME ), '</a>';
                         // Added by Ash/Upwork
                         if( defined( 'Visualizer_Pro' ) ){
                             global $Visualizer_Pro;
@@ -107,16 +105,27 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                         $Visualizer_Pro->_addEditorElements();
                     }else{
 ?>
-                    <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL;?>" title="<?php echo Visualizer_Plugin::PRO_TEASER_TITLE;?>" target="_new">
+                    <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL;?>" title="<?php echo Visualizer_Plugin::PRO_TEASER_TITLE;?>" class="check-pro-btn" target="_new">
                         <input type="button" class="button preview preview-btn" id="existing-chart-free" value="<?php esc_attr_e( 'Check PRO Version ', Visualizer_Plugin::NAME );?>">
                     </a>
+
+
 <?php
                     }
+
+					echo'<input type="button" name="advanced_button" class="advanced-settings-btn preview-btn" value="'. __( 'Advanced', Visualizer_Plugin::NAME ).' &raquo;">';
                     // Added by Ash/Upwork
 
 				echo '</div>';
 			echo '</div>';
-		echo '</li>';
+
+        // changed by Ash/Upwork
+		echo '<div class= "second-screen hidden-setting">';
+		echo '<form id="settings-form" action="', add_query_arg( 'nonce', wp_create_nonce() ), '" method="post">';
+        echo $this->sidebar;
+		echo '</form>';
+		echo '</div>';
+        // changed by Ash/Upwork
 	}
 
 	/**
@@ -127,12 +136,16 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		echo '<a class="button button-large" href="', add_query_arg( 'tab', false ), '">';
+        // changed by Ash/Upwork
+        echo '<div class="toolbar-div">';
+		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'types' ), '">';
 			esc_html_e( 'Back', Visualizer_Plugin::NAME );
 		echo '</a>';
-		echo '<a class="button button-large button-primary push-right" href="', add_query_arg( 'tab', 'settings' ), '">';
-			esc_html_e( 'Next', Visualizer_Plugin::NAME );
-		echo '</a>';
+		echo '</div>';
+        echo '</div>';
+
+
+		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 	}
 
 }
