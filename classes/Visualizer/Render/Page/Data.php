@@ -98,7 +98,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                         }
 						echo '</div>';
 					echo '</form>';
-				echo'<input type="button" name="advanced_button" class="advanced-settings-btn preview-btn" value="Advanced &raquo;">';
 
                     // added by Ash/Upwork
                     if( defined( 'Visualizer_Pro' ) ){
@@ -113,6 +112,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 <?php
                     }
+
+					echo'<input type="button" name="advanced_button" class="advanced-settings-btn preview-btn" value="'. __( 'Advanced', Visualizer_Plugin::NAME ).' &raquo;">';
                     // Added by Ash/Upwork
 
 				echo '</div>';
@@ -140,15 +141,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'types' ), '">';
 			esc_html_e( 'Back', Visualizer_Plugin::NAME );
 		echo '</a>';
+		echo '</div>';
         echo '</div>';
 
-        echo '<div class="toolbar-div rate-the-plugin">';
-            echo '<div><b>', esc_html__( 'Like the plugin? Show us your love!', Visualizer_Plugin::NAME ), '</b>';
-            echo '<a id="rate-link" href="http://wordpress.org/support/view/plugin-reviews/visualizer" target="_blank">';
-                esc_html_e( 'Rate it on WordPress.org', Visualizer_Plugin::NAME );
-            echo '</a>';
-            echo '</div>';
-        echo '</div>';
 
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 	}

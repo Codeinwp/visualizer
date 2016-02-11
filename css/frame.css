@@ -573,7 +573,7 @@ div.group-content .group-description {
 
 	select#chart-id {
 		left: 44px;
-    position: relative;
+    	position: relative;
 		width: 120px;
 	}
 
@@ -667,6 +667,7 @@ div.group-content .group-description {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	margin-bottom: 20px;
+	margin-top:5px;
 }
 
 .return-settings-btn {
