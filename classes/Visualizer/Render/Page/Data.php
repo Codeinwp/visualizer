@@ -98,6 +98,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                         }
 						echo '</div>';
 					echo '</form>';
+				echo'<input type="button" name="advanced_button" class="advanced-settings-btn preview-btn" value="Advanced &raquo;">';
 
                     // added by Ash/Upwork
                     if( defined( 'Visualizer_Pro' ) ){
@@ -109,7 +110,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                         <input type="button" class="button preview preview-btn" id="existing-chart-free" value="<?php esc_attr_e( 'Check PRO Version ', Visualizer_Plugin::NAME );?>">
                     </a>
 
-											<input type="button" name="advanced_button" class="advanced-settings-btn preview-btn" value="Advanced &raquo;">
 
 <?php
                     }
