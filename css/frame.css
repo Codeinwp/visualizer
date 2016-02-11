@@ -565,6 +565,34 @@ div.group-content .group-description {
   	margin-top: 2px !important;
   }
 
+	input#existing-chart {
+		left: 18px;
+		width: 110px;
+    position: relative;
+	}
+
+	select#chart-id {
+		left: 44px;
+    position: relative;
+		width: 120px;
+	}
+
+	button#editor-chart-button {
+    width: 260px;
+    margin: 0 auto;
+    display: block;
+    background-color: #2f8cea !important;
+    color: white !important;
+    border: 1px solid #2c80d6 !important;
+    box-shadow: none !important;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    text-shadow: none;
+	}
+
 .preview-btn{
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
