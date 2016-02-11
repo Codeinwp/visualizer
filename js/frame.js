@@ -106,3 +106,19 @@
         return $(this);
     }
 })(jQuery);
+
+//Hide / show settings in sidebar
+(function($) {
+	$(document).ready(function() {
+
+		$('.advanced-settings-btn').click(function(){
+			$('.second-screen, .return-settings-btn').removeClass("hidden-setting");
+			$('.initial-screen').addClass("hidden-setting");
+		});
+
+		$('.return-settings-btn').click(function(){
+			$('.second-screen, .return-settings-btn').addClass("hidden-setting");
+			$('.initial-screen').removeClass("hidden-setting");
+		});
+	});
+})(jQuery);
