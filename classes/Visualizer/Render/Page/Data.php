@@ -141,11 +141,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'types' ), '">';
 			esc_html_e( 'Back', Visualizer_Plugin::NAME );
 		echo '</a>';
-		echo '</div>';
+		echo '</div>';		
+		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
+
         echo '</div>';
 
 
-		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 	}
 
 }
