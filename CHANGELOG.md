@@ -1,5 +1,13 @@
 
 
+### 1.5.2 - 13/02/2016
+
+ Changes: 
+
+
+ * Fix for create button missing.
+
+
 ### 1.5.2 - 11/02/2016
 
  Changes: 
