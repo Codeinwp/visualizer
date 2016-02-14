@@ -489,7 +489,7 @@ div.group-content .group-description {
  }
 
  .just-on-pro{
-	background: #FFF  url("../images/available_pro.png") no-repeat scroll 0px 1px !important;
+	background: #F5F5F5  url("../images/available_pro.png") no-repeat scroll 0px 1px !important;
 	width: 250px;
 	height: 100px;
 	cursor:not-allowed;
