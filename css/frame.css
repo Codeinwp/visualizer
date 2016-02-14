@@ -449,6 +449,7 @@ div.group-content .group-description {
 #remote-file {
 	float: right;
 	clear: both;
+  margin-right: -18px;
 }
 
  .form-inline {
@@ -468,6 +469,7 @@ div.group-content .group-description {
 	border: 1px solid #B0B0B0 !important;
 	box-shadow: none !important;
 	text-shadow:none!important;
+	left: -18px;
 
  }
 
