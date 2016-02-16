@@ -316,6 +316,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$filter = 'all';
 		}
 
+        // Added by Ash/Upwork
+        $filterByMeta   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+        // Added by Ash/Upwork
+
 		// fetch charts
 		$charts = array();
 		$query = new WP_Query( $query_args );
@@ -325,6 +329,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 			unset( $settings['height'], $settings['width'] );
+
+            // Added by Ash/Upwork
+            if($filterByMeta && strpos(serialize($settings), $filterByMeta) === FALSE) continue;
+            // Added by Ash/Upwork
 
 			$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
