@@ -318,6 +318,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
         // Added by Ash/Upwork
         $filterByMeta   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+        if($filterByMeta){
+            $query      = array(
+					'key'     => Visualizer_Plugin::CF_SETTINGS,
+					'value'   => $filterByMeta,
+					'compare' => 'LIKE',
+            );
+            $meta       = isset($query_args['meta_query']) ? $query_args['meta_query'] : array();
+            $meta[]     = $query;
+            $query_args['meta_query']   = $meta;
+        }
         // Added by Ash/Upwork
 
 		// fetch charts
@@ -329,10 +339,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 			unset( $settings['height'], $settings['width'] );
-
-            // Added by Ash/Upwork
-            if($filterByMeta && strpos(serialize($settings), $filterByMeta) === FALSE) continue;
-            // Added by Ash/Upwork
 
 			$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );

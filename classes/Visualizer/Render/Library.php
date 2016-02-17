@@ -82,7 +82,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
         // Added by Ash/Upwork
         $filterBy       = null;
         if(isset($_GET["filter"]) && strlen($_GET["filter"]) > 0){
-            $filterBy   = filter_input( INPUT_GET, $_GET["filter"], FILTER_SANITIZE_STRING );
+            $filterBy   = filter_input( INPUT_GET, "filter", FILTER_SANITIZE_STRING );
         }
         $action         = $_SERVER["REQUEST_URI"];
         echo '<div id="visualizer-search"><form action="" method="get">
