@@ -316,6 +316,20 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$filter = 'all';
 		}
 
+        // Added by Ash/Upwork
+        $filterByMeta   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+        if($filterByMeta){
+            $query      = array(
+					'key'     => Visualizer_Plugin::CF_SETTINGS,
+					'value'   => $filterByMeta,
+					'compare' => 'LIKE',
+            );
+            $meta       = isset($query_args['meta_query']) ? $query_args['meta_query'] : array();
+            $meta[]     = $query;
+            $query_args['meta_query']   = $meta;
+        }
+        // Added by Ash/Upwork
+
 		// fetch charts
 		$charts = array();
 		$query = new WP_Query( $query_args );

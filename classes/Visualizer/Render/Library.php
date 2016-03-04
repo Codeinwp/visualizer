@@ -79,6 +79,19 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 */
 	private function _renderLibrary() {
+        // Added by Ash/Upwork
+        $filterBy       = null;
+        if(isset($_GET["filter"]) && strlen($_GET["filter"]) > 0){
+            $filterBy   = filter_input( INPUT_GET, "filter", FILTER_SANITIZE_STRING );
+        }
+        $action         = $_SERVER["REQUEST_URI"];
+        echo '<div id="visualizer-search"><form action="" method="get">
+                <input type="text" name="filter" value="' . $filterBy . '">
+                <input type="hidden" name="page" value="visualizer">
+                <input type="submit" class="button button-secondary" value="' . esc_attr__('Search', Visualizer_Plugin::NAME) . '">
+            </form></div>';
+        // Added by Ash/Upwork
+
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 			echo '<ul>';
 				foreach ( $this->types as $type => $label ) {
