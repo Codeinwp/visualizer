@@ -143,3 +143,30 @@ a.page-numbers:hover {
 .visualizer-library-pagination {
 	display: none;
 }
+
+#visualizer-search form {
+	display:flex;
+	align-items: center;
+}
+
+#visualizer-search > form > input[type="text"]:nth-child(1) {
+	height: 30px;
+}
+#visualizer-search .button-secondary {
+	background-color: lightcoral;
+	box-shadow: 0 0 5px lightpink;
+	padding: 5px 10px;
+  color: white;
+  text-decoration: none;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+  font-weight: bold;
+	line-height: 17px;
+	font-size: 14px;
+	margin-left: 20px;
+}
+#visualizer-search .button-secondary:hover {
+	background-color: lightpink;
+	border-color: lightpink;
+}
