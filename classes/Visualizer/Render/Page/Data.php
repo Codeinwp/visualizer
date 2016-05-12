@@ -108,11 +108,16 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                     <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL;?>" title="<?php echo Visualizer_Plugin::PRO_TEASER_TITLE;?>" class="check-pro-btn" target="_new">
                         <input type="button" class="button preview preview-btn" id="existing-chart-free" value="<?php esc_attr_e( 'Check PRO Version ', Visualizer_Plugin::NAME );?>">
                     </a>
-
-
 <?php
                     }
 
+                    $export_link = add_query_arg( array(
+                        'action' => Visualizer_Plugin::ACTION_EXPORT_DATA,
+                        'chart'  => $this->chart->ID,
+                    ), admin_url( 'admin-ajax.php' ) );
+?>
+                    <input type="button" class="button" id="export-data" value="<?php esc_attr_e( 'Export Data', Visualizer_Plugin::NAME );?>" data-url="<?php echo $export_link;?>">
+<?php
 					echo'<input type="button" name="advanced_button" class="advanced-settings-btn preview-btn" value="'. __( 'Advanced', Visualizer_Plugin::NAME ).' &raquo;">';
                     // Added by Ash/Upwork
 

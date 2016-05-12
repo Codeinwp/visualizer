@@ -49,6 +49,8 @@ class Visualizer_Plugin {
 	const ACTION_CLONE_CHART  = 'visualizer-clone-chart';
 	const ACTION_DELETE_CHART = 'visualizer-delete-chart';
 	const ACTION_UPLOAD_DATA  = 'visualizer-upload-data';
+    // Added by Ash/Upwork
+	const ACTION_EXPORT_DATA  = 'visualizer-export-data';
 
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';
