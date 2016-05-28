@@ -229,7 +229,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
-				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array() );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array('focusTarget' => 'datum') );
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int)$chart_id ) );
