@@ -606,6 +606,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function exportData() {
+        check_ajax_referer(Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION, "security");
+
 		$chart_id = $success = false;
 		$capable = current_user_can( 'edit_posts' );
 		if ( $capable ) {

@@ -114,6 +114,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                     $export_link = add_query_arg( array(
                         'action' => Visualizer_Plugin::ACTION_EXPORT_DATA,
                         'chart'  => $this->chart->ID,
+                        'security' => wp_create_nonce(Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION),
                     ), admin_url( 'admin-ajax.php' ) );
 ?>
                     <input type="button" class="button" id="export-data" value="<?php esc_attr_e( 'Export Data', Visualizer_Plugin::NAME );?>" data-url="<?php echo $export_link;?>">
