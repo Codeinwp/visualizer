@@ -56,24 +56,6 @@
 			return false;
 		});
 
-        $("#export-data").on("click", function() {
-            $.ajax({
-                url: $(this).attr("data-url"),
-                method: "get",
-                success: function( data, textStatus, jqXHR ){
-                    var a = document.createElement("a");
-                    document.body.appendChild(a);
-                    a.style = "display: none";
-                    var blob = new Blob([data.data.csv], {type: "application/csv"}),
-                    url = window.URL.createObjectURL(blob);
-                    a.href = url;
-                    a.download = data.data.name;
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-        });
-
 	});
 })(jQuery);
 

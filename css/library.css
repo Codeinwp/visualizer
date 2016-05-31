@@ -93,6 +93,11 @@
 	background-position: -64px -112px;
 }
 
+.visualizer-nochart-export,
+.visualizer-chart-export {
+    background-position: -46px -64px;
+}
+
 .visualizer-nochart-clone,
 .visualizer-nochart-delete,
 .visualizer-nochart-edit {

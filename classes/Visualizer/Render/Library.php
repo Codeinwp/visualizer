@@ -55,6 +55,12 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			'type'   => $this->type,
 		), $ajax_url );
 
+        $export_link = add_query_arg( array(
+            'action' => Visualizer_Plugin::ACTION_EXPORT_DATA,
+            'chart'  => $chart_id,
+            'security' => wp_create_nonce(Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION),
+        ), admin_url( 'admin-ajax.php' ) );
+
 		echo '<div class="visualizer-chart">';
 			echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 				echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
@@ -63,6 +69,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '" onclick="return showNotice.warn();"></a>';
 				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', Visualizer_Plugin::NAME ), '"></a>';
 				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', Visualizer_Plugin::NAME ), '" data-chart="', $chart_id, '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-export" href="javascript:;" title="', esc_attr__( 'Export', Visualizer_Plugin::NAME ), '" data-chart="', $export_link, '"></a>';
 
 				echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">';
 					echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
@@ -134,6 +141,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 						echo '<span class="visualizer-chart-action visualizer-nochart-delete"></span>';
 						echo '<span class="visualizer-chart-action visualizer-nochart-clone"></span>';
 						echo '<span class="visualizer-chart-action visualizer-nochart-edit"></span>';
+						echo '<span class="visualizer-chart-action visualizer-nochart-export"></span>';
 
 						echo '<span class="visualizer-chart-shortcode">';
 							echo '&nbsp;[visualizer]&nbsp;';
