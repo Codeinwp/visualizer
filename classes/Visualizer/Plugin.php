@@ -30,7 +30,7 @@
 class Visualizer_Plugin {
 
 	const NAME    = 'visualizer';
-	const VERSION = '1.5.4';
+	const VERSION = '1.5.5';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -49,6 +49,8 @@ class Visualizer_Plugin {
 	const ACTION_CLONE_CHART  = 'visualizer-clone-chart';
 	const ACTION_DELETE_CHART = 'visualizer-delete-chart';
 	const ACTION_UPLOAD_DATA  = 'visualizer-upload-data';
+    // Added by Ash/Upwork
+	const ACTION_EXPORT_DATA  = 'visualizer-export-data';
 
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';

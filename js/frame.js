@@ -55,6 +55,7 @@
 			$(this).parent().find('.section-description:first').toggle();
 			return false;
 		});
+
 	});
 })(jQuery);
 

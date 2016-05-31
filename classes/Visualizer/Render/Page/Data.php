@@ -108,8 +108,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
                     <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL;?>" title="<?php echo Visualizer_Plugin::PRO_TEASER_TITLE;?>" class="check-pro-btn" target="_new">
                         <input type="button" class="button preview preview-btn" id="existing-chart-free" value="<?php esc_attr_e( 'Check PRO Version ', Visualizer_Plugin::NAME );?>">
                     </a>
-
-
 <?php
                     }
 

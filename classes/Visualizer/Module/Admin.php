@@ -58,12 +58,54 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_footer', 'renderTempaltes' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts' );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
+        // Added by Ash/Upwork for feedback
+		$this->_addAction( 'admin_init', 'visualizerInitFeedback' );
+        // Added by Ash/Upwork for feedback
 
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
 		$this->_addFilter( 'visualizer_admin_pointers', 'visualizerAdminPointers', 10, 2 );
+        // Added by Ash/Upwork for feedback
+		$this->_addFilter( 'visualizer_feedback_enqueue', 'visualizerFeedbackEnqueue', 10, 2 );
+		$this->_addFilter( 'visualizer_feedback', 'visualizerFeedback', 10, 2 );
+		$this->_addFilter( 'visualizer_feedback_config', 'visualizerFeedbackConfig', 10, 2 );
+		$this->_addFilter( 'visualizer_feedback_action', 'visualizerFeedbackAction', 10, 2 );
+        // Added by Ash/Upwork for feedback
 	}
+
+    // Added by Ash/Upwork for feedback
+    function visualizerFeedbackConfig(){
+        return array(
+            "title" => "TITLE",
+            "description" => "Message that will ask the user for review",
+            "yes_btn_txt" => "Text to show on yes btn ",
+            "no_btn_txt"  => "txt to show on no btn",
+            "yes_btn_link" => "link to redirect when click on the yes btn", 
+        );
+    }
+
+    function visualizerFeedbackAction(){
+        return array("type"=>"splash","action"=>array("type"=>"click","target"=>".add-new-h2"));
+    }
+
+    function visualizerFeedback(){
+        return true;
+    }
+
+    function visualizerInitFeedback(){
+        $file   = trailingslashit(VISUALIZER_ABSPATH) . "feedback/PluginFeedbackTI.php";
+        if (file_exists($file)) {
+            include_once $file;
+            new PluginFeedbackTI(Visualizer_Plugin::NAME, 1, Visualizer_Plugin::VERSION, "visualizer_feedback", "visualizer_feedback_config", "visualizer_feedback_action", "visualizer_feedback_enqueue");
+        }
+    }
+
+    function visualizerFeedbackEnqueue(){
+        wp_register_script("ti-feedback-func", VISUALIZER_ABSURL . 'js/feedback-func.js');
+        wp_enqueue_script("ti-feedback-func");
+    }
+    // Added by Ash/Upwork for feedback
 
 	/**
 	 * Returns wp pointers for visualizer

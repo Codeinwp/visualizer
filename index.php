@@ -3,7 +3,7 @@
 Plugin Name: Visualizer: Charts and Graphs
 Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs/
 Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-Version: 1.5.4
+Version: 1.5.5
 Author: Themeisle
 Author URI: http://themeisle.com
 License: GPL v2.0 or later
@@ -109,6 +109,9 @@ function visualizer_launch() {
 	if ( $doing_ajax ) {
 		// set ajax modules
 		$plugin->setModule( Visualizer_Module_Chart::NAME );
+        // Added by Ash/Upwork for feedback
+        $plugin->setModule( Visualizer_Module_Admin::NAME );
+        // Added by Ash/Upwork for feedback
 	} else {
 		if ( is_admin() ) {
 			// set admin modules

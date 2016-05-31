@@ -61,6 +61,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CLONE_CHART, 'cloneChart' );
 
         // Added by Ash/Upwork
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EXPORT_DATA, 'exportData' );
         if( defined( 'Visualizer_Pro' ) ){
             global $Visualizer_Pro;
             list($action, $name, $class) = $Visualizer_Pro->_getAjaxAction($this);
@@ -228,7 +229,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
-				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array() );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array('focusTarget' => 'datum') );
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int)$chart_id ) );
@@ -597,4 +598,76 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		exit;
 	}
 
+	/**
+	 * Exports the chart data
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
+	public function exportData() {
+        check_ajax_referer(Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION, "security");
+
+		$chart_id = $success = false;
+		$capable = current_user_can( 'edit_posts' );
+		if ( $capable ) {
+			$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+			if ( $chart_id ) {
+				$chart = get_post( $chart_id );
+				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+			}
+		}
+
+		if ( $success ) {
+            $settings   = get_post_meta($chart_id, Visualizer_Plugin::CF_SETTINGS, true);
+            $filename   = $settings["title"];
+            if (empty($filename)) {
+                $filename   = "export.csv";
+            } else {
+                $filename   .= ".csv";
+            }
+            $rows       = array();
+            $series     = get_post_meta($chart_id, Visualizer_Plugin::CF_SERIES, true); 
+            $data       = unserialize($chart->post_content);
+            if (!empty($series)) {
+                $row    = array();
+                foreach ($series as $array) {
+                    $row[]  = $array["label"];
+                }
+                $rows[]     = $row;
+
+                $row    = array();
+                foreach ($series as $array) {
+                    $row[]  = $array["type"];
+                }
+                $rows[]     = $row;
+            }
+
+            if (!empty($data)) {
+                foreach ($data as $array) {
+                    $rows[] = $array;
+                }
+            }
+
+            $fp             = tmpfile();
+            foreach ($rows as $row) {
+                fputcsv($fp, $row);
+            }
+            rewind($fp);
+
+            $csv            = "";
+            while (($array = fgetcsv($fp)) !== FALSE) {
+                if (strlen($csv) > 0) $csv .= PHP_EOL;
+                $csv        .= implode(",", $array);
+            }
+            fclose($fp);
+
+            echo wp_send_json_success(array(
+                "csv"       => $csv,
+                "name"      => $filename
+            ));
+		}
+
+		exit;
+	}
 }
