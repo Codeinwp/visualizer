@@ -1,4 +1,9 @@
 
+### 1.5.5 - 31/05/2016
+**Changes:** 
+- Added export feature for charts
+- Fixed issue with hovering on charts
+
 
 ### 1.5.4 - 04/03/2016
 
