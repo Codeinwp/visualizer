@@ -166,7 +166,9 @@ class Visualizer_Plugin {
 	 * @return array
 	 */
 	public static function getChartTypes() {
-		return array( 'line', 'area', 'bar', 'column', 'pie', 'geo', 'scatter', 'candlestick', 'gauge' );
+        $array  = array_keys(Visualizer_Module_Admin::_getChartTypesLocalized());
+        unset($array[0]); // all
+        return $array;
 	}
 
 }

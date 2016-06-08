@@ -545,4 +545,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		}
 	}
 
+	protected static function _renderCheckboxItem( $title, $name, $value, $default, $desc ) {
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', $title, '</b>';
+			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ($value == $default ? "checked" : ""), '>';
+			echo '<p class="section-description">', $desc, '</p>';
+		echo '</div>';
+	}
+
 }

@@ -250,6 +250,13 @@ div.group-content .group-description {
 	width: 100%;
 }
 
+.control-check {
+	float: right;
+}
+.control-check::after {
+	clear: both;
+}
+
 .section-description ul {
 	margin: 0 0 0 25px;
 	list-style: circle;

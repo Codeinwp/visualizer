@@ -240,8 +240,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array(), Visualizer_Plugin::VERSION );
 
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
-		wp_register_script( 'google-jsapi', '//www.google.com/jsapi', array(), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi', 'visualizer-frame' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array('google-jsapi-new'), null, true );
+		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi-old', 'google-jsapi-new', 'visualizer-frame' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'wp-color-picker', 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
 
         // added by Ash/Upwork
@@ -350,68 +351,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_iframe( array( $render, 'render') );
 	}
 
-	/**
-	 * Handles chart settigns page.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access private
-	 */
-	private function _handleSettingsPage() {
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
-			if ( $this->_chart->post_status == 'auto-draft' ) {
-				$this->_chart->post_status = 'publish';
-				wp_update_post( $this->_chart->to_array() );
-			}
-
-			update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
-
-			$render = new Visualizer_Render_Page_Send();
-			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );
-
-			wp_iframe( array( $render, 'render') );
-			return;
-		}
-
-		$data = $this->_getChartArray();
-
-		$sidebar = '';
-		$sidebar_class = 'Visualizer_Render_Sidebar_Type_' . ucfirst( $data['type'] );
-		if ( class_exists( $sidebar_class, true ) ) {
-			$sidebar = new $sidebar_class( $data['settings'] );
-			$sidebar->__series = $data['series'];
-			$sidebar->__data = $data['data'];
-		}
-
-		unset( $data['settings']['width'], $data['settings']['height'] );
-
-		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_style( 'visualizer-frame' );
-
-		wp_enqueue_script( 'visualizer-preview' );
-		wp_localize_script( 'visualizer-render', 'visualizer', array(
-			'charts' => array(
-				'canvas' => $data,
-			),
-		) );
-
-		$render = new Visualizer_Render_Page_Settings();
-
-		$render->sidebar = $sidebar;
-		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
-			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
-				? esc_html__( 'Save Chart', Visualizer_Plugin::NAME )
-				: esc_html__( 'Create Chart', Visualizer_Plugin::NAME );
-		} else {
-			$render->button = esc_attr__( 'Insert Chart', Visualizer_Plugin::NAME );
-		}
-
-		$this->_addAction( 'admin_head', 'renderFlattrScript' );
-
-		wp_iframe( array( $render, 'render') );
-	}
-
-
     // changed by Ash/Upwork
     private function _handleDataAndSettingsPage(){
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
@@ -437,7 +376,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$sidebar = new $sidebar_class( $data['settings'] );
 			$sidebar->__series = $data['series'];
 			$sidebar->__data = $data['data'];
-		}
+		} else {
+            $sidebar    = apply_filters("visualizer_pro_chart_type_sidebar", '', $data);
+            if ($sidebar != '') {
+                $sidebar->__series = $data['series'];
+                $sidebar->__data = $data['data'];
+            }
+        }
 
 		unset( $data['settings']['width'], $data['settings']['height'] );
 

@@ -77,8 +77,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access public
 	 */
 	public function enqueueScripts() {
-		wp_register_script( 'visualizer-google-jsapi', '//www.google.com/jsapi', array(), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi', 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array('visualizer-google-jsapi-new'), null, true );
+		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
 	}
 
 	/**

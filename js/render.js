@@ -18,7 +18,7 @@
 		if (!render) {
 			render = chart.type == 'gauge'
 				? 'Gauge'
-				: chart.type.charAt(0).toUpperCase() + chart.type.slice(1) + 'Chart';
+				: (chart.type == 'table' ? 'Table' : chart.type.charAt(0).toUpperCase() + chart.type.slice(1) + 'Chart');
 
 			render = new gv[render](container);
 		}
@@ -53,6 +53,12 @@
 				}
 				break;
 			case 'gauge':
+				break;
+			case 'table':
+                if (parseInt(settings['pagination']) != 1)
+                {
+                    delete settings['pageSize'];
+                }
 				break;
 			default:
 				return;
@@ -139,8 +145,8 @@
 		}
 	};
 
-	g.load("visualization", "1", {packages: ["corechart", "geochart", "gauge"]});
-	g.setOnLoadCallback(function() {
+	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table"]});
+	g.charts.setOnLoadCallback(function() {
 		gv = g.visualization;
 		v.render();
 	});
