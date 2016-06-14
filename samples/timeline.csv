@@ -1,0 +1,6 @@
+Category,Work,From,To
+string,string,date,date
+1,Requirements,2013-01-01,2013-01-30
+1,Customer Discussion,2013-01-01,2013-01-30
+2,Design,2013-02-01,2013-02-27
+3,Implementation,2013-03-01,2013-04-30

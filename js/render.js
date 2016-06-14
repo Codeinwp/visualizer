@@ -16,9 +16,16 @@
 
 		render = v.objects[id] || null;
 		if (!render) {
-			render = chart.type == 'gauge'
-				? 'Gauge'
-				: (chart.type == 'table' ? 'Table' : chart.type.charAt(0).toUpperCase() + chart.type.slice(1) + 'Chart');
+            switch (chart.type) {
+                case "gauge":
+                case "table":
+                case "timeline":
+                    render  = chart.type.charAt(0).toUpperCase() + chart.type.slice(1);
+                    break;
+                default:
+			        render = chart.type.charAt(0).toUpperCase() + chart.type.slice(1) + 'Chart';
+                    break;
+            }
 
 			render = new gv[render](container);
 		}
@@ -52,12 +59,21 @@
 					settings['region'] = 'world';
 				}
 				break;
-			case 'gauge':
-				break;
 			case 'table':
                 if (parseInt(settings['pagination']) != 1)
                 {
                     delete settings['pageSize'];
+                }
+				break;
+			case 'gauge':
+				break;
+			case 'timeline':
+                settings['timeline'] = [];
+                settings['timeline']['groupByRowLabel'] = settings['groupByRowLabel'] ? true : false;
+                settings['timeline']['colorByRowLabel'] = settings['colorByRowLabel'] ? true : false;
+                settings['timeline']['showRowLabels']   = settings['showRowLabels'] ? true : false;
+                if(settings['singleColor'] != '') {
+                    settings['timeline']['singleColor'] = settings['singleColor'];
                 }
 				break;
 			default:
@@ -145,7 +161,7 @@
 		}
 	};
 
-	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table"]});
+	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"]});
 	g.charts.setOnLoadCallback(function() {
 		gv = g.visualization;
 		v.render();

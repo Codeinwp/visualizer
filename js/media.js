@@ -4,7 +4,7 @@
 	wpmvtv = wpmv.toolbar.visualizer;
 	mediaFrame = wpmv.MediaFrame.Post;
 
-	g.charts.load("current", { packages: ["corechart", "geochart", "gauge", "table"] });
+	g.charts.load("current", { packages: ["corechart", "geochart", "gauge", "table", "timeline"] });
 
 	wpmv.MediaFrame.Post = mediaFrame.extend({
 		initialize: function() {
