@@ -76,6 +76,18 @@
                     settings['timeline']['singleColor'] = settings['singleColor'];
                 }
 				break;
+			case 'combo':
+				if (settings.series) {
+					for (i in settings.series) {
+						if (settings.series[i]['type'] == '') {
+							delete settings.series[i]['type'];
+						}
+						if (settings.series[i]['color'] == '') {
+							delete settings.series[i]['color'];
+						}
+					}
+				}
+				break;
 			default:
 				return;
 		}
