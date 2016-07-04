@@ -80,8 +80,15 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 *
 	 * @access protected
 	 */
-	protected function _renderToolbar() {
-		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', Visualizer_Plugin::NAME ), '">';
-	}
-
+	 protected function _renderToolbar() {
+ 		if( defined( 'Visualizer_Pro' ) ){
+ 				global $Visualizer_Pro;
+ 		}else{
+			echo "<a class='pro-upsell' href='https://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/' target='_blank'>";
+				echo "<span class='dashicons dashicons-plus-alt'></span>";
+ 					echo esc_html( "Three Additional Chart Types Available in the Pro Version", Visualizer_Plugin::NAME );
+			echo "</a>";
+ 		}
+ 		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', Visualizer_Plugin::NAME ), '">';
+ 	}
 }
