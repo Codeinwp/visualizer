@@ -2,7 +2,7 @@
 Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
-Tested up to: 4.5.2
+Tested up to: 4.5.3
 Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -19,13 +19,14 @@ The plugin uses Google Visualization API to add charts, which support cross-brow
 >
 > * Import data from other charts
 > * Easy edit the data using a live editor
+> * 3 more chart types ( Combo, Timeline and Table chart )
 > * Priority email support from the developer of the plugin
 > * Support and updates for 1 year
 >
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/)**
 
 
-### 9 Chart types ###
+### 9 Chart types + 3 more in the pro version ###
 This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is line chart, area chart, bar chart, column chart, pie chart, geo chart, gauge chart, candlestick chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
 
 ### Flexible and customizable ###
@@ -68,6 +69,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+
+= 1.5.6 =
+* Added support for 3 more chart types
+* Fixed issue with charts not saving
+
 
 = 1.5.5 =
 * Added export for charts
