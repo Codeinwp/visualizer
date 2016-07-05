@@ -1,4 +1,9 @@
 
+### 1.5.6 - 05/07/2016
+**Changes:** 
+- Added support for 3 more chart types
+- Fixed issue with charts not saving
+
 ### 1.5.5 - 31/05/2016
 **Changes:** 
 - Added export feature for charts
