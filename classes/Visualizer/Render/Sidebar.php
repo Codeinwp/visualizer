@@ -98,6 +98,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		$this->_legendPositions = array(
 			''       => '',
+			'left'  => esc_html__( 'Left of the chart', Visualizer_Plugin::NAME ),
 			'right'  => esc_html__( 'Right of the chart', Visualizer_Plugin::NAME ),
 			'top'    => esc_html__( 'Above the chart', Visualizer_Plugin::NAME ),
 			'bottom' => esc_html__( 'Below the chart', Visualizer_Plugin::NAME ),
