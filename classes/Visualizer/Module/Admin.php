@@ -175,7 +175,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 			wp_enqueue_script( 'visualizer-google-jsapi-new',    '//www.gstatic.com/charts/loader.js',                      array( 'media-editor' ),                null,                       true );
 			wp_enqueue_script( 'visualizer-google-jsapi-old',    '//www.google.com/jsapi',                      array( 'visualizer-google-jsapi-new' ),                null,                       true );
-			wp_enqueue_script( 'visualizer-media-model',      VISUALIZER_ABSURL . 'js/media/model.js',      array( 'visualizer-google-jsapi' ),     Visualizer_Plugin::VERSION, true );
+			wp_enqueue_script( 'visualizer-media-model',      VISUALIZER_ABSURL . 'js/media/model.js',      array( 'visualizer-google-jsapi-old' ),     Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-collection', VISUALIZER_ABSURL . 'js/media/collection.js', array( 'visualizer-media-model' ),      Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-controller', VISUALIZER_ABSURL . 'js/media/controller.js', array( 'visualizer-media-collection' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-view',       VISUALIZER_ABSURL . 'js/media/view.js',       array( 'visualizer-media-controller' ), Visualizer_Plugin::VERSION, true );
