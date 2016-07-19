@@ -117,16 +117,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array The associated array of pointer
 	 */
 	function visualizerAdminPointers( $p ) {
-		$p['visualizer'] = array(
-			'target' => '#menu-media',
-			'options' => array(
-				'content' => sprintf( '<h3> %s </h3> <p> %s </p>',
-					__( 'Visualizer New Features ' , Visualizer_Plugin::NAME),
-					__( 'Right now the Visualizer Charts and Graphics plugin integrates a live editor and a new importing option for your charts. ',Visualizer_Plugin::NAME)
-				),
-				'position' => array( 'edge' => 'top', 'align' => 'middle' )
-			)
-		);
 		return $p;
 	}
 
