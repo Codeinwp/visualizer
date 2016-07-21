@@ -109,9 +109,6 @@ function visualizer_launch() {
 	if ( $doing_ajax ) {
 		// set ajax modules
 		$plugin->setModule( Visualizer_Module_Chart::NAME );
-        // Added by Ash/Upwork for feedback
-        $plugin->setModule( Visualizer_Module_Admin::NAME );
-        // Added by Ash/Upwork for feedback
 	} else {
 		if ( is_admin() ) {
 			// set admin modules

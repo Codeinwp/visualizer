@@ -58,66 +58,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_footer', 'renderTempaltes' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts' );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
-        // Added by Ash/Upwork for feedback
-		$this->_addAction( 'admin_init', 'visualizerInitFeedback' );
-        // Added by Ash/Upwork for feedback
 
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
-		$this->_addFilter( 'visualizer_admin_pointers', 'visualizerAdminPointers', 10, 2 );
-        // Added by Ash/Upwork for feedback
-		$this->_addFilter( 'visualizer_feedback_enqueue', 'visualizerFeedbackEnqueue', 10, 2 );
-		$this->_addFilter( 'visualizer_feedback', 'visualizerFeedback', 10, 2 );
-		$this->_addFilter( 'visualizer_feedback_config', 'visualizerFeedbackConfig', 10, 2 );
-		$this->_addFilter( 'visualizer_feedback_action', 'visualizerFeedbackAction', 10, 2 );
-        // Added by Ash/Upwork for feedback
-	}
-
-    // Added by Ash/Upwork for feedback
-    function visualizerFeedbackConfig(){
-        return array(
-            "title" => "TITLE",
-            "description" => "Message that will ask the user for review",
-            "yes_btn_txt" => "Text to show on yes btn ",
-            "no_btn_txt"  => "txt to show on no btn",
-            "yes_btn_link" => "link to redirect when click on the yes btn", 
-        );
-    }
-
-    function visualizerFeedbackAction(){
-        return array("type"=>"splash","action"=>array("type"=>"click","target"=>".add-new-h2"));
-    }
-
-    function visualizerFeedback(){
-        return true;
-    }
-
-    function visualizerInitFeedback(){
-        $file   = trailingslashit(VISUALIZER_ABSPATH) . "feedback/PluginFeedbackTI.php";
-        if (file_exists($file)) {
-            include_once $file;
-            new PluginFeedbackTI(Visualizer_Plugin::NAME, 1, Visualizer_Plugin::VERSION, "visualizer_feedback", "visualizer_feedback_config", "visualizer_feedback_action", "visualizer_feedback_enqueue");
-        }
-    }
-
-    function visualizerFeedbackEnqueue(){
-        wp_register_script("ti-feedback-func", VISUALIZER_ABSURL . 'js/feedback-func.js');
-        wp_enqueue_script("ti-feedback-func");
-    }
-    // Added by Ash/Upwork for feedback
-
-	/**
-	 * Returns wp pointers for visualizer
-	 *
-	 * @since 1.5
-	 *
-	 * @static
-	 * @access private
-	 * @return array The associated array of pointer
-	 */
-	function visualizerAdminPointers( $p ) {
-		return $p;
 	}
 
 	/**
@@ -248,46 +192,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array('google-jsapi-new'), null, true );
 			wp_enqueue_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi-old', 'visualizer-library' ), Visualizer_Plugin::VERSION, true );
 		}
-		if ( get_bloginfo( 'version' ) < '3.3' )
-			return;
-
-
-		// Get pointers for this screen
-		$pointers = apply_filters( 'visualizer_admin_pointers', array() );
-
-		if ( ! $pointers || ! is_array( $pointers ) )
-			return;
-
-		// Get dismissed pointers
-		$dismissed = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
-		$valid_pointers =array();
-		// Check pointers and remove dismissed ones.
-		foreach ( $pointers as $pointer_id => $pointer ) {
-
-			// Sanity check
-			if ( in_array( $pointer_id, $dismissed ) || empty( $pointer )  || empty( $pointer_id ) || empty( $pointer['target'] ) || empty( $pointer['options'] ) )
-				continue;
-
-			$pointer['pointer_id'] = $pointer_id;
-
-			// Add the pointer to $valid_pointers array
-			$valid_pointers['pointers'][] =  $pointer;
-		}
-
-		// No valid pointers? Stop here.
-		if ( empty( $valid_pointers ) )
-			return;
-
-		// Add pointers style to queue.
-		wp_enqueue_style( 'wp-pointer' );
-		// Add pointers script to queue. Add custom script.
-		wp_enqueue_script( 'visualizer-pointer', VISUALIZER_ABSURL."js/visualizer-pointer.js", array( 'wp-pointer' ),Visualizer_Plugin::VERSION );
-
-		// Add pointer options to script.
-		wp_localize_script( 'visualizer-pointer', 'visualizer', $valid_pointers );
-
-
-
 	}
 
 	/**
