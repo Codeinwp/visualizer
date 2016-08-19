@@ -91,7 +91,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
         if(isset($_GET["filter"]) && strlen($_GET["filter"]) > 0){
             $filterBy   = filter_input( INPUT_GET, "filter", FILTER_SANITIZE_STRING );
         }
-        $action         = $_SERVER["REQUEST_URI"];
         echo '<div id="visualizer-search"><form action="" method="get">
                 <input type="text" name="filter" value="' . $filterBy . '">
                 <input type="hidden" name="page" value="visualizer">
@@ -104,11 +103,11 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				foreach ( $this->types as $type => $label ) {
 					echo '<li class="visualizer-list-item">';
 						if ( $type == $this->type ) {
-							echo '<a class="page-numbers current" href="', add_query_arg( 'vpage', false ), '">';
+							echo '<a class="page-numbers current" href="', esc_url(add_query_arg( 'vpage', false )), '">';
 								echo $label;
 							echo '</a>';
 						} else {
-							echo '<a class="page-numbers" href="', add_query_arg( array( 'type' => $type, 'vpage' => false ) ), '">';
+							echo '<a class="page-numbers" href="', esc_url(add_query_arg( array( 'type' => $type, 'vpage' => false ) )), '">';
 								echo $label;
 							echo '</a>';
 						}
