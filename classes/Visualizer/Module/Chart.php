@@ -132,7 +132,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			) )
 		);
 
-		$filter = filter_input( INPUT_GET, 'filter' );
+		$filter = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
 		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
 			$query_args['meta_query'] = array(
 				array(

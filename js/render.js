@@ -53,6 +53,11 @@
 						}
 					}
 				}
+
+                if (settings.series && settings.legend && settings.legend.position == "left")
+                {
+                    settings.targetAxisIndex = 1;
+                }
 				break;
 			case 'geo':
 				if (settings.region != undefined && settings.region.replace(/^\s+|\s+$/g, '') == '') {
@@ -87,6 +92,11 @@
 						}
 					}
 				}
+
+                if (settings.series && settings.legend && settings.legend.position == "left")
+                {
+                    settings.targetAxisIndex = 1;
+                }
 				break;
 			default:
 				return;

@@ -1,8 +1,8 @@
-=== WordPress Charts and Graphs ===
+=== WordPress Charts and Graphs Lite ===
 Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
-Tested up to: 4.5.3
+Tested up to: 4.6
 Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -11,7 +11,7 @@ A simple and quite powerful WordPress chart plugin to create, manage and embed i
 
 == Description ==
  
-<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs/" rel="friend">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
+<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="friend">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
 The plugin uses Google Visualization API to add charts, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
 
@@ -69,6 +69,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+
+= 1.6.0 =
+* Fixed security issue when importing charts
+* Removed pointer for the pro version
+* Fixed charts import from media library
+* Added support to show legend on the left side
+
 
 = 1.5.6 =
 * Added support for 3 more chart types
