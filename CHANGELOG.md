@@ -1,4 +1,11 @@
 
+### 1.6.0 - 19/08/2016
+**Changes:** 
+- Fixed potential XSS security bug
+- Added support for charts in the media library
+- Removed pointer for the pro version
+- Added option to show legend on the left side
+
 ### 1.5.6 - 05/07/2016
 **Changes:** 
 - Added support for 3 more chart types
