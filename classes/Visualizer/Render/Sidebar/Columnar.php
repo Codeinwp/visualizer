@@ -78,4 +78,39 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 		self::_renderGroupEnd();
 	}
 
+
+	/**
+	 * Renders general settings block for vertical axis settings.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderVerticalAxisGeneralSettings() {
+        parent::_renderVerticalAxisGeneralSettings();
+		self::_renderColorPickerItem(
+			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			'hAxis[textStyle]',
+			isset( $this->hAxis['textStyle'] ) ? $this->hAxis['textStyle'] : null,
+			'#000'
+		);
+    }
+
+	/**
+	 * Renders general settings block for vertical axis settings.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderHorizontalAxisGeneralSettings() {
+        parent::_renderHorizontalAxisGeneralSettings();
+		self::_renderColorPickerItem(
+			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			'vAxis[textStyle]',
+			isset( $this->vAxis['textStyle'] ) ? $this->vAxis['textStyle'] : null,
+			'#000'
+		);
+    }
+
 }
