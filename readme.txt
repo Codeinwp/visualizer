@@ -11,7 +11,7 @@ A simple and quite powerful WordPress chart plugin to create, manage and embed i
 
 == Description ==
  
-<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="friend">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
+<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
 
 The plugin uses Google Visualization API to add charts, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
 
@@ -37,7 +37,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 
 *above descriptions were partially taken from Google Visualization API site*
 
-The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="friend">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="friend">premium WordPress themes</a>
+The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="nofollow">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
 
 ### Knowledge Base ###
 
