@@ -54,8 +54,8 @@ class Visualizer_Render_Sidebar_Type_Bar extends Visualizer_Render_Sidebar_Colum
 	 *
 	 * @access protected
 	 */
-	protected function _renderHorizontalAxisGeneratSettings() {
-		parent::_renderHorizontalAxisGeneratSettings();
+	protected function _renderHorizontalAxisGeneralSettings() {
+		parent::_renderHorizontalAxisGeneralSettings();
 		$this->_renderHorizontalAxisFormatField();
 	}
 

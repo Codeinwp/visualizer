@@ -91,8 +91,16 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	 *
 	 * @access protected
 	 */
-	protected function _renderHorizontalAxisGeneratSettings() {
-		parent::_renderHorizontalAxisGeneratSettings();
+	protected function _renderHorizontalAxisGeneralSettings() {
+		parent::_renderHorizontalAxisGeneralSettings();
+
+		self::_renderColorPickerItem(
+			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			'vAxis[textStyle]',
+			isset( $this->vAxis['textStyle'] ) ? $this->vAxis['textStyle'] : null,
+			'#000'
+		);
+
 		$this->_renderHorizontalAxisFormatField();
 	}
 
@@ -105,6 +113,14 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	 */
 	protected function _renderVerticalAxisGeneralSettings() {
 		parent::_renderVerticalAxisGeneralSettings();
+
+		self::_renderColorPickerItem(
+			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			'hAxis[textStyle]',
+			isset( $this->hAxis['textStyle'] ) ? $this->hAxis['textStyle'] : null,
+			'#000'
+		);
+
 		$this->_renderVerticalAxisFormatField();
 	}
 

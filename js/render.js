@@ -132,6 +132,18 @@
 			}
 		}
 
+        if(settings.hAxis){
+            if(settings.hAxis.textStyle && settings.hAxis.textStyle != ''){
+                settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
+            }
+        }
+
+        if(settings.vAxis){
+            if(settings.vAxis.textStyle && settings.vAxis.textStyle != ''){
+                settings.vAxis.textStyle = {color: settings.vAxis.textStyle};
+            }
+        }
+
         for (i = 0; i < data.length; i++) {
 			row = [];
 			for (j = 0; j < series.length; j++) {

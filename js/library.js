@@ -98,7 +98,9 @@
                     a.href = url;
                     a.download = data.data.name;
                     a.click();
-                    window.URL.revokeObjectURL(url);
+                    setTimeout(function(){
+                        window.URL.revokeObjectURL(url);
+                    }, 100);
                 }
             });
             return false;
