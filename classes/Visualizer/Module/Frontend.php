@@ -110,8 +110,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		$id = 'visualizer-' . $atts['id'];
+        $defaultClass   = "visualizer-front";
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
-		$class = !empty( $class ) ? ' class="' . $class . '"' : '';
+        $class  = $defaultClass . " " . $class;
+		$class = !empty( $class ) ? ' class="' . trim($class) . '"' : '';
 
 		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 

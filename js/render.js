@@ -210,5 +210,31 @@
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(v.render, 100);
 		});
-	});
+
+        resizeHiddenContainers();
+    });
+
+    function resizeHiddenContainers(){
+        $(".visualizer-front").parents().each(function(){
+            if(!$(this).is(":visible")){
+                $(this).addClass("visualizer-hidden-container");
+            }
+        });
+
+        var mutateObserver = new MutationObserver(function(records) {
+            records.forEach(function(record) {
+                if(record.attributeName == "style"){
+                    var element         = $(record.target);
+                    var displayStyle    = window.getComputedStyle(element[0]).getPropertyValue("display");
+                    if(element.hasClass("visualizer-hidden-container-resized") || displayStyle == "none") return;
+                    element.addClass("visualizer-hidden-container-resized").find(".visualizer-front").resize();
+                }
+            });
+        });
+
+        $('.visualizer-hidden-container').each(function(){
+            mutateObserver.observe($(this)[0], {attributes: true});
+        });
+	}
+
 })(jQuery, visualizer);
