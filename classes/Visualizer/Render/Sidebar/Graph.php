@@ -133,7 +133,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 *
 	 * @access protected
 	 */
-	protected function _renderHorizontalAxisGeneratSettings() {
+	protected function _renderHorizontalAxisGeneralSettings() {
 		self::_renderTextItem(
 			esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
 			'hAxis[title]',
@@ -179,7 +179,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	protected function _renderHorizontalAxisSettings() {
 		self::_renderGroupStart( esc_html__( 'Horizontal Axis Settings', Visualizer_Plugin::NAME ) );
 			self::_renderSectionStart( esc_html__( 'General Settings', Visualizer_Plugin::NAME ), false );
-				$this->_renderHorizontalAxisGeneratSettings();
+				$this->_renderHorizontalAxisGeneralSettings();
 			self::_renderSectionEnd();
 
 			if ( $this->_horizontalGridLines ) {
