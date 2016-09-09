@@ -1,4 +1,9 @@
 
+### 1.6.5 - 09/09/2016
+**Changes:** 
+- Fixed responsive issue
+- Fixed no axis color for line and bar charts
+
 ### 1.6.0 - 19/08/2016
 **Changes:** 
 - Fixed potential XSS security bug
