@@ -223,7 +223,7 @@
 
         var mutateObserver = new MutationObserver(function(records) {
             records.forEach(function(record) {
-                if(record.attributeName == "style"){
+                if(record.attributeName == "style" || record.attributeName == "class"){
                     var element         = $(record.target);
                     var displayStyle    = window.getComputedStyle(element[0]).getPropertyValue("display");
                     if(element.hasClass("visualizer-hidden-container-resized") || displayStyle == "none") return;
