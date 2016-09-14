@@ -70,6 +70,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.6.6=
+* Fixed charts resizing on tabbed content
+
 = 1.6.5=
 * Fixed responsive issue
 * Fixed no axis text color for line and bar charts
