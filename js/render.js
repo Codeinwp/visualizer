@@ -211,12 +211,16 @@
 			resizeTimeout = setTimeout(v.render, 100);
 		});
 
-        resizeHiddenContainers();
+        resizeHiddenContainers(false);
     });
 
-    function resizeHiddenContainers(){
+    $(window).load(function(){
+        resizeHiddenContainers(true);
+    });
+
+    function resizeHiddenContainers(everytime){
         $(".visualizer-front").parents().each(function(){
-            if(!$(this).is(":visible")){
+            if(!$(this).is(":visible") && !$(this).hasClass("visualizer-hidden-container")){
                 $(this).addClass("visualizer-hidden-container");
             }
         });
@@ -227,7 +231,8 @@
                     var element         = $(record.target);
                     var displayStyle    = window.getComputedStyle(element[0]).getPropertyValue("display");
                     if(element.hasClass("visualizer-hidden-container-resized") || displayStyle == "none") return;
-                    element.addClass("visualizer-hidden-container-resized").find(".visualizer-front").resize();
+                    element.find(".visualizer-front").resize();
+                    if(!everytime) element.addClass("visualizer-hidden-container-resized");
                 }
             });
         });
