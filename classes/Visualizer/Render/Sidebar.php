@@ -332,10 +332,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
 							echo '<td class="section-table-column">';
-								echo '<input type="text" name="chartArea[left]" class="control-text" value="', !empty( $this->chartArea['left'] ) ? esc_attr( $this->chartArea['left'] ) : '', '" placeholder="20%">';
+								echo '<input type="text" name="chartArea[left]" class="control-text" value="', $this->chartArea['left'] || $this->chartArea['left'] === "0" ? esc_attr( $this->chartArea['left'] ) : '', '" placeholder="20%">';
 							echo '</td>';
 							echo '<td class="section-table-column">';
-								echo '<input type="text" name="chartArea[top]" class="control-text" value="', !empty( $this->chartArea['top'] ) ? esc_attr( $this->chartArea['top'] ) : '', '" placeholder="20%">';
+								echo '<input type="text" name="chartArea[top]" class="control-text" value="', $this->chartArea['top'] || $this->chartArea['top'] === "0" ? esc_attr( $this->chartArea['top'] ) : '', '" placeholder="20%">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
