@@ -1,4 +1,8 @@
 
+### 1.7.0 - 20/10/2016
+**Changes:** 
+- Release 1.7.0
+
 ### 1.6.6 - 14/09/2016
 **Changes:** 
 - Fixed issue on chart resizing on tabbed system
