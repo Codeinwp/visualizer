@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Renders visualizer library page.
  *
@@ -37,7 +36,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 *
 	 * @access private
 	 * @param string $placeholder_id The placeholder's id for the chart.
-	 * @param int $chart_id The id of the chart.
+	 * @param int    $chart_id The id of the chart.
 	 */
 	private function _renderChartBox( $placeholder_id, $chart_id ) {
 		$ajax_url = admin_url( 'admin-ajax.php' );
@@ -55,23 +54,23 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			'type'   => $this->type,
 		), $ajax_url );
 
-        $export_link = add_query_arg( array(
-            'action' => Visualizer_Plugin::ACTION_EXPORT_DATA,
-            'chart'  => $chart_id,
-            'security' => wp_create_nonce(Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION),
-        ), admin_url( 'admin-ajax.php' ) );
+		$export_link = add_query_arg( array(
+			'action' => Visualizer_Plugin::ACTION_EXPORT_DATA,
+			'chart'  => $chart_id,
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
+		), admin_url( 'admin-ajax.php' ) );
 
 		echo '<div class="visualizer-chart">';
 			echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 				echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 			echo '</div>';
 			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
-				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '" onclick="return showNotice.warn();"></a>';
-				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', Visualizer_Plugin::NAME ), '"></a>';
-				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', Visualizer_Plugin::NAME ), '" data-chart="', $chart_id, '"></a>';
-				echo '<a class="visualizer-chart-action visualizer-chart-export" href="javascript:;" title="', esc_attr__( 'Export', Visualizer_Plugin::NAME ), '" data-chart="', $export_link, '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', 'visualizer' ), '" onclick="return showNotice.warn();"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', 'visualizer' ), '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', 'visualizer' ), '" data-chart="', $chart_id, '"></a>';
+				echo '<a class="visualizer-chart-action visualizer-chart-export" href="javascript:;" title="', esc_attr__( 'Export', 'visualizer' ), '" data-chart="', $export_link, '"></a>';
 
-				echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">';
+				echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">';
 					echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
 				echo '</span>';
 			echo '</div>';
@@ -86,55 +85,54 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 */
 	private function _renderLibrary() {
-        // Added by Ash/Upwork
-        $filterBy       = null;
-        if(isset($_GET["filter"]) && strlen($_GET["filter"]) > 0){
-            $filterBy   = filter_input( INPUT_GET, "filter", FILTER_SANITIZE_STRING );
-        }
-        echo '<div id="visualizer-search"><form action="" method="get">
+		// Added by Ash/Upwork
+		$filterBy       = null;
+		if ( isset( $_GET['filter'] ) && strlen( $_GET['filter'] ) > 0 ) {
+			$filterBy   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+		}
+		echo '<div id="visualizer-search"><form action="" method="get">
                 <input type="text" name="filter" value="' . $filterBy . '">
                 <input type="hidden" name="page" value="visualizer">
-                <input type="submit" class="button button-secondary" value="' . esc_attr__('Search', Visualizer_Plugin::NAME) . '">
+                <input type="submit" class="button button-secondary" value="' . esc_attr__( 'Search', 'visualizer' ) . '">
             </form></div>';
-        // Added by Ash/Upwork
-
+		// Added by Ash/Upwork
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 			echo '<ul>';
-				foreach ( $this->types as $type => $label ) {
-					echo '<li class="visualizer-list-item">';
-						if ( $type == $this->type ) {
-							echo '<a class="page-numbers current" href="', esc_url(add_query_arg( 'vpage', false )), '">';
-								echo $label;
-							echo '</a>';
-						} else {
-							echo '<a class="page-numbers" href="', esc_url(add_query_arg( array( 'type' => $type, 'vpage' => false ) )), '">';
-								echo $label;
-							echo '</a>';
-						}
-					echo '</li>';
-				}
+		foreach ( $this->types as $type => $label ) {
+			echo '<li class="visualizer-list-item">';
+			if ( $type == $this->type ) {
+				echo '<a class="page-numbers current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
+				echo $label;
+				echo '</a>';
+			} else {
+				echo '<a class="page-numbers" href="', esc_url( add_query_arg( array( 'type' => $type, 'vpage' => false ) ) ), '">';
+				echo $label;
+				echo '</a>';
+			}
+			echo '</li>';
+		}
 			echo '</ul>';
 		echo '</div>';
 
-		if ( !empty( $this->charts ) ) {
+		if ( ! empty( $this->charts ) ) {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
-				foreach ( $this->charts as $placeholder_id  => $chart ) {
-					$this->_renderChartBox( $placeholder_id, $chart['id'] );
-				}
+			foreach ( $this->charts as $placeholder_id  => $chart ) {
+				$this->_renderChartBox( $placeholder_id, $chart['id'] );
+			}
 			echo '</div>';
 
 			if ( is_array( $this->pagination ) ) {
 				echo '<ul class="visualizer-library-pagination">';
-					foreach ( $this->pagination as $page ) {
-						echo '<li class="visualizer-list-item">', $page, '</li>';
-					}
+				foreach ( $this->pagination as $page ) {
+					echo '<li class="visualizer-list-item">', $page, '</li>';
+				}
 				echo '</ul>';
 			}
 		} else {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 				echo '<div class="visualizer-chart">';
 					echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
-						echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', Visualizer_Plugin::NAME ), '</div>';
+						echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', 'visualizer' ), '</div>';
 					echo '</div>';
 					echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 						echo '<span class="visualizer-chart-action visualizer-nochart-delete"></span>';
@@ -162,8 +160,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div class="wrap">';
 			echo '<div id="visualizer-icon" class="icon32"><br></div>';
 			echo '<h2>';
-				esc_html_e( 'Visualizer Library', Visualizer_Plugin::NAME );
-				echo ' <a href="javascript:;" class="add-new-h2">', esc_html__( 'Add New', Visualizer_Plugin::NAME ), '</a>';
+				esc_html_e( 'Visualizer Library', 'visualizer' );
+				echo ' <a href="javascript:;" class="add-new-h2">', esc_html__( 'Add New', 'visualizer' ), '</a>';
 			echo '</h2>';
 
 			$this->_renderMessages();
@@ -179,10 +177,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 */
 	private function _renderMessages() {
-		if ( !filter_var( ini_get( 'allow_url_fopen' ), FILTER_VALIDATE_BOOLEAN ) ) {
+		if ( ! filter_var( ini_get( 'allow_url_fopen' ), FILTER_VALIDATE_BOOLEAN ) ) {
 			echo '<div class="updated error">';
 				echo '<p>';
-					printf( esc_html__( '%s option is disabled in your php.ini config. Please, enable it by change its value to 1. This option increases the speed of remote CSV uploading.', Visualizer_Plugin::NAME ), '<b>allow_url_fopen</b>' );
+					printf( esc_html__( '%s option is disabled in your php.ini config. Please, enable it by change its value to 1. This option increases the speed of remote CSV uploading.', 'visualizer' ), '<b>allow_url_fopen</b>' );
 				echo '</p>';
 			echo '</div>';
 		}

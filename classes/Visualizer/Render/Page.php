@@ -19,8 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
-
 /**
  * Base class for all chart builder pages.
  *
@@ -71,10 +69,10 @@ class Visualizer_Render_Page extends Visualizer_Render {
 			echo '</ul>';
 
 			echo '<div id="rate-the-plugin">';
-				echo '<div><b>', esc_html__( 'Like the plugin? Show us your love!', Visualizer_Plugin::NAME ), '</b></div>';
+				echo '<div><b>', esc_html__( 'Like the plugin? Show us your love!', 'visualizer' ), '</b></div>';
 				echo '<div id="rate-stars">&nbsp;</div>';
 				echo '<a id="rate-link" href="http://wordpress.org/support/view/plugin-reviews/visualizer" target="_blank">';
-					esc_html_e( 'Rate it on WordPress.org', Visualizer_Plugin::NAME );
+					esc_html_e( 'Rate it on WordPress.org', 'visualizer' );
 				echo '</a>';
 			echo '</div>';
 		echo '</div>';

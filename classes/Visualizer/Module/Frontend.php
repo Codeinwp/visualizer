@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Frontend module class.
  *
@@ -58,12 +57,12 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$this->_addShortcode( 'visualizer', 'renderChart' );
 
 		// add do_shortocde hook for widget_text filter
-		if ( !has_filter( 'widget_text', 'do_shortcode' ) ) {
+		if ( ! has_filter( 'widget_text', 'do_shortcode' ) ) {
 			add_filter( 'widget_text', 'do_shortcode' );
 		}
 
 		// add do_shortcode hook for term_description filter
-		if ( !has_filter( 'term_description', 'do_shortcode' ) ) {
+		if ( ! has_filter( 'term_description', 'do_shortcode' ) ) {
 			add_filter( 'term_description', 'do_shortcode' );
 		}
 	}
@@ -78,7 +77,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 */
 	public function enqueueScripts() {
 		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array('visualizer-google-jsapi-new'), null, true );
+		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
 	}
 
@@ -105,15 +104,15 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		), $atts );
 
 		// if empty id or chart does not exists, then return empty string
-		if ( !$atts['id'] || !( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
 			return '';
 		}
 
 		$id = 'visualizer-' . $atts['id'];
-        $defaultClass   = "visualizer-front";
+		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
-        $class  = $defaultClass . " " . $class;
-		$class = !empty( $class ) ? ' class="' . trim($class) . '"' : '';
+		$class  = $defaultClass . ' ' . $class;
+		$class = ! empty( $class ) ? ' class="' . trim( $class ) . '"' : '';
 
 		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 
@@ -125,23 +124,23 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		// handle series filter hooks
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-		if ( !empty( $atts['series'] ) ) {
+		if ( ! empty( $atts['series'] ) ) {
 			$series = apply_filters( $atts['series'], $series, $chart->ID, $type );
 		}
 		// handle settings filter hooks
 		$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
-		if ( !empty( $atts['settings'] ) ) {
+		if ( ! empty( $atts['settings'] ) ) {
 			$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
 		}
 
 		// handle data filter hooks
 		$data = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
-		if ( !empty( $atts['data'] ) ) {
+		if ( ! empty( $atts['data'] ) ) {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
 
 		// add chart to the array
-		$this->_charts[$id] = array(
+		$this->_charts[ $id ] = array(
 			'type'     => $type,
 			'series'   => $series,
 			'settings' => $settings,

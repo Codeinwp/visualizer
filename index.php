@@ -1,15 +1,16 @@
 <?php
+
 /*
-Plugin Name: Visualizer: Charts and Graphs Lite
-Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
-Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-Version: 1.6.6
-Author: Themeisle
-Author URI: http://themeisle.com
-License: GPL v2.0 or later
-License URI: http://www.opensource.org/licenses/gpl-license.php
+	Plugin Name: Visualizer: Charts and Graphs Lite
+	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
+	Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
+	Version: 1.7.0
+	Author: Themeisle
+	Author URI: http://themeisle.com
+	License: GPL v2.0 or later
+	License URI: http://www.opensource.org/licenses/gpl-license.php
 */
- 
+
 
 // +----------------------------------------------------------------------+
 // | Copyright 2013  Madpixels  (email : visualizer@madpixels.net)        |
@@ -30,24 +31,22 @@ License URI: http://www.opensource.org/licenses/gpl-license.php
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 // prevent direct access to the plugin folder
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	header( 'HTTP/1.0 404 Not Found', true, 404 );
 	exit;
 }
 
 // don't load the plugin, if it has been already loaded
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
-   return;
+	return;
 }
 
 // Added by Ash/Upwork
-if ( class_exists( 'Visualizer_Pro', false ) ){
-    define( 'Visualizer_Pro', true);
+if ( class_exists( 'Visualizer_Pro', false ) ) {
+	define( 'Visualizer_Pro', true );
 }
 // Added by Ash/Upwork
-
 /**
  * Automatically loads classes for the plugin. Checks a namespace and loads only
  * approved classes.
@@ -83,11 +82,11 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 
-	if ( !defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
+	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 		define( 'VISUALIZER_CSV_DELIMITER', ',' );
 	}
 
-	if ( !defined( 'VISUALIZER_CSV_ENCLOSURE' ) ) {
+	if ( ! defined( 'VISUALIZER_CSV_ENCLOSURE' ) ) {
 		define( 'VISUALIZER_CSV_ENCLOSURE', '"' );
 	}
 

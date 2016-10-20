@@ -1,3 +1,7 @@
+/*jshint scripturl:true*/
+/* global google */
+/* global visualizer */
+/* global showNotice */
 (function($, wpm) {
 	var libraryWidth, libraryHeight, wpmv, wpmV, wpmvv, wpmvvl, wpmvvb, l10n;
 
@@ -55,14 +59,14 @@
 			settings.height = self.options.height;
 
 			table = new gv.DataTable({cols: series});
-			chart = type == 'gauge' ? 'Gauge' : type.charAt(0).toUpperCase() + type.slice(1) + 'Chart';
+			chart = type === 'gauge' ? 'Gauge' : type.charAt(0).toUpperCase() + type.slice(1) + 'Chart';
 			chart = new gv[chart](self.el);
 
 			switch (type) {
 				case 'pie':
 					if (settings.slices) {
 						for (i in settings.slices) {
-							if (settings.slices[i]['color'] == '') {
+							if (settings.slices[i]['color'] === '') {
 								delete settings.slices[i]['color'];
 							}
 						}
@@ -76,14 +80,14 @@
 				case 'candlestick':
 					if (settings.series) {
 						for (i in settings.series) {
-							if (settings.series[i]['color'] == '') {
+							if (settings.series[i]['color'] === '') {
 								delete settings.series[i]['color'];
 							}
 						}
 					}
 					break;
 				case 'geo':
-					if (settings.region != undefined && settings.region.replace(/^\s+|\s+$/g, '') == '') {
+					if (settings.region !== undefined && settings.region.replace(/^\s+|\s+$/g, '') === '') {
 						settings['region'] = 'world';
 					}
 					break;
@@ -93,7 +97,7 @@
 					return;
 			}
 
-			if (series[0] && (series[0].type == 'date' || series[0].type == 'datetime')) {
+			if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime')) {
 				axis = false;
 				switch (type) {
 					case 'line':
@@ -126,7 +130,7 @@
 			for (i = 0; i < data.length; i++) {
 				row = [];
 				for (j = 0; j < series.length; j++) {
-					if (series[j].type == 'date' || series[j].type == 'datetime') {
+					if (series[j].type === 'date' || series[j].type === 'datetime') {
 						date = new Date(data[i][j]);
 						data[i][j] = null;
 						if (Object.prototype.toString.call(date) === "[object Date]") {
@@ -143,7 +147,7 @@
 			if (settings.series) {
 				for (i = 0; i < settings.series.length; i++) {
 					format = settings.series[i].format;
-					if (!format || format == '') {
+					if (!format || format === '') {
 						continue;
 					}
 
@@ -397,13 +401,9 @@
 			self.$el.html(_.chain(items).map(function(item) {
 				var content, className;
 
-				content = item == '...' || item == self.options.page
-					? self.make('span', { class: 'visualizer-library-pagination-page' }, item)
-					: self.make('a', { class: 'visualizer-library-pagination-page', href: 'javascript:;', 'data-page': item }, item);
+				content = item === '...' || item === self.options.page ? self.make('span', { class: 'visualizer-library-pagination-page' }, item) : self.make('a', { class: 'visualizer-library-pagination-page', href: 'javascript:;', 'data-page': item }, item);
 
-				className = item == self.options.page
-					? 'visualizer-library-pagination-item visualizer-library-pagination-active'
-					: 'visualizer-library-pagination-item';
+				className = item === self.options.page ? 'visualizer-library-pagination-item visualizer-library-pagination-active' : 'visualizer-library-pagination-item';
 
 				return self.make('li', { class: className }, content);
 			}).value());
@@ -419,7 +419,7 @@
 			} else {
 				tmp = current - Math.floor( max / 2 );
 
-				if ( max % 2 == 0 ) {
+				if ( max % 2 === 0 ) {
 					tmp++;
 				}
 
@@ -435,12 +435,12 @@
 					pagenation.push(tmp++);
 				}
 
-				if ( pagenation[0] != 1 ) {
+				if ( pagenation[0] !== 1 ) {
 					pagenation[0] = 1;
 					pagenation[1] = '...';
 				}
 
-				if ( pagenation[max - 1] != total ) {
+				if ( pagenation[max - 1] !== total ) {
 					pagenation[max - 1] = total;
 					pagenation[max - 2] = '...';
 				}
@@ -487,7 +487,7 @@
         });
 
         return $(this);
-    }
+    };
 
     $.fn.unlock = function() {
         $(this).each(function() {
@@ -500,5 +500,5 @@
         });
 
         return $(this);
-    }
+    };
 })(jQuery);

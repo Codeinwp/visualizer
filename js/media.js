@@ -1,3 +1,4 @@
+/* global google */
 (function(wpmv, g) {
 	var mediaFrame, wpmvtv;
 

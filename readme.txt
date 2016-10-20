@@ -70,6 +70,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.7.0=
+* Fixed responsive issues
+* Fixed issues with zero margin values
+* Fixed import issue
+
 = 1.6.6=
 * Fixed charts resizing on tabbed content
 

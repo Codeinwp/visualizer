@@ -19,8 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
-
 /**
  * Class for column chart sidebar settings.
  *
@@ -40,7 +38,7 @@ class Visualizer_Render_Sidebar_Type_Column extends Visualizer_Render_Sidebar_Co
 	 * @access public
 	 * @param array $data The data what has to be associated with this render.
 	 */
-	public function __construct( $data = array( ) ) {
+	public function __construct( $data = array() ) {
 		parent::__construct( $data );
 
 		// disable vertical gridlines settings

@@ -1,0 +1,27 @@
+{
+    "name": "visualizer",
+    "version": "1.7.0",
+    "description": "Visualizer Lite",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Codeinwp/visualizer.git"
+    },
+    "keywords": [
+        "wordpress-plugin"
+    ],
+    "textdomain": "visualizer",
+    "author": "ThemeIsle <friends@themeisle.com>",
+    "license": "GPL-2.0+",
+    "bugs": {
+        "url": "https://github.com/Codeinwp/visualizer/issues"
+    },
+    "pot": {
+        "reportmsgidbugsto": "https://github.com/Codeinwp/visualizer/issues",
+        "languageteam": "Themeisle Translate <friends@themeisle.com>",
+        "lasttranslator": "Themeisle Translate Team <friends@themeisle.com>"
+    },
+    "devDependencies": {
+        "grunt-plugin-fleet": "codeinwp/grunt-plugin-fleet",
+        "load-project-config": "~0.2.0"
+    }
+}

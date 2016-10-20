@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * The core plugin class.
  *
@@ -30,7 +29,7 @@
 class Visualizer_Plugin {
 
 	const NAME    = 'visualizer';
-	const VERSION = '1.6.6';
+	const VERSION = '1.7.0';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -49,7 +48,7 @@ class Visualizer_Plugin {
 	const ACTION_CLONE_CHART  = 'visualizer-clone-chart';
 	const ACTION_DELETE_CHART = 'visualizer-delete-chart';
 	const ACTION_UPLOAD_DATA  = 'visualizer-upload-data';
-    // Added by Ash/Upwork
+	// Added by Ash/Upwork
 	const ACTION_EXPORT_DATA  = 'visualizer-export-data';
 
 	// custom filters
@@ -58,11 +57,10 @@ class Visualizer_Plugin {
 	const FILTER_GET_CHART_DATA      = 'visualizer-get-chart-data';
 	const FILTER_GET_CHART_SETTINGS      = 'visualizer-get-chart-settings';
 
-    // Added by Ash/Upwork
-    const PRO_TEASER_URL    = "http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/";
-    const PRO_TEASER_TITLE  = "Check PRO version ";
-    // Added by Ash/Upwork
-
+	// Added by Ash/Upwork
+	const PRO_TEASER_URL    = 'http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/';
+	const PRO_TEASER_TITLE  = 'Check PRO version ';
+	// Added by Ash/Upwork
 	/**
 	 * Singletone instance of the plugin.
 	 *
@@ -128,7 +126,7 @@ class Visualizer_Plugin {
 	 * @return Visualizer_Module|null Returns a module if it was registered or NULL.
 	 */
 	public function getModule( $name ) {
-		return isset( $this->_modules[$name] ) ? $this->_modules[$name] : null;
+		return isset( $this->_modules[ $name ] ) ? $this->_modules[ $name ] : null;
 	}
 
 	/**
@@ -141,7 +139,7 @@ class Visualizer_Plugin {
 	 * @return boolean TRUE if the module has been registered. Otherwise FALSE.
 	 */
 	public function hasModule( $name ) {
-		return isset( $this->_modules[$name] );
+		return isset( $this->_modules[ $name ] );
 	}
 
 	/**
@@ -150,10 +148,10 @@ class Visualizer_Plugin {
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @param string $module The name of the module to use in the plugin.
+	 * @param string $class The name of the module to use in the plugin.
 	 */
 	public function setModule( $class ) {
-		$this->_modules[$class] = new $class( $this );
+		$this->_modules[ $class ] = new $class( $this );
 	}
 
 	/**
@@ -166,9 +164,9 @@ class Visualizer_Plugin {
 	 * @return array
 	 */
 	public static function getChartTypes() {
-        $array  = array_keys(Visualizer_Module_Admin::_getChartTypesLocalized());
-        unset($array[0]); // all
-        return $array;
+		$array  = array_keys( Visualizer_Module_Admin::_getChartTypesLocalized() );
+		unset( $array[0] ); // all
+		return $array;
 	}
 
 }

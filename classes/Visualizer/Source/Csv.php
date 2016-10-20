@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Source manager for local CSV files.
  *
@@ -66,13 +65,13 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		// read series types
 		$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
 
-		if ( !$labels || !$types ) {
+		if ( ! $labels || ! $types ) {
 			return false;
 		}
 
 		// if no types were setup, re read labels and empty types array
 		$types = array_map( 'trim', $types );
-		if ( !self::_validateTypes( $types ) ) {
+		if ( ! self::_validateTypes( $types ) ) {
 			// re open the file
 			fclose( $handle );
 			$handle = $this->_get_file_handle();
@@ -85,8 +84,8 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		for ( $i = 0, $len = count( $labels ); $i < $len; $i++ ) {
 			$default_type = $i == 0 ? 'string' : 'number';
 			$this->_series[] = array(
-				'label' => $labels[$i],
-				'type'  => isset( $types[$i] ) ? $types[$i] : $default_type,
+				'label' => $labels[ $i ],
+				'type'  => isset( $types[ $i ] ) ? $types[ $i ] : $default_type,
 			);
 		}
 
@@ -104,7 +103,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 */
 	protected function _get_file_handle( $filename = false ) {
 		// set line endings auto detect mode
-		@ini_set( 'auto_detect_line_endings', true );
+		ini_set( 'auto_detect_line_endings', true );
 		// open file and return handle
 		return fopen( $filename ? $filename : $this->_filename, 'rb' );
 	}
@@ -127,7 +126,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		$handle = $this->_get_file_handle();
 		if ( $handle ) {
 			// fetch series
-			if ( !$this->_fetchSeries( $handle ) ) {
+			if ( ! $this->_fetchSeries( $handle ) ) {
 				return false;
 			}
 

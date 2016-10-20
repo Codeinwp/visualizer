@@ -19,8 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
-
 /**
  * Base class for sidebar settigns of graph based charts.
  *
@@ -79,9 +77,9 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 
 		$this->_positions = array(
 			''     => '',
-			'in'   => esc_html__( 'Inside the chart', Visualizer_Plugin::NAME ),
-			'out'  => esc_html__( 'Outside the chart', Visualizer_Plugin::NAME ),
-			'none' => esc_html__( 'None', Visualizer_Plugin::NAME ),
+			'in'   => esc_html__( 'Inside the chart', 'visualizer' ),
+			'out'  => esc_html__( 'Outside the chart', 'visualizer' ),
+			'none' => esc_html__( 'None', 'visualizer' ),
 		);
 	}
 
@@ -94,22 +92,22 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderChartTitleSettings() {
 		self::_renderTextItem(
-			esc_html__( 'Chart Title', Visualizer_Plugin::NAME ),
+			esc_html__( 'Chart Title', 'visualizer' ),
 			'title',
 			$this->title,
-			esc_html__( 'Text to display above the chart.', Visualizer_Plugin::NAME )
+			esc_html__( 'Text to display above the chart.', 'visualizer' )
 		);
 
 		self::_renderSelectItem(
-			esc_html__( 'Chart Title Position', Visualizer_Plugin::NAME ),
+			esc_html__( 'Chart Title Position', 'visualizer' ),
 			'titlePosition',
 			$this->titlePosition,
 			$this->_positions,
-			esc_html__( 'Where to place the chart title, compared to the chart area.', Visualizer_Plugin::NAME )
+			esc_html__( 'Where to place the chart title, compared to the chart area.', 'visualizer' )
 		);
 
 		self::_renderColorPickerItem(
-			esc_html__( 'Chart Title Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Chart Title Color', 'visualizer' ),
 			'titleTextStyle[color]',
 			isset( $this->titleTextStyle['color'] ) ? $this->titleTextStyle['color'] : null,
 			'#000'
@@ -118,11 +116,11 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 		echo '<div class="section-delimiter"></div>';
 
 		self::_renderSelectItem(
-			esc_html__( 'Axes Titles Position', Visualizer_Plugin::NAME ),
+			esc_html__( 'Axes Titles Position', 'visualizer' ),
 			'axisTitlesPosition',
 			$this->axisTitlesPosition,
 			$this->_positions,
-			esc_html__( 'Determines where to place the axis titles, compared to the chart area.', Visualizer_Plugin::NAME )
+			esc_html__( 'Determines where to place the axis titles, compared to the chart area.', 'visualizer' )
 		);
 	}
 
@@ -135,34 +133,34 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderHorizontalAxisGeneralSettings() {
 		self::_renderTextItem(
-			esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
+			esc_html__( 'Axis Title', 'visualizer' ),
 			'hAxis[title]',
 			isset( $this->hAxis['title'] ) ? $this->hAxis['title'] : '',
-			esc_html__( 'The title of the horizontal axis.', Visualizer_Plugin::NAME )
+			esc_html__( 'The title of the horizontal axis.', 'visualizer' )
 		);
 
 		self::_renderSelectItem(
-			esc_html__( 'Text Position', Visualizer_Plugin::NAME ),
+			esc_html__( 'Text Position', 'visualizer' ),
 			'vAxis[textPosition]',
 			isset( $this->vAxis['textPosition'] ) ? $this->vAxis['textPosition'] : '',
 			$this->_positions,
-			esc_html__( 'Position of the horizontal axis text, relative to the chart area.', Visualizer_Plugin::NAME )
+			esc_html__( 'Position of the horizontal axis text, relative to the chart area.', 'visualizer' )
 		);
 
 		self::_renderSelectItem(
-			esc_html__( 'Direction', Visualizer_Plugin::NAME ),
+			esc_html__( 'Direction', 'visualizer' ),
 			'hAxis[direction]',
 			isset( $this->hAxis['direction'] ) ? $this->hAxis['direction'] : '',
 			array(
 				''   => '',
-				'1'  => esc_html__( 'Identical Direction', Visualizer_Plugin::NAME ),
-				'-1' => esc_html__( 'Reverse Direction', Visualizer_Plugin::NAME ),
+				'1'  => esc_html__( 'Identical Direction', 'visualizer' ),
+				'-1' => esc_html__( 'Reverse Direction', 'visualizer' ),
 			),
-			esc_html__( 'The direction in which the values along the horizontal axis grow.', Visualizer_Plugin::NAME )
+			esc_html__( 'The direction in which the values along the horizontal axis grow.', 'visualizer' )
 		);
 
 		self::_renderColorPickerItem(
-			esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Base Line Color', 'visualizer' ),
 			'vAxis[baselineColor]',
 			isset( $this->vAxis['baselineColor'] ) ? $this->vAxis['baselineColor'] : null,
 			'#000'
@@ -177,64 +175,64 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 * @access protected
 	 */
 	protected function _renderHorizontalAxisSettings() {
-		self::_renderGroupStart( esc_html__( 'Horizontal Axis Settings', Visualizer_Plugin::NAME ) );
-			self::_renderSectionStart( esc_html__( 'General Settings', Visualizer_Plugin::NAME ), false );
+		self::_renderGroupStart( esc_html__( 'Horizontal Axis Settings', 'visualizer' ) );
+			self::_renderSectionStart( esc_html__( 'General Settings', 'visualizer' ), false );
 				$this->_renderHorizontalAxisGeneralSettings();
 			self::_renderSectionEnd();
 
-			if ( $this->_horizontalGridLines ) {
-				self::_renderSectionStart( esc_html__( 'Grid Lines', Visualizer_Plugin::NAME ), false );
-					self::_renderTextItem(
-						esc_html__( 'Count', Visualizer_Plugin::NAME ),
-						'vAxis[gridlines][count]',
-						isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
-						esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
-						5
-					);
+		if ( $this->_horizontalGridLines ) {
+			self::_renderSectionStart( esc_html__( 'Grid Lines', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'Count', 'visualizer' ),
+				'vAxis[gridlines][count]',
+				isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
+				esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
+				5
+			);
 
-					self::_renderColorPickerItem(
-						esc_html__( 'Color', Visualizer_Plugin::NAME ),
-						'vAxis[gridlines][color]',
-						isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
-						'#ccc'
-					);
-				self::_renderSectionEnd();
+			self::_renderColorPickerItem(
+				esc_html__( 'Color', 'visualizer' ),
+				'vAxis[gridlines][color]',
+				isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
+				'#ccc'
+			);
+			self::_renderSectionEnd();
 
-				self::_renderSectionStart( esc_html__( 'Minor Grid Lines', Visualizer_Plugin::NAME ), false );
-					self::_renderTextItem(
-						esc_html__( 'Count', Visualizer_Plugin::NAME ),
-						'vAxis[minorGridlines][count]',
-						isset( $this->vAxis['minorGridlines']['count'] ) ? $this->vAxis['minorGridlines']['count'] : '',
-						esc_html__( 'The number of horizontal minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
-						0
-					);
+			self::_renderSectionStart( esc_html__( 'Minor Grid Lines', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'Count', 'visualizer' ),
+				'vAxis[minorGridlines][count]',
+				isset( $this->vAxis['minorGridlines']['count'] ) ? $this->vAxis['minorGridlines']['count'] : '',
+				esc_html__( 'The number of horizontal minor gridlines between two regular gridlines.', 'visualizer' ),
+				0
+			);
 
-					self::_renderColorPickerItem(
-						esc_html__( 'Color', Visualizer_Plugin::NAME ),
-						'vAxis[minorGridlines][color]',
-						isset( $this->vAxis['minorGridlines']['color'] ) ? $this->vAxis['minorGridlines']['color'] : null,
-						null
-					);
-				self::_renderSectionEnd();
-			}
+			self::_renderColorPickerItem(
+				esc_html__( 'Color', 'visualizer' ),
+				'vAxis[minorGridlines][color]',
+				isset( $this->vAxis['minorGridlines']['color'] ) ? $this->vAxis['minorGridlines']['color'] : null,
+				null
+			);
+			self::_renderSectionEnd();
+		}
 
-			if ( $this->_verticalGridLines ) {
-				self::_renderSectionStart( esc_html__( 'View Window', Visualizer_Plugin::NAME ), false );
-					self::_renderTextItem(
-						esc_html__( 'Maximum Value', Visualizer_Plugin::NAME ),
-						'hAxis[viewWindow][max]',
-						isset( $this->hAxis['viewWindow']['max'] ) ? $this->hAxis['viewWindow']['max'] : '',
-						'The maximum vertical data value to render.'
-					);
+		if ( $this->_verticalGridLines ) {
+			self::_renderSectionStart( esc_html__( 'View Window', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'Maximum Value', 'visualizer' ),
+				'hAxis[viewWindow][max]',
+				isset( $this->hAxis['viewWindow']['max'] ) ? $this->hAxis['viewWindow']['max'] : '',
+				'The maximum vertical data value to render.'
+			);
 
-					self::_renderTextItem(
-						esc_html__( 'Minimum Value', Visualizer_Plugin::NAME ),
-						'hAxis[viewWindow][min]',
-						isset( $this->hAxis['viewWindow']['min'] ) ? $this->hAxis['viewWindow']['min'] : '',
-						'The minimum vertical data value to render.'
-					);
-				self::_renderSectionEnd();
-			}
+			self::_renderTextItem(
+				esc_html__( 'Minimum Value', 'visualizer' ),
+				'hAxis[viewWindow][min]',
+				isset( $this->hAxis['viewWindow']['min'] ) ? $this->hAxis['viewWindow']['min'] : '',
+				'The minimum vertical data value to render.'
+			);
+			self::_renderSectionEnd();
+		}
 		self::_renderGroupEnd();
 	}
 
@@ -247,34 +245,34 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderVerticalAxisGeneralSettings() {
 		self::_renderTextItem(
-			esc_html__( 'Axis Title', Visualizer_Plugin::NAME ),
+			esc_html__( 'Axis Title', 'visualizer' ),
 			'vAxis[title]',
 			isset( $this->vAxis['title'] ) ? $this->vAxis['title'] : '',
-			esc_html__( 'The title of the vertical axis.', Visualizer_Plugin::NAME )
+			esc_html__( 'The title of the vertical axis.', 'visualizer' )
 		);
 
 		self::_renderSelectItem(
-			esc_html__( 'Text Position', Visualizer_Plugin::NAME ),
+			esc_html__( 'Text Position', 'visualizer' ),
 			'hAxis[textPosition]',
 			isset( $this->hAxis['textPosition'] ) ? $this->hAxis['textPosition'] : '',
 			$this->_positions,
-			esc_html__( 'Position of the vertical axis text, relative to the chart area.', Visualizer_Plugin::NAME )
+			esc_html__( 'Position of the vertical axis text, relative to the chart area.', 'visualizer' )
 		);
 
 		self::_renderSelectItem(
-			esc_html__( 'Direction', Visualizer_Plugin::NAME ),
+			esc_html__( 'Direction', 'visualizer' ),
 			'vAxis[direction]',
 			isset( $this->vAxis['direction'] ) ? $this->vAxis['direction'] : '',
 			array(
 				''   => '',
-				'1'  => esc_html__( 'Identical Direction', Visualizer_Plugin::NAME ),
-				'-1' => esc_html__( 'Reverse Direction', Visualizer_Plugin::NAME ),
+				'1'  => esc_html__( 'Identical Direction', 'visualizer' ),
+				'-1' => esc_html__( 'Reverse Direction', 'visualizer' ),
 			),
-			esc_html__( 'The direction in which the values along the vertical axis grow.', Visualizer_Plugin::NAME )
+			esc_html__( 'The direction in which the values along the vertical axis grow.', 'visualizer' )
 		);
 
 		self::_renderColorPickerItem(
-			esc_html__( 'Base Line Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Base Line Color', 'visualizer' ),
 			'hAxis[baselineColor]',
 			isset( $this->hAxis['baselineColor'] ) ? $this->hAxis['baselineColor'] : null,
 			'#000'
@@ -289,64 +287,64 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 * @access protected
 	 */
 	protected function _renderVerticalAxisSettings() {
-		self::_renderGroupStart( esc_html__( 'Vertical Axis Settings', Visualizer_Plugin::NAME ) );
-			self::_renderSectionStart( esc_html__( 'General Settings', Visualizer_Plugin::NAME ), false );
+		self::_renderGroupStart( esc_html__( 'Vertical Axis Settings', 'visualizer' ) );
+			self::_renderSectionStart( esc_html__( 'General Settings', 'visualizer' ), false );
 				$this->_renderVerticalAxisGeneralSettings();
 			self::_renderSectionEnd();
 
-			if ( $this->_verticalGridLines ) {
-				self::_renderSectionStart( esc_html__( 'Grid Lines', Visualizer_Plugin::NAME ), false );
-					self::_renderTextItem(
-						esc_html__( 'Count', Visualizer_Plugin::NAME ),
-						'hAxis[gridlines][count]',
-						isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
-						esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', Visualizer_Plugin::NAME ),
-						5
-					);
+		if ( $this->_verticalGridLines ) {
+			self::_renderSectionStart( esc_html__( 'Grid Lines', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'Count', 'visualizer' ),
+				'hAxis[gridlines][count]',
+				isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
+				esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
+				5
+			);
 
-					self::_renderColorPickerItem(
-						esc_html__( 'Color', Visualizer_Plugin::NAME ),
-						'hAxis[gridlines][color]',
-						isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
-						'#ccc'
-					);
-				self::_renderSectionEnd();
+			self::_renderColorPickerItem(
+				esc_html__( 'Color', 'visualizer' ),
+				'hAxis[gridlines][color]',
+				isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
+				'#ccc'
+			);
+			self::_renderSectionEnd();
 
-				self::_renderSectionStart( esc_html__( 'Minor Grid Lines', Visualizer_Plugin::NAME ), false );
-					self::_renderTextItem(
-						esc_html__( 'Count', Visualizer_Plugin::NAME ),
-						'hAxis[minorGridlines][count]',
-						isset( $this->hAxis['minorGridlines']['count'] ) ? $this->hAxis['minorGridlines']['count'] : '',
-						esc_html__( 'The number of vertical minor gridlines between two regular gridlines.', Visualizer_Plugin::NAME ),
-						0
-					);
+			self::_renderSectionStart( esc_html__( 'Minor Grid Lines', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'Count', 'visualizer' ),
+				'hAxis[minorGridlines][count]',
+				isset( $this->hAxis['minorGridlines']['count'] ) ? $this->hAxis['minorGridlines']['count'] : '',
+				esc_html__( 'The number of vertical minor gridlines between two regular gridlines.', 'visualizer' ),
+				0
+			);
 
-					self::_renderColorPickerItem(
-						esc_html__( 'Color', Visualizer_Plugin::NAME ),
-						'hAxis[minorGridlines][color]',
-						isset( $this->hAxis['minorGridlines']['color'] ) ? $this->hAxis['minorGridlines']['color'] : null,
-						null
-					);
-				self::_renderSectionEnd();
-			}
+			self::_renderColorPickerItem(
+				esc_html__( 'Color', 'visualizer' ),
+				'hAxis[minorGridlines][color]',
+				isset( $this->hAxis['minorGridlines']['color'] ) ? $this->hAxis['minorGridlines']['color'] : null,
+				null
+			);
+			self::_renderSectionEnd();
+		}
 
-			if ( $this->_horizontalGridLines ) {
-				self::_renderSectionStart( esc_html__( 'View Window', Visualizer_Plugin::NAME ), false );
-					self::_renderTextItem(
-						esc_html__( 'Maximum Value', Visualizer_Plugin::NAME ),
-						'vAxis[viewWindow][max]',
-						isset( $this->vAxis['viewWindow']['max'] ) ? $this->vAxis['viewWindow']['max'] : '',
-						'The maximum vertical data value to render.'
-					);
+		if ( $this->_horizontalGridLines ) {
+			self::_renderSectionStart( esc_html__( 'View Window', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'Maximum Value', 'visualizer' ),
+				'vAxis[viewWindow][max]',
+				isset( $this->vAxis['viewWindow']['max'] ) ? $this->vAxis['viewWindow']['max'] : '',
+				'The maximum vertical data value to render.'
+			);
 
-					self::_renderTextItem(
-						esc_html__( 'Minimum Value', Visualizer_Plugin::NAME ),
-						'vAxis[viewWindow][min]',
-						isset( $this->vAxis['viewWindow']['min'] ) ? $this->vAxis['viewWindow']['min'] : '',
-						'The minimum vertical data value to render.'
-					);
-				self::_renderSectionEnd();
-			}
+			self::_renderTextItem(
+				esc_html__( 'Minimum Value', 'visualizer' ),
+				'vAxis[viewWindow][min]',
+				isset( $this->vAxis['viewWindow']['min'] ) ? $this->vAxis['viewWindow']['min'] : '',
+				'The minimum vertical data value to render.'
+			);
+			self::_renderSectionEnd();
+		}
 		self::_renderGroupEnd();
 	}
 
@@ -370,14 +368,14 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 * @access protected
 	 */
 	protected function _renderSeriesSettings() {
-		self::_renderGroupStart( esc_html__( 'Series Settings', Visualizer_Plugin::NAME ) );
-			for ( $i = 1, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
-				if ( !empty( $this->__series[$i]['label'] ) ) {
-					self::_renderSectionStart( esc_html( $this->__series[$i]['label'] ), false );
-						$this->_renderSeries( $i - 1 );
-					self::_renderSectionEnd();
-				}
+		self::_renderGroupStart( esc_html__( 'Series Settings', 'visualizer' ) );
+		for ( $i = 1, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
+			if ( ! empty( $this->__series[ $i ]['label'] ) ) {
+				self::_renderSectionStart( esc_html( $this->__series[ $i ]['label'] ), false );
+					$this->_renderSeries( $i - 1 );
+				self::_renderSectionEnd();
 			}
+		}
 		self::_renderGroupEnd();
 	}
 
@@ -391,23 +389,23 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderSeries( $index ) {
 		self::_renderSelectItem(
-			esc_html__( 'Visible In Legend', Visualizer_Plugin::NAME ),
+			esc_html__( 'Visible In Legend', 'visualizer' ),
 			'series[' . $index . '][visibleInLegend]',
-			isset( $this->series[$index]['visibleInLegend'] ) ? $this->series[$index]['visibleInLegend'] : '',
+			isset( $this->series[ $index ]['visibleInLegend'] ) ? $this->series[ $index ]['visibleInLegend'] : '',
 			array(
 				''  => '',
-				'0' => esc_html__( 'No', Visualizer_Plugin::NAME ),
-				'1' => esc_html__( 'Yes', Visualizer_Plugin::NAME ),
+				'0' => esc_html__( 'No', 'visualizer' ),
+				'1' => esc_html__( 'Yes', 'visualizer' ),
 			),
-			esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+			esc_html__( 'Determines whether the series has to be presented in the legend or not.', 'visualizer' )
 		);
 
 		$this->_renderFormatField( $index );
 
 		self::_renderColorPickerItem(
-			esc_html__( 'Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Color', 'visualizer' ),
 			'series[' . $index . '][color]',
-			isset( $this->series[$index]['color'] ) ? $this->series[$index]['color'] : null,
+			isset( $this->series[ $index ]['color'] ) ? $this->series[ $index ]['color'] : null,
 			null
 		);
 	}
@@ -421,19 +419,19 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderHorizontalAxisFormatField() {
 		self::_renderTextItem(
-			esc_html__( 'Number Format', Visualizer_Plugin::NAME ),
+			esc_html__( 'Number Format', 'visualizer' ),
 			'hAxis[format]',
 			isset( $this->hAxis['format'] ) ? $this->hAxis['format'] : '',
 			sprintf(
 				'%s<br><br>%s<br><br>%s',
-				esc_html__( 'Enter custom format pattern to apply to horizontal axis labels.', Visualizer_Plugin::NAME ),
+				esc_html__( 'Enter custom format pattern to apply to horizontal axis labels.', 'visualizer' ),
 				sprintf(
-					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %sICU pattern set%s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #%% percentage format then your values will be multiplied by 100.', Visualizer_Plugin::NAME ),
+					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%1$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #%3$% percentage format then your values will be multiplied by 100.', 'visualizer' ),
 					'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
 					'</a>'
 				),
 				sprintf(
-					esc_html__( 'For date axis labels, this is a subset of the date formatting %sICU date and time format%s.', Visualizer_Plugin::NAME ),
+					esc_html__( 'For date axis labels, this is a subset of the date formatting %1$sICU date and time format%1$s.', 'visualizer' ),
 					'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
 					'</a>'
 				)
@@ -450,19 +448,19 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderVerticalAxisFormatField() {
 		self::_renderTextItem(
-			esc_html__( 'Number Format', Visualizer_Plugin::NAME ),
+			esc_html__( 'Number Format', 'visualizer' ),
 			'vAxis[format]',
 			isset( $this->vAxis['format'] ) ? $this->vAxis['format'] : '',
 			sprintf(
 				'%s<br><br>%s<br><br>%s',
-				esc_html__( 'Enter custom format pattern to apply to vertical axis labels.', Visualizer_Plugin::NAME ),
+				esc_html__( 'Enter custom format pattern to apply to vertical axis labels.', 'visualizer' ),
 				sprintf(
-					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %sICU pattern set%s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #%% percentage format then your values will be multiplied by 100.', Visualizer_Plugin::NAME ),
+					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%1$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #%3$% percentage format then your values will be multiplied by 100.', 'visualizer' ),
 					'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
 					'</a>'
 				),
 				sprintf(
-					esc_html__( 'For date axis labels, this is a subset of the date formatting %sICU date and time format%s.', Visualizer_Plugin::NAME ),
+					esc_html__( 'For date axis labels, this is a subset of the date formatting %1$sICU date and time format%1$s.', 'visualizer' ),
 					'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
 					'</a>'
 				)

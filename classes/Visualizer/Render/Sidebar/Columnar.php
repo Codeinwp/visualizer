@@ -19,8 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
-
 /**
  * Base class for sidebar settings of columnar based charts.
  *
@@ -41,37 +39,37 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 	 * @access protected
 	 */
 	protected function _renderColumnarSettings() {
-		self::_renderGroupStart( esc_html__( 'Bars Settings', Visualizer_Plugin::NAME ) );
+		self::_renderGroupStart( esc_html__( 'Bars Settings', 'visualizer' ) );
 			self::_renderSectionStart();
 				self::_renderSelectItem(
-					esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
+					esc_html__( 'Focus Target', 'visualizer' ),
 					'focusTarget',
 					$this->focusTarget,
 					array(
 						''         => '',
-						'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
-						'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
+						'datum'    => esc_html__( 'Focus on a single data point.', 'visualizer' ),
+						'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', 'visualizer' ),
 					),
-					esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
+					esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', 'visualizer' )
 				);
 
 				echo '<div class="section-delimiter"></div>';
 
 				self::_renderSelectItem(
-					esc_html__( 'Is Stacked', Visualizer_Plugin::NAME ),
+					esc_html__( 'Is Stacked', 'visualizer' ),
 					'isStacked',
 					$this->isStacked,
 					$this->_yesno,
-					esc_html__( 'If set to yes, series elements are stacked.', Visualizer_Plugin::NAME )
+					esc_html__( 'If set to yes, series elements are stacked.', 'visualizer' )
 				);
 
 				echo '<div class="section-delimiter"></div>';
 
 				self::_renderTextItem(
-					esc_html__( 'Bars Opacity', Visualizer_Plugin::NAME ),
+					esc_html__( 'Bars Opacity', 'visualizer' ),
 					'dataOpacity',
 					$this->dataOpacity,
-					esc_html__( 'Bars transparency, with 1.0 being completely opaque and 0.0 fully transparent.', Visualizer_Plugin::NAME ),
+					esc_html__( 'Bars transparency, with 1.0 being completely opaque and 0.0 fully transparent.', 'visualizer' ),
 					'1.0'
 				);
 			self::_renderSectionEnd();
@@ -87,14 +85,14 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 	 * @access protected
 	 */
 	protected function _renderVerticalAxisGeneralSettings() {
-        parent::_renderVerticalAxisGeneralSettings();
+		parent::_renderVerticalAxisGeneralSettings();
 		self::_renderColorPickerItem(
-			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Axis Text Color', 'visualizer' ),
 			'hAxis[textStyle]',
 			isset( $this->hAxis['textStyle'] ) ? $this->hAxis['textStyle'] : null,
 			'#000'
 		);
-    }
+	}
 
 	/**
 	 * Renders general settings block for vertical axis settings.
@@ -104,13 +102,13 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 	 * @access protected
 	 */
 	protected function _renderHorizontalAxisGeneralSettings() {
-        parent::_renderHorizontalAxisGeneralSettings();
+		parent::_renderHorizontalAxisGeneralSettings();
 		self::_renderColorPickerItem(
-			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Axis Text Color', 'visualizer' ),
 			'vAxis[textStyle]',
 			isset( $this->vAxis['textStyle'] ) ? $this->vAxis['textStyle'] : null,
 			'#000'
 		);
-    }
+	}
 
 }

@@ -1,3 +1,5 @@
+/* global google */
+/* global visualizer */
 (function(v, g) {
 	var gv;
 
@@ -34,7 +36,7 @@
 			case 'pie':
 				if (settings.slices) {
 					for (i in settings.slices) {
-						if (settings.slices[i]['color'] == '') {
+						if (settings.slices[i]['color'] === '') {
 							delete settings.slices[i]['color'];
 						}
 					}
@@ -48,24 +50,24 @@
 			case 'candlestick':
 				if (settings.series) {
 					for (i in settings.series) {
-						if (settings.series[i]['color'] == '') {
+						if (settings.series[i]['color'] === '') {
 							delete settings.series[i]['color'];
 						}
 					}
 				}
 
-                if (settings.series && settings.legend && settings.legend.position == "left")
+                if (settings.series && settings.legend && settings.legend.position === "left")
                 {
                     settings.targetAxisIndex = 1;
                 }
 				break;
 			case 'geo':
-				if (settings.region != undefined && settings.region.replace(/^\s+|\s+$/g, '') == '') {
+				if (settings.region !== undefined && settings.region.replace(/^\s+|\s+$/g, '') === '') {
 					settings['region'] = 'world';
 				}
 				break;
 			case 'table':
-                if (parseInt(settings['pagination']) != 1)
+                if (parseInt(settings['pagination']) !== 1)
                 {
                     delete settings['pageSize'];
                 }
@@ -77,23 +79,23 @@
                 settings['timeline']['groupByRowLabel'] = settings['groupByRowLabel'] ? true : false;
                 settings['timeline']['colorByRowLabel'] = settings['colorByRowLabel'] ? true : false;
                 settings['timeline']['showRowLabels']   = settings['showRowLabels'] ? true : false;
-                if(settings['singleColor'] != '') {
+                if(settings['singleColor'] !== '') {
                     settings['timeline']['singleColor'] = settings['singleColor'];
                 }
 				break;
 			case 'combo':
 				if (settings.series) {
 					for (i in settings.series) {
-						if (settings.series[i]['type'] == '') {
+						if (settings.series[i]['type'] === '') {
 							delete settings.series[i]['type'];
 						}
-						if (settings.series[i]['color'] == '') {
+						if (settings.series[i]['color'] === '') {
 							delete settings.series[i]['color'];
 						}
 					}
 				}
 
-                if (settings.series && settings.legend && settings.legend.position == "left")
+                if (settings.series && settings.legend && settings.legend.position === "left")
                 {
                     settings.targetAxisIndex = 1;
                 }
@@ -102,7 +104,7 @@
 				return;
 		}
 
-		if (series[0] && (series[0].type == 'date' || series[0].type == 'datetime')) {
+		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime')) {
 			axis = false;
 			switch (v.charts[id].type) {
 				case 'line':
@@ -133,13 +135,13 @@
 		}
 
         if(settings.hAxis){
-            if(settings.hAxis.textStyle && settings.hAxis.textStyle != ''){
+            if(settings.hAxis.textStyle && settings.hAxis.textStyle !== ''){
                 settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
             }
         }
 
         if(settings.vAxis){
-            if(settings.vAxis.textStyle && settings.vAxis.textStyle != ''){
+            if(settings.vAxis.textStyle && settings.vAxis.textStyle !== ''){
                 settings.vAxis.textStyle = {color: settings.vAxis.textStyle};
             }
         }
@@ -147,7 +149,7 @@
         for (i = 0; i < data.length; i++) {
 			row = [];
 			for (j = 0; j < series.length; j++) {
-				if (series[j].type == 'date' || series[j].type == 'datetime') {
+				if (series[j].type === 'date' || series[j].type === 'datetime') {
 					date = new Date(data[i][j]);
 					data[i][j] = null;
 					if (Object.prototype.toString.call(date) === "[object Date]") {
@@ -164,7 +166,7 @@
 		if (settings.series) {
 			for (i = 0; i < settings.series.length; i++) {
 				format = settings.series[i].format;
-				if (!format || format == '') {
+				if (!format || format === '') {
 					continue;
 				}
 
@@ -211,23 +213,30 @@
 			resizeTimeout = setTimeout(v.render, 100);
 		});
 
-        resizeHiddenContainers();
+        resizeHiddenContainers(false);
     });
 
-    function resizeHiddenContainers(){
+    $(window).load(function(){
+        resizeHiddenContainers(true);
+    });
+
+    function resizeHiddenContainers(everytime){
         $(".visualizer-front").parents().each(function(){
-            if(!$(this).is(":visible")){
+            if(!$(this).is(":visible") && !$(this).hasClass("visualizer-hidden-container")){
                 $(this).addClass("visualizer-hidden-container");
             }
         });
 
         var mutateObserver = new MutationObserver(function(records) {
             records.forEach(function(record) {
-                if(record.attributeName == "style" || record.attributeName == "class"){
+                if(record.attributeName === "style" || record.attributeName === "class"){
                     var element         = $(record.target);
                     var displayStyle    = window.getComputedStyle(element[0]).getPropertyValue("display");
-                    if(element.hasClass("visualizer-hidden-container-resized") || displayStyle == "none") return;
-                    element.addClass("visualizer-hidden-container-resized").find(".visualizer-front").resize();
+                    if(element.hasClass("visualizer-hidden-container-resized") || displayStyle === "none") { return ; }
+                    element.find(".visualizer-front").resize();
+                    if(!everytime) {
+                    	element.addClass("visualizer-hidden-container-resized");
+                    }
                 }
             });
         });
