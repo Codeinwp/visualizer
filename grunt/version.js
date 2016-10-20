@@ -1,6 +1,5 @@
-/**
- * Created by Marius Cristea on 20/10/2016.
- */
+/* jshint node:true */
+//https://github.com/kswedberg/grunt-version
 module.exports = {
     options: {
         pkg: {
