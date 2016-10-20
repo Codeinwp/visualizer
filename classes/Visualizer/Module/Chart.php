@@ -590,7 +590,18 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
             if (!empty($data)) {
                 foreach ($data as $array) {
-                    $rows[] = $array;
+                    // ignore strings
+                    if (!is_array($array)) continue;
+
+                    // if this is an array of arrays...
+                    if (is_array($array[0])) {
+                        foreach ($array as $arr) {
+                            $rows[] = $arr;
+                        }
+                    } else {
+                        // just an array
+                        $rows[] = $array;
+                    }
                 }
             }
 
