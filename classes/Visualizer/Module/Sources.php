@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Sources module class.
  *
@@ -67,16 +66,16 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @return Visualizer_Source The source object if source exists, otherwise FALSE.
 	 */
 	private function _getSource( $chart_id ) {
-		if ( !isset( $this->_sources[$chart_id] ) ) {
+		if ( ! isset( $this->_sources[ $chart_id ] ) ) {
 			$class = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
-			if ( !class_exists( $class, true ) ) {
+			if ( ! class_exists( $class, true ) ) {
 				return false;
 			}
 
-			$this->_sources[$chart_id] = new $class();
+			$this->_sources[ $chart_id ] = new $class();
 		}
 
-		return $this->_sources[$chart_id];
+		return $this->_sources[ $chart_id ];
 	}
 
 	/**
@@ -86,12 +85,12 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 *
 	 * @access public
 	 * @param array $series The array of chart series.
-	 * @param int $chart_id The chart id.
+	 * @param int   $chart_id The chart id.
 	 * @return array The array of filtered series.
 	 */
 	public function filterChartSeries( $series, $chart_id ) {
 		$source = $this->_getSource( $chart_id );
-		if ( !$source ) {
+		if ( ! $source ) {
 			return $series;
 		}
 
@@ -105,12 +104,12 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 *
 	 * @access public
 	 * @param array $data The array of chart data.
-	 * @param int $chart_id The chart id.
+	 * @param int   $chart_id The chart id.
 	 * @return array The array of filtered data.
 	 */
 	public function filterChartData( $data, $chart_id ) {
 		$source = $this->_getSource( $chart_id );
-		if ( !$source ) {
+		if ( ! $source ) {
 			return $data;
 		}
 

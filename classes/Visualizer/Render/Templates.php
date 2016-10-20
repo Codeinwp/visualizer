@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Media view template rendering class.
  *
@@ -66,10 +65,10 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 */
 	protected function _renderLibraryChart() {
 		echo '<div class="visualizer-library-chart-footer visualizer-clearfix">';
-			echo '<a class="visualizer-library-chart-action visualizer-library-chart-delete" href="javascript:;" title="', esc_attr__( 'Delete', Visualizer_Plugin::NAME ), '"></a>';
-			echo '<a class="visualizer-library-chart-action visualizer-library-chart-insert" href="javascript:;" title="', esc_attr__( 'Insert', Visualizer_Plugin::NAME ), '"></a>';
+			echo '<a class="visualizer-library-chart-action visualizer-library-chart-delete" href="javascript:;" title="', esc_attr__( 'Delete', 'visualizer' ), '"></a>';
+			echo '<a class="visualizer-library-chart-action visualizer-library-chart-insert" href="javascript:;" title="', esc_attr__( 'Insert', 'visualizer' ), '"></a>';
 
-			echo '<span class="visualizer-library-chart-shortcode" title="', esc_attr__( 'Click to select', Visualizer_Plugin::NAME ), '">&nbsp;[visualizer id=&quot;{{data.id}}&quot;]&nbsp;</span>';
+			echo '<span class="visualizer-library-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">&nbsp;[visualizer id=&quot;{{data.id}}&quot;]&nbsp;</span>';
 		echo '</div>';
 	}
 
@@ -83,7 +82,7 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	protected function _renderLibraryEmpty() {
 		echo '<div class="visualizer-library-chart">';
 			echo '<div class="visualizer-library-chart-canvas visualizer-library-nochart-canvas">';
-				echo '<div class="visualizer-library-notfound">', esc_html__( 'No charts found', Visualizer_Plugin::NAME ), '</div>';
+				echo '<div class="visualizer-library-notfound">', esc_html__( 'No charts found', 'visualizer' ), '</div>';
 			echo '</div>';
 			echo '<div class="visualizer-library-chart-footer visualizer-clearfix">';
 				echo '<span class="visualizer-library-chart-action visualizer-library-nochart-delete"></span>';

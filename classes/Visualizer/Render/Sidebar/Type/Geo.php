@@ -19,8 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
-
 /**
  * Class for geo chart sidebar settings.
  *
@@ -55,20 +53,20 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderMapSettings() {
-		self::_renderGroupStart( esc_html__( 'Map Settings', Visualizer_Plugin::NAME ) );
-			self::_renderSectionStart( esc_html__( 'Region', Visualizer_Plugin::NAME ), false );
+		self::_renderGroupStart( esc_html__( 'Map Settings', 'visualizer' ) );
+			self::_renderSectionStart( esc_html__( 'Region', 'visualizer' ), false );
 				self::_renderSectionDescription(
-					esc_html__( 'Configure the region area to display on the map. (Surrounding areas will be displayed as well.) Can be one of the following:' ) .
+					esc_html__( 'Configure the region area to display on the map. (Surrounding areas will be displayed as well.) Can be one of the following:' , 'visualizer' ) .
 					'<ul>' .
-						'<li>' . esc_html__( "'world' - A map of the entire world.", Visualizer_Plugin::NAME ) . '</li>' .
-						'<li>' . sprintf( esc_html__( "A continent or a sub-continent, specified by its %s code, e.g., '011' for Western Africa.", Visualizer_Plugin::NAME ), '<a href="https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart#Continent_Hierarchy" target="_blank">3-digit</a>' ) . '</li>' .
-						'<li>' . sprintf( esc_html__( "A country, specified by its %s code, e.g., 'AU' for Australia.", Visualizer_Plugin::NAME ), '<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">ISO 3166-1 alpha-2</a>' ) . '</li>' .
-						'<li>' . sprintf( esc_html__( "A state in the United States, specified by its %s code, e.g., 'US-AL' for Alabama. Note that the resolution option must be set to either 'provinces' or 'metros'.", Visualizer_Plugin::NAME ), '<a href="http://en.wikipedia.org/wiki/ISO_3166-2:US" target="_blank">ISO 3166-2:US</a>' ) . '</li>' .
+						'<li>' . esc_html__( "'world' - A map of the entire world.", 'visualizer' ) . '</li>' .
+						'<li>' . sprintf( esc_html__( "A continent or a sub-continent, specified by its %s code, e.g., '011' for Western Africa.", 'visualizer' ), '<a href="https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart#Continent_Hierarchy" target="_blank">3-digit</a>' ) . '</li>' .
+						'<li>' . sprintf( esc_html__( "A country, specified by its %s code, e.g., 'AU' for Australia.", 'visualizer' ), '<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">ISO 3166-1 alpha-2</a>' ) . '</li>' .
+						'<li>' . sprintf( esc_html__( "A state in the United States, specified by its %s code, e.g., 'US-AL' for Alabama. Note that the resolution option must be set to either 'provinces' or 'metros'.", 'visualizer' ), '<a href="http://en.wikipedia.org/wiki/ISO_3166-2:US" target="_blank">ISO 3166-2:US</a>' ) . '</li>' .
 					'</ul>'
 				);
 
 				self::_renderTextItem(
-					esc_html__( 'Region', Visualizer_Plugin::NAME ),
+					esc_html__( 'Region', 'visualizer' ),
 					'region',
 					$this->region,
 					'',
@@ -76,56 +74,56 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 				);
 
 			self::_renderSectionEnd();
-			self::_renderSectionStart( esc_html__( 'Resolution', Visualizer_Plugin::NAME ), false );
+			self::_renderSectionStart( esc_html__( 'Resolution', 'visualizer' ), false );
 
 				self::_renderSectionDescription(
-					esc_html__( 'The resolution of the map borders. Choose one of the following values:' ) .
+					esc_html__( 'The resolution of the map borders. Choose one of the following values:', 'visualizer' ) .
 					'<ul>' .
-						'<li>' . esc_html__( "'countries' - Supported for all regions, except for US state regions.", Visualizer_Plugin::NAME ) . '</li>' .
-						'<li>' . esc_html__( "'provinces' - Supported only for country regions and US state regions. Not supported for all countries; please test a country to see whether this option is supported.", Visualizer_Plugin::NAME ) . '</li>' .
-						'<li>' . esc_html__( "'metros' - Supported for the US country region and US state regions only.", Visualizer_Plugin::NAME ) . '</li>' .
+						'<li>' . esc_html__( "'countries' - Supported for all regions, except for US state regions.", 'visualizer' ) . '</li>' .
+						'<li>' . esc_html__( "'provinces' - Supported only for country regions and US state regions. Not supported for all countries; please test a country to see whether this option is supported.", 'visualizer' ) . '</li>' .
+						'<li>' . esc_html__( "'metros' - Supported for the US country region and US state regions only.", 'visualizer' ) . '</li>' .
 					'</ul>'
 				);
 
 				self::_renderSelectItem(
-					esc_html__( 'Resolution', Visualizer_Plugin::NAME ),
+					esc_html__( 'Resolution', 'visualizer' ),
 					'resolution',
 					$this->resolution,
 					array(
 						''          => '',
-						'countries' => esc_html__( 'Countries', Visualizer_Plugin::NAME ),
-						'provinces' => esc_html__( 'Provinces', Visualizer_Plugin::NAME ),
-						'metros'    => esc_html__( 'Metros', Visualizer_Plugin::NAME ),
+						'countries' => esc_html__( 'Countries', 'visualizer' ),
+						'provinces' => esc_html__( 'Provinces', 'visualizer' ),
+						'metros'    => esc_html__( 'Metros', 'visualizer' ),
 					),
 					''
 				);
 
 			self::_renderSectionEnd();
-			self::_renderSectionStart( esc_html__( 'Display Mode', Visualizer_Plugin::NAME ), false );
+			self::_renderSectionStart( esc_html__( 'Display Mode', 'visualizer' ), false );
 
 				self::_renderSectionDescription(
-					esc_html__( 'Determines which type of map this is. The following values are supported:' ) .
+					esc_html__( 'Determines which type of map this is. The following values are supported:', 'visualizer' ) .
 					'<ul>' .
-						'<li>' . esc_html__( "'auto' - Choose based on the format of the data.", Visualizer_Plugin::NAME ) . '</li>' .
-						'<li>' . esc_html__( "'regions' - This is a region map.", Visualizer_Plugin::NAME ) . '</li>' .
-						'<li>' . esc_html__( "'markers' - This is a marker map.", Visualizer_Plugin::NAME ) . '</li>' .
+						'<li>' . esc_html__( "'auto' - Choose based on the format of the data.", 'visualizer' ) . '</li>' .
+						'<li>' . esc_html__( "'regions' - This is a region map.", 'visualizer' ) . '</li>' .
+						'<li>' . esc_html__( "'markers' - This is a marker map.", 'visualizer' ) . '</li>' .
 					'</ul>'
 				);
 
 				self::_renderSelectItem(
-					esc_html__( 'Display Mode', Visualizer_Plugin::NAME ),
+					esc_html__( 'Display Mode', 'visualizer' ),
 					'displayMode',
 					$this->displayMode,
 					array(
 						''        => '',
-						'auto'    => esc_html__( 'Auto', Visualizer_Plugin::NAME ),
-						'regions' => esc_html__( 'Regions', Visualizer_Plugin::NAME ),
-						'markers' => esc_html__( 'Markers', Visualizer_Plugin::NAME ),
+						'auto'    => esc_html__( 'Auto', 'visualizer' ),
+						'regions' => esc_html__( 'Regions', 'visualizer' ),
+						'markers' => esc_html__( 'Markers', 'visualizer' ),
 					),
 					''
 				);
 			self::_renderSectionEnd();
-			self::_renderSectionStart( esc_html__( 'Tooltip', Visualizer_Plugin::NAME ), false );
+			self::_renderSectionStart( esc_html__( 'Tooltip', 'visualizer' ), false );
 				$this->_renderTooltipSettigns();
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
@@ -140,15 +138,15 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 */
 	protected function _renderTooltipSettigns() {
 		self::_renderSelectItem(
-			esc_html__( 'Trigger', Visualizer_Plugin::NAME ),
+			esc_html__( 'Trigger', 'visualizer' ),
 			'tooltip[trigger]',
 			isset( $this->tooltip['trigger'] ) ? $this->tooltip['trigger'] : null,
 			array(
 				''          => '',
-				'focus'     => esc_html__( 'The tooltip will be displayed when the user hovers over an element', Visualizer_Plugin::NAME ),
-				'none'      => esc_html__( 'The tooltip will not be displayed', Visualizer_Plugin::NAME ),
+				'focus'     => esc_html__( 'The tooltip will be displayed when the user hovers over an element', 'visualizer' ),
+				'none'      => esc_html__( 'The tooltip will not be displayed', 'visualizer' ),
 			),
-			esc_html__( 'Determines the user interaction that causes the tooltip to be displayed.', Visualizer_Plugin::NAME )
+			esc_html__( 'Determines the user interaction that causes the tooltip to be displayed.', 'visualizer' )
 		);
 	}
 
@@ -160,13 +158,13 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderColorAxisSettings() {
-		self::_renderGroupStart( esc_html__( 'Color Axis', Visualizer_Plugin::NAME ) );
+		self::_renderGroupStart( esc_html__( 'Color Axis', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure color axis gradient scale, minimum and maximun values and a color of the dateless regions.', Visualizer_Plugin::NAME ) );
+				self::_renderSectionDescription( esc_html__( 'Configure color axis gradient scale, minimum and maximun values and a color of the dateless regions.', 'visualizer' ) );
 
 				echo '<div class="section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Minimum And Maximum Values', Visualizer_Plugin::NAME ), '</b>';
+					echo '<b>', esc_html__( 'Minimum And Maximum Values', 'visualizer' ), '</b>';
 
 					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -180,35 +178,35 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 					echo '</table>';
 
 					echo '<p class="section-description">';
-						esc_html_e( 'Determines the minimum and maximum values of color axis.', Visualizer_Plugin::NAME );
+						esc_html_e( 'Determines the minimum and maximum values of color axis.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Minimum Value', Visualizer_Plugin::NAME ),
+					esc_html__( 'Minimum Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					!empty( $this->colorAxis['color'][0] ) ? $this->colorAxis['color'][0] : null,
+					! empty( $this->colorAxis['color'][0] ) ? $this->colorAxis['color'][0] : null,
 					'#efe6dc'
 				);
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Intermediate Value', Visualizer_Plugin::NAME ),
+					esc_html__( 'Intermediate Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					!empty( $this->colorAxis['color'][1] ) ? $this->colorAxis['color'][1] : null,
+					! empty( $this->colorAxis['color'][1] ) ? $this->colorAxis['color'][1] : null,
 					'#82bf7c'
 				);
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Maximum Value', Visualizer_Plugin::NAME ),
+					esc_html__( 'Maximum Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					!empty( $this->colorAxis['color'][2] ) ? $this->colorAxis['color'][2] : null,
+					! empty( $this->colorAxis['color'][2] ) ? $this->colorAxis['color'][2] : null,
 					'#109618'
 				);
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Dateless Region', Visualizer_Plugin::NAME ),
+					esc_html__( 'Dateless Region', 'visualizer' ),
 					'datalessRegionColor',
-					!empty( $this->datalessRegionColor ) ? $this->datalessRegionColor : null,
+					! empty( $this->datalessRegionColor ) ? $this->datalessRegionColor : null,
 					null
 				);
 
@@ -224,13 +222,13 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderSizeAxisSettings() {
-		self::_renderGroupStart( esc_html__( 'Size Axis', Visualizer_Plugin::NAME ) );
+		self::_renderGroupStart( esc_html__( 'Size Axis', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure how values are associated with bubble size, minimum and maximun values and marker opacity setting.', Visualizer_Plugin::NAME ) );
+				self::_renderSectionDescription( esc_html__( 'Configure how values are associated with bubble size, minimum and maximun values and marker opacity setting.', 'visualizer' ) );
 
 				echo '<div class="section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Minimum And Maximum Values', Visualizer_Plugin::NAME ), '</b>';
+					echo '<b>', esc_html__( 'Minimum And Maximum Values', 'visualizer' ), '</b>';
 
 					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -244,13 +242,13 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 					echo '</table>';
 
 					echo '<p class="section-description">';
-						esc_html_e( 'Determines the minimum and maximum values of size axis.', Visualizer_Plugin::NAME );
+						esc_html_e( 'Determines the minimum and maximum values of size axis.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
 				echo '<div class="section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Minimum And Maximum Marker Radius', Visualizer_Plugin::NAME ), '</b>';
+					echo '<b>', esc_html__( 'Minimum And Maximum Marker Radius', 'visualizer' ), '</b>';
 
 					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -264,15 +262,15 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 					echo '</table>';
 
 					echo '<p class="section-description">';
-						esc_html_e( 'Determines the radius of the smallest and largest possible bubbles, in pixels.', Visualizer_Plugin::NAME );
+						esc_html_e( 'Determines the radius of the smallest and largest possible bubbles, in pixels.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
 				self::_renderTextItem(
-					esc_html__( 'Marker Opacity', Visualizer_Plugin::NAME ),
+					esc_html__( 'Marker Opacity', 'visualizer' ),
 					'markerOpacity',
 					$this->markerOpacity,
-					esc_html__( 'The opacity of the markers, where 0.0 is fully transparent and 1.0 is fully opaque.', Visualizer_Plugin::NAME ),
+					esc_html__( 'The opacity of the markers, where 0.0 is fully transparent and 1.0 is fully opaque.', 'visualizer' ),
 					'1.0'
 				);
 
@@ -290,23 +288,23 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderMagnifyingGlassSettings() {
-		self::_renderGroupStart( esc_html__( 'Magnifying Glass', Visualizer_Plugin::NAME ) );
+		self::_renderGroupStart( esc_html__( 'Magnifying Glass', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure magnifying glass settings, which appears, when the user lingers over a cluttered marker. Note: this feature is not supported in browsers that do not support SVG, i.e. Internet Explorer version 8 or earlier.', Visualizer_Plugin::NAME ) );
+				self::_renderSectionDescription( esc_html__( 'Configure magnifying glass settings, which appears, when the user lingers over a cluttered marker. Note: this feature is not supported in browsers that do not support SVG, i.e. Internet Explorer version 8 or earlier.', 'visualizer' ) );
 
 				self::_renderSelectItem(
-					esc_html__( 'Enabled', Visualizer_Plugin::NAME ),
+					esc_html__( 'Enabled', 'visualizer' ),
 					'magnifyingGlass[enable]',
 					isset( $this->magnifyingGlass['enable'] ) ? $this->magnifyingGlass['enable'] : '',
 					$this->_yesno,
-					esc_html__( 'If yes, when the user lingers over a cluttered marker, a magnifiying glass will be opened.', Visualizer_Plugin::NAME )
+					esc_html__( 'If yes, when the user lingers over a cluttered marker, a magnifiying glass will be opened.', 'visualizer' )
 				);
 
 				self::_renderTextItem(
-					esc_html__( 'Zoom Factor', Visualizer_Plugin::NAME ),
+					esc_html__( 'Zoom Factor', 'visualizer' ),
 					'magnifyingGlass[zoomFactor]',
 					isset( $this->magnifyingGlass['zoomFactor'] ) ? $this->magnifyingGlass['zoomFactor'] : '',
-					esc_html__( 'The zoom factor of the magnifying glass. Can be any number greater than 0.', Visualizer_Plugin::NAME ),
+					esc_html__( 'The zoom factor of the magnifying glass. Can be any number greater than 0.', 'visualizer' ),
 					'5.0'
 				);
 			self::_renderSectionEnd();
@@ -321,13 +319,13 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderViewSettings() {
-		self::_renderGroupStart( esc_html__( 'Layout Settings', Visualizer_Plugin::NAME ) );
+		self::_renderGroupStart( esc_html__( 'Layout Settings', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', Visualizer_Plugin::NAME ) );
+				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
 				echo '<div class="section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Width And Height Of Chart', Visualizer_Plugin::NAME ), '</b>';
+					echo '<b>', esc_html__( 'Width And Height Of Chart', 'visualizer' ), '</b>';
 
 					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -341,42 +339,42 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 					echo '</table>';
 
 					echo '<p class="section-description">';
-						esc_html_e( 'Determines the total width and height of the chart.', Visualizer_Plugin::NAME );
+						esc_html_e( 'Determines the total width and height of the chart.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
 				self::_renderSelectItem(
-					esc_html__( 'Keep Aspect Ratio', Visualizer_Plugin::NAME ),
+					esc_html__( 'Keep Aspect Ratio', 'visualizer' ),
 					'keepAspectRatio',
 					$this->keepAspectRatio,
 					$this->_yesno,
-					esc_html__( 'If yes, the map will be drawn at the largest size that can fit inside the chart area at its natural aspect ratio. If only one of the width and height options is specified, the other one will be calculated according to the aspect ratio.', Visualizer_Plugin::NAME ) . '<br><br>' .
-					esc_html__( 'If no, the map will be stretched to the exact size of the chart as specified by the width and height options.', Visualizer_Plugin::NAME )
+					esc_html__( 'If yes, the map will be drawn at the largest size that can fit inside the chart area at its natural aspect ratio. If only one of the width and height options is specified, the other one will be calculated according to the aspect ratio.', 'visualizer' ) . '<br><br>' .
+					esc_html__( 'If no, the map will be stretched to the exact size of the chart as specified by the width and height options.', 'visualizer' )
 				);
 
 				echo '<div class="section-delimiter"></div>';
 
-				self::_renderSectionDescription( esc_html__( 'Configure the background color for the main area of the chart and the chart border width and color.', Visualizer_Plugin::NAME ) );
+				self::_renderSectionDescription( esc_html__( 'Configure the background color for the main area of the chart and the chart border width and color.', 'visualizer' ) );
 
 				self::_renderTextItem(
-					esc_html__( 'Stroke Width', Visualizer_Plugin::NAME ),
+					esc_html__( 'Stroke Width', 'visualizer' ),
 					'backgroundColor[strokeWidth]',
 					isset( $this->backgroundColor['strokeWidth'] ) ? $this->backgroundColor['strokeWidth'] : null,
-					esc_html__( 'The chart border width in pixels.', Visualizer_Plugin::NAME ),
+					esc_html__( 'The chart border width in pixels.', 'visualizer' ),
 					'0'
 				);
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Stroke Color', Visualizer_Plugin::NAME ),
+					esc_html__( 'Stroke Color', 'visualizer' ),
 					'backgroundColor[stroke]',
-					!empty( $this->backgroundColor['stroke'] ) ? $this->backgroundColor['stroke'] : null,
+					! empty( $this->backgroundColor['stroke'] ) ? $this->backgroundColor['stroke'] : null,
 					'#666'
 				);
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Background Color', Visualizer_Plugin::NAME ),
+					esc_html__( 'Background Color', 'visualizer' ),
 					'backgroundColor[fill]',
-					!empty( $this->backgroundColor['fill'] ) ? $this->backgroundColor['fill'] : null,
+					! empty( $this->backgroundColor['fill'] ) ? $this->backgroundColor['fill'] : null,
 					'#fff'
 				);
 			self::_renderSectionEnd();

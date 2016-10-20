@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * The module for all admin stuff.
  *
@@ -75,21 +74,21 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public static function _getChartTypesLocalized() {
 		$types  = array(
-			'all'         => esc_html__( 'All', Visualizer_Plugin::NAME ),
-			'pie'         => esc_html__( 'Pie', Visualizer_Plugin::NAME ),
-			'line'        => esc_html__( 'Line', Visualizer_Plugin::NAME ),
-			'area'        => esc_html__( 'Area', Visualizer_Plugin::NAME ),
-			'geo'         => esc_html__( 'Geo', Visualizer_Plugin::NAME ),
-			'bar'         => esc_html__( 'Bar', Visualizer_Plugin::NAME ),
-			'column'      => esc_html__( 'Column', Visualizer_Plugin::NAME ),
-			'gauge'       => esc_html__( 'Gauge', Visualizer_Plugin::NAME ),
-			'scatter'     => esc_html__( 'Scatter', Visualizer_Plugin::NAME ),
-			'candlestick' => esc_html__( 'Candlestick', Visualizer_Plugin::NAME ),
+			'all'         => esc_html__( 'All', 'visualizer' ),
+			'pie'         => esc_html__( 'Pie', 'visualizer' ),
+			'line'        => esc_html__( 'Line', 'visualizer' ),
+			'area'        => esc_html__( 'Area', 'visualizer' ),
+			'geo'         => esc_html__( 'Geo', 'visualizer' ),
+			'bar'         => esc_html__( 'Bar', 'visualizer' ),
+			'column'      => esc_html__( 'Column', 'visualizer' ),
+			'gauge'       => esc_html__( 'Gauge', 'visualizer' ),
+			'scatter'     => esc_html__( 'Scatter', 'visualizer' ),
+			'candlestick' => esc_html__( 'Candlestick', 'visualizer' ),
 		);
 
-        $types  = apply_filters("visualizer_pro_chart_types", $types);
+		$types  = apply_filters( 'visualizer_pro_chart_types', $types );
 
-        return $types;
+		return $types;
 	}
 
 	/**
@@ -134,11 +133,11 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'delete_chart' => Visualizer_Plugin::ACTION_DELETE_CHART,
 			),
 			'controller' => array(
-				'title' => esc_html__( 'Visualizations', Visualizer_Plugin::NAME ),
+				'title' => esc_html__( 'Visualizations', 'visualizer' ),
 			),
 			'routers' => array(
-				'library' => esc_html__( 'From Library', Visualizer_Plugin::NAME ),
-				'create'  => esc_html__( 'Create New', Visualizer_Plugin::NAME ),
+				'library' => esc_html__( 'From Library', 'visualizer' ),
+				'create'  => esc_html__( 'Create New', 'visualizer' ),
 			),
 			'library' => array(
 				'filters' => self::_getChartTypesLocalized(),
@@ -189,7 +188,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			wp_enqueue_media();
 			wp_enqueue_script( 'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array( 'jquery', 'media-views' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array('google-jsapi-new'), null, true );
+			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
 			wp_enqueue_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'google-jsapi-old', 'visualizer-library' ), Visualizer_Plugin::VERSION, true );
 		}
 	}
@@ -216,7 +215,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access public
 	 */
 	public function registerAdminMenu() {
-		$title = esc_html__( 'Visualizer Library', Visualizer_Plugin::NAME );
+		$title = esc_html__( 'Visualizer Library', 'visualizer' );
 		$callback = array( $this, 'renderLibraryPage' );
 		$this->_libraryPage = add_submenu_page( 'upload.php', $title, $title, 'edit_posts', Visualizer_Plugin::NAME, $callback );
 	}
@@ -234,7 +233,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'options' => array(
 				'min_range' => 1,
 				'default'   => 1,
-			)
+			),
 		) );
 
 		// the initial query arguments to fetch charts
@@ -258,24 +257,23 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$filter = 'all';
 		}
 
-        // Added by Ash/Upwork
-        $filterByMeta   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
-        if($filterByMeta){
-            $query      = array(
+		// Added by Ash/Upwork
+		$filterByMeta   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+		if ( $filterByMeta ) {
+			$query      = array(
 					'key'     => Visualizer_Plugin::CF_SETTINGS,
 					'value'   => $filterByMeta,
 					'compare' => 'LIKE',
-            );
-            $meta       = isset($query_args['meta_query']) ? $query_args['meta_query'] : array();
-            $meta[]     = $query;
-            $query_args['meta_query']   = $meta;
-        }
-        // Added by Ash/Upwork
-
+			);
+			$meta       = isset( $query_args['meta_query'] ) ? $query_args['meta_query'] : array();
+			$meta[]     = $query;
+			$query_args['meta_query']   = $meta;
+		}
+		// Added by Ash/Upwork
 		// fetch charts
 		$charts = array();
 		$query = new WP_Query( $query_args );
-		while( $query->have_posts() ) {
+		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
 
 			// fetch and update settings
@@ -287,7 +285,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$data = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
 
 			// add chart to the array
-			$charts['visualizer-' . $chart->ID] = array(
+			$charts[ 'visualizer-' . $chart->ID ] = array(
 				'id'       => $chart->ID,
 				'type'     => $type,
 				'series'   => $series,
@@ -303,7 +301,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'urls'   => array(
 				'base'   => add_query_arg( 'vpage', false ),
 				'create' => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_CREATE_CHART, 'library' => 'yes' ), $ajaxurl ),
-				'edit'   => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_EDIT_CHART,   'library' => 'yes' ), $ajaxurl ),
+				'edit'   => add_query_arg( array( 'action' => Visualizer_Plugin::ACTION_EDIT_CHART, 'library' => 'yes' ), $ajaxurl ),
 			),
 		) );
 
@@ -330,7 +328,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @param array $links The array of original action links.
+	 * @param array  $links The array of original action links.
 	 * @param string $file The plugin basename.
 	 * @return array Updated array of action links.
 	 */
@@ -341,7 +339,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				sprintf(
 					'<a href="%s">%s</a>',
 					admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ),
-					esc_html__( 'Library', Visualizer_Plugin::NAME )
+					esc_html__( 'Library', 'visualizer' )
 				)
 			);
 		}
@@ -355,7 +353,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @param array $plugin_meta The array of a plugin meta links.
+	 * @param array  $plugin_meta The array of a plugin meta links.
 	 * @param string $plugin_file The plugin's basename.
 	 * @return array Updated array of plugin meta links.
 	 */
@@ -364,12 +362,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
 				'<a href="https://github.com/codeinwp/visualizer/wiki" target="_blank">%s</a>',
-				esc_html__( 'Knowledge Base', Visualizer_Plugin::NAME )
+				esc_html__( 'Knowledge Base', 'visualizer' )
 			);
 			// flattr link
 			$plugin_meta[] = sprintf(
 				'<a style="color:red" href="https://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/" target="_blank">%s</a>',
-				esc_html__( 'Pro Addon', Visualizer_Plugin::NAME )
+				esc_html__( 'Pro Addon', 'visualizer' )
 			);
 		}
 

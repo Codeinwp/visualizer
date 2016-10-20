@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Abstract render class implements all routine stuff required for template
  * rendering.
@@ -64,7 +63,7 @@ abstract class Visualizer_Render {
 	 * @return mixed Returns mixed value of a property or NULL if a property doesn't exist.
 	 */
 	public function __get( $name ) {
-		return array_key_exists( $name, $this->_data ) ? $this->_data[$name] : null;
+		return array_key_exists( $name, $this->_data ) ? $this->_data[ $name ] : null;
 	}
 
 	/**
@@ -73,7 +72,7 @@ abstract class Visualizer_Render {
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @param string $name
+	 * @param string $name The key name.
 	 * @return boolean TRUE if the property exists, otherwise FALSE.
 	 */
 	public function __isset( $name ) {
@@ -87,10 +86,10 @@ abstract class Visualizer_Render {
 	 *
 	 * @access public
 	 * @param string $name The name of a property to associate.
-	 * @param mixed $value The value of a property.
+	 * @param mixed  $value The value of a property.
 	 */
 	public function __set( $name, $value ) {
-		$this->_data[$name] = $value;
+		$this->_data[ $name ] = $value;
 	}
 
 	/**
@@ -102,7 +101,7 @@ abstract class Visualizer_Render {
 	 * @param string $name The name of the property to unassociate.
 	 */
 	public function __unset( $name ) {
-		unset( $this->_data[$name] );
+		unset( $this->_data[ $name ] );
 	}
 
 	/**

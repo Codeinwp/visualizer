@@ -19,8 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
-
 /**
  * Base class for sidebar settings of linear based charts.
  *
@@ -79,8 +77,8 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 
 		$this->_curveTypes = array(
 			''         => '',
-			'none'     => esc_html__( 'Straight line without curve', Visualizer_Plugin::NAME ),
-			'function' => esc_html__( 'The angles of the line will be smoothed', Visualizer_Plugin::NAME ),
+			'none'     => esc_html__( 'Straight line without curve', 'visualizer' ),
+			'function' => esc_html__( 'The angles of the line will be smoothed', 'visualizer' ),
 		);
 	}
 
@@ -95,7 +93,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 		parent::_renderHorizontalAxisGeneralSettings();
 
 		self::_renderColorPickerItem(
-			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Axis Text Color', 'visualizer' ),
 			'vAxis[textStyle]',
 			isset( $this->vAxis['textStyle'] ) ? $this->vAxis['textStyle'] : null,
 			'#000'
@@ -115,7 +113,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 		parent::_renderVerticalAxisGeneralSettings();
 
 		self::_renderColorPickerItem(
-			esc_html__( 'Axis Text Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Axis Text Color', 'visualizer' ),
 			'hAxis[textStyle]',
 			isset( $this->hAxis['textStyle'] ) ? $this->hAxis['textStyle'] : null,
 			'#000'
@@ -134,7 +132,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	protected function _renderLineSettingsItems() {
 		echo '<div class="section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
-			echo '<b>', esc_html__( 'Line Width And Point Size', Visualizer_Plugin::NAME ), '</b>';
+			echo '<b>', esc_html__( 'Line Width And Point Size', 'visualizer' ), '</b>';
 
 			echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 				echo '<tr>';
@@ -148,17 +146,17 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			echo '</table>';
 
 			echo '<p class="section-description">';
-				esc_html_e( 'Data line width and diameter of displayed points in pixels. Use zero to hide all lines or points.', Visualizer_Plugin::NAME );
+				esc_html_e( 'Data line width and diameter of displayed points in pixels. Use zero to hide all lines or points.', 'visualizer' );
 			echo '</p>';
 		echo '</div>';
 
 		if ( $this->_includeCurveTypes ) {
 			self::_renderSelectItem(
-				esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
+				esc_html__( 'Curve Type', 'visualizer' ),
 				'curveType',
 				$this->curveType,
 				$this->_curveTypes,
-				esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+				esc_html__( 'Determines whether the series has to be presented in the legend or not.', 'visualizer' )
 			);
 		}
 
@@ -166,51 +164,51 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 
 		if ( $this->_includeFocusTarget ) {
 			self::_renderSelectItem(
-				esc_html__( 'Focus Target', Visualizer_Plugin::NAME ),
+				esc_html__( 'Focus Target', 'visualizer' ),
 				'focusTarget',
 				$this->focusTarget,
 				array(
 					''         => '',
-					'datum'    => esc_html__( 'Focus on a single data point.', Visualizer_Plugin::NAME ),
-					'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', Visualizer_Plugin::NAME ),
+					'datum'    => esc_html__( 'Focus on a single data point.', 'visualizer' ),
+					'category' => esc_html__( 'Focus on a grouping of all data points along the major axis.', 'visualizer' ),
 				),
-				esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', Visualizer_Plugin::NAME )
+				esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', 'visualizer' )
 			);
 		}
 
 		self::_renderSelectItem(
-			esc_html__( 'Selection Mode', Visualizer_Plugin::NAME ),
+			esc_html__( 'Selection Mode', 'visualizer' ),
 			'selectionMode',
 			$this->selectionMode,
 			array(
 				''         => '',
-				'single'   => esc_html__( 'Single data point', Visualizer_Plugin::NAME ),
-				'multiple' => esc_html__( 'Multiple data points', Visualizer_Plugin::NAME ),
+				'single'   => esc_html__( 'Single data point', 'visualizer' ),
+				'multiple' => esc_html__( 'Multiple data points', 'visualizer' ),
 			),
-			esc_html__( 'Determines how many data points an user can select on a chart.', Visualizer_Plugin::NAME )
+			esc_html__( 'Determines how many data points an user can select on a chart.', 'visualizer' )
 		);
 
 		self::_renderSelectItem(
-			esc_html__( 'Aggregation Target', Visualizer_Plugin::NAME ),
+			esc_html__( 'Aggregation Target', 'visualizer' ),
 			'aggregationTarget',
 			$this->aggregationTarget,
 			array(
 				''         => '',
-				'category' => esc_html__( 'Group selected data by x-value', Visualizer_Plugin::NAME ),
-				'series'   => esc_html__( 'Group selected data by series', Visualizer_Plugin::NAME ),
-				'auto'     => esc_html__( 'Group selected data by x-value if all selections have the same x-value, and by series otherwise', Visualizer_Plugin::NAME ),
-				'none'     => esc_html__( 'Show only one tooltip per selection', Visualizer_Plugin::NAME ),
+				'category' => esc_html__( 'Group selected data by x-value', 'visualizer' ),
+				'series'   => esc_html__( 'Group selected data by series', 'visualizer' ),
+				'auto'     => esc_html__( 'Group selected data by x-value if all selections have the same x-value, and by series otherwise', 'visualizer' ),
+				'none'     => esc_html__( 'Show only one tooltip per selection', 'visualizer' ),
 			),
-			esc_html__( 'Determines how multiple data selections are rolled up into tooltips. To make it working you need to set multiple selection mode and tooltip trigger to display it when an user selects an element.', Visualizer_Plugin::NAME )
+			esc_html__( 'Determines how multiple data selections are rolled up into tooltips. To make it working you need to set multiple selection mode and tooltip trigger to display it when an user selects an element.', 'visualizer' )
 		);
 
 		echo '<div class="section-delimiter"></div>';
 
 		self::_renderTextItem(
-			esc_html__( 'Point Opacity', Visualizer_Plugin::NAME ),
+			esc_html__( 'Point Opacity', 'visualizer' ),
 			'dataOpacity',
 			$this->dataOpacity,
-			esc_html__( 'The transparency of data points, with 1.0 being completely opaque and 0.0 fully transparent.', Visualizer_Plugin::NAME ),
+			esc_html__( 'The transparency of data points, with 1.0 being completely opaque and 0.0 fully transparent.', 'visualizer' ),
 			'1.0'
 		);
 	}
@@ -223,7 +221,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	 * @access protected
 	 */
 	protected function _renderLineSettings() {
-		self::_renderGroupStart( esc_html__( 'Lines Settings', Visualizer_Plugin::NAME ) );
+		self::_renderGroupStart( esc_html__( 'Lines Settings', 'visualizer' ) );
 			self::_renderSectionStart();
 				$this->_renderLineSettingsItems();
 			self::_renderSectionEnd();
@@ -240,36 +238,36 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	 */
 	protected function _renderSeries( $index ) {
 		self::_renderSelectItem(
-			esc_html__( 'Visible In Legend', Visualizer_Plugin::NAME ),
+			esc_html__( 'Visible In Legend', 'visualizer' ),
 			'series[' . $index . '][visibleInLegend]',
-			isset( $this->series[$index]['visibleInLegend'] ) ? $this->series[$index]['visibleInLegend'] : '',
+			isset( $this->series[ $index ]['visibleInLegend'] ) ? $this->series[ $index ]['visibleInLegend'] : '',
 			array(
 				''  => '',
-				'0' => esc_html__( 'No', Visualizer_Plugin::NAME ),
-				'1' => esc_html__( 'Yes', Visualizer_Plugin::NAME ),
+				'0' => esc_html__( 'No', 'visualizer' ),
+				'1' => esc_html__( 'Yes', 'visualizer' ),
 			),
-			esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+			esc_html__( 'Determines whether the series has to be presented in the legend or not.', 'visualizer' )
 		);
 
 		echo '<div class="section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
-			echo '<b>', esc_html__( 'Line Width And Point Size', Visualizer_Plugin::NAME ), '</b>';
+			echo '<b>', esc_html__( 'Line Width And Point Size', 'visualizer' ), '</b>';
 
 			echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
 				echo '<tr>';
 					echo '<td class="section-table-column">';
-						$line_width = isset( $this->series[$index]['lineWidth'] ) ? $this->series[$index]['lineWidth'] : '';
+						$line_width = isset( $this->series[ $index ]['lineWidth'] ) ? $this->series[ $index ]['lineWidth'] : '';
 						echo '<input type="text" name="series[', $index, '][lineWidth]" class="control-text" value="', esc_attr( $line_width ), '" placeholder="2">';
 					echo '</td>';
 					echo '<td class="section-table-column">';
-						$point_size = isset( $this->series[$index]['pointSize'] ) ? $this->series[$index]['pointSize'] : '';
+						$point_size = isset( $this->series[ $index ]['pointSize'] ) ? $this->series[ $index ]['pointSize'] : '';
 						echo '<input type="text" name="series[', $index, '][pointSize]" class="control-text" value="', esc_attr( $point_size ), '" placeholder="0">';
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
 
 			echo '<p class="section-description">';
-				esc_html_e( 'Overrides the global line width and point size values for this series.', Visualizer_Plugin::NAME );
+				esc_html_e( 'Overrides the global line width and point size values for this series.', 'visualizer' );
 			echo '</p>';
 		echo '</div>';
 
@@ -277,18 +275,18 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 
 		if ( $this->_includeCurveTypes ) {
 			self::_renderSelectItem(
-				esc_html__( 'Curve Type', Visualizer_Plugin::NAME ),
+				esc_html__( 'Curve Type', 'visualizer' ),
 				'series[' . $index . '][curveType]',
-				isset( $this->series[$index]['curveType'] ) ? $this->series[$index]['curveType'] : '',
+				isset( $this->series[ $index ]['curveType'] ) ? $this->series[ $index ]['curveType'] : '',
 				$this->_curveTypes,
-				esc_html__( 'Determines whether the series has to be presented in the legend or not.', Visualizer_Plugin::NAME )
+				esc_html__( 'Determines whether the series has to be presented in the legend or not.', 'visualizer' )
 			);
 		}
 
 		self::_renderColorPickerItem(
-			esc_html__( 'Color', Visualizer_Plugin::NAME ),
+			esc_html__( 'Color', 'visualizer' ),
 			'series[' . $index . '][color]',
-			isset( $this->series[$index]['color'] ) ? $this->series[$index]['color'] : null,
+			isset( $this->series[ $index ]['color'] ) ? $this->series[ $index ]['color'] : null,
 			null
 		);
 	}

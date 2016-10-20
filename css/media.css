@@ -1,5 +1,5 @@
 /*
-	Version: 1.6.6
+	Version: 1.7.0
 */
 #visualizer-library-view {
 	padding: 30px 10px 10px 30px;
@@ -30,46 +30,46 @@
 	margin: 0 20px 20px 0;
 	padding: 5px;
 	border: 1px solid #ddd;
-	-webkit-box-shadow: 0px 0px 8px #ddd;
-	box-shadow: 0px 0px 8px #ddd;
 	background-color: #efefef;
+	-webkit-box-shadow: 0 0 8px #ddd;
+	box-shadow: 0 0 8px #ddd;
 }
 
 .visualizer-library-chart-canvas {
-	height: 187px;
 	width: 250px;
+	height: 187px;
 	border: 1px solid #ddd;
 	background-color: white;
-	background-image: url('../images/ajax-loader.gif');
-	background-position: center center;
+	background-image: url("../images/ajax-loader.gif");
 	background-repeat: no-repeat;
+	background-position: center center;
 }
 
 .visualizer-library-nochart-canvas {
-	background-image: url('../images/notfound.png?v=4');
-	background-repeat: repeat;
 	position: relative;
+	background-image: url("../images/notfound.png?v=4");
+	background-repeat: repeat;
 }
 
 .visualizer-library-notfound {
-	text-align: center;
-	font-weight: bold;
-	font-size: 14px;
-	margin-top: -7px;
 	position: absolute;
 	top: 50%;
-	left: 0;
 	right: 0;
+	left: 0;
+	margin-top: -7px;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
 }
 
 .visualizer-library-chart-action {
-	float: right;
 	display: block;
-	height: 16px;
+	float: right;
 	width: 16px;
-	background-repeat: no-repeat;
-	background-image: url('../images/ui-icons.png');
+	height: 16px;
 	margin: 2px 5px 0;
+	background-image: url("../images/ui-icons.png");
+	background-repeat: no-repeat;
 }
 
 .visualizer-library-nochart-delete,
@@ -84,9 +84,10 @@
 
 .visualizer-library-nochart-delete,
 .visualizer-library-nochart-insert {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-    filter: alpha(opacity=50);
-    opacity: 0.5
+	opacity: 0.5;
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
 }
 
 .visualizer-library-chart-footer {
@@ -94,16 +95,23 @@
 }
 
 .visualizer-library-chart-shortcode {
+	padding: 3px 0;
 	color: #aaa;
 	text-shadow: 0 1px 0 #fff;
 	cursor: pointer;
-	padding: 3px 0;
+}
+
+.visualizer-library-chart-shortcode::-moz-selection,
+.visualizer-library-chart-shortcode::-moz-selection {
+	color: black;
+	background-color: #a8d1ff;
+	text-shadow: none;
 }
 
 .visualizer-library-chart-shortcode::selection,
 .visualizer-library-chart-shortcode::-moz-selection {
-	background-color: #a8d1ff;
 	color: black;
+	background-color: #a8d1ff;
 	text-shadow: none;
 }
 
@@ -113,40 +121,44 @@
 
 .visualizer-library-pagination-item {
 	float: left;
-	margin-left: 20px;
 	margin-top: 10px;
+	margin-left: 20px;
 }
 
 .visualizer-library-pagination-page {
 	padding: 5px 10px;
-	background-color: #aaa;
-	color: white !important;
-	text-decoration: none;
 	border-radius: 2px;
+	color: white !important;
+	background-color: #aaa;
+	-webkit-box-shadow: 0 0 5px #ccc;
 	box-shadow: 0 0 5px #ccc;
 	font-weight: bold;
+	text-decoration: none;
 }
 
 .visualizer-library-pagination-active > .visualizer-library-pagination-page,
 a.visualizer-library-pagination-page:hover {
 	background-color: lightcoral;
+	-webkit-box-shadow: 0 0 5px lightpink;
 	box-shadow: 0 0 5px lightpink;
 }
 
-.locker, .locker-loader {
-	left: 0;
+.locker,
+.locker-loader {
+	position: absolute;
 	top: 0;
+	left: 0;
 	width: 100%;
 	height: 100%;
-	position: absolute;
 }
 
 .locker {
 	z-index: 1000;
+	opacity: 0.8;
 	background-color: white;
+
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
 	filter: alpha(opacity=80);
-	opacity: 0.8;
 }
 
 .locker-loader {

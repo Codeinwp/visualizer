@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * The abstract class for source managers.
  *
@@ -119,28 +118,28 @@ abstract class Visualizer_Source {
 	 */
 	protected function _normalizeData( $data ) {
 		// normalize values
-		//print_r($data);
+		// print_r($data);
 		foreach ( $this->_series as $i => $series ) {
 			// if no value exists for the seires, then add null
-			if ( !isset( $data[$i] ) ) {
-				$data[$i] = null;
+			if ( ! isset( $data[ $i ] ) ) {
+				$data[ $i ] = null;
 			}
 
-			if ( is_null( $data[$i] ) && !is_numeric($data[$i])) {
+			if ( is_null( $data[ $i ] ) && ! is_numeric( $data[ $i ] ) ) {
 				continue;
 			}
 
 			switch ( $series['type'] ) {
 				case 'number':
-					$data[$i] = (  is_numeric($data[$i]) ) ? floatval( $data[$i] ) : null;
+					$data[ $i ] = (  is_numeric( $data[ $i ] ) ) ? floatval( $data[ $i ] ) : null;
 					break;
 				case 'boolean':
-					$data[$i] = !empty( $data[$i] ) ? filter_validate( $data[$i], FILTER_VALIDATE_BOOLEAN ) : null;
+					$data[ $i ] = ! empty( $data[ $i ] ) ? filter_validate( $data[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
 					break;
 				case 'timeofday':
-					$date = new DateTime( '1984-03-16T' . $data[$i] );
+					$date = new DateTime( '1984-03-16T' . $data[ $i ] );
 					if ( $date ) {
-						$data[$i] = array(
+						$data[ $i ] = array(
 							intval( $date->format( 'H' ) ),
 							intval( $date->format( 'i' ) ),
 							intval( $date->format( 's' ) ),
@@ -166,7 +165,7 @@ abstract class Visualizer_Source {
 	protected static function _validateTypes( $types ) {
 		$allowed_types = array( 'string', 'number', 'boolean', 'date', 'datetime', 'timeofday' );
 		foreach ( $types as $type ) {
-			if ( !in_array( $type, $allowed_types ) ) {
+			if ( ! in_array( $type, $allowed_types ) ) {
 				return false;
 			}
 		}
@@ -181,7 +180,7 @@ abstract class Visualizer_Source {
 	 *
 	 * @access public
 	 * @param array $series The actual array of series.
-	 * @param int $chart_id The chart id.
+	 * @param int   $chart_id The chart id.
 	 * @return array The re populated array of series or old one.
 	 */
 	public function repopulateSeries( $series, $chart_id ) {
@@ -195,7 +194,7 @@ abstract class Visualizer_Source {
 	 *
 	 * @access public
 	 * @param array $data The actual array of data.
-	 * @param int $chart_id The chart id.
+	 * @param int   $chart_id The chart id.
 	 * @return array The re populated array of data or old one.
 	 */
 	public function repopulateData( $data, $chart_id ) {

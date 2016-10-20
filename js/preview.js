@@ -1,3 +1,4 @@
+/* global visualizer */
 (function($, v) {
 	var timeout;
 

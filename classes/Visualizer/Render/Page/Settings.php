@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Renders chart settings page.
  *
@@ -53,7 +52,7 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	 */
 	protected function _renderToolbar() {
 		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'data' ), '">';
-			esc_html_e( 'Back', Visualizer_Plugin::NAME );
+			esc_html_e( 'Back', 'visualizer' );
 		echo '</a>';
 		echo '<input type="submit" class="button button-primary button-large push-right" value="', $this->button, '">';
 	}

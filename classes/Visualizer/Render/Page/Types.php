@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Renders chart type picker page.
  *
@@ -54,13 +53,13 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 */
 	protected function _renderContent() {
 		echo '<div id="type-picker">';
-			foreach ( $this->types as $type ) {
-				echo '<div class="type-box type-box-', $type, '">';
-					echo '<label class="type-label', $type == $this->type ? ' type-label-selected' : '', '">';
-						echo '<input type="radio" class="type-radio" name="type" value="', $type, '"', checked( $type, $this->type, false ), '>';
-					echo '</label>';
-				echo '</div>';
-			}
+		foreach ( $this->types as $type ) {
+			echo '<div class="type-box type-box-', $type, '">';
+			echo '<label class="type-label', $type == $this->type ? ' type-label-selected' : '', '">';
+				echo '<input type="radio" class="type-radio" name="type" value="', $type, '"', checked( $type, $this->type, false ), '>';
+			echo '</label>';
+			echo '</div>';
+		}
 		echo '</div>';
 	}
 
@@ -80,15 +79,15 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 *
 	 * @access protected
 	 */
-	 protected function _renderToolbar() {
- 		if( defined( 'Visualizer_Pro' ) ){
- 				global $Visualizer_Pro;
- 		}else{
-			echo "<a class='pro-upsell' href='".Visualizer_Plugin::PRO_TEASER_URL."' target='_blank'>";
-				echo "<span class='dashicons dashicons-plus-alt'></span>";
- 					echo esc_html( "Three Additional Chart Types Available in the Pro Version ( Table, Timeline and Combo Chart ) ", Visualizer_Plugin::NAME );
-			echo "</a>";
- 		}
- 		echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', Visualizer_Plugin::NAME ), '">';
- 	}
+	protected function _renderToolbar() {
+		if ( defined( 'Visualizer_Pro' ) ) {
+				global $Visualizer_Pro;
+		} else {
+			echo "<a class='pro-upsell' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
+			echo "<span class='dashicons dashicons-plus-alt'></span>";
+					echo esc_html( 'Three Additional Chart Types Available in the Pro Version ( Table, Timeline and Combo Chart ) ', 'visualizer' );
+			echo '</a>';
+		}
+			echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', 'visualizer' ), '">';
+	}
 }

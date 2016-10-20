@@ -19,8 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
-
 /**
  * Renders data uploading respond.
  *
@@ -45,24 +43,23 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			echo '<head>';
 				echo '<script type="text/javascript">';
 					echo '(function() {';
-						if ( empty( $this->message ) ) {
-							echo 'var win = window.dialogArguments || opener || parent || top;';
-							echo 'if (win.visualizer) {';
-								echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
-								echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
-								echo 'win.visualizer.render();';
-							echo '}';
+		if ( empty( $this->message ) ) {
+			echo 'var win = window.dialogArguments || opener || parent || top;';
+			echo 'if (win.visualizer) {';
+			echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
+			echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
+			echo 'win.visualizer.render();';
+			echo '}';
 
-                            // added by Ash/Upwork
-                            if( defined( 'Visualizer_Pro' ) ){
-                                global $Visualizer_Pro;
-                                $Visualizer_Pro->_addUpdateHook($this->series, $this->data);
-                            }
-                            // Added by Ash/Upwork
-
-						} else {
-							echo 'alert("', $this->message, '");';
-						}
+			// added by Ash/Upwork
+			if ( defined( 'Visualizer_Pro' ) ) {
+				global $Visualizer_Pro;
+				$Visualizer_Pro->_addUpdateHook( $this->series, $this->data );
+			}
+			// Added by Ash/Upwork
+		} else {
+			echo 'alert("', $this->message, '");';
+		}
 					echo '})();';
 				echo '</script>';
 			echo '</head>';

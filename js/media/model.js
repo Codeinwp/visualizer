@@ -3,7 +3,7 @@
 
 	wpmm.visualizer.Chart = Backbone.Model.extend({
 		sync: function(method, model, options) {
-			if ('delete' == method) {
+			if ('delete' === method) {
 				options = options || {};
 				options.data = _.extend( options.data || {}, {
 					action:  wpmvlv.actions.delete_chart,

@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Base class for all modules. Implements routine methods required by all modules.
  *
@@ -75,11 +74,12 @@ class Visualizer_Module {
 	 * @access protected
 	 * @param string $tag The name of the action to which the $method is hooked.
 	 * @param string $method The name of the method to be called.
-	 * @param int $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default: 10). Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action.
-	 * @param int $accepted_args optional. The number of arguments the function accept (default 1).
+	 * @param bool   $methodClass The root of the method.
+	 * @param int    $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default: 10). Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action.
+	 * @param int    $accepted_args optional. The number of arguments the function accept (default 1).
 	 * @return Visualizer_Module
 	 */
-	protected function _addAction( $tag, $method, $methodClass=NULL, $priority = 10, $accepted_args = 1 ) {
+	protected function _addAction( $tag, $method, $methodClass = null, $priority = 10, $accepted_args = 1 ) {
 		add_action( $tag, array( $methodClass ? $methodClass : $this, $method ), $priority, $accepted_args );
 		return $this;
 	}
@@ -90,13 +90,14 @@ class Visualizer_Module {
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @param string $tag The name of the AJAX action to which the $method is hooked.
-	 * @param string $method Optional. The name of the method to be called. If the name of the method is not provided, tag name will be used as method name.
+	 * @param string  $tag The name of the AJAX action to which the $method is hooked.
+	 * @param string  $method Optional. The name of the method to be called. If the name of the method is not provided, tag name will be used as method name.
+	 * @param bool    $methodClass The root of the method.
 	 * @param boolean $private Optional. Determines if we should register hook for logged in users.
 	 * @param boolean $public Optional. Determines if we should register hook for not logged in users.
 	 * @return Visualizer_Module
 	 */
-	protected function _addAjaxAction( $tag, $method = '', $methodClass=NULL, $private = true, $public = false ) {
+	protected function _addAjaxAction( $tag, $method = '', $methodClass = null, $private = true, $public = false ) {
 		if ( $private ) {
 			$this->_addAction( 'wp_ajax_' . $tag, $method, $methodClass );
 		}
@@ -116,9 +117,9 @@ class Visualizer_Module {
 	 *
 	 * @access protected
 	 * @param string $tag The name of the filter to hook the $method to.
-	 * @param type $method The name of the method to be called when the filter is applied.
-	 * @param int $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default: 10). Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action.
-	 * @param int $accepted_args optional. The number of arguments the function accept (default 1).
+	 * @param type   $method The name of the method to be called when the filter is applied.
+	 * @param int    $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default: 10). Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action.
+	 * @param int    $accepted_args optional. The number of arguments the function accept (default 1).
 	 * @return Visualizer_Module
 	 */
 	protected function _addFilter( $tag, $method, $priority = 10, $accepted_args = 1 ) {
