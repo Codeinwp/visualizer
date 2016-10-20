@@ -1,4 +1,8 @@
 
+### 1.7.1 - 20/10/2016
+**Changes:** 
+- Fixed bad link on grid lines
+
 ### 1.7.0 - 20/10/2016
 **Changes:** 
 - Release 1.7.0
