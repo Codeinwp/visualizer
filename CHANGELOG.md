@@ -1,4 +1,8 @@
 
+### 1.7.2 - 23/11/2016
+**Changes:** 
+- Improved responsive mechanism
+
 ### 1.7.1 - 20/10/2016
 **Changes:** 
 - Fixed bad link on grid lines
