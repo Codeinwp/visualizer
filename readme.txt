@@ -70,6 +70,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.7.2=
+* Improved charts responsive system
+
 = 1.7.1=
 * Fixed grid lines error links
 
