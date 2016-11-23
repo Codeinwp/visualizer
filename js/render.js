@@ -213,7 +213,7 @@
 			resizeTimeout = setTimeout(v.render, 100);
 		});
 
-        resizeHiddenContainers(false);
+        resizeHiddenContainers(true);
     });
 
     $(window).load(function(){
