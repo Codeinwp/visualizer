@@ -526,7 +526,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					esc_html__( 'Number Format', 'visualizer' ),
 					'series[' . $index . '][format]',
 					isset( $this->series[ $index ]['format'] ) ? $this->series[ $index ]['format'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU pattern set%1$s. Use something like #,### to get 1,234 as output, or $# to add dollar sign before digits. Pay attention that if you use #%3$% percentage format then your values will be multiplied by 100.', 'visualizer' ), '<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">', '</a>' ),
+					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU pattern set%1$s. Use something like #,### to get 1,234 as output, or $# to add dollar sign before digits. Pay attention that if you use &#37; percentage format then your values will be multiplied by 100.', 'visualizer' ), '<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">', '</a>' ),
 					'#,###.##'
 				);
 				break;
