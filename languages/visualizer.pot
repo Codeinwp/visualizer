@@ -2,9 +2,9 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Charts and Graphs Lite 1.7.0\n"
+"Project-Id-Version: Visualizer: Charts and Graphs Lite 1.7.1\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2016-10-20 22:05:09+00:00\n"
+"POT-Creation-Date: 2016-11-23 13:55:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -496,35 +496,23 @@ msgid "Enter custom format pattern to apply to horizontal axis labels."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:429
+#: classes/Visualizer/Render/Sidebar/Graph.php:458
 msgid ""
-"For number axis labels, this is a subset of the decimal formatting %sICU "
-"pattern set%s. For instance, $#,###.## will display values $1,234.56 for "
-"value 1234.56. Pay attention that if you use #%3$% percentage format then "
-"your values will be multiplied by 100."
+"For number axis labels, this is a subset of the decimal formatting %1$sICU "
+"pattern set%2$s. For instance, $#,###.## will display values $1,234.56 for "
+"value 1234.56. Pay attention that if you use #&#37;&#37; percentage format "
+"then your values will be multiplied by 100."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:434
+#: classes/Visualizer/Render/Sidebar/Graph.php:463
 msgid ""
-"For date axis labels, this is a subset of the date formatting %sICU date "
-"and time format%s."
+"For date axis labels, this is a subset of the date formatting %1$sICU date "
+"and time format%2$s."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:456
 msgid "Enter custom format pattern to apply to vertical axis labels."
-msgstr ""
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:458
-msgid ""
-"For number axis labels, this is a subset of the decimal formatting %1$sICU "
-"pattern set%1$s. For instance, $#,###.## will display values $1,234.56 for "
-"value 1234.56. Pay attention that if you use #%3$% percentage format then "
-"your values will be multiplied by 100."
-msgstr ""
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:463
-msgid ""
-"For date axis labels, this is a subset of the date formatting %1$sICU date "
-"and time format%1$s."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Linear.php:80
@@ -1319,7 +1307,7 @@ msgstr ""
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%1$s. Use something like #,### to get 1,234 as output, "
-"or $# to add dollar sign before digits. Pay attention that if you use #%3$% "
+"or $# to add dollar sign before digits. Pay attention that if you use &#37; "
 "percentage format then your values will be multiplied by 100."
 msgstr ""
 
