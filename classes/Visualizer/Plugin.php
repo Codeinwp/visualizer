@@ -165,7 +165,6 @@ class Visualizer_Plugin {
 	 */
 	public static function getChartTypes() {
 		$array  = array_keys( Visualizer_Module_Admin::_getChartTypesLocalized() );
-		unset( $array[0] ); // all
 		return $array;
 	}
 
