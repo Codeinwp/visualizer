@@ -300,7 +300,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$render = new Visualizer_Render_Page_Types();
 		$render->type = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
-		$render->types = Visualizer_Plugin::getChartTypes();
+		$render->types = Visualizer_Module_Admin::_getChartTypesLocalized();
 		$render->chart = $this->_chart;
 
 		wp_enqueue_style( 'visualizer-frame' );

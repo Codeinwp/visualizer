@@ -98,14 +98,19 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		// Added by Ash/Upwork
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 			echo '<ul>';
-		foreach ( $this->types as $type => $label ) {
+		foreach ( $this->types as $type => $array ) {
+			$label      = $array['name'];
+			$link       = '<a class="page-numbers" href="' . esc_url( add_query_arg( array( 'type' => $type, 'vpage' => false ) ) ) . '">';
+			if ( ! $array['enabled'] ) {
+				$link   = "<a class='pro-upsell page-numbers' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
+			}
 			echo '<li class="visualizer-list-item">';
 			if ( $type == $this->type ) {
 				echo '<a class="page-numbers current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
 				echo $label;
 				echo '</a>';
 			} else {
-				echo '<a class="page-numbers" href="', esc_url( add_query_arg( array( 'type' => $type, 'vpage' => false ) ) ), '">';
+				echo $link;
 				echo $label;
 				echo '</a>';
 			}

@@ -2,9 +2,9 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Charts and Graphs Lite 1.7.1\n"
+"Project-Id-Version: Visualizer: Charts and Graphs Lite 1.7.2\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2016-11-23 13:55:43+00:00\n"
+"POT-Creation-Date: 2016-12-09 11:26:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,32 +64,44 @@ msgstr ""
 msgid "Candlestick"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:136
-msgid "Visualizations"
+#: classes/Visualizer/Module/Admin.php:88
+msgid "Table"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:139
-msgid "From Library"
+#: classes/Visualizer/Module/Admin.php:89
+msgid "Timeline"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:90
+msgid "Combo"
 msgstr ""
 
 #: classes/Visualizer/Module/Admin.php:140
+msgid "Visualizations"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:143
+msgid "From Library"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:144
 msgid "Create New"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:218
-#: classes/Visualizer/Render/Library.php:163
+#: classes/Visualizer/Module/Admin.php:222
+#: classes/Visualizer/Render/Library.php:168
 msgid "Visualizer Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:342
+#: classes/Visualizer/Module/Admin.php:346
 msgid "Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:365
+#: classes/Visualizer/Module/Admin.php:369
 msgid "Knowledge Base"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:370
+#: classes/Visualizer/Module/Admin.php:374
 msgid "Pro Addon"
 msgstr ""
 
@@ -149,16 +161,16 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:135
+#: classes/Visualizer/Render/Library.php:140
 #: classes/Visualizer/Render/Templates.php:85
 msgid "No charts found"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:164
+#: classes/Visualizer/Render/Library.php:169
 msgid "Add New"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:183
+#: classes/Visualizer/Render/Library.php:188
 msgid ""
 "%s option is disabled in your php.ini config. Please, enable it by change "
 "its value to 1. This option increases the speed of remote CSV uploading."
@@ -202,7 +214,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Types.php:91
+#: classes/Visualizer/Render/Page/Types.php:94
 msgid "Next"
 msgstr ""
 
