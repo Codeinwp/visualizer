@@ -74,7 +74,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public static function _getChartTypesLocalized() {
 		$types  = array(
-			'all'         => array( 'name' => esc_html__( 'All', 'visualizer' ), 'enabled' => true ),
 			'pie'         => array( 'name' => esc_html__( 'Pie', 'visualizer' ), 'enabled' => true ),
 			'line'        => array( 'name' => esc_html__( 'Line', 'visualizer' ), 'enabled' => true ),
 			'area'        => array( 'name' => esc_html__( 'Area', 'visualizer' ), 'enabled' => true ),
