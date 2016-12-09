@@ -419,50 +419,6 @@ div.group-content .group-description {
 	background-position: -597px -670px;
 }
 
-a.pro-upsell {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	position: relative;
-	top: 10px;
-	height: 20px;
-	margin: 0;
-	padding: 10px 20px;
-	border: 1px solid #2c80d6;
-	border-radius: 50px;
-	background-color: #4285f4;
-	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-	text-decoration: none;
-	-webkit-transition: all 0.5s ease-in;
-	transition: all 0.5s ease-in;
-
-	-webkit-align-items: center;
-	align-items: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-}
-
-a.pro-upsell:hover {
-	background-color: #5a95f5;
-	-webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-}
-
-a.pro-upsell span {
-	display: inline-block;
-	margin-right: 10px;
-	color: #fff;
-}
-
-a.pro-upsell {
-	display: inline;
-	color: #fff;
-	font-size: 13px;
-	font-weight: bold;
-}
-
 /******************************************************************************/
 /********************************  OTHER STYLES  ******************************/
 /******************************************************************************/
