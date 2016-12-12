@@ -72,7 +72,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access private
 	 * @return array The associated array of chart types with localized names.
 	 */
-	public static function _getChartTypesLocalized() {
+	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false ) {
 		$types  = array(
 			'pie'         => array( 'name' => esc_html__( 'Pie', 'visualizer' ), 'enabled' => true ),
 			'line'        => array( 'name' => esc_html__( 'Line', 'visualizer' ), 'enabled' => true ),
@@ -90,6 +90,24 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		);
 
 		$types  = apply_filters( 'visualizer_pro_chart_types', $types );
+
+		if ( $enabledOnly ) {
+			$filtered   = array();
+			foreach ( $types as $type => $array ) {
+				if ( ! $array['enabled'] ) { continue;
+				}
+				$filtered[ $type ] = $array;
+			}
+			$types      = $filtered;
+		}
+
+		if ( $get2Darray ) {
+			$doubleD    = array();
+			foreach ( $types as $type => $array ) {
+				$doubleD[ $type ] = $array['name'];
+			}
+			$types      = $doubleD;
+		}
 
 		return $types;
 	}
@@ -143,7 +161,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'create'  => esc_html__( 'Create New', 'visualizer' ),
 			),
 			'library' => array(
-				'filters' => self::_getChartTypesLocalized(),
+				'filters'   => self::_getChartTypesLocalized( true, true ),
+				'types'     => array_keys( self::_getChartTypesLocalized( true, true ) ),
 			),
 			'nonce'    => wp_create_nonce(),
 			'buildurl' => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),

@@ -358,7 +358,7 @@
 			var self = this;
 
 			self.filters = {};
-			_.each(['all', 'pie', 'line', 'area', 'bar', 'column', 'geo', 'scatter', 'gauge', 'candlestick'], function(type, i) {
+			_.each(l10n.library.types, function(type, i) {
 				self.filters[type] = {
 					text: l10n.library.filters[type],
 					key: type,
