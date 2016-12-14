@@ -70,6 +70,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+= 1.7.5=
+* Removed footer banner upsell
+* Fixed series settings issue
+* Fixed issue with comas being used in numbers
+
 = 1.7.2=
 * Improved charts responsive system
 
