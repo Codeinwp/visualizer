@@ -29,7 +29,7 @@
 class Visualizer_Plugin {
 
 	const NAME    = 'visualizer';
-	const VERSION = '1.7.2';
+	const VERSION = '1.7.5';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -165,7 +165,6 @@ class Visualizer_Plugin {
 	 */
 	public static function getChartTypes() {
 		$array  = array_keys( Visualizer_Module_Admin::_getChartTypesLocalized() );
-		unset( $array[0] ); // all
 		return $array;
 	}
 

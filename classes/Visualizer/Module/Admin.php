@@ -72,21 +72,42 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access private
 	 * @return array The associated array of chart types with localized names.
 	 */
-	public static function _getChartTypesLocalized() {
+	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false ) {
 		$types  = array(
-			'all'         => esc_html__( 'All', 'visualizer' ),
-			'pie'         => esc_html__( 'Pie', 'visualizer' ),
-			'line'        => esc_html__( 'Line', 'visualizer' ),
-			'area'        => esc_html__( 'Area', 'visualizer' ),
-			'geo'         => esc_html__( 'Geo', 'visualizer' ),
-			'bar'         => esc_html__( 'Bar', 'visualizer' ),
-			'column'      => esc_html__( 'Column', 'visualizer' ),
-			'gauge'       => esc_html__( 'Gauge', 'visualizer' ),
-			'scatter'     => esc_html__( 'Scatter', 'visualizer' ),
-			'candlestick' => esc_html__( 'Candlestick', 'visualizer' ),
+			'pie'         => array( 'name' => esc_html__( 'Pie', 'visualizer' ), 'enabled' => true ),
+			'line'        => array( 'name' => esc_html__( 'Line', 'visualizer' ), 'enabled' => true ),
+			'area'        => array( 'name' => esc_html__( 'Area', 'visualizer' ), 'enabled' => true ),
+			'geo'         => array( 'name' => esc_html__( 'Geo', 'visualizer' ), 'enabled' => true ),
+			'bar'         => array( 'name' => esc_html__( 'Bar', 'visualizer' ), 'enabled' => true ),
+			'column'      => array( 'name' => esc_html__( 'Column', 'visualizer' ), 'enabled' => true ),
+			'gauge'       => array( 'name' => esc_html__( 'Gauge', 'visualizer' ), 'enabled' => true ),
+			'scatter'     => array( 'name' => esc_html__( 'Scatter', 'visualizer' ), 'enabled' => true ),
+			'candlestick' => array( 'name' => esc_html__( 'Candlestick', 'visualizer' ), 'enabled' => true ),
+			// pro types
+			'table'       => array( 'name' => esc_html__( 'Table', 'visualizer' ), 'enabled' => false ),
+			'timeline'    => array( 'name' => esc_html__( 'Timeline', 'visualizer' ), 'enabled' => false ),
+			'combo'       => array( 'name' => esc_html__( 'Combo', 'visualizer' ), 'enabled' => false ),
 		);
 
 		$types  = apply_filters( 'visualizer_pro_chart_types', $types );
+
+		if ( $enabledOnly ) {
+			$filtered   = array();
+			foreach ( $types as $type => $array ) {
+				if ( ! $array['enabled'] ) { continue;
+				}
+				$filtered[ $type ] = $array;
+			}
+			$types      = $filtered;
+		}
+
+		if ( $get2Darray ) {
+			$doubleD    = array();
+			foreach ( $types as $type => $array ) {
+				$doubleD[ $type ] = $array['name'];
+			}
+			$types      = $doubleD;
+		}
 
 		return $types;
 	}
@@ -140,7 +161,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'create'  => esc_html__( 'Create New', 'visualizer' ),
 			),
 			'library' => array(
-				'filters' => self::_getChartTypesLocalized(),
+				'filters'   => self::_getChartTypesLocalized( true, true ),
+				'types'     => array_keys( self::_getChartTypesLocalized( true, true ) ),
 			),
 			'nonce'    => wp_create_nonce(),
 			'buildurl' => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
