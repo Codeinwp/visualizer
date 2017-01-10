@@ -137,7 +137,7 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 	protected function _get_file_handle( $filename = false ) {
 		static $allow_url_fopen = null;
 
-		if ( $this->_tmpfile && is_readable( $this->_tmpfile ) ) {
+		if ( ! is_wp_error( $this->_tmpfile ) && $this->_tmpfile && is_readable( $this->_tmpfile ) ) {
 			return parent::_get_file_handle( $this->_tmpfile );
 		}
 
