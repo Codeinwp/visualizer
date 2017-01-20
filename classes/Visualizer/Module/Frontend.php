@@ -111,7 +111,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
-		$class  = $defaultClass . ' ' . $class;
+		$class  = $defaultClass . ' ' . $class . ' ' . 'visualizer-front-' . $atts['id'];
 		$class = ! empty( $class ) ? ' class="' . trim( $class ) . '"' : '';
 
 		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
@@ -138,6 +138,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		if ( ! empty( $atts['data'] ) ) {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
+
+		$id = $id . '-' . rand();
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(

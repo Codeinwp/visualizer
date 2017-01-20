@@ -619,7 +619,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'csv'       => $csv,
 				'name'      => $filename,
 			));
-		}
+		}// End if().
 
 		exit;
 	}
