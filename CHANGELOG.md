@@ -1,4 +1,8 @@
 
+### 1.7.6 - 20/01/2017
+**Changes:** 
+- Fixed issue when using the same shortcode multiple times on the same page.
+
 ### 1.7.5 - 14/12/2016
 **Changes:** 
 - Removed footer banner upsell
