@@ -55,7 +55,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'load-post.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'load-post-new.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'admin_footer', 'renderTempaltes' );
-		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts' );
+		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts', null, 9 );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
