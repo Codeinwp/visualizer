@@ -2,9 +2,9 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Charts and Graphs Lite 1.7.5\n"
+"Project-Id-Version: Visualizer: Charts and Graphs Lite 1.7.6\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-01-20 12:32:52+00:00\n"
+"POT-Creation-Date: 2017-02-17 13:22:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -172,40 +172,44 @@ msgid ""
 "its value to 1. This option increases the speed of remote CSV uploading."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:70
+#: classes/Visualizer/Render/Page/Data.php:68
+msgid "Chart Source"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:72
 msgid ""
 "Select and upload your data CSV file here. The first row of the CSV file "
 "should contain the column headings. The second one should contain series "
 "type (string, number, boolean, date, datetime, timeofday)."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:74
+#: classes/Visualizer/Render/Page/Data.php:76
 msgid ""
 "If you are unsure about how to format your data CSV then please take a look "
 "at this sample:"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:76
+#: classes/Visualizer/Render/Page/Data.php:78
 msgid "or read how you can add Google spreadsheet in following %1$sarticle%1$s."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:85
+#: classes/Visualizer/Render/Page/Data.php:86
 msgid "From Computer"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:88
+#: classes/Visualizer/Render/Page/Data.php:89
 msgid "From Web"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:107
+#: classes/Visualizer/Render/Page/Data.php:108
 msgid "Check PRO Version "
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:112
-msgid "Advanced"
+#: classes/Visualizer/Render/Page/Data.php:117
+msgid "Chart Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:137
+#: classes/Visualizer/Render/Page/Data.php:138
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""

@@ -63,8 +63,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			'chart'  => $this->chart->ID,
 		), admin_url( 'admin-ajax.php' ) );
 
-				echo '<input type="button" name="back_button" class="return-settings-btn preview-btn hidden-setting" value="&laquo; Back">';
-				echo '<div class="initial-screen">';
+		echo '<ul class="group-wrapper">';
+		echo '<li class="group">';
+		echo '<h2 class="group-title main-group">' . __( 'Chart Source', 'visualizer' ) . '</h2>';
+		echo '<ul class="group-content">';
 				echo '<iframe id="thehole" name="thehole"></iframe>';
 				echo '<p class="group-description">';
 					esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' );
@@ -76,14 +78,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					printf( esc_html__( 'or read how you can add Google spreadsheet in following %1$sarticle%1$s.', 'visualizer' ), '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' );
 				echo '</p>';
 
-				echo '<div>';
 					echo '<form id="csv-form" action="', $upload_link, '" method="post" target="thehole" enctype="multipart/form-data">';
 						echo '<input type="hidden" id="remote-data" name="remote_data">';
 						echo '<div class="form-inline">';
-						echo '<div class="button button-primary file-wrapper computer-btn">';
-							echo '<input type="file" id="csv-file" class="file" name="local_data">';
-							esc_attr_e( 'From Computer', 'visualizer' );
-						echo '</div>';
+							echo '<div class="button button-primary file-wrapper computer-btn">';
+								echo '<input type="file" id="csv-file" class="file" name="local_data">';
+								esc_attr_e( 'From Computer', 'visualizer' );
+							echo '</div>';
 
 						echo '<a id="remote-file" class="button from-web from-web-btn" href="javascript:;">', esc_html__( 'From Web', 'visualizer' ), '</a>';
 						// Added by Ash/Upwork
@@ -109,17 +110,17 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 <?php
 		}
 
-					echo'<input type="button" name="advanced_button" class="advanced-settings-btn preview-btn" value="' . __( 'Advanced', 'visualizer' ) . ' &raquo;">';
-					// Added by Ash/Upwork
-				echo '</div>';
-			echo '</div>';
+				echo '</ul></li>';
 
-		// changed by Ash/Upwork
-		echo '<div class= "second-screen hidden-setting">';
-		echo '<form id="settings-form" action="', add_query_arg( 'nonce', wp_create_nonce() ), '" method="post">';
-		echo $this->sidebar;
-		echo '</form>';
-		echo '</div>';
+		echo '<ul class="group-wrapper">';
+		echo '<li class="group">';
+		echo '<h2 class="group-title main-group">' . __( 'Chart Settings', 'visualizer' ) . '</h2>';
+		echo '<ul class="group-content">';
+			echo '<form id="settings-form" action="', add_query_arg( 'nonce', wp_create_nonce() ), '" method="post">';
+			echo $this->sidebar;
+			echo '</form>';
+		echo '</ul></li>';
+		echo '</ul>';
 		// changed by Ash/Upwork
 	}
 
