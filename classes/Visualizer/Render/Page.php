@@ -64,9 +64,7 @@ class Visualizer_Render_Page extends Visualizer_Render {
 	 */
 	protected function _renderSidebar() {
 		echo '<div id="sidebar">';
-			echo '<ul class="group-wrapper">';
 				$this->_renderSidebarContent();
-			echo '</ul>';
 
 			echo '<div id="rate-the-plugin">';
 				echo '<div><b>', esc_html__( 'Like the plugin? Show us your love!', 'visualizer' ), '</b></div>';
