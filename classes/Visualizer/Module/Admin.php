@@ -280,7 +280,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		// Added by Ash/Upwork
-		$filterByMeta   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+		$filterByMeta   = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
 		if ( $filterByMeta ) {
 			$query      = array(
 					'key'     => Visualizer_Plugin::CF_SETTINGS,

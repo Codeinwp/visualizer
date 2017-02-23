@@ -87,26 +87,22 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	private function _renderLibrary() {
 		// Added by Ash/Upwork
 		$filterBy       = null;
-		if ( isset( $_GET['filter'] ) && strlen( $_GET['filter'] ) > 0 ) {
-			$filterBy   = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+		if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) > 0 ) {
+			$filterBy   = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
 		}
-		echo '<div id="visualizer-search"><form action="" method="get">
-                <input type="text" name="filter" value="' . $filterBy . '">
-                <input type="hidden" name="page" value="visualizer">
-                <input type="submit" class="button button-secondary" value="' . esc_attr__( 'Search', 'visualizer' ) . '">
-            </form></div>';
+
 		// Added by Ash/Upwork
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
-			echo '<ul>';
+			echo '<ul class="subsubsub">';
 		foreach ( $this->types as $type => $array ) {
 			$label      = $array['name'];
-			$link       = '<a class="page-numbers" href="' . esc_url( add_query_arg( array( 'type' => $type, 'vpage' => false ) ) ) . '">';
+			$link       = '<a class=" " href="' . esc_url( add_query_arg( array( 'type' => $type, 'vpage' => false ) ) ) . '">';
 			if ( ! $array['enabled'] ) {
-				$link   = "<a class='pro-upsell page-numbers' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
+				$link   = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
-			echo '<li class="visualizer-list-item">';
+			echo '<li class="visualizer-list-item all">';
 			if ( $type == $this->type ) {
-				echo '<a class="page-numbers current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
+				echo '<a class="  current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
 				echo $label;
 				echo '</a>';
 			} else {
@@ -114,9 +110,14 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				echo $label;
 				echo '</a>';
 			}
-			echo '</li>';
+			echo ' | </li>';
 		}
 			echo '</ul>';
+		echo '<form action="" method="get"><p id="visualizer-search" class="search-box">
+                <input type="search"   name="s" value="' . $filterBy . '">
+                <input type="hidden" name="page" value="visualizer">
+                <input type="submit" id="search-submit" class="button button-secondary" value="' . esc_attr__( 'Search', 'visualizer' ) . '">
+           </p> </form>';
 		echo '</div>';
 
 		if ( ! empty( $this->charts ) ) {
@@ -127,9 +128,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 
 			if ( is_array( $this->pagination ) ) {
-				echo '<ul class="visualizer-library-pagination">';
+				echo '<ul class=" subsubsub">';
 				foreach ( $this->pagination as $page ) {
-					echo '<li class="visualizer-list-item">', $page, '</li>';
+					echo '<li class="all">', $page, '</li>';
 				}
 				echo '</ul>';
 			}
