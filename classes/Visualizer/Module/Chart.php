@@ -329,7 +329,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script( 'visualizer-render', 'visualizer', array(
 			'l10n'   => array(
-				'remotecsv_prompt' => esc_html__( 'Please, enter the URL of CSV file:', 'visualizer' ),
 				'invalid_source'   => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
 			),
 			'charts' => array(
@@ -393,7 +392,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script( 'visualizer-render', 'visualizer', array(
 			'l10n'   => array(
-				'remotecsv_prompt' => esc_html__( 'Please, enter the URL of CSV file:', 'visualizer' ),
 				'invalid_source'   => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
 			),
 			'charts' => array(

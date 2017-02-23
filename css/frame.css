@@ -87,7 +87,7 @@
 }
 
 .group-title:hover,
-.group.open .group-title {
+.group.open > .group-title {
 	color: white;
 	background: gray;
 	background-image: -webkit-gradient(linear, left bottom, left top, from(#6d6d6d), to(gray));
@@ -114,7 +114,7 @@
 }
 
 .group-title:hover::after,
-.group.open .group-title::after {
+.group.open > .group-title::after {
 	border-color: #eee transparent;
 }
 
@@ -122,11 +122,11 @@
 	border-top-color: gray;
 }
 
-.group.open .group-title {
+.group.open > .group-title {
 	border-top-color: #6d6d6d;
 }
 
-.group.open .group-title::after {
+.group.open > .group-title::after {
 	border-width: 0 6px 6px;
 }
 
@@ -142,7 +142,7 @@ div.group-content {
 	padding: 10px 20px 20px;
 }
 
-.group.open .group-content {
+.group.open > .group-content {
 	display: block;
 }
 
