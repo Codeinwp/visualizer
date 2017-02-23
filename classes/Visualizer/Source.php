@@ -51,6 +51,16 @@ abstract class Visualizer_Source {
 	protected $_series = array();
 
 	/**
+	 * The array of allowed types.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected static $allowed_types = array( 'string', 'number', 'boolean', 'date', 'datetime', 'timeofday' );
+
+	/**
 	 * Returns source name.
 	 *
 	 * @since 1.0.0
@@ -164,15 +174,29 @@ abstract class Visualizer_Source {
 	 * @return boolean TRUE if sereis types are valid, otherwise FALSE.
 	 */
 	protected static function _validateTypes( $types ) {
-		$allowed_types = array( 'string', 'number', 'boolean', 'date', 'datetime', 'timeofday' );
 		foreach ( $types as $type ) {
-			if ( ! in_array( $type, $allowed_types ) ) {
+			if ( ! in_array( $type, self::$allowed_types ) ) {
 				return false;
 			}
 		}
 
 		return true;
 	}
+
+	/**
+	 * Return allowed types
+	 *
+	 * @since 1.0.1
+	 *
+	 * @static
+	 * @access public
+	 * @return array the allowed types
+	 */
+	public static function getAllowedTypes() {
+		return self::$allowed_types;
+	}
+
+
 
 	/**
 	 * Re populates series if the source is dynamic.
