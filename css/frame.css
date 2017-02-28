@@ -64,7 +64,7 @@
 .group-title {
 	position: relative;
 	margin: 0;
-	padding: 10px 20px;
+	padding: 7px 15px;
 	border-top: 1px solid white;
 	border-bottom: 1px solid #dfdfdf;
 	background: whiteSmoke;
@@ -73,10 +73,9 @@
 	background-image: -webkit-gradient( linear, left top, left bottom, from(#eee), to(whiteSmoke));
 	background-image: -webkit-linear-gradient( top, #eee, whiteSmoke);
 	background-image: linear-gradient( to bottom, #eee, whiteSmoke);
-	text-shadow: 0 1px 0 white;
 	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
 	font-family: "Open Sans",sans-serif;
-	font-size: 15px;
+	font-size: 13px;
 	font-weight: normal;
 	font-weight: 700;
 	cursor: pointer;
@@ -89,12 +88,8 @@
 .group-title:hover,
 .group.open > .group-title {
 	color: white;
-	background: gray;
-	background-image: -webkit-gradient(linear, left bottom, left top, from(#6d6d6d), to(gray));
-	background-image: -webkit-linear-gradient(bottom, #6d6d6d, gray);
-	background-image: -webkit-gradient( linear, left top, left bottom, from(#6d6d6d), to(gray));
-	background-image: -webkit-linear-gradient( top, #6d6d6d, gray);
-	background-image: linear-gradient( to bottom, #6d6d6d, gray);
+	background: #008ec2;
+	background-image: none
 	text-shadow: 0 -1px 0 #333;
 	font-family: "Open Sans", sans-serif;
 	font-weight: 700;
@@ -103,23 +98,23 @@
 .group-title::after {
 	position: absolute;
 	z-index: 1;
-	top: 15px;
+	top: 13px;
 	right: 20px;
 	width: 0;
 	height: 0;
-	border-width: 6px 6px 0;
+	border-width: 5px 5px 0;
 	border-style: solid;
-	border-color: #ccc transparent;
+	border-color: #ddd transparent;
 	content: "";
 }
 
 .group-title:hover::after,
 .group.open > .group-title::after {
-	border-color: #eee transparent;
+	border-color: #fff transparent;
 }
 
-.group:hover .group-title {
-	border-top-color: gray;
+.group:hover {
+	border-top: transparent !important;
 }
 
 .group.open > .group-title {
@@ -127,19 +122,51 @@
 }
 
 .group.open > .group-title::after {
-	border-width: 0 6px 6px;
+	border-width: 0 5px 5px;
+}
+
+.group-wrapper.full-height {
+	height: 100%;
+	margin-bottom: -1px;
+	overflow: hidden;
+	position: relative;
+}
+
+.group.bottom-fixed {
+	bottom: 0;
+	display: block;
+	position: absolute;
+	width: 100%;
+}
+
+.group.open,
+.group.open > .group-title,
+.group-category > h2 {
+	background: #008ec2;
+	background-image: none !important;
+	color: #fff;
+}
+
+.group ul li h2,
+.group ul li h3 {
+	padding: 7px 15px 7px 35px;
+}
+
+.group h2 .dashicons {
+	margin-right: 5px;
+	vertical-align: -5px;
 }
 
 .group-content {
 	display: none;
 	overflow: hidden;
 	margin: 0;
-	padding: 10px 0 20px 0;
+	padding: 0;
 	background-color: #fdfdfd;
 }
 
 div.group-content {
-	padding: 10px 20px 20px;
+	padding: 15px;
 }
 
 .group.open > .group-content {
@@ -199,7 +226,7 @@ div.group-content .group-description {
 
 .section-items {
 	display: none;
-	padding: 5px 20px 10px 20px;
+	padding: 15px;
 }
 
 .section-items.open {
