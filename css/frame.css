@@ -806,3 +806,60 @@ button#editor-chart-button {
 		vertical-align: middle;
 	}
 }
+
+
+#vz-chart-settings h2:hover,
+#vz-chart-review a:hover {
+	text-decoration: underline;
+}
+#vz-chart-review a {
+	text-decoration: none;
+	color:#00a0d2;
+}
+
+#vz-chart-settings h2{
+
+	width:50%;
+	border: 0px;
+	left:0px;
+	bottom:25px;
+	padding-right:30px;
+	font-weight: normal;
+	text-align: right;
+	font-size: 12px;
+}
+#vz-chart-review  {
+	width:50%;
+	right:0px;
+	bottom:25px;
+	padding-right:30px;
+	text-align: right;
+}
+#vz-chart-settings h2:after{
+	display: none;
+}
+#vz-chart-settings h2,
+#vz-chart-review,
+#vz-chart-settings{
+	background: none;
+	font-family: "Open Sans",sans-serif;
+	display: inline;
+	color:#00a0d2;
+}
+#vz-chart-copyright{
+	bottom:5px;
+	text-align: center;
+}
+#vz-chart-source h2{
+	background: none;
+	border:none;
+	color:#666;
+}
+#vz-chart-source{
+	border: none;
+	padding:3px;
+}
+#sidebar{
+	background: #f3f3f3;
+	border-left: 1px solid #ddd;
+}

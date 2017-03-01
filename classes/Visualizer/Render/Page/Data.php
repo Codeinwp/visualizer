@@ -66,8 +66,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 ?>
 	<iframe id="thehole" name="thehole"></iframe>
 	<ul class="group-wrapper full-height">
-	    <li class="group group-category open">
-		    <h2 class="group-title main-group"><span class="dashicons dashicons-share"></span><?php _e( 'Chart Source', 'visualizer' );?></h2>
+	    <li class="group group-category  " id="vz-chart-source">
+		    <h2 class="group-title main-group"><?php _e( 'Chart Source', 'visualizer' );?></h2>
 			<ul class="group-content">
 		        <ul class="group-wrapper">
 		            <li class="group">
@@ -114,14 +114,18 @@ if ( defined( 'Visualizer_Pro' ) ) {
 			</ul>
 		</li>
 	</ul>
-		<li class="group group-category bottom-fixed">
-			<h2 class="group-title main-group"><span class="dashicons dashicons-admin-settings"></span><?php _e( 'Chart Settings', 'visualizer' );?></h2>
+		<li class="group group-category bottom-fixed" id="vz-chart-settings">
+			<h2 class="group-title main-group"><?php _e( 'Advanced Settings', 'visualizer' );?></h2>
 			<ul class="group-content">
 				<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() );?>" method="post">
 				<?php echo $this->sidebar;?>
 				</form>
 			</ul>
 		</li>
+		<li class=" group bottom-fixed" id="vz-chart-review">
+			<a href="https://wordpress.org/support/plugin/visualizer/reviews/?filter=5#new-post" target="_blank"><?php _e('Leave feedback','visualizer'); ?></a>
+		</li>
+		<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; 2014 </li>
 	</ul>
 <?php
 		// changed by Ash/Upwork
