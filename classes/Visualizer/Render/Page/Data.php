@@ -66,8 +66,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 ?>
 	<iframe id="thehole" name="thehole"></iframe>
 	<ul class="group-wrapper full-height">
-	    <li class="group group-category  " id="vz-chart-source">
-		    <h2 class="group-title main-group"><?php _e( 'Chart Source', 'visualizer' );?></h2>
+	    <li class="group group-category open" id="vz-chart-source">
+            <div class="group-header">
+                <!-- start btn de back -->
+                <button class="customize-section-back" tabindex="0"></button>
+                <!-- end btn de back -->
+                <h2 class="group-title main-group"><?php _e( 'Chart Source', 'visualizer' );?></h2>
+            </div>
 			<ul class="group-content">
 		        <ul class="group-wrapper">
 		            <li class="group">
