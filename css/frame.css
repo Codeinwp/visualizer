@@ -65,6 +65,11 @@
 .group-wrapper ul li {
 	border-top: 1px solid #ddd;
 }
+.group-wrapper ul ul li.subsection {
+	border-top: none;
+	margin:5px;
+	border:1px solid #ddd;
+}
 
 .group-wrapper .group .group .group-title {
 	background-color: #fff;
@@ -141,8 +146,9 @@
 .group-wrapper.full-height {
 	height: 100%;
 	margin: 0;
-	overflow: hidden;
 	position: relative;
+	float: left;
+	width: 100%;
 }
 
 .group.bottom-fixed {
@@ -164,7 +170,6 @@
 
 .group-content {
 	display: none;
-	overflow: hidden;
 	margin: 0;
 	padding: 0;
 	background-color: #fdfdfd;
@@ -211,7 +216,12 @@ div.group-content .group-description {
 	font-weight: bold;
 	cursor: pointer;
 }
-
+.group-wrapper ul ul li .section-title {
+	margin-bottom: 0;
+	border: none;
+	-webkit-box-shadow:none;
+	box-shadow: none;
+}
 .section-title::after {
 	position: absolute;
 	z-index: 1;
@@ -828,31 +838,38 @@ button#editor-chart-button {
 	text-align: right;
 	width: 50%;
 }
-
+#vz-chart-settings.bottom-fixed h2 {
+	padding-left: 20px;
+}
 #vz-chart-settings  {
 	bottom: 40px;
 	box-sizing: border-box;
 	left:0;
-	padding-left: 20px;
 	text-align: left;
 	width: 50%;
 }
 
-#vz-chart-settings h2,
 #vz-chart-review,
-#vz-chart-settings{
+#vz-chart-settings h2{
 	background: none;
 	color:#00a0d2;
 	display: inline;
+	cursor: pointer;
 	font-family: "Open Sans",sans-serif;
+
+}
+#vz-chart-settings{
+	background: none;
+
+	display: inline;
+	cursor: pointer;
 }
 
+#vz-chart-source > ul ,
 #vz-chart-settings > ul {
 	border-bottom: 1px solid #ddd;
-	bottom: 30px;
-	left: 0;
-	position: absolute;
-	right: -100%;
+	z-index:10;
+	position: relative;
 }
 
 #vz-chart-copyright{
@@ -863,4 +880,25 @@ button#editor-chart-button {
 #sidebar{
 	background: #f3f3f3;
 	border-left: 1px solid #ddd;
+}
+
+#vz-chart-settings.open h2{
+	left:20px;
+	position: absolute;
+	bottom: 28px;
+}
+#vz-chart-settings.open .group-header {
+	display: block;
+}
+#vz-chart-settings .group-header {
+	display: none;
+}
+#vz-chart-settings .group-header .group-title.main-group{
+
+}
+#sidebar::-webkit-scrollbar {
+	width: 4px;
+}
+#sidebar::-webkit-scrollbar-thumb {
+	background: #999;
 }

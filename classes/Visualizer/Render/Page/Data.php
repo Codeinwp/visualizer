@@ -68,18 +68,15 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	<ul class="group-wrapper full-height">
 	    <li class="group group-category open" id="vz-chart-source">
             <div class="group-header">
-                <!-- start btn de back -->
-                <button class="customize-section-back" tabindex="0"></button>
-                <!-- end btn de back -->
-                <h2 class="group-title main-group"><?php _e( 'Chart Source', 'visualizer' );?></h2>
+                <h2 class="group-title main-group"><?php _e( 'Chart Data', 'visualizer' );?></h2>
             </div>
 			<ul class="group-content">
 		        <ul class="group-wrapper">
 		            <li class="group">
-						<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Create Chart From File', 'visualizer' );?></h2>
+						<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' );?></h2>
 		                <div class="group-content">
 				            <p class="group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' );?></p>
-							<p class="group-description"><?php _e( sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s or read how you can add Google spreadsheet in following %1$sarticle%1$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' . $this->type . '.csv</a>', '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' ) );?></p>
+							<p class="group-description"><?php _e( sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %s or read how you can add Google spreadsheet in following %s article %s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' . $this->type . '.csv</a>', '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' ) );?></p>
 							<form id="csv-file-form" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
 						        <input type="hidden" id="remote-data" name="remote_data">
 								<div class="">
@@ -91,7 +88,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</div>
 					</li>
 		            <li class="group">
-						<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Create Chart From URL', 'visualizer' );?></h2>
+						<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' );?></h2>
+
 		                <div class="group-content">
 							<form id="remote-file-form" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
 								<div class="remote-file-section">
@@ -103,7 +101,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</div>
 					</li>
 		            <li class="group">
-						<h2 class="group-title sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Add data from editor', 'visualizer' );?></h2>
+						<h2 class="group-title sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Edit data', 'visualizer' );?></h2>
 		                <div class="group-content">
 <?php
 if ( defined( 'Visualizer_Pro' ) ) {
@@ -119,8 +117,12 @@ if ( defined( 'Visualizer_Pro' ) ) {
 			</ul>
 		</li>
 	</ul>
-		<li class="group group-category bottom-fixed" id="vz-chart-settings">
-			<h2 class="group-title main-group"><?php _e( 'Advanced Settings', 'visualizer' );?></h2>
+		<li class="group group-category bottom-fixed  " id="vz-chart-settings">
+			<h2  ><?php _e( 'Advanced Settings', 'visualizer' );?></h2>
+			<div class="group-header">
+				<button class="customize-section-back" tabindex="0"></button>
+				<h3 class="group-title main-group"><?php _e( 'Chart Settings', 'visualizer' );?></h3>
+			</div>
 			<ul class="group-content">
 				<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() );?>" method="post">
 				<?php echo $this->sidebar;?>
