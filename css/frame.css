@@ -39,6 +39,7 @@
 	width: 299px;
 	border-left: 1px solid #dfdfdf;
 	background: whitesmoke;
+
 	-webkit-overflow-scrolling: touch;
 }
 
@@ -50,12 +51,12 @@
 }
 
 .group .group-header .group-title {
-	background: #fff;
-	border-bottom: 1px solid #ddd;
-	border-top: 1px solid #ddd;
-	color: #555d66;
 	margin: 10px 0;
 	padding: 15px 20px;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	color: #555d66;
+	background: #fff;
 }
 
 .group-wrapper ul .group-title {
@@ -65,96 +66,97 @@
 .group-wrapper ul li {
 	border-top: 1px solid #ddd;
 }
+
 .group-wrapper ul ul li.subsection {
+	margin: 5px;
+	border: 1px solid #ddd;
 	border-top: none;
-	margin:5px;
-	border:1px solid #ddd;
 }
 
 .group-wrapper .group .group .group-title {
-	background-color: #fff;
+	position: relative;
+	margin: 0;
+	padding: 10px 10px 11px 14px;
+	border-top: none;
 	border-bottom: none;
 	border-left: 4px solid #fff;
-	border-top: none;
 	color: #555d66;
-	cursor: pointer;
+	background-color: #fff;
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 21px;
-	margin: 0;
-	padding: 10px 10px 11px 14px;
-	position: relative;
-	transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
-	-webkit-transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
+	cursor: pointer;
+	-webkit-transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
+	transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
 }
 
 .group-wrapper .group .group:hover .group-title,
 .group-wrapper .group .group.open .group-title {
-	background: #f3f3f5;
 	border-left-color: #0073aa;
 	color: #0073aa;
+	background: #f3f3f5;
 }
 
 .group-wrapper .group .group .group-title:after {
-	color: #a0a5aa;
-	content: "\f345";
-	font: 400 20px/1 dashicons;
 	position: absolute;
-	right: 10px;
-	top: 11px;
 	z-index: 1;
+	top: 11px;
+	right: 10px;
+	color: #a0a5aa;
+	font: 400 20px/1 dashicons;
+	content: "\f345";
 }
 
 .group-wrapper .group .group.open .group-title:after {
-	content: '\f347';
+	content: "\f347";
 }
 
 .group-wrapper .group .customize-section-back {
-	background: #fff;
-	border: none;
-	border-left: 4px solid #fff;
-	border-right: 1px solid #ddd;
-	border-top: 1px solid #ddd;
-	box-shadow: none;
-	-webkit-box-shadow: none;
-	cursor: pointer;
 	display: block;
 	float: left;
+	width: 42px;
 	height: 49px;
 	margin: 0 15px 0 0;
 	padding: 0;
-	width: 42px;
-	transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
-	-webkit-transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
+	border: none;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-left: 4px solid #fff;
+	background: #fff;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	cursor: pointer;
+	-webkit-transition: color 0.15s ease-in-out,border-color 0.15s ease-in-out,background 0.15s ease-in-out;
+	transition: color 0.15s ease-in-out,border-color 0.15s ease-in-out,background 0.15s ease-in-out;
 }
 
 .group-wrapper .group .customize-section-back:hover {
-	background: #f3f3f5;
 	border-left-color: #0073aa;
-	color: #0073aa;
 	outline: 0;
+	color: #0073aa;
+	background: #f3f3f5;
 }
 
 .group-wrapper .group .customize-section-back:before {
-	content: "\f341";
-	font: 400 20px/72px dashicons;
-	left: -2px;
 	position: relative;
 	top: -11px;
+	left: -2px;
+	font: 400 20px/72px dashicons;
+	content: "\f341";
 }
 
 .group-wrapper.full-height {
+	float: left;
+	position: relative;
+	width: 100%;
 	height: 100%;
 	margin: 0;
-	position: relative;
-	float: left;
-	width: 100%;
 }
 
 .group.bottom-fixed {
-	bottom: 0;
 	display: block;
 	position: absolute;
+	bottom: 0;
 	width: 100%;
 }
 
@@ -216,12 +218,14 @@ div.group-content .group-description {
 	font-weight: bold;
 	cursor: pointer;
 }
+
 .group-wrapper ul ul li .section-title {
 	margin-bottom: 0;
 	border: none;
-	-webkit-box-shadow:none;
+	-webkit-box-shadow: none;
 	box-shadow: none;
 }
+
 .section-title::after {
 	position: absolute;
 	z-index: 1;
@@ -812,93 +816,97 @@ button#editor-chart-button {
 	}
 }
 
-
 #vz-chart-settings h2:hover,
 #vz-chart-review a:hover {
 	text-decoration: underline;
 }
+
 #vz-chart-review a {
+	color: #00a0d2;
 	text-decoration: none;
-	color:#00a0d2;
 }
 
 #vz-chart-settings h2,
 #vz-chart-review h2 {
+	padding: 0;
 	border: none;
 	font-size: 12px;
 	font-weight: 400;
-	padding: 0;
 }
 
-#vz-chart-review  {
+#vz-chart-review {
+	right: 0;
 	bottom: 40px;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	padding-right: 20px;
-	right:0;
-	text-align: right;
 	width: 50%;
+	padding-right: 20px;
+	text-align: right;
 }
+
 #vz-chart-settings.bottom-fixed h2 {
 	padding-left: 20px;
 }
-#vz-chart-settings  {
+
+#vz-chart-settings {
 	bottom: 40px;
+	left: 0;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	left:0;
-	text-align: left;
 	width: 50%;
+	text-align: left;
 }
 
 #vz-chart-review,
-#vz-chart-settings h2{
-	background: none;
-	color:#00a0d2;
+#vz-chart-settings h2 {
 	display: inline;
-	cursor: pointer;
+	color: #00a0d2;
+	background: none;
 	font-family: "Open Sans",sans-serif;
-
-}
-#vz-chart-settings{
-	background: none;
-
-	display: inline;
 	cursor: pointer;
 }
 
-#vz-chart-source > ul ,
-#vz-chart-settings > ul {
-	border-bottom: 1px solid #ddd;
-	z-index:10;
-	position: relative;
+#vz-chart-settings {
+	display: inline;
+	background: none;
+	cursor: pointer;
 }
 
-#vz-chart-copyright{
+#vz-chart-source > ul,
+#vz-chart-settings > ul {
+	position: relative;
+	z-index: 10;
+	border-bottom: 1px solid #ddd;
+}
+
+#vz-chart-copyright {
 	bottom: 10px;
 	text-align: center;
 }
 
-#sidebar{
-	background: #f3f3f3;
+#sidebar {
 	border-left: 1px solid #ddd;
+	background: #f3f3f3;
 }
 
-#vz-chart-settings.open h2{
-	left:20px;
+#vz-chart-settings.open h2 {
 	position: absolute;
 	bottom: 28px;
+	left: 20px;
 }
+
 #vz-chart-settings.open .group-header {
 	display: block;
 }
+
 #vz-chart-settings .group-header {
 	display: none;
 }
-#vz-chart-settings .group-header .group-title.main-group{
 
-}
 #sidebar::-webkit-scrollbar {
 	width: 4px;
 }
+
 #sidebar::-webkit-scrollbar-thumb {
 	background: #999;
 }

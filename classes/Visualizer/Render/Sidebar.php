@@ -480,7 +480,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		if ( ! empty( $title ) ) {
 			echo '<li class="subsection">';
 			echo '<span class="section-title">', $title, '</span>';
-		}else {
+		} else {
 			echo '<li class=" ">';
 		}
 			echo '<div class="section-items', $open ? ' open' : '', '">';
