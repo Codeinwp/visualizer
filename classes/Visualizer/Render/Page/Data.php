@@ -67,16 +67,16 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	<iframe id="thehole" name="thehole"></iframe>
 	<ul class="group-wrapper full-height">
 	    <li class="group group-category open" id="vz-chart-source">
-            <div class="group-header">
-                <h2 class="group-title main-group"><?php _e( 'Chart Data', 'visualizer' );?></h2>
-            </div>
+			<div class="group-header">
+				<h2 class="group-title main-group"><?php _e( 'Chart Data', 'visualizer' );?></h2>
+			</div>
 			<ul class="group-content">
 		        <ul class="group-wrapper">
 		            <li class="group">
 						<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' );?></h2>
 		                <div class="group-content">
 				            <p class="group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' );?></p>
-							<p class="group-description"><?php _e( sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %s or read how you can add Google spreadsheet in following %s article %s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' . $this->type . '.csv</a>', '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' ) );?></p>
+							<p class="group-description"><?php _e( sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s or read how you can add Google spreadsheet in following %1$s article %1$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' . $this->type . '.csv</a>', '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' ) );?></p>
 							<form id="csv-file-form" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
 						        <input type="hidden" id="remote-data" name="remote_data">
 								<div class="">
@@ -130,7 +130,7 @@ if ( defined( 'Visualizer_Pro' ) ) {
 			</ul>
 		</li>
 		<li class=" group bottom-fixed" id="vz-chart-review">
-			<a href="https://wordpress.org/support/plugin/visualizer/reviews/?filter=5#new-post" target="_blank"><?php _e('Leave feedback','visualizer'); ?></a>
+			<a href="https://wordpress.org/support/plugin/visualizer/reviews/?filter=5#new-post" target="_blank"><?php _e( 'Leave feedback','visualizer' ); ?></a>
 		</li>
 		<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; 2014 </li>
 	</ul>
