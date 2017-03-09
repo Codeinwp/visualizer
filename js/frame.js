@@ -31,7 +31,7 @@
                 parent.addClass('open');
             }
         });
-        $('.view-remote-file').click(function () {
+        $('#vz-import-file').click(function () {
             var url = $(this).parent().find('#remote-data').val();
 
             if (url !== '') {
@@ -48,7 +48,7 @@
             }
         });
 
-        $('.view-csv-file').click(function (e) {
+        $('#vz-import-file').click(function (e) {
             e.preventDefault();
             if ($.trim($(this).parent().find("#csv-file").val()) !== '') {
                 $('#canvas').lock();

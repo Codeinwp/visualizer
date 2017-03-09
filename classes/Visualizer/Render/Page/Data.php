@@ -76,28 +76,48 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' );?></h2>
 		                <div class="group-content">
 				            <p class="group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' );?></p>
-							<p class="group-description"><?php _e( sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %s or read how you can add Google spreadsheet in following %s article %s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' . $this->type . '.csv</a>', '<a href="https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank">', '</a>' ) );?></p>
-							<form id="csv-file-form" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
+							<p class="group-description"><?php _e( sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %s ', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' . $this->type . '.csv</a>' ) );?></p>
+							<form id="vz-csv-file-form" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
 						        <input type="hidden" id="remote-data" name="remote_data">
 								<div class="">
 									<input type="file" id="csv-file" name="local_data">
-									<?php esc_attr_e( 'From Computer', 'visualizer' );?>
 								</div>
-								<input type="button" class="view-csv-file" value="<?php _e( 'View', 'visualizer' );?>">
+								<input type="button" class="button button-primary" id="vz-import-file" value="<?php _e( 'Import', 'visualizer' );?>">
 							</form>
 						</div>
 					</li>
 		            <li class="group">
 						<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' );?></h2>
+						<ul class="group-content">
+							<li class="subsection">
+								<span class="section-title"><?php _e('One time import','visualizer'); ?></span>
+								<div class="section-items">
+									<form id="vz-one-time-import" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
+										<div class="remote-file-section">
+											<input type="url" id="remote-data" name="remote_data" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file:', 'visualizer' );?>">
 
-		                <div class="group-content">
-							<form id="remote-file-form" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
-								<div class="remote-file-section">
-									<input type="url" id="remote-data" name="remote_data" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file:', 'visualizer' );?>">
-									<div class="<?php echo defined( 'Visualizer_Pro' ) ? '' : 'just-on-pro'?>"><?php _e( 'Synchronize each hour', 'visualizer' );?><input type="checkbox" id="remote-sync" name="remote-sync" value="1"></div>
+										</div>
+										<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' );?>">
+									</form>
 								</div>
-								<input type="button" class="view-remote-file" value="<?php _e( 'View', 'visualizer' );?>">
-							</form>
+							</li>
+							<li class="subsection">
+								<span class="section-title"><?php _e('Schedule Import','visualizer'); ?></span>
+								<div class="section-items">
+									<form id="vz-schedule-import" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
+										<div class="remote-file-section">
+											<input type="url" id="remote-data" name="remote_data" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file:', 'visualizer' );?>">
+
+										</div>
+										<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' );?>">
+									</form>
+								</div>
+							</li>
+						</ul>
+		                <div class="group-content">
+
+
+
 						</div>
 					</li>
 		            <li class="group">

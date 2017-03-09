@@ -902,3 +902,9 @@ button#editor-chart-button {
 #sidebar::-webkit-scrollbar-thumb {
 	background: #999;
 }
+#vz-csv-file-form {
+	text-align: center;
+}
+#vz-import-file{
+	margin-top:10px;
+}
