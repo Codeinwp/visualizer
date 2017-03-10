@@ -94,7 +94,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<div class="section-items">
 									<form id="vz-one-time-import" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
 										<div class="remote-file-section">
-											<input type="url" id="remote-data" name="remote_data" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file:', 'visualizer' );?>">
+											<input type="url" id="remote-data" name="remote_data" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file:', 'visualizer' );?>" class="visualizer-input">
 
 										</div>
 										<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' );?>">
@@ -102,37 +102,65 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</div>
 							</li>
 							<li class="subsection">
-								<span class="section-title"><?php _e('Schedule Import','visualizer'); ?></span>
+								<span class="section-title"><?php _e('Schedule Import','visualizer'); ?><span class="dashicons dashicons-lock"></span></span>
 								<div class="section-items">
-									<form id="vz-schedule-import" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data">
+									<form id="vz-schedule-import" action="<?php echo $upload_link?>" method="post" target="thehole" enctype="multipart/form-data" class="only-pro-feature">
 										<div class="remote-file-section">
-											<input type="url" id="remote-data" name="remote_data" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file:', 'visualizer' );?>">
-
+                                            <input type="url" id="remote-data" name="remote_data" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file:', 'visualizer' );?>" class="visualizer-input only-pro" disabled>
+                                            <select name="123" id="123" class="visualizer-select only-pro" disabled>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
 										</div>
-										<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' );?>">
+										<input type="button" id="view-remote-file" class="button button-primary only-pro" value="<?php _e( 'Import', 'visualizer' );?>" disabled>
+
+                                        <div class="only-pro-content">
+                                            <div class="only-pro-container">
+                                                <div class="only-pro-inner">
+                                                    <p><?php _e( 'Enable this feature in PRO version!','visualizer' ); ?></p>
+                                                    <a href="#" title="<?php _e( 'Buy now','visualizer' ); ?>"><?php _e( 'Buy now','visualizer' ); ?></a>
+                                                </div>
+                                            </div>
+                                        </div>
 									</form>
 								</div>
 							</li>
 						</ul>
-		                <div class="group-content">
-
-
-
-						</div>
 					</li>
 		            <li class="group">
-						<h2 class="group-title sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Edit data', 'visualizer' );?></h2>
-		                <div class="group-content">
-<?php
-if ( defined( 'Visualizer_Pro' ) ) {
-	global $Visualizer_Pro;
-	$Visualizer_Pro->_addFormElements( $upload_link );
-} else {
-	// Added by Ash/Upwork
-	echo '<div class="just-on-pro"> </div>';
-}
-?>
-						</div>
+						<h2 class="group-title sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Edit data', 'visualizer' );?><span class="dashicons dashicons-lock"></span></h2>
+		                <div class="group-content edit-data-content">
+                            <div class="only-pro-feature">
+                                <?php
+                                if ( defined( 'Visualizer_Pro' ) ) {
+                                    global $Visualizer_Pro;
+                                    $Visualizer_Pro->_addFormElements( $upload_link );
+                                } else {
+                                    ?>
+                                    <select name="123" id="123" class="visualizer-select only-pro" disabled>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                    <input type="button" id="view-data" class="button button-primary only-pro" value="<?php _e( 'View data', 'visualizer' );?>" disabled>
+                                    <?php
+                                }
+                                ?>
+                                <div class="only-pro-content">
+                                    <div class="only-pro-container">
+                                        <div class="only-pro-inner">
+                                            <p><?php _e( 'Enable this feature in PRO version!','visualizer' ); ?></p>
+                                            <a href="#" title="<?php _e( 'Buy now','visualizer' ); ?>"><?php _e( 'Buy now','visualizer' ); ?></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 					</li>
 			</ul>
 		</li>
