@@ -47,6 +47,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @since 1.1.0
 	 *
 	 * @access public
+	 *
 	 * @param Visualizer_Plugin $plugin The instance of the plugin.
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
@@ -54,6 +55,29 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SERIES, 'filterChartSeries', 1, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA, 'filterChartData', 1, 2 );
+
+		$this->_addFilter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
+	}
+
+	/**
+	 * Filters chart sereis.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @access public
+	 *
+	 * @param array $series The array of chart series.
+	 * @param int   $chart_id The chart id.
+	 *
+	 * @return array The array of filtered series.
+	 */
+	public function filterChartSeries( $series, $chart_id ) {
+		$source = $this->_getSource( $chart_id );
+		if ( ! $source ) {
+			return $series;
+		}
+
+		return $source->repopulateSeries( $series, $chart_id );
 	}
 
 	/**
@@ -62,7 +86,9 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @since 1.1.0
 	 *
 	 * @access private
+	 *
 	 * @param int $chart_id The chart id.
+	 *
 	 * @return Visualizer_Source The source object if source exists, otherwise FALSE.
 	 */
 	private function _getSource( $chart_id ) {
@@ -79,32 +105,15 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	}
 
 	/**
-	 * Filters chart sereis.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @access public
-	 * @param array $series The array of chart series.
-	 * @param int   $chart_id The chart id.
-	 * @return array The array of filtered series.
-	 */
-	public function filterChartSeries( $series, $chart_id ) {
-		$source = $this->_getSource( $chart_id );
-		if ( ! $source ) {
-			return $series;
-		}
-
-		return $source->repopulateSeries( $series, $chart_id );
-	}
-
-	/**
 	 * Filters chart data.
 	 *
 	 * @since 1.1.0
 	 *
 	 * @access public
+	 *
 	 * @param array $data The array of chart data.
 	 * @param int   $chart_id The chart id.
+	 *
 	 * @return array The array of filtered data.
 	 */
 	public function filterChartData( $data, $chart_id ) {
@@ -114,6 +123,27 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 		}
 
 		return $source->repopulateData( $data, $chart_id );
+	}
+
+	/**
+	 * Add the pro upsell html.
+	 *
+	 * @param string $old The previous html string.
+	 *
+	 * @return string The new html code.
+	 */
+	public function addProUpsell( $old ) {
+		$return = '<div class="only-pro-content">';
+		$return .= '	<div class="only-pro-container">';
+		$return .= '		<div class="only-pro-inner">';
+		$return .= '			<p>' . __( 'Enable this feature in PRO version!', 'visualizer' ) . '</p>';
+		$return .= '            <a target="_blank" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
+		$return .= ' 		</div>';
+		$return .= ' 	</div>';
+		$return .= '</div>';
+
+		return $return;
+
 	}
 
 }

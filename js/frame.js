@@ -12,13 +12,13 @@
         $('#vz-chart-settings h2').click(function () {
             $("#vz-chart-source").hide();
             $(this).parent().removeClass('bottom-fixed').addClass('open');
-            e.preventDefault();
+
             return false;
         });
         $('#vz-chart-settings .customize-section-back').click(function () {
             $("#vz-chart-source").show();
             $(this).parent().parent().removeClass('open').addClass('bottom-fixed');
-            e.preventDefault();
+
             return false;
         });
         $('.group-title').click(function () {
