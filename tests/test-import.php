@@ -11,4 +11,7 @@
  */
 class Test_Import extends WP_UnitTestCase {
 
+	public function test_file_import() {
+
+	}
 }
