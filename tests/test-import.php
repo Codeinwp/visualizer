@@ -10,7 +10,9 @@
  * @since       2.0.0
  */
 class Test_Import extends WP_UnitTestCase {
-
+	/**
+	 * Testing file import feature.
+	 */
 	public function test_file_import() {
 
 	}
