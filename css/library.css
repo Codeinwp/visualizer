@@ -20,9 +20,11 @@
 #visualizer-types {
 	margin: 20px 0 10px;
 }
-.visualizer-list-item .visualizer-pro-only{
+
+.visualizer-list-item .visualizer-pro-only {
 	text-decoration: line-through;
 }
+
 #visualizer-library {
 	margin: 20px 0;
 }
@@ -139,9 +141,6 @@
 	margin-right: 20px;
 }
 
-
-
 #visualizer-search form {
 	text-align: right;
 }
-
