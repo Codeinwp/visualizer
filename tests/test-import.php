@@ -156,7 +156,9 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 * @access public
 	 */
 	public function fileProvider() {
-		return [ [ VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'bar.csv' ] ];
+		return array(
+				array( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'bar.csv' ),
+		);
 	}
 
 	/**
@@ -165,6 +167,8 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 * @access public
 	 */
 	public function urlProvider() {
-		return [ [ 'http://localhost/wp-content/plugins/wp-visualizer/samples/bar.csv' ] ];
+		return array(
+			array( 'http://localhost/wp-content/plugins/wp-visualizer/samples/bar.csv' ),
+		);
 	}
 }
