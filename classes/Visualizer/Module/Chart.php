@@ -443,13 +443,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function uploadData() {
 		// validate nonce
-		if ( ! wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
+		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
+		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
 			status_header( 403 );
 			exit;
 		}
 
 		// check chart, if chart exists
-		$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT );
+		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
 			status_header( 400 );
 			exit;
@@ -457,7 +458,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
-		if ( filter_input( INPUT_POST, 'remote_data', FILTER_VALIDATE_URL ) ) {
+		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
 			$source = new Visualizer_Source_Csv_Remote( $_POST['remote_data'] );
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
@@ -488,7 +489,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$render->render();
-		exit;
+		wp_die();
 	}
 
 	/**

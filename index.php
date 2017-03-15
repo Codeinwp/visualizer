@@ -90,14 +90,6 @@ function visualizer_launch() {
 		define( 'VISUALIZER_CSV_ENCLOSURE', '"' );
 	}
 
-	// don't load the plugin if cron job is running or doing autosave
-	$doing_autosave = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE;
-	$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
-	$doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
-	if ( $doing_autosave || $doing_cron ) {
-		return;
-	}
-
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
 
@@ -105,17 +97,13 @@ function visualizer_launch() {
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
 
-	if ( $doing_ajax ) {
-		// set ajax modules
-		$plugin->setModule( Visualizer_Module_Chart::NAME );
+	$plugin->setModule( Visualizer_Module_Chart::NAME );
+	if ( is_admin() ) {
+		// set admin modules
+		$plugin->setModule( Visualizer_Module_Admin::NAME );
 	} else {
-		if ( is_admin() ) {
-			// set admin modules
-			$plugin->setModule( Visualizer_Module_Admin::NAME );
-		} else {
-			// set frontend modules
-			$plugin->setModule( Visualizer_Module_Frontend::NAME );
-		}
+		// set frontend modules
+		$plugin->setModule( Visualizer_Module_Frontend::NAME );
 	}
 }
 
