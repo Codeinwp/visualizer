@@ -250,7 +250,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		// dispatch pages
-		$this->_chart = $chart;
+		$this->_chart = get_post( $chart_id );
 		switch ( isset( $_GET['tab'] ) ? $_GET['tab'] : '' ) {
 			case 'settings':
 				// changed by Ash/Upwork
@@ -552,7 +552,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$chart_id = $success = false;
 		$capable = current_user_can( 'edit_posts' );
 		if ( $capable ) {
-			$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+			$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) : '';
 			if ( $chart_id ) {
 				$chart = get_post( $chart_id );
 				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
@@ -561,7 +561,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		if ( $success ) {
 			$settings   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
-			$filename   = $settings['title'];
+			$filename   = isset( $settings['title'] ) ? $settings['title'] : '';
 			if ( empty( $filename ) ) {
 				$filename   = 'export.csv';
 			} else {
@@ -620,6 +620,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			));
 		}// End if().
 
-		exit;
+		wp_die();
 	}
 }
