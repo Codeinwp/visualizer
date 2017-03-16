@@ -462,11 +462,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$source = new Visualizer_Source_Csv_Remote( $_POST['remote_data'] );
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
-
 			// Added by Ash/Upwork
-		} elseif ( defined( 'Visualizer_Pro' ) && isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			global $Visualizer_Pro;
-			$source = $Visualizer_Pro->_handleChartData( $_POST['chart_data'] );
+		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
+			$source = apply_filters( 'visualizer_pro_handle_chart_data', '', $_POST['chart_data'] );
 			// Added by Ash/Upwork
 		} else {
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );

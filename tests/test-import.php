@@ -151,6 +151,88 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Testing editor feature.
+	 *
+	 * @access public
+	 * @dataProvider editorDataProvider
+	 */
+	public function test_pro_editor( $data ) {
+		if ( ! defined( 'VISUALIZER_PRO_VERSION' ) ) {
+			$this->markTestSkipped( 'PRO not installed/available, skipping test' );
+		}
+
+		$this->create_chart();
+		$this->_setRole( 'administrator' );
+
+		$_POST  = array(
+			'chart_data'    => $data,
+		);
+		$_GET   = array(
+			'nonce'         => wp_create_nonce(),
+			'chart'         => $this->chart,
+		);
+		$_FILES = array();
+
+		// swallow the output
+		ob_start();
+		try {
+			$this->_handleAjax( 'visualizer-upload-data' );
+		} catch ( WPAjaxDieContinueException  $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee) {
+			// We expected this, do nothing.
+		}
+		ob_end_clean();
+
+		$chart      = get_post( $this->chart );
+		$content    = $chart->post_content;
+
+		$content_line   = 'a:14:{i:0;a:4:{i:0;s:1:"A";i:1;d:10;i:2;d:10;i:3;d:5;}i:1;a:4:{i:0;s:1:"B";i:1;d:20;i:2;d:5;i:3;d:10;}i:2;a:4:{i:0;s:1:"C";i:1;d:40;i:2;d:10;i:3;d:5;}i:3;a:4:{i:0;s:1:"D";i:1;d:80;i:2;d:5;i:3;d:10;}i:4;a:4:{i:0;s:1:"E";i:1;d:70;i:2;d:10;i:3;d:5;}i:5;a:4:{i:0;s:1:"F";i:1;d:70;i:2;d:5;i:3;d:10;}i:6;a:4:{i:0;s:1:"G";i:1;d:80;i:2;d:10;i:3;d:5;}i:7;a:4:{i:0;s:1:"H";i:1;d:40;i:2;d:5;i:3;d:10;}i:8;a:4:{i:0;s:1:"I";i:1;d:20;i:2;d:10;i:3;d:5;}i:9;a:4:{i:0;s:1:"J";i:1;d:35;i:2;d:5;i:3;d:10;}i:10;a:4:{i:0;s:1:"K";i:1;d:30;i:2;d:10;i:3;d:5;}i:11;a:4:{i:0;s:1:"L";i:1;d:35;i:2;d:5;i:3;d:10;}i:12;a:4:{i:0;s:1:"M";i:1;d:10;i:2;d:10;i:3;d:5;}i:13;a:4:{i:0;s:1:"N";i:1;d:10;i:2;d:5;i:3;d:10;}}';
+
+		$this->assertEquals( $content, $content_line );
+	}
+
+	/**
+	 * Provide the "edited" data
+	 *
+	 * @access public
+	 */
+	public function editorDataProvider() {
+		$data       = array();
+		$file       = VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'line.csv';
+		if ( ($handle = fopen( $file, 'r' )) !== false ) {
+			$row    = 0;
+			while ( ($line = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE )) !== false ) {
+				if ( $row++ <= 1 ) {
+					$cols   = count( $line );
+					$datum  = array();
+					for ( $col = 0; $col < $cols; $col++ ) {
+						$datum[]    = '"' . $line[ $col ] . '"';
+					}
+				} else {
+					$cols   = count( $line );
+					$datum  = array();
+					for ( $col = 0; $col < $cols; $col++ ) {
+						if ( is_numeric( $line[ $col ] ) ) {
+							// multiply all numbers by 10
+							$datum[]    = $line[ $col ] * 10;
+						} else {
+							$datum[]    = '"' . $line[ $col ] . '"';
+						}
+					}
+				}
+				$data[] = $datum;
+			}
+		}
+
+		$csv        = array();
+		foreach ( $data as $row ) {
+			$csv[]  = '[' . implode( ',', $row ) . ']';
+		}
+		$csv        = '[' . implode( ',', $csv ) . ']';
+		return array( array( $csv ) );
+	}
+	/**
 	 * Provide the fileURL for uploading the file
 	 *
 	 * @access public
