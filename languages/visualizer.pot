@@ -3,7 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n" 
+"Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
+"POT-Creation-Date: 2017-03-16 05:02:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -117,11 +118,11 @@ msgstr ""
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:471
+#: classes/Visualizer/Module/Chart.php:472
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:486
+#: classes/Visualizer/Module/Chart.php:487
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 

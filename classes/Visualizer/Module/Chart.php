@@ -204,10 +204,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function renderChartPages() {
-		define( 'IFRAME_REQUEST', 1 );
+		defined( 'IFRAME_REQUEST' ) || define( 'IFRAME_REQUEST', 1 );
 
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
-		$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT );
+		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
 			$default_type = 'line';
 
@@ -231,7 +231,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
-			exit;
+			wp_die();
 		}
 
 		// enqueue and register scripts and styles
@@ -250,8 +250,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		// dispatch pages
-		$this->_chart = $chart;
-		switch ( filter_input( INPUT_GET, 'tab' ) ) {
+		$this->_chart = get_post( $chart_id );
+		switch ( isset( $_GET['tab'] ) ? $_GET['tab'] : '' ) {
 			case 'settings':
 				// changed by Ash/Upwork
 				$this->_handleDataAndSettingsPage();
@@ -262,7 +262,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				break;
 		}
 
-		exit;
+		wp_die();
 	}
 
 	/**
@@ -351,7 +351,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * Handle data and settings page
 	 */
 	private function _handleDataAndSettingsPage() {
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
 			if ( $this->_chart->post_status == 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
 				wp_update_post( $this->_chart->to_array() );
@@ -443,13 +443,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function uploadData() {
 		// validate nonce
-		if ( ! wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ) ) ) {
+		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
+		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
 			status_header( 403 );
 			exit;
 		}
 
 		// check chart, if chart exists
-		$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT );
+		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
 			status_header( 400 );
 			exit;
@@ -457,7 +458,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
-		if ( filter_input( INPUT_POST, 'remote_data', FILTER_VALIDATE_URL ) ) {
+		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
 			$source = new Visualizer_Source_Csv_Remote( $_POST['remote_data'] );
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
@@ -488,7 +489,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$render->render();
-		exit;
+		wp_die();
 	}
 
 	/**
@@ -551,7 +552,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$chart_id = $success = false;
 		$capable = current_user_can( 'edit_posts' );
 		if ( $capable ) {
-			$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+			$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) : '';
 			if ( $chart_id ) {
 				$chart = get_post( $chart_id );
 				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
@@ -560,7 +561,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		if ( $success ) {
 			$settings   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
-			$filename   = $settings['title'];
+			$filename   = isset( $settings['title'] ) ? $settings['title'] : '';
 			if ( empty( $filename ) ) {
 				$filename   = 'export.csv';
 			} else {
@@ -619,6 +620,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			));
 		}// End if().
 
-		exit;
+		wp_die();
 	}
 }

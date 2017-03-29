@@ -31,7 +31,7 @@
                 parent.addClass('open');
             }
         });
-        $('#vz-import-file').click(function () {
+        $('#view-remote-file').click(function () {
             var url = $(this).parent().find('#remote-data').val();
 
             if (url !== '') {
