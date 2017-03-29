@@ -61,11 +61,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		// Added by Ash/Upwork
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EXPORT_DATA, 'exportData' );
-		if ( defined( 'Visualizer_Pro' ) ) {
-			global $Visualizer_Pro;
-			list($action, $name, $class) = $Visualizer_Pro->_getAjaxAction( $this );
-			$this->_addAjaxAction( $action, $name, $class );
-		}
 		// Added by Ash/Upwork
 	}
 
@@ -77,12 +72,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 * @param array $results The response array.
 	 */
-	public function _sendResponse( $results ) {
+	public static function _sendResponse( $results ) {
 		header( 'Content-type: application/json' );
 		nocache_headers();
 
 		echo json_encode( $results );
-		exit;
+		wp_die();
 	}
 
 	/**
@@ -153,7 +148,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$charts[] = $chart_data;
 		}
 
-		$this->_sendResponse( array(
+		self::_sendResponse( array(
 			'success' => true,
 			'data'    => $charts,
 			'total'   => $query->max_num_pages,
@@ -188,7 +183,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		if ( $is_post ) {
-			$this->_sendResponse( array( 'success' => $success ) );
+			self::_sendResponse( array( 'success' => $success ) );
 		}
 
 		wp_redirect( wp_get_referer() );

@@ -156,22 +156,22 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 * @access public
 	 * @dataProvider editorDataProvider
 	 */
-	public function test_pro_editor( $data ) {
-		if ( ! defined( 'VISUALIZER_PRO_VERSION' ) ) {
-			$this->markTestSkipped( 'PRO not installed/available, skipping test' );
-		}
+	public function test_pro_editor($data) {
+        if ( !defined( 'VISUALIZER_PRO_VERSION' ) ) {
+    		$this->markTestSkipped( 'PRO not installed/available, skipping test');
+        }
 
 		$this->create_chart();
 		$this->_setRole( 'administrator' );
 
 		$_POST  = array(
-			'chart_data'    => $data,
+			'chart_data'    => $data
 		);
 		$_GET   = array(
 			'nonce'         => wp_create_nonce(),
 			'chart'         => $this->chart,
 		);
-		$_FILES = array();
+        $_FILES = array();
 
 		// swallow the output
 		ob_start();
@@ -193,44 +193,80 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Testing fetch from chat feature. We only need to test fetching, because we already have a test case for uploading data
+	 *
+	 * @access public
+	 */
+	public function test_pro_fetch_from_chart() {
+        if ( !defined( 'VISUALIZER_PRO_VERSION' ) ) {
+    		$this->markTestSkipped( 'PRO not installed/available, skipping test');
+        }
+
+		$this->create_chart();
+		$this->_setRole( 'administrator' );
+
+		$_GET   = array(
+			'nonce'         => wp_create_nonce(),
+			'chart_id'      => $this->chart,
+		);
+
+		// swallow the output
+		ob_start();
+		try {
+			$this->_handleAjax( 'visualizer-fetch-data' );
+		} catch ( WPAjaxDieContinueException  $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee) {
+			// We expected this, do nothing.
+		}
+		ob_end_clean();
+
+        $response = json_decode( $this->_last_response );
+        $this->assertInternalType( 'object', $response );
+        $this->assertObjectHasAttribute( 'success', $response );
+        $this->assertObjectHasAttribute( 'data', $response );
+        $this->assertTrue( $response->success );
+	}
+
+	/**
 	 * Provide the "edited" data
 	 *
 	 * @access public
 	 */
 	public function editorDataProvider() {
-		$data       = array();
-		$file       = VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'line.csv';
-		if ( ($handle = fopen( $file, 'r' )) !== false ) {
-			$row    = 0;
-			while ( ($line = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE )) !== false ) {
-				if ( $row++ <= 1 ) {
-					$cols   = count( $line );
-					$datum  = array();
-					for ( $col = 0; $col < $cols; $col++ ) {
-						$datum[]    = '"' . $line[ $col ] . '"';
-					}
-				} else {
-					$cols   = count( $line );
-					$datum  = array();
-					for ( $col = 0; $col < $cols; $col++ ) {
-						if ( is_numeric( $line[ $col ] ) ) {
-							// multiply all numbers by 10
-							$datum[]    = $line[ $col ] * 10;
-						} else {
-							$datum[]    = '"' . $line[ $col ] . '"';
-						}
-					}
-				}
-				$data[] = $datum;
-			}
-		}
+        $data       = array();
+        $file       = VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'line.csv';
+        if (($handle = fopen($file, "r")) !== FALSE) {
+            $row    = 0;
+            while (($line = fgetcsv($handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE)) !== FALSE) {
+                if ($row++ <= 1) {
+                    $cols   = count($line);
+                    $datum  = array();
+                    for ($col = 0; $col < $cols; $col++) {
+                        $datum[]    = '"'. $line[$col] . '"';
+                    }
+                } else {
+                    $cols   = count($line);
+                    $datum  = array();
+                    for ($col = 0; $col < $cols; $col++) {
+                        if (is_numeric($line[$col])) {
+                            // multiply all numbers by 10
+                            $datum[]    = $line[$col] * 10;
+                        } else {
+                            $datum[]    = '"' . $line[$col] . '"';
+                        }
+                    }
+                }
+                $data[] = $datum;
+            }
+        }
 
-		$csv        = array();
-		foreach ( $data as $row ) {
-			$csv[]  = '[' . implode( ',', $row ) . ']';
-		}
-		$csv        = '[' . implode( ',', $csv ) . ']';
-		return array( array( $csv ) );
+        $csv        = array();
+        foreach ($data as $row) {
+            $csv[]  = "[" . implode(",", $row) . "]";
+        }
+        $csv        = "[" . implode(",", $csv) . "]";
+		return array(array($csv));
 	}
 	/**
 	 * Provide the fileURL for uploading the file
@@ -239,8 +275,8 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 */
 	public function fileProvider() {
 		return array(
-				array( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'bar.csv' ),
-		);
+                array(VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'bar.csv')
+        );
 	}
 
 	/**
@@ -250,7 +286,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 */
 	public function urlProvider() {
 		return array(
-			array( 'http://localhost/wp-content/plugins/wp-visualizer/samples/bar.csv' ),
-		);
+            array('http://localhost/wp-content/plugins/wp-visualizer/samples/bar.csv')
+        );
 	}
 }

@@ -150,11 +150,33 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<div>
 									<p class="group-description"><?php _e( 'You can import here data from your previously created charts', 'visualizer' ); ?></p>
 									<form>
-										<select name="vz-import-from-chart" id="vz-import-from-chart"
-												class="visualizer-select">
-											<option value="#"><?php _e( 'Chart #123', 'visualizer' ); ?></option>
+										<select name="vz-import-from-chart" id="chart-id" class="visualizer-select">
+			<?php
+				$fetch_link = add_query_arg( array(
+					'action' => Visualizer_Pro::ACTION_FETCH_DATA,
+					'nonce'  => wp_create_nonce(),
+				), admin_url( 'admin-ajax.php' ) );
+
+				$query_args_charts = array(
+					'post_type'         => Visualizer_Plugin::CPT_VISUALIZER,
+					'posts_per_page'    => -1,
+					'no_found_rows'     => true,
+				);
+				$charts            = array();
+				$query             = new WP_Query( $query_args_charts );
+			while ( $query->have_posts() ) {
+				$chart    = $query->next_post();
+				$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+				?>
+				<option value="<?php echo $chart->ID; ?>"><?php echo empty( $settings['title'] ) ? '#' . $chart->ID : $settings['title']; ?></option>
+				<?php
+			}
+				?>
+
 										</select>
 									</form>
+											<input type="button" id="existing-chart" class="button button-primary"
+												   value="<?php _e( 'Import Chart', 'visualizer' ); ?>" data-viz-link="<?php echo $fetch_link;?>">
 									<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
 								</div>
 							</div>
