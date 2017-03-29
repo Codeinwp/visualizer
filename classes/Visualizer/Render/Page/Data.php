@@ -163,12 +163,15 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<h2 class="group-title sub-group visualizer-editor-tab"
 								data-current="chart"><?php _e( 'Edit current data', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
+								<form id="editor-form" action="<?php echo $upload_link?>" method="post" target="thehole">
+									<input type="hidden" id="chart-data" name="chart_data">
+								</form>
+
 							<div class="group-content edit-data-content">
 								<div>
-
 									<p class="group-description"><?php _e( 'You can manually edit the chart data using the spreadsheet like editor.', 'visualizer' ); ?></p>
-									<input type="button" id="view-editor" class="button button-primary "
-										   value="<?php _e( 'View editor', 'visualizer' ); ?>" >
+									<input type="button" id="editor-chart-button" class="button button-primary "
+										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart" data-t-editor="<?php _e( 'Show Chart', 'visualizer' );?>" data-t-chart="<?php _e( 'View Editor', 'visualizer' );?>">
 
 									<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
 								</div>

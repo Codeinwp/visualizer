@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-03-16 05:02:53+00:00\n"
+"POT-Creation-Date: 2017-03-16 09:39:48+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -118,19 +118,19 @@ msgstr ""
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:472
+#: classes/Visualizer/Module/Chart.php:470
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:487
+#: classes/Visualizer/Module/Chart.php:485
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Sources.php:139
+#: classes/Visualizer/Module/Sources.php:143
 msgid "Enable this feature in PRO version!"
 msgstr ""
 
-#: classes/Visualizer/Module/Sources.php:140
+#: classes/Visualizer/Module/Sources.php:144
 msgid "Buy now"
 msgstr ""
 
@@ -290,27 +290,31 @@ msgstr ""
 msgid "Edit current data"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:169
+#: classes/Visualizer/Render/Page/Data.php:172
 msgid "You can manually edit the chart data using the spreadsheet like editor."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:171
-msgid "View editor"
+#: classes/Visualizer/Render/Page/Data.php:174
+msgid "View Editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:181
-msgid "Advanced Settings"
+#: classes/Visualizer/Render/Page/Data.php:174
+msgid "Show Chart"
 msgstr ""
 
 #: classes/Visualizer/Render/Page/Data.php:184
+msgid "Advanced Settings"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:187
 msgid "Chart Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:195
+#: classes/Visualizer/Render/Page/Data.php:198
 msgid "Rate our plugin"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:214
+#: classes/Visualizer/Render/Page/Data.php:217
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
