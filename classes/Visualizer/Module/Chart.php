@@ -171,7 +171,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$nonce = wp_verify_nonce( filter_input( $input_method, 'nonce' ) );
 		$capable = current_user_can( 'delete_posts' );
 		if ( $nonce && $capable ) {
-			$chart_id = filter_input( $input_method, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+			$chart_id = filter_input( $input_method, 'chart', FILTER_VALIDATE_INT, array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			) );
 			if ( $chart_id ) {
 				$chart = get_post( $chart_id );
 				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
@@ -183,7 +187,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		if ( $is_post ) {
-			self::_sendResponse( array( 'success' => $success ) );
+			self::_sendResponse( array(
+				'success' => $success,
+			) );
 		}
 
 		wp_redirect( wp_get_referer() );
@@ -222,7 +228,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
-				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array( 'focusTarget' => 'datum' ) );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array(
+					'focusTarget' => 'datum',
+				) );
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
@@ -497,7 +505,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$nonce = wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ), Visualizer_Plugin::ACTION_CLONE_CHART );
 		$capable = current_user_can( 'edit_posts' );
 		if ( $nonce && $capable ) {
-			$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+			$chart_id = filter_input( INPUT_GET, 'chart', FILTER_VALIDATE_INT, array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			) );
 			if ( $chart_id ) {
 				$chart = get_post( $chart_id );
 				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
@@ -545,7 +557,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$chart_id = $success = false;
 		$capable = current_user_can( 'edit_posts' );
 		if ( $capable ) {
-			$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) : '';
+			$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT, array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			) ) : '';
 			if ( $chart_id ) {
 				$chart = get_post( $chart_id );
 				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;

@@ -81,7 +81,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'visualizer-upload-data' );
 		} catch ( WPAjaxDieContinueException  $e ) {
 			// We expected this, do nothing.
-		} catch ( WPAjaxDieStopException $ee) {
+		} catch ( WPAjaxDieStopException $ee ) {
 			// We expected this, do nothing.
 		}
 		ob_end_clean();
@@ -126,7 +126,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'visualizer-upload-data' );
 		} catch ( WPAjaxDieContinueException  $e ) {
 			// We expected this, do nothing.
-		} catch ( WPAjaxDieStopException $ee) {
+		} catch ( WPAjaxDieStopException $ee ) {
 			// We expected this, do nothing.
 		}
 		ob_end_clean();
@@ -171,7 +171,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'visualizer-upload-data' );
 		} catch ( WPAjaxDieContinueException  $e ) {
 			// We expected this, do nothing.
-		} catch ( WPAjaxDieStopException $ee) {
+		} catch ( WPAjaxDieStopException $ee ) {
 			// We expected this, do nothing.
 		}
 		ob_end_clean();
@@ -206,7 +206,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'visualizer-fetch-data' );
 		} catch ( WPAjaxDieContinueException  $e ) {
 			// We expected this, do nothing.
-		} catch ( WPAjaxDieStopException $ee) {
+		} catch ( WPAjaxDieStopException $ee ) {
 			// We expected this, do nothing.
 		}
 		ob_end_clean();
@@ -286,7 +286,14 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 		list($content, $series) = $this->parseFile( $file );
 		unlink( $file );
 		return array(
-			array( $url, array( 'source' => $url, 'data' => $content ), $series ),
+			array(
+				$url,
+				array(
+					'source' => $url,
+					'data' => $content,
+				),
+				$series,
+			),
 		);
 	}
 

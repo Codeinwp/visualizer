@@ -96,7 +96,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<ul class="subsubsub">';
 		foreach ( $this->types as $type => $array ) {
 			$label      = $array['name'];
-			$link       = '<a class=" " href="' . esc_url( add_query_arg( array( 'type' => $type, 'vpage' => false ) ) ) . '">';
+			$link       = '<a class=" " href="' . esc_url( add_query_arg( array(
+				'type' => $type,
+				'vpage' => false,
+			) ) ) . '">';
 			if ( ! $array['enabled'] ) {
 				$link   = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
