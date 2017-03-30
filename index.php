@@ -8,6 +8,8 @@
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
+    WordPress Available:  yes
+    Requires License:    no
 	License URI: http://www.opensource.org/licenses/gpl-license.php
 */
 
@@ -105,8 +107,12 @@ function visualizer_launch() {
 		// set frontend modules
 		$plugin->setModule( Visualizer_Module_Frontend::NAME );
 	}
+	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload_52.php';
+	if ( is_readable( $vendor_file ) ) {
+		require_once $vendor_file;
+		ThemeIsle_SDK_Loader::init_product( VISUALIZER_BASEFILE );
+	}
 }
-
 // register autoloader function
 spl_autoload_register( 'visualizer_autoloader' );
 
