@@ -27,6 +27,8 @@
 
 #visualizer-library {
 	margin: 20px 0;
+	width:80%;
+	float:left;
 }
 
 .loader {
@@ -143,4 +145,26 @@
 
 #visualizer-search form {
 	text-align: right;
+}
+#visualizer-sidebar{
+	width:20%;
+	float:left;
+}
+
+.visualizer-sidebar-box ul{
+	list-style: circle;
+	width:70%;
+}
+.visualizer-sidebar-box{
+
+	width: 95%;
+	display: block;
+	height: 200px;
+	background: white;
+	margin: 0px;
+	margin-left:2.5%;
+	padding: 0px;
+	padding-top:10px;
+	text-align: center;
+	color:#0073aa;
 }
