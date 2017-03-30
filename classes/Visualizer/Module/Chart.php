@@ -61,11 +61,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		// Added by Ash/Upwork
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EXPORT_DATA, 'exportData' );
-		if ( defined( 'Visualizer_Pro' ) ) {
-			global $Visualizer_Pro;
-			list($action, $name, $class) = $Visualizer_Pro->_getAjaxAction( $this );
-			$this->_addAjaxAction( $action, $name, $class );
-		}
 		// Added by Ash/Upwork
 	}
 
@@ -77,12 +72,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 * @param array $results The response array.
 	 */
-	public function _sendResponse( $results ) {
+	public static function _sendResponse( $results ) {
 		header( 'Content-type: application/json' );
 		nocache_headers();
 
 		echo json_encode( $results );
-		exit;
+		wp_die();
 	}
 
 	/**
@@ -153,7 +148,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$charts[] = $chart_data;
 		}
 
-		$this->_sendResponse( array(
+		self::_sendResponse( array(
 			'success' => true,
 			'data'    => $charts,
 			'total'   => $query->max_num_pages,
@@ -188,7 +183,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		if ( $is_post ) {
-			$this->_sendResponse( array( 'success' => $success ) );
+			self::_sendResponse( array( 'success' => $success ) );
 		}
 
 		wp_redirect( wp_get_referer() );
@@ -462,11 +457,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$source = new Visualizer_Source_Csv_Remote( $_POST['remote_data'] );
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
-
 			// Added by Ash/Upwork
-		} elseif ( defined( 'Visualizer_Pro' ) && isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			global $Visualizer_Pro;
-			$source = $Visualizer_Pro->_handleChartData( $_POST['chart_data'] );
+		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
+			$source = apply_filters( 'visualizer_pro_handle_chart_data', '', $_POST['chart_data'] );
 			// Added by Ash/Upwork
 		} else {
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );
