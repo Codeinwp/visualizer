@@ -76,7 +76,7 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'visualizer-export-data' );
 		} catch ( WPAjaxDieContinueException  $e ) {
 			// We expected this, do nothing.
-		} catch ( WPAjaxDieStopException $ee) {
+		} catch ( WPAjaxDieStopException $ee ) {
 			// We expected this, do nothing.
 		}
 		ob_end_clean();

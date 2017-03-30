@@ -135,19 +135,55 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false ) {
 		$types = array(
-			'pie'         => array( 'name' => esc_html__( 'Pie', 'visualizer' ), 'enabled' => true ),
-			'line'        => array( 'name' => esc_html__( 'Line', 'visualizer' ), 'enabled' => true ),
-			'area'        => array( 'name' => esc_html__( 'Area', 'visualizer' ), 'enabled' => true ),
-			'geo'         => array( 'name' => esc_html__( 'Geo', 'visualizer' ), 'enabled' => true ),
-			'bar'         => array( 'name' => esc_html__( 'Bar', 'visualizer' ), 'enabled' => true ),
-			'column'      => array( 'name' => esc_html__( 'Column', 'visualizer' ), 'enabled' => true ),
-			'gauge'       => array( 'name' => esc_html__( 'Gauge', 'visualizer' ), 'enabled' => true ),
-			'scatter'     => array( 'name' => esc_html__( 'Scatter', 'visualizer' ), 'enabled' => true ),
-			'candlestick' => array( 'name' => esc_html__( 'Candlestick', 'visualizer' ), 'enabled' => true ),
+			'pie'         => array(
+				'name' => esc_html__( 'Pie', 'visualizer' ),
+				'enabled' => true,
+			),
+			'line'        => array(
+				'name' => esc_html__( 'Line', 'visualizer' ),
+				'enabled' => true,
+			),
+			'area'        => array(
+				'name' => esc_html__( 'Area', 'visualizer' ),
+				'enabled' => true,
+			),
+			'geo'         => array(
+				'name' => esc_html__( 'Geo', 'visualizer' ),
+				'enabled' => true,
+			),
+			'bar'         => array(
+				'name' => esc_html__( 'Bar', 'visualizer' ),
+				'enabled' => true,
+			),
+			'column'      => array(
+				'name' => esc_html__( 'Column', 'visualizer' ),
+				'enabled' => true,
+			),
+			'gauge'       => array(
+				'name' => esc_html__( 'Gauge', 'visualizer' ),
+				'enabled' => true,
+			),
+			'scatter'     => array(
+				'name' => esc_html__( 'Scatter', 'visualizer' ),
+				'enabled' => true,
+			),
+			'candlestick' => array(
+				'name' => esc_html__( 'Candlestick', 'visualizer' ),
+				'enabled' => true,
+			),
 			// pro types
-			'table'       => array( 'name' => esc_html__( 'Table', 'visualizer' ), 'enabled' => false ),
-			'timeline'    => array( 'name' => esc_html__( 'Timeline', 'visualizer' ), 'enabled' => false ),
-			'combo'       => array( 'name' => esc_html__( 'Combo', 'visualizer' ), 'enabled' => false ),
+			'table'       => array(
+				'name' => esc_html__( 'Table', 'visualizer' ),
+				'enabled' => false,
+			),
+			'timeline'    => array(
+				'name' => esc_html__( 'Timeline', 'visualizer' ),
+				'enabled' => false,
+			),
+			'combo'       => array(
+				'name' => esc_html__( 'Combo', 'visualizer' ),
+				'enabled' => false,
+			),
 		);
 
 		$types = apply_filters( 'visualizer_pro_chart_types', $types );
