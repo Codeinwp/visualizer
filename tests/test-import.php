@@ -281,7 +281,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 * @access public
 	 */
 	public function urlProvider() {
-		$url        = 'http://localhost/wp-content/plugins/wp-visualizer/samples/bar.csv';
+		$url        = 'https://demo.themeisle.com/wp-content/plugins/visualizer/samples/bar.csv';
 		$file       = download_url( $url );
 		list($content, $series) = $this->parseFile( $file );
 		unlink( $file );
