@@ -26,9 +26,9 @@
 }
 
 #visualizer-library {
+	float: left;
+	width: 80%;
 	margin: 20px 0;
-	width:80%;
-	float:left;
 }
 
 .loader {
@@ -146,25 +146,111 @@
 #visualizer-search form {
 	text-align: right;
 }
-#visualizer-sidebar{
-	width:20%;
-	float:left;
+
+#visualizer-sidebar {
+	float: left;
+	width: 20%;
 }
 
-.visualizer-sidebar-box ul{
-	list-style: circle;
-	width:70%;
+.visualizer-sidebar-box ul li {
+	margin: 4px;
 }
-.visualizer-sidebar-box{
 
-	width: 95%;
+.visualizer-sidebar-box ul {
+	width: 70%;
+	margin-left: 9%;
+	text-align: left;
+	list-style-position: inside;
+	list-style-type: disc;
+}
+
+.visualizer-sidebar-box {
 	display: block;
-	height: 200px;
+	width: 95%;
+	margin: 0;
+	margin-top: 20px;
+	margin-left: 2.5%;
+	padding-top: 10px;
+	padding-bottom: 15px;
+	border-top: 5px solid #0073aa;
+	color: #0073aa;
 	background: white;
-	margin: 0px;
-	margin-left:2.5%;
-	padding: 0px;
-	padding-top:10px;
 	text-align: center;
-	color:#0073aa;
+}
+
+/* The switch - the box around the slider */
+.visualizer-switch {
+	display: inline-block;
+	position: relative;
+	width: 60px;
+	height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.visualizer-switch input {
+	display: none;
+}
+
+/* The slider */
+.visualizer-slider {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #ccc;
+	cursor: pointer;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+.visualizer-slider:before {
+	position: absolute;
+	bottom: 4px;
+	left: 4px;
+	width: 26px;
+	height: 26px;
+	background-color: white;
+	content: "";
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+input:checked + .viusalizer-slider {
+	background-color: #2196f3;
+}
+
+input:focus + .visualizer-slider {
+	-webkit-box-shadow: 0 0 1px #2196f3;
+	box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .visualizer-slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.visualizer-slider.visualizer-round {
+	border-radius: 34px;
+}
+
+.visualizer-slider.visualizer-round:before {
+	border-radius: 50%;
+}
+
+.visualizer-tracking p {
+	padding-left: 24px;
+	color: #23282d;
+	line-height: 12px;
+	text-align: left;
+}
+
+.visualizer-tracking span {
+	margin-left: 10px;
+	color: #23282d;
+	background: none;
+	font-size: 14px;
+	font-weight: bold;
 }

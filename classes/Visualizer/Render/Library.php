@@ -18,7 +18,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Renders visualizer library page.
  *
@@ -86,7 +85,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
 					'type'  => $type,
 					'vpage' => false,
-				) ) ) . '">';
+			) ) ) . '">';
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
@@ -139,15 +138,24 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
-			echo '<div id="visualizer-sidebar">';
-			echo '<div class="visualizer-sidebar-box">';
-			echo '<h3>' . __( 'Upgrade to PRO', 'visualizer' ) . '</h3><ul>';
-			echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li></ul>';
-			echo '</div>';
-			echo '</div>';
 		}
+		echo '<div id="visualizer-sidebar">';
+		echo '<div class="visualizer-sidebar-box">';
+		echo '<h3>' . __( 'Upgrade to PRO', 'visualizer' ) . '</h3><ul>';
+		echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li>';
+		echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li>';
+		echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li></ul>';
+		echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more', 'visualizer' ) . '</a>';
+		echo '</div>';
+		echo '<div class="visualizer-sidebar-box visualizer-tracking">';
+		echo '<label class="visualizer-switch">';
+		echo '<input type="checkbox" >';
+		echo '<div class="visualizer-slider visualizer-round"></div>';
+		echo '</label>';
+		echo '<span>Enable Tracking<sup>*</sup></span>';
+		echo '<p><small>' . __( 'You can help us improve the plugin by allowing to gather data.','visualizer' ) . '</small></p>';
+		echo '</div>';
+		echo '</div>';
 	}
 
 	/**
@@ -158,16 +166,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 *
 	 * @param string $placeholder_id The placeholder's id for the chart.
-	 * @param int $chart_id The id of the chart.
+	 * @param int    $chart_id The id of the chart.
 	 */
 	private function _renderChartBox( $placeholder_id, $chart_id ) {
-		$ajax_url = admin_url( 'admin-ajax.php' );
-		$delete_url = add_query_arg( array(
+		$ajax_url    = admin_url( 'admin-ajax.php' );
+		$delete_url  = add_query_arg( array(
 			'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
 			'nonce'  => wp_create_nonce(),
 			'chart'  => $chart_id,
 		), $ajax_url );
-		$clone_url = add_query_arg( array(
+		$clone_url   = add_query_arg( array(
 			'action' => Visualizer_Plugin::ACTION_CLONE_CHART,
 			'nonce'  => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
 			'chart'  => $chart_id,
