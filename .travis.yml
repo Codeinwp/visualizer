@@ -1,6 +1,4 @@
 language: php
-
-##  PHP versions to test  against
 php:
     - "7.0"
     - "5.6"
@@ -9,29 +7,58 @@ php:
     - "5.3"
     - "5.2"
 sudo: false
+branches:
+  except:
+  - "/^*-v[0-9]/"
 env:
-    - WP_VERSION=latest WP_MULTISITE=0
+  matrix:
+  - WP_VERSION=latest WP_MULTISITE=0
+  global:
+  - MASTER_BRANCH=production UPSTREAM_REPO=Codeinwp/visualizer STORE_URL=https://themeisle.com
 install:
-  - . $HOME/.nvm/nvm.sh
-  - nvm install stable
-  - nvm use stable
-  - npm install
-  - npm install grunt-cli -g
-   ## install PHPCS and Wordpress standards
-  - pear install pear/PHP_CodeSniffer
-  - mkdir $TRAVIS_BUILD_DIR/wordpress-coding-standards && curl -L https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/archive/master.tar.gz | tar xz --strip-components=1 -C wordpress-coding-standards
-  - phpenv rehash
-  - phpcs --config-set installed_paths $TRAVIS_BUILD_DIR/wordpress-coding-standards
-  - phpenv rehash
-before_script:
-    - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-    - export PATH="$HOME/.composer/vendor/bin:$PATH"
-    - |
-      if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
-        composer global require "phpunit/phpunit=5.7.*"
-      fi
-    - phpenv rehash
+- chmod +x bin/install-dependencies.sh
+- ". ./bin/install-dependencies.sh"
 script:
-     grunt travis
-after_failure:
-  - cat logs/phpcs.log
+- if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then  grunt travis; fi;
+before_deploy:
+- chmod +x bin/prepare-deploy.sh
+- ". ./bin/prepare-deploy.sh"
+deploy:
+- provider: s3
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  bucket: "$AWS_BUCKET"
+  skip_cleanup: true
+  acl: public_read
+  overwrite: true
+  local-dir: artifact/
+  upload-dir: "$AWS_PRODUCTS_FOLDER/$THEMEISLE_REPO/latest"
+  on:
+    branch: "$MASTER_BRANCH"
+    repo: "$UPSTREAM_REPO"
+    condition: $TRAVIS_PHP_VERSION = "7.0"
+- provider: s3
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  bucket: "$AWS_BUCKET"
+  skip_cleanup: true
+  acl: public_read
+  overwrite: true
+  local-dir: artifact/
+  upload-dir: "$AWS_PRODUCTS_FOLDER/$THEMEISLE_REPO/$THEMEISLE_VERSION"
+  on:
+    repo: "$UPSTREAM_REPO"
+    branch: "$MASTER_BRANCH"
+    condition: $TRAVIS_PHP_VERSION = "7.0"
+- provider: releases
+  api_key: "$GITHUB_TOKEN"
+  file: artifact/$THEMEISLE_REPO.zip
+  skip_cleanup: true
+  on:
+    tags: false
+    repo: "$UPSTREAM_REPO"
+    branch: "$MASTER_BRANCH"
+    condition: $TRAVIS_PHP_VERSION = "7.0"
+after_deploy:
+- chmod +x bin/deploy.sh
+- ". ./bin/deploy.sh"
