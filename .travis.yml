@@ -33,5 +33,5 @@ before_script:
     - phpenv rehash
 script:
      grunt travis
-after_failur:
+after_failure:
   - cat logs/phpcs.log
