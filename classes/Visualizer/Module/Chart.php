@@ -231,7 +231,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
-			wp_die();
+			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 
 		// enqueue and register scripts and styles
