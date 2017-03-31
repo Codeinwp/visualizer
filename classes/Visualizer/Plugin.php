@@ -43,6 +43,7 @@ class Visualizer_Plugin {
 
 	// custom actions
 	const ACTION_GET_CHARTS   = 'visualizer-get-charts';
+	const ACTION_TRACK   = 'visualizer-track';
 	const ACTION_CREATE_CHART = 'visualizer-create-chart';
 	const ACTION_EDIT_CHART   = 'visualizer-edit-chart';
 	const ACTION_CLONE_CHART  = 'visualizer-clone-chart';

@@ -1,5 +1,4 @@
 <?php
-
 // +----------------------------------------------------------------------+
 // | Copyright 2013  Madpixels  (email : visualizer@madpixels.net)        |
 // +----------------------------------------------------------------------+
@@ -19,6 +18,7 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
+
 /**
  * The module for all admin stuff.
  *
@@ -52,7 +52,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
-
 		$this->_addAction( 'load-post.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'load-post-new.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'admin_footer', 'renderTempaltes' );
@@ -61,6 +60,30 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
+		$this->_addFilter( 'visualizer_logger_flag', 'get_logger_flag', 10, 1 );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_TRACK, 'visualizer_enable_track' );
+	}
+
+	public function visualizer_enable_track() {
+		check_admin_referer( Visualizer_Plugin::ACTION_TRACK, 'nonce' );
+		$status = $_GET['status'];
+		if ( $status == 'yes' ) {
+			update_option( 'visualizer_logger_flag', 'yes' );
+		} else {
+			update_option( 'visualizer_logger_flag', 'no' );
+		}
+		wp_send_json_success( array( 'status' => $status ) );
+	}
+
+	/**
+	 * Either the tracking is active or not.
+	 *
+	 * @return bool The flag status.
+	 */
+	public function get_logger_flag() {
+		$flag = get_option( 'visualizer_logger_flag', 'no' );
+
+		return ( $flag === 'yes' );
 	}
 
 	/**
@@ -74,10 +97,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function enqueueMediaScripts() {
 		global $typenow;
-
 		if ( post_type_supports( $typenow, 'editor' ) ) {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
-
 			wp_enqueue_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array( 'media-editor' ), null, true );
 			wp_enqueue_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', array( 'visualizer-google-jsapi-old' ), Visualizer_Plugin::VERSION, true );
@@ -136,58 +157,56 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false ) {
 		$types = array(
 			'pie'         => array(
-				'name' => esc_html__( 'Pie', 'visualizer' ),
+				'name'    => esc_html__( 'Pie', 'visualizer' ),
 				'enabled' => true,
 			),
 			'line'        => array(
-				'name' => esc_html__( 'Line', 'visualizer' ),
+				'name'    => esc_html__( 'Line', 'visualizer' ),
 				'enabled' => true,
 			),
 			'area'        => array(
-				'name' => esc_html__( 'Area', 'visualizer' ),
+				'name'    => esc_html__( 'Area', 'visualizer' ),
 				'enabled' => true,
 			),
 			'geo'         => array(
-				'name' => esc_html__( 'Geo', 'visualizer' ),
+				'name'    => esc_html__( 'Geo', 'visualizer' ),
 				'enabled' => true,
 			),
 			'bar'         => array(
-				'name' => esc_html__( 'Bar', 'visualizer' ),
+				'name'    => esc_html__( 'Bar', 'visualizer' ),
 				'enabled' => true,
 			),
 			'column'      => array(
-				'name' => esc_html__( 'Column', 'visualizer' ),
+				'name'    => esc_html__( 'Column', 'visualizer' ),
 				'enabled' => true,
 			),
 			'gauge'       => array(
-				'name' => esc_html__( 'Gauge', 'visualizer' ),
+				'name'    => esc_html__( 'Gauge', 'visualizer' ),
 				'enabled' => true,
 			),
 			'scatter'     => array(
-				'name' => esc_html__( 'Scatter', 'visualizer' ),
+				'name'    => esc_html__( 'Scatter', 'visualizer' ),
 				'enabled' => true,
 			),
 			'candlestick' => array(
-				'name' => esc_html__( 'Candlestick', 'visualizer' ),
+				'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 				'enabled' => true,
 			),
 			// pro types
 			'table'       => array(
-				'name' => esc_html__( 'Table', 'visualizer' ),
+				'name'    => esc_html__( 'Table', 'visualizer' ),
 				'enabled' => false,
 			),
 			'timeline'    => array(
-				'name' => esc_html__( 'Timeline', 'visualizer' ),
+				'name'    => esc_html__( 'Timeline', 'visualizer' ),
 				'enabled' => false,
 			),
 			'combo'       => array(
-				'name' => esc_html__( 'Combo', 'visualizer' ),
+				'name'    => esc_html__( 'Combo', 'visualizer' ),
 				'enabled' => false,
 			),
 		);
-
 		$types = apply_filters( 'visualizer_pro_chart_types', $types );
-
 		if ( $enabledOnly ) {
 			$filtered = array();
 			foreach ( $types as $type => $array ) {
@@ -198,7 +217,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			}
 			$types = $filtered;
 		}
-
 		if ( $get2Darray ) {
 			$doubleD = array();
 			foreach ( $types as $type => $array ) {
@@ -220,11 +238,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderTempaltes() {
 		global $pagenow;
-
 		if ( 'post.php' != $pagenow && 'post-new.php' != $pagenow ) {
 			return;
 		}
-
 		$render = new Visualizer_Render_Templates();
 		$render->render();
 	}
@@ -244,9 +260,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function enqueueLibraryScripts( $suffix ) {
 		if ( $suffix == $this->_libraryPage ) {
 			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
-
 			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
-
 			wp_enqueue_media();
 			wp_enqueue_script( 'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array(
 				'jquery',
@@ -306,14 +320,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'default'   => 1,
 			),
 		) );
-
 		// the initial query arguments to fetch charts
 		$query_args = array(
 			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
 			'posts_per_page' => 6,
 			'paged'          => $page,
 		);
-
 		// add chart type filter to the query arguments
 		$filter = filter_input( INPUT_GET, 'type' );
 		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
@@ -327,7 +339,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		} else {
 			$filter = 'all';
 		}
-
 		// Added by Ash/Upwork
 		$filterByMeta = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
 		if ( $filterByMeta ) {
@@ -346,15 +357,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$query  = new WP_Query( $query_args );
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
-
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 			unset( $settings['height'], $settings['width'] );
-
 			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
-
 			// add chart to the array
 			$charts[ 'visualizer-' . $chart->ID ] = array(
 				'id'       => $chart->ID,
@@ -364,7 +372,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'data'     => $data,
 			);
 		}
-
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
 		wp_localize_script( 'visualizer-library', 'visualizer', array(
@@ -379,12 +386,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
 					'library' => 'yes',
 				), $ajaxurl ),
+				'logger' => add_query_arg( array(
+					'action'  => Visualizer_Plugin::ACTION_TRACK,
+					'library' => 'yes',
+					'nonce'   => wp_create_nonce( Visualizer_Plugin::ACTION_TRACK ),
+				), $ajaxurl ),
 			),
 		) );
-
 		// render library page
-		$render = new Visualizer_Render_Library();
-
+		$render             = new Visualizer_Render_Library();
 		$render->charts     = $charts;
 		$render->type       = $filter;
 		$render->types      = self::_getChartTypesLocalized();
@@ -395,7 +405,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'total'   => $query->max_num_pages,
 			'type'    => 'array',
 		) );
-
 		$render->render();
 	}
 
@@ -406,7 +415,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array  $links The array of original action links.
+	 * @param array $links The array of original action links.
 	 * @param string $file The plugin basename.
 	 *
 	 * @return array Updated array of action links.
@@ -433,7 +442,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array  $plugin_meta The array of a plugin meta links.
+	 * @param array $plugin_meta The array of a plugin meta links.
 	 * @param string $plugin_file The plugin's basename.
 	 *
 	 * @return array Updated array of plugin meta links.
@@ -454,7 +463,5 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		return $plugin_meta;
 	}
-
-
 
 }

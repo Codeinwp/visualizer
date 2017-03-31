@@ -18,6 +18,7 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
+
 /**
  * Renders visualizer library page.
  *
@@ -85,7 +86,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
 					'type'  => $type,
 					'vpage' => false,
-			) ) ) . '">';
+				) ) ) . '">';
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
@@ -108,6 +109,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
                 <input type="submit" id="search-submit" class="button button-secondary" value="' . esc_attr__( 'Search', 'visualizer' ) . '">
            </p> </form>';
 		echo '</div>';
+		echo '<div id="visualizer-content-wrapper">';
 		if ( ! empty( $this->charts ) ) {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 			foreach ( $this->charts as $placeholder_id => $chart ) {
@@ -139,22 +141,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 			echo '</div>';
 		}
-		echo '<div id="visualizer-sidebar">';
-		echo '<div class="visualizer-sidebar-box">';
-		echo '<h3>' . __( 'Upgrade to PRO', 'visualizer' ) . '</h3><ul>';
-		echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li>';
-		echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li>';
-		echo '<li>' . __( 'Upgrade to PRO', 'visualizer' ) . '</li></ul>';
-		echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more', 'visualizer' ) . '</a>';
-		echo '</div>';
-		echo '<div class="visualizer-sidebar-box visualizer-tracking">';
-		echo '<label class="visualizer-switch">';
-		echo '<input type="checkbox" >';
-		echo '<div class="visualizer-slider visualizer-round"></div>';
-		echo '</label>';
-		echo '<span>Enable Tracking<sup>*</sup></span>';
-		echo '<p><small>' . __( 'You can help us improve the plugin by allowing to gather data.','visualizer' ) . '</small></p>';
-		echo '</div>';
+		$this->_renderSidebar();
 		echo '</div>';
 	}
 
@@ -166,7 +153,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 *
 	 * @param string $placeholder_id The placeholder's id for the chart.
-	 * @param int    $chart_id The id of the chart.
+	 * @param int $chart_id The id of the chart.
 	 */
 	private function _renderChartBox( $placeholder_id, $chart_id ) {
 		$ajax_url    = admin_url( 'admin-ajax.php' );
@@ -198,6 +185,32 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">';
 		echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
 		echo '</span>';
+		echo '</div>';
+		echo '</div>';
+	}
+
+	/**
+	 * Render sidebar.
+	 */
+	private function _renderSidebar() {
+		$checked = apply_filters( 'visualizer_logger_flag', false );
+		$checked = ( $checked === false ) ? '' : 'checked';
+		echo '<div id="visualizer-sidebar">';
+		echo '<div class="visualizer-sidebar-box">';
+		echo '<h3>' . __( 'Gain more editing power', 'visualizer' ) . '</h3><ul>';
+		echo '<li>' . __( 'Spreadsheet editor', 'visualizer' ) . '</li>';
+		echo '<li>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
+		echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
+		echo '<li>' . __( '+ 3 types of charts', 'visualizer' ) . '</li></ul>';
+		echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a>';
+		echo '</div>';
+		echo '<div class="visualizer-sidebar-box visualizer-tracking">';
+		echo '<label class="visualizer-switch">';
+		echo '<input type="checkbox" ' . $checked . ' >';
+		echo '<div class="visualizer-slider visualizer-round"></div>';
+		echo '</label>';
+		echo '<span>' . __( 'Enable Tracking', 'visualizer' ) . '<sup>*</sup></span>';
+		echo '<p><small><sup>*</sup>' . __( 'Allow Visualizer to anonymously track how this plugin is used and help us make the plugin better. No sensitive data is tracked.', 'visualizer' ) . '</small></p>';
 		echo '</div>';
 		echo '</div>';
 	}
