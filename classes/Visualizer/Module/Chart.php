@@ -77,7 +77,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		nocache_headers();
 
 		echo json_encode( $results );
-		wp_die();
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
 
 	/**
@@ -265,7 +265,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				break;
 		}
 
-		wp_die();
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
 
 	/**
@@ -490,7 +490,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$render->render();
-		wp_die();
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
 
 	/**
@@ -629,6 +629,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			));
 		}// End if().
 
-		wp_die();
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
 }
