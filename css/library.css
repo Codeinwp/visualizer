@@ -158,6 +158,7 @@
 
 .visualizer-sidebar-box ul li {
     margin: 4px 0;
+    color: #23282d;
 }
 
 .visualizer-sidebar-box ul {
@@ -184,8 +185,8 @@
 .visualizer-switch {
     display: inline-block;
     position: relative;
-    width: 40px;
-    height: 26px;
+    width: 30px;
+    height: 18px;
 }
 
 /* Hide default HTML checkbox */
@@ -213,10 +214,10 @@
 .visualizer-slider:before {
     position: absolute;
 
-    bottom: 2px;
+    bottom: 1.5px;
     left: 2px;
-    width: 22px;
-    height: 22px;
+    width: 15px;
+    height: 15px;
     background-color: white;
     content: "";
     -webkit-transition: 0.4s;
@@ -233,9 +234,9 @@ input:focus + .visualizer-slider {
 }
 
 input:checked + .visualizer-slider:before {
-    -webkit-transform: translateX(14px);
-    -ms-transform: translateX(14px);
-    transform: translateX(14px);
+    -webkit-transform: translateX(11px);
+    -ms-transform: translateX(11px);
+    transform: translateX(11px);
 }
 
 /* Rounded sliders */
@@ -247,6 +248,9 @@ input:checked + .visualizer-slider:before {
     border-radius: 50%;
 }
 
+.visualizer-tracking p small sup{
+    margin-left: -3px;
+}
 .visualizer-tracking p {
     padding-left: 14px;
     color: #23282d;
@@ -265,4 +269,14 @@ input:checked + .visualizer-slider:before {
 
 #visualizer-content-wrapper {
     display: table;
+}
+#visualizer-sidebar h3{
+   margin-top:0px;
+}
+#visualizer-sidebar .visualizer-sidebar-box p{
+    margin-bottom:0px;
+}
+#visualizer-sidebar .visualizer-sidebar-box{
+    padding-top:20px;
+    padding-bottom:20px;
 }
