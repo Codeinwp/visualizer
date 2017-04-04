@@ -153,7 +153,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<select name="vz-import-from-chart" id="chart-id" class="visualizer-select">
 			<?php
 				$fetch_link = add_query_arg( array(
-					'action' => Visualizer_Pro::ACTION_FETCH_DATA,
+					'action' => defined( 'Visualizer_Pro' ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
 					'nonce'  => wp_create_nonce(),
 				), admin_url( 'admin-ajax.php' ) );
 

@@ -18,7 +18,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Renders visualizer library page.
  *
@@ -86,7 +85,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
 					'type'  => $type,
 					'vpage' => false,
-				) ) ) . '">';
+			) ) ) . '">';
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
@@ -153,7 +152,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 *
 	 * @param string $placeholder_id The placeholder's id for the chart.
-	 * @param int $chart_id The id of the chart.
+	 * @param int    $chart_id The id of the chart.
 	 */
 	private function _renderChartBox( $placeholder_id, $chart_id ) {
 		$ajax_url    = admin_url( 'admin-ajax.php' );
