@@ -18,6 +18,7 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
+
 /**
  * The module for all admin stuff.
  *
@@ -63,6 +64,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_TRACK, 'visualizer_enable_track' );
 	}
 
+	/**
+	 *  Enable track ajax action.
+	 */
 	public function visualizer_enable_track() {
 		check_admin_referer( Visualizer_Plugin::ACTION_TRACK, 'nonce' );
 		$status = $_GET['status'];
@@ -414,7 +418,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array  $links The array of original action links.
+	 * @param array $links The array of original action links.
 	 * @param string $file The plugin basename.
 	 *
 	 * @return array Updated array of action links.
@@ -441,7 +445,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array  $plugin_meta The array of a plugin meta links.
+	 * @param array $plugin_meta The array of a plugin meta links.
 	 * @param string $plugin_file The plugin's basename.
 	 *
 	 * @return array Updated array of plugin meta links.
