@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-04-01 08:46:40+00:00\n"
+"POT-Creation-Date: 2017-04-06 15:20:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,80 +24,80 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: classes/Visualizer/Module/Admin.php:130
+#: classes/Visualizer/Module/Admin.php:133
 msgid "Visualizations"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:133
+#: classes/Visualizer/Module/Admin.php:136
 msgid "From Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:134
+#: classes/Visualizer/Module/Admin.php:137
 msgid "Create New"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:159
+#: classes/Visualizer/Module/Admin.php:162
 msgid "Pie"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:163
+#: classes/Visualizer/Module/Admin.php:166
 msgid "Line"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:167
+#: classes/Visualizer/Module/Admin.php:170
 msgid "Area"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:171
+#: classes/Visualizer/Module/Admin.php:174
 msgid "Geo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:175
+#: classes/Visualizer/Module/Admin.php:178
 msgid "Bar"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:179
+#: classes/Visualizer/Module/Admin.php:182
 msgid "Column"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:183
+#: classes/Visualizer/Module/Admin.php:186
 msgid "Gauge"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:187
+#: classes/Visualizer/Module/Admin.php:190
 msgid "Scatter"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:191
+#: classes/Visualizer/Module/Admin.php:194
 msgid "Candlestick"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:196
+#: classes/Visualizer/Module/Admin.php:199
 msgid "Table"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:200
+#: classes/Visualizer/Module/Admin.php:203
 msgid "Timeline"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:204
+#: classes/Visualizer/Module/Admin.php:207
 msgid "Combo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:302
+#: classes/Visualizer/Module/Admin.php:305
 #: classes/Visualizer/Render/Library.php:42
 msgid "Visualizer Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:429
+#: classes/Visualizer/Module/Admin.php:432
 msgid "Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:454
+#: classes/Visualizer/Module/Admin.php:457
 msgid "Knowledge Base"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:459
+#: classes/Visualizer/Module/Admin.php:462
 msgid "Pro Addon"
 msgstr ""
 
@@ -175,35 +175,35 @@ msgstr ""
 msgid "Click to select"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:199
+#: classes/Visualizer/Render/Library.php:200
 msgid "Gain more editing power"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:200
+#: classes/Visualizer/Render/Library.php:201
 msgid "Spreadsheet like editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:201
+#: classes/Visualizer/Render/Library.php:202
 msgid "Import from other charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:202
+#: classes/Visualizer/Render/Library.php:203
 msgid "Auto-sync with online files"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:203
+#: classes/Visualizer/Render/Library.php:204
 msgid "3 more chart types"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:204
+#: classes/Visualizer/Render/Library.php:205
 msgid "View more features"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:211
+#: classes/Visualizer/Render/Library.php:213
 msgid "Enable Tracking"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:212
+#: classes/Visualizer/Render/Library.php:214
 msgid ""
 "Allow Visualizer to anonymously track how this plugin is used and help us "
 "make the plugin better. No sensitive data is tracked."
@@ -225,13 +225,14 @@ msgid ""
 msgstr ""
 
 #: classes/Visualizer/Render/Page/Data.php:79
+#: classes/Visualizer/Render/Page/Data.php:99
 msgid ""
 "If you are unsure about how to format your data CSV then please take a look "
 "at this sample: %1$s %2$s%3$s"
 msgstr ""
 
 #: classes/Visualizer/Render/Page/Data.php:87
-#: classes/Visualizer/Render/Page/Data.php:109
+#: classes/Visualizer/Render/Page/Data.php:110
 msgid "Import"
 msgstr ""
 
@@ -250,27 +251,27 @@ msgid ""
 "contain series type (string, number, boolean, date, datetime, timeofday)."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:99
+#: classes/Visualizer/Render/Page/Data.php:100
 msgid ""
 "You can also import data from Google Spreadsheet, for more info check <a "
 "href=\"https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-"
 "from-Google-Spreadsheet%3F\" target=\"_blank\" >this</a> tutorial"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:104
-#: classes/Visualizer/Render/Page/Data.php:124
+#: classes/Visualizer/Render/Page/Data.php:105
+#: classes/Visualizer/Render/Page/Data.php:125
 msgid "Please enter the URL of CSV file"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:114
+#: classes/Visualizer/Render/Page/Data.php:115
 msgid "Schedule Import"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:117
+#: classes/Visualizer/Render/Page/Data.php:118
 msgid "You can choose here to synchronize your chart data with a remote CSV file."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:118
+#: classes/Visualizer/Render/Page/Data.php:119
 msgid ""
 "You can also synchronize with your Google Spreadsheet file, for more info "
 "check <a "
@@ -278,77 +279,77 @@ msgid ""
 "from-Google-Spreadsheet%3F\" target=\"_blank\" >this</a> tutorial"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:119
+#: classes/Visualizer/Render/Page/Data.php:120
 msgid ""
 "We will update the chart data based on your time interval preference by "
 "overwritting the current data with the one from the URL."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:126
+#: classes/Visualizer/Render/Page/Data.php:127
 msgid "How often do you want to check the url"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:129
+#: classes/Visualizer/Render/Page/Data.php:130
 msgid "Each hour"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:130
+#: classes/Visualizer/Render/Page/Data.php:131
 msgid "Each 12 hours"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:131
+#: classes/Visualizer/Render/Page/Data.php:132
 msgid "Each day"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:132
+#: classes/Visualizer/Render/Page/Data.php:133
 msgid "Each 3 days"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:136
+#: classes/Visualizer/Render/Page/Data.php:137
 msgid "Save schedule"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:147
+#: classes/Visualizer/Render/Page/Data.php:148
 msgid "Import from other chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:151
+#: classes/Visualizer/Render/Page/Data.php:152
 msgid "You can import here data from your previously created charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:179
+#: classes/Visualizer/Render/Page/Data.php:180
 msgid "Import Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:186
+#: classes/Visualizer/Render/Page/Data.php:187
 msgid "Edit current data"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:194
+#: classes/Visualizer/Render/Page/Data.php:195
 msgid "You can manually edit the chart data using the spreadsheet like editor."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:196
+#: classes/Visualizer/Render/Page/Data.php:197
 msgid "View Editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:196
+#: classes/Visualizer/Render/Page/Data.php:197
 msgid "Show Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:206
+#: classes/Visualizer/Render/Page/Data.php:207
 msgid "Advanced Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:209
+#: classes/Visualizer/Render/Page/Data.php:210
 msgid "Chart Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:220
+#: classes/Visualizer/Render/Page/Data.php:221
 msgid "Rate our plugin"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:239
+#: classes/Visualizer/Render/Page/Data.php:240
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
@@ -1470,6 +1471,12 @@ msgstr ""
 
 #: classes/Visualizer/Render/Templates.php:69
 msgid "Insert"
+msgstr ""
+
+#: vendor/codeinwp/themeisle-sdk/class-themeisle-sdk-licenser.php:453
+msgid ""
+"Updating this theme will lose any customizations you have made. Cancel to "
+"stop, OK to update."
 msgstr ""
 
 #. Plugin Name of the plugin/theme

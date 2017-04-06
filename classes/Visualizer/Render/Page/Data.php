@@ -39,7 +39,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 */
 	protected function _renderContent() {
 		// Added by Ash/Upwork
-		if ( defined( 'Visualizer_Pro' ) ) {
+		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_addEditor();
 		}
@@ -76,7 +76,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?></h2>
 							<div class="group-content">
 								<p class="group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
-								<p class="group-description"><?php sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' , $this->type , '.csv</a>' ); ?></p>
+								<p class="group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' , $this->type , '.csv</a>' ); ?></p>
 								<form id="vz-csv-file-form" action="<?php echo $upload_link ?>" method="post"
 									  target="thehole" enctype="multipart/form-data">
 									<input type="hidden" id="remote-data" name="remote_data">
@@ -96,6 +96,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 									<div class="section-items">
 										<p class="group-description"><?php _e( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?> </p>
+										<p class="group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">' , $this->type , '.csv</a>' ); ?></p>
 										<p class="group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-one-time-import" action="<?php echo $upload_link ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
@@ -153,7 +154,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<select name="vz-import-from-chart" id="chart-id" class="visualizer-select">
 			<?php
 				$fetch_link = add_query_arg( array(
-					'action' => defined( 'Visualizer_Pro' ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
+					'action' => ( VISUALIZER_PRO ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
 					'nonce'  => wp_create_nonce(),
 				), admin_url( 'admin-ajax.php' ) );
 

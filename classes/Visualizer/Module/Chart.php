@@ -247,7 +247,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_script( 'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array( 'wp-color-picker', 'visualizer-render' ), Visualizer_Plugin::VERSION, true );
 
 		// added by Ash/Upwork
-		if ( defined( 'Visualizer_Pro' ) ) {
+		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_addScriptsAndStyles();
 		}
@@ -340,7 +340,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		) );
 
 		// Added by Ash/Upwork
-		if ( defined( 'Visualizer_Pro' ) ) {
+		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
 		}
@@ -415,7 +415,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
 
-		if ( defined( 'Visualizer_Pro' ) ) {
+		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
 		}

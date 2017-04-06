@@ -186,14 +186,14 @@ div.group-content {
 
 .group-description {
 	margin: 0;
-	padding: 5px ;
+	padding: 5px;
 	color: #555;
-	text-align: left;
 	font-size: 12px;
+	text-align: left;
 }
 
 div.group-content .group-description {
-	padding: 0;
+	padding: 5px;
 	font-family: "Montserrat",sans-serif;
 	font-weight: 300;
 }

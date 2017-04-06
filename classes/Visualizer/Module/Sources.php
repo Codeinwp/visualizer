@@ -133,7 +133,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @return string The new html code.
 	 */
 	public function addProUpsell( $old ) {
-		if ( defined( 'Visualizer_Pro' ) ) {
+		if ( VISUALIZER_PRO ) {
 			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
 			return;
 		}
