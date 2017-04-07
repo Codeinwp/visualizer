@@ -124,7 +124,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 												<input type="url" id="remote-data" name="remote_data"
 													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
 													   class="visualizer-input">
-												<p><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>
+												<p class="group-description"><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>
 												<select name="vz-import-time" id="vz-import-time"
 														class="visualizer-select">
 													<option value="3600"><?php _e( 'Each hour', 'visualizer' ); ?></option>

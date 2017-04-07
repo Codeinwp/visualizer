@@ -682,7 +682,8 @@ input#existing-chart {
 
 select#chart-id {
 	float: right;
-	width: 95px;
+	width: 146px;
+	margin-right: 14px;
 }
 
 button#editor-chart-button {
