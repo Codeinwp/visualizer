@@ -37,4 +37,29 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
 
      # Send data to demo server.
         grunt sftp
+
+     # Upload to Wordpress SVN
+     if [ ! -z "$WP_ORG_PASSWORD" ]; then
+
+            svn co -q "http://svn.wp-plugins.org/$THEMEISLE_REPO" svn
+
+            # Copy new content to svn trunk.
+            rsync -r -p dist/* svn/trunk
+
+            # Create new SVN tag.
+            mkdir -p svn/tags/$THEMEISLE_VERSION
+            rsync -r -p  dist/* svn/tags/$THEMEISLE_VERSION
+
+            # Add new files to SVN
+            svn stat svn | grep '^?' | awk '{print $2}' | xargs -I x svn add x@
+            # Remove deleted files from SVN
+            svn stat svn | grep '^!' | awk '{print $2}' | xargs -I x svn rm --force x@
+
+            svn stat svn
+
+            # Commit to SVN
+            svn ci --no-auth-cache --username $WPORG_USER --password $WPORG_PASS svn -m "Release  v$THEMEISLE_VERSION"
+
+	 fi
+
 fi;
