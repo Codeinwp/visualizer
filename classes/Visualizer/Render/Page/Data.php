@@ -121,7 +121,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<form id="vz-schedule-import" action=" " method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
-												<input type="url" id="remote-data" name="remote_data"
+												<input type="url" id="vz-schedule-url" name="remote_data"
 													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
 													   class="visualizer-input">
 												<p class="group-description"><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>

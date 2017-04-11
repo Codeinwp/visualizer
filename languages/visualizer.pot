@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-04-07 13:45:21+00:00\n"
+"POT-Creation-Date: 2017-04-11 13:25:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -101,28 +101,28 @@ msgstr ""
 msgid "Pro Addon"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:335
-#: classes/Visualizer/Module/Chart.php:398
+#: classes/Visualizer/Module/Chart.php:295
+#: classes/Visualizer/Module/Chart.php:573
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:412
+#: classes/Visualizer/Module/Chart.php:307
 msgid "Save Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:413
+#: classes/Visualizer/Module/Chart.php:308
 msgid "Create Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:415
+#: classes/Visualizer/Module/Chart.php:310
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:473
+#: classes/Visualizer/Module/Chart.php:407
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:488
+#: classes/Visualizer/Module/Chart.php:419
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
