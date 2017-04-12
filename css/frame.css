@@ -933,6 +933,7 @@ button#editor-chart-button {
 .only-pro-feature button,
 .only-pro-feature select {
 	cursor: not-allowed !important;
+	pointer-events: none;
 }
 
 .only-pro-feature > div {
