@@ -81,6 +81,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 		echo '<ul class="subsubsub">';
 		foreach ( $this->types as $type => $array ) {
+            if ( ! is_array( $array ) ) {
+                // support for old pro
+                $array  = array( 'enabled' => true, 'name' => $array );
+            }
 			$label = $array['name'];
 			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
 					'type'  => $type,
