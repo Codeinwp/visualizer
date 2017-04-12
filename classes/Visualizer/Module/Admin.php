@@ -212,10 +212,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $enabledOnly ) {
 			$filtered = array();
 			foreach ( $types as $type => $array ) {
-                if ( ! is_array( $array ) ) {
-                    // support for old pro
-                    $array  = array( 'enabled' => true, 'name' => $array );
-                }
+				if ( ! is_array( $array ) ) {
+					// support for old pro
+					$array  = array( 'enabled' => true, 'name' => $array );
+				}
 				if ( ! $array['enabled'] ) {
 					continue;
 				}
@@ -226,10 +226,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $get2Darray ) {
 			$doubleD = array();
 			foreach ( $types as $type => $array ) {
-                if ( ! is_array( $array ) ) {
-                    // support for old pro
-                    $array  = array( 'enabled' => true, 'name' => $array );
-                }
+				if ( ! is_array( $array ) ) {
+					// support for old pro
+					$array  = array( 'enabled' => true, 'name' => $array );
+				}
 				$doubleD[ $type ] = $array['name'];
 			}
 			$types = $doubleD;
