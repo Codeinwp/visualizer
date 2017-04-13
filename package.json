@@ -1,6 +1,6 @@
 {
     "name": "visualizer",
-    "version": "1.7.6",
+    "version": "2.0.0",
     "description": "Visualizer Lite",
     "repository": {
         "type": "git",
@@ -10,6 +10,7 @@
         "wordpress-plugin"
     ],
     "textdomain": "visualizer",
+    "category": "plugins",
     "author": "ThemeIsle <friends@themeisle.com>",
     "license": "GPL-2.0+",
     "bugs": {

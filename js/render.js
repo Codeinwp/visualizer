@@ -166,7 +166,7 @@
 		if (settings.series) {
 			for (i = 0; i < settings.series.length; i++) {
 				format = settings.series[i].format;
-				if (!format || format === '') {
+				if (!format || format === '' || !series[i + 1]) {
 					continue;
 				}
 

@@ -2,9 +2,9 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Charts and Graphs Lite 1.7.5\n"
+"Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-01-20 12:32:52+00:00\n"
+"POT-Creation-Date: 2017-04-12 10:19:50+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,188 +24,332 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: classes/Visualizer/Module/Admin.php:77
-msgid "Pie"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:78
-msgid "Line"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:79
-msgid "Area"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:80
-msgid "Geo"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:81
-msgid "Bar"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:82
-msgid "Column"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:83
-msgid "Gauge"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:84
-msgid "Scatter"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:85
-msgid "Candlestick"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:87
-msgid "Table"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:88
-msgid "Timeline"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:89
-msgid "Combo"
-msgstr ""
-
-#: classes/Visualizer/Module/Admin.php:157
+#: classes/Visualizer/Module/Admin.php:133
 msgid "Visualizations"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:160
+#: classes/Visualizer/Module/Admin.php:136
 msgid "From Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:161
+#: classes/Visualizer/Module/Admin.php:137
 msgid "Create New"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:240
-#: classes/Visualizer/Render/Library.php:168
+#: classes/Visualizer/Module/Admin.php:162
+msgid "Pie"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:166
+msgid "Line"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:170
+msgid "Area"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:174
+msgid "Geo"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:178
+msgid "Bar"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:182
+msgid "Column"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:186
+msgid "Gauge"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:190
+msgid "Scatter"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:194
+msgid "Candlestick"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:199
+msgid "Table"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:203
+msgid "Timeline"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:207
+msgid "Combo"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:313
+#: classes/Visualizer/Render/Library.php:42
 msgid "Visualizer Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:364
+#: classes/Visualizer/Module/Admin.php:440
 msgid "Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:387
+#: classes/Visualizer/Module/Admin.php:465
 msgid "Knowledge Base"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:392
+#: classes/Visualizer/Module/Admin.php:470
 msgid "Pro Addon"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:332
-#: classes/Visualizer/Module/Chart.php:396
-msgid "Please, enter the URL of CSV file:"
-msgstr ""
-
-#: classes/Visualizer/Module/Chart.php:333
-#: classes/Visualizer/Module/Chart.php:397
+#: classes/Visualizer/Module/Chart.php:295
+#: classes/Visualizer/Module/Chart.php:573
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:411
+#: classes/Visualizer/Module/Chart.php:307
 msgid "Save Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:412
+#: classes/Visualizer/Module/Chart.php:308
 msgid "Create Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:414
+#: classes/Visualizer/Module/Chart.php:310
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:473
+#: classes/Visualizer/Module/Chart.php:407
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:488
+#: classes/Visualizer/Module/Chart.php:419
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:68
-#: classes/Visualizer/Render/Templates.php:68
-msgid "Delete"
+#: classes/Visualizer/Module/Sources.php:142
+msgid "Enable this feature in PRO version!"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:69
-msgid "Clone"
+#: classes/Visualizer/Module/Sources.php:143
+msgid "Buy now"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:70
-msgid "Edit"
-msgstr ""
-
-#: classes/Visualizer/Render/Library.php:71
-msgid "Export"
-msgstr ""
-
-#: classes/Visualizer/Render/Library.php:73
-#: classes/Visualizer/Render/Templates.php:71
-msgid "Click to select"
-msgstr ""
-
-#: classes/Visualizer/Render/Library.php:96
-msgid "Search"
-msgstr ""
-
-#: classes/Visualizer/Render/Library.php:140
-#: classes/Visualizer/Render/Templates.php:85
-msgid "No charts found"
-msgstr ""
-
-#: classes/Visualizer/Render/Library.php:169
+#: classes/Visualizer/Render/Library.php:43
 msgid "Add New"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:188
+#: classes/Visualizer/Render/Library.php:61
 msgid ""
 "%s option is disabled in your php.ini config. Please, enable it by change "
 "its value to 1. This option increases the speed of remote CSV uploading."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:70
+#: classes/Visualizer/Render/Library.php:112
+msgid "Search"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:133
+#: classes/Visualizer/Render/Templates.php:85
+msgid "No charts found"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:184
+#: classes/Visualizer/Render/Templates.php:68
+msgid "Delete"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:185
+msgid "Clone"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:186
+msgid "Edit"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:187
+msgid "Export"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:188
+#: classes/Visualizer/Render/Templates.php:71
+msgid "Click to select"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:204
+msgid "Gain more editing power"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:205
+msgid "Spreadsheet like editor"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:206
+msgid "Import from other charts"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:207
+msgid "Auto-sync with online files"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:208
+msgid "3 more chart types"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:209
+msgid "View more features"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:217
+msgid "Enable Tracking"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:218
+msgid ""
+"Allow Visualizer to anonymously track how this plugin is used and help us "
+"make the plugin better. No sensitive data is tracked."
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:71
+msgid "Chart Data"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:76
+msgid "Import data from file"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:78
 msgid ""
 "Select and upload your data CSV file here. The first row of the CSV file "
 "should contain the column headings. The second one should contain series "
 "type (string, number, boolean, date, datetime, timeofday)."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:74
+#: classes/Visualizer/Render/Page/Data.php:79
+#: classes/Visualizer/Render/Page/Data.php:99
 msgid ""
 "If you are unsure about how to format your data CSV then please take a look "
-"at this sample:"
+"at this sample: %1$s %2$s%3$s"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:76
-msgid "or read how you can add Google spreadsheet in following %1$sarticle%1$s."
+#: classes/Visualizer/Render/Page/Data.php:87
+#: classes/Visualizer/Render/Page/Data.php:110
+msgid "Import"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:85
-msgid "From Computer"
+#: classes/Visualizer/Render/Page/Data.php:92
+msgid "Import data from URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:88
-msgid "From Web"
+#: classes/Visualizer/Render/Page/Data.php:95
+msgid "One time import"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:107
-msgid "Check PRO Version "
+#: classes/Visualizer/Render/Page/Data.php:98
+msgid ""
+"You can use this to import data from a remote CSV file. The first row of "
+"the CSV file should contain the column headings. The second one should "
+"contain series type (string, number, boolean, date, datetime, timeofday)."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:112
-msgid "Advanced"
+#: classes/Visualizer/Render/Page/Data.php:100
+msgid ""
+"You can also import data from Google Spreadsheet, for more info check <a "
+"href=\"https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-"
+"from-Google-Spreadsheet%3F\" target=\"_blank\" >this</a> tutorial"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:137
+#: classes/Visualizer/Render/Page/Data.php:105
+#: classes/Visualizer/Render/Page/Data.php:125
+msgid "Please enter the URL of CSV file"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:115
+msgid "Schedule Import"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:118
+msgid "You can choose here to synchronize your chart data with a remote CSV file."
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:119
+msgid ""
+"You can also synchronize with your Google Spreadsheet file, for more info "
+"check <a "
+"href=\"https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-"
+"from-Google-Spreadsheet%3F\" target=\"_blank\" >this</a> tutorial"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:120
+msgid ""
+"We will update the chart data based on your time interval preference by "
+"overwritting the current data with the one from the URL."
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:127
+msgid "How often do you want to check the url"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:132
+msgid "Each hour"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:133
+msgid "Each 12 hours"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:134
+msgid "Each day"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:135
+msgid "Each 3 days"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:147
+msgid "Save schedule"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:158
+msgid "Import from other chart"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:162
+msgid "You can import here data from your previously created charts"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:190
+msgid "Import Chart"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:197
+msgid "Edit current data"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:205
+msgid "You can manually edit the chart data using the spreadsheet like editor."
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:207
+msgid "View Editor"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:207
+msgid "Show Chart"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:217
+msgid "Advanced Settings"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:220
+msgid "Chart Settings"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:231
+msgid "Rate our plugin"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:250
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
@@ -216,14 +360,6 @@ msgstr ""
 
 #: classes/Visualizer/Render/Page/Types.php:96
 msgid "Next"
-msgstr ""
-
-#: classes/Visualizer/Render/Page.php:72
-msgid "Like the plugin? Show us your love!"
-msgstr ""
-
-#: classes/Visualizer/Render/Page.php:75
-msgid "Rate it on WordPress.org"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Columnar.php:42
@@ -499,7 +635,7 @@ msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:422
 #: classes/Visualizer/Render/Sidebar/Graph.php:451
-#: classes/Visualizer/Render/Sidebar.php:526
+#: classes/Visualizer/Render/Sidebar.php:529
 msgid "Number Format"
 msgstr ""
 
@@ -1315,7 +1451,7 @@ msgstr ""
 msgid "Hex Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:529
+#: classes/Visualizer/Render/Sidebar.php:532
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, "
@@ -1323,11 +1459,11 @@ msgid ""
 "percentage format then your values will be multiplied by 100."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:537
+#: classes/Visualizer/Render/Sidebar.php:540
 msgid "Date Format"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:540
+#: classes/Visualizer/Render/Sidebar.php:543
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU date and time format%2$s."

@@ -1,5 +1,4 @@
 <?php
-
 // +----------------------------------------------------------------------+
 // | Copyright 2013  Madpixels  (email : visualizer@madpixels.net)        |
 // +----------------------------------------------------------------------+
@@ -47,35 +46,14 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @since 1.1.0
 	 *
 	 * @access public
+	 *
 	 * @param Visualizer_Plugin $plugin The instance of the plugin.
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
-
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SERIES, 'filterChartSeries', 1, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA, 'filterChartData', 1, 2 );
-	}
-
-	/**
-	 * Returns appropriate source object for a chart.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @access private
-	 * @param int $chart_id The chart id.
-	 * @return Visualizer_Source The source object if source exists, otherwise FALSE.
-	 */
-	private function _getSource( $chart_id ) {
-		if ( ! isset( $this->_sources[ $chart_id ] ) ) {
-			$class = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
-			if ( ! class_exists( $class, true ) ) {
-				return false;
-			}
-
-			$this->_sources[ $chart_id ] = new $class();
-		}
-
-		return $this->_sources[ $chart_id ];
+		$this->_addFilter( 'visualizer_pro_upsell', 'addProUpsell', 10, 2 );
 	}
 
 	/**
@@ -84,8 +62,10 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @since 1.1.0
 	 *
 	 * @access public
+	 *
 	 * @param array $series The array of chart series.
 	 * @param int   $chart_id The chart id.
+	 *
 	 * @return array The array of filtered series.
 	 */
 	public function filterChartSeries( $series, $chart_id ) {
@@ -98,13 +78,38 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	}
 
 	/**
+	 * Returns appropriate source object for a chart.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @access private
+	 *
+	 * @param int $chart_id The chart id.
+	 *
+	 * @return Visualizer_Source The source object if source exists, otherwise FALSE.
+	 */
+	private function _getSource( $chart_id ) {
+		if ( ! isset( $this->_sources[ $chart_id ] ) ) {
+			$class = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
+			if ( ! class_exists( $class, true ) ) {
+				return false;
+			}
+			$this->_sources[ $chart_id ] = new $class();
+		}
+
+		return $this->_sources[ $chart_id ];
+	}
+
+	/**
 	 * Filters chart data.
 	 *
 	 * @since 1.1.0
 	 *
 	 * @access public
+	 *
 	 * @param array $data The array of chart data.
 	 * @param int   $chart_id The chart id.
+	 *
 	 * @return array The array of filtered data.
 	 */
 	public function filterChartData( $data, $chart_id ) {
@@ -114,6 +119,39 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 		}
 
 		return $source->repopulateData( $data, $chart_id );
+	}
+
+	/**
+	 * Add the pro upsell html.
+	 *
+	 * @param string $old The previous html string.
+	 * @param string $feature What feature is this filter running for.
+	 *
+	 * @return string The new html code.
+	 */
+	public function addProUpsell( $old, $feature = null ) {
+		$return  = '';
+		$feature = strval( $feature );
+		if ( empty( $feature ) || ( $feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false ) ) ) {
+			$plan = 'PRO';
+			if ( $feature === 'schedule-chart' ) {
+				$plan = 'BUSINESS';
+			}
+			$return = '<div class="only-pro-content">';
+			$return .= '	<div class="only-pro-container">';
+			$return .= '		<div class="only-pro-inner">';
+			$return .= '			<p>' . sprintf( __( 'Enable this feature in %s version!', 'visualizer' ), $plan ) . '</p>';
+			$return .= '            <a target="_blank" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
+			$return .= ' 		</div>';
+			$return .= ' 	</div>';
+			$return .= '</div>';
+		}
+		if ( empty( $feature ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
+			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
+			$return = '';
+		}
+
+		return $return;
 	}
 
 }

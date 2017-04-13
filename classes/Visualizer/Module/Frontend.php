@@ -151,7 +151,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		// enqueue visualizer render and update render localizations
 		wp_enqueue_script( 'visualizer-render' );
-		wp_localize_script( 'visualizer-render', 'visualizer', array( 'charts' => $this->_charts ) );
+		wp_localize_script( 'visualizer-render', 'visualizer', array(
+			'charts' => $this->_charts,
+		) );
 
 		// return placeholder div
 		return '<div id="' . $id . '"' . $class . '></div>';

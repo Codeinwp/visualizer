@@ -90,7 +90,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		if ( defined( 'Visualizer_Pro' ) ) {
+		if ( VISUALIZER_PRO ) {
 				global $Visualizer_Pro;
 		}
 			echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', 'visualizer' ), '">';

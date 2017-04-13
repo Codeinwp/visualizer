@@ -2,32 +2,33 @@
 Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
-Tested up to: 4.7.1
+Tested up to: 4.7.3
 Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
-A simple and quite powerful WordPress chart plugin to create, manage and embed interactive charts into your WordPress posts and pages.
+A simple and quite powerful WordPress chart plugin to create and embed interactive charts & tables into your site.
 
 == Description ==
  
-<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages.
+<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">WordPress Visualizer plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts & tables into your WordPress posts and pages.
 
-The plugin uses Google Visualization API to add charts, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
+The plugin uses Google Visualization API to add responsive & animated charts/diagrams, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases. Is the best Excel to WordPress solution who let's you insert charts to your wp site using a simple chart builder.
 
 > **Time-saving features available in the Pro version:**
 >
 > * Import data from other charts
 > * Easy edit the data using a live editor
 > * 3 more chart types ( Combo, Timeline and Table chart )
+> * Auto synchronize with your online file.
 > * Priority email support from the developer of the plugin
 > * Support and updates for 1 year
 >
-> **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/)**
+> **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
 
 ### 9 Chart types + 3 more in the pro version ###
-This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is line chart, area chart, bar chart, column chart, pie chart, geo chart, gauge chart, candlestick chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
+This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is line chart,flow chart, area chart, bar chart, column chart, pie chart, geo chart, gauge chart, candlestick chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. The premium version can act as a interactive WordPress Table plugin, with sorting capabilities.
 
 ### Flexible and customizable ###
 Make the charts your own. Configure an extensive set of options to perfectly match the look and feel of your website. You can use Google Chart Tools with their default setting - all customization is optional and the basic setup is launch-ready. However, charts can be easily customizable in case your webpage adopts a style which is at odds with provided defaults. Every chart exposes a number of options that customize its look and feel.
@@ -39,15 +40,22 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 
 The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="nofollow">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
 
-### Knowledge Base ###
 
-1. [How can I create a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-create-a-chart%3F)
-1. [How can I edit a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-edit-a-chart%3F)
-1. [How can I clone a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-clone-a-chart%3F)
-1. [How can I delete a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-delete-a-chart%3F)
-1. [How can I highlight a single bar?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-highlight-a-single-bar%3F)
-1. [How can I populate chart series and data dynamically?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-chart-series-and-data-dynamically%3F)
-1. [How can I populate data from Google Spreadsheet?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F)
+ = See how Visualizer can integrate with your website  =
+
+* [Create line chart ](https://demo.themeisle.com/visualizer/line-chart/)
+* [Create pie chart ](https://demo.themeisle.com/visualizer/pie-chart/)
+* [Create bar chart](https://demo.themeisle.com/visualizer/bar-chart/)
+* [Create column chart](https://demo.themeisle.com/visualizer/column-chart/)
+* [Create area chart](https://demo.themeisle.com/visualizer/area-chart/)
+* [Create geo chart](https://demo.themeisle.com/visualizer/geo-chart/)
+* [Create table chart](https://demo.themeisle.com/visualizer/table-chart/)
+* [Create gauge chart](https://demo.themeisle.com/visualizer/gauge-chart//)
+* [Create candlestick chart](https://demo.themeisle.com/visualizer/candlestick-chart/)
+* [Create combo chart](https://demo.themeisle.com/visualizer/combo-chart/)
+* [Create scatter chart](https://demo.themeisle.com/visualizer/scatter-chart/)
+* [Create timeline chart](https://demo.themeisle.com/visualizer/timeline-chart/)
+
 
 == Installation ==
 
@@ -60,6 +68,46 @@ The plugins works perfectly with the all <a href="http://justfreethemes.com" rel
 
 Pay attention that to turn your shortcodes into graphs, your theme has to have `<?php wp_footer(); ?>` call at the bottom of **footer.php** file.
 
+= How can I create a chart? =
+
+http://docs.themeisle.com/article/597-create-chart
+
+= How can I edit a chart? =
+
+http://docs.themeisle.com/article/602-how-can-i-edit-a-chart
+
+= How can I delete a chart? =
+
+http://docs.themeisle.com/article/600-delete-chart
+
+= How can I clone a chart? =
+
+http://docs.themeisle.com/article/598-clone-chart
+
+= How can I highlight a single bar? =
+
+http://docs.themeisle.com/article/603-how-can-i-highlight-a-single-bar
+
+= How can I populate chart series and data dynamically? =
+
+http://docs.themeisle.com/article/605-how-can-i-populate-chart-series-and-data-dynamically
+
+= How can I populate data from Google Spreadsheet? =
+
+http://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet
+
+= How can i import content from another chart? =
+
+http://docs.themeisle.com/article/609-how-can-i-import-content-from-another-chart
+
+= How to export a chart? =
+
+http://docs.themeisle.com/article/608-how-to-export-a-chart
+
+= How can i edit the data manually? =
+
+http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
+
 == Screenshots ==
 
 1. Chart type selection
@@ -70,29 +118,34 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
-= 1.7.6=
+= 2.0.0 =
+* Improved design and layout to support multiple datasources.
+* Added new integrations in the Pro version.
+* Added opt-in for tracking.
+
+= 1.7.6 =
 * Fixed issue when using the same shortcode multiple times on the same page.
 
-= 1.7.5=
+= 1.7.5 =
 * Removed footer banner upsell
 * Fixed series settings issue
 * Fixed issue with comas being used in numbers
 
-= 1.7.2=
+= 1.7.2 =
 * Improved charts responsive system
 
-= 1.7.1=
+= 1.7.1 =
 * Fixed grid lines error links
 
-= 1.7.0=
+= 1.7.0 =
 * Fixed responsive issues
 * Fixed issues with zero margin values
 * Fixed import issue
 
-= 1.6.6=
+= 1.6.6 =
 * Fixed charts resizing on tabbed content
 
-= 1.6.5=
+= 1.6.5 =
 * Fixed responsive issue
 * Fixed no axis text color for line and bar charts
 
@@ -208,4 +261,4 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * The bug with CSV file uploading was fixed.
 
 = 1.0.0 =
-* The first version of the plugin was implemented.
+* The first version of what wil be the best wp charts plugin.

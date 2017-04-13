@@ -476,9 +476,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param boolean $open Determines whether the section items block has to be expanded or collapsed.
 	 */
 	protected static function _renderSectionStart( $title = false, $open = true ) {
-		echo '<li>';
+
 		if ( ! empty( $title ) ) {
+			echo '<li class="subsection">';
 			echo '<span class="section-title">', $title, '</span>';
+		} else {
+			echo '<li class=" ">';
 		}
 			echo '<div class="section-items', $open ? ' open' : '', '">';
 	}

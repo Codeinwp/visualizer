@@ -52,11 +52,10 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			echo '}';
 
 			// added by Ash/Upwork
-			if ( defined( 'Visualizer_Pro' ) ) {
+			if ( VISUALIZER_PRO ) {
 				global $Visualizer_Pro;
 				$Visualizer_Pro->_addUpdateHook( $this->series, $this->data );
 			}
-			// Added by Ash/Upwork
 		} else {
 			echo 'alert("', $this->message, '");';
 		}

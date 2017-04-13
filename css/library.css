@@ -21,8 +21,18 @@
 	margin: 20px 0 10px;
 }
 
+.visualizer-list-item .visualizer-pro-only {
+	text-decoration: line-through;
+}
+
 #visualizer-library {
+	display: table-cell;
+	width: auto;
 	margin: 20px 0;
+}
+
+#visualizer-content-wrapper {
+	width: 100%;
 }
 
 .loader {
@@ -137,59 +147,139 @@
 	margin-right: 20px;
 }
 
-.page-numbers {
-	padding: 5px 10px;
-	border-radius: 2px;
-	color: white !important;
-	background-color: #aaa;
-	-webkit-box-shadow: 0 0 5px #ccc;
-	box-shadow: 0 0 5px #ccc;
-	font-weight: bold;
-	text-decoration: none;
+#visualizer-search form {
+	text-align: right;
 }
 
-.page-numbers.current,
-a.page-numbers:hover {
-	background-color: lightcoral;
-	-webkit-box-shadow: 0 0 5px lightpink;
-	box-shadow: 0 0 5px lightpink;
+#visualizer-sidebar {
+	display: table-cell;
+	width: 250px;
 }
 
-.visualizer-library-pagination {
+.visualizer-sidebar-box ul li {
+	margin: 4px 0;
+	color: #23282d;
+}
+
+.visualizer-sidebar-box ul {
+	margin-left: 40px;
+	text-align: left;
+	list-style-type: disc;
+}
+
+.visualizer-sidebar-box {
+	display: block;
+	width: 95%;
+	margin: 0;
+	margin-top: 20px;
+	margin-left: 2.5%;
+	padding-top: 10px;
+	padding-bottom: 15px;
+	border-top: 5px solid #0073aa;
+	color: #0073aa;
+	background: white;
+	text-align: center;
+}
+
+/* The switch - the box around the slider */
+.visualizer-switch {
+	display: inline-block;
+	position: relative;
+	width: 30px;
+	height: 18px;
+}
+
+/* Hide default HTML checkbox */
+.visualizer-switch input {
 	display: none;
 }
 
-#visualizer-search form {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-
-	-webkit-align-items: center;
-	align-items: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
+/* The slider */
+.visualizer-tracking sup {
+	vertical-align: 3px;
 }
 
-#visualizer-search > form > input[type="text"]:nth-child(1) {
-	height: 30px;
+.visualizer-slider {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #ccc;
+	cursor: pointer;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
 }
 
-#visualizer-search .button-secondary {
-	margin-left: 20px;
-	padding: 5px 10px;
-	border-radius: 5px;
-	color: white;
-	background-color: lightcoral;
-	-webkit-box-shadow: 0 0 5px lightpink;
-	box-shadow: 0 0 5px lightpink;
+.visualizer-slider:before {
+	position: absolute;
+	bottom: 1.5px;
+	left: 2px;
+	width: 15px;
+	height: 15px;
+	background-color: white;
+	content: "";
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+input:checked + .visualizer-slider {
+	background-color: #0085ba;
+}
+
+input:focus + .visualizer-slider {
+	-webkit-box-shadow: 0 0 1px #0085ba;
+	box-shadow: 0 0 1px #0085ba;
+}
+
+input:checked + .visualizer-slider:before {
+	-webkit-transform: translateX(11px);
+	-ms-transform: translateX(11px);
+	transform: translateX(11px);
+}
+
+/* Rounded sliders */
+.visualizer-slider.visualizer-round {
+	border-radius: 34px;
+}
+
+.visualizer-slider.visualizer-round:before {
+	border-radius: 50%;
+}
+
+.visualizer-tracking p small sup {
+	margin-left: -3px;
+}
+
+.visualizer-tracking p {
+	padding-left: 14px;
+	color: #23282d;
+	font-size: 12px;
+	line-height: 12px;
+	text-align: left;
+}
+
+.visualizer-tracking span {
+	margin-left: 10px;
+	color: #23282d;
+	background: none;
 	font-size: 14px;
 	font-weight: bold;
-	line-height: 17px;
-	text-decoration: none;
 }
 
-#visualizer-search .button-secondary:hover {
-	border-color: lightpink;
-	background-color: lightpink;
+#visualizer-content-wrapper {
+	display: table;
+}
+
+#visualizer-sidebar h3 {
+	margin-top: 0;
+}
+
+#visualizer-sidebar .visualizer-sidebar-box p {
+	margin-bottom: 0;
+}
+
+#visualizer-sidebar .visualizer-sidebar-box {
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
