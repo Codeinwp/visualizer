@@ -18,6 +18,7 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
+
 /**
  * Renders visualizer library page.
  *
@@ -89,7 +90,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
 					'type'  => $type,
 					'vpage' => false,
-			) ) ) . '">';
+				) ) ) . '">';
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
@@ -119,13 +120,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				$this->_renderChartBox( $placeholder_id, $chart['id'] );
 			}
 			echo '</div>';
-			if ( is_array( $this->pagination ) ) {
-				echo '<ul class=" subsubsub">';
-				foreach ( $this->pagination as $page ) {
-					echo '<li class="all">', $page, '</li>';
-				}
-				echo '</ul>';
-			}
 		} else {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 			echo '<div class="visualizer-chart">';
@@ -146,6 +140,13 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		$this->_renderSidebar();
 		echo '</div>';
+		if ( is_array( $this->pagination ) ) {
+			echo '<ul class=" subsubsub">';
+			foreach ( $this->pagination as $page ) {
+				echo '<li class="all">', $page, '</li>';
+			}
+			echo '</ul>';
+		}
 	}
 
 	/**
