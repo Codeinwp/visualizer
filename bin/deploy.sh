@@ -57,7 +57,7 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
             svn stat svn
 
             # Commit to SVN
-            svn commit svn  -m "Release  v$THEMEISLE_VERSION" --username $WPORG_USER --password $WPORG_PASS
+            svn commit svn   --no-auth-cache  -m "Release  v$THEMEISLE_VERSION" --username $WPORG_USER --password $WPORG_PASS
 
 	 fi
 
