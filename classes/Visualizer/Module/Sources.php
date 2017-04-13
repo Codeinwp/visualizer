@@ -1,5 +1,4 @@
 <?php
-
 // +----------------------------------------------------------------------+
 // | Copyright 2013  Madpixels  (email : visualizer@madpixels.net)        |
 // +----------------------------------------------------------------------+
@@ -19,6 +18,7 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
+
 /**
  * Sources module class.
  *
@@ -52,10 +52,8 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
-
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SERIES, 'filterChartSeries', 1, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA, 'filterChartData', 1, 2 );
-
 		$this->_addFilter( 'visualizer_pro_upsell', 'addProUpsell', 10, 2 );
 	}
 
@@ -97,7 +95,6 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			if ( ! class_exists( $class, true ) ) {
 				return false;
 			}
-
 			$this->_sources[ $chart_id ] = new $class();
 		}
 
@@ -135,11 +132,15 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 */
 	public function addProUpsell( $old, $feature = null ) {
 		$return = '';
-		if ( ! $feature || ($feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false )) ) {
+		if ( ! $feature || ( $feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false ) ) ) {
+			$plan = 'PRO';
+			if ( $feature === 'schedule-chart' ) {
+				$plan = 'BUSINESS';
+			}
 			$return = '<div class="only-pro-content">';
 			$return .= '	<div class="only-pro-container">';
 			$return .= '		<div class="only-pro-inner">';
-			$return .= '			<p>' . __( 'Enable this feature in PRO version!', 'visualizer' ) . '</p>';
+			$return .= '			<p>' . sprintf( __( 'Enable this feature in %s version!', 'visualizer' ), $plan ) . '</p>';
 			$return .= '            <a target="_blank" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
 			$return .= ' 		</div>';
 			$return .= ' 	</div>';
@@ -149,6 +150,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
 			$return = '';
 		}
+
 		return $return;
 	}
 
