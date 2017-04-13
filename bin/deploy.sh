@@ -58,7 +58,7 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
 
             # Commit to SVN
             svn commit svn   --no-auth-cache  -m "Release  v$THEMEISLE_VERSION" --username $WPORG_USER --password $WPORG_PASS
-
+            # Remove svn dir.
             rm -fR svn
 
 	 fi
