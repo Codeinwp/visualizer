@@ -130,11 +130,11 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 *
 	 * @param string $old The previous html string.
 	 * @param string $feature What feature is this filter running for.
-	 * 
+	 *
 	 * @return string The new html code.
 	 */
 	public function addProUpsell( $old, $feature = null ) {
-        $return = '';
+		$return = '';
 		if ( ! $feature || ($feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false )) ) {
 			$return = '<div class="only-pro-content">';
 			$return .= '	<div class="only-pro-container">';

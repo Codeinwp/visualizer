@@ -126,14 +126,14 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													   class="visualizer-input visualizer-remote-url">
 												<p class="group-description"><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>
 												<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
-                                                <?php
-                                                $hours  = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
-                                                $schedules  = array(
-                                                    '1'     => __( 'Each hour', 'visualizer' ),
-                                                    '12'    => __( 'Each 12 hours', 'visualizer' ),
-                                                    '24'    => __( 'Each day', 'visualizer' ),
-                                                    '36'    => __( 'Each 3 days', 'visualizer' ),
-                                                );
+												<?php
+												$hours  = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
+												$schedules  = array(
+													'1'     => __( 'Each hour', 'visualizer' ),
+													'12'    => __( 'Each 12 hours', 'visualizer' ),
+													'24'    => __( 'Each day', 'visualizer' ),
+													'36'    => __( 'Each 3 days', 'visualizer' ),
+												);
 												foreach ( $schedules as $num => $name ) {
 													$extra  = $num == $hours ? 'selected' : '';
 												?>
