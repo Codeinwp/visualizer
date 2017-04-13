@@ -88,7 +88,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</form>
 							</div>
 						</li>
-						<li class="group">
+						<li class="group visualizer-import-url">
 							<h2 class="group-title sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' ); ?></h2>
 							<ul class="group-content">
 								<li class="subsection">
@@ -111,33 +111,43 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										</form>
 									</div>
 								</li>
-								<li class="subsection <?php echo apply_filters( 'visualizer_pro_upsell_class','only-pro-feature' ); ?>">
-								<span class="section-title"><?php _e( 'Schedule Import', 'visualizer' ); ?><span
+								<li class="subsection <?php echo apply_filters( 'visualizer_pro_upsell_class','only-pro-feature', 'schedule-chart' ); ?>">
+								<span class="section-title visualizer-import-url-schedule"><?php _e( 'Schedule Import', 'visualizer' ); ?><span
 											class="dashicons dashicons-lock"></span></span>
 									<div class="section-items">
 										<p class="group-description"><?php _e( 'You can choose here to synchronize your chart data with a remote CSV file.', 'visualizer' ); ?> </p>
 										<p class="group-description"> <?php _e( 'You can also synchronize with your Google Spreadsheet file, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<p class="group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwritting the current data with the one from the URL.', 'visualizer' ); ?></p>
-										<form id="vz-schedule-import" action=" " method="post"
+										<form id="vz-schedule-import" action="<?php echo $upload_link ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
-												<input type="url" id="vz-schedule-url" name="remote_data"
+												<input type="url" id="vz-schedule-url" name="remote_data" value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true );?>"
 													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
-													   class="visualizer-input">
+													   class="visualizer-input visualizer-remote-url">
 												<p class="group-description"><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>
-												<select name="vz-import-time" id="vz-import-time"
-														class="visualizer-select">
-													<option value="3600"><?php _e( 'Each hour', 'visualizer' ); ?></option>
-													<option value="43200"><?php _e( 'Each 12 hours', 'visualizer' ); ?></option>
-													<option value="86400"><?php _e( 'Each day', 'visualizer' ); ?></option>
-													<option value="259200"><?php _e( 'Each 3 days', 'visualizer' ); ?></option>
+												<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
+												<?php
+												$hours  = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
+												$schedules  = array(
+													'1'     => __( 'Each hour', 'visualizer' ),
+													'12'    => __( 'Each 12 hours', 'visualizer' ),
+													'24'    => __( 'Each day', 'visualizer' ),
+													'36'    => __( 'Each 3 days', 'visualizer' ),
+												);
+												foreach ( $schedules as $num => $name ) {
+													$extra  = $num == $hours ? 'selected' : '';
+												?>
+												<option value="<?php echo $num;?>" <?php echo $extra;?>><?php echo $name;?></option>
+												<?php
+												}
+												?>
 												</select>
 											</div>
 											<input type="button" id="vz-save-schedule" class="button button-primary"
 												   value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
 
 
-											<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
+											<?php echo apply_filters( 'visualizer_pro_upsell', '', 'schedule-chart' ); ?>
 										</form>
 									</div>
 								</li>

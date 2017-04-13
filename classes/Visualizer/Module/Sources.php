@@ -56,7 +56,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SERIES, 'filterChartSeries', 1, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA, 'filterChartData', 1, 2 );
 
-		$this->_addFilter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
+		$this->_addFilter( 'visualizer_pro_upsell', 'addProUpsell', 10, 2 );
 	}
 
 	/**
@@ -129,25 +129,27 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * Add the pro upsell html.
 	 *
 	 * @param string $old The previous html string.
+	 * @param string $feature What feature is this filter running for.
 	 *
 	 * @return string The new html code.
 	 */
-	public function addProUpsell( $old ) {
-		if ( VISUALIZER_PRO ) {
-			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
-			return;
+	public function addProUpsell( $old, $feature = null ) {
+		$return = '';
+		if ( ! $feature || ($feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false )) ) {
+			$return = '<div class="only-pro-content">';
+			$return .= '	<div class="only-pro-container">';
+			$return .= '		<div class="only-pro-inner">';
+			$return .= '			<p>' . __( 'Enable this feature in PRO version!', 'visualizer' ) . '</p>';
+			$return .= '            <a target="_blank" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
+			$return .= ' 		</div>';
+			$return .= ' 	</div>';
+			$return .= '</div>';
 		}
-		$return = '<div class="only-pro-content">';
-		$return .= '	<div class="only-pro-container">';
-		$return .= '		<div class="only-pro-inner">';
-		$return .= '			<p>' . __( 'Enable this feature in PRO version!', 'visualizer' ) . '</p>';
-		$return .= '            <a target="_blank" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
-		$return .= ' 		</div>';
-		$return .= ' 	</div>';
-		$return .= '</div>';
-
+		if ( ! $feature && defined( 'Visualizer_Pro' ) ) {
+			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
+			$return = '';
+		}
 		return $return;
-
 	}
 
 }

@@ -126,11 +126,11 @@ msgstr ""
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Sources.php:143
+#: classes/Visualizer/Module/Sources.php:142
 msgid "Enable this feature in PRO version!"
 msgstr ""
 
-#: classes/Visualizer/Module/Sources.php:144
+#: classes/Visualizer/Module/Sources.php:143
 msgid "Buy now"
 msgstr ""
 
@@ -289,67 +289,67 @@ msgstr ""
 msgid "How often do you want to check the url"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:130
+#: classes/Visualizer/Render/Page/Data.php:132
 msgid "Each hour"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:131
+#: classes/Visualizer/Render/Page/Data.php:133
 msgid "Each 12 hours"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:132
+#: classes/Visualizer/Render/Page/Data.php:134
 msgid "Each day"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:133
+#: classes/Visualizer/Render/Page/Data.php:135
 msgid "Each 3 days"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:137
+#: classes/Visualizer/Render/Page/Data.php:147
 msgid "Save schedule"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:148
+#: classes/Visualizer/Render/Page/Data.php:158
 msgid "Import from other chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:152
+#: classes/Visualizer/Render/Page/Data.php:162
 msgid "You can import here data from your previously created charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:180
+#: classes/Visualizer/Render/Page/Data.php:190
 msgid "Import Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:187
+#: classes/Visualizer/Render/Page/Data.php:197
 msgid "Edit current data"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:195
+#: classes/Visualizer/Render/Page/Data.php:205
 msgid "You can manually edit the chart data using the spreadsheet like editor."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:197
+#: classes/Visualizer/Render/Page/Data.php:207
 msgid "View Editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:197
+#: classes/Visualizer/Render/Page/Data.php:207
 msgid "Show Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:207
+#: classes/Visualizer/Render/Page/Data.php:217
 msgid "Advanced Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:210
+#: classes/Visualizer/Render/Page/Data.php:220
 msgid "Chart Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:221
+#: classes/Visualizer/Render/Page/Data.php:231
 msgid "Rate our plugin"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:240
+#: classes/Visualizer/Render/Page/Data.php:250
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
