@@ -170,7 +170,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 				$query_args_charts = array(
 					'post_type'         => Visualizer_Plugin::CPT_VISUALIZER,
-					'posts_per_page'    => -1,
+					'posts_per_page'    => 300,
 					'no_found_rows'     => true,
 				);
 				$charts            = array();

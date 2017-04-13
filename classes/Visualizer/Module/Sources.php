@@ -18,6 +18,7 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
+
 /**
  * Sources module class.
  *
@@ -130,8 +131,9 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @return string The new html code.
 	 */
 	public function addProUpsell( $old, $feature = null ) {
-		$return = '';
-		if ( ! $feature || ( $feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false ) ) ) {
+		$return  = '';
+		$feature = strval( $feature );
+		if ( empty( $feature ) || ( $feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false ) ) ) {
 			$plan = 'PRO';
 			if ( $feature === 'schedule-chart' ) {
 				$plan = 'BUSINESS';
@@ -145,7 +147,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			$return .= ' 	</div>';
 			$return .= '</div>';
 		}
-		if ( ! $feature && defined( 'Visualizer_Pro' ) ) {
+		if ( empty( $feature ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
 			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
 			$return = '';
 		}
