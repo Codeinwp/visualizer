@@ -83,7 +83,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		foreach ( $this->types as $type => $array ) {
 			if ( ! is_array( $array ) ) {
 				// support for old pro
-				$array  = array( 'enabled' => true, 'name' => $array );
+				$array = array( 'enabled' => true, 'name' => $array );
 			}
 			$label = $array['name'];
 			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
@@ -196,10 +196,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * Render sidebar.
 	 */
 	private function _renderSidebar() {
-		$checked = apply_filters( 'visualizer_logger_flag', false );
-		$checked = ( $checked === false ) ? '' : 'checked';
-		echo '<div id="visualizer-sidebar">';
 		if ( ! VISUALIZER_PRO ) {
+			$checked = apply_filters( 'visualizer_logger_flag', false );
+			$checked = ( $checked === false ) ? '' : 'checked';
+			echo '<div id="visualizer-sidebar">';
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Gain more editing power', 'visualizer' ) . '</h3><ul>';
 			echo '<li>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
@@ -208,16 +208,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li>' . __( '3 more chart types', 'visualizer' ) . '</li></ul>';
 			echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a>';
 			echo '</div>';
+			echo '<div class="visualizer-sidebar-box visualizer-tracking">';
+			echo '<label class="visualizer-switch">';
+			echo '<input type="checkbox" ' . $checked . ' >';
+			echo '<div class="visualizer-slider visualizer-round"></div>';
+			echo '</label>';
+			echo '<span>' . __( 'Enable Tracking', 'visualizer' ) . '<sup>*</sup></span>';
+			echo '<p><small><sup>*</sup>' . __( 'Allow Visualizer to anonymously track how this plugin is used and help us make the plugin better. No sensitive data is tracked.', 'visualizer' ) . '</small></p>';
+			echo '</div>';
+			echo '</div>';
 		}
-		echo '<div class="visualizer-sidebar-box visualizer-tracking">';
-		echo '<label class="visualizer-switch">';
-		echo '<input type="checkbox" ' . $checked . ' >';
-		echo '<div class="visualizer-slider visualizer-round"></div>';
-		echo '</label>';
-		echo '<span>' . __( 'Enable Tracking', 'visualizer' ) . '<sup>*</sup></span>';
-		echo '<p><small><sup>*</sup>' . __( 'Allow Visualizer to anonymously track how this plugin is used and help us make the plugin better. No sensitive data is tracked.', 'visualizer' ) . '</small></p>';
-		echo '</div>';
-		echo '</div>';
 	}
 
 }

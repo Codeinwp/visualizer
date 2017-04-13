@@ -20,10 +20,11 @@ The plugin uses Google Visualization API to add responsive & animated charts/dia
 > * Import data from other charts
 > * Easy edit the data using a live editor
 > * 3 more chart types ( Combo, Timeline and Table chart )
+> * Auto synchronize with your online file.
 > * Priority email support from the developer of the plugin
 > * Support and updates for 1 year
 >
-> **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/)**
+> **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
 
 ### 9 Chart types + 3 more in the pro version ###
@@ -39,15 +40,22 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 
 The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="nofollow">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
 
-### Knowledge Base ###
 
-1. [How can I create a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-create-a-chart%3F)
-1. [How can I edit a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-edit-a-chart%3F)
-1. [How can I clone a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-clone-a-chart%3F)
-1. [How can I delete a chart?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-delete-a-chart%3F)
-1. [How can I highlight a single bar?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-highlight-a-single-bar%3F)
-1. [How can I populate chart series and data dynamically?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-chart-series-and-data-dynamically%3F)
-1. [How can I populate data from Google Spreadsheet?](https://github.com/madpixelslabs/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F)
+ = See how Visualizer can integrate with your website  =
+
+* [Create line chart ](https://demo.themeisle.com/visualizer/line-chart/)
+* [Create pie chart ](https://demo.themeisle.com/visualizer/pie-chart/)
+* [Create bar chart](https://demo.themeisle.com/visualizer/bar-chart/)
+* [Create column chart](https://demo.themeisle.com/visualizer/column-chart/)
+* [Create area chart](https://demo.themeisle.com/visualizer/area-chart/)
+* [Create geo chart](https://demo.themeisle.com/visualizer/geo-chart/)
+* [Create table chart](https://demo.themeisle.com/visualizer/table-chart/)
+* [Create gauge chart](https://demo.themeisle.com/visualizer/gauge-chart//)
+* [Create candlestick chart](https://demo.themeisle.com/visualizer/candlestick-chart/)
+* [Create combo chart](https://demo.themeisle.com/visualizer/combo-chart/)
+* [Create scatter chart](https://demo.themeisle.com/visualizer/scatter-chart/)
+* [Create timeline chart](https://demo.themeisle.com/visualizer/timeline-chart/)
+
 
 == Installation ==
 
@@ -60,6 +68,46 @@ The plugins works perfectly with the all <a href="http://justfreethemes.com" rel
 
 Pay attention that to turn your shortcodes into graphs, your theme has to have `<?php wp_footer(); ?>` call at the bottom of **footer.php** file.
 
+= How can I create a chart? =
+
+http://docs.themeisle.com/article/597-create-chart
+
+= How can I edit a chart? =
+
+http://docs.themeisle.com/article/602-how-can-i-edit-a-chart
+
+= How can I delete a chart? =
+
+http://docs.themeisle.com/article/600-delete-chart
+
+= How can I clone a chart? =
+
+http://docs.themeisle.com/article/598-clone-chart
+
+= How can I highlight a single bar? =
+
+http://docs.themeisle.com/article/603-how-can-i-highlight-a-single-bar
+
+= How can I populate chart series and data dynamically? =
+
+http://docs.themeisle.com/article/605-how-can-i-populate-chart-series-and-data-dynamically
+
+= How can I populate data from Google Spreadsheet? =
+
+http://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet
+
+= How can i import content from another chart? =
+
+http://docs.themeisle.com/article/609-how-can-i-import-content-from-another-chart
+
+= How to export a chart? =
+
+http://docs.themeisle.com/article/608-how-to-export-a-chart
+
+= How can i edit the data manually? =
+
+http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
+
 == Screenshots ==
 
 1. Chart type selection
@@ -69,6 +117,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+
+= 2.0.0 =
+* Improved design and layout to support multiple datasources.
+* Added new integrations in the Pro version.
+* Added opt-in for tracking.
 
 = 1.7.6 =
 * Fixed issue when using the same shortcode multiple times on the same page.
