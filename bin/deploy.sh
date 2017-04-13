@@ -39,7 +39,7 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
         grunt sftp
 
      # Upload to Wordpress SVN
-     if [ ! -z "$WP_ORG_PASSWORD" ]; then
+     if [ ! -z "$WPORG_PASS" ]; then
 
             svn co -q "http://svn.wp-plugins.org/$THEMEISLE_REPO" svn
 
