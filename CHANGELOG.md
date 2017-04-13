@@ -1,4 +1,11 @@
 
+### 2.0.0 - 13/04/2017
+**Changes:** 
+- Improved UI of the builder.
+- Added compatibility with the new options in the pro version.
+- Added new travis stack.
+- Added optin for tracking.
+
 ### 1.7.6 - 20/01/2017
 **Changes:** 
 - Fixed issue when using the same shortcode multiple times on the same page.
