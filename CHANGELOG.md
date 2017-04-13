@@ -1,4 +1,8 @@
 
+ ### v2.0.2 - 2017-04-13 
+ **Changes:** 
+ - Fixed SVN deploy
+ 
  ### v2.0.1 - 2017-04-13 
  **Changes:** 
  - Fixed vendor include.
