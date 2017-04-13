@@ -49,7 +49,6 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
             # Create new SVN tag.
             mkdir -p svn/tags/$THEMEISLE_VERSION
             rsync -r -p  dist/* svn/tags/$THEMEISLE_VERSION
-
             # Add new files to SVN
             svn stat svn | grep '^?' | awk '{print $2}' | xargs -I x svn add x@
             # Remove deleted files from SVN
@@ -58,7 +57,7 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
             svn stat svn
 
             # Commit to SVN
-            svn ci --no-auth-cache --username $WPORG_USER --password $WPORG_PASS svn -m "Release  v$THEMEISLE_VERSION"
+            svn commit svn  -m "Release  v$THEMEISLE_VERSION" --username $WPORG_USER --password $WPORG_PASS
 
 	 fi
 
