@@ -11,6 +11,11 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
 
         git config user.name "selul"
         git config user.email ${GITHUB_EMAIL}
+        git fetch
+
+     # Check if we already have a tag with this version.
+     if ! git rev-parse "v$THEMEISLE_VERSION" >/dev/null 2>&1
+        then
 
     # Send changelog changes to git.
         git checkout $MASTER_BRANCH
@@ -30,7 +35,7 @@ if ! [ $AFTER_DEPLOY_RUN ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then
     # to set the body of the release.
         API_JSON='{"tag_name": "v'$THEMEISLE_VERSION'","target_commitish": "'$MASTER_BRANCH'","name": "v'$THEMEISLE_VERSION'","body": "'$CHANGES'","draft": false,"prerelease": false}';
         curl -s --data  "$API_JSON" "https://api.github.com/repos/$UPSTREAM_REPO/releases?access_token="$GITHUB_TOKEN  > /dev/null;
-
+     fi
      # Send update to the store
         STORE_JSON='{"version": "'$THEMEISLE_VERSION'","id": "'$THEMEISLE_ID'","body": "'$CHANGES'"}';
         curl -s  -H "Content-Type: application/json" -H "x-themeisle-auth: $THEMEISLE_AUTH"  --data "$STORE_JSON" "$STORE_URL/wp-json/ti-endpoint/v1/update_changelog_new/" > /dev/null

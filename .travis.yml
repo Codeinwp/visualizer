@@ -50,15 +50,6 @@ deploy:
     repo: "$UPSTREAM_REPO"
     branch: "$MASTER_BRANCH"
     condition: $TRAVIS_PHP_VERSION = "7.0"
-- provider: releases
-  api_key: "$GITHUB_TOKEN"
-  file: artifact/$THEMEISLE_REPO.zip
-  skip_cleanup: true
-  on:
-    tags: false
-    repo: "$UPSTREAM_REPO"
-    branch: "$MASTER_BRANCH"
-    condition: $TRAVIS_PHP_VERSION = "7.0"
 after_deploy:
 - chmod +x bin/deploy.sh
 - ". ./bin/deploy.sh"
