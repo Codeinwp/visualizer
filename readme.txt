@@ -118,6 +118,9 @@ http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
 
 == Changelog ==
 
+= 2.0.4 =
+* Fixed resize issue in the library page.
+
 = 2.0.0 =
 * Improved design and layout to support multiple datasources.
 * Added new integrations in the Pro version.
