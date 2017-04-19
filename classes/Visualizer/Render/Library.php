@@ -18,7 +18,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Renders visualizer library page.
  *
@@ -90,7 +89,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
 					'type'  => $type,
 					'vpage' => false,
-				) ) ) . '">';
+			) ) ) . '">';
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
