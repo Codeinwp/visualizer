@@ -1,4 +1,10 @@
 
+ ### v2.0.4 - 2017-04-21 
+ **Changes:** 
+ - Fixed library rendering issue. 
+- Added git tag check for deployment. 
+- Added wraith for visual regression testing.
+ 
  ### v2.0.3 - 2017-04-13 
  **Changes:** 
  - Fixed SVN deploy script. 
