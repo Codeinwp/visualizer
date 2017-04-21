@@ -119,13 +119,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				$this->_renderChartBox( $placeholder_id, $chart['id'] );
 			}
 			echo '</div>';
-			if ( is_array( $this->pagination ) ) {
-				echo '<ul class=" subsubsub">';
-				foreach ( $this->pagination as $page ) {
-					echo '<li class="all">', $page, '</li>';
-				}
-				echo '</ul>';
-			}
 		} else {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 			echo '<div class="visualizer-chart">';
@@ -146,6 +139,13 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		$this->_renderSidebar();
 		echo '</div>';
+		if ( is_array( $this->pagination ) ) {
+			echo '<ul class=" subsubsub">';
+			foreach ( $this->pagination as $page ) {
+				echo '<li class="all">', $page, '</li>';
+			}
+			echo '</ul>';
+		}
 	}
 
 	/**
