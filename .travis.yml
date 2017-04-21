@@ -57,7 +57,7 @@ deploy:
   on:
     repo: "$UPSTREAM_REPO"
     branch: "$MASTER_BRANCH"
-    condition: $TEST_SUITE = "Wraith_Visual_Regression_Testing"
+    condition: $TRAVIS_PHP_VERSION = "7.0"
 after_deploy:
 - chmod +x bin/deploy.sh
 - ". ./bin/deploy.sh"
