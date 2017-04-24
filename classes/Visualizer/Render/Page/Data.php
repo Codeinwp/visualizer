@@ -41,7 +41,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		// Added by Ash/Upwork
 		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
-			$Visualizer_Pro->_addEditor();
+			$Visualizer_Pro->_addEditor( $this->chart->ID );
+			$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
 		}
 		// Added by Ash/Upwork
 		echo '<div id="canvas">';
@@ -64,6 +65,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		), admin_url( 'admin-ajax.php' ) );
 
 		?>
+		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID;?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
 		<ul class="group-wrapper full-height">
 			<li class="group group-category open" id="vz-chart-source">
@@ -192,6 +194,21 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</div>
 							</div>
 						</li>
+
+						<li class="group <?php echo apply_filters( 'visualizer_pro_upsell_class','only-pro-feature' ); ?> ">
+							<h2 class="group-title sub-group"><?php _e( 'Import from Wordpress', 'visualizer' ); ?><span
+										class="dashicons dashicons-lock"></span></h2>
+							<div class="group-content edit-data-content">
+								<div>
+									<p class="group-description"><?php _e( 'You can import here data from Wordpress', 'visualizer' ); ?></p>
+									<input type="button" id="filter-chart-button" class="button button-primary "
+										   value="<?php _e( 'Create Filters', 'visualizer' ); ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' );?>" data-t-chart="<?php _e( 'Create Filters', 'visualizer' );?>">
+									<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
+								</div>
+							</div>
+						</li>
+
+
 						<li class="group <?php echo apply_filters( 'visualizer_pro_upsell_class','only-pro-feature' ); ?>">
 							<h2 class="group-title sub-group visualizer-editor-tab"
 								data-current="chart"><?php _e( 'Edit current data', 'visualizer' ); ?><span
