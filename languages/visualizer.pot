@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.4\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-04-22 16:20:08+00:00\n"
+"POT-Creation-Date: 2017-04-25 04:53:19+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -209,69 +209,69 @@ msgid ""
 "make the plugin better. No sensitive data is tracked."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:73
+#: classes/Visualizer/Render/Page/Data.php:75
 msgid "Chart Data"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:78
+#: classes/Visualizer/Render/Page/Data.php:80
 msgid "Import data from file"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:80
+#: classes/Visualizer/Render/Page/Data.php:82
 msgid ""
 "Select and upload your data CSV file here. The first row of the CSV file "
 "should contain the column headings. The second one should contain series "
 "type (string, number, boolean, date, datetime, timeofday)."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:81
-#: classes/Visualizer/Render/Page/Data.php:101
+#: classes/Visualizer/Render/Page/Data.php:83
+#: classes/Visualizer/Render/Page/Data.php:103
 msgid ""
 "If you are unsure about how to format your data CSV then please take a look "
 "at this sample: %1$s %2$s%3$s"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:89
-#: classes/Visualizer/Render/Page/Data.php:112
+#: classes/Visualizer/Render/Page/Data.php:91
+#: classes/Visualizer/Render/Page/Data.php:114
 msgid "Import"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:94
+#: classes/Visualizer/Render/Page/Data.php:96
 msgid "Import data from URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:97
+#: classes/Visualizer/Render/Page/Data.php:99
 msgid "One time import"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:100
+#: classes/Visualizer/Render/Page/Data.php:102
 msgid ""
 "You can use this to import data from a remote CSV file. The first row of "
 "the CSV file should contain the column headings. The second one should "
 "contain series type (string, number, boolean, date, datetime, timeofday)."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:102
+#: classes/Visualizer/Render/Page/Data.php:104
 msgid ""
 "You can also import data from Google Spreadsheet, for more info check <a "
 "href=\"https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-"
 "from-Google-Spreadsheet%3F\" target=\"_blank\" >this</a> tutorial"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:107
-#: classes/Visualizer/Render/Page/Data.php:127
+#: classes/Visualizer/Render/Page/Data.php:109
+#: classes/Visualizer/Render/Page/Data.php:129
 msgid "Please enter the URL of CSV file"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:117
+#: classes/Visualizer/Render/Page/Data.php:119
 msgid "Schedule Import"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:120
+#: classes/Visualizer/Render/Page/Data.php:122
 msgid "You can choose here to synchronize your chart data with a remote CSV file."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:121
+#: classes/Visualizer/Render/Page/Data.php:123
 msgid ""
 "You can also synchronize with your Google Spreadsheet file, for more info "
 "check <a "
@@ -279,90 +279,90 @@ msgid ""
 "from-Google-Spreadsheet%3F\" target=\"_blank\" >this</a> tutorial"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:122
+#: classes/Visualizer/Render/Page/Data.php:124
 msgid ""
 "We will update the chart data based on your time interval preference by "
 "overwritting the current data with the one from the URL."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:129
+#: classes/Visualizer/Render/Page/Data.php:131
 msgid "How often do you want to check the url"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:134
+#: classes/Visualizer/Render/Page/Data.php:136
 msgid "Each hour"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:135
+#: classes/Visualizer/Render/Page/Data.php:137
 msgid "Each 12 hours"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:136
+#: classes/Visualizer/Render/Page/Data.php:138
 msgid "Each day"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:137
+#: classes/Visualizer/Render/Page/Data.php:139
 msgid "Each 3 days"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:149
+#: classes/Visualizer/Render/Page/Data.php:151
 msgid "Save schedule"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:160
+#: classes/Visualizer/Render/Page/Data.php:162
 msgid "Import from other chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:164
+#: classes/Visualizer/Render/Page/Data.php:166
 msgid "You can import here data from your previously created charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:192
+#: classes/Visualizer/Render/Page/Data.php:194
 msgid "Import Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:199
+#: classes/Visualizer/Render/Page/Data.php:201
 msgid "Import from Wordpress"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:203
+#: classes/Visualizer/Render/Page/Data.php:205
 msgid "You can import here data from Wordpress"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:205
+#: classes/Visualizer/Render/Page/Data.php:207
 msgid "Create Filters"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:205
-#: classes/Visualizer/Render/Page/Data.php:224
+#: classes/Visualizer/Render/Page/Data.php:207
+#: classes/Visualizer/Render/Page/Data.php:226
 msgid "Show Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:214
+#: classes/Visualizer/Render/Page/Data.php:216
 msgid "Edit current data"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:222
+#: classes/Visualizer/Render/Page/Data.php:224
 msgid "You can manually edit the chart data using the spreadsheet like editor."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:224
+#: classes/Visualizer/Render/Page/Data.php:226
 msgid "View Editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:234
+#: classes/Visualizer/Render/Page/Data.php:236
 msgid "Advanced Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:237
+#: classes/Visualizer/Render/Page/Data.php:239
 msgid "Chart Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:248
+#: classes/Visualizer/Render/Page/Data.php:250
 msgid "Rate our plugin"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:267
+#: classes/Visualizer/Render/Page/Data.php:269
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
