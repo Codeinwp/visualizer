@@ -42,7 +42,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_addEditor( $this->chart->ID );
-			$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
+			if ( method_exists( $Visualizer_Pro, '_addFilterWizard' ) ) {
+				$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
+			}
 		}
 		// Added by Ash/Upwork
 		echo '<div id="canvas">';
