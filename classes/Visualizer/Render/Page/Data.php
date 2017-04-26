@@ -214,7 +214,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 						<li class="group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="group-title sub-group visualizer-editor-tab"
-							    data-current="chart"><?php _e( 'Edit current data', 'visualizer' ); ?><span
+							    data-current="chart"><?php _e( 'Add data manually', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<form id="editor-form" action="<?php echo $upload_link ?>" method="post" target="thehole">
 								<input type="hidden" id="chart-data" name="chart_data">
