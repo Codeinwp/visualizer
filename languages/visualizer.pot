@@ -1,10 +1,10 @@
 # Copyright (C) 2017 Themeisle
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
-msgstr ""
+msgstr "" 
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-05-01 10:10:47+00:00\n"
+"POT-Creation-Date: 2017-05-01 10:10:47+00:00\n" 
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
