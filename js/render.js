@@ -14,6 +14,9 @@
 		settings = chart.settings;
 
 		container = document.getElementById(id);
+        if (container == null) {
+            return;
+        }
 		table = new gv.DataTable({cols: series});
 
 		render = v.objects[id] || null;
