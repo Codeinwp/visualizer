@@ -421,7 +421,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 		$render->render();
-		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
+			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		}
 	}
 
 	/**
