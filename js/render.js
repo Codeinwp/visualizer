@@ -225,7 +225,7 @@
 
     function resizeHiddenContainers(everytime){
         $(".visualizer-front").parents().each(function(){
-            if(!$(this).is(":visible") && !$(this).hasClass("visualizer-hidden-container")){
+            if(!$(this).hasClass("visualizer-hidden-container")){
                 $(this).addClass("visualizer-hidden-container");
             }
         });
