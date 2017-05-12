@@ -2,7 +2,7 @@
 Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
-Tested up to: 4.7.3
+Tested up to: 4.7.4
 Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -21,6 +21,7 @@ The plugin uses Google Visualization API to add responsive & animated charts/dia
 > * Easy edit the data using a live editor
 > * 3 more chart types ( Combo, Timeline and Table chart )
 > * Auto synchronize with your online file.
+> * Create charts from your wordpress posts, pages,products or any other post_type.
 > * Priority email support from the developer of the plugin
 > * Support and updates for 1 year
 >
@@ -117,6 +118,11 @@ http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
 5. Charts library
 
 == Changelog ==
+
+= 2.1.0 =
+* Fixed geomap issue with apikey.
+* Fixed responsive issues on tabbed interface and page builders.
+* Added compatibility with premium import from posts/page feature.
 
 = 2.0.4 =
 * Fixed resize issue in the library page.
