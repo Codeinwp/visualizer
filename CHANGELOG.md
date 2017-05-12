@@ -1,4 +1,11 @@
 
+ ### v2.1.0 - 2017-05-12 
+ **Changes:** 
+ - Fixed responsive issues on pagebuilders.
+- Fixed chart rendering if container is not found.
+- Added api key for geotype map.
+- Added compatibility with import from post_types.
+ 
  ### v2.0.4 - 2017-04-21 
  **Changes:** 
  - Fixed library rendering issue. 
