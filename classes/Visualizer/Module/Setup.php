@@ -44,6 +44,18 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
+		$this->_addFilter( 'visualizer_logger_flag', 'get_logger_flag', 10, 1 );
+	}
+
+	/**
+	 * Either the tracking is active or not.
+	 *
+	 * @return bool The flag status.
+	 */
+	public function get_logger_flag() {
+		$flag = get_option( 'visualizer_logger_flag', 'no' );
+
+		return ( $flag === 'yes' );
 	}
 
 	/**

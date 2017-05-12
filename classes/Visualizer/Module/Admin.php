@@ -59,7 +59,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
-		$this->_addFilter( 'visualizer_logger_flag', 'get_logger_flag', 10, 1 );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_TRACK, 'visualizer_enable_track' );
 	}
 
@@ -75,17 +74,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			update_option( 'visualizer_logger_flag', 'no' );
 		}
 		wp_send_json_success( array( 'status' => $status ) );
-	}
-
-	/**
-	 * Either the tracking is active or not.
-	 *
-	 * @return bool The flag status.
-	 */
-	public function get_logger_flag() {
-		$flag = get_option( 'visualizer_logger_flag', 'no' );
-
-		return ( $flag === 'yes' );
 	}
 
 	/**
@@ -372,7 +360,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			unset( $settings['height'], $settings['width'] );
 			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
+			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
 			// add chart to the array
 			$charts[ 'visualizer-' . $chart->ID ] = array(
 				'id'       => $chart->ID,
