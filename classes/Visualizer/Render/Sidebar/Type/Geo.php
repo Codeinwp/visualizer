@@ -54,6 +54,22 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 */
 	protected function _renderMapSettings() {
 		self::_renderGroupStart( esc_html__( 'Map Settings', 'visualizer' ) );
+
+			self::_renderSectionStart( esc_html__( 'API', 'visualizer' ), false );
+				self::_renderSectionDescription(
+					sprintf( esc_html__( 'Add the Google Maps API key (Click %1$shere%2$s to get the key)', 'visualizer' ), '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">', '</a>' )
+				);
+
+				self::_renderTextItem(
+					esc_html__( 'API Key', 'visualizer' ),
+					'map_api_key',
+					get_option( 'visualizer-map-api-key' ),
+					'',
+					''
+				);
+
+			self::_renderSectionEnd();
+
 			self::_renderSectionStart( esc_html__( 'Region', 'visualizer' ), false );
 				self::_renderSectionDescription(
 					esc_html__( 'Configure the region area to display on the map. (Surrounding areas will be displayed as well.) Can be one of the following:' , 'visualizer' ) .

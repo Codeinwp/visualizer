@@ -258,6 +258,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * Handle data and settings page
 	 */
 	private function _handleDataAndSettingsPage() {
+		if ( isset( $_POST['map_api_key'] ) ) {
+			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
+		}
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
 			if ( $this->_chart->post_status == 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
@@ -297,6 +300,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'charts' => array(
 				'canvas' => $data,
 			),
+			'map_api_key' => get_option( 'visualizer-map-api-key' ),
 		) );
 		$render          = new Visualizer_Render_Page_Data();
 		$render->chart   = $this->_chart;

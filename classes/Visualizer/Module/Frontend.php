@@ -152,7 +152,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		// enqueue visualizer render and update render localizations
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script( 'visualizer-render', 'visualizer', array(
-			'charts' => $this->_charts,
+			'charts'        => $this->_charts,
+			'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 		) );
 
 		// return placeholder div
