@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.0.5\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-05-05 15:21:44+00:00\n"
+"POT-Creation-Date: 2017-05-12 11:50:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -101,28 +101,28 @@ msgstr ""
 msgid "Pro Addon"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:295
-#: classes/Visualizer/Module/Chart.php:576
+#: classes/Visualizer/Module/Chart.php:298
+#: classes/Visualizer/Module/Chart.php:580
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:307
+#: classes/Visualizer/Module/Chart.php:311
 msgid "Save Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:308
+#: classes/Visualizer/Module/Chart.php:312
 msgid "Create Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:310
+#: classes/Visualizer/Module/Chart.php:314
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:408
+#: classes/Visualizer/Module/Chart.php:412
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:420
+#: classes/Visualizer/Module/Chart.php:424
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
@@ -576,13 +576,13 @@ msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:222
 #: classes/Visualizer/Render/Sidebar/Graph.php:334
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:200
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:216
 msgid "Maximum Value"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:229
 #: classes/Visualizer/Render/Sidebar/Graph.php:341
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:186
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:202
 msgid "Minimum Value"
 msgstr ""
 
@@ -805,7 +805,7 @@ msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:101
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:125
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:360
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:376
 #: classes/Visualizer/Render/Sidebar.php:293
 msgid "Stroke Width"
 msgstr ""
@@ -816,7 +816,7 @@ msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:109
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:133
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:368
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:384
 #: classes/Visualizer/Render/Sidebar.php:301
 msgid "Stroke Color"
 msgstr ""
@@ -901,7 +901,7 @@ msgid "Layout & Chart Area"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:229
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:324
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:340
 #: classes/Visualizer/Render/Sidebar.php:266
 msgid ""
 "Configure the total size of the chart. Two formats are supported: a number, "
@@ -910,13 +910,13 @@ msgid ""
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:233
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:328
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:344
 #: classes/Visualizer/Render/Sidebar.php:270
 msgid "Width And Height Of Chart"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:247
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:342
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:358
 #: classes/Visualizer/Render/Sidebar.php:284
 msgid "Determines the total width and height of the chart."
 msgstr ""
@@ -925,231 +925,243 @@ msgstr ""
 msgid "Map Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:57
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:69
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:58
+msgid "API"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:60
+msgid "Add the Google Maps API key (Click %1$shere%2$s to get the key)"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:64
+msgid "API Key"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:73
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:85
 msgid "Region"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:59
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:75
 msgid ""
 "Configure the region area to display on the map. (Surrounding areas will be "
 "displayed as well.) Can be one of the following:"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:61
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:77
 msgid "'world' - A map of the entire world."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:62
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:78
 msgid ""
 "A continent or a sub-continent, specified by its %s code, e.g., '011' for "
 "Western Africa."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:63
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:79
 msgid "A country, specified by its %s code, e.g., 'AU' for Australia."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:64
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:80
 msgid ""
 "A state in the United States, specified by its %s code, e.g., 'US-AL' for "
 "Alabama. Note that the resolution option must be set to either 'provinces' "
 "or 'metros'."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:77
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:89
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:93
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:105
 msgid "Resolution"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:80
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:96
 msgid "The resolution of the map borders. Choose one of the following values:"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:82
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:98
 msgid "'countries' - Supported for all regions, except for US state regions."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:83
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:99
 msgid ""
 "'provinces' - Supported only for country regions and US state regions. Not "
 "supported for all countries; please test a country to see whether this "
 "option is supported."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:84
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:100
 msgid "'metros' - Supported for the US country region and US state regions only."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:94
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:110
 msgid "Countries"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:95
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:111
 msgid "Provinces"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:96
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:112
 msgid "Metros"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:102
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:114
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:118
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:130
 msgid "Display Mode"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:105
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:121
 msgid "Determines which type of map this is. The following values are supported:"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:107
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:123
 msgid "'auto' - Choose based on the format of the data."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:108
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:124
 msgid "'regions' - This is a region map."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:109
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:125
 msgid "'markers' - This is a marker map."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:119
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:135
 msgid "Auto"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:120
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:136
 msgid "Regions"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:121
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:137
 msgid "Markers"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:126
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:142
 #: classes/Visualizer/Render/Sidebar.php:220
 msgid "Tooltip"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:141
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:157
 #: classes/Visualizer/Render/Sidebar.php:235
 msgid "Trigger"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:146
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:162
 #: classes/Visualizer/Render/Sidebar.php:240
 msgid "The tooltip will be displayed when the user hovers over an element"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:147
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:163
 #: classes/Visualizer/Render/Sidebar.php:242
 msgid "The tooltip will not be displayed"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:149
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:165
 #: classes/Visualizer/Render/Sidebar.php:244
 msgid "Determines the user interaction that causes the tooltip to be displayed."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:161
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:177
 msgid "Color Axis"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:163
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:179
 msgid ""
 "Configure color axis gradient scale, minimum and maximun values and a color "
 "of the dateless regions."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:167
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:231
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:183
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:247
 msgid "Minimum And Maximum Values"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:181
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:197
 msgid "Determines the minimum and maximum values of color axis."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:193
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:209
 msgid "Intermediate Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:207
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:223
 msgid "Dateless Region"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:225
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:241
 msgid "Size Axis"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:227
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:243
 msgid ""
 "Configure how values are associated with bubble size, minimum and maximun "
 "values and marker opacity setting."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:245
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:261
 msgid "Determines the minimum and maximum values of size axis."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:251
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:267
 msgid "Minimum And Maximum Marker Radius"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:265
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:281
 msgid ""
 "Determines the radius of the smallest and largest possible bubbles, in "
 "pixels."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:270
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:286
 msgid "Marker Opacity"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:273
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:289
 msgid ""
 "The opacity of the markers, where 0.0 is fully transparent and 1.0 is fully "
 "opaque."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:291
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:307
 msgid "Magnifying Glass"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:293
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:309
 msgid ""
 "Configure magnifying glass settings, which appears, when the user lingers "
 "over a cluttered marker. Note: this feature is not supported in browsers "
 "that do not support SVG, i.e. Internet Explorer version 8 or earlier."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:296
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:312
 msgid "Enabled"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:300
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:316
 msgid ""
 "If yes, when the user lingers over a cluttered marker, a magnifiying glass "
 "will be opened."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:304
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:320
 msgid "Zoom Factor"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:307
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:323
 msgid "The zoom factor of the magnifying glass. Can be any number greater than 0."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:322
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:338
 msgid "Layout Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:347
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:363
 msgid "Keep Aspect Ratio"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:351
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:367
 msgid ""
 "If yes, the map will be drawn at the largest size that can fit inside the "
 "chart area at its natural aspect ratio. If only one of the width and height "
@@ -1157,25 +1169,25 @@ msgid ""
 "aspect ratio."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:352
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:368
 msgid ""
 "If no, the map will be stretched to the exact size of the chart as "
 "specified by the width and height options."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:357
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:373
 #: classes/Visualizer/Render/Sidebar.php:290
 msgid ""
 "Configure the background color for the main area of the chart and the chart "
 "border width and color."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:363
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:379
 #: classes/Visualizer/Render/Sidebar.php:296
 msgid "The chart border width in pixels."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Type/Geo.php:375
+#: classes/Visualizer/Render/Sidebar/Type/Geo.php:391
 #: classes/Visualizer/Render/Sidebar.php:309
 msgid "Background Color"
 msgstr ""

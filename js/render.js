@@ -200,7 +200,7 @@
 		}
 	};
 
-	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"]});
+	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key});
 	g.charts.setOnLoadCallback(function() {
 		gv = g.visualization;
 		v.render();
