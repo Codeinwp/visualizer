@@ -100,9 +100,7 @@ msgstr ""
 #: classes/Visualizer/Module/Admin.php:458
 msgid "Pro Addon"
 msgstr ""
-
-#: classes/Visualizer/Module/Chart.php:298
-#: classes/Visualizer/Module/Chart.php:580
+ 
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr ""
 
