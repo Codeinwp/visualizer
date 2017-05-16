@@ -119,6 +119,9 @@ http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
 
 == Changelog ==
 
+= 2.1.1 =
+* Fixed charts bliking on some themes.
+
 = 2.1.0 =
 * Fixed geomap issue with apikey.
 * Fixed responsive issues on tabbed interface and page builders.
