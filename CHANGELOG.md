@@ -1,4 +1,8 @@
 
+ ### v2.1.1 - 2017-05-16 
+ **Changes:** 
+ - Fixed blinking chart issue.
+ 
  ### v2.1.0 - 2017-05-12 
  **Changes:** 
  - Fixed responsive issues on pagebuilders.
