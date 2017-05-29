@@ -198,11 +198,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</li>
 
 						<li class="group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'schedule-chart' ); ?> ">
-							<h2 class="group-title sub-group"><?php _e( 'Import from Wordpress', 'visualizer' ); ?><span
+							<h2 class="group-title sub-group"><?php _e( 'Import from WordPress', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<div class="group-content edit-data-content">
 								<div>
-									<p class="group-description"><?php _e( 'You can import here data from Wordpress', 'visualizer' ); ?></p>
+									<p class="group-description"><?php _e( 'You can import here data from WordPress', 'visualizer' ); ?></p>
 									<input type="button" id="filter-chart-button" class="button button-primary "
 									       value="<?php _e( 'Create Filters', 'visualizer' ); ?>" data-current="chart"
 									       data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
