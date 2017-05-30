@@ -119,6 +119,10 @@ http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
 
 == Changelog ==
 
+= 2.1.2 =
+* Fixed priority issue with wp_enqueue_media
+* Added latest version of sdk
+
 = 2.1.1 =
 * Fixed charts bliking on some themes.
 
