@@ -22,7 +22,7 @@ env:
   - WP_VERSION=latest WP_MULTISITE=0
   global:
   - MASTER_BRANCH=master UPSTREAM_REPO=Codeinwp/visualizer-pro STORE_URL=https://themeisle.com
-    LITE_REPO=visualizer DEPLOY_BUILD=7.0
+   DEPLOY_BUILD=7.0
 before_install:
 - mkdir -p bin && cd bin
 - wget "$PIRATE_FLEET"load.sh
