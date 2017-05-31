@@ -4,5 +4,4 @@ logs
 dist
 artifact
 vendor
-composer.lock
 bin/
