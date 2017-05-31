@@ -197,8 +197,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 */
 	private function _renderSidebar() {
 		if ( ! VISUALIZER_PRO ) {
-			$checked = apply_filters( 'visualizer_logger_flag', false );
-			$checked = ( $checked === false ) ? '' : 'checked';
 			echo '<div id="visualizer-sidebar">';
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Gain more editing power', 'visualizer' ) . '</h3><ul>';
@@ -207,15 +205,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
 			echo '<li>' . __( '3 more chart types', 'visualizer' ) . '</li></ul>';
 			echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a>';
-			echo '</div>';
-			echo '<div class="visualizer-sidebar-box visualizer-tracking">';
-			echo '<label class="visualizer-switch">';
-			echo '<input type="checkbox" ' . $checked . ' >';
-			echo '<div class="visualizer-slider visualizer-round"></div>';
-			echo '</label>';
-			echo '<span>' . __( 'Enable Tracking', 'visualizer' ) . '<sup>*</sup></span>';
-			echo '<p><small><sup>*</sup>' . __( 'Allow Visualizer to anonymously track how this plugin is used and help us make the plugin better. No sensitive data is tracked.', 'visualizer' ) . '</small></p>';
-			echo '</div>';
 			echo '</div>';
 		}
 	}

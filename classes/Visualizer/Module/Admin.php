@@ -59,22 +59,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
-		$this->_addAjaxAction( Visualizer_Plugin::ACTION_TRACK, 'visualizer_enable_track' );
 	}
 
-	/**
-	 *  Enable track ajax action.
-	 */
-	public function visualizer_enable_track() {
-		check_admin_referer( Visualizer_Plugin::ACTION_TRACK, 'nonce' );
-		$status = $_GET['status'];
-		if ( $status == 'yes' ) {
-			update_option( 'visualizer_logger_flag', 'yes' );
-		} else {
-			update_option( 'visualizer_logger_flag', 'no' );
-		}
-		wp_send_json_success( array( 'status' => $status ) );
-	}
 
 	/**
 	 * Enqueues media scripts and styles.
@@ -383,11 +369,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'edit'   => add_query_arg( array(
 					'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
 					'library' => 'yes',
-				), $ajaxurl ),
-				'logger' => add_query_arg( array(
-					'action'  => Visualizer_Plugin::ACTION_TRACK,
-					'library' => 'yes',
-					'nonce'   => wp_create_nonce( Visualizer_Plugin::ACTION_TRACK ),
 				), $ajaxurl ),
 			),
 		) );
