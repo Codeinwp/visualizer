@@ -1,4 +1,7 @@
 
+ ### v2.1.3 - 2017-05-31 
+ **Changes:** 
+  
  ### v2.1.2 - 2017-05-30 
  **Changes:** 
  - Fixed priority issue with wp_enqueue_media
