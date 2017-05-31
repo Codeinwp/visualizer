@@ -1,4 +1,9 @@
 
+ ### v2.1.2 - 2017-05-30 
+ **Changes:** 
+ - Fixed priority issue with wp_enqueue_media
+- Added latest version of sdk
+ 
  ### v2.1.1 - 2017-05-16 
  **Changes:** 
  - Fixed blinking chart issue.
