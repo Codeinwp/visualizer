@@ -106,18 +106,6 @@
             });
             return false;
         });
-        $('.visualizer-switch input').on('change', function () {
-
-            var status = $(this).is(':checked');
-            status = (status) ? 'yes' : 'no';
-            $.ajax({
-                url: visualizer.urls.logger,
-                data: {status: status},
-                method: "get",
-                success: function (data, textStatus, jqXHR) {
-                }
-            });
-        });
         $(window).resize(function () {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function () {
