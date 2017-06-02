@@ -379,7 +379,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function uploadData() {
-		error_log( 'in uploadData ' . print_r( $_GET,true ) . print_r( $_POST,true ) );
 		// validate nonce
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
