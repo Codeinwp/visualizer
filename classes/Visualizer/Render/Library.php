@@ -206,6 +206,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li>' . __( '3 more chart types', 'visualizer' ) . '</li></ul>';
 			echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a>';
 			echo '</div>';
+			echo '</div>';
 		}
 	}
 
