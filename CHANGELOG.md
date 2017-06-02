@@ -1,4 +1,8 @@
 
+ ### v2.1.5 - 2017-06-02 
+ **Changes:** 
+ - Fixed markup issue which caused issue on library loading.
+ 
  ### v2.1.4 - 2017-06-02 
  **Changes:** 
  - Added support for non Latin characters
