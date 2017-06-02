@@ -1,4 +1,8 @@
 
+ ### v2.1.4 - 2017-06-02 
+ **Changes:** 
+ - Added support for non Latin characters
+ 
  ### v2.1.3 - 2017-05-31 
  **Changes:** 
   
