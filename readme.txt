@@ -1,5 +1,5 @@
 === WordPress Charts and Graphs Lite ===
-Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle
+Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle,rozroz
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api
 Requires at least: 3.5
 Tested up to: 4.7.5

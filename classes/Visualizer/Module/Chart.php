@@ -539,6 +539,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				}
 			}
 			$fp = tmpfile();
+			// support for MS Excel
+			fprintf( $fp, $bom = ( chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) ) );
 			foreach ( $rows as $row ) {
 				fputcsv( $fp, $row );
 			}

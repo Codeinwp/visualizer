@@ -62,7 +62,6 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	private function _fetchSeries( &$handle ) {
 		// read column titles
 		$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
-		$labels = array_map( 'utf8_encode', $labels );
 		// read series types
 		$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
 
@@ -79,7 +78,6 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 
 			// re read the labels and empty types array
 			$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
-			$labels = array_map( 'utf8_encode', $labels );
 			$types = array();
 		}
 
@@ -107,10 +105,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		// set line endings auto detect mode
 		ini_set( 'auto_detect_line_endings', true );
 		// open file and return handle
-		$fc = iconv( 'ISO-8859-1', 'utf-8', file_get_contents( $filename ? $filename : $this->_filename ) );
-		$tmp = tempnam( sys_get_temp_dir(), rand() );
-		file_put_contents( $tmp, $fc );
-		return fopen( $tmp, 'rb' );
+		return fopen( $filename ? $filename : $this->_filename, 'rb' );
 	}
 
 	/**
