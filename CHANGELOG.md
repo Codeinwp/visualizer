@@ -1,4 +1,8 @@
 
+ ### v2.1.6 - 2017-06-07 
+ **Changes:** 
+ - Fixed non-latin chars render.
+ 
  ### v2.1.5 - 2017-06-02 
  **Changes:** 
  - Fixed markup issue which caused issue on library loading.
