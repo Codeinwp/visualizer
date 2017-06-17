@@ -118,6 +118,11 @@ http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
 5. Charts library
 
 == Changelog ==
+= 2.1.7 = 
+
+* Updated sdk loading logic.
+
+
 
 = 2.1.4 =
 * Fixed issues with non-latin chars on CSV files to import.

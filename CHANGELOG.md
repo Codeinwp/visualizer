@@ -1,4 +1,8 @@
 
+ ### v2.1.7 - 2017-06-17 
+ **Changes:** 
+ * Updated sdk loading logic.
+ 
  ### v2.1.6 - 2017-06-07 
  **Changes:** 
  - Fixed non-latin chars render.
