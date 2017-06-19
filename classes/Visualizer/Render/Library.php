@@ -159,6 +159,11 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @param int    $chart_id The id of the chart.
 	 */
 	private function _renderChartBox( $placeholder_id, $chart_id ) {
+		$settings    = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS );
+		$title       = '#' . $chart_id;
+		if ( ! empty( $settings[0]['title'] ) ) {
+			$title  = $settings[0]['title'];
+		}
 		$ajax_url    = admin_url( 'admin-ajax.php' );
 		$delete_url  = add_query_arg( array(
 			'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
@@ -176,7 +181,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			'chart'    => $chart_id,
 			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
 		), admin_url( 'admin-ajax.php' ) );
-		echo '<div class="visualizer-chart">';
+		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
