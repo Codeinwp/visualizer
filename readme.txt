@@ -118,6 +118,12 @@ http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
 5. Charts library
 
 == Changelog ==
+= 2.1.8 - 2017-07-03  = 
+
+* Added chart title into library. 
+* Fixed SDK issues with dashboard widget.
+
+
 = 2.1.7 = 
 
 * Updated sdk loading logic.

@@ -1,4 +1,9 @@
 
+ ### v2.1.8 - 2017-07-03 
+ **Changes:** 
+ * Added chart title into library. 
+* Fixed SDK issues with dashboard widget.
+ 
  ### v2.1.7 - 2017-06-17 
  **Changes:** 
  * Updated sdk loading logic.
