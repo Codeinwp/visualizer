@@ -2,9 +2,9 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Charts and Graphs Lite 2.1.5\n"
+"Project-Id-Version: Visualizer: Charts and Graphs Lite 2.1.7\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-06-07 18:40:31+00:00\n"
+"POT-Creation-Date: 2017-06-19 10:36:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -153,49 +153,53 @@ msgstr ""
 msgid "No charts found"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:184
+#: classes/Visualizer/Render/Library.php:163
+msgid "No Title"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:189
 #: classes/Visualizer/Render/Templates.php:68
 msgid "Delete"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:185
+#: classes/Visualizer/Render/Library.php:190
 msgid "Clone"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:186
+#: classes/Visualizer/Render/Library.php:191
 msgid "Edit"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:187
+#: classes/Visualizer/Render/Library.php:192
 msgid "Export"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:188
+#: classes/Visualizer/Render/Library.php:193
 #: classes/Visualizer/Render/Templates.php:71
 msgid "Click to select"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:202
+#: classes/Visualizer/Render/Library.php:207
 msgid "Gain more editing power"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:203
+#: classes/Visualizer/Render/Library.php:208
 msgid "Spreadsheet like editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:204
+#: classes/Visualizer/Render/Library.php:209
 msgid "Import from other charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:205
+#: classes/Visualizer/Render/Library.php:210
 msgid "Auto-sync with online files"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:206
+#: classes/Visualizer/Render/Library.php:211
 msgid "3 more chart types"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:207
+#: classes/Visualizer/Render/Library.php:212
 msgid "View more features"
 msgstr ""
 

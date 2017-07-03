@@ -283,3 +283,9 @@ input:checked + .visualizer-slider:before {
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
+.visualizer-chart-title{
+
+	text-align: center;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
