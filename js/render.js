@@ -139,13 +139,17 @@
 
         if(settings.hAxis){
             if(settings.hAxis.textStyle && settings.hAxis.textStyle !== ''){
-                settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
+                if(typeof(settings.hAxis.textStyle) === "string") {
+                    settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
+                }
             }
         }
 
         if(settings.vAxis){
             if(settings.vAxis.textStyle && settings.vAxis.textStyle !== ''){
-                settings.vAxis.textStyle = {color: settings.vAxis.textStyle};
+                if(typeof(settings.vAxis.textStyle) === "string") {
+                    settings.vAxis.textStyle = {color: settings.vAxis.textStyle};
+                }
             }
         }
 
