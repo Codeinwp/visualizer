@@ -1,4 +1,8 @@
 
+ ### v2.1.9 - 2017-07-10 
+ **Changes:** 
+ * Fixed display error with hex color.
+ 
  ### v2.1.8 - 2017-07-03 
  **Changes:** 
  * Added chart title into library. 

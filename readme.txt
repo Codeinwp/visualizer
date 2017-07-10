@@ -118,6 +118,11 @@ http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
 5. Charts library
 
 == Changelog ==
+= 2.1.9 - 2017-07-10  = 
+
+* Fixed display error with hex color.
+
+
 = 2.1.8 - 2017-07-03  = 
 
 * Added chart title into library. 
