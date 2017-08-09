@@ -80,12 +80,14 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 			// We expected this, do nothing.
 		}
 		ob_end_clean();
-		$query       = new WP_Query( array(
-			'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
-			'post_status' => 'auto-draft',
-			'numberposts' => 1,
-			'fields'      => 'ids',
-		) );
+		$query       = new WP_Query(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'auto-draft',
+				'numberposts' => 1,
+				'fields'      => 'ids',
+			)
+		);
 		$this->chart = $query->posts[0];
 	}
 
