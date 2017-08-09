@@ -194,7 +194,7 @@
 				}
 			}
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
-            var formatter = new g.visualization.NumberFormat({pattern: settings.format});
+            formatter = new g.visualization.NumberFormat({pattern: settings.format});
             formatter.format(table, 1);
         }
 
