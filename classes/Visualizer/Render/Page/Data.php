@@ -256,7 +256,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				<a href="https://wordpress.org/support/plugin/visualizer/reviews/?filter=5#new-post"
 				   target="_blank"><?php _e( 'Rate our plugin', 'visualizer' ); ?></a>
 			</li>
-			<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; 2014</li>
+			<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; <?php echo date( 'Y', current_time( 'timestamp' ) ); ?></li>
 		</ul>
 		<?php
 		// changed by Ash/Upwork
