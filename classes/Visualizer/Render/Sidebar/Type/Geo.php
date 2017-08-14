@@ -43,6 +43,7 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 		$this->_renderSizeAxisSettings();
 		$this->_renderMagnifyingGlassSettings();
 		$this->_renderViewSettings();
+		$this->_renderAdvancedSettings();
 	}
 
 	/**

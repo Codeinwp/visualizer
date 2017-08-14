@@ -43,6 +43,7 @@ class Visualizer_Render_Sidebar_Type_Candlestick extends Visualizer_Render_Sideb
 		$this->_renderLineSettings();
 		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
+		$this->_renderAdvancedSettings();
 	}
 
 	/**

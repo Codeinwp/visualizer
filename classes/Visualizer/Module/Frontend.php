@@ -65,6 +65,76 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		if ( ! has_filter( 'term_description', 'do_shortcode' ) ) {
 			add_filter( 'term_description', 'do_shortcode' );
 		}
+
+		add_action( 'rest_api_init', array( $this, 'endpoint_register' ) );
+	}
+
+	/**
+	 * Registers the endpoints
+	 */
+	function endpoint_register() {
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/action/(?P<chart>\d+)/(?P<type>.+)/',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'perform_action' ),
+			)
+		);
+	}
+
+	/**
+	 * All possible actions and their labels
+	 *
+	 * @access private
+	 */
+	private function get_actions() {
+		return apply_filters(
+			'visualizer_action_buttons', array(
+				'print'     => __( 'Print', 'visualizer' ),
+				'csv'       => __( 'CSV', 'visualizer' ),
+				'xls'       => __( 'Excel', 'visualizer' ),
+				'copy'      => __( 'Copy', 'visualizer' ),
+			)
+		);
+	}
+
+	/**
+	 * The print button
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
+	public function perform_action( WP_REST_Request $params ) {
+		$chart_id   = filter_var( sanitize_text_field( $params['chart'] ), FILTER_VALIDATE_INT );
+		$type       = sanitize_text_field( $params['type'] );
+		$data       = null;
+
+		if ( ! $chart_id ) {
+			return new WP_REST_Response( array( 'error' => new WP_Error( __( 'Invalid chart ID', 'visualizer' ) ) ) );
+		}
+
+		if ( ! $type ) {
+			return new WP_REST_Response( array( 'error' => new WP_Error( __( 'Invalid action', 'visualizer' ) ) ) );
+		}
+
+		switch ( $type ) {
+			case 'print':
+				$data   = $this->_getDataAs( $chart_id, 'print' );
+				break;
+			case 'csv':
+				$data   = $this->_getDataAs( $chart_id, 'csv' );
+				break;
+			case 'xls':
+				$data   = $this->_getDataAs( $chart_id, 'xls' );
+				break;
+			default:
+				$data   = apply_filters( 'visualizer_action_data', $data, $chart_id, $type );
+				break;
+		}
+
+		return new WP_REST_Response( array( 'data' => $data ) );
 	}
 
 	/**
@@ -79,6 +149,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'vendor/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_enqueue_script( 'visualizer-clipboardjs' );
 	}
 
 	/**
@@ -157,11 +229,41 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'visualizer-render', 'visualizer', array(
 				'charts'        => $this->_charts,
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
+				'rest_url'      => rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ),
+				'i10n'          => array(
+					'copied'        => __( 'Copied!', 'visualizer' ),
+				),
 			)
 		);
 
+		$actions_div            = '';
+		if ( ! empty( $settings['actions'] ) ) {
+			$actions            = $this->get_actions();
+			$actions_div        = '<div class="visualizer-actions">';
+			foreach ( $settings['actions'] as $action_type ) {
+				$key            = $action_type;
+				$mime           = '';
+				if ( strpos( $action_type, ';' ) !== false ) {
+					$array      = explode( ';', $action_type );
+					$key        = $array[0];
+					$mime       = end( $array );
+				}
+				$label          = $actions[ $key ];
+				$actions_div    .= '<a href="#" class="visualizer-action visualizer-action-' . $key . '" data-visualizer-type="' . $key . '" data-visualizer-chart-id="' . $atts['id'] . '" data-visualizer-mime="' . $mime . '" title="' . $label . '" ';
+
+				if ( 'copy' === $key ) {
+					$copy           = $this->_getDataAs( $atts['id'], 'copy' );
+					$actions_div    .= ' data-clipboard-text="' . esc_attr( $copy['csv'] ) . '"';
+				}
+
+				$actions_div    .= apply_filters( 'visualizer_action_attributes', '', $key, $atts['id'] );
+				$actions_div    .= '>' . $label . '</a>';
+			}
+
+			$actions_div        .= '</div>';
+		}
 		// return placeholder div
-		return '<div id="' . $id . '"' . $class . '></div>';
+		return $actions_div . '<div id="' . $id . '"' . $class . '></div>';
 	}
 
 }

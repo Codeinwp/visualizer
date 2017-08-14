@@ -28,7 +28,8 @@
   },
   "require": {
     "codeinwp/themeisle-sdk": "master",
-    "xrstf/composer-php52": "^1.0.20"
+    "xrstf/composer-php52": "^1.0.20",
+    "PHPOffice/PHPExcel": "^1.8.1"
   },
   "autoload": {
     "files": [

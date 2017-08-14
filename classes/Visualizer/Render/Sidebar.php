@@ -142,6 +142,62 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	}
 
 	/**
+	 * Renders chart advanced settings group.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAdvancedSettings() {
+		self::_renderGroupStart( esc_html__( 'Advanced Settings', 'visualizer' ) );
+			self::_renderSectionStart();
+				self::_renderSectionDescription( esc_html__( 'Configure advanced functionality here.', 'visualizer' ) );
+			self::_renderSectionEnd();
+
+			$this->_renderActionSettings();
+		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders chart action buttons group.
+	 *
+	 * @access protected
+	 */
+	protected function _renderActionSettings() {
+		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), false );
+			self::_renderCheckboxItem(
+				esc_html__( 'Print', 'visualizer' ),
+				'actions[]',
+				isset( $this->actions ) && in_array( 'print', $this->actions ) ? true : false,
+				'print',
+				esc_html__( 'To enable printing the data.', 'visualizer' )
+			);
+			self::_renderCheckboxItem(
+				esc_html__( 'CSV', 'visualizer' ),
+				'actions[]',
+				isset( $this->actions ) && in_array( 'csv;application/csv', $this->actions ) ? true : false,
+				'csv;application/csv',
+				esc_html__( 'To enable downloading the data as a CSV.', 'visualizer' )
+			);
+
+			$disabled   = ! ( extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && version_compare( PHP_VERSION, '5.2.0', '>' ) );
+			self::_renderCheckboxItem(
+				esc_html__( 'Excel', 'visualizer' ),
+				'actions[]',
+				isset( $this->actions ) && in_array( 'xls;application/vnd.ms-excel', $this->actions ) ? true : false,
+				'xls;application/vnd.ms-excel',
+				$disabled ? '<span class="section-error">' . esc_html__( 'Enable the ZIP and XML extensions to use this setting.', 'visualizer' ) . '</span>' : esc_html__( 'To enable downloading the data as an Excel spreadsheet.', 'visualizer' ),
+				$disabled
+			);
+			self::_renderCheckboxItem(
+				esc_html__( 'Copy', 'visualizer' ),
+				'actions[]',
+				isset( $this->actions ) && in_array( 'copy', $this->actions ) ? true : false,
+				'copy',
+				esc_html__( 'To enable copying the data to the clipboard.', 'visualizer' )
+			);
+		self::_renderSectionEnd();
+	}
+
+	/**
 	 * Renders chart general settings group.
 	 *
 	 * @since 1.0.0
@@ -550,11 +606,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	/**
 	 * Render a checkbox item
 	 */
-	protected static function _renderCheckboxItem( $title, $name, $value, $default, $desc ) {
+	protected static function _renderCheckboxItem( $title, $name, $value, $default, $desc, $disabled = false ) {
 		echo '<div class="section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ($value == $default ? 'checked' : ''), '>';
+			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ($value == $default ? 'checked' : ''), ' ', ($disabled ? 'disabled=disabled' : ''), '>';
 			echo '<p class="section-description">', $desc, '</p>';
 		echo '</div>';
 	}
