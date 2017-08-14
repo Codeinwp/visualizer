@@ -43,6 +43,7 @@ class Visualizer_Render_Sidebar_Type_Pie extends Visualizer_Render_Sidebar {
 		$this->_renderResidueSettings();
 		$this->_renderSlicesSettings();
 		$this->_renderViewSettings();
+		$this->_renderAdvancedSettings();
 	}
 
 	/**

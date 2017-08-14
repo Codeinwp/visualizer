@@ -996,3 +996,7 @@ button#editor-chart-button {
 #sidebar::-webkit-scrollbar-thumb {
 	background: #999;
 }
+
+span.section-error {
+	color: #ff000;
+}

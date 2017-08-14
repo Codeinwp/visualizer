@@ -66,6 +66,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_BASEFILE', __FILE__ );
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
+	define( 'VISUALIZER_REST_VERSION', 1 );
 	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 		define( 'VISUALIZER_CSV_DELIMITER', ',' );
 	}

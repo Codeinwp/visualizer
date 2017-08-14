@@ -56,6 +56,7 @@ class Visualizer_Render_Sidebar_Type_Area extends Visualizer_Render_Sidebar_Line
 		$this->_renderLineSettings();
 		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
+		$this->_renderAdvancedSettings();
 	}
 
 	/**

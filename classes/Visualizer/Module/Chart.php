@@ -509,7 +509,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function exportData() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION, 'security' );
-		$chart_id = $success = false;
 		$capable  = current_user_can( 'edit_posts' );
 		if ( $capable ) {
 			$chart_id = isset( $_GET['chart'] ) ? filter_var(
@@ -520,72 +519,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				)
 			) : '';
 			if ( $chart_id ) {
-				$chart   = get_post( $chart_id );
-				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+				$data   = $this->_getDataAs( $chart_id, 'csv' );
+				if ( $data ) {
+					echo wp_send_json_success( $data );
+				}
 			}
 		}
-		if ( $success ) {
-			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
-			$filename = isset( $settings['title'] ) ? $settings['title'] : '';
-			if ( empty( $filename ) ) {
-				$filename = 'export.csv';
-			} else {
-				$filename .= '.csv';
-			}
-			$rows   = array();
-			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-			$data   = unserialize( $chart->post_content );
-			if ( ! empty( $series ) ) {
-				$row = array();
-				foreach ( $series as $array ) {
-					$row[] = $array['label'];
-				}
-				$rows[] = $row;
-				$row    = array();
-				foreach ( $series as $array ) {
-					$row[] = $array['type'];
-				}
-				$rows[] = $row;
-			}
-			if ( ! empty( $data ) ) {
-				foreach ( $data as $array ) {
-					// ignore strings
-					if ( ! is_array( $array ) ) {
-						continue;
-					}
-					// if this is an array of arrays...
-					if ( is_array( $array[0] ) ) {
-						foreach ( $array as $arr ) {
-							$rows[] = $arr;
-						}
-					} else {
-						// just an array
-						$rows[] = $array;
-					}
-				}
-			}
-			$fp = tmpfile();
-			// support for MS Excel
-			fprintf( $fp, $bom = ( chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) ) );
-			foreach ( $rows as $row ) {
-				fputcsv( $fp, $row );
-			}
-			rewind( $fp );
-			$csv = '';
-			while ( ( $array = fgetcsv( $fp ) ) !== false ) {
-				if ( strlen( $csv ) > 0 ) {
-					$csv .= PHP_EOL;
-				}
-				$csv .= implode( ',', $array );
-			}
-			fclose( $fp );
-			echo wp_send_json_success(
-				array(
-					'csv'  => $csv,
-					'name' => $filename,
-				)
-			);
-		}// End if().
+
 		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
 

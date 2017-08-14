@@ -58,6 +58,7 @@ class Visualizer_Render_Sidebar_Type_Scatter extends Visualizer_Render_Sidebar_L
 		$this->_renderLineSettings();
 		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
+		$this->_renderAdvancedSettings();
 	}
 
 }

@@ -43,6 +43,7 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 		$this->_renderYellowColorSettings();
 		$this->_renderRedColorSettings();
 		$this->_renderViewSettings();
+		$this->_renderAdvancedSettings();
 	}
 
 	/**
