@@ -89,11 +89,28 @@ function visualizer_launch() {
 	if ( is_readable( $vendor_file ) ) {
 		include_once( $vendor_file );
 	}
-	add_filter( 'themeisle_sdk_products', function ( $products ) {
-		$products[] = VISUALIZER_BASEFILE;
+	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
+	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
+}
 
-		return $products;
-	} );
+/**
+ * Registers with the SDK
+ *
+ * @since    1.0.0
+ */
+function visualizer_register_sdk( $products ) {
+	$products[] = VISUALIZER_BASEFILE;
+	return $products;
+}
+
+/**
+ * Registers with the parrot plugin
+ *
+ * @since    1.0.0
+ */
+function visualizer_register_parrot( $plugins ) {
+	$plugins[] = Visualizer_Plugin::NAME;
+	return $plugins;
 }
 
 // register autoloader function

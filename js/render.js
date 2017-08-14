@@ -35,7 +35,7 @@
 			render = new gv[render](container);
 		}
 
-		switch (v.charts[id].type) {
+		switch (chart.type) {
 			case 'pie':
 				if (settings.slices) {
 					for (i in settings.slices) {
@@ -109,7 +109,7 @@
 
 		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime')) {
 			axis = false;
-			switch (v.charts[id].type) {
+			switch (chart.type) {
 				case 'line':
 				case 'area':
 				case 'scatter':
@@ -193,7 +193,10 @@
 					formatter.format(table, i + 1);
 				}
 			}
-		}
+		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
+            formatter = new g.visualization.NumberFormat({pattern: settings.format});
+            formatter.format(table, 1);
+        }
 
         render.draw(table, settings);
 	};

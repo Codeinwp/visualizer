@@ -59,11 +59,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderSidebarContent() {
-		$upload_link = add_query_arg( array(
-			'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
-			'nonce'  => wp_create_nonce(),
-			'chart'  => $this->chart->ID,
-		), admin_url( 'admin-ajax.php' ) );
+		$upload_link = add_query_arg(
+			array(
+				'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
+				'nonce'  => wp_create_nonce(),
+				'chart'  => $this->chart->ID,
+			), admin_url( 'admin-ajax.php' )
+		);
 		?>
 		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
@@ -79,14 +81,14 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<div class="group-content">
 								<p class="group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
 								<p class="group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
-								<form id="vz-csv-file-form" action="<?php echo $upload_link ?>" method="post"
-								      target="thehole" enctype="multipart/form-data">
+								<form id="vz-csv-file-form" action="<?php echo $upload_link; ?>" method="post"
+									  target="thehole" enctype="multipart/form-data">
 									<input type="hidden" id="remote-data" name="remote_data">
 									<div class="">
 										<input type="file" id="csv-file" name="local_data">
 									</div>
 									<input type="button" class="button button-primary" id="vz-import-file"
-									       value="<?php _e( 'Import', 'visualizer' ); ?>">
+										   value="<?php _e( 'Import', 'visualizer' ); ?>">
 								</form>
 							</div>
 						</li>
@@ -100,16 +102,16 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<p class="group-description"><?php _e( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?> </p>
 										<p class="group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
 										<p class="group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
-										<form id="vz-one-time-import" action="<?php echo $upload_link ?>" method="post"
-										      target="thehole" enctype="multipart/form-data">
+										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
+											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 												<input type="url" id="remote-data" name="remote_data"
-												       placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
-												       class="visualizer-input">
+													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
+													   class="visualizer-input">
 
 											</div>
 											<input type="button" id="view-remote-file" class="button button-primary"
-											       value="<?php _e( 'Import', 'visualizer' ); ?>">
+												   value="<?php _e( 'Import', 'visualizer' ); ?>">
 										</form>
 									</div>
 								</li>
@@ -121,16 +123,16 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<p class="group-description"><?php _e( 'You can choose here to synchronize your chart data with a remote CSV file.', 'visualizer' ); ?> </p>
 										<p class="group-description"> <?php _e( 'You can also synchronize with your Google Spreadsheet file, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<p class="group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwritting the current data with the one from the URL.', 'visualizer' ); ?></p>
-										<form id="vz-schedule-import" action="<?php echo $upload_link ?>" method="post"
-										      target="thehole" enctype="multipart/form-data">
+										<form id="vz-schedule-import" action="<?php echo $upload_link; ?>" method="post"
+											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 												<input type="url" id="vz-schedule-url" name="remote_data"
-												       value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ); ?>"
-												       placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
-												       class="visualizer-input visualizer-remote-url">
+													   value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ); ?>"
+													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
+													   class="visualizer-input visualizer-remote-url">
 												<p class="group-description"><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>
 												<select name="vz-import-time" id="vz-import-time"
-												        class="visualizer-select">
+														class="visualizer-select">
 													<?php
 													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
 													$schedules = array(
@@ -149,7 +151,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 												</select>
 											</div>
 											<input type="button" id="vz-save-schedule" class="button button-primary"
-											       value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
+												   value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
 
 											<?php echo apply_filters( 'visualizer_pro_upsell', '', 'schedule-chart' ); ?>
 										</form>
@@ -159,7 +161,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</li>
 						<li class="group <?php echo apply_filters( 'visualizer_pro_upsell_class', '' ); ?> ">
 							<h2 class="group-title sub-group"
-							    data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
+								data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<div class="group-content edit-data-content">
 								<div>
@@ -167,10 +169,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<form>
 										<select name="vz-import-from-chart" id="chart-id" class="visualizer-select">
 											<?php
-											$fetch_link        = add_query_arg( array(
-												'action' => ( VISUALIZER_PRO ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
-												'nonce'  => wp_create_nonce(),
-											), admin_url( 'admin-ajax.php' ) );
+											$fetch_link        = add_query_arg(
+												array(
+													'action' => ( VISUALIZER_PRO ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
+													'nonce'  => wp_create_nonce(),
+												), admin_url( 'admin-ajax.php' )
+											);
 											$query_args_charts = array(
 												'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
 												'posts_per_page' => 300,
@@ -190,8 +194,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										</select>
 									</form>
 									<input type="button" id="existing-chart" class="button button-primary"
-									       value="<?php _e( 'Import Chart', 'visualizer' ); ?>"
-									       data-viz-link="<?php echo $fetch_link; ?>">
+										   value="<?php _e( 'Import Chart', 'visualizer' ); ?>"
+										   data-viz-link="<?php echo $fetch_link; ?>">
 									<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
 								</div>
 							</div>
@@ -204,9 +208,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<div>
 									<p class="group-description"><?php _e( 'You can import here data from WordPress', 'visualizer' ); ?></p>
 									<input type="button" id="filter-chart-button" class="button button-primary "
-									       value="<?php _e( 'Create Filters', 'visualizer' ); ?>" data-current="chart"
-									       data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-									       data-t-chart="<?php _e( 'Create Filters', 'visualizer' ); ?>">
+										   value="<?php _e( 'Create Filters', 'visualizer' ); ?>" data-current="chart"
+										   data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+										   data-t-chart="<?php _e( 'Create Filters', 'visualizer' ); ?>">
 									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'schedule-chart' ); ?>
 								</div>
 							</div>
@@ -214,9 +218,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 						<li class="group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="group-title sub-group visualizer-editor-tab"
-							    data-current="chart"><?php _e( 'Add data manually', 'visualizer' ); ?><span
+								data-current="chart"><?php _e( 'Add data manually', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
-							<form id="editor-form" action="<?php echo $upload_link ?>" method="post" target="thehole">
+							<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
 								<input type="hidden" id="chart-data" name="chart_data">
 							</form>
 
@@ -224,9 +228,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<div>
 									<p class="group-description"><?php _e( 'You can manually edit the chart data using the spreadsheet like editor.', 'visualizer' ); ?></p>
 									<input type="button" id="editor-chart-button" class="button button-primary "
-									       value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
-									       data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-									       data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>">
+										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
+										   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+										   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>">
 
 									<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
 								</div>
@@ -243,7 +247,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				</div>
 				<ul class="group-content">
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
-					      method="post">
+						  method="post">
 						<?php echo $this->sidebar; ?>
 					</form>
 				</ul>
@@ -252,7 +256,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				<a href="https://wordpress.org/support/plugin/visualizer/reviews/?filter=5#new-post"
 				   target="_blank"><?php _e( 'Rate our plugin', 'visualizer' ); ?></a>
 			</li>
-			<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; 2014</li>
+			<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; <?php echo date( 'Y', current_time( 'timestamp' ) ); ?></li>
 		</ul>
 		<?php
 		// changed by Ash/Upwork

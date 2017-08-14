@@ -95,13 +95,15 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @param array $atts The array of shortcode attributes.
 	 */
 	public function renderChart( $atts ) {
-		$atts = shortcode_atts( array(
-			'id'     => false, // chart id
+		$atts = shortcode_atts(
+			array(
+				'id'     => false, // chart id
 			'class'  => false, // chart class
 			'series' => false, // series filter hook
 			'data'   => false, // data filter hook
 			'settings'   => false, // data filter hook
-		), $atts );
+			), $atts
+		);
 
 		// if empty id or chart does not exists, then return empty string
 		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
@@ -151,10 +153,12 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		// enqueue visualizer render and update render localizations
 		wp_enqueue_script( 'visualizer-render' );
-		wp_localize_script( 'visualizer-render', 'visualizer', array(
-			'charts'        => $this->_charts,
-			'map_api_key'   => get_option( 'visualizer-map-api-key' ),
-		) );
+		wp_localize_script(
+			'visualizer-render', 'visualizer', array(
+				'charts'        => $this->_charts,
+				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
+			)
+		);
 
 		// return placeholder div
 		return '<div id="' . $id . '"' . $class . '></div>';
