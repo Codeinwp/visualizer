@@ -232,11 +232,12 @@
     });
 
     function initActionsButtons() {
-        var clipboard = new Clipboard('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
-        clipboard.on('success', function(e) {
-            window.alert(v.i10n['copied']);
-        });
-
+        if($('a.visualizer-action[data-visualizer-type=copy]').length > 0) {
+            var clipboard = new Clipboard('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
+            clipboard.on('success', function(e) {
+                window.alert(v.i10n['copied']);
+            });
+        }
         $('a.visualizer-action[data-visualizer-type!=copy]').on('click', function(e) {
             var type    = $(this).attr( 'data-visualizer-type' );
             var chart   = $(this).attr( 'data-visualizer-chart-id' );

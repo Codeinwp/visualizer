@@ -252,7 +252,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				$actions_div    .= '<a href="#" class="visualizer-action visualizer-action-' . $key . '" data-visualizer-type="' . $key . '" data-visualizer-chart-id="' . $atts['id'] . '" data-visualizer-mime="' . $mime . '" title="' . $label . '" ';
 
 				if ( 'copy' === $key ) {
-					$copy           = $this->_getDataAs( $atts['id'], 'copy' );
+					$copy           = $this->_getDataAs( $atts['id'], 'csv' );
 					$actions_div    .= ' data-clipboard-text="' . esc_attr( $copy['csv'] ) . '"';
 				}
 
