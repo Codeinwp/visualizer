@@ -80,14 +80,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access private
 	 */
 	public function getChartCountsByTypeAndMeta( $meta_keys = array() ) {
-		$charts					= array();
-		$charts['chart_types']	= array();
+		$charts                 = array();
+		$charts['chart_types']  = array();
 		// the initial query arguments to fetch charts
 		$query_args = array(
 			'post_type'         => Visualizer_Plugin::CPT_VISUALIZER,
 			'posts_per_page'    => 300,
 			'fields'            => 'ids',
-			'no_rows_found'		=> false,
+			'no_rows_found'     => false,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 
@@ -100,7 +100,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$charts['chart_types'][ $type ]    = isset( $charts['chart_types'][ $type ] ) ? $charts['chart_types'][ $type ] + 1 : 1;
 			if ( ! empty( $meta_keys ) ) {
 				foreach ( $meta_keys as $name => $key ) {
-					$data	= get_post_meta( $chart_id, $key, true );
+					$data   = get_post_meta( $chart_id, $key, true );
 					if ( ! empty( $data ) ) {
 						$charts[ $name ] = isset( $charts[ $name ] ) ? $charts[ $name ] + 1 : 1;
 					} else {
