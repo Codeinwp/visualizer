@@ -139,6 +139,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 2.2.0 - 2017-08-16  = 
+
+* Added custom number format for pie chart.
+* Added frontend actions buttons ( Print, Export to CSV, Export to Excel, Copy)
+
+
 = 2.1.9 - 2017-07-10  = 
 
 * Fixed display error with hex color.

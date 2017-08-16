@@ -1,4 +1,9 @@
 
+ ### v2.2.0 - 2017-08-16 
+ **Changes:** 
+ * Added custom number format for pie chart.
+* Added frontend actions buttons ( Print, Export to CSV, Export to Excel, Copy)
+ 
  ### v2.1.9 - 2017-07-10 
  **Changes:** 
  * Fixed display error with hex color.
