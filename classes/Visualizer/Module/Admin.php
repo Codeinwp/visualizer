@@ -59,6 +59,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
+		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 	}
 
 	/**
@@ -69,31 +70,44 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access public
 	 */
 	public function getLoggerData( $data ) {
-		return array(
-			'chart_types'       => $this->getChartTypesAndCounts(),
-			'wordpress_filters' => '',
-		);
+		return $this->getChartCountsByTypeAndMeta();
 	}
 
 	/**
 	 * Fetches the types of charts created and their counts.
 	 *
+	 * @param array $meta_keys An array of name vs. meta keys - to return how many charts have these keys.
 	 * @access private
 	 */
-	private function getChartTypesAndCounts() {
-		$charts     = array();
+	public function getChartCountsByTypeAndMeta( $meta_keys = array() ) {
+		$charts					= array();
+		$charts['chart_types']	= array();
 		// the initial query arguments to fetch charts
 		$query_args = array(
 			'post_type'         => Visualizer_Plugin::CPT_VISUALIZER,
 			'posts_per_page'    => 300,
 			'fields'            => 'ids',
+			'no_rows_found'		=> false,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+
 		);
 
 		$query  = new WP_Query( $query_args );
 		while ( $query->have_posts() ) {
 			$chart_id   = $query->next_post();
 			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-			$charts[ $type ]    = isset( $charts[ $type ] ) ? $charts[ $type ] + 1 : 1;
+			$charts['chart_types'][ $type ]    = isset( $charts['chart_types'][ $type ] ) ? $charts['chart_types'][ $type ] + 1 : 1;
+			if ( ! empty( $meta_keys ) ) {
+				foreach ( $meta_keys as $name => $key ) {
+					$data	= get_post_meta( $chart_id, $key, true );
+					if ( ! empty( $data ) ) {
+						$charts[ $name ] = isset( $charts[ $name ] ) ? $charts[ $name ] + 1 : 1;
+					} else {
+						$charts[ $name ] = 0;
+					}
+				}
+			}
 		}
 		return $charts;
 	}
