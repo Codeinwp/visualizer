@@ -4,7 +4,7 @@
 	Plugin Name: Visualizer: Charts and Graphs Lite
 	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
 	Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-	Version: 2.1.9
+	Version: 2.2.0
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
@@ -66,6 +66,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_BASEFILE', __FILE__ );
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
+	define( 'VISUALIZER_REST_VERSION', 1 );
 	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 		define( 'VISUALIZER_CSV_DELIMITER', ',' );
 	}
@@ -89,11 +90,28 @@ function visualizer_launch() {
 	if ( is_readable( $vendor_file ) ) {
 		include_once( $vendor_file );
 	}
-	add_filter( 'themeisle_sdk_products', function ( $products ) {
-		$products[] = VISUALIZER_BASEFILE;
+	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
+	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
+}
 
-		return $products;
-	} );
+/**
+ * Registers with the SDK
+ *
+ * @since    1.0.0
+ */
+function visualizer_register_sdk( $products ) {
+	$products[] = VISUALIZER_BASEFILE;
+	return $products;
+}
+
+/**
+ * Registers with the parrot plugin
+ *
+ * @since    1.0.0
+ */
+function visualizer_register_parrot( $plugins ) {
+	$plugins[] = Visualizer_Plugin::NAME;
+	return $plugins;
 }
 
 // register autoloader function

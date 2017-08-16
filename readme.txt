@@ -56,6 +56,7 @@ The plugins works perfectly with the all <a href="http://justfreethemes.com" rel
 * [Create combo chart](https://demo.themeisle.com/visualizer/combo-chart/)
 * [Create scatter chart](https://demo.themeisle.com/visualizer/scatter-chart/)
 * [Create timeline chart](https://demo.themeisle.com/visualizer/timeline-chart/)
+* [Chart using frontend action links](https://demo.themeisle.com/visualizer/frontend-action-links/)
 
 
 == Installation ==
@@ -69,45 +70,65 @@ The plugins works perfectly with the all <a href="http://justfreethemes.com" rel
 
 Pay attention that to turn your shortcodes into graphs, your theme has to have `<?php wp_footer(); ?>` call at the bottom of **footer.php** file.
 
+= Is there any documentation available for this plugin? =
+
+[http://docs.themeisle.com/article/428-visualizer-charts-and-graphs-documentation](http://docs.themeisle.com/article/428-visualizer-charts-and-graphs-documentation)
+
+= How to format chart series values? =
+
+[http://docs.themeisle.com/article/672-how-to-format-series-values](http://docs.themeisle.com/article/672-how-to-format-series-values)
+
+= How to create charts from your WordPress posts? =
+
+[http://docs.themeisle.com/article/673-how-to-create-charts-from-your-wordpress-posts](http://docs.themeisle.com/article/673-how-to-create-charts-from-your-wordpress-posts)
+
+= How to automatically sync charts with online files? =
+
+[http://docs.themeisle.com/article/674-how-to-automatically-sync-charts-with-online-files](http://docs.themeisle.com/article/674-how-to-automatically-sync-charts-with-online-files)
+
 = How can I create a chart? =
 
-http://docs.themeisle.com/article/597-create-chart
+[http://docs.themeisle.com/article/597-create-chart](http://docs.themeisle.com/article/597-create-chart)
 
 = How can I edit a chart? =
 
-http://docs.themeisle.com/article/602-how-can-i-edit-a-chart
+[http://docs.themeisle.com/article/602-how-can-i-edit-a-chart](http://docs.themeisle.com/article/602-how-can-i-edit-a-chart)
 
 = How can I delete a chart? =
 
-http://docs.themeisle.com/article/600-delete-chart
+[http://docs.themeisle.com/article/600-delete-chart](http://docs.themeisle.com/article/600-delete-chart)
 
 = How can I clone a chart? =
 
-http://docs.themeisle.com/article/598-clone-chart
+[http://docs.themeisle.com/article/598-clone-chart](http://docs.themeisle.com/article/598-clone-chart)
 
 = How can I highlight a single bar? =
 
-http://docs.themeisle.com/article/603-how-can-i-highlight-a-single-bar
+[http://docs.themeisle.com/article/603-how-can-i-highlight-a-single-bar](http://docs.themeisle.com/article/603-how-can-i-highlight-a-single-bar)
 
 = How can I populate chart series and data dynamically? =
 
-http://docs.themeisle.com/article/605-how-can-i-populate-chart-series-and-data-dynamically
+[http://docs.themeisle.com/article/605-how-can-i-populate-chart-series-and-data-dynamically](http://docs.themeisle.com/article/605-how-can-i-populate-chart-series-and-data-dynamically)
 
 = How can I populate data from Google Spreadsheet? =
 
-http://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet
+[http://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet](http://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet)
 
 = How can i import content from another chart? =
 
-http://docs.themeisle.com/article/609-how-can-i-import-content-from-another-chart
+[http://docs.themeisle.com/article/609-how-can-i-import-content-from-another-chart](http://docs.themeisle.com/article/609-how-can-i-import-content-from-another-chart)
 
 = How to export a chart? =
 
-http://docs.themeisle.com/article/608-how-to-export-a-chart
+[http://docs.themeisle.com/article/608-how-to-export-a-chart](http://docs.themeisle.com/article/608-how-to-export-a-chart)
 
 = How can i edit the data manually? =
 
-http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually
+[http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually](http://docs.themeisle.com/article/610-how-can-i-edit-the-data-manually)
+
+= How to enable frontend action buttons? =
+
+[http://docs.themeisle.com/article/675-how-to-enable-frontend-action-buttons](http://docs.themeisle.com/article/675-how-to-enable-frontend-action-buttons)
 
 == Screenshots ==
 

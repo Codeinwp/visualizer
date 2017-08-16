@@ -47,12 +47,14 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 		}
 		ob_end_clean();
 
-		$query          = new WP_Query(array(
-			'post_type'     => Visualizer_Plugin::CPT_VISUALIZER,
-			'post_status'   => 'auto-draft',
-			'numberposts'   => 1,
-			'fields'        => 'ids',
-		));
+		$query          = new WP_Query(
+			array(
+				'post_type'     => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'   => 'auto-draft',
+				'numberposts'   => 1,
+				'fields'        => 'ids',
+			)
+		);
 		$this->chart    = $query->posts[0];
 	}
 

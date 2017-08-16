@@ -86,10 +86,14 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				$array = array( 'enabled' => true, 'name' => $array );
 			}
 			$label = $array['name'];
-			$link  = '<a class=" " href="' . esc_url( add_query_arg( array(
-					'type'  => $type,
-					'vpage' => false,
-			) ) ) . '">';
+			$link  = '<a class=" " href="' . esc_url(
+				add_query_arg(
+					array(
+						'type'  => $type,
+						'vpage' => false,
+					)
+				)
+			) . '">';
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
@@ -165,22 +169,28 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$title  = $settings[0]['title'];
 		}
 		$ajax_url    = admin_url( 'admin-ajax.php' );
-		$delete_url  = add_query_arg( array(
-			'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
-			'nonce'  => wp_create_nonce(),
-			'chart'  => $chart_id,
-		), $ajax_url );
-		$clone_url   = add_query_arg( array(
-			'action' => Visualizer_Plugin::ACTION_CLONE_CHART,
-			'nonce'  => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
-			'chart'  => $chart_id,
-			'type'   => $this->type,
-		), $ajax_url );
-		$export_link = add_query_arg( array(
-			'action'   => Visualizer_Plugin::ACTION_EXPORT_DATA,
-			'chart'    => $chart_id,
-			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
-		), admin_url( 'admin-ajax.php' ) );
+		$delete_url  = add_query_arg(
+			array(
+				'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
+				'nonce'  => wp_create_nonce(),
+				'chart'  => $chart_id,
+			), $ajax_url
+		);
+		$clone_url   = add_query_arg(
+			array(
+				'action' => Visualizer_Plugin::ACTION_CLONE_CHART,
+				'nonce'  => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
+				'chart'  => $chart_id,
+				'type'   => $this->type,
+			), $ajax_url
+		);
+		$export_link = add_query_arg(
+			array(
+				'action'   => Visualizer_Plugin::ACTION_EXPORT_DATA,
+				'chart'    => $chart_id,
+				'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
+			), admin_url( 'admin-ajax.php' )
+		);
 		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';

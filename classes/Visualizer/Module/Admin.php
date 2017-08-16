@@ -246,16 +246,20 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
 			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
 			wp_enqueue_media();
-			wp_enqueue_script( 'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array(
-				'jquery',
-				'media-views',
-			), Visualizer_Plugin::VERSION, true );
+			wp_enqueue_script(
+				'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array(
+					'jquery',
+					'media-views',
+				), Visualizer_Plugin::VERSION, true
+			);
 			wp_enqueue_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
-			wp_enqueue_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array(
-				'google-jsapi-old',
-				'visualizer-library',
-			), Visualizer_Plugin::VERSION, true );
+			wp_enqueue_script(
+				'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array(
+					'google-jsapi-old',
+					'visualizer-library',
+				), Visualizer_Plugin::VERSION, true
+			);
 		}
 	}
 
@@ -298,12 +302,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderLibraryPage() {
 		// get current page
-		$page = filter_input( INPUT_GET, 'vpage', FILTER_VALIDATE_INT, array(
-			'options' => array(
-				'min_range' => 1,
-				'default'   => 1,
-			),
-		) );
+		$page = filter_input(
+			INPUT_GET, 'vpage', FILTER_VALIDATE_INT, array(
+				'options' => array(
+					'min_range' => 1,
+					'default'   => 1,
+				),
+			)
+		);
 		// the initial query arguments to fetch charts
 		$query_args = array(
 			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
@@ -358,32 +364,40 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
-		wp_localize_script( 'visualizer-library', 'visualizer', array(
-			'charts' => $charts,
-			'urls'   => array(
-				'base'   => add_query_arg( 'vpage', false ),
-				'create' => add_query_arg( array(
-					'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
-					'library' => 'yes',
-				), $ajaxurl ),
-				'edit'   => add_query_arg( array(
-					'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
-					'library' => 'yes',
-				), $ajaxurl ),
-			),
-		) );
+		wp_localize_script(
+			'visualizer-library', 'visualizer', array(
+				'charts' => $charts,
+				'urls'   => array(
+					'base'   => add_query_arg( 'vpage', false ),
+					'create' => add_query_arg(
+						array(
+							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
+							'library' => 'yes',
+						), $ajaxurl
+					),
+					'edit'   => add_query_arg(
+						array(
+							'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
+							'library' => 'yes',
+						), $ajaxurl
+					),
+				),
+			)
+		);
 		// render library page
 		$render             = new Visualizer_Render_Library();
 		$render->charts     = $charts;
 		$render->type       = $filter;
 		$render->types      = self::_getChartTypesLocalized();
-		$render->pagination = paginate_links( array(
-			'base'    => add_query_arg( 'vpage', '%#%' ),
-			'format'  => '',
-			'current' => $page,
-			'total'   => $query->max_num_pages,
-			'type'    => 'array',
-		) );
+		$render->pagination = paginate_links(
+			array(
+				'base'    => add_query_arg( 'vpage', '%#%' ),
+				'format'  => '',
+				'current' => $page,
+				'total'   => $query->max_num_pages,
+				'type'    => 'array',
+			)
+		);
 		$render->render();
 	}
 

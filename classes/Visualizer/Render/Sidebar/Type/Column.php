@@ -70,6 +70,7 @@ class Visualizer_Render_Sidebar_Type_Column extends Visualizer_Render_Sidebar_Co
 		$this->_renderColumnarSettings();
 		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
+		$this->_renderAdvancedSettings();
 	}
 
 }

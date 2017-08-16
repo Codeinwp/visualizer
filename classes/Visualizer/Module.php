@@ -143,4 +143,177 @@ class Visualizer_Module {
 		return $this;
 	}
 
+	/**
+	 * Extracts the data for a chart and prepares it for the given type.
+	 *
+	 * @access protected
+	 * @param int    $chart_id The chart id.
+	 * @param string $type The exported type.
+	 */
+	protected function _getDataAs( $chart_id, $type ) {
+		$final       = null;
+		$success    = false;
+		if ( $chart_id ) {
+			$chart   = get_post( $chart_id );
+			$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+		}
+		if ( $success ) {
+			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+			$rows   = array();
+			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+			$data   = unserialize( $chart->post_content );
+			if ( ! empty( $series ) ) {
+				$row = array();
+				foreach ( $series as $array ) {
+					$row[] = $array['label'];
+				}
+				$rows[] = $row;
+				$row    = array();
+				foreach ( $series as $array ) {
+					$row[] = $array['type'];
+				}
+				$rows[] = $row;
+			}
+			if ( ! empty( $data ) ) {
+				foreach ( $data as $array ) {
+					// ignore strings
+					if ( ! is_array( $array ) ) {
+						continue;
+					}
+					// if this is an array of arrays...
+					if ( is_array( $array[0] ) ) {
+						foreach ( $array as $arr ) {
+							$rows[] = $arr;
+						}
+					} else {
+						// just an array
+						$rows[] = $array;
+					}
+				}
+			}
+
+			$filename   = isset( $settings['title'] ) && ! empty( $settings['title'] ) ? $settings['title'] : 'visualizer#' . $chart_id;
+
+			switch ( $type ) {
+				case 'csv':
+					$final   = $this->_getCSV( $rows, $filename );
+					break;
+				case 'xls':
+					$final   = $this->_getExcel( $rows, $filename );
+					break;
+				case 'print':
+					$final   = $this->_getHTML( $rows );
+					break;
+			}
+		}
+		return $final;
+	}
+
+	/**
+	 * Prepares a CSV.
+	 *
+	 * @access private
+	 * @param array  $rows The array of data.
+	 * @param string $filename The name of the file to use.
+	 */
+	private function _getCSV( $rows, $filename ) {
+		$filename .= '.csv';
+
+		$fp = tmpfile();
+		// support for MS Excel
+		fprintf( $fp, $bom = ( chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) ) );
+		foreach ( $rows as $row ) {
+			fputcsv( $fp, $row );
+		}
+		rewind( $fp );
+		$csv = '';
+		while ( ( $array = fgetcsv( $fp ) ) !== false ) {
+			if ( strlen( $csv ) > 0 ) {
+				$csv .= PHP_EOL;
+			}
+			$csv .= implode( ',', $array );
+		}
+		fclose( $fp );
+
+		return array(
+			'csv'  => $csv,
+			'name' => $filename,
+		);
+	}
+
+	/**
+	 * Prepares an Excel file.
+	 *
+	 * @access private
+	 * @param array  $rows The array of data.
+	 * @param string $filename The name of the file to use.
+	 */
+	private function _getExcel( $rows, $filename ) {
+		$chart      = $filename;
+		$filename   .= '.xlsx';
+
+		$doc        = new PHPExcel();
+		$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
+		$doc->getActiveSheet()->setTitle( $chart );
+		$doc        = apply_filters( 'visualizer_excel_doc', $doc );
+		$writer = PHPExcel_IOFactory::createWriter( $doc, 'Excel2007' );
+		ob_start();
+		$writer->save( 'php://output' );
+		$xlsData = ob_get_contents();
+		ob_end_clean();
+		return array(
+			'csv'  => 'data:application/vnd.ms-excel;base64,' . base64_encode( $xlsData ),
+			'name' => $filename,
+		);
+	}
+
+	/**
+	 * Prepares an HTML table.
+	 *
+	 * @access private
+	 * @param array $rows The array of data.
+	 */
+	private function _getHTML( $rows ) {
+		$css        = '
+					table.visualizer-print {
+						border-collapse: collapse;
+					}
+					table.visualizer-print, table.visualizer-print th, table.visualizer-print td {
+						border: 1px solid #000;
+					}
+		';
+		$html       = '';
+		$html       .= '
+		<html>
+			<head>
+				<style>
+					' . apply_filters( 'visualizer_print_css', $css ) . '
+				</style>
+			</head>
+			<body>';
+
+		$table      = '<table class="visualizer-print">';
+		$index      = 0;
+		foreach ( $rows as $row ) {
+			$table  .= '<tr>';
+			foreach ( $row as $col ) {
+				if ( $index === 0 ) {
+					$table  .= '<th>' . $col . '</th>';
+				} else {
+					$table  .= '<td>' . $col . '</td>';
+				}
+			}
+			$table  .= '</tr>';
+			$index++;
+		}
+		$table      .= '</table>';
+
+		$html       .= apply_filters( 'visualizer_print_table', $table ) . '
+			</body>
+		</html>';
+		return array(
+			'csv'  => $html,
+		);
+	}
+
 }

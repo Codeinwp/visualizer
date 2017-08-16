@@ -55,10 +55,12 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * @access public
 	 */
 	public function setupCustomPostTypes() {
-		register_post_type( Visualizer_Plugin::CPT_VISUALIZER, array(
-			'label'  => 'Visualizer Charts',
-			'public' => false,
-		) );
+		register_post_type(
+			Visualizer_Plugin::CPT_VISUALIZER, array(
+				'label'  => 'Visualizer Charts',
+				'public' => false,
+			)
+		);
 	}
 
 	/**
