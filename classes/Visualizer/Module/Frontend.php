@@ -257,7 +257,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				}
 
 				$actions_div    .= apply_filters( 'visualizer_action_attributes', '', $key, $atts['id'] );
-				$actions_div    .= '>' . $label . '</a>';
+				$actions_div    .= '>' . $label . '</a> &nbsp;';
 			}
 
 			$actions_div        .= '</div>';

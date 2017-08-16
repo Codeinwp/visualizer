@@ -147,9 +147,9 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderAdvancedSettings() {
-		self::_renderGroupStart( esc_html__( 'Advanced Settings', 'visualizer' ) );
+		self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure advanced functionality here.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'Configure frontend actions here.', 'visualizer' ) );
 			self::_renderSectionEnd();
 
 			$this->_renderActionSettings();
