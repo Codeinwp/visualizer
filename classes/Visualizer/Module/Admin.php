@@ -58,9 +58,45 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
-		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
+		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 	}
 
+	/**
+	 * Fetches the SDK logger data.
+	 *
+	 * @param array $data The default data that needs to be sent.
+	 *
+	 * @access public
+	 */
+	public function getLoggerData( $data ) {
+		return array(
+			'chart_types'       => $this->getChartTypesAndCounts(),
+			'wordpress_filters' => '',
+		);
+	}
+
+	/**
+	 * Fetches the types of charts created and their counts.
+	 *
+	 * @access private
+	 */
+	private function getChartTypesAndCounts() {
+		$charts     = array();
+		// the initial query arguments to fetch charts
+		$query_args = array(
+			'post_type'         => Visualizer_Plugin::CPT_VISUALIZER,
+			'posts_per_page'    => 300,
+			'fields'            => 'ids',
+		);
+
+		$query  = new WP_Query( $query_args );
+		while ( $query->have_posts() ) {
+			$chart_id   = $query->next_post();
+			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+			$charts[ $type ]    = isset( $charts[ $type ] ) ? $charts[ $type ] + 1 : 1;
+		}
+		return $charts;
+	}
 
 	/**
 	 * Enqueues media scripts and styles.
