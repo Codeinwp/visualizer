@@ -483,12 +483,20 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $value The actual value of the select item.
 	 * @param string $desc The description of the select item.
 	 * @param string $placeholder The placeholder for the input.
+	 * @param string $type The type for the input (out of number, email, tel etc., default is text).
+	 * @param array  $custom_attributes The custom attributes.
 	 */
-	protected static function _renderTextItem( $title, $name, $value, $desc, $placeholder = '' ) {
+	protected static function _renderTextItem( $title, $name, $value, $desc, $placeholder = '', $type = 'text', $custom_attributes = array() ) {
+		$attributes     = '';
+		if ( $custom_attributes ) {
+			foreach ( $custom_attributes as $k => $v ) {
+				$attributes .= ' ' . $k . '="' . esc_attr( $v ) . '"';
+			}
+		}
 		echo '<div class="section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<input type="text" class="control-text" name="', $name, '" value="', esc_attr( $value ), '" placeholder="', $placeholder, '">';
+			echo '<input type="', $type, '" class="control-text" ', $attributes, ' name="', $name, '" value="', esc_attr( $value ), '" placeholder="', $placeholder, '">';
 			echo '<p class="section-description">', $desc, '</p>';
 		echo '</div>';
 	}
