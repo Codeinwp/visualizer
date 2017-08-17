@@ -18,3 +18,5 @@ artifact
 composer.json
 composer.lock
 key.enc
+vendor/phpoffice/phpexcel/Examples
+vendor/phpoffice/phpexcel/unitTests
