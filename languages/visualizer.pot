@@ -2,7 +2,7 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Charts and Graphs Lite 2.1.9\n"
+"Project-Id-Version: Visualizer: Charts and Graphs Lite 2.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
 "POT-Creation-Date: 2017-08-21 06:05:36+00:00\n"
 "MIME-Version: 1.0\n"
@@ -374,8 +374,10 @@ msgstr ""
 msgid "View Editor"
 msgstr ""
 
+
 #: classes/Visualizer/Render/Page/Data.php:244
 #: classes/Visualizer/Render/Sidebar.php:150
+
 msgid "Advanced Settings"
 msgstr ""
 
@@ -1405,8 +1407,12 @@ msgstr ""
 msgid "Aligned to the end of the allocated area"
 msgstr ""
 
+#: classes/Visualizer/Render/Sidebar.php:150
+msgid "Frontend Actions"
+msgstr ""
+
 #: classes/Visualizer/Render/Sidebar.php:152
-msgid "Configure advanced functionality here."
+msgid "Configure frontend actions here."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar.php:165
