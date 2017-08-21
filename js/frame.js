@@ -11,6 +11,7 @@
 
         $('#vz-chart-settings h2').click(function () {
             $("#vz-chart-source").hide();
+            $("#vz-chart-permissions").removeClass('open').addClass('bottom-fixed')
             $(this).parent().removeClass('bottom-fixed').addClass('open');
 
             return false;

@@ -240,7 +240,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					</ul>
 					</li>
 				</ul>
-			<li class="group group-category bottom-fixed  " id="vz-chart-settings">
+			<li class="group group-category bottom-fixed sidebar-footer-link" id="vz-chart-settings">
 				<h2><?php _e( 'Advanced Settings', 'visualizer' ); ?></h2>
 				<div class="group-header">
 					<button class="customize-section-back" tabindex="0"></button>
@@ -253,6 +253,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					</form>
 				</ul>
 			</li>
+			<?php echo apply_filters( 'visualizer_pro_sidebar_footer_links', '', $this->chart->ID ); ?>
 			<li class=" group bottom-fixed" id="vz-chart-review">
 				<a href="https://wordpress.org/support/plugin/visualizer/reviews/?filter=5#new-post"
 				   target="_blank"><?php _e( 'Rate our plugin', 'visualizer' ); ?></a>

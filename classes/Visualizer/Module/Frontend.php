@@ -77,7 +77,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/action/(?P<chart>\d+)/(?P<type>.+)/',
 			array(
-				'methods'  => 'GET',
+				'methods'  => array( 'GET', 'POST' ),
 				'callback' => array( $this, 'perform_action' ),
 			)
 		);
@@ -130,7 +130,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				$data   = $this->_getDataAs( $chart_id, 'xls' );
 				break;
 			default:
-				$data   = apply_filters( 'visualizer_action_data', $data, $chart_id, $type );
+				$data   = apply_filters( 'visualizer_action_data', $data, $chart_id, $type, $params, $this );
 				break;
 		}
 
@@ -151,6 +151,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_enqueue_script( 'visualizer-clipboardjs' );
+		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
+		do_action( 'visualizer_pro_frontend_load_resources' );
 	}
 
 	/**
@@ -179,6 +181,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		// if empty id or chart does not exists, then return empty string
 		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+			return '';
+		}
+
+		if ( ! apply_filters( 'visualizer_pro_show_chart', true, $atts['id'] ) ) {
 			return '';
 		}
 
@@ -239,12 +245,14 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				),
 			)
 		);
+		wp_enqueue_style( 'visualizer-front' );
 
 		$actions_div            = '';
-		if ( ! empty( $settings['actions'] ) ) {
+		$actions_visible        = apply_filters( 'visualizer_pro_add_actions', isset( $settings['actions'] ) ? $settings['actions'] : array(), $atts['id'] );
+		if ( ! empty( $actions_visible ) ) {
 			$actions            = $this->get_actions();
 			$actions_div        = '<div class="visualizer-actions">';
-			foreach ( $settings['actions'] as $action_type ) {
+			foreach ( $actions_visible as $action_type ) {
 				$key            = $action_type;
 				$mime           = '';
 				if ( strpos( $action_type, ';' ) !== false ) {

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.1.9\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-08-16 18:15:11+00:00\n"
+"POT-Creation-Date: 2017-08-21 06:05:36+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -101,28 +101,28 @@ msgstr ""
 msgid "Pro Addon"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:315
-#: classes/Visualizer/Module/Chart.php:556
+#: classes/Visualizer/Module/Chart.php:320
+#: classes/Visualizer/Module/Chart.php:561
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:329
+#: classes/Visualizer/Module/Chart.php:334
 msgid "Save Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:330
+#: classes/Visualizer/Module/Chart.php:335
 msgid "Create Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:332
+#: classes/Visualizer/Module/Chart.php:337
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:435
+#: classes/Visualizer/Module/Chart.php:440
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:447
+#: classes/Visualizer/Module/Chart.php:452
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
@@ -154,7 +154,7 @@ msgstr ""
 msgid "Invalid action"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:238
+#: classes/Visualizer/Module/Frontend.php:244
 msgid "Copied!"
 msgstr ""
 
@@ -383,11 +383,11 @@ msgstr ""
 msgid "Chart Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:258
+#: classes/Visualizer/Render/Page/Data.php:259
 msgid "Rate our plugin"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:277
+#: classes/Visualizer/Render/Page/Data.php:278
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
@@ -674,7 +674,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Graph.php:422
 #: classes/Visualizer/Render/Sidebar/Graph.php:451
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:61
-#: classes/Visualizer/Render/Sidebar.php:593
+#: classes/Visualizer/Render/Sidebar.php:603
 msgid "Number Format"
 msgstr ""
 
@@ -1529,11 +1529,11 @@ msgstr ""
 msgid "Determines the width and hight of the chart area."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:469
+#: classes/Visualizer/Render/Sidebar.php:479
 msgid "Hex Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:596
+#: classes/Visualizer/Render/Sidebar.php:606
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, "
@@ -1541,11 +1541,11 @@ msgid ""
 "percentage format then your values will be multiplied by 100."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:604
+#: classes/Visualizer/Render/Sidebar.php:614
 msgid "Date Format"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:607
+#: classes/Visualizer/Render/Sidebar.php:617
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU date and time format%2$s."

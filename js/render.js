@@ -241,6 +241,8 @@
         $('a.visualizer-action[data-visualizer-type!=copy]').on('click', function(e) {
             var type    = $(this).attr( 'data-visualizer-type' );
             var chart   = $(this).attr( 'data-visualizer-chart-id' );
+            var lock    = $('.visualizer-front.visualizer-front-' + chart);
+            lock.lock();
             e.preventDefault();
             $.ajax({
                 url     : v.rest_url.replace('#id#', chart).replace('#type#', type),
@@ -283,11 +285,12 @@
                                 break;
                             default:
                                 if(window.visualizer_perform_action) {
-                                    window.visualizer_perform_action(type, data.data);
+                                    window.visualizer_perform_action(type, chart, data.data);
                                 }
                                 break;
                         }
                     }
+                    lock.unlock();
                 }
             });
         });
@@ -320,3 +323,52 @@
 	}
 
 })(jQuery, visualizer);
+
+(function ($) {
+    $.fn.lock = function () {
+        $(this).each(function () {
+            var $this = $(this);
+            var position = $this.css('position');
+
+            if (!position) {
+                position = 'static';
+            }
+
+            switch (position) {
+                case 'absolute':
+                case 'relative':
+                    break;
+                default:
+                    $this.css('position', 'relative');
+                    break;
+            }
+            $this.data('position', position);
+
+            var width = $this.width(),
+                height = $this.height();
+
+            var locker = $('<div class="locker"></div>');
+            locker.width(width).height(height);
+
+            var loader = $('<div class="locker-loader"></div>');
+            loader.width(width).height(height);
+
+            locker.append(loader);
+            $this.append(locker);
+            $(window).resize(function () {
+                $this.find('.locker,.locker-loader').width($this.width()).height($this.height());
+            });
+        });
+
+        return $(this);
+    };
+
+    $.fn.unlock = function () {
+        $(this).each(function () {
+            $(this).find('.locker').remove();
+            $(this).css('position', $(this).data('position'));
+        });
+
+        return $(this);
+    };
+})(jQuery);
