@@ -213,7 +213,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
 
-		$id = $id . '-' . rand();
+		$id         = $id . '-' . rand();
+		$arguments  = array( '', $id, $settings );
+		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );
+		$css        = $arguments[0];
+		$settings   = $arguments[2];
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(
@@ -262,8 +266,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 			$actions_div        .= '</div>';
 		}
+
+		$actions_div            .= $css;
+
 		// return placeholder div
 		return $actions_div . '<div id="' . $id . '"' . $class . '></div>';
 	}
-
 }

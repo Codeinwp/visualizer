@@ -3,8 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.2.0\n"
-"Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-08-16 11:04:21+00:00\n"
+"Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n" 
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,85 +23,85 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: classes/Visualizer/Module/Admin.php:107
+#: classes/Visualizer/Module/Admin.php:157
 msgid "Visualizations"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:110
+#: classes/Visualizer/Module/Admin.php:160
 msgid "From Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:111
+#: classes/Visualizer/Module/Admin.php:161
 msgid "Create New"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:136
+#: classes/Visualizer/Module/Admin.php:186
 msgid "Pie"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:140
+#: classes/Visualizer/Module/Admin.php:190
 msgid "Line"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:144
+#: classes/Visualizer/Module/Admin.php:194
 msgid "Area"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:148
+#: classes/Visualizer/Module/Admin.php:198
 msgid "Geo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:152
+#: classes/Visualizer/Module/Admin.php:202
 msgid "Bar"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:156
+#: classes/Visualizer/Module/Admin.php:206
 msgid "Column"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:160
+#: classes/Visualizer/Module/Admin.php:210
 msgid "Gauge"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:164
+#: classes/Visualizer/Module/Admin.php:214
 msgid "Scatter"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:168
+#: classes/Visualizer/Module/Admin.php:218
 msgid "Candlestick"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:173
+#: classes/Visualizer/Module/Admin.php:223
 msgid "Table"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:177
+#: classes/Visualizer/Module/Admin.php:227
 msgid "Timeline"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:181
+#: classes/Visualizer/Module/Admin.php:231
 msgid "Combo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:291
+#: classes/Visualizer/Module/Admin.php:341
 #: classes/Visualizer/Render/Library.php:42
 msgid "Visualizer Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:423
+#: classes/Visualizer/Module/Admin.php:473
 msgid "Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:448
+#: classes/Visualizer/Module/Admin.php:498
 msgid "Knowledge Base"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:453
+#: classes/Visualizer/Module/Admin.php:503
 msgid "Pro Addon"
 msgstr ""
 
 #: classes/Visualizer/Module/Chart.php:315
-#: classes/Visualizer/Module/Chart.php:550
+#: classes/Visualizer/Module/Chart.php:556
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr ""
 
@@ -118,11 +117,11 @@ msgstr ""
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:429
+#: classes/Visualizer/Module/Chart.php:435
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:441
+#: classes/Visualizer/Module/Chart.php:447
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
@@ -154,7 +153,7 @@ msgstr ""
 msgid "Invalid action"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:234
+#: classes/Visualizer/Module/Frontend.php:238
 msgid "Copied!"
 msgstr ""
 
@@ -357,7 +356,7 @@ msgid "Create Filters"
 msgstr ""
 
 #: classes/Visualizer/Render/Page/Data.php:212
-#: classes/Visualizer/Render/Page/Data.php:232
+#: classes/Visualizer/Render/Page/Data.php:233
 msgid "Show Chart"
 msgstr ""
 
@@ -365,28 +364,20 @@ msgstr ""
 msgid "Add data manually"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:229
+#: classes/Visualizer/Render/Page/Data.php:230
 msgid "You can manually edit the chart data using the spreadsheet like editor."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:231
-#: classes/Visualizer/Render/Page/Data.php:233
+#: classes/Visualizer/Render/Page/Data.php:232
+#: classes/Visualizer/Render/Page/Data.php:234
 msgid "View Editor"
-msgstr ""
+msgstr "" 
 
-#: classes/Visualizer/Render/Page/Data.php:243
-msgid "Advanced Settings"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:246
-msgid "Chart Settings"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:257
+#: classes/Visualizer/Render/Page/Data.php:258
 msgid "Rate our plugin"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:276
+#: classes/Visualizer/Render/Page/Data.php:277
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
@@ -673,7 +664,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Graph.php:422
 #: classes/Visualizer/Render/Sidebar/Graph.php:451
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:61
-#: classes/Visualizer/Render/Sidebar.php:585
+#: classes/Visualizer/Render/Sidebar.php:593
 msgid "Number Format"
 msgstr ""
 
@@ -1536,7 +1527,7 @@ msgstr ""
 msgid "Hex Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:588
+#: classes/Visualizer/Render/Sidebar.php:596
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, "
@@ -1544,11 +1535,11 @@ msgid ""
 "percentage format then your values will be multiplied by 100."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:596
+#: classes/Visualizer/Render/Sidebar.php:604
 msgid "Date Format"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:599
+#: classes/Visualizer/Render/Sidebar.php:607
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU date and time format%2$s."
