@@ -40,6 +40,8 @@ class Visualizer_Plugin {
 	const CF_DEFAULT_DATA = 'visualizer-default-data';
 	const CF_SETTINGS = 'visualizer-settings';
 
+	const CF_SOURCE_FILTER = 'visualizer-source-filter';
+
 	// custom actions
 	const ACTION_GET_CHARTS = 'visualizer-get-charts';
 	const ACTION_CREATE_CHART = 'visualizer-create-chart';

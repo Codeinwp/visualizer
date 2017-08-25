@@ -222,6 +222,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										class="dashicons dashicons-lock"></span></h2>
 							<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
 								<input type="hidden" id="chart-data" name="chart_data">
+								<input type="hidden" id="chart-data-src" name="chart_data_src">
 							</form>
 
 							<div class="group-content edit-data-content">

@@ -412,6 +412,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! isset( $_POST['vz-import-time'] ) ) {
 			apply_filters( 'visualizer_pro_remove_schedule', $chart_id );
 		}
+
+		if ( ! isset( $_POST['chart_data_src'] ) || Visualizer_Plugin::CF_SOURCE_FILTER !== $_POST['chart_data_src'] ) {
+			// delete the filters in case this chart is being uploaded from other data sources
+			delete_post_meta( $chart_id, 'visualizer-filter-config' );
+		}
+
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
 		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
