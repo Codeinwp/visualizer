@@ -1,5 +1,6 @@
 /* global google */
 /* global visualizer */
+/* global console */
 (function(v, g) {
 	var gv;
 
@@ -198,8 +199,22 @@
             formatter.format(table, 1);
         }
 
+        v.override(settings);
+
         render.draw(table, settings);
 	};
+
+    v.override = function(settings) {
+        if (settings.manual) {
+            try{
+                var options = JSON.parse(settings.manual);
+                jQuery.extend(settings, options);
+                delete settings.manual;
+            }catch(error){
+                console.error("Error while adding manual configuration override " + settings.manual);
+            }
+        }
+    };
 
 	v.render = function() {
 		for (var id in (v.charts || {})) {

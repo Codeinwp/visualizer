@@ -154,6 +154,35 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 			$this->_renderActionSettings();
 		self::_renderGroupEnd();
+
+		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
+			self::_renderSectionStart();
+				self::_renderSectionDescription( esc_html__( 'Configure the graph by providing values.', 'visualizer' ) );
+			self::_renderSectionEnd();
+
+			$example    = '
+{
+	vAxis: {
+		"ticks":[5,10,15,20]
+		"titleTextStyle":{
+			"color":"red"
+		},
+		"textPosition":"in"
+	}
+}';
+
+			self::_renderTextAreaItem(
+				esc_html__( 'Configuration', 'visualizer' ),
+				'manual',
+				$this->manual,
+				sprintf(
+					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ), '<br><pre>' . $example . '</pre>'
+				),
+				'',
+				array( 'rows' => 5 )
+			);
+		self::_renderGroupEnd();
+
 	}
 
 	/**
@@ -629,6 +658,24 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
 			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ($value == $default ? 'checked' : ''), ' ', ($disabled ? 'disabled=disabled' : ''), '>';
+			echo '<p class="section-description">', $desc, '</p>';
+		echo '</div>';
+	}
+
+	/**
+	 * Render a textarea item.
+	 */
+	protected static function _renderTextAreaItem( $title, $name, $value, $desc, $placeholder = '', $custom_attributes = array() ) {
+		$attributes     = '';
+		if ( $custom_attributes ) {
+			foreach ( $custom_attributes as $k => $v ) {
+				$attributes .= ' ' . $k . '="' . esc_attr( $v ) . '"';
+			}
+		}
+		echo '<div class="section-item">';
+			echo '<a class="more-info" href="javascript:;">[?]</a>';
+			echo '<b>', $title, '</b>';
+			echo '<textarea class="control-text" ', $attributes, ' name="', $name, '" placeholder="', $placeholder, '">', $value, '</textarea>';
 			echo '<p class="section-description">', $desc, '</p>';
 		echo '</div>';
 	}
