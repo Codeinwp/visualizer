@@ -3,8 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Charts and Graphs Lite 2.2.0\n"
-"Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-08-16 18:15:11+00:00\n"
+"Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n" 
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -372,18 +371,7 @@ msgstr ""
 #: classes/Visualizer/Render/Page/Data.php:232
 #: classes/Visualizer/Render/Page/Data.php:234
 msgid "View Editor"
-msgstr ""
-
-
-#: classes/Visualizer/Render/Page/Data.php:244
-#: classes/Visualizer/Render/Sidebar.php:150
-#: classes/Visualizer/Render/Page/Data.php:243
-msgid "Advanced Settings"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:247
-msgid "Chart Settings"
-msgstr ""
+msgstr "" 
 
 #: classes/Visualizer/Render/Page/Data.php:258
 msgid "Rate our plugin"
