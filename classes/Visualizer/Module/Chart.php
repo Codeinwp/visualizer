@@ -228,6 +228,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'focusTarget' => 'datum',
 					)
 				);
+				do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 			}
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
@@ -257,14 +258,18 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		// dispatch pages
 		$this->_chart = get_post( $chart_id );
-		switch ( isset( $_GET['tab'] ) ? $_GET['tab'] : '' ) {
+		$tab    = isset( $_GET['tab'] ) || empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
+		switch ( $tab ) {
 			case 'settings':
 				// changed by Ash/Upwork
 				$this->_handleDataAndSettingsPage();
 				break;
-			case 'type':
-			default:
+			case 'type': // fall through.
+			case 'visualizer': // fall through.
 				$this->_handleTypesPage();
+				break;
+			default:
+				do_action( 'visualizer_pro_handle_tab', $tab, $this->_chart );
 				break;
 		}
 		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();

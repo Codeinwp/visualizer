@@ -428,20 +428,30 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @since 1.0.0
 	 *
 	 * @static
-	 * @access protected
+	 * @access public
 	 * @param string $title The title of the select item.
 	 * @param string $name The name of the select item.
 	 * @param string $value The actual value of the select item.
 	 * @param array  $options The array of select options.
 	 * @param string $desc The description of the select item.
+	 * @param bool   $multiple Is this a multiple select box.
+	 * @param array  $classes Any additional classes.
+	 * @param array  $attributes Custom attributes.
 	 */
-	protected static function _renderSelectItem( $title, $name, $value, array $options, $desc ) {
+	public static function _renderSelectItem( $title, $name, $value, array $options, $desc, $multiple = false, $classes = array(), $attributes = array() ) {
+		$atts   = '';
+		if ( $attributes ) {
+			foreach ( $attributes as $k => $v ) {
+				$atts   .= ' data-visualizer-' . $k . '=' . esc_attr( $v );
+			}
+		}
 		echo '<div class="section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<select class="control-select" name="', $name, '">';
+			echo '<select class="control-select ', implode( ' ', $classes ) , '" name="', $name, '" ', ( $multiple ? 'multiple' : '' ), ' ' , $atts, '>';
 		foreach ( $options as $key => $label ) {
-			echo '<option value="', $key, '"', selected( $key, $value, false ), '>';
+			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value ) ? 'selected' : '' ) : selected( $key, $value, false );
+			echo '<option value="', $key, '"', $extra, '>';
 			echo $label;
 			echo '</option>';
 		}
@@ -507,10 +517,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @since 1.0.0
 	 *
 	 * @static
-	 * @access protected
+	 * @access public
 	 * @param string $title The title of this group.
 	 */
-	protected static function _renderGroupStart( $title ) {
+	public static function _renderGroupStart( $title ) {
 		echo '<li class="group">';
 			echo '<h3 class="group-title">', $title, '</h3>';
 			echo '<ul class="group-content">';
@@ -522,9 +532,9 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @since 1.0.0
 	 *
 	 * @static
-	 * @access protected
+	 * @access public
 	 */
-	protected static function _renderGroupEnd() {
+	public static function _renderGroupEnd() {
 			echo '</ul>';
 		echo '</li>';
 	}
@@ -535,11 +545,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @since 1.0.0
 	 *
 	 * @static
-	 * @access protected
+	 * @access public
 	 * @param string  $title The title of this section. If the title is empty, no title will be displayed.
 	 * @param boolean $open Determines whether the section items block has to be expanded or collapsed.
 	 */
-	protected static function _renderSectionStart( $title = false, $open = true ) {
+	public static function _renderSectionStart( $title = false, $open = true ) {
 
 		if ( ! empty( $title ) ) {
 			echo '<li class="subsection">';
@@ -555,10 +565,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @static
+	 * @public
 	 * @access protected
 	 */
-	protected static function _renderSectionEnd() {
+	public static function _renderSectionEnd() {
 			echo '</div>';
 		echo '</li>';
 	}
@@ -569,10 +579,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @since 1.0.0
 	 *
 	 * @static
-	 * @access protected
+	 * @access public
 	 * @param string $description The description text.
 	 */
-	protected static function _renderSectionDescription( $description ) {
+	public static function _renderSectionDescription( $description ) {
 		echo '<div class="section-item">';
 			echo '<div class="section-description">', $description, '</div>';
 		echo '</div>';
