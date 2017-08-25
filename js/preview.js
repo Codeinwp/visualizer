@@ -26,7 +26,7 @@
             try{
                 var options = JSON.parse($(this).val());
             }catch(error){
-                $('<div class="visualizer-error" id="visualizer-error-manual">Error while adding manual configuration override: ' + error + '</div>').insertAfter($(this));
+                $('<div class="visualizer-error" id="visualizer-error-manual">Invalid JSON: ' + error + '</div>').insertAfter($(this));
             }
         }
 
