@@ -241,7 +241,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					</li>
 				</ul>
 			<li class="group group-category bottom-fixed sidebar-footer-link" id="vz-chart-settings">
-				<h2><?php _e( 'Advanced Settings', 'visualizer' ); ?></h2>
+				<h2><span class="dashicons dashicons-admin-tools"></span><?php _e( 'Advanced', 'visualizer' ); ?></h2>
 				<div class="group-header">
 					<button class="customize-section-back" tabindex="0"></button>
 					<h3 class="group-title main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>
@@ -254,9 +254,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				</ul>
 			</li>
 			<?php echo apply_filters( 'visualizer_pro_sidebar_footer_links', '', $this->chart->ID ); ?>
-			<li class=" group bottom-fixed" id="vz-chart-review">
-				<a href="https://wordpress.org/support/plugin/visualizer/reviews/?filter=5#new-post"
-				   target="_blank"><?php _e( 'Rate our plugin', 'visualizer' ); ?></a>
+			<li class=" group bottom-fixed vz-pro-sidebar-link" id="vz-chart-permissions">
+				<a target="_blank"><span class="dashicons dashicons-admin-users"></span><?php _e( 'Permissions (PRO)', 'visualizer' ); ?></a>
 			</li>
 			<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; <?php echo date( 'Y', current_time( 'timestamp' ) ); ?></li>
 		</ul>

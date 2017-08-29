@@ -830,16 +830,16 @@ button#editor-chart-button {
 
 #vz-chart-review {
 	right: 0;
-	bottom: 40px;
+	bottom: 10px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	width: 50%;
-	padding-right: 20px;
+	width: 40%;
+	padding-right: 6px;
 	text-align: right;
 }
 
 #vz-chart-settings.bottom-fixed h2 {
-	padding-left: 20px;
+	padding-left: 6px;
 }
 
 #vz-chart-settings {
@@ -847,7 +847,7 @@ button#editor-chart-button {
 	left: 0;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	width: 50%;
+	width: 33%;
 	text-align: left;
 }
 
@@ -862,6 +862,7 @@ button#editor-chart-button {
 
 .sidebar-footer-link,
 #vz-chart-review,
+#vz-chart-permissions,
 #vz-chart-settings {
 	display: inline;
 	background: none;
@@ -1021,4 +1022,16 @@ span.section-error {
 }
 #visualizer-error-manual{
 	color:#ff595e;
+}
+#vz-chart-permissions{
+
+	width:43%;
+}
+#vz-chart-permissions{
+	color: #ce484c;
+}
+#vz-chart-permissions{
+	width: 30%;
+	bottom: 40px;
+	right: 6px;
 }
