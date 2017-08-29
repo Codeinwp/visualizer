@@ -1019,3 +1019,6 @@ button#editor-chart-button {
 span.section-error {
 	color: #ff000;
 }
+#visualizer-error-manual{
+	color:#ff595e;
+}

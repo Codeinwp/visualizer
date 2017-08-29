@@ -157,17 +157,16 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure the graph by providing values.', 'visualizer' ) );
-			self::_renderSectionEnd();
+				self::_renderSectionDescription( __( 'Configure the graph by providing configuration variables right from the','visualizer' ) . ' <a href="https://developers.google.com/chart/interactive/docs/reference" target="_blank">Google Visualization</a> API.' );
 
 			$example    = '
 {
-	vAxis: {
-		"ticks":[5,10,15,20]
-		"titleTextStyle":{
-			"color":"red"
+	"vAxis": {
+		"ticks": [5, 10, 15, 20],
+		"titleTextStyle": {
+			"color": "red"
 		},
-		"textPosition":"in"
+		"textPosition": "in"
 	}
 }';
 
@@ -176,11 +175,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'manual',
 				$this->manual,
 				sprintf(
-					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ), '<br><pre>' . $example . '</pre>'
+					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ), '<br><code>' . $example . '</code>'
 				),
 				'',
 				array( 'rows' => 5 )
 			);
+
+		self::_renderSectionEnd();
 		self::_renderGroupEnd();
 
 	}
