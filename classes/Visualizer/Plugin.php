@@ -52,6 +52,11 @@ class Visualizer_Plugin {
 	// Added by Ash/Upwork
 	const ACTION_EXPORT_DATA = 'visualizer-export-data';
 
+	/**
+	 *Action used for fetching specific users/roles for permissions.
+	 */
+	const ACTION_FETCH_PERMISSIONS_DATA = 'visualizer-fetch-permissions-data';
+
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';
 	const FILTER_GET_CHART_SERIES = 'visualizer-get-chart-series';

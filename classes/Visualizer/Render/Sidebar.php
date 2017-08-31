@@ -549,10 +549,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @static
 	 * @access public
 	 * @param string $title The title of this group.
+	 * @param string $html Any additional HTML.
+	 * @param string $class Any additional classes.
 	 */
-	public static function _renderGroupStart( $title ) {
-		echo '<li class="group">';
+	public static function _renderGroupStart( $title, $html = '', $class = '' ) {
+		echo '<li class="group ' . $class . '">';
 			echo '<h3 class="group-title">', $title, '</h3>';
+			echo $html;
 			echo '<ul class="group-content">';
 	}
 
@@ -597,9 +600,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 *
 	 * @public
 	 * @access protected
+	 * @param string $html Any addition HTML to add.
 	 */
-	public static function _renderSectionEnd() {
+	public static function _renderSectionEnd( $html = '' ) {
 			echo '</div>';
+			echo $html;
 		echo '</li>';
 	}
 

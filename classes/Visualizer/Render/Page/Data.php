@@ -253,14 +253,144 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					</form>
 				</ul>
 			</li>
-			<?php echo apply_filters( 'visualizer_pro_sidebar_footer_links', '', $this->chart->ID ); ?>
-			<li class=" group bottom-fixed vz-pro-sidebar-link" id="vz-chart-permissions">
-				<a target="_blank"><span class="dashicons dashicons-admin-users"></span><?php _e( 'Permissions (PRO)', 'visualizer' ); ?></a>
-			</li>
+
+			<?php $this->getPermissionsLink( $this->chart->ID ); ?>
+
 			<li class="group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; <?php echo date( 'Y', current_time( 'timestamp' ) ); ?></li>
 		</ul>
 		<?php
 		// changed by Ash/Upwork
+	}
+
+	/**
+	 * Generates the permissions link.
+	 *
+	 * @access private
+	 * @param int $id The chart id.
+	 */
+	private function getPermissionsLink( $id ) {
+		$permissions    = apply_filters( 'visualizer_pro_get_permissions', null, $id );
+		if ( $permissions ) {
+			foreach ( $permissions as $k => $v ) {
+				$this->$k   = $v;
+			}
+		}
+?>
+		<li class="group group-category bottom-fixed sidebar-footer-link" id="vz-chart-permissions">
+			<a target="_blank"><span class="dashicons dashicons-admin-users"></span><?php _e( 'Permissions (PRO)', 'visualizer' ); ?></a>
+			<div class="group-header">
+				<button class="customize-section-back" tabindex="0"></button>
+				<h3 class="group-title main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>
+			</div>
+			<ul class="group-content">
+				<form id="permissions-form" action="
+				<?php
+				echo add_query_arg(
+					array(
+						'nonce' => wp_create_nonce(),
+						'tab' => 'permissions',
+					), remove_query_arg( 'tab', $_SERVER['REQUEST_URI'] )
+				);
+?>
+" method="post">
+					<?php $this->permissionsSidebar(); ?>
+				</form>
+			</ul>
+		</li>
+<?php
+	}
+
+	/**
+	 * Generates the permissions form.
+	 *
+	 * @access private
+	 */
+	private function permissionsSidebar() {
+		Visualizer_Render_Sidebar::_renderGroupStart(
+			esc_html__( 'Who can see this chart?', 'visualizer' ) . '<span
+										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' )
+		);
+			Visualizer_Render_Sidebar::_renderSectionStart();
+				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can view the chart on the front-end.', 'visualizer' ) );
+
+		if ( ! isset( $this->permissions['read'] ) ) {
+			$this->permissions['read'] = 'all';
+		}
+
+				Visualizer_Render_Sidebar::_renderSelectItem(
+					'',
+					'permissions[read]',
+					$this->permissions['read'],
+					array(
+						'all'       => esc_html__( 'All Users', 'visualizer' ),
+						'users'     => esc_html__( 'Select Users', 'visualizer' ),
+						'roles'     => esc_html__( 'Select Roles', 'visualizer' ),
+					),
+					'',
+					false,
+					array( 'visualizer-permission', 'visualizer-permission-type', 'visualizer-permission-read' ),
+					array(
+						'permission-type' => 'read',
+					)
+				);
+
+				$options    = apply_filters( 'visualizer_pro_get_permissions_data', array(), isset( $this->permissions['read'] ) ? $this->permissions['read'] : 'roles' );
+
+				Visualizer_Render_Sidebar::_renderSelectItem(
+					'',
+					'permissions[read-specific][]',
+					isset( $this->permissions['read-specific'] ) ? $this->permissions['read-specific'] : array(),
+					$options,
+					'',
+					true,
+					array( 'visualizer-permission', 'visualizer-permission-specific', 'visualizer-permission-read-specific' )
+				);
+			Visualizer_Render_Sidebar::_renderSectionEnd( apply_filters( 'visualizer_pro_upsell', 'only-pro-feature', 'chart-permissions' ) );
+		Visualizer_Render_Sidebar::_renderGroupEnd();
+
+		Visualizer_Render_Sidebar::_renderGroupStart(
+			esc_html__( 'Who can edit this chart?', 'visualizer' ) . '<span
+										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' )
+		);
+			Visualizer_Render_Sidebar::_renderSectionStart();
+				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can edit the chart on the front-end.', 'visualizer' ) );
+
+		if ( ! isset( $this->permissions['edit'] ) ) {
+			$this->permissions['edit'] = 'roles';
+			$this->permissions['edit-specific'] = 'administrator';
+		}
+
+				Visualizer_Render_Sidebar::_renderSelectItem(
+					'',
+					'permissions[edit]',
+					$this->permissions['edit'],
+					array(
+						'all'       => esc_html__( 'All Users', 'visualizer' ),
+						'users'     => esc_html__( 'Select Users', 'visualizer' ),
+						'roles'     => esc_html__( 'Select Roles', 'visualizer' ),
+					),
+					'',
+					false,
+					array( 'visualizer-permission', 'visualizer-permission-type', 'visualizer-permission-edit' ),
+					array(
+						'permission-type' => 'edit',
+					)
+				);
+
+				$options    = apply_filters( 'visualizer_pro_get_permissions_data', array(), isset( $this->permissions['edit'] ) ? $this->permissions['edit'] : 'roles' );
+
+				Visualizer_Render_Sidebar::_renderSelectItem(
+					'',
+					'permissions[edit-specific][]',
+					isset( $this->permissions['edit-specific'] ) ? $this->permissions['edit-specific'] : array(),
+					$options,
+					'',
+					true,
+					array( 'visualizer-permission', 'visualizer-permission-specific', 'visualizer-permission-edit-specific' )
+				);
+			Visualizer_Render_Sidebar::_renderSectionEnd( apply_filters( 'visualizer_pro_upsell', 'only-pro-feature', 'chart-permissions' ) );
+		Visualizer_Render_Sidebar::_renderGroupEnd();
+
 	}
 
 	/**
