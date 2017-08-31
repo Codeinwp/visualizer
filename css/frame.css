@@ -164,7 +164,7 @@
 	padding: 7px 15px 7px 35px;
 }
 
-.group h2 .dashicons {
+.group h2 .dashicons, .group h3 .dashicons {
 	margin-right: 5px;
 	vertical-align: -5px;
 }

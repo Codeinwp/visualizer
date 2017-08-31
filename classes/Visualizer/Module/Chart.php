@@ -234,8 +234,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 		// enqueue and register scripts and styles
-		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array(), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-chosen', VISUALIZER_ABSURL . 'js/lib/chosen.jquery.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION );
+		wp_register_style( 'visualizer-chosen', VISUALIZER_ABSURL . 'css/lib/chosen.min.css', array(), Visualizer_Plugin::VERSION );
+
+		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
+		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
 		wp_register_script(
@@ -318,11 +321,21 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer-render', 'visualizer', array(
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
+					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
 				),
 				'map_api_key' => get_option( 'visualizer-map-api-key' ),
+				'ajax'                 => array(
+					'url'     => admin_url( 'admin-ajax.php' ),
+					'nonces'  => array(
+						'permissions'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA ),
+					),
+					'actions' => array(
+						'permissions'   => Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA,
+					),
+				),
 			)
 		);
 		$render          = new Visualizer_Render_Page_Data();
@@ -559,6 +572,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer-render', 'visualizer', array(
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
+					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
