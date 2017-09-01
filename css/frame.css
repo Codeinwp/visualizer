@@ -809,6 +809,7 @@ button#editor-chart-button {
 }
 
 #vz-chart-settings h2:hover,
+#vz-chart-permissions h2:hover,
 .sidebar-footer-link h2:hover,
 #vz-chart-review a:hover {
 	text-decoration: underline;
@@ -820,6 +821,7 @@ button#editor-chart-button {
 }
 
 #vz-chart-settings h2,
+#vz-chart-permissions h2,
 .sidebar-footer-link h2,
 #vz-chart-review h2 {
 	padding: 0;
@@ -838,9 +840,11 @@ button#editor-chart-button {
 	text-align: right;
 }
 
+
 #vz-chart-settings.bottom-fixed h2 {
 	padding-left: 6px;
 }
+
 
 #vz-chart-settings {
 	bottom: 40px;
@@ -851,6 +855,23 @@ button#editor-chart-button {
 	text-align: left;
 }
 
+#vz-chart-permissions:not(.open) h2{
+	width: 100%;
+	display: inline-block;
+	margin: 0px;
+	text-align: right;
+}
+#vz-chart-permissions{
+
+	bottom: 40px;
+	right: 0;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 33%;
+	text-align: left;
+}
+
+#vz-chart-permissions h2,
 #vz-chart-settings h2,
 .sidebar-footer-link h2 {
 	display: inline;
@@ -871,6 +892,7 @@ button#editor-chart-button {
 
 .sidebar-footer-link > ul,
 #vz-chart-source > ul,
+#vz-chart-permissions > ul,
 #vz-chart-settings > ul {
 	position: relative;
 	z-index: 10;
@@ -887,16 +909,26 @@ button#editor-chart-button {
 	background: #f3f3f3;
 }
 
+
+#vz-chart-permissions.open h2{
+
+	position: absolute;
+	bottom: 28px;
+	right: 6px;
+	text-align: right;
+}
 #vz-chart-settings.open h2 {
 	position: absolute;
 	bottom: 28px;
 	left: 20px;
 }
 
-#vz-chart-settings.open .group-header {
+#vz-chart-permissions .group-header,
+#vz-chart-settings.open .group-header{
 	display: block;
 }
 
+#vz-chart-permissions .group-header,
 #vz-chart-settings .group-header {
 	display: none;
 }
@@ -1031,7 +1063,11 @@ span.section-error {
 	color: #ce484c;
 }
 #vz-chart-permissions{
-	width: 30%;
+	width: 35%;
 	bottom: 40px;
 	right: 6px;
+}
+#permissions-form .only-pro-feature > ul{
+	position:relative;
+	text-align: center;
 }

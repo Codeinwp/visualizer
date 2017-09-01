@@ -277,7 +277,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		}
 ?>
 		<li class="group group-category bottom-fixed sidebar-footer-link" id="vz-chart-permissions">
-			<a target="_blank"><span class="dashicons dashicons-admin-users"></span><?php _e( 'Permissions (PRO)', 'visualizer' ); ?></a>
+			<h2><span class="dashicons dashicons-admin-users"></span><?php _e( 'Permissions', 'visualizer' ); ?></h2>
 			<div class="group-header">
 				<button class="customize-section-back" tabindex="0"></button>
 				<h3 class="group-title main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>

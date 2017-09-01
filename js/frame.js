@@ -75,8 +75,9 @@
     });
 
     function init_permissions(){
-        $('#vz-chart-permissions a').click(function () {
+        $('#vz-chart-permissions h2').click(function () {
             $("#vz-chart-source").hide();
+            $("#vz-chart-permissions .group-header").show();
             $("#vz-chart-settings").removeClass('open').addClass('bottom-fixed');
 
             $('#settings-button').click(function(e) {
@@ -91,6 +92,7 @@
         $('#vz-chart-permissions .customize-section-back').click(function () {
             $("#vz-chart-source").show();
 
+            $("#vz-chart-permissions .group-header").hide();
             $('#settings-button').click(function(e) {
                 e.preventDefault();
                 $('#settings-form').submit();
