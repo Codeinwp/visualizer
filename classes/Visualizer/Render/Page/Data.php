@@ -308,7 +308,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	private function permissionsSidebar() {
 		Visualizer_Render_Sidebar::_renderGroupStart(
 			esc_html__( 'Who can see this chart?', 'visualizer' ) . '<span
-										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' )
+										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
 		);
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can view the chart on the front-end.', 'visualizer' ) );
@@ -350,7 +350,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 		Visualizer_Render_Sidebar::_renderGroupStart(
 			esc_html__( 'Who can edit this chart?', 'visualizer' ) . '<span
-										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' )
+										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
 		);
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can edit the chart on the front-end.', 'visualizer' ) );
