@@ -283,7 +283,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				<h3 class="group-title main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>
 			</div>
 			<ul class="group-content">
-				<form id="permissions-form" action="
+				<form id="permissions-form" target="thehole" action="
 				<?php
 				echo add_query_arg(
 					array(

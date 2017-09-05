@@ -83,6 +83,7 @@
             $('#settings-button').click(function(e) {
                 e.preventDefault();
                 $('#permissions-form').submit();
+                $('#settings-form').submit();
             });
 
             $(this).parent().removeClass('bottom-fixed').addClass('open');
