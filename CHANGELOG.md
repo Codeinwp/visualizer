@@ -1,4 +1,9 @@
 
+ ### v3.0.0 - 2017-09-05 
+ **Changes:** 
+ * Adds support manual configuration according to Google Visualization API.
+* Improves compatibility with more features from the pro version.
+ 
  ### v2.2.0 - 2017-08-16 
  **Changes:** 
  * Added custom number format for pie chart.

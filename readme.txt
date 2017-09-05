@@ -144,6 +144,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 3.0.0 - 2017-09-05  = 
+
+* Adds support manual configuration according to Google Visualization API.
+* Improves compatibility with more features from the pro version.
+
+
 = 2.2.0 - 2017-08-16  = 
 
 * Added custom number format for pie chart.
