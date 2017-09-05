@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '2.2.0';
+	const VERSION = '3.0.0';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -40,6 +40,8 @@ class Visualizer_Plugin {
 	const CF_DEFAULT_DATA = 'visualizer-default-data';
 	const CF_SETTINGS = 'visualizer-settings';
 
+	const CF_SOURCE_FILTER = 'visualizer-source-filter';
+
 	// custom actions
 	const ACTION_GET_CHARTS = 'visualizer-get-charts';
 	const ACTION_CREATE_CHART = 'visualizer-create-chart';
@@ -49,6 +51,11 @@ class Visualizer_Plugin {
 	const ACTION_UPLOAD_DATA = 'visualizer-upload-data';
 	// Added by Ash/Upwork
 	const ACTION_EXPORT_DATA = 'visualizer-export-data';
+
+	/**
+	 *Action used for fetching specific users/roles for permissions.
+	 */
+	const ACTION_FETCH_PERMISSIONS_DATA = 'visualizer-fetch-permissions-data';
 
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';

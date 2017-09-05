@@ -2,9 +2,9 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Charts and Graphs Lite 2.2.0\n"
+"Project-Id-Version: Visualizer: Charts and Graphs Lite 3.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2017-08-16 11:04:21+00:00\n"
+"POT-Creation-Date: 2017-09-05 13:05:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,125 +24,130 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: classes/Visualizer/Module/Admin.php:107
+#: classes/Visualizer/Module/Admin.php:157
 msgid "Visualizations"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:110
+#: classes/Visualizer/Module/Admin.php:160
 msgid "From Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:111
+#: classes/Visualizer/Module/Admin.php:161
 msgid "Create New"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:136
+#: classes/Visualizer/Module/Admin.php:186
 msgid "Pie"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:140
+#: classes/Visualizer/Module/Admin.php:190
 msgid "Line"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:144
+#: classes/Visualizer/Module/Admin.php:194
 msgid "Area"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:148
+#: classes/Visualizer/Module/Admin.php:198
 msgid "Geo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:152
+#: classes/Visualizer/Module/Admin.php:202
 msgid "Bar"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:156
+#: classes/Visualizer/Module/Admin.php:206
 msgid "Column"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:160
+#: classes/Visualizer/Module/Admin.php:210
 msgid "Gauge"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:164
+#: classes/Visualizer/Module/Admin.php:214
 msgid "Scatter"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:168
+#: classes/Visualizer/Module/Admin.php:218
 msgid "Candlestick"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:173
+#: classes/Visualizer/Module/Admin.php:223
 msgid "Table"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:177
+#: classes/Visualizer/Module/Admin.php:227
 msgid "Timeline"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:181
+#: classes/Visualizer/Module/Admin.php:231
 msgid "Combo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:291
+#: classes/Visualizer/Module/Admin.php:341
 #: classes/Visualizer/Render/Library.php:42
 msgid "Visualizer Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:423
+#: classes/Visualizer/Module/Admin.php:473
 msgid "Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:448
+#: classes/Visualizer/Module/Admin.php:498
 msgid "Knowledge Base"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:453
+#: classes/Visualizer/Module/Admin.php:503
 msgid "Pro Addon"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:315
-#: classes/Visualizer/Module/Chart.php:550
+#: classes/Visualizer/Module/Chart.php:323
+#: classes/Visualizer/Module/Chart.php:574
 msgid "You have entered invalid URL. Please, insert proper URL."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:329
+#: classes/Visualizer/Module/Chart.php:324
+#: classes/Visualizer/Module/Chart.php:575
+msgid "Loading..."
+msgstr ""
+
+#: classes/Visualizer/Module/Chart.php:347
 msgid "Save Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:330
+#: classes/Visualizer/Module/Chart.php:348
 msgid "Create Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:332
+#: classes/Visualizer/Module/Chart.php:350
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:429
+#: classes/Visualizer/Module/Chart.php:453
 msgid "CSV file with chart data was not uploaded. Please, try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:441
+#: classes/Visualizer/Module/Chart.php:465
 msgid "CSV file is broken or invalid. Please, try again."
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:94
-#: classes/Visualizer/Render/Sidebar.php:167
+#: classes/Visualizer/Render/Sidebar.php:197
 msgid "Print"
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:95
-#: classes/Visualizer/Render/Sidebar.php:174
+#: classes/Visualizer/Render/Sidebar.php:204
 msgid "CSV"
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:96
-#: classes/Visualizer/Render/Sidebar.php:183
+#: classes/Visualizer/Render/Sidebar.php:213
 msgid "Excel"
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:97
-#: classes/Visualizer/Render/Sidebar.php:191
+#: classes/Visualizer/Render/Sidebar.php:221
 msgid "Copy"
 msgstr ""
 
@@ -154,15 +159,15 @@ msgstr ""
 msgid "Invalid action"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:234
+#: classes/Visualizer/Module/Frontend.php:244
 msgid "Copied!"
 msgstr ""
 
-#: classes/Visualizer/Module/Sources.php:143
+#: classes/Visualizer/Module/Sources.php:144
 msgid "Enable this feature in %s version!"
 msgstr ""
 
-#: classes/Visualizer/Module/Sources.php:144
+#: classes/Visualizer/Module/Sources.php:145
 msgid "Buy now"
 msgstr ""
 
@@ -220,14 +225,22 @@ msgid "Import from other charts"
 msgstr ""
 
 #: classes/Visualizer/Render/Library.php:220
-msgid "Auto-sync with online files"
+msgid "Frontend editor"
 msgstr ""
 
 #: classes/Visualizer/Render/Library.php:221
-msgid "3 more chart types"
+msgid "Private charts"
 msgstr ""
 
 #: classes/Visualizer/Render/Library.php:222
+msgid "Auto-sync with online files"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:223
+msgid "3 more chart types"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:224
 msgid "View more features"
 msgstr ""
 
@@ -357,7 +370,7 @@ msgid "Create Filters"
 msgstr ""
 
 #: classes/Visualizer/Render/Page/Data.php:212
-#: classes/Visualizer/Render/Page/Data.php:232
+#: classes/Visualizer/Render/Page/Data.php:233
 msgid "Show Chart"
 msgstr ""
 
@@ -365,28 +378,60 @@ msgstr ""
 msgid "Add data manually"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:229
+#: classes/Visualizer/Render/Page/Data.php:230
 msgid "You can manually edit the chart data using the spreadsheet like editor."
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:231
-#: classes/Visualizer/Render/Page/Data.php:233
+#: classes/Visualizer/Render/Page/Data.php:232
+#: classes/Visualizer/Render/Page/Data.php:234
 msgid "View Editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:243
-msgid "Advanced Settings"
+#: classes/Visualizer/Render/Page/Data.php:244
+msgid "Advanced"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:246
+#: classes/Visualizer/Render/Page/Data.php:247
+#: classes/Visualizer/Render/Page/Data.php:283
 msgid "Chart Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:257
-msgid "Rate our plugin"
+#: classes/Visualizer/Render/Page/Data.php:280
+msgid "Permissions"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:276
+#: classes/Visualizer/Render/Page/Data.php:310
+msgid "Who can see this chart?"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:314
+msgid "Select who can view the chart on the front-end."
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:325
+#: classes/Visualizer/Render/Page/Data.php:368
+msgid "All Users"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:326
+#: classes/Visualizer/Render/Page/Data.php:369
+msgid "Select Users"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:327
+#: classes/Visualizer/Render/Page/Data.php:370
+msgid "Select Roles"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:352
+msgid "Who can edit this chart?"
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:356
+msgid "Select who can edit the chart on the front-end."
+msgstr ""
+
+#: classes/Visualizer/Render/Page/Data.php:407
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
@@ -549,7 +594,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Graph.php:179
 #: classes/Visualizer/Render/Sidebar/Graph.php:291
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:57
-#: classes/Visualizer/Render/Sidebar.php:208
+#: classes/Visualizer/Render/Sidebar.php:238
 msgid "General Settings"
 msgstr ""
 
@@ -673,7 +718,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Graph.php:422
 #: classes/Visualizer/Render/Sidebar/Graph.php:451
 #: classes/Visualizer/Render/Sidebar/Type/Pie.php:61
-#: classes/Visualizer/Render/Sidebar.php:585
+#: classes/Visualizer/Render/Sidebar.php:638
 msgid "Number Format"
 msgstr ""
 
@@ -832,7 +877,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:102
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:126
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:377
-#: classes/Visualizer/Render/Sidebar.php:349
+#: classes/Visualizer/Render/Sidebar.php:379
 msgid "Stroke Width"
 msgstr ""
 
@@ -843,7 +888,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:110
 #: classes/Visualizer/Render/Sidebar/Type/Candlestick.php:134
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:385
-#: classes/Visualizer/Render/Sidebar.php:357
+#: classes/Visualizer/Render/Sidebar.php:387
 msgid "Stroke Color"
 msgstr ""
 
@@ -922,13 +967,13 @@ msgid "The lowest and highest values for a range marked by a red color."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:228
-#: classes/Visualizer/Render/Sidebar.php:320
+#: classes/Visualizer/Render/Sidebar.php:350
 msgid "Layout & Chart Area"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:230
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:341
-#: classes/Visualizer/Render/Sidebar.php:322
+#: classes/Visualizer/Render/Sidebar.php:352
 msgid ""
 "Configure the total size of the chart. Two formats are supported: a number, "
 "or a number followed by %. A simple number is a value in pixels; a number "
@@ -937,13 +982,13 @@ msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:234
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:345
-#: classes/Visualizer/Render/Sidebar.php:326
+#: classes/Visualizer/Render/Sidebar.php:356
 msgid "Width And Height Of Chart"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Gauge.php:248
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:359
-#: classes/Visualizer/Render/Sidebar.php:340
+#: classes/Visualizer/Render/Sidebar.php:370
 msgid "Determines the total width and height of the chart."
 msgstr ""
 
@@ -1065,27 +1110,27 @@ msgid "Markers"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:143
-#: classes/Visualizer/Render/Sidebar.php:276
+#: classes/Visualizer/Render/Sidebar.php:306
 msgid "Tooltip"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:158
-#: classes/Visualizer/Render/Sidebar.php:291
+#: classes/Visualizer/Render/Sidebar.php:321
 msgid "Trigger"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:163
-#: classes/Visualizer/Render/Sidebar.php:296
+#: classes/Visualizer/Render/Sidebar.php:326
 msgid "The tooltip will be displayed when the user hovers over an element"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:164
-#: classes/Visualizer/Render/Sidebar.php:298
+#: classes/Visualizer/Render/Sidebar.php:328
 msgid "The tooltip will not be displayed"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:166
-#: classes/Visualizer/Render/Sidebar.php:300
+#: classes/Visualizer/Render/Sidebar.php:330
 msgid "Determines the user interaction that causes the tooltip to be displayed."
 msgstr ""
 
@@ -1202,19 +1247,19 @@ msgid ""
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:374
-#: classes/Visualizer/Render/Sidebar.php:346
+#: classes/Visualizer/Render/Sidebar.php:376
 msgid ""
 "Configure the background color for the main area of the chart and the chart "
 "border width and color."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:380
-#: classes/Visualizer/Render/Sidebar.php:352
+#: classes/Visualizer/Render/Sidebar.php:382
 msgid "The chart border width in pixels."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/Geo.php:392
-#: classes/Visualizer/Render/Sidebar.php:365
+#: classes/Visualizer/Render/Sidebar.php:395
 msgid "Background Color"
 msgstr ""
 
@@ -1412,103 +1457,119 @@ msgstr ""
 msgid "Configure frontend actions here."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:165
-msgid "Actions"
+#: classes/Visualizer/Render/Sidebar.php:158
+msgid "Manual Configuration"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:171
-msgid "To enable printing the data."
+#: classes/Visualizer/Render/Sidebar.php:160
+msgid "Configure the graph by providing configuration variables right from the"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:174
+msgid "Configuration"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar.php:178
-msgid "To enable downloading the data as a CSV."
-msgstr ""
-
-#: classes/Visualizer/Render/Sidebar.php:187
-msgid "Enable the ZIP and XML extensions to use this setting."
-msgstr ""
-
-#: classes/Visualizer/Render/Sidebar.php:187
-msgid "To enable downloading the data as an Excel spreadsheet."
+msgid "One per line in valid JSON (key:value) format e.g. %s"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar.php:195
+msgid "Actions"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:201
+msgid "To enable printing the data."
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:208
+msgid "To enable downloading the data as a CSV."
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:217
+msgid "Enable the ZIP and XML extensions to use this setting."
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:217
+msgid "To enable downloading the data as an Excel spreadsheet."
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:225
 msgid "To enable copying the data to the clipboard."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:210
+#: classes/Visualizer/Render/Sidebar.php:240
 msgid ""
 "Configure title, font styles, tooltip, legend and else settings for the "
 "chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:213
+#: classes/Visualizer/Render/Sidebar.php:243
 msgid "Title"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:217
+#: classes/Visualizer/Render/Sidebar.php:247
 msgid "Font Styles"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:220
+#: classes/Visualizer/Render/Sidebar.php:250
 msgid "Family And Size"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:246
+#: classes/Visualizer/Render/Sidebar.php:276
 msgid "The default font family and size for all text in the chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:251
+#: classes/Visualizer/Render/Sidebar.php:281
 msgid "Legend"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:253
+#: classes/Visualizer/Render/Sidebar.php:283
 msgid "Position"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:257
+#: classes/Visualizer/Render/Sidebar.php:287
 msgid "Determines where to place the legend, compared to the chart area."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:261
+#: classes/Visualizer/Render/Sidebar.php:291
 msgid "Alignment"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:265
+#: classes/Visualizer/Render/Sidebar.php:295
 msgid "Determines the alignment of the legend."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:269
+#: classes/Visualizer/Render/Sidebar.php:299
 msgid "Font Color"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:297
+#: classes/Visualizer/Render/Sidebar.php:327
 msgid "The tooltip will be displayed when the user selects an element"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:304
+#: classes/Visualizer/Render/Sidebar.php:334
 msgid "Show Color Code"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:308
+#: classes/Visualizer/Render/Sidebar.php:338
 msgid ""
 "If set to yes, will show colored squares next to the slice information in "
 "the tooltip."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:321
+#: classes/Visualizer/Render/Sidebar.php:351
 msgid "Layout"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:374
+#: classes/Visualizer/Render/Sidebar.php:404
 msgid "Transparent background"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:379
+#: classes/Visualizer/Render/Sidebar.php:409
 msgid "Chart Area"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:380
+#: classes/Visualizer/Render/Sidebar.php:410
 msgid ""
 "Configure the placement and size of the chart area (where the chart itself "
 "is drawn, excluding axis and legends). Two formats are supported: a number, "
@@ -1516,27 +1577,27 @@ msgid ""
 "followed by % is a percentage."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:384
+#: classes/Visualizer/Render/Sidebar.php:414
 msgid "Left And Top Margins"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:398
+#: classes/Visualizer/Render/Sidebar.php:428
 msgid "Determines how far to draw the chart from the left and top borders."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:404
+#: classes/Visualizer/Render/Sidebar.php:434
 msgid "Width And Height Of Chart Area"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:418
+#: classes/Visualizer/Render/Sidebar.php:448
 msgid "Determines the width and hight of the chart area."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:469
+#: classes/Visualizer/Render/Sidebar.php:509
 msgid "Hex Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:588
+#: classes/Visualizer/Render/Sidebar.php:641
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, "
@@ -1544,11 +1605,11 @@ msgid ""
 "percentage format then your values will be multiplied by 100."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:596
+#: classes/Visualizer/Render/Sidebar.php:649
 msgid "Date Format"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:599
+#: classes/Visualizer/Render/Sidebar.php:652
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU date and time format%2$s."

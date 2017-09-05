@@ -164,7 +164,8 @@
 	padding: 7px 15px 7px 35px;
 }
 
-.group h2 .dashicons {
+.group h2 .dashicons,
+.group h3 .dashicons {
 	margin-right: 5px;
 	vertical-align: -5px;
 }
@@ -404,7 +405,7 @@ div.group-content .group-description {
 }
 
 #type-picker {
-	width: 952px;
+	width: 954px;
 	margin: 50px auto;
 }
 
@@ -809,8 +810,10 @@ button#editor-chart-button {
 }
 
 #vz-chart-settings h2:hover,
+#vz-chart-permissions h2:hover,
+.sidebar-footer-link h2:hover,
 #vz-chart-review a:hover {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 #vz-chart-review a {
@@ -819,6 +822,8 @@ button#editor-chart-button {
 }
 
 #vz-chart-settings h2,
+#vz-chart-permissions h2,
+.sidebar-footer-link h2,
 #vz-chart-review h2 {
 	padding: 0;
 	border: none;
@@ -828,16 +833,16 @@ button#editor-chart-button {
 
 #vz-chart-review {
 	right: 0;
-	bottom: 40px;
+	bottom: 10px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	width: 50%;
-	padding-right: 20px;
+	width: 40%;
+	padding-right: 6px;
 	text-align: right;
 }
 
 #vz-chart-settings.bottom-fixed h2 {
-	padding-left: 20px;
+	padding-left: 6px;
 }
 
 #vz-chart-settings {
@@ -845,12 +850,29 @@ button#editor-chart-button {
 	left: 0;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	width: 50%;
+	width: 33%;
 	text-align: left;
 }
 
-#vz-chart-review,
-#vz-chart-settings h2 {
+#vz-chart-permissions:not(.open) h2 {
+	display: inline-block;
+	width: 100%;
+	margin: 0;
+	text-align: right;
+}
+
+#vz-chart-permissions {
+	right: 0;
+	bottom: 40px;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 33%;
+	text-align: left;
+}
+
+#vz-chart-permissions h2,
+#vz-chart-settings h2,
+.sidebar-footer-link h2 {
 	display: inline;
 	color: #00a0d2;
 	background: none;
@@ -858,13 +880,18 @@ button#editor-chart-button {
 	cursor: pointer;
 }
 
+.sidebar-footer-link,
+#vz-chart-review,
+#vz-chart-permissions,
 #vz-chart-settings {
 	display: inline;
 	background: none;
 	cursor: pointer;
 }
 
+.sidebar-footer-link > ul,
 #vz-chart-source > ul,
+#vz-chart-permissions > ul,
 #vz-chart-settings > ul {
 	position: relative;
 	z-index: 10;
@@ -881,17 +908,42 @@ button#editor-chart-button {
 	background: #f3f3f3;
 }
 
+#vz-chart-permissions.open h2 {
+	position: absolute;
+	right: 6px;
+	bottom: 28px;
+	left: auto;
+	width: 50%;
+	text-align: right;
+}
+
 #vz-chart-settings.open h2 {
+	position: absolute;
+	bottom: 28px;
+	left: 6px;
+}
+
+#vz-chart-permissions .group-header,
+#vz-chart-settings.open .group-header {
+	display: block;
+}
+
+#vz-chart-permissions .group-header,
+#vz-chart-settings .group-header {
+	display: none;
+}
+
+.sidebar-footer-link.open h2 {
 	position: absolute;
 	bottom: 28px;
 	left: 20px;
 }
 
-#vz-chart-settings.open .group-header {
+.sidebar-footer-link.open .group-header {
 	display: block;
 }
 
-#vz-chart-settings .group-header {
+.sidebar-footer-link .group-header {
 	display: none;
 }
 
@@ -999,4 +1051,27 @@ button#editor-chart-button {
 
 span.section-error {
 	color: #ff000;
+}
+
+#visualizer-error-manual {
+	color: #ff595e;
+}
+
+#vz-chart-permissions {
+	width: 43%;
+}
+
+#vz-chart-permissions {
+	color: #ce484c;
+}
+
+#vz-chart-permissions {
+	right: 6px;
+	bottom: 40px;
+	width: 35%;
+}
+
+#permissions-form .only-pro-feature > ul {
+	position: relative;
+	text-align: center;
 }

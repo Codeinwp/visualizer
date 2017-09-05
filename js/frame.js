@@ -4,6 +4,8 @@
 
 (function ($) {
     $(document).ready(function () {
+        init_permissions();
+
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');
             $(this).parent().addClass('type-label-selected');
@@ -11,8 +13,9 @@
 
         $('#vz-chart-settings h2').click(function () {
             $("#vz-chart-source").hide();
+            $("#vz-chart-permissions").removeClass('open').addClass('bottom-fixed');
             $(this).parent().removeClass('bottom-fixed').addClass('open');
-
+	        $("#vz-chart-permissions .group-header").hide();
             return false;
         });
         $('#vz-chart-settings .customize-section-back').click(function () {
@@ -70,6 +73,82 @@
         });
 
     });
+
+    function init_permissions(){
+        $('#vz-chart-permissions h2').click(function () {
+            $("#vz-chart-source").hide();
+            $("#vz-chart-permissions .group-header").show();
+            $("#vz-chart-settings").removeClass('open').addClass('bottom-fixed');
+
+            $('#settings-button').click(function(e) {
+                e.preventDefault();
+                $('#permissions-form').submit();
+                $('#settings-form').submit();
+            });
+
+            $(this).parent().removeClass('bottom-fixed').addClass('open');
+
+            return false;
+        });
+        $('#vz-chart-permissions .customize-section-back').click(function () {
+            $("#vz-chart-source").show();
+
+            $("#vz-chart-permissions .group-header").hide();
+            $('#settings-button').click(function(e) {
+                e.preventDefault();
+                $('#settings-form').submit();
+            });
+
+            $(this).parent().parent().removeClass('open').addClass('bottom-fixed');
+
+            return false;
+        });
+
+        $('.visualizer-permission').chosen({
+            width               : '50%',
+            search_contains     : true
+        });
+        
+        $('.visualizer-permission-type').each(function(x, y){
+            var type    = $(y).attr('data-visualizer-permission-type');
+            var child   = $('.visualizer-permission-' + type + '-specific');
+            if($(y).val() === 'all'){
+                child.next('div.chosen-container').hide();
+                return;
+            }
+        });
+        
+        $('.visualizer-permission-type').on('change', function(evt, params) {
+            var type    = $(this).attr('data-visualizer-permission-type');
+            var child   = $('.visualizer-permission-' + type + '-specific');
+            child.empty();
+            if(params.selected === 'all'){
+                child.next('div.chosen-container').hide();
+                return;
+            } else {
+                child.next('div.chosen-container').show();
+            }
+            child.append('<option value="">' + visualizer.l10n['loading'] + '</option>').trigger('chosen:updated');
+            $.ajax({
+                url     : visualizer.ajax['url'],
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['permissions'],
+                    'nonce'     : visualizer.ajax['nonces']['permissions'],
+                    'type'      : params.selected
+                },
+                success : function(d, textStatus, XMLHttpRequest){
+                    if(d.success) {
+                        child.empty();
+                        $.each(d.data, function(k, v){
+                            child.append('<option value="' + k + '">' + v + '</option>');
+                        });
+                        child.trigger('chosen:updated');
+                    }
+                }
+            });
+        });
+    }
 })(jQuery);
 
 (function ($) {

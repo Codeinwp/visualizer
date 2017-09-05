@@ -146,11 +146,11 @@ class Visualizer_Module {
 	/**
 	 * Extracts the data for a chart and prepares it for the given type.
 	 *
-	 * @access protected
+	 * @access public
 	 * @param int    $chart_id The chart id.
 	 * @param string $type The exported type.
 	 */
-	protected function _getDataAs( $chart_id, $type ) {
+	public function _getDataAs( $chart_id, $type ) {
 		$final       = null;
 		$success    = false;
 		if ( $chart_id ) {

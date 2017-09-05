@@ -1,6 +1,6 @@
 {
   "name": "visualizer",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Visualizer Lite",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "lasttranslator": "Themeisle Translate Team <friends@themeisle.com>"
   },
   "devDependencies": {
-    "grunt-plugin-fleet": "codeinwp/grunt-plugin-fleet",
+    "grunt-plugin-fleet": "github:codeinwp/grunt-plugin-fleet",
     "load-project-config": "~0.2.0"
   },
   "wraithSlug": [

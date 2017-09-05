@@ -1,4 +1,5 @@
 /* global visualizer */
+/* global console */
 (function($, v) {
 	var timeout;
 
@@ -20,12 +21,23 @@
 			}, 1000);
 		}
 
+        function validateJSON() {
+            $('#visualizer-error-manual').remove();
+            try{
+                var options = JSON.parse($(this).val());
+            }catch(error){
+                $('<div class="visualizer-error" id="visualizer-error-manual">Invalid JSON: ' + error + '</div>').insertAfter($(this));
+            }
+        }
+
 		$('.control-text').change(updateChart).keyup(updateChart);
 		$('.control-select, .control-checkbox').change(updateChart);
 		$('.color-picker-hex').wpColorPicker({
 			change: updateChart,
 			clear: updateChart
 		});
+		$('textarea[name="manual"]').change(validateJSON).keyup(validateJSON);
+
 	});
 })(jQuery, visualizer);
 

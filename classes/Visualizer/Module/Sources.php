@@ -130,11 +130,12 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 * @return string The new html code.
 	 */
 	public function addProUpsell( $old, $feature = null ) {
+		$biz_features   = array( 'schedule-chart', 'chart-permissions' );
 		$return  = '';
 		$feature = strval( $feature );
-		if ( empty( $feature ) || ( $feature == 'schedule-chart' && ! apply_filters( 'visualizer_is_business', false ) ) ) {
+		if ( empty( $feature ) || ( in_array( $feature, $biz_features ) && ! apply_filters( 'visualizer_is_business', false ) ) ) {
 			$plan = 'PRO';
-			if ( $feature === 'schedule-chart' ) {
+			if ( in_array( $feature, $biz_features ) ) {
 				$plan = 'BUSINESS';
 			}
 			$return = '<div class="only-pro-content">';

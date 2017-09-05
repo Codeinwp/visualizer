@@ -217,6 +217,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<h3>' . __( 'Gain more editing power', 'visualizer' ) . '</h3><ul>';
 			echo '<li>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
+			echo '<li>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
+			echo '<li>' . __( 'Private charts', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
 			echo '<li>' . __( '3 more chart types', 'visualizer' ) . '</li></ul>';
 			echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a>';

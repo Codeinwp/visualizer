@@ -21,6 +21,8 @@ The plugin uses Google Visualization API to add responsive & animated charts/dia
 > * Easy edit the data using a live editor
 > * 3 more chart types ( Combo, Timeline and Table chart )
 > * Auto synchronize with your online file.
+> * Create private charts.
+> * Allow users to edit charts.
 > * Create charts from your wordpress posts, pages,products or any other post_type.
 > * Priority email support from the developer of the plugin
 > * Support and updates for 1 year
@@ -129,6 +131,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 = How to enable frontend action buttons? =
 
 [http://docs.themeisle.com/article/675-how-to-enable-frontend-action-buttons](http://docs.themeisle.com/article/675-how-to-enable-frontend-action-buttons)
+= How to use Google Visualization variables? =
+
+[http://docs.themeisle.com/article/691-how-to-use-google-visualization-variables](http://docs.themeisle.com/article/691-how-to-use-google-visualization-variables)
 
 == Screenshots ==
 
