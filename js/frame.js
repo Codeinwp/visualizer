@@ -15,7 +15,7 @@
             $("#vz-chart-source").hide();
             $("#vz-chart-permissions").removeClass('open').addClass('bottom-fixed');
             $(this).parent().removeClass('bottom-fixed').addClass('open');
-
+	        $("#vz-chart-permissions .group-header").hide();
             return false;
         });
         $('#vz-chart-settings .customize-section-back').click(function () {

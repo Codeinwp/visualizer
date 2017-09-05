@@ -404,7 +404,7 @@ div.group-content .group-description {
 }
 
 #type-picker {
-	width: 952px;
+	width: 954px;
 	margin: 50px auto;
 }
 
@@ -812,7 +812,7 @@ button#editor-chart-button {
 #vz-chart-permissions h2:hover,
 .sidebar-footer-link h2:hover,
 #vz-chart-review a:hover {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 #vz-chart-review a {
@@ -916,11 +916,13 @@ button#editor-chart-button {
 	bottom: 28px;
 	right: 6px;
 	text-align: right;
+	width: 50%;
+	left: auto;
 }
 #vz-chart-settings.open h2 {
 	position: absolute;
 	bottom: 28px;
-	left: 20px;
+	left: 6px;
 }
 
 #vz-chart-permissions .group-header,
