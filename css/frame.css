@@ -164,7 +164,8 @@
 	padding: 7px 15px 7px 35px;
 }
 
-.group h2 .dashicons, .group h3 .dashicons {
+.group h2 .dashicons,
+.group h3 .dashicons {
 	margin-right: 5px;
 	vertical-align: -5px;
 }
@@ -840,11 +841,9 @@ button#editor-chart-button {
 	text-align: right;
 }
 
-
 #vz-chart-settings.bottom-fixed h2 {
 	padding-left: 6px;
 }
-
 
 #vz-chart-settings {
 	bottom: 40px;
@@ -855,16 +854,16 @@ button#editor-chart-button {
 	text-align: left;
 }
 
-#vz-chart-permissions:not(.open) h2{
-	width: 100%;
+#vz-chart-permissions:not(.open) h2 {
 	display: inline-block;
-	margin: 0px;
+	width: 100%;
+	margin: 0;
 	text-align: right;
 }
-#vz-chart-permissions{
 
-	bottom: 40px;
+#vz-chart-permissions {
 	right: 0;
+	bottom: 40px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	width: 33%;
@@ -909,16 +908,15 @@ button#editor-chart-button {
 	background: #f3f3f3;
 }
 
-
-#vz-chart-permissions.open h2{
-
+#vz-chart-permissions.open h2 {
 	position: absolute;
-	bottom: 28px;
 	right: 6px;
-	text-align: right;
-	width: 50%;
+	bottom: 28px;
 	left: auto;
+	width: 50%;
+	text-align: right;
 }
+
 #vz-chart-settings.open h2 {
 	position: absolute;
 	bottom: 28px;
@@ -926,7 +924,7 @@ button#editor-chart-button {
 }
 
 #vz-chart-permissions .group-header,
-#vz-chart-settings.open .group-header{
+#vz-chart-settings.open .group-header {
 	display: block;
 }
 
@@ -1054,22 +1052,26 @@ button#editor-chart-button {
 span.section-error {
 	color: #ff000;
 }
-#visualizer-error-manual{
-	color:#ff595e;
-}
-#vz-chart-permissions{
 
-	width:43%;
+#visualizer-error-manual {
+	color: #ff595e;
 }
-#vz-chart-permissions{
+
+#vz-chart-permissions {
+	width: 43%;
+}
+
+#vz-chart-permissions {
 	color: #ce484c;
 }
-#vz-chart-permissions{
-	width: 35%;
-	bottom: 40px;
+
+#vz-chart-permissions {
 	right: 6px;
+	bottom: 40px;
+	width: 35%;
 }
-#permissions-form .only-pro-feature > ul{
-	position:relative;
+
+#permissions-form .only-pro-feature > ul {
+	position: relative;
 	text-align: center;
 }
