@@ -129,6 +129,9 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 = How to enable frontend action buttons? =
 
 [http://docs.themeisle.com/article/675-how-to-enable-frontend-action-buttons](http://docs.themeisle.com/article/675-how-to-enable-frontend-action-buttons)
+= How to use Google Visualization variables? =
+
+[http://docs.themeisle.com/article/691-how-to-use-google-visualization-variables](http://docs.themeisle.com/article/691-how-to-use-google-visualization-variables)
 
 == Screenshots ==
 
