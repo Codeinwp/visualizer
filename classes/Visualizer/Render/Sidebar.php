@@ -214,7 +214,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'actions[]',
 				isset( $this->actions ) && in_array( 'xls;application/vnd.ms-excel', $this->actions ) ? true : false,
 				'xls;application/vnd.ms-excel',
-				$disabled ? '<span class="section-error">' . esc_html__( 'Enable the ZIP and XML extensions to use this setting.', 'visualizer' ) . '</span>' : esc_html__( 'To enable downloading the data as an Excel spreadsheet.', 'visualizer' ),
+				$disabled ? '<span class="viz-section-error">' . esc_html__( 'Enable the ZIP and XML extensions to use this setting.', 'visualizer' ) . '</span>' : esc_html__( 'To enable downloading the data as an Excel spreadsheet.', 'visualizer' ),
 				$disabled
 			);
 			self::_renderCheckboxItem(

@@ -53,7 +53,7 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 					esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', 'visualizer' )
 				);
 
-				echo '<div class="section-delimiter"></div>';
+				echo '<div class="viz-section-delimiter"></div>';
 
 				self::_renderSelectItem(
 					esc_html__( 'Is Stacked', 'visualizer' ),
@@ -63,7 +63,7 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 					esc_html__( 'If set to yes, series elements are stacked.', 'visualizer' )
 				);
 
-				echo '<div class="section-delimiter"></div>';
+				echo '<div class="viz-section-delimiter"></div>';
 
 				self::_renderTextItem(
 					esc_html__( 'Bars Opacity', 'visualizer' ),

@@ -98,7 +98,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<li class="viz-subsection">
 									<span class="viz-section-title"><?php _e( 'One time import', 'visualizer' ); ?></span>
 
-									<div class="viz-section-items">
+									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php _e( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?> </p>
 										<p class="viz-group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
 										<p class="viz-group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
@@ -119,7 +119,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<span class="viz-section-title visualizer-import-url-schedule"><?php _e( 'Schedule Import', 'visualizer' ); ?>
 									<span
 											class="dashicons dashicons-lock"></span></span>
-									<div class="viz-section-items">
+									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php _e( 'You can choose here to synchronize your chart data with a remote CSV file.', 'visualizer' ); ?> </p>
 										<p class="viz-group-description"> <?php _e( 'You can also synchronize with your Google Spreadsheet file, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<p class="viz-group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwritting the current data with the one from the URL.', 'visualizer' ); ?></p>

@@ -68,7 +68,7 @@ class Visualizer_Render_Sidebar_Type_Candlestick extends Visualizer_Render_Sideb
 					esc_html__( 'The type of the entity that receives focus on mouse hover. Also affects which entity is selected by mouse click.', 'visualizer' )
 				);
 
-				echo '<div class="section-delimiter"></div>';
+				echo '<div class="viz-section-delimiter"></div>';
 
 				self::_renderSelectItem(
 					esc_html__( 'Selection Mode', 'visualizer' ),
