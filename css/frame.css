@@ -43,14 +43,14 @@
 	-webkit-overflow-scrolling: touch;
 }
 
-.group {
+.viz-group {
 	margin: 0;
 	font-size: 12px;
 	line-height: 18px;
 	list-style: none;
 }
 
-.group .group-header .group-title {
+.viz-group .viz-group-header .viz-group-title {
 	margin: 10px 0;
 	padding: 15px 20px;
 	border-top: 1px solid #ddd;
@@ -59,20 +59,20 @@
 	background: #fff;
 }
 
-.group-wrapper ul .group-title {
+.viz-group-wrapper ul .viz-group-title {
 	border-top: 1px solid #ddd;
 }
 
-.group-wrapper ul li {
+.viz-group-wrapper ul li {
 	border-top: 1px solid #ddd;
 }
 
-.group-wrapper ul ul li.subsection {
+.viz-group-wrapper ul ul li.viz-subsection {
 	margin: 5px;
 	border: 1px solid #ddd;
 }
 
-.group-wrapper .group .group .group-title {
+.viz-group-wrapper .viz-group .viz-group .viz-group-title {
 	position: relative;
 	margin: 0;
 	padding: 10px 10px 11px 14px;
@@ -89,14 +89,14 @@
 	transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
 }
 
-.group-wrapper .group .group:hover .group-title,
-.group-wrapper .group .group.open .group-title {
+.viz-group-wrapper .viz-group .viz-group:hover .viz-group-title,
+.viz-group-wrapper .viz-group .viz-group.open .viz-group-title {
 	border-left-color: #0073aa;
 	color: #0073aa;
 	background: #f3f3f5;
 }
 
-.group-wrapper .group .group .group-title:after {
+.viz-group-wrapper .viz-group .viz-group .viz-group-title:after {
 	position: absolute;
 	z-index: 1;
 	top: 11px;
@@ -106,11 +106,11 @@
 	content: "\f345";
 }
 
-.group-wrapper .group .group.open .group-title:after {
+.viz-group-wrapper .viz-group .viz-group.open .viz-group-title:after {
 	content: "\f347";
 }
 
-.group-wrapper .group .customize-section-back {
+.viz-group-wrapper .viz-group .customize-section-back {
 	display: block;
 	float: left;
 	width: 42px;
@@ -129,14 +129,14 @@
 	transition: color 0.15s ease-in-out,border-color 0.15s ease-in-out,background 0.15s ease-in-out;
 }
 
-.group-wrapper .group .customize-section-back:hover {
+.viz-group-wrapper .viz-group .customize-section-back:hover {
 	border-left-color: #0073aa;
 	outline: 0;
 	color: #0073aa;
 	background: #f3f3f5;
 }
 
-.group-wrapper .group .customize-section-back:before {
+.viz-group-wrapper .viz-group .customize-section-back:before {
 	position: relative;
 	top: -11px;
 	left: -2px;
@@ -144,7 +144,7 @@
 	content: "\f341";
 }
 
-.group-wrapper.full-height {
+.viz-group-wrapper.full-height {
 	float: left;
 	position: relative;
 	width: 100%;
@@ -152,40 +152,40 @@
 	margin: 0;
 }
 
-.group.bottom-fixed {
+.viz-group.bottom-fixed {
 	display: block;
 	position: absolute;
 	bottom: 0;
 	width: 100%;
 }
 
-.group ul li h2,
-.group ul li h3 {
+.viz-group ul li h2,
+.viz-group ul li h3 {
 	padding: 7px 15px 7px 35px;
 }
 
-.group h2 .dashicons,
-.group h3 .dashicons {
+.viz-group h2 .dashicons,
+.viz-group h3 .dashicons {
 	margin-right: 5px;
 	vertical-align: -5px;
 }
 
-.group-content {
+.viz-group-content {
 	display: none;
 	margin: 0;
 	padding: 0;
 	background-color: #fdfdfd;
 }
 
-div.group-content {
+div.viz-group-content {
 	padding: 15px;
 }
 
-.group.open > .group-content {
+.viz-group.open > .viz-group-content {
 	display: block;
 }
 
-.group-description {
+.viz-group-description {
 	margin: 0;
 	padding: 5px;
 	color: #555;
@@ -193,20 +193,20 @@ div.group-content {
 	text-align: left;
 }
 
-div.group-content .group-description {
+div.viz-group-content .viz-group-description {
 	padding: 5px;
 	font-family: "Montserrat",sans-serif;
 	font-weight: 300;
 }
 
-.initial-screen .group-description {
+.initial-screen .viz-group-description {
 	padding: 0;
 	padding: 10px 20px 20px;
 	font-family: "Montserrat",sans-serif;
 	font-weight: 300;
 }
 
-.section-title {
+.viz-section-title {
 	display: block;
 	position: relative;
 	margin-bottom: 5px;
@@ -220,14 +220,14 @@ div.group-content .group-description {
 	cursor: pointer;
 }
 
-.group-wrapper ul ul li .section-title {
+.viz-group-wrapper ul ul li .viz-section-title {
 	margin-bottom: 0;
 	border: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
-.section-title::after {
+.viz-section-title::after {
 	position: absolute;
 	z-index: 1;
 	top: 13px;
@@ -240,16 +240,16 @@ div.group-content .group-description {
 	content: "";
 }
 
-.section-title.open::after {
+.viz-section-title.open::after {
 	border-width: 0 4px 4px;
 }
 
-.section-items {
+.section-items, .viz-section-items {
 	display: none;
 	padding: 15px;
 }
 
-.section-items.open {
+.viz-section-items.open {
 	display: block;
 }
 
@@ -262,7 +262,7 @@ div.group-content .group-description {
 	text-decoration: none;
 }
 
-.section-description {
+.viz-section-description {
 	margin: 0;
 	/*display: none;*/
 	padding: 0;
@@ -270,23 +270,23 @@ div.group-content .group-description {
 	font-size: 11px;
 }
 
-.section-table {
+.viz-section-table {
 	width: 100%;
 }
 
-.section-delimiter {
+.section-delimiter, .viz-section-delimiter {
 	margin: 15px 0;
 	border-top: 1px dashed #ccc;
 }
 
-.section-table-column {
+.viz-section-table-column {
 	width: 50%;
 	padding: 0 1px;
 	text-align: left;
 	vertical-align: top;
 }
 
-.section-item {
+.viz-section-item {
 	margin-bottom: 10px;
 }
 
@@ -303,12 +303,12 @@ div.group-content .group-description {
 	clear: both;
 }
 
-.section-description ul {
+.viz-section-description ul {
 	margin: 0 0 0 25px;
 	list-style: circle;
 }
 
-.section-description li {
+.viz-section-description li {
 	margin: 0;
 	list-style: circle;
 }
@@ -923,13 +923,13 @@ button#editor-chart-button {
 	left: 6px;
 }
 
-#vz-chart-permissions .group-header,
-#vz-chart-settings.open .group-header {
+#vz-chart-permissions .viz-group-header,
+#vz-chart-settings.open .viz-group-header {
 	display: block;
 }
 
-#vz-chart-permissions .group-header,
-#vz-chart-settings .group-header {
+#vz-chart-permissions .viz-group-header,
+#vz-chart-settings .viz-group-header {
 	display: none;
 }
 
@@ -939,11 +939,11 @@ button#editor-chart-button {
 	left: 20px;
 }
 
-.sidebar-footer-link.open .group-header {
+.sidebar-footer-link.open .viz-group-header {
 	display: block;
 }
 
-.sidebar-footer-link .group-header {
+.sidebar-footer-link .viz-group-header {
 	display: none;
 }
 
@@ -965,7 +965,7 @@ button#editor-chart-button {
 	margin: 0 0 15px;
 }
 
-.group .dashicons-lock {
+.viz-group .dashicons-lock {
 	display: none;
 }
 
@@ -973,8 +973,8 @@ button#editor-chart-button {
 	display: inline;
 }
 
-.section-title .dashicons,
-.group-title .dashicons {
+.viz-section-title .dashicons,
+.viz-group-title .dashicons {
 	width: 18px;
 	height: 18px;
 	margin-left: 3px;
@@ -1049,7 +1049,7 @@ button#editor-chart-button {
 	background: #999;
 }
 
-span.section-error {
+span.viz-section-error {
 	color: #ff000;
 }
 

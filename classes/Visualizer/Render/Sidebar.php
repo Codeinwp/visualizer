@@ -245,13 +245,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Font Styles', 'visualizer' ), false );
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<select name="fontName" class="control-select">';
 									echo '<option></option>';
 		foreach ( self::$_fontFamilies as $font => $label ) {
@@ -261,7 +261,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		}
 								echo '</select>';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<select name="fontSize" class="control-select">';
 									echo '<option></option>';
 		for ( $i = 7; $i <= 20; $i++ ) {
@@ -272,7 +272,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'The default font family and size for all text in the chart.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
@@ -351,27 +351,27 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderSectionStart( esc_html__( 'Layout', 'visualizer' ), false );
 				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Width And Height Of Chart', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="width" class="control-text" value="', esc_attr( $this->width ), '" placeholder="100%">';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="height" class="control-text" value="', esc_attr( $this->height ), '" placeholder="400">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'Determines the total width and height of the chart.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
-				echo '<div class="section-delimiter"></div>';
+				echo '<div class="viz-section-delimiter"></div>';
 
 				self::_renderSectionDescription( esc_html__( 'Configure the background color for the main area of the chart and the chart border width and color.', 'visualizer' ) );
 
@@ -398,7 +398,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					'#fff'
 				);
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<label>';
 						echo '<input type="checkbox" class="control-checkbox" name="backgroundColor[fill]" value="transparent"', checked( $background_color, 'transparent', false ), '> ';
 						esc_html_e( 'Transparent background', 'visualizer' );
@@ -409,42 +409,42 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderSectionStart( esc_html__( 'Chart Area', 'visualizer' ), false );
 				self::_renderSectionDescription( esc_html__( 'Configure the placement and size of the chart area (where the chart itself is drawn, excluding axis and legends). Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Left And Top Margins', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="chartArea[left]" class="control-text" value="', $this->chartArea['left'] || $this->chartArea['left'] === '0' ? esc_attr( $this->chartArea['left'] ) : '', '" placeholder="20%">';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="chartArea[top]" class="control-text" value="', $this->chartArea['top'] || $this->chartArea['top'] === '0' ? esc_attr( $this->chartArea['top'] ) : '', '" placeholder="20%">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'Determines how far to draw the chart from the left and top borders.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Width And Height Of Chart Area', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="chartArea[width]" class="control-text" value="', ! empty( $this->chartArea['width'] ) ? esc_attr( $this->chartArea['width'] ) : '', '" placeholder="60%">';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="chartArea[height]" class="control-text" value="', ! empty( $this->chartArea['height'] ) ? esc_attr( $this->chartArea['height'] ) : '', '" placeholder="60%">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'Determines the width and hight of the chart area.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
@@ -475,7 +475,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$atts   .= ' data-visualizer-' . $k . '=' . esc_attr( $v );
 			}
 		}
-		echo '<div class="section-item">';
+		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
 			echo '<select class="control-select ', implode( ' ', $classes ) , '" name="', $name, '" ', ( $multiple ? 'multiple' : '' ), ' ' , $atts, '>';
@@ -486,7 +486,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '</option>';
 		}
 			echo '</select>';
-			echo '<p class="section-description">', $desc, '</p>';
+			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}
 
@@ -503,7 +503,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $default The default value of the color picker.
 	 */
 	protected static function _renderColorPickerItem( $title, $name, $value, $default ) {
-		echo '<div class="section-item">';
+		echo '<div class="viz-section-item">';
 			echo '<b>', $title, '</b>';
 			echo '<div>';
 				echo '<input type="text" class="color-picker-hex" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default : esc_attr( $value ), '" data-default-color="', $default, '">';
@@ -533,11 +533,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$attributes .= ' ' . $k . '="' . esc_attr( $v ) . '"';
 			}
 		}
-		echo '<div class="section-item">';
+		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
 			echo '<input type="', $type, '" class="control-text" ', $attributes, ' name="', $name, '" value="', esc_attr( $value ), '" placeholder="', $placeholder, '">';
-			echo '<p class="section-description">', $desc, '</p>';
+			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}
 
@@ -553,10 +553,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $class Any additional classes.
 	 */
 	public static function _renderGroupStart( $title, $html = '', $class = '' ) {
-		echo '<li class="group ' . $class . '">';
-			echo '<h3 class="group-title">', $title, '</h3>';
+		echo '<li class="viz-group ' . $class . '">';
+			echo '<h3 class="viz-group-title">', $title, '</h3>';
 			echo $html;
-			echo '<ul class="group-content">';
+			echo '<ul class="viz-group-content">';
 	}
 
 	/**
@@ -585,12 +585,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	public static function _renderSectionStart( $title = false, $open = true ) {
 
 		if ( ! empty( $title ) ) {
-			echo '<li class="subsection">';
-			echo '<span class="section-title">', $title, '</span>';
+			echo '<li class="viz-subsection">';
+			echo '<span class="viz-section-title">', $title, '</span>';
 		} else {
 			echo '<li class=" ">';
 		}
-			echo '<div class="section-items', $open ? ' open' : '', '">';
+			echo '<div class="viz-section-items section-items', $open ? ' open' : '', '">';
 	}
 
 	/**
@@ -618,8 +618,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $description The description text.
 	 */
 	public static function _renderSectionDescription( $description ) {
-		echo '<div class="section-item">';
-			echo '<div class="section-description">', $description, '</div>';
+		echo '<div class="viz-section-item">';
+			echo '<div class="viz-section-description">', $description, '</div>';
 		echo '</div>';
 	}
 
@@ -660,11 +660,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * Render a checkbox item
 	 */
 	protected static function _renderCheckboxItem( $title, $name, $value, $default, $desc, $disabled = false ) {
-		echo '<div class="section-item">';
+		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
 			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ($value == $default ? 'checked' : ''), ' ', ($disabled ? 'disabled=disabled' : ''), '>';
-			echo '<p class="section-description">', $desc, '</p>';
+			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}
 
@@ -678,11 +678,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$attributes .= ' ' . $k . '="' . esc_attr( $v ) . '"';
 			}
 		}
-		echo '<div class="section-item">';
+		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
 			echo '<textarea class="control-text" ', $attributes, ' name="', $name, '" placeholder="', $placeholder, '">', $value, '</textarea>';
-			echo '<p class="section-description">', $desc, '</p>';
+			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}
 
