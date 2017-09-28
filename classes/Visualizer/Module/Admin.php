@@ -60,6 +60,32 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
+		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
+	}
+
+	/**
+	 * Whether to show the feedback review or not.
+	 *
+	 * @access public
+	 */
+	public function feedbackReviewTrigger( $dumb ) {
+		$query  = new WP_Query(
+			array(
+				'posts_per_page'        => 50,
+				'post_type'             => Visualizer_Plugin::CPT_VISUALIZER,
+				'fields'                => 'ids',
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
+
+		if ( $query->have_posts() && $query->post_count > 0 ) {
+			return array(
+				'heading'   => __( 'Some title from visualizer', 'visualizer' ),
+				'msg'       => __( 'Some msg from visualizer', 'visualizer' ),
+			);
+		}
+		return false;
 	}
 
 	/**
