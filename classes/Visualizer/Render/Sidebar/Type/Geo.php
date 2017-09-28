@@ -179,22 +179,22 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure color axis gradient scale, minimum and maximun values and a color of the dateless regions.', 'visualizer' ) );
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Minimum And Maximum Values', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="colorAxis[minValue]" class="control-text" value="', isset( $this->colorAxis['minValue'] ) ? esc_attr( $this->colorAxis['minValue'] ) : '', '">';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="colorAxis[maxValue]" class="control-text" value="', isset( $this->colorAxis['maxValue'] ) ? esc_attr( $this->colorAxis['maxValue'] ) : '', '">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'Determines the minimum and maximum values of color axis.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
@@ -243,42 +243,42 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure how values are associated with bubble size, minimum and maximun values and marker opacity setting.', 'visualizer' ) );
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Minimum And Maximum Values', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="sizeAxis[minValue]" class="control-text" value="', isset( $this->sizeAxis['minValue'] ) ? esc_attr( $this->sizeAxis['minValue'] ) : '', '">';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="sizeAxis[maxValue]" class="control-text" value="', isset( $this->sizeAxis['maxValue'] ) ? esc_attr( $this->sizeAxis['maxValue'] ) : '', '">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'Determines the minimum and maximum values of size axis.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Minimum And Maximum Marker Radius', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="sizeAxis[minSize]" class="control-text" value="', isset( $this->sizeAxis['minSize'] ) ? esc_attr( $this->sizeAxis['minSize'] ) : '', '" placeholder="3">';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="sizeAxis[maxSize]" class="control-text" value="', isset( $this->sizeAxis['maxSize'] ) ? esc_attr( $this->sizeAxis['maxSize'] ) : '', '" placeholder="12">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'Determines the radius of the smallest and largest possible bubbles, in pixels.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
@@ -340,22 +340,22 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
-				echo '<div class="section-item">';
+				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
 					echo '<b>', esc_html__( 'Width And Height Of Chart', 'visualizer' ), '</b>';
 
-					echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="width" class="control-text" value="', esc_attr( $this->width ), '" placeholder="100%">';
 							echo '</td>';
-							echo '<td class="section-table-column">';
+							echo '<td class="viz-section-table-column">';
 								echo '<input type="text" name="height" class="control-text" value="', esc_attr( $this->height ), '" placeholder="400">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
 
-					echo '<p class="section-description">';
+					echo '<p class="viz-section-description">';
 						esc_html_e( 'Determines the total width and height of the chart.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
@@ -369,7 +369,7 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 					esc_html__( 'If no, the map will be stretched to the exact size of the chart as specified by the width and height options.', 'visualizer' )
 				);
 
-				echo '<div class="section-delimiter"></div>';
+				echo '<div class="viz-section-delimiter"></div>';
 
 				self::_renderSectionDescription( esc_html__( 'Configure the background color for the main area of the chart and the chart border width and color.', 'visualizer' ) );
 

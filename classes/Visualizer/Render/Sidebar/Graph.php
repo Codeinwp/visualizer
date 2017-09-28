@@ -113,7 +113,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			'#000'
 		);
 
-		echo '<div class="section-delimiter"></div>';
+		echo '<div class="viz-section-delimiter"></div>';
 
 		self::_renderSelectItem(
 			esc_html__( 'Axes Titles Position', 'visualizer' ),
