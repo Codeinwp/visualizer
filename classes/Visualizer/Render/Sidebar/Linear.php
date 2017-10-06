@@ -130,22 +130,22 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 	 * @access protected
 	 */
 	protected function _renderLineSettingsItems() {
-		echo '<div class="section-item">';
+		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', esc_html__( 'Line Width And Point Size', 'visualizer' ), '</b>';
 
-			echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+			echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 				echo '<tr>';
-					echo '<td class="section-table-column">';
+					echo '<td class="viz-section-table-column">';
 						echo '<input type="text" name="lineWidth" class="control-text" value="', esc_attr( $this->lineWidth ), '" placeholder="2">';
 					echo '</td>';
-					echo '<td class="section-table-column">';
+					echo '<td class="viz-section-table-column">';
 						echo '<input type="text" name="pointSize" class="control-text" value="', esc_attr( $this->pointSize ), '" placeholder="0">';
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
 
-			echo '<p class="section-description">';
+			echo '<p class="viz-section-description">';
 				esc_html_e( 'Data line width and diameter of displayed points in pixels. Use zero to hide all lines or points.', 'visualizer' );
 			echo '</p>';
 		echo '</div>';
@@ -160,7 +160,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			);
 		}
 
-		echo '<div class="section-delimiter"></div>';
+		echo '<div class="viz-section-delimiter"></div>';
 
 		if ( $this->_includeFocusTarget ) {
 			self::_renderSelectItem(
@@ -202,7 +202,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			esc_html__( 'Determines how multiple data selections are rolled up into tooltips. To make it working you need to set multiple selection mode and tooltip trigger to display it when an user selects an element.', 'visualizer' )
 		);
 
-		echo '<div class="section-delimiter"></div>';
+		echo '<div class="viz-section-delimiter"></div>';
 
 		self::_renderTextItem(
 			esc_html__( 'Point Opacity', 'visualizer' ),
@@ -249,24 +249,24 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 			esc_html__( 'Determines whether the series has to be presented in the legend or not.', 'visualizer' )
 		);
 
-		echo '<div class="section-item">';
+		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', esc_html__( 'Line Width And Point Size', 'visualizer' ), '</b>';
 
-			echo '<table class="section-table" cellspacing="0" cellpadding="0" border="0">';
+			echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 				echo '<tr>';
-					echo '<td class="section-table-column">';
+					echo '<td class="viz-section-table-column">';
 						$line_width = isset( $this->series[ $index ]['lineWidth'] ) ? $this->series[ $index ]['lineWidth'] : '';
 						echo '<input type="text" name="series[', $index, '][lineWidth]" class="control-text" value="', esc_attr( $line_width ), '" placeholder="2">';
 					echo '</td>';
-					echo '<td class="section-table-column">';
+					echo '<td class="viz-section-table-column">';
 						$point_size = isset( $this->series[ $index ]['pointSize'] ) ? $this->series[ $index ]['pointSize'] : '';
 						echo '<input type="text" name="series[', $index, '][pointSize]" class="control-text" value="', esc_attr( $point_size ), '" placeholder="0">';
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
 
-			echo '<p class="section-description">';
+			echo '<p class="viz-section-description">';
 				esc_html_e( 'Overrides the global line width and point size values for this series.', 'visualizer' );
 			echo '</p>';
 		echo '</div>';

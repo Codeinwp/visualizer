@@ -261,7 +261,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		// dispatch pages
 		$this->_chart = get_post( $chart_id );
-		$tab    = isset( $_GET['tab'] ) || empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
+		$tab    = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
 		switch ( $tab ) {
 			case 'settings':
 				// changed by Ash/Upwork
