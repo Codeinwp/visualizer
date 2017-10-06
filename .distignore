@@ -17,6 +17,7 @@ dist
 artifact
 composer.json
 composer.lock
+package-lock.json
 key.enc
 vendor/phpoffice/phpexcel/Examples
 vendor/phpoffice/phpexcel/unitTests
