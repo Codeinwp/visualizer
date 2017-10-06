@@ -1,4 +1,9 @@
 
+ ### v3.0.1 - 2017-10-06 
+ **Changes:** 
+ * Improved compatibility with various theme and plugins.
+* Fix for chart type selection when creation from media popup.
+ 
  ### v3.0.0 - 2017-09-05 
  **Changes:** 
  * Adds support manual configuration according to Google Visualization API.
