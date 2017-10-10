@@ -6,12 +6,6 @@
     "charts",
     "visualization"
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/Codeinwp/themeisle-sdk"
-    }
-  ],
   "homepage": "https://themeisle.com/plugins/visualizer/",
   "license": "GPL-2.0+",
   "authors": [
