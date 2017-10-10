@@ -144,6 +144,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 3.0.2 - 2017-10-10  = 
+
+* Fix dependency for composer dependencies.
+
+
 = 3.0.1 - 2017-10-06  = 
 
 * Improved compatibility with various theme and plugins.
