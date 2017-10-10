@@ -249,18 +249,25 @@ class Visualizer_Module {
 	 * @param string $filename The name of the file to use.
 	 */
 	private function _getExcel( $rows, $filename ) {
-		$chart      = $filename;
+		// PHPExcel does not like sheet names longer than 31 characters.
+		$chart      = substr( $filename, 0, 30 );
 		$filename   .= '.xlsx';
 
-		$doc        = new PHPExcel();
-		$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
-		$doc->getActiveSheet()->setTitle( $chart );
-		$doc        = apply_filters( 'visualizer_excel_doc', $doc );
-		$writer = PHPExcel_IOFactory::createWriter( $doc, 'Excel2007' );
-		ob_start();
-		$writer->save( 'php://output' );
-		$xlsData = ob_get_contents();
-		ob_end_clean();
+		$xlsData    = '';
+		if ( class_exists( 'PHPExcel' ) ) {
+			$doc        = new PHPExcel();
+			$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
+			$doc->getActiveSheet()->setTitle( $chart );
+			$doc        = apply_filters( 'visualizer_excel_doc', $doc );
+			$writer = PHPExcel_IOFactory::createWriter( $doc, 'Excel2007' );
+			ob_start();
+			$writer->save( 'php://output' );
+			$xlsData = ob_get_contents();
+			ob_end_clean();
+		} else {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PHPExcel does not exist!', 'error', __FILE__, __LINE__ );
+			error_log( 'Class PHPExcel does not exist!' );
+		}
 		return array(
 			'csv'  => 'data:application/vnd.ms-excel;base64,' . base64_encode( $xlsData ),
 			'name' => $filename,

@@ -208,7 +208,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				esc_html__( 'To enable downloading the data as a CSV.', 'visualizer' )
 			);
 
-			$disabled   = ! ( extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && version_compare( PHP_VERSION, '5.2.0', '>' ) );
+			$disabled   = ! ( class_exists( 'PHPExcel' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && version_compare( PHP_VERSION, '5.2.0', '>' ) );
 			self::_renderCheckboxItem(
 				esc_html__( 'Excel', 'visualizer' ),
 				'actions[]',
