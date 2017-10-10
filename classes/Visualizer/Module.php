@@ -253,7 +253,7 @@ class Visualizer_Module {
 		$chart      = substr( $filename, 0, 30 );
 		$filename   .= '.xlsx';
 
-		$xlsData	= '';
+		$xlsData    = '';
 		if ( class_exists( 'PHPExcel' ) ) {
 			$doc        = new PHPExcel();
 			$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
