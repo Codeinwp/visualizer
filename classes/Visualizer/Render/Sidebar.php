@@ -157,7 +157,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( __( 'Configure the graph by providing configuration variables right from the','visualizer' ) . ' <a href="https://developers.google.com/chart/interactive/docs/reference" target="_blank">Google Visualization</a> API.' );
+				self::_renderSectionDescription( __( 'Configure the graph by providing configuration variables right from the', 'visualizer' ) . ' <a href="https://developers.google.com/chart/interactive/docs/reference" target="_blank">Google Visualization</a> API.' );
 
 			$example    = '
 {
@@ -193,7 +193,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function _renderActionSettings() {
 		global $wp_version;
-		$disable_actions	= version_compare( $wp_version, '4.7.0', '<' );
+		$disable_actions    = version_compare( $wp_version, '4.7.0', '<' );
 		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), false );
 			self::_renderCheckboxItem(
 				esc_html__( 'Print', 'visualizer' ),
@@ -668,7 +668,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ($value == $default ? 'checked' : ''), ' ', ($disabled ? 'disabled=disabled' : ''), '>';
+			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value == $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
 			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}

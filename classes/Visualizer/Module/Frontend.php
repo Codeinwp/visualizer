@@ -173,10 +173,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$atts = shortcode_atts(
 			array(
 				'id'     => false, // chart id
-			'class'  => false, // chart class
-			'series' => false, // series filter hook
-			'data'   => false, // data filter hook
-			'settings'   => false, // data filter hook
+				'class'  => false, // chart class
+				'series' => false, // series filter hook
+				'data'   => false, // data filter hook
+				'settings'   => false, // data filter hook
 			), $atts
 		);
 
