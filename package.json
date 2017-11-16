@@ -23,7 +23,8 @@
   },
   "devDependencies": {
     "grunt-plugin-fleet": "github:codeinwp/grunt-plugin-fleet",
-    "load-project-config": "~0.2.0"
+    "load-project-config": "~0.2.0",
+    "grunt-helpscout-faq": "~0.1.0"
   },
   "wraithSlug": [
     "visualizer"
