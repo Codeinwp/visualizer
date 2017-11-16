@@ -2,7 +2,7 @@
 **Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [rozroz](https://profiles.wordpress.org/rozroz)  
 **Tags:** chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api  
 **Requires at least:** 3.5  
-**Tested up to:** 4.8  
+**Tested up to:** 4.9  
 **Stable tag:** trunk  
 **License:** GPL v2.0 or later  
 **License URI:** http://www.opensource.org/licenses/gpl-license.php  
@@ -144,6 +144,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.0.3 - 2017-11-16  ###
+
+* Adds compatibility with WordPress 4.9.
+
+
 ### 3.0.2 - 2017-10-10  ###
 
 * Fix dependency for composer dependencies.

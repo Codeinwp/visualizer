@@ -1,4 +1,8 @@
 
+ ### v3.0.3 - 2017-11-16 
+ **Changes:** 
+ * Adds compatibility with WordPress 4.9.
+ 
  ### v3.0.2 - 2017-10-10 
  **Changes:** 
  * Fix dependency for composer dependencies.
