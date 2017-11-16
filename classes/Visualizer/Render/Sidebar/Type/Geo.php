@@ -73,7 +73,7 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 
 			self::_renderSectionStart( esc_html__( 'Region', 'visualizer' ), false );
 				self::_renderSectionDescription(
-					esc_html__( 'Configure the region area to display on the map. (Surrounding areas will be displayed as well.) Can be one of the following:' , 'visualizer' ) .
+					esc_html__( 'Configure the region area to display on the map. (Surrounding areas will be displayed as well.) Can be one of the following:', 'visualizer' ) .
 					'<ul>' .
 						'<li>' . esc_html__( "'world' - A map of the entire world.", 'visualizer' ) . '</li>' .
 						'<li>' . sprintf( esc_html__( "A continent or a sub-continent, specified by its %s code, e.g., '011' for Western Africa.", 'visualizer' ), '<a href="https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart#Continent_Hierarchy" target="_blank">3-digit</a>' ) . '</li>' .
