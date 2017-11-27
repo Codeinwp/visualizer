@@ -80,10 +80,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		);
 
 		if ( $query->have_posts() && $query->post_count > 0 ) {
-			return array(
-				'heading'   => __( 'Some title from visualizer', 'visualizer' ),
-				'msg'       => __( 'Some msg from visualizer', 'visualizer' ),
-			);
+			return true;
 		}
 		return false;
 	}

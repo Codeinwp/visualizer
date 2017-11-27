@@ -1,5 +1,5 @@
 /*
-	Version: 3.0.3
+	Version: 3.0.4
 */
 #visualizer-library-view {
 	padding: 30px 10px 10px 30px;
@@ -31,7 +31,6 @@
 	padding: 5px;
 	border: 1px solid #ddd;
 	background-color: #efefef;
-	-webkit-box-shadow: 0 0 8px #ddd;
 	box-shadow: 0 0 8px #ddd;
 }
 
@@ -130,7 +129,6 @@
 	border-radius: 2px;
 	color: white !important;
 	background-color: #aaa;
-	-webkit-box-shadow: 0 0 5px #ccc;
 	box-shadow: 0 0 5px #ccc;
 	font-weight: bold;
 	text-decoration: none;
@@ -139,7 +137,6 @@
 .visualizer-library-pagination-active > .visualizer-library-pagination-page,
 a.visualizer-library-pagination-page:hover {
 	background-color: lightcoral;
-	-webkit-box-shadow: 0 0 5px lightpink;
 	box-shadow: 0 0 5px lightpink;
 }
 
