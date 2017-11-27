@@ -144,6 +144,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.0.4 - 2017-11-27  ###
+
+* Fix for review message notification.
+
+
 ### 3.0.3 - 2017-11-16  ###
 
 * Adds compatibility with WordPress 4.9.

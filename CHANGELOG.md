@@ -1,4 +1,8 @@
 
+ ### v3.0.4 - 2017-11-27 
+ **Changes:** 
+ * Fix for review message notification.
+ 
  ### v3.0.3 - 2017-11-16 
  **Changes:** 
  * Adds compatibility with WordPress 4.9.
