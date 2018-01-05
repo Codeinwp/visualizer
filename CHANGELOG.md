@@ -1,4 +1,9 @@
 
+ ### v3.0.5 - 2018-01-05 
+ **Changes:** 
+ * Fix chart rendering bug in firefox.
+* Fix review notification.
+ 
  ### v3.0.4 - 2017-11-27 
  **Changes:** 
  * Fix for review message notification.
