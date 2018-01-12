@@ -42,10 +42,16 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
+		register_activation_hook( VISUALIZER_BASEFILE, array( $this, 'activate' ) );
+		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
+		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
+
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
+
+
 	}
 	/**
 	 * Fetches the SDK logger data.
@@ -126,4 +132,62 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		load_plugin_textdomain( Visualizer_Plugin::NAME, false, dirname( plugin_basename( VISUALIZER_BASEFILE ) ) . '/languages/' );
 	}
 
+	/**
+	 * Activate the plugin
+	 */
+	public function activate() {
+		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, 'hourly', 'visualizer_schedule_refresh_db' );
+	}
+
+	/**
+	 * Deactivate the plugin
+	 */
+	public function deactivate() {
+		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+	}
+
+	/**
+	 * Refresh the db chart.
+	 *
+	 * @access public
+	 */
+	public function refreshDbChart() {
+		$schedules = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
+		if ( ! $schedules ) {
+			return;
+		}
+		if ( ! defined( 'VISUALIZER_DO_NOT_DIE' ) ) {
+			// define this so that the ajax call does not die
+			// this means that if the new version of pro and the old version of free are installed, only the first chart will be updated
+			define( 'VISUALIZER_DO_NOT_DIE', true );
+		}
+
+		$new_schedules = array();
+		$now           = time();
+		foreach ( $schedules as $chart_id => $time ) {
+			$new_schedules[ $chart_id ] = $time;
+			if ( $time > $now ) {
+				continue;
+			}
+			// check if the source is correct.
+			$source		= get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
+			if ( Visualizer_Source_Query_Params::class === $source ) {
+				$params		= get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
+				$source		= new Visualizer_Source_Query_Params( $params );
+				$source->fetch( false );
+				if ( empty( $source->get_error() ) ) {
+					update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+
+					wp_update_post( array(
+						'ID'			=> $chart_id,
+						'post_content'	=> $source->getData(),
+					) );
+				}
+				$hours                      = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+				$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
+			}
+		}
+		update_option( Visualizer_Plugin::CF_DB_SCHEDULE, $new_schedules );
+	}
 }

@@ -23,13 +23,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
 	return;
 }
-// Added by Ash/Upwork
 if ( class_exists( 'Visualizer_Pro', false ) ) {
 	define( 'VISUALIZER_PRO', true );
 } else {
 	defined( 'VISUALIZER_PRO' ) || define( 'VISUALIZER_PRO', false );
 }
-// Added by Ash/Upwork
+
+// if x and y features are required, this value should read x,y or x|y or x;y.
+define( 'VISUALIZER_ENABLE_BETA_FEATURES', 'dbwizard' );
+
 /**
  * Automatically loads classes for the plugin. Checks a namespace and loads only
  * approved classes.

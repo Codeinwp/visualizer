@@ -1056,3 +1056,20 @@ span.viz-section-error {
 	position: relative;
 	text-align: center;
 }
+
+
+/******************************************************************************/
+/********************************  DB WIZARD  ***********************************/
+/******************************************************************************/
+
+.db-wizard-condition .select-condition {
+	display: none;
+}
+
+.db-wizard-condition .select-condition.active {
+	display: block;
+}
+
+.db-wizard-results {
+	width: 75%;
+}
