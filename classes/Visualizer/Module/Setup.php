@@ -171,7 +171,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			}
 			// check if the source is correct.
 			$source     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
-			if ( Visualizer_Source_Query_Params::class === $source ) {
+			if ( 'Visualizer_Source_Query_Params' === $source ) {
 				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
 				$source     = new Visualizer_Source_Query_Params( $params );
 				$source->fetch( false );
