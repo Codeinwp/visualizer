@@ -175,7 +175,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
 				$source     = new Visualizer_Source_Query_Params( $params );
 				$source->fetch( false );
-				if ( empty( $source->get_error() ) ) {
+				$error      = $source->get_error();
+				if ( empty( $error ) ) {
 					update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 
 					wp_update_post(
