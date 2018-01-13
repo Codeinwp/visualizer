@@ -679,7 +679,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( $chart_id ) {
 			$source     = new Visualizer_Source_Query_Params( wp_parse_args( $_POST['params'] ) );
 			$source->fetch( false );
-			if ( empty( $source->get_error() ) ) {
+			$error      = $source->get_error();
+			if ( empty( $error ) ) {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, wp_parse_args( $_POST['params'] ) );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
@@ -698,7 +699,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
 			} else {
-				$render->message = $souce->get_error();
+				$render->message = $error;
 			}
 		}
 		$render->render();
