@@ -51,7 +51,6 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 
-
 	}
 	/**
 	 * Fetches the SDK logger data.
@@ -171,18 +170,20 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				continue;
 			}
 			// check if the source is correct.
-			$source		= get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
+			$source     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
 			if ( Visualizer_Source_Query_Params::class === $source ) {
-				$params		= get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
-				$source		= new Visualizer_Source_Query_Params( $params );
+				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
+				$source     = new Visualizer_Source_Query_Params( $params );
 				$source->fetch( false );
 				if ( empty( $source->get_error() ) ) {
 					update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 
-					wp_update_post( array(
-						'ID'			=> $chart_id,
-						'post_content'	=> $source->getData(),
-					) );
+					wp_update_post(
+						array(
+							'ID'            => $chart_id,
+							'post_content'  => $source->getData(),
+						)
+					);
 				}
 				$hours                      = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
 				$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;

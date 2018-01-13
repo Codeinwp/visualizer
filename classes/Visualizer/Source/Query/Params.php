@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Source manager for query builder.
  *
@@ -46,7 +45,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	 */
 	public function __construct( $params = null ) {
 		$this->_params = $params;
-		if ( ! empty ( $params ) ) {
+		if ( ! empty( $params ) ) {
 			$this->build_query();
 		}
 	}
@@ -59,23 +58,23 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			return null;
 		}
 
-		$first	= null;
-		$index	= 0;
+		$first  = null;
+		$index  = 0;
 		foreach ( $select as $column ) {
 			if ( ! is_null( $first ) ) {
 				break;
 			}
-			$table	= $tables;
-			$col	= $column;
+			$table  = $tables;
+			$col    = $column;
 			if ( 0 !== strpos( $column, 'count(' ) ) {
 				if ( count( $tables ) > 1 ) {
-					$arr	= explode( '.', $column );
-					$table	= $arr[0];
-					$col	= $arr[1];
+					$arr    = explode( '.', $column );
+					$table  = $arr[0];
+					$col    = $arr[1];
 				}
 				foreach ( $columns[ $table ] as $table_cols ) {
-					if ( $table_cols['name'] === $column && 's' === $table_cols['type' ] ) {
-						$first	= $column;
+					if ( $table_cols['name'] === $column && 's' === $table_cols['type'] ) {
+						$first  = $column;
 						break;
 					}
 				}
@@ -97,16 +96,16 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	 * @access private
 	 */
 	private function build_query() {
-		$args		= $this->_params;
+		$args       = $this->_params;
 
-		$table		= $args['from'];
-		$tables		= array( $table );
-		$mapping	= self::get_db_table_mapping();
+		$table      = $args['from'];
+		$tables     = array( $table );
+		$mapping    = self::get_db_table_mapping();
 		if ( array_key_exists( $table, $mapping ) ) {
 			$tables[] = $mapping[ $table ];
 		}
 
-		$cols		= array();
+		$cols       = array();
 		foreach ( $tables as $table ) {
 			$cols[ $table ] = self::get_db_table_columns( $table, count( $tables ) > 1 );
 		}
@@ -115,38 +114,37 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			return;
 		}
 
-		$query		= '';
-		$select		= 'SELECT ' . $this->rearrange_columns_for_x_axis( $cols, $args['select'], $tables );
-		$from		= ' FROM ' . vsprintf( implode( ',', array_fill( 0, count( $tables ), '%s' ) ), $tables );
-		$group		= '';
-		$order		= '';
-		$limit		= '';
-		$fk			= '';
-		$where		= array();
+		$query      = '';
+		$select     = 'SELECT ' . $this->rearrange_columns_for_x_axis( $cols, $args['select'], $tables );
+		$from       = ' FROM ' . vsprintf( implode( ',', array_fill( 0, count( $tables ), '%s' ) ), $tables );
+		$group      = '';
+		$order      = '';
+		$limit      = '';
+		$fk         = '';
+		$where      = array();
 
 		if ( isset( $args['group'] ) ) {
-			$group	= ' GROUP BY ' . implode( ', ', $args['group'] );
+			$group  = ' GROUP BY ' . implode( ', ', $args['group'] );
 		}
 		if ( isset( $args['order'] ) ) {
-			$order	= ' ORDER BY ' . implode( ', ', $args['order'] );
+			$order  = ' ORDER BY ' . implode( ', ', $args['order'] );
 		}
 		if ( ! empty( $args['limit'] ) ) {
-			$limit	= ' LIMIT ' . $args['limit'];
+			$limit  = ' LIMIT ' . $args['limit'];
 		}
 
-
-		$index		= 0;
+		$index      = 0;
 		if ( ! empty( $args['where'] ) ) {
-			$scraps		= array();
+			$scraps     = array();
 			foreach ( $args['where'] as $column ) {
 				if ( empty( $column ) ) {
 					continue;
 				}
-				$table	= strstr( $column, '.', true );
+				$table  = strstr( $column, '.', true );
 				$scraps[] = array(
-					'table'		=> $table,
-					'col'		=> $column,
-					'index'		=> $index++,
+					'table'     => $table,
+					'col'       => $column,
+					'index'     => $index++,
 				);
 			}
 
@@ -154,9 +152,9 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 				foreach ( $scraps as $scrap ) {
 					foreach ( $cols[ $scrap['table'] ] as $col ) {
 						if ( $scrap['col'] === $col['name'] ) {
-							$operator	= $args[ $col['type'] . '-operator' ][ $scrap['index'] ];
-							$operand	= $args[ $col['type'] ][ $scrap['index'] ];
-							$where[]	= $scrap['col'] . " $operator $operand";
+							$operator   = $args[ $col['type'] . '-operator' ][ $scrap['index'] ];
+							$operand    = $args[ $col['type'] ][ $scrap['index'] ];
+							$where[]    = $scrap['col'] . " $operator $operand";
 						}
 					}
 				}
@@ -164,20 +162,20 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 		}
 
 		if ( count( $tables ) > 1 ) {
-			$fk			= $this->get_foreign_key_constraint( $tables[0], $tables[1] );
+			$fk         = $this->get_foreign_key_constraint( $tables[0], $tables[1] );
 			if ( ! empty( $fk ) ) {
-				$where[]	= $fk;
+				$where[]    = $fk;
 			}
 		}
 
 		if ( empty( $where ) ) {
-			$where		= '';
+			$where      = '';
 		} else {
-			$where		= ' WHERE ' . implode( ' AND ', $where );
+			$where      = ' WHERE ' . implode( ' AND ', $where );
 		}
 
-		$query			= $select . $from . $where . $group . $order . $limit;
-		$this->_query	= $query;
+		$query          = $select . $from . $where . $group . $order . $limit;
+		$this->_query   = $query;
 	}
 
 	/**
@@ -207,8 +205,8 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	/**
 	 * Returns the foreign key relationship constraint between the tables.
 	 *
-	 * @param string $table Table 1.
-	 * @param string $table Table 2.
+	 * @param string $table1 Table 1.
+	 * @param string $table2 Table 2.
 	 * @access private
 	 * @return string
 	 */
@@ -236,34 +234,36 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	 * Gets the column information for the table.
 	 *
 	 * @param string $table The table.
-	 * @param bool $prefix_with_table Whether to prefix column name with the name of the table.
+	 * @param bool   $prefix_with_table Whether to prefix column name with the name of the table.
 	 * @access private
 	 * @return array
 	 */
 	private static function get_db_table_columns( $table, $prefix_with_table = false ) {
 		global $wpdb;
-		$columns	= get_transient( "visualizer_db_{$table}_columns" );
+		$columns    = get_transient( "visualizer_db_{$table}_columns" );
 		if ( $columns ) {
 			return $columns;
 		}
-		$columns	= array();
-		$rows		= $wpdb->get_results( "SHOW COLUMNS IN `$table`", ARRAY_N );
+		$columns    = array();
+		// @codingStandardsIgnoreStart
+		$rows       = $wpdb->get_results( "SHOW COLUMNS IN `$table`", ARRAY_N );
+		// @codingStandardsIgnoreEnd
 		if ( $rows ) {
 			// n => numeric, d => date-ish, s => string-ish.
 			foreach ( $rows as $row ) {
-				$col		= ( $prefix_with_table ? "$table." : '' ) . $row[0];
-				$type		= $row[1];
+				$col        = ( $prefix_with_table ? "$table." : '' ) . $row[0];
+				$type       = $row[1];
 				if ( strpos( $type, 'int' ) !== false || strpos( $type, 'float' ) !== false ) {
-					$type	= 'n';
-				} else if ( strpos( $type, 'date' ) !== false || strpos( $type, 'time' ) !== false ) {
-					$type	= 'd';
+					$type   = 'n';
+				} elseif ( strpos( $type, 'date' ) !== false || strpos( $type, 'time' ) !== false ) {
+					$type   = 'd';
 				} else {
-					$type	= 's';
+					$type   = 's';
 				}
-				$columns[]	= array( 'name' => $col, 'type' => $type );
+				$columns[]  = array( 'name' => $col, 'type' => $type );
 			}
 		}
-		$mapping	= apply_filters( 'visualizer_pro_db_table_columns', $columns, $table );
+		$mapping    = apply_filters( 'visualizer_pro_db_table_columns', $columns, $table );
 		set_transient( "visualizer_db_{$table}_columns", $columns, DAY_IN_SECONDS );
 		return $columns;
 	}
@@ -276,12 +276,12 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	 * @return array
 	 */
 	public static function get_table_columns( $table ) {
-		$columns	= array();
+		$columns    = array();
 		if ( ! $table ) {
 			return $columns;
 		}
 
-		$tables	= array( $table );
+		$tables = array( $table );
 		$mapping = Visualizer_Source_Query_Params::get_db_table_mapping();
 		if ( array_key_exists( $table, $mapping ) ) {
 			$tables[] = $mapping[ $table ];
@@ -306,9 +306,9 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			return $tables;
 		}
 
-		$prefix	= apply_filters( 'visualizer_pro_db_prefix', $wpdb->prefix );
-		$sql	= $wpdb->get_col( 'SHOW TABLES', 0 );
-		foreach( $sql as $table ) {
+		$prefix = apply_filters( 'visualizer_pro_db_prefix', $wpdb->prefix );
+		$sql    = $wpdb->get_col( 'SHOW TABLES', 0 );
+		foreach ( $sql as $table ) {
 			if ( empty( $prefix ) || 0 === strpos( $table, $prefix ) ) {
 				$tables[] = $table;
 			}

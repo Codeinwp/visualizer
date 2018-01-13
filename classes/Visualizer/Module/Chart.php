@@ -294,7 +294,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
 		}
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
-		error_log("idhar! " . print_r($_POST,true));
+			error_log( 'idhar! ' . print_r( $_POST, true ) );
 			if ( $this->_chart->post_status == 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
 				wp_update_post( $this->_chart->to_array() );
@@ -348,7 +348,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'url'     => admin_url( 'admin-ajax.php' ),
 					'nonces'  => array(
 						'permissions'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA ),
-						'db_get_cols'	=> wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_COLS . Visualizer_Plugin::VERSION ),
+						'db_get_cols'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_COLS . Visualizer_Plugin::VERSION ),
 						'db_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION ),
 					),
 					'actions' => array(
@@ -357,26 +357,26 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'db_get_data'   => Visualizer_Plugin::ACTION_FETCH_DB_DATA,
 					),
 				),
-				'db_wizard'	=> array(
-					'labels'	=> array(
-						'from'		=> __( 'Select From', 'visualizer' ),
-						'select'	=> __( 'Select Columns', 'visualizer' ),
-						'where'		=> __( 'Where', 'visualizer' ),
-						'group'		=> __( 'Group By', 'visualizer' ),
-						'order'		=> __( 'Order By', 'visualizer' ),
+				'db_wizard' => array(
+					'labels'    => array(
+						'from'      => __( 'Select From', 'visualizer' ),
+						'select'    => __( 'Select Columns', 'visualizer' ),
+						'where'     => __( 'Where', 'visualizer' ),
+						'group'     => __( 'Group By', 'visualizer' ),
+						'order'     => __( 'Order By', 'visualizer' ),
 					),
-					'select'	=> array(
+					'select'    => array(
 						'count(*)',
 						'count(distinct #)',
 						'#',
 					),
-					'where'	=> array(
+					'where' => array(
 						'#',
 					),
-					'group'	=> array(
+					'group' => array(
 						'#',
 					),
-					'order'	=> array(
+					'order' => array(
 						'#',
 					),
 				),
@@ -653,10 +653,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function getTableData() {
 		global $wpdb;
 		check_ajax_referer( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION, 'security' );
-		
-		$source		= new Visualizer_Source_Query_Params(  wp_parse_args( $_POST['params'] ) );
-		$html		= $source->fetch( true );
-		wp_send_json_success( array( 'table' => $html ) );	
+
+		$source     = new Visualizer_Source_Query_Params( wp_parse_args( $_POST['params'] ) );
+		$html       = $source->fetch( true );
+		wp_send_json_success( array( 'table' => $html ) );
 	}
 
 	/**
@@ -667,7 +667,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function saveQuery() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION, 'security' );
 
-		$chart_id	= filter_input(
+		$chart_id   = filter_input(
 			INPUT_GET, 'chart', FILTER_VALIDATE_INT, array(
 				'options' => array(
 					'min_range' => 1,
@@ -677,7 +677,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$render = new Visualizer_Render_Page_Update();
 		if ( $chart_id ) {
-			$source		= new Visualizer_Source_Query_Params( wp_parse_args( $_POST['params'] ) );
+			$source     = new Visualizer_Source_Query_Params( wp_parse_args( $_POST['params'] ) );
 			$source->fetch( false );
 			if ( empty( $source->get_error() ) ) {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, wp_parse_args( $_POST['params'] ) );
@@ -689,10 +689,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
 				update_option( Visualizer_Plugin::CF_DB_SCHEDULE, $schedules );
 
-				wp_update_post( array(
-					'ID'			=> $chart_id,
-					'post_content'	=> $source->getData(),
-				) );
+				wp_update_post(
+					array(
+						'ID'            => $chart_id,
+						'post_content'  => $source->getData(),
+					)
+				);
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
 			} else {

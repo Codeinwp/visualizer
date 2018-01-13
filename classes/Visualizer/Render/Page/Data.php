@@ -140,12 +140,14 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 														class="visualizer-select">
 													<?php
 													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
-													$schedules = apply_filters( 'visualizer_schedules', array(
-														'1'  => __( 'Each hour', 'visualizer' ),
-														'12' => __( 'Each 12 hours', 'visualizer' ),
-														'24' => __( 'Each day', 'visualizer' ),
-														'36' => __( 'Each 3 days', 'visualizer' ),
-													) );
+													$schedules = apply_filters(
+														'visualizer_schedules', array(
+															'1'  => __( 'Each hour', 'visualizer' ),
+															'12' => __( 'Each 12 hours', 'visualizer' ),
+															'24' => __( 'Each day', 'visualizer' ),
+															'36' => __( 'Each 3 days', 'visualizer' ),
+														)
+													);
 													foreach ( $schedules as $num => $name ) {
 														$extra = $num == $hours ? 'selected' : '';
 														?>
@@ -242,12 +244,14 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<select name="refresh" id="vz-db-import-time" class="visualizer-select">
 											<?php
 											$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-											$schedules = apply_filters( 'visualizer_schedules', array(
-												'1'  => __( 'Each hour', 'visualizer' ),
-												'12' => __( 'Each 12 hours', 'visualizer' ),
-												'24' => __( 'Each day', 'visualizer' ),
-												'36' => __( 'Each 3 days', 'visualizer' ),
-											) );
+											$schedules = apply_filters(
+												'visualizer_schedules', array(
+													'1'  => __( 'Each hour', 'visualizer' ),
+													'12' => __( 'Each 12 hours', 'visualizer' ),
+													'24' => __( 'Each day', 'visualizer' ),
+													'36' => __( 'Each 3 days', 'visualizer' ),
+												)
+											);
 											foreach ( $schedules as $num => $name ) {
 												$extra = $num == $hours ? 'selected' : '';
 												?>
@@ -466,6 +470,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 	}
 
+	/**
+	 * Renders the additional content.
+	 *
+	 * @access private
+	 */
 	private function add_additional_content() {
 		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'dbwizard' ) !== false ) {
 			$params = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_PARAMS, true );

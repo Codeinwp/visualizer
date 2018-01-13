@@ -1,6 +1,7 @@
 /* global prompt */
 /* global visualizer */
 /* global alert */
+/* global ajaxurl */
 
 (function ($) {
     $(document).ready(function () {

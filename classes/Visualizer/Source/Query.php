@@ -19,7 +19,6 @@
 // +----------------------------------------------------------------------+
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
-
 /**
  * Source manager for query builder.
  *
@@ -48,7 +47,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param array $params The query.
+	 * @param string $query The query.
 	 */
 	public function __construct( $query ) {
 		$this->_query = $query;
@@ -67,19 +66,21 @@ class Visualizer_Source_Query extends Visualizer_Source {
 		}
 
 		global $wpdb;
-		$rows		= $wpdb->get_results( $this->_query, ARRAY_A );
+		// @codingStandardsIgnoreStart
+		$rows       = $wpdb->get_results( $this->_query, ARRAY_A );
+		// @codingStandardsIgnoreEnd
 		if ( $rows ) {
-			$results	= array();
-			$headers	= array();
+			$results    = array();
+			$headers    = array();
 			if ( $rows ) {
-				$row_num	= 0;
+				$row_num    = 0;
 				foreach ( $rows as $row ) {
-					$result		= array();
-					$col_num	= 0;
+					$result     = array();
+					$col_num    = 0;
 					foreach ( $row as $k => $v ) {
-						$result[]	= $v;
+						$result[]   = $v;
 						if ( 0 === $row_num ) {
-							$headers[]	= array( 'type' => $this->get_col_type( $col_num++ ), 'label' => $k );
+							$headers[]  = array( 'type' => $this->get_col_type( $col_num++ ), 'label' => $k );
 						}
 					}
 					$results[] = $result;
@@ -137,15 +138,15 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 * @return bool
 	 */
 	private function object( $headers, $results ) {
-		$series		= array();
+		$series     = array();
 		foreach ( $headers as $header ) {
-			$series[]	= $header;
+			$series[]   = $header;
 		}
 		$this->_series = $series;
 
-		$data		= array();
+		$data       = array();
 		foreach ( $results as $row ) {
-			$data[]	= $this->_normalizeData( $row );
+			$data[] = $this->_normalizeData( $row );
 		}
 		$this->_data = $data;
 		return true;
