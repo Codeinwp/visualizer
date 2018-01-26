@@ -221,7 +221,7 @@ abstract class Visualizer_Source {
 						);
 					}
 					break;
-				default:
+				case 'string':
 					$data[ $i ] = utf8_encode( $data[ $i ] );
 					break;
 			}
