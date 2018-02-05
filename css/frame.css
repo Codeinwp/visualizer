@@ -1061,15 +1061,142 @@ span.viz-section-error {
 /******************************************************************************/
 /********************************  DB WIZARD  ***********************************/
 /******************************************************************************/
-
 .db-wizard-condition .select-condition {
 	display: none;
 }
 
 .db-wizard-condition .select-condition.active {
 	display: block;
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #eee;
+	max-width: 50%;
+	font-weight: 500;
 }
 
 .db-wizard-results {
-	width: 75%;
+	padding: 0 25px 20px;
+	width: calc(100% - 350px);
+}
+
+#db-wizard-form {
+	padding: 25px;
+}
+
+.db-wizard-query label {
+	display: block;
+	font-weight: 500;
+	color: rgba(0,0,0,0.85);
+	min-width: 150px;
+	font-size: 18px;
+	padding: 20px 0 5px;
+}
+.db-wizard-query .db-wizard-from label {
+	padding-top: 0;
+}
+.db-wizard-query > div:not(:last-child) {
+	margin-bottom: 15px;
+}
+
+.db-wizard-query .select-condition > div {
+	display: block;
+}
+
+.db-wizard-query .chosen-container {
+	width: auto;
+}
+
+.db-wizard-query .chosen-container-single .chosen-single {
+	background: #fff;
+	font-size: 13px;
+	font-weight: 500;
+	border: 1px solid #ccc;
+	box-shadow: none;
+}
+.db-wizard-templates,
+.db-wizard-templates > div {
+	display: inline;
+}
+.db-wizard-query .chosen-container-multi .chosen-choices {
+	border-color: #ccc;
+	box-shadow: none;
+	background: #fff;
+	padding: 5px;
+}
+.db-wizard-query .select-condition-operand input {
+	margin-top: 10px;
+	background: #fff;
+	box-shadow:  none;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	padding-left: 7px;
+	width: 50%;
+	font-size: 13px;
+}
+.db-wizard-query .select-condition-operand input::placeholder {
+	color: #cdcdcd;
+}
+
+.db-wizard-query .chosen-container-multi .chosen-choices li.search-choice {
+	background: #fff;
+	font-weight: 600;
+	padding: 5px 30px 5px 5px;
+	border-color: #ccc;
+	box-shadow: none;
+}
+
+.db-wizard-results table > thead > tr > th {
+	border: none;
+	font-size: 18px;
+	color: #252422;
+	font-weight: 500;
+	text-align: left;
+	padding: 15px 8px;
+	background: #fff;
+}
+
+.db-wizard-results table > tbody > tr > td, .dataTables_info {
+	border-top: 1px solid #a2a2a2;
+	font-size: 14px;
+	color: #252422;
+	font-weight: 300;
+	padding: 15px 8px;
+}
+.db-wizard-results table > tbody > tr.odd {
+	background-color: #F7F7F7;
+}
+
+
+.db-wizard-results table.dataTable.no-footer {
+	border: none;
+}
+
+.db-wizard-results .dataTables_wrapper .dataTables_info {
+	border-top: 1px solid #CCC5B9;
+	color: #a2a2a2;
+	font-weight: 500;
+	font-size: 12px;
+}
+
+.db-wizard-results .dataTables_filter label {
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.db-wizard-where-template-remove,
+.db-wizard-where-template-add {
+	width: 25px;
+	height: 25px;
+	border-radius: 3px;
+	color: #fff;
+	border: none;
+	font-size: 18px;
+	margin-top: 10px;
+}
+
+.db-wizard-where-template-add {
+	background-color: #34a85e;
+}
+.db-wizard-where-template-remove {
+	background-color: #ff0d00;
 }

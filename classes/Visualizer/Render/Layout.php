@@ -98,6 +98,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<form id='db-wizard-form'>
 				<div class='db-wizard-query'>
 					<div class='db-wizard-from'>
+						<label for="from"><?php _e( 'Select Table', 'visualizer' ); ?></label>
 						<select name='from' class='visualizer-select-from' data-placeholder='<?php _e( 'Select Table', 'visualizer' ); ?>'>
 							<option></option>
 						<?php
@@ -109,6 +110,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						</select>
 					</div>
 					<div class='db-wizard-select'>
+						<label for="select[]"><?php _e( 'Select Columns', 'visualizer' ); ?></label>
 						<select name='select[]' class='visualizer-select-select' data-placeholder='<?php _e( 'Select Columns', 'visualizer' ); ?>' multiple>
 							<option></option>
 						<?php
@@ -151,6 +153,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<button class='db-wizard-where-template-add' title='<?php _e( 'Add', 'visualizer' ); ?>'>+</button>
 					
 					<div class='db-wizard-group'>
+						<label for="group[]"><?php _e( 'Group By', 'visualizer' ); ?></label>
 						<select name='group[]' class='visualizer-select-group' data-placeholder='<?php _e( 'Group By', 'visualizer' ); ?>' multiple>
 							<option></option>
 						<?php
@@ -164,6 +167,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						</select>
 					</div>
 					<div class='db-wizard-order'>
+						<label for="order[]"><?php _e( 'Order By', 'visualizer' ); ?></label>
 						<select name='order[]' class='visualizer-select-order' data-placeholder='<?php _e( 'Order By', 'visualizer' ); ?>' multiple>
 							<option></option>
 						<?php
@@ -177,6 +181,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						</select>
 					</div>
 					<div class='db-wizard-limit'>
+						<label for="limit"><?php _e( 'Limit results to', 'visualizer' ); ?></label>
 						<input type="number" min="0" name='limit' class='visualizer-select-limit' placeholder='<?php _e( 'Limit results to', 'visualizer' ); ?>' value='<?php echo $limit; ?>'>
 					</div>
 				</div>
@@ -215,6 +220,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$operand    = '';
 	?>
 		<div class='db-wizard-where'>
+			<label for="where[]"><?php _e( 'Where', 'visualizer' ); ?></label>
 			<select name='where[]' class='visualizer-select-where' data-placeholder='<?php _e( 'Where', 'visualizer' ); ?>'>
 				<option></option>
 				<?php
