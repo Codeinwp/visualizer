@@ -1123,7 +1123,11 @@ span.viz-section-error {
 	background: #fff;
 	padding: 5px;
 }
-.db-wizard-query .select-condition-operand input {
+
+
+.db-wizard-results .dataTables_wrapper .dataTables_filter input,
+.db-wizard-query .select-condition-operand input,
+.db-wizard-limit input {
 	margin-top: 10px;
 	background: #fff;
 	box-shadow:  none;
@@ -1132,6 +1136,10 @@ span.viz-section-error {
 	padding-left: 7px;
 	width: 50%;
 	font-size: 13px;
+}
+.db-wizard-limit input {
+	/*width: auto;*/
+	margin-bottom: 20px;
 }
 .db-wizard-query .select-condition-operand input::placeholder {
 	color: #cdcdcd;
@@ -1192,6 +1200,11 @@ span.viz-section-error {
 	border: none;
 	font-size: 18px;
 	margin-top: 10px;
+}
+
+.db-wizard-results .dataTables_wrapper .dataTables_filter {
+	float: none;
+	text-align: left;
 }
 
 .db-wizard-where-template-add {
