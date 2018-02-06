@@ -177,7 +177,7 @@
                 display_where_clause(evt, params, $(this));
             });
 
-            $('.db-wizard-templates .visualizer-select-where-added .db-wizard-where-template-remove').on('click', function(e){
+            $('.db-wizard-templates .db-wizard-where-template-remove').on('click', function(e){
                 $(this).parent().remove();
             });
 

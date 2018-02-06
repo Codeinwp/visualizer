@@ -219,6 +219,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$operator   = null;
 		$operand    = '';
 	?>
+	<div class='db-wizard-where-clause'>
 		<div class='db-wizard-where'>
 			<label for="where[]"><?php _e( 'Where', 'visualizer' ); ?></label>
 			<select name='where[]' class='visualizer-select-where' data-placeholder='<?php _e( 'Where', 'visualizer' ); ?>'>
@@ -317,6 +318,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			</div>
 		</div>
 		<button class='db-wizard-where-template-remove' title='<?php _e( 'Remove', 'visualizer' ); ?>'>-</button>
+	</div>
 	<?php
 	}
 
