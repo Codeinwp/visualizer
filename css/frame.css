@@ -1091,6 +1091,7 @@ span.viz-section-error {
 	font-size: 18px;
 	padding: 20px 0 5px;
 }
+.db-wizard-query .db-wizard-where label,
 .db-wizard-query .db-wizard-from label {
 	padding-top: 0;
 }
@@ -1115,7 +1116,17 @@ span.viz-section-error {
 }
 .db-wizard-templates,
 .db-wizard-templates > div {
-	display: inline;
+	display: block;
+}
+.db-wizard-templates > div {
+	width: 50%;
+	border: 1px solid #efefef;
+	padding: 20px;
+	margin-top: 20px;
+	box-sizing: border-box;
+}
+.db-wizard-templates > div:first-child {
+	margin-top: 0;
 }
 .db-wizard-query .chosen-container-multi .chosen-choices {
 	border-color: #ccc;
@@ -1124,11 +1135,9 @@ span.viz-section-error {
 	padding: 5px;
 }
 
-
 .db-wizard-results .dataTables_wrapper .dataTables_filter input,
 .db-wizard-query .select-condition-operand input,
 .db-wizard-limit input {
-	margin-top: 10px;
 	background: #fff;
 	box-shadow:  none;
 	border: 1px solid #ccc;
@@ -1138,9 +1147,14 @@ span.viz-section-error {
 	font-size: 13px;
 }
 .db-wizard-limit input {
-	/*width: auto;*/
-	margin-bottom: 20px;
+	margin: 0 0 20px 20px;
+	display: inline;
+	width: 150px;
 }
+.db-wizard-limit label{
+	display: inline;
+}
+
 .db-wizard-query .select-condition-operand input::placeholder {
 	color: #cdcdcd;
 }
@@ -1193,13 +1207,19 @@ span.viz-section-error {
 
 .db-wizard-where-template-remove,
 .db-wizard-where-template-add {
-	width: 25px;
+	font-size: 12px;
+	width: auto;
 	height: 25px;
 	border-radius: 3px;
 	color: #fff;
 	border: none;
-	font-size: 18px;
 	margin-top: 10px;
+	cursor: pointer;
+	transition: .3s ease;
+}
+.db-wizard-where-template-remove:hover,
+.db-wizard-where-template-add:hover {
+	opacity: .8;
 }
 
 .db-wizard-results .dataTables_wrapper .dataTables_filter {

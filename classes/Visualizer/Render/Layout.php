@@ -150,7 +150,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						?>
 					</div>
 					
-					<button class='db-wizard-where-template-add' title='<?php _e( 'Add', 'visualizer' ); ?>'>+</button>
+					<button class='db-wizard-where-template-add' title='<?php _e( 'Add Condition', 'visualizer' ); ?>'>+ <?php _e( 'Add Condition', 'visualizer' ); ?></button>
 					
 					<div class='db-wizard-group'>
 						<label for="group[]"><?php _e( 'Group By', 'visualizer' ); ?></label>
@@ -317,7 +317,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				</div>
 			</div>
 		</div>
-		<button class='db-wizard-where-template-remove' title='<?php _e( 'Remove', 'visualizer' ); ?>'>-</button>
+		<button class='db-wizard-where-template-remove' title='<?php _e( 'Remove Condition', 'visualizer' ); ?>'>- <?php _e( 'Remove Condition', 'visualizer' ); ?></button>
 	</div>
 	<?php
 	}
