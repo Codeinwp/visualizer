@@ -151,9 +151,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * Refresh the specific chart from the db. This is mostly for charts that have 0 refresh time i.e. live data.
 	 *
 	 * @param WP_Post $chart The chart object.
-	 * @param int $chart_id The chart id.
-	 * @param bool $force If this is true, then the chart data will be refreshed no matter if the chart requests live data or cached data.
-	 * If false, data will be refreshed only if the chart requests live data.
+	 * @param int     $chart_id The chart id.
+	 * @param bool    $force If this is true, then the chart data will be refreshed no matter if the chart requests live data or cached data.
+	 *    If false, data will be refreshed only if the chart requests live data.
 	 *
 	 * @access public
 	 */
