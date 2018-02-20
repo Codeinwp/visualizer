@@ -246,6 +246,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
 											$schedules = apply_filters(
 												'visualizer_schedules', array(
+													'0'  => __( 'Live', 'visualizer' ),
 													'1'  => __( 'Each hour', 'visualizer' ),
 													'12' => __( 'Each 12 hours', 'visualizer' ),
 													'24' => __( 'Each day', 'visualizer' ),

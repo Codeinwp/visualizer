@@ -294,7 +294,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
 		}
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
-			error_log( 'idhar! ' . print_r( $_POST, true ) );
 			if ( $this->_chart->post_status == 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
 				wp_update_post( $this->_chart->to_array() );
@@ -681,10 +680,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$source->fetch( false );
 			$error      = $source->get_error();
 			if ( empty( $error ) ) {
+				$hours = $_POST['refresh'];
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, wp_parse_args( $_POST['params'] ) );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
-				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $_POST['refresh'] );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );
 
 				$schedules              = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
 				$schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;

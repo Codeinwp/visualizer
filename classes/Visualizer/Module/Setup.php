@@ -45,6 +45,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		register_activation_hook( VISUALIZER_BASEFILE, array( $this, 'activate' ) );
 		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
 		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
+		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', null, 10, 3 );
 
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
@@ -147,6 +148,60 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	}
 
 	/**
+	 * Refresh the specific chart from the db. This is mostly for charts that have 0 refresh time i.e. live data.
+	 *
+	 * @param WP_Post $chart The chart object.
+	 * @param int $chart_id The chart id.
+	 * @param bool $force If this is true, then the chart data will be refreshed no matter if the chart requests live data or cached data.
+	 * If false, data will be refreshed only if the chart requests live data.
+	 *
+	 * @access public
+	 */
+	public function refresh_db_for_chart( $chart, $chart_id, $force = false ) {
+		if ( ! $chart_id ) {
+			return $chart;
+		}
+
+		if ( ! $chart ) {
+			$chart = get_post( $chart_id );
+		}
+
+		// check if its a live-data chart or a cached-data chart.
+		if ( ! $force ) {
+			$hours = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+			if ( ! empty( $hours ) ) {
+				// cached, bail!
+				return $chart;
+			}
+		}
+
+		// check if the source is correct.
+		$source     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
+		if ( $source !== 'Visualizer_Source_Query_Params' ) {
+			return $chart;
+		}
+
+		$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
+		$source     = new Visualizer_Source_Query_Params( $params );
+		$source->fetch( false );
+		$error      = $source->get_error();
+		if ( empty( $error ) ) {
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+
+			wp_update_post(
+				array(
+					'ID'            => $chart_id,
+					'post_content'  => $source->getData(),
+				)
+			);
+
+			$chart = get_post( $chart_id );
+		}
+
+		return $chart;
+	}
+
+	/**
 	 * Refresh the db chart.
 	 *
 	 * @access public
@@ -169,27 +224,12 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			if ( $time > $now ) {
 				continue;
 			}
-			// check if the source is correct.
-			$source     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
-			if ( 'Visualizer_Source_Query_Params' === $source ) {
-				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
-				$source     = new Visualizer_Source_Query_Params( $params );
-				$source->fetch( false );
-				$error      = $source->get_error();
-				if ( empty( $error ) ) {
-					update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 
-					wp_update_post(
-						array(
-							'ID'            => $chart_id,
-							'post_content'  => $source->getData(),
-						)
-					);
-				}
-				$hours                      = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-				$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
-			}
+			$this->refresh_db_for_chart( null, $chart_id, false );
+			$hours                      = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+			$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
 		}
 		update_option( Visualizer_Plugin::CF_DB_SCHEDULE, $new_schedules );
 	}
+
 }
