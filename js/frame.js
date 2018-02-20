@@ -1,10 +1,12 @@
 /* global prompt */
 /* global visualizer */
 /* global alert */
+/* global ajaxurl */
 
 (function ($) {
     $(document).ready(function () {
         init_permissions();
+        init_db_import();
 
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');
@@ -149,6 +151,205 @@
             });
         });
     }
+
+    function init_db_import(){
+        $( '#visualizer-db-wizard' ).css("z-index", "-1").hide();
+
+        // add the first where clause.
+        $('.db-wizard-templates').append($('.db-wizard-where-template').clone().removeClass('db-wizard-where-template').show());
+
+        $('.db-wizard-query select').chosen({
+            width               : '50%',
+            search_contains     : true
+        });
+
+        // trigger for new where clauses.
+        $('.db-wizard-where-template-add').on('click', function(e){
+            e.preventDefault();
+            $('.db-wizard-templates').append($('.db-wizard-where-template').clone().removeClass('db-wizard-where-template').addClass('visualizer-select-where-added').show());
+            $('.db-wizard-templates .visualizer-select-where-added select').chosen({
+                width               : '50%',
+                search_contains     : true
+            });
+
+            // show the condition operator and operand.
+            $('.db-wizard-templates .visualizer-select-where-added select.visualizer-select-where').on('change', function(evt, params) {
+                display_where_clause(evt, params, $(this));
+            });
+
+            $('.db-wizard-templates .db-wizard-where-template-remove').on('click', function(e){
+                $(this).parent().parent().remove();
+            });
+
+            $('.db-wizard-templates .visualizer-select-where-added').removeClass('visualizer-select-where-added');
+        });
+
+        // show the condition operator and operand.
+        $('.visualizer-select-where').on('change', function(evt, params) {
+            display_where_clause(evt, params, $(this));
+        });
+
+        $('.db-wizard-where-template-remove').on('click', function(e){
+            $(this).parent().parent().remove();
+        });
+
+        if($('.visualizer-select-select :selected').length === 0){
+            $('#visualizer-query-fetch').attr('disabled', 'disabled');
+        }
+
+        $('.visualizer-select-select').on('change', function(evt, params) {
+            if($('.visualizer-select-select :selected').length > 0){
+                $('#visualizer-query-fetch').removeAttr('disabled');
+            }else{
+                $('#visualizer-query-fetch').attr('disabled', 'disabled');
+            }
+        });
+
+        // get the columns when table is selected.
+        $('.visualizer-select-from').on('change', function(evt, params) {
+            start_ajax($('#visualizer-db-wizard'));
+            $('.db-wizard-templates').empty();
+            $('.db-wizard-where-template-add').trigger('click');
+            $('.visualizer-select-select').empty().trigger('chosen:updated');
+            $('.visualizer-select-group').empty().trigger('chosen:updated');
+            $('.visualizer-select-order').empty().trigger('chosen:updated');
+            $('.visualizer-select-limit').val('');
+            $('.db-wizard-results').empty();
+            $('#visualizer-query-fetch').attr('disabled', 'disabled');
+
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['db_get_cols'],
+                    'security'  : visualizer.ajax['nonces']['db_get_cols'],
+                    'table'     : params.selected
+                },
+                success : function(data){
+                    var where = $('.visualizer-select-where');
+                    var select = $('.visualizer-select-select');
+                    var group = $('.visualizer-select-group');
+                    var order = $('.visualizer-select-order');
+
+                    where.empty().append('<option value=""></option>');
+                    select.empty().append('<option value=""></option>');
+                    group.empty().append('<option value=""></option>');
+                    order.empty().append('<option value=""></option>');
+
+                    // populate the SELECT clause.
+                    $(visualizer.db_wizard.select).each(function(i, clause){
+                        if(clause.indexOf('#') === -1){
+                            select.append($('<option value="' + clause + '">' + clause + '</option>'));
+                        }else{
+                            $(data.data.columns).each(function(i, col){
+                                var val = clause.replace(/#/g, col.name);
+                                select.append($('<option value="' + val + '">' + val + '</option>'));
+                            });
+                        }
+                    });
+
+                    // populate the WHERE, ORDER and GROUPBY clauses.
+                    $(data.data.columns).each(function(i, col){
+                        $(visualizer.db_wizard.where).each(function(i, clause){
+                            if(clause.indexOf('#') !== -1){
+                                var val = clause.replace(/#/g, col.name);
+                                where.append($('<option value="' + val + '" data-type="' + col.type + '">' + val + '</option>'));
+                            }
+                        });
+                        $(visualizer.db_wizard.group).each(function(i, clause){
+                            if(clause.indexOf('#') !== -1){
+                                var val = clause.replace(/#/g, col.name);
+                                group.append($('<option value="' + val + '">' + val + '</option>'));
+                            }
+                        });
+                        $(visualizer.db_wizard.order).each(function(i, clause){
+                            if(clause.indexOf('#') !== -1){
+                                var val = clause.replace(/#/g, col.name);
+                                order.append($('<option value="' + val + '">' + val + '</option>'));
+                            }
+                        });
+                    });
+                    where.trigger('chosen:updated');
+                    select.trigger('chosen:updated');
+                    group.trigger('chosen:updated');
+                    order.trigger('chosen:updated');
+                },
+                complete: function(){
+                    end_ajax($('#visualizer-db-wizard'));
+                }
+            });
+        });
+
+        $('#visualizer-query-fetch').on('click', function(e){
+            start_ajax($('#visualizer-db-wizard'));
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['db_get_data'],
+                    'security'  : visualizer.ajax['nonces']['db_get_data'],
+                    'params'    : $('#db-wizard-form').serialize()
+                },
+                success : function(data){
+                    $('.db-wizard-error').contents().filter(function(){ return this.nodeType === 3; }).empty();
+                    $('.db-wizard-results').empty();
+                    if(data.success){
+                        $('.db-wizard-results').html(data.data.table);
+                        $('#db-query').html(data.data.query);
+                        $('#results').DataTable({
+                            "paging":   false
+                        });
+                    }else{
+                        $('.db-wizard-error .query').html(data.data.query);
+                        $('.db-wizard-error .msg').html(data.data.msg);
+                    }
+                },
+                complete: function(){
+                    end_ajax($('#visualizer-db-wizard'));
+                }
+            });
+        });
+
+        $( '#db-chart-button' ).on( 'click', function(){
+            if( $(this).attr( 'data-current' ) === 'chart'){
+                $(this).val( $(this).attr( 'data-t-filter' ) );
+                $(this).html( $(this).attr( 'data-t-filter' ) );
+                $(this).attr( 'data-current', 'filter' );
+                $( '.visualizer-editor-lhs' ).hide();
+                $( '#visualizer-db-wizard' ).css("z-index", "9999").show();
+                $( '#canvas' ).hide();
+            }else{
+                var filter_button = $(this);
+                $( '#visualizer-db-wizard' ).css("z-index", "-1").hide();
+                $('#canvas').lock();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+                $( '#db-chart-save-button' ).trigger('click');
+            }
+        } );
+
+        $( '#db-chart-save-button' ).on( 'click', function(){
+            $('#viz-db-wizard-params').val($('#db-wizard-form').serialize());
+            $('#vz-db-wizard').submit();
+        });
+    }
+
+    function display_where_clause(evt, params, where){
+        var type = where.find('option[value="' + params.selected + '"]').attr('data-type');
+        where.parent().parent().find('.select-condition').removeClass('active');
+        where.parent().parent().find('.select-condition.select-condition-' + type).addClass('active');
+    }
+
+    function start_ajax(element){
+        element.lock();
+    }
+
+    function end_ajax(element){
+        element.unlock();
+    }
+
 })(jQuery);
 
 (function ($) {

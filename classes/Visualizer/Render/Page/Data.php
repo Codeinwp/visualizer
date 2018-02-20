@@ -44,7 +44,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			if ( method_exists( $Visualizer_Pro, '_addFilterWizard' ) ) {
 				$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
 			}
+		} else {
+			Visualizer_Render_Layout::show( 'faux-editor' );
 		}
+
+		$this->add_additional_content();
+
 		// Added by Ash/Upwork
 		echo '<div id="canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
@@ -135,11 +140,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 														class="visualizer-select">
 													<?php
 													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
-													$schedules = array(
-														'1'  => __( 'Each hour', 'visualizer' ),
-														'12' => __( 'Each 12 hours', 'visualizer' ),
-														'24' => __( 'Each day', 'visualizer' ),
-														'36' => __( 'Each 3 days', 'visualizer' ),
+													$schedules = apply_filters(
+														'visualizer_schedules', array(
+															'1'  => __( 'Each hour', 'visualizer' ),
+															'12' => __( 'Each 12 hours', 'visualizer' ),
+															'24' => __( 'Each day', 'visualizer' ),
+															'36' => __( 'Each 3 days', 'visualizer' ),
+														)
 													);
 													foreach ( $schedules as $num => $name ) {
 														$extra = $num == $hours ? 'selected' : '';
@@ -206,7 +213,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										class="dashicons dashicons-lock"></span></h2>
 							<div class="viz-group-content edit-data-content">
 								<div>
-									<p class="viz-group-description"><?php _e( 'You can import here data from WordPress', 'visualizer' ); ?></p>
+									<p class="viz-group-description"><?php _e( 'You can import data from WordPress here.', 'visualizer' ); ?></p>
 									<input type="button" id="filter-chart-button" class="button button-primary "
 										   value="<?php _e( 'Create Filters', 'visualizer' ); ?>" data-current="chart"
 										   data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
@@ -215,6 +222,58 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</div>
 							</div>
 						</li>
+
+						<?php if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'dbwizard' ) !== false ) { ?>
+						<?php
+							$save_query = add_query_arg(
+								array(
+									'action' => Visualizer_Plugin::ACTION_SAVE_DB_QUERY,
+									'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION ),
+									'chart'  => $this->chart->ID,
+								), admin_url( 'admin-ajax.php' )
+							);
+						?>
+						<li class="viz-group ">
+							<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from database', 'visualizer' ); ?><span
+										class="dashicons dashicons-lock"></span></h2>
+							<div class="viz-group-content edit-data-content">
+								<div>
+									<p class="viz-group-description"><?php _e( 'You can import data from the database here.', 'visualizer' ); ?></p>
+									<form id="vz-db-wizard" action="<?php echo $save_query; ?>" method="post" target="thehole">
+										<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from the database.', 'visualizer' ); ?></p>
+										<select name="refresh" id="vz-db-import-time" class="visualizer-select">
+											<?php
+											$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+											$schedules = apply_filters(
+												'visualizer_schedules', array(
+													'0'  => __( 'Live', 'visualizer' ),
+													'1'  => __( 'Each hour', 'visualizer' ),
+													'12' => __( 'Each 12 hours', 'visualizer' ),
+													'24' => __( 'Each day', 'visualizer' ),
+													'36' => __( 'Each 3 days', 'visualizer' ),
+												)
+											);
+											foreach ( $schedules as $num => $name ) {
+												$extra = $num == $hours ? 'selected' : '';
+												?>
+												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+												<?php
+											}
+											?>
+										</select>
+										<input type="hidden" name="params" id="viz-db-wizard-params">
+
+										<input type="button" id="db-chart-button" class="button button-secondary "
+											   value="<?php _e( 'Create Query', 'visualizer' ); ?>" data-current="chart"
+											   data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+											   data-t-chart="<?php _e( 'Create Query', 'visualizer' ); ?>">
+										<input type="button" id="db-chart-save-button" class="button button-primary "
+											   value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+									</form>
+								</div>
+							</div>
+						</li>
+						<?php } ?>
 
 						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="viz-group-title viz-sub-group visualizer-editor-tab"
@@ -410,6 +469,18 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 		echo '</div>';
 
+	}
+
+	/**
+	 * Renders the additional content.
+	 *
+	 * @access private
+	 */
+	private function add_additional_content() {
+		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'dbwizard' ) !== false ) {
+			$params = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_PARAMS, true );
+			Visualizer_Render_Layout::show( 'db-wizard', Visualizer_Source_Query_Params::get_db_tables(), $params );
+		}
 	}
 
 }
