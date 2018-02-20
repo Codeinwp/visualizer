@@ -178,7 +178,7 @@
             });
 
             $('.db-wizard-templates .db-wizard-where-template-remove').on('click', function(e){
-                $(this).parent().remove();
+                $(this).parent().parent().remove();
             });
 
             $('.db-wizard-templates .visualizer-select-where-added').removeClass('visualizer-select-where-added');
@@ -190,7 +190,7 @@
         });
 
         $('.db-wizard-where-template-remove').on('click', function(e){
-            $(this).parent().remove();
+            $(this).parent().parent().remove();
         });
 
         if($('.visualizer-select-select :selected').length === 0){

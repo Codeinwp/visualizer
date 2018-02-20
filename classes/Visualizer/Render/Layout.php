@@ -144,7 +144,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						if ( $where ) {
 							$index = 0;
 							foreach ( $where as $col ) {
+								echo '<div>';
 								self::show( 'db-wizard-where', $columns, $col, $index++, $params );
+								echo '</div>';
 							}
 						}
 						?>
