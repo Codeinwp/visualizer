@@ -216,9 +216,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							</div>
 						</li>
 
-						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
+						<?php
+							// we will auto-open the manual data feature but only when pro is active.
+							$pro_class = apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' );
+						?>
+						<li class="viz-group <?php echo $pro_class; ?> <?php echo empty( $pro_class ) ? 'open' : ''; ?> ">
 							<h2 class="viz-group-title viz-sub-group visualizer-editor-tab"
-								data-current="chart"><?php _e( 'Add data manually', 'visualizer' ); ?><span
+								data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
 								<input type="hidden" id="chart-data" name="chart_data">
