@@ -30,6 +30,8 @@ if ( class_exists( 'Visualizer_Pro', false ) ) {
 	defined( 'VISUALIZER_PRO' ) || define( 'VISUALIZER_PRO', false );
 }
 // Added by Ash/Upwork
+define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
+
 /**
  * Automatically loads classes for the plugin. Checks a namespace and loads only
  * approved classes.
