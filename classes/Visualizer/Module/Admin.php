@@ -121,6 +121,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array The extended array of media view strings.
 	 */
 	public function setupMediaViewStrings( $strings ) {
+		$chart_types = self::_getChartTypesLocalized( true, true, true );
 		$strings['visualizer'] = array(
 			'actions'    => array(
 				'get_charts'   => Visualizer_Plugin::ACTION_GET_CHARTS,
@@ -134,8 +135,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'create'  => esc_html__( 'Create New', 'visualizer' ),
 			),
 			'library'    => array(
-				'filters' => self::_getChartTypesLocalized( true, true ),
-				'types'   => array_keys( self::_getChartTypesLocalized( true, true ) ),
+				'filters' => $chart_types,
+				'types'   => array_keys( $chart_types ),
 			),
 			'nonce'      => wp_create_nonce(),
 			'buildurl'   => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
@@ -153,8 +154,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access private
 	 * @return array The associated array of chart types with localized names.
 	 */
-	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false ) {
-		$types = array(
+	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false, $add_select = false ) {
+		$additional = array();
+		if ( $add_select ) {
+			$additional['select'] = array(
+				'name'    => esc_html__( 'All', 'visualizer' ),
+				'enabled' => true,
+			);
+		}
+
+		$types = array_merge( $additional, array(
 			'pie'         => array(
 				'name'    => esc_html__( 'Pie', 'visualizer' ),
 				'enabled' => true,
@@ -204,7 +213,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'name'    => esc_html__( 'Combo', 'visualizer' ),
 				'enabled' => false,
 			),
-		);
+		) );
 		$types = apply_filters( 'visualizer_pro_chart_types', $types );
 		if ( $enabledOnly ) {
 			$filtered = array();
