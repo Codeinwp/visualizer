@@ -61,6 +61,59 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
+
+		$this->_addAction( 'admin_init', 'init' );
+	}
+
+	/**
+	 * Admin init.
+	 *
+	 * @access  public
+	 */
+	public function init() {
+		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' == get_user_option( 'rich_editing' ) ) {
+			$this->_addFilter( 'mce_external_languages', 'add_tinymce_lang', 10, 1 );
+			$this->_addFilter( 'mce_external_plugins', 'tinymce_plugin', 10, 1 );
+			$this->_addFilter( 'mce_buttons', 'register_mce_button', 10, 1 );
+		}
+	}
+
+	/**
+	 * Load plugin translation for - TinyMCE API
+	 *
+	 * @access  public
+	 * @param   array $arr  The tinymce_lang array.
+	 * @return  array
+	 */
+	public function add_tinymce_lang( $arr ) {
+		$ui_lang = VISUALIZER_ABSPATH . '/classes/Visualizer/Module/Language.php';
+		$ui_lang = apply_filters( 'visualizer_ui_lang_filter', $ui_lang );
+		$arr[] = $ui_lang;
+		return $arr;
+	}
+
+	/**
+	 * Load custom js options - TinyMCE API
+	 *
+	 * @access  public
+	 * @param   array $plugin_array  The tinymce plugin array.
+	 * @return  array
+	 */
+	public function tinymce_plugin( $plugin_array ) {
+		$plugin_array['visualizer_mce_button'] = VISUALIZER_ABSURL . 'js/mce.js';
+		return $plugin_array;
+	}
+
+	/**
+	 * Register new button in the editor
+	 *
+	 * @access  public
+	 * @param   array $buttons  The tinymce buttons array.
+	 * @return  array
+	 */
+	public function register_mce_button( $buttons ) {
+		array_push( $buttons, 'visualizer_mce_button' );
+		return $buttons;
 	}
 
 	/**

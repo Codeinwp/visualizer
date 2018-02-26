@@ -162,3 +162,13 @@ a.visualizer-library-pagination-page:hover {
 	z-index: 1001;
 	background: url(../images/ajax-loader.gif) no-repeat center center;
 }
+
+
+/* TinyMCE button */
+i.mce-i-visualizer-icon:before {
+	content: "\f184";
+	display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    font: 400 20px/1 dashicons;
+    vertical-align: top;
+}
