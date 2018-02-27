@@ -7,7 +7,11 @@
 			label: editor.getLang( 'visualizer_tinymce_plugin.plugin_label' ),
 			icon: 'visualizer-icon',
 			onclick: function() {
-                $('#insert-media-button').trigger('click');
+				frame = wp.media({
+					frame:'post',
+					state:'visualizer'
+				});
+				frame.open( );
 			}
 		});
 	});
