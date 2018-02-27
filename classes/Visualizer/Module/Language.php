@@ -4,7 +4,6 @@
  *
  * @link       http://themeisle.com
  * @since      3.0.0
- *
  */
 /**
  *
