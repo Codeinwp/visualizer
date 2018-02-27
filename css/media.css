@@ -1,5 +1,5 @@
 /*
-	Version: 3.0.5
+	Version: 3.0.6
 */
 #visualizer-library-view {
 	padding: 30px 10px 10px 30px;
@@ -161,4 +161,14 @@ a.visualizer-library-pagination-page:hover {
 .locker-loader {
 	z-index: 1001;
 	background: url(../images/ajax-loader.gif) no-repeat center center;
+}
+
+
+/* TinyMCE button */
+i.mce-i-visualizer-icon:before {
+	content: "\f184";
+	display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    font: 400 20px/1 dashicons;
+    vertical-align: top;
 }

@@ -221,6 +221,9 @@ abstract class Visualizer_Source {
 						);
 					}
 					break;
+				case 'string':
+					$data[ $i ] = utf8_encode( $data[ $i ] );
+					break;
 			}
 		}
 
