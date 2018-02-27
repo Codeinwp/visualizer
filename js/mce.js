@@ -7,7 +7,7 @@
 			label: editor.getLang( 'visualizer_tinymce_plugin.plugin_label' ),
 			icon: 'visualizer-icon',
 			onclick: function() {
-				frame = wp.media({
+				var frame = wp.media({
 					frame:'post',
 					state:'visualizer'
 				});
