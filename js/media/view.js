@@ -59,7 +59,18 @@
 			settings.height = self.options.height;
 
 			table = new gv.DataTable({cols: series});
-			chart = type === 'gauge' ? 'Gauge' : type.charAt(0).toUpperCase() + type.slice(1) + 'Chart';
+
+            switch (type) {
+                case "gauge":
+                case "table":
+                case "timeline":
+                    chart  = type.charAt(0).toUpperCase() + type.slice(1);
+                    break;
+                default:
+			        chart = type.charAt(0).toUpperCase() + type.slice(1) + 'Chart';
+                    break;
+            }
+
 			chart = new gv[chart](self.el);
 
 			switch (type) {
