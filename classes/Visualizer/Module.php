@@ -257,7 +257,7 @@ class Visualizer_Module {
 		if ( class_exists( 'PHPExcel' ) ) {
 			$doc        = new PHPExcel();
 			$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
-			$doc->getActiveSheet()->setTitle( $chart );
+			$doc->getActiveSheet()->setTitle( sanitize_title( $chart ) );
 			$doc        = apply_filters( 'visualizer_excel_doc', $doc );
 			$writer = PHPExcel_IOFactory::createWriter( $doc, 'Excel2007' );
 			ob_start();

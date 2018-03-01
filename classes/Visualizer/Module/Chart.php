@@ -83,6 +83,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			),
 		);
 		$filter     = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
+		if ( empty( $filter ) ) {
+			// 'filter' is from the modal from the add media button.
+			$filter = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+		}
+
 		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
 			$query_args['meta_query'] = array(
 				array(
@@ -262,9 +267,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// dispatch pages
 		$this->_chart = get_post( $chart_id );
 		$tab    = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
+
+		// skip chart type pages only for existing charts.
+		if ( VISUALIZER_SKIP_CHART_TYPE_PAGE && 'auto-draft' !== $this->_chart->post_status ) {
+			$tab = 'settings';
+		}
+
 		switch ( $tab ) {
 			case 'settings':
-				// changed by Ash/Upwork
 				$this->_handleDataAndSettingsPage();
 				break;
 			case 'type': // fall through.
