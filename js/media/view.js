@@ -269,6 +269,16 @@
 						}
 
 						self.renderCollection();
+                        $('.visualizer-library-chart').css('position', 'relative')
+                            .append($(
+                                '<div class="visualizer-chart-bg"></div>'
+                                + '<div class="visualizer-chart-insert-bg">'
+                                + '<button class="button button-primary visualizer-library-chart-insert">Insert</button>'
+                                + '</div>'
+                            ))
+                            .on('mouseover', function(){
+                                $(this).addClass('hover');
+                            });
 						content.unlock();
 					}
 				}
