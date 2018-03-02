@@ -271,10 +271,12 @@
 						self.renderCollection();
                         $('.visualizer-library-chart').css('position', 'relative')
                             .append($(
+                                // jshint ignore:start
                                 '<div class="visualizer-chart-bg"></div>'
                                 + '<div class="visualizer-chart-insert-bg">'
                                 + '<button class="button button-primary visualizer-library-chart-insert">Insert</button>'
                                 + '</div>'
+                                // jshint ignore:end
                             ))
                             .on('mouseover', function(){
                                 $(this).addClass('hover');
