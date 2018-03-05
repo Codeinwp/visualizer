@@ -1,4 +1,11 @@
 
+ ### v3.0.6 - 2018-02-27 
+ **Changes:** 
+ * Fix UTF-8 support while saving the data. 
+* Improve editing experience.  
+* Improves compatibility with Premium version. 
+* Adds chart button into TinyMCE editor.
+ 
  ### v3.0.5 - 2018-01-05 
  **Changes:** 
  * Fix chart rendering bug in firefox.
