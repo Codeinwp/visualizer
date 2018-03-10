@@ -150,7 +150,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
-		wp_enqueue_script( 'visualizer-clipboardjs' );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
 	}
@@ -267,6 +266,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );
 					$actions_div    .= ' data-clipboard-text="' . esc_attr( $copy['csv'] ) . '"';
+					wp_enqueue_script( 'visualizer-clipboardjs' );
 				}
 
 				$actions_div    .= apply_filters( 'visualizer_action_attributes', '', $key, $atts['id'] );
