@@ -239,6 +239,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		wp_localize_script(
 			'visualizer-render', 'visualizer', array(
 				'charts'        => $this->_charts,
+				'language'  => $this->get_language(),
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 				'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
 				'i10n'          => array(

@@ -336,6 +336,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'charts' => array(
 					'canvas' => $data,
 				),
+				'language'  => $this->get_language(),
 				'map_api_key' => get_option( 'visualizer-map-api-key' ),
 				'ajax'                 => array(
 					'url'     => admin_url( 'admin-ajax.php' ),
