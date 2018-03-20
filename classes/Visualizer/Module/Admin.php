@@ -496,6 +496,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$query  = new WP_Query( $query_args );
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
+
+			// if the user has updated a chart and instead of saving it, has closed the modal. If the user refreshes, they should get the original chart.
+			$chart = $this->handleExistingRevisions( $chart->ID, $chart );
+
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 			unset( $settings['height'], $settings['width'] );

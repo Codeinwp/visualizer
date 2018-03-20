@@ -323,4 +323,48 @@ class Visualizer_Module {
 		);
 	}
 
+	/**
+	 * Undo revisions for the chart, and if necessary, restore the earliest version.
+	 *
+	 * @return bool If any revisions were found.
+	 */
+	protected function undoRevisions( $chart_id, $restore = false ) {
+		$revisions = wp_get_post_revisions( $chart_id, array( 'order' => 'ASC' ) );
+		if ( $revisions ) {
+			$revision_ids = array_keys( $revisions );
+
+			// when we restore, a new revision is likely to be created. so, let's disable revisions for the time being.
+			add_filter( 'wp_revisions_to_keep', '__return_false' );
+
+			if ( $restore ) {
+				// restore to the oldest one i.e. the first one.
+				wp_restore_post_revision( $revision_ids[0] );
+			}
+
+			// delete all revisions.
+			foreach ( $revision_ids as $id ) {
+				wp_delete_post_revision( $id );
+			}
+
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * If existing revisions exist for the chart, restore the earliest version and then create a new revision to initiate editing.
+	 */
+	protected function handleExistingRevisions( $chart_id, $chart ) {
+		// undo revisions.
+		$revisions_found	= $this->undoRevisions( $chart_id, true );
+		// create revision for the edit action.
+		wp_save_post_revision( $chart_id );
+
+		if ( $revisions_found ) {
+			// fetch chart data again in case it was updated by an earlier revision.
+			$chart = get_post( $chart_id );
+		}
+		return $chart;
+	}
+
 }
