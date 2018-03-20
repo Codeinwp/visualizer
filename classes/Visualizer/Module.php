@@ -356,7 +356,7 @@ class Visualizer_Module {
 	 */
 	protected function handleExistingRevisions( $chart_id, $chart ) {
 		// undo revisions.
-		$revisions_found	= $this->undoRevisions( $chart_id, true );
+		$revisions_found    = $this->undoRevisions( $chart_id, true );
 		// create revision for the edit action.
 		wp_save_post_revision( $chart_id );
 
