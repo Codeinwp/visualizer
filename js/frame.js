@@ -72,6 +72,10 @@
             return false;
         });
 
+        $('#cancel-button').click(function () {
+            $('#cancel-form').submit();
+        });
+
     });
 
     function init_permissions(){

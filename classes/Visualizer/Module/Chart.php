@@ -273,6 +273,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$tab = 'settings';
 		}
 
+		if ( isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] ) ) {
+			// if the cancel button is clicked.
+			$this->undoRevisions( $chart_id, true );
+		} elseif ( isset( $_POST['save'] ) && 1 === intval( $_POST['save'] ) ) {
+			// if the save button is clicked.
+			$this->undoRevisions( $chart_id, false );
+		} else {
+			// if the edit button is clicked.
+			$rev = wp_save_post_revision( $chart_id );
+		}
+
 		switch ( $tab ) {
 			case 'settings':
 				$this->_handleDataAndSettingsPage();
@@ -356,6 +367,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
 				? esc_html__( 'Save Chart', 'visualizer' )
 				: esc_html__( 'Create Chart', 'visualizer' );
+			if ( filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART ) {
+				$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
+			}
 		} else {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
@@ -597,5 +611,28 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// Added by Ash/Upwork
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 		wp_iframe( array( $render, 'render' ) );
+	}
+
+	/**
+	 * Undo revisions for the chart, and if necessary, restore the earliest version.
+	 */
+	private function undoRevisions( $chart_id, $restore = false ) {
+		$revisions = wp_get_post_revisions( $chart_id, array( 'order' => 'ASC' ) );
+		if ( $revisions ) {
+			$revision_ids = array_keys( $revisions );
+
+			// when we restore, a new revision is likely to be created. so, let's disable revisions for the time being.
+			add_filter( 'wp_revisions_to_keep', '__return_false' );
+
+			if ( $restore ) {
+				// restore to the oldest one i.e. the first one.
+				wp_restore_post_revision( $revision_ids[0] );
+			}
+
+			// delete all revisions.
+			foreach ( $revision_ids as $id ) {
+				wp_delete_post_revision( $id );
+			}
+		}
 	}
 }

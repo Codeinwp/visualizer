@@ -287,3 +287,7 @@ input:checked + .visualizer-slider:before {
 	font-weight: bold;
 	text-align: center;
 }
+
+button.media-modal-close {
+	display: none !important;
+}
