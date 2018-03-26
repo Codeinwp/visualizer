@@ -1,4 +1,11 @@
 
+ ### v3.0.7 - 2018-03-26 
+ **Changes:** 
+ * Adds insert button in chart library.
+* Remove frontend assets where they are not needed.
+* Improve non-English charts compatibility. 
+* Adds a filter to change charts locale.
+ 
  ### v3.0.6 - 2018-02-27 
  **Changes:** 
  * Fix UTF-8 support while saving the data. 
