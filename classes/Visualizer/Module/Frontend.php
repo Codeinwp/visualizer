@@ -54,6 +54,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		parent::__construct( $plugin );
 
 		$this->_addAction( 'wp_enqueue_scripts', 'enqueueScripts' );
+		$this->_addFilter( 'visualizer_get_language', 'getLanguage' );
 		$this->_addShortcode( 'visualizer', 'renderChart' );
 
 		// add do_shortocde hook for widget_text filter
@@ -68,6 +69,14 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		add_action( 'rest_api_init', array( $this, 'endpoint_register' ) );
 	}
+
+	/**
+	 * Returns the language/locale.
+	 */
+	function getLanguage( $dummy, $only_language ) {
+		return $this->get_language();
+	}
+
 
 	/**
 	 * Registers the endpoints
@@ -150,7 +159,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
-		wp_enqueue_script( 'visualizer-clipboardjs' );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
 	}
@@ -239,6 +247,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		wp_localize_script(
 			'visualizer-render', 'visualizer', array(
 				'charts'        => $this->_charts,
+				'language'  => $this->get_language(),
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 				'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
 				'i10n'          => array(
@@ -267,6 +276,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );
 					$actions_div    .= ' data-clipboard-text="' . esc_attr( $copy['csv'] ) . '"';
+					wp_enqueue_script( 'visualizer-clipboardjs' );
 				}
 
 				$actions_div    .= apply_filters( 'visualizer_action_attributes', '', $key, $atts['id'] );
