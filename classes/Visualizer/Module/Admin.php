@@ -460,6 +460,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$ajaxurl = admin_url( 'admin-ajax.php' );
 		wp_localize_script(
 			'visualizer-library', 'visualizer', array(
+				'language'  => $this->get_language(),
+				'map_api_key' => get_option( 'visualizer-map-api-key' ),
 				'charts' => $charts,
 				'urls'   => array(
 					'base'   => add_query_arg( 'vpage', false ),
