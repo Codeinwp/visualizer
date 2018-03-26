@@ -54,6 +54,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		parent::__construct( $plugin );
 
 		$this->_addAction( 'wp_enqueue_scripts', 'enqueueScripts' );
+		$this->_addFilter( 'visualizer_get_language', 'getLanguage' );
 		$this->_addShortcode( 'visualizer', 'renderChart' );
 
 		// add do_shortocde hook for widget_text filter
@@ -68,6 +69,14 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		add_action( 'rest_api_init', array( $this, 'endpoint_register' ) );
 	}
+
+	/**
+	 * Returns the language/locale.
+	 */
+	function getLanguage( $dummy, $only_language ) {
+		return $this->get_language();
+	}
+
 
 	/**
 	 * Registers the endpoints
