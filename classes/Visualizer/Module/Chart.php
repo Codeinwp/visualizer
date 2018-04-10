@@ -57,9 +57,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EDIT_CHART, 'renderChartPages' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_UPLOAD_DATA, 'uploadData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CLONE_CHART, 'cloneChart' );
-		// Added by Ash/Upwork
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EXPORT_DATA, 'exportData' );
-		// Added by Ash/Upwork
 	}
 
 	/**
@@ -273,6 +271,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$tab = 'settings';
 		}
 
+		if ( isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] ) ) {
+			// if the cancel button is clicked.
+			$this->undoRevisions( $chart_id, true );
+		} elseif ( isset( $_POST['save'] ) && 1 === intval( $_POST['save'] ) ) {
+			// if the save button is clicked.
+			$this->undoRevisions( $chart_id, false );
+		} else {
+			// if the edit button is clicked.
+			$this->_chart = $this->handleExistingRevisions( $chart_id, $this->_chart );
+		}
+
 		switch ( $tab ) {
 			case 'settings':
 				$this->_handleDataAndSettingsPage();
@@ -357,6 +366,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
 				? esc_html__( 'Save Chart', 'visualizer' )
 				: esc_html__( 'Create Chart', 'visualizer' );
+			if ( filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART ) {
+				$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
+			}
 		} else {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
@@ -599,4 +611,5 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 		wp_iframe( array( $render, 'render' ) );
 	}
+
 }

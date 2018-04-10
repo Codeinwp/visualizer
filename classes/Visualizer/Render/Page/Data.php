@@ -254,6 +254,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
 						  method="post">
 						<?php echo $this->sidebar; ?>
+						<input type="hidden" name="save" value="1">
+					</form>
+					<form id="cancel-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>" method="post">
+						<input type="hidden" name="cancel" value="1">
 					</form>
 				</ul>
 			</li>
@@ -415,6 +419,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			echo '</div>';
 		}
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
+		if ( isset( $this->cancel_button ) ) {
+			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-right" value="', $this->cancel_button, '">';
+		}
 	}
 
 }
