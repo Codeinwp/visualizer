@@ -367,4 +367,21 @@ class Visualizer_Module {
 		return $chart;
 	}
 
+	/**
+	 * Returns the language of the locale.
+	 *
+	 * @access protected
+	 */
+	protected function get_language() {
+		$locale = get_locale();
+		if ( empty( $locale ) ) {
+			return '';
+		}
+		$array  = explode( '_', $locale );
+		if ( count( $array ) < 2 ) {
+			return '';
+		}
+		return reset( $array );
+	}
+
 }
