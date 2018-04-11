@@ -128,6 +128,72 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Testing revisions by not cancelling edit but by implicitly editing it again.
+	 *
+	 * @access public
+	 * @dataProvider fileProvider
+	 */
+	public function test_chart_edit_again( $file_orig, $file_new ) {
+		wp_set_current_user( 1 );
+		$this->_setRole( 'administrator' );
+		$this->create_chart();
+
+		// this is very important so that revisions are saved.
+		wp_update_post( array('ID' => $this->chart, 'post_status' => 'publish') );
+
+		$dest = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . basename( $file_new );
+		copy( $file_new, $dest );
+		$_FILES = array(
+			'local_data' => array(
+				'tmp_name' => $dest,
+				'error'    => 0,
+			),
+		);
+		$_GET   = array(
+			'nonce' => wp_create_nonce(),
+			'chart' => $this->chart,
+		);
+		// swallow the output
+		ob_start();
+		try {
+			$this->_handleAjax( 'visualizer-upload-data' );
+		} catch ( WPAjaxDieContinueException  $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee ) {
+			// We expected this, do nothing.
+		}
+		ob_end_clean();
+		unlink( $dest );
+
+		$revisions  = wp_get_post_revisions( $this->chart );
+		$this->assertGreaterThan( 1, count( $revisions ) );
+
+		// swallow the output
+		ob_start();
+		try {
+			$this->_handleAjax( 'visualizer-edit-chart' );
+		} catch ( WPAjaxDieContinueException  $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee ) {
+			// We expected this, do nothing.
+		}
+		ob_end_clean();
+
+		$revisions  = wp_get_post_revisions( $this->chart );
+		$this->assertEquals( 0, count( $revisions ) );
+
+		list( $content, $series ) = $this->parseFile( $file_orig );
+
+		$series_new  = get_post_meta( $this->chart, 'visualizer-series', true );
+		$chart       = get_post( $this->chart );
+		$src         = get_post_meta( $this->chart, 'visualizer-source', true );
+		$content_new = $chart->post_content;
+		$this->assertEquals( 'Visualizer_Source_Csv', $src );
+		$this->assertEquals( $content_new, serialize( $content ) );
+		$this->assertEquals( $series_new, $series );
+	}
+
+	/**
 	 * Testing revisions by saving edit.
 	 *
 	 * @access public
