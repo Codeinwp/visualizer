@@ -2,7 +2,7 @@
 /* global google */
 /* global visualizer */
 /* global showNotice */
-(function($, wpm) {
+(function($, wpm, visualizer) {
 	var libraryWidth, libraryHeight, wpmv, wpmV, wpmvv, wpmvvl, wpmvvb, l10n;
 
 	wpmv = wpm.view;
@@ -269,6 +269,18 @@
 						}
 
 						self.renderCollection();
+                        $('.visualizer-library-chart').css('position', 'relative')
+                            .append($(
+                                // jshint ignore:start
+                                '<div class="visualizer-chart-bg"></div>'
+                                + '<div class="visualizer-chart-insert-bg">'
+                                + '<button class="button button-primary visualizer-library-chart-insert">' + visualizer.i10n.insert + '</button>'
+                                + '</div>'
+                                // jshint ignore:end
+                            ))
+                            .on('mouseover', function(){
+                                $(this).addClass('hover');
+                            });
 						content.unlock();
 					}
 				}
@@ -464,7 +476,7 @@
 			this.controller.trigger('visualizer:library:page', $(e.target).data('page'));
 		}
 	});
-})(jQuery, wp.media);
+})(jQuery, wp.media, visualizer);
 
 (function($) {
     $.fn.lock = function() {
