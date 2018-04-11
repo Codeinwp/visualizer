@@ -57,18 +57,18 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * Testing revisions.
+	 * Testing revisions by cancelling edit.
 	 *
 	 * @access public
 	 * @dataProvider fileProvider
 	 */
 	public function test_chart_edit_cancel( $file_orig, $file_new ) {
-		wp_set_current_user(1);
+		wp_set_current_user( 1 );
 		$this->_setRole( 'administrator' );
 		$this->create_chart();
 
 		// this is very important so that revisions are saved.
-		wp_update_post(array('ID'=>$this->chart, 'post_status'=>'publish'));
+		wp_update_post( array('ID' => $this->chart, 'post_status' => 'publish') );
 
 		$dest = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . basename( $file_new );
 		copy( $file_new, $dest );
@@ -94,13 +94,13 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		ob_end_clean();
 		unlink( $dest );
 
-		$revisions	= wp_get_post_revisions( $this->chart );
+		$revisions  = wp_get_post_revisions( $this->chart );
 		$this->assertGreaterThan( 1, count( $revisions ) );
-		$_GET		= array(
-			'chart'	=> $this->chart,
+		$_GET       = array(
+			'chart' => $this->chart,
 		);
-		$_POST		= array(
-			'cancel'	=> 1,
+		$_POST      = array(
+			'cancel'    => 1,
 		);
 		// swallow the output
 		ob_start();
@@ -113,7 +113,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		}
 		ob_end_clean();
 
-		$revisions	= wp_get_post_revisions( $this->chart );
+		$revisions  = wp_get_post_revisions( $this->chart );
 		$this->assertEquals( 0, count( $revisions ) );
 
 		list( $content, $series ) = $this->parseFile( $file_orig );
@@ -128,18 +128,18 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * Testing revisions.
+	 * Testing revisions by saving edit.
 	 *
 	 * @access public
 	 * @dataProvider fileProvider
 	 */
 	public function test_chart_edit_save( $file_orig, $file_new ) {
-		wp_set_current_user(1);
+		wp_set_current_user( 1 );
 		$this->_setRole( 'administrator' );
 		$this->create_chart();
 
 		// this is very important so that revisions are saved.
-		wp_update_post(array('ID'=>$this->chart, 'post_status'=>'publish'));
+		wp_update_post( array('ID' => $this->chart, 'post_status' => 'publish') );
 
 		$dest = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . basename( $file_new );
 		copy( $file_new, $dest );
@@ -165,13 +165,13 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		ob_end_clean();
 		unlink( $dest );
 
-		$revisions	= wp_get_post_revisions( $this->chart );
+		$revisions  = wp_get_post_revisions( $this->chart );
 		$this->assertGreaterThan( 1, count( $revisions ) );
-		$_GET		= array(
-			'chart'	=> $this->chart,
+		$_GET       = array(
+			'chart' => $this->chart,
 		);
-		$_POST		= array(
-			'save'	=> 1,
+		$_POST      = array(
+			'save'  => 1,
 		);
 		// swallow the output
 		ob_start();
@@ -184,7 +184,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		}
 		ob_end_clean();
 
-		$revisions	= wp_get_post_revisions( $this->chart );
+		$revisions  = wp_get_post_revisions( $this->chart );
 		$this->assertEquals( 0, count( $revisions ) );
 
 		list( $content, $series ) = $this->parseFile( $file_new );
