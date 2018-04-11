@@ -81,6 +81,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		$_GET   = array(
 			'nonce' => wp_create_nonce(),
 			'chart' => $this->chart,
+			'tab'   => 'type',
 		);
 		// swallow the output
 		ob_start();
@@ -152,6 +153,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		$_GET   = array(
 			'nonce' => wp_create_nonce(),
 			'chart' => $this->chart,
+			'tab'   => 'type',
 		);
 		// swallow the output
 		ob_start();
@@ -218,6 +220,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		$_GET   = array(
 			'nonce' => wp_create_nonce(),
 			'chart' => $this->chart,
+			'tab'   => 'type',
 		);
 		// swallow the output
 		ob_start();
