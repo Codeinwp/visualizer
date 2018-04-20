@@ -103,6 +103,7 @@ class Visualizer_Render_Sidebar_Type_Pie extends Visualizer_Render_Sidebar {
 						'value'      => esc_html__( 'The quantitative value of the slice', 'visualizer' ),
 						'label'      => esc_html__( 'The name of the slice', 'visualizer' ),
 						// the below option is undocumented.
+						'value-and-percentage'       => esc_html__( 'The quantitative value and percentage of the slice', 'visualizer' ),
 						'none'       => esc_html__( 'No text is displayed', 'visualizer' ),
 					),
 					esc_html__( 'The content of the text displayed on the slice.', 'visualizer' )
