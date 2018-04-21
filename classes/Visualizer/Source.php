@@ -222,7 +222,7 @@ abstract class Visualizer_Source {
 					}
 					break;
 				case 'string':
-					if ( function_exists( 'mb_detect_encoding' ) && mb_detect_encoding( $data[ $i ] ) !== 'ASCII' ) {
+					if ( ! function_exists( 'mb_detect_encoding' ) || mb_detect_encoding( $data[ $i ] ) !== 'ASCII' ) {
 						$data[ $i ] = \ForceUTF8\Encoding::toUTF8( $data[ $i ] );
 					}
 					break;
