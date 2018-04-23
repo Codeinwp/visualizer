@@ -80,7 +80,11 @@ class Visualizer_Source_Query extends Visualizer_Source {
 					foreach ( $row as $k => $v ) {
 						$result[]   = $v;
 						if ( 0 === $row_num ) {
-							$headers[]  = array( 'type' => $this->get_col_type( $col_num++ ), 'label' => $k );
+							$header		= array( 'type' => $this->get_col_type( $col_num++ ), 'label' => $k );
+							if ( $header['type'] === 'date' ) {
+								$header['transform'] = 'mysql2date';
+							}
+							$headers[]  = $header;
 						}
 					}
 					$results[] = $result;
@@ -149,6 +153,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			$data[] = $this->_normalizeData( $row );
 		}
 		$this->_data = $data;
+
 		return true;
 	}
 
