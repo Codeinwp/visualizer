@@ -81,9 +81,6 @@ class Visualizer_Source_Query extends Visualizer_Source {
 						$result[]   = $v;
 						if ( 0 === $row_num ) {
 							$header		= array( 'type' => $this->get_col_type( $col_num++ ), 'label' => $k );
-							if ( $header['type'] === 'date' ) {
-								$header['transform'] = 'mysql2date';
-							}
 							$headers[]  = $header;
 						}
 					}

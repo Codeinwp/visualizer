@@ -210,18 +210,6 @@ abstract class Visualizer_Source {
 				case 'boolean':
 					$data[ $i ] = ! empty( $data[ $i ] ) ? filter_validate( $data[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
 					break;
-				case 'date':
-					if ( array_key_exists( 'transform', $series ) ) {
-						switch ( $series['transform'] ) {
-							case 'mysql2date':
-								//$data[ $i ] = explode( ':', mysql2date( 'Y:m:d:H:i:s:0', $data[ $i ] ) );
-								//$data[ $i ] = 1000 * intval(mysql2date( 'U', $data[ $i ] ));
-								//$data[ $i ] = array( 2018, 8, 9 );
-								$data[ $i ] = "2018-02-19";
-								break;
-						}
-					}
-					break;
 				case 'timeofday':
 					$date = new DateTime( '1984-03-16T' . $data[ $i ] );
 					if ( $date ) {
