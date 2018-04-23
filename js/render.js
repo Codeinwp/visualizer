@@ -124,7 +124,6 @@
 			}
 
 			if (axis) {
-                console.log(axis);
 				for (property in axis.viewWindow) {
 					date = new Date(axis.viewWindow[property]);
 					if (Object.prototype.toString.call(date) === "[object Date]") {
@@ -159,8 +158,8 @@
 			row = [];
 			for (j = 0; j < series.length; j++) {
 				if (series[j].type === 'date' || series[j].type === 'datetime') {
-                    //data[i][j]=new Date("2013-01-30");
-console.log("in " + data[i][j] );                    
+                    data[i][j]=new Date("2013-01-30");
+                    
 					date = new Date(data[i][j]);
 					data[i][j] = null;
 					if (Object.prototype.toString.call(date) === "[object Date]") {
@@ -168,7 +167,7 @@ console.log("in " + data[i][j] );
 							data[i][j] = date;
 						}
 					}
-
+                    
                     console.log(data[i][j]);
 				}
 				row.push(data[i][j]);

@@ -51,7 +51,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	}
 
 	/**
-	 * Rearrange columns so that a string/date column, if present, is always first in the select list as this will form the x axis.
+	 * Rearrange columns so that a string column, if present, is always first in the select list as this will form the x axis.
 	 */
 	private function rearrange_columns_for_x_axis( $columns, $select, $tables ) {
 		if ( ! $select ) {
@@ -73,7 +73,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 					$col    = $arr[1];
 				}
 				foreach ( $columns[ $table ] as $table_cols ) {
-					if ( $table_cols['name'] === $column && 'n' !== $table_cols['type'] ) {
+					if ( $table_cols['name'] === $column && 's' === $table_cols['type'] ) {
 						$first  = $column;
 						break;
 					}
@@ -87,7 +87,6 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			array_unshift( $select, $first );
 		}
 
-error_log(print_r($select,true));
 		return implode( ',', $select );
 	}
 
