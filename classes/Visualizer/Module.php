@@ -330,7 +330,7 @@ class Visualizer_Module {
 	 */
 	protected function undoRevisions( $chart_id, $restore = false ) {
 		$revisions = wp_get_post_revisions( $chart_id, array( 'order' => 'ASC' ) );
-		if ( $revisions ) {
+		if ( count( $revisions ) > 1 ) {
 			$revision_ids = array_keys( $revisions );
 
 			// when we restore, a new revision is likely to be created. so, let's disable revisions for the time being.
@@ -338,7 +338,7 @@ class Visualizer_Module {
 
 			if ( $restore ) {
 				// restore to the oldest one i.e. the first one.
-				wp_restore_post_revision( $revision_ids[0] );
+				wp_restore_post_revision( array_shift( $revision_ids ) );
 			}
 
 			// delete all revisions.
@@ -357,6 +357,7 @@ class Visualizer_Module {
 	protected function handleExistingRevisions( $chart_id, $chart ) {
 		// undo revisions.
 		$revisions_found    = $this->undoRevisions( $chart_id, true );
+
 		// create revision for the edit action.
 		wp_save_post_revision( $chart_id );
 
