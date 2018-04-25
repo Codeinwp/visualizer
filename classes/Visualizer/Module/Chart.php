@@ -267,7 +267,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$tab    = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
 
 		// skip chart type pages only for existing charts.
-		if ( VISUALIZER_SKIP_CHART_TYPE_PAGE && 'auto-draft' !== $this->_chart->post_status && 'visualizer' === $_GET['tab'] ) {
+		if ( VISUALIZER_SKIP_CHART_TYPE_PAGE && 'auto-draft' !== $this->_chart->post_status && ( isset( $_GET['tab'] && 'visualizer' === $_GET['tab'] ) ) ) {
 			$tab = 'settings';
 		}
 
