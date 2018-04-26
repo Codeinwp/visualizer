@@ -13,9 +13,6 @@
 		series = chart.series;
 		data = chart.data;
 		settings = chart.settings;
-        if(settings == null){
-            settings = {};
-        }
 
 		container = document.getElementById(id);
         if (container == null) {
