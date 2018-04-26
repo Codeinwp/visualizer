@@ -477,6 +477,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! isset( $_POST['chart_data_src'] ) || Visualizer_Plugin::CF_SOURCE_FILTER !== $_POST['chart_data_src'] ) {
 			// delete the filters in case this chart is being uploaded from other data sources
 			delete_post_meta( $chart_id, 'visualizer-filter-config' );
+
+			// delete "import from db" specific parameters.
+			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS );
+			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
 		}
 
 		$source = null;
@@ -685,6 +689,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 
 				$schedules              = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
 				$schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
