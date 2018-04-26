@@ -230,6 +230,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$id         = $id . '-' . rand();
 		$arguments  = array( '', $id, $settings );
+		$css        = '';
 		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );
 		if ( ! empty( $arguments ) ) {
 			$css        = $arguments[0];
