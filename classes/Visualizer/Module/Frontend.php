@@ -230,9 +230,12 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$id         = $id . '-' . rand();
 		$arguments  = array( '', $id, $settings );
+		$css        = '';
 		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );
-		$css        = $arguments[0];
-		$settings   = $arguments[2];
+		if ( ! empty( $arguments ) ) {
+			$css        = $arguments[0];
+			$settings   = $arguments[2];
+		}
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(
