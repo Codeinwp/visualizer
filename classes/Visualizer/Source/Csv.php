@@ -83,6 +83,9 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 
 		for ( $i = 0, $len = count( $labels ); $i < $len; $i++ ) {
 			$default_type = $i == 0 ? 'string' : 'number';
+
+			$labels[ $i ] = $this->toUTF8( $labels[ $i ] );
+
 			$this->_series[] = array(
 				'label' => $labels[ $i ],
 				'type'  => isset( $types[ $i ] ) ? $types[ $i ] : $default_type,
