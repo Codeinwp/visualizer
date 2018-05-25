@@ -73,7 +73,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 					$col    = $arr[1];
 				}
 				foreach ( $columns[ $table ] as $table_cols ) {
-					if ( $table_cols['name'] === $column && 's' === $table_cols['type'] ) {
+					if ( $table_cols['name'] === $column && 'n' !== $table_cols['type'] ) {
 						$first  = $column;
 						break;
 					}

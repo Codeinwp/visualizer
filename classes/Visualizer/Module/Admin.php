@@ -370,12 +370,17 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$query  = new WP_Query( $query_args );
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
+
+			// refresh a "live" db query chart.
+			$chart = apply_filters( 'visualizer_schedule_refresh_chart', $chart, $chart->ID, false );
+
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 			unset( $settings['height'], $settings['width'] );
 			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
+
 			// add chart to the array
 			$charts[ 'visualizer-' . $chart->ID ] = array(
 				'id'       => $chart->ID,

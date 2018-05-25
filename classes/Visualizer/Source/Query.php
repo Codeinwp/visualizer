@@ -149,6 +149,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			$data[] = $this->_normalizeData( $row );
 		}
 		$this->_data = $data;
+
 		return true;
 	}
 
