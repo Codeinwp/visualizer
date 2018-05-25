@@ -535,6 +535,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						array(
 							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
 							'library' => 'yes',
+							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
 						), $ajaxurl
 					),
 					'edit'   => add_query_arg(

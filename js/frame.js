@@ -3,6 +3,13 @@
 /* global alert */
 
 (function ($) {
+    $(window).load(function(){
+        // scroll to the selected chart type.
+        if($('label.type-label.type-label-selected').length > 0) {
+            $('label.type-label.type-label-selected')[0].scrollIntoView();
+        }
+    });
+
     $(document).ready(function () {
         init_permissions();
 
