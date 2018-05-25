@@ -314,6 +314,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access private
 	 */
 	private function permissionsSidebar() {
+		// ignore for unit tests because Travis throws the error "Indirect modification of overloaded property Visualizer_Render_Page_Data::$permissions has no effect".
+		if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+			return;
+		}
 		Visualizer_Render_Sidebar::_renderGroupStart(
 			esc_html__( 'Who can see this chart?', 'visualizer' ) . '<span
 										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )

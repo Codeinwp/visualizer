@@ -197,6 +197,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
+		// in case revisions exist.
+		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
+			$chart = get_post( $chart->ID );
+		}
+
 		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );

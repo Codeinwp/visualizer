@@ -75,13 +75,17 @@ function visualizer_launch() {
 	if ( ! defined( 'VISUALIZER_CSV_ENCLOSURE' ) ) {
 		define( 'VISUALIZER_CSV_ENCLOSURE', '"' );
 	}
+	if ( ! defined( 'VISUALIZER_DEBUG' ) ) {
+		define( 'VISUALIZER_DEBUG', false );
+	}
+
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
 	// set general modules
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
 	$plugin->setModule( Visualizer_Module_Chart::NAME );
-	if ( is_admin() ) {
+	if ( is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
 		// set admin modules
 		$plugin->setModule( Visualizer_Module_Admin::NAME );
 	} else {

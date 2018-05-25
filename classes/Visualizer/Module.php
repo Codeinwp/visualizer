@@ -63,6 +63,10 @@ class Visualizer_Module {
 
 		$this->_wpdb = $wpdb;
 		$this->_plugin = $plugin;
+
+		$this->_addFilter( Visualizer_Plugin::FILTER_UNDO_REVISIONS, 'undoRevisions', 10, 2 );
+		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
+
 	}
 
 	/**
@@ -328,17 +332,21 @@ class Visualizer_Module {
 	 *
 	 * @return bool If any revisions were found.
 	 */
-	protected function undoRevisions( $chart_id, $restore = false ) {
+	public final function undoRevisions( $chart_id, $restore = false ) {
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'undoRevisions for %d with%s restore', $chart_id, ( $restore ? '' : 'out' ) ), 'debug', __FILE__, __LINE__ );
+
 		$revisions = wp_get_post_revisions( $chart_id, array( 'order' => 'ASC' ) );
-		if ( $revisions ) {
+		if ( count( $revisions ) > 1 ) {
 			$revision_ids = array_keys( $revisions );
+
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'found %d revisions = %s', count( $revisions ), print_r( $revision_ids, true ) ), 'debug', __FILE__, __LINE__ );
 
 			// when we restore, a new revision is likely to be created. so, let's disable revisions for the time being.
 			add_filter( 'wp_revisions_to_keep', '__return_false' );
 
 			if ( $restore ) {
 				// restore to the oldest one i.e. the first one.
-				wp_restore_post_revision( $revision_ids[0] );
+				wp_restore_post_revision( array_shift( $revision_ids ) );
 			}
 
 			// delete all revisions.
@@ -354,9 +362,12 @@ class Visualizer_Module {
 	/**
 	 * If existing revisions exist for the chart, restore the earliest version and then create a new revision to initiate editing.
 	 */
-	protected function handleExistingRevisions( $chart_id, $chart ) {
+	public final function handleExistingRevisions( $chart_id, $chart ) {
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'handleExistingRevisions for %d', $chart_id ), 'debug', __FILE__, __LINE__ );
+
 		// undo revisions.
 		$revisions_found    = $this->undoRevisions( $chart_id, true );
+
 		// create revision for the edit action.
 		wp_save_post_revision( $chart_id );
 
