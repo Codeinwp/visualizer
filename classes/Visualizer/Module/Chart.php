@@ -438,18 +438,30 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function uploadData() {
+		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
+		// otherwise, assume this is a normal web request.
+		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
+
 		// validate nonce
-		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
+			if ( ! $can_die ) {
+				return;
+			}
 			status_header( 403 );
 			exit;
 		}
+
 		// check chart, if chart exists
+		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+			if ( ! $can_die ) {
+				return;
+			}
 			status_header( 400 );
 			exit;
 		}
+
 		if ( ! isset( $_POST['vz-import-time'] ) ) {
 			apply_filters( 'visualizer_pro_remove_schedule', $chart_id );
 		}
@@ -468,10 +480,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
-			// Added by Ash/Upwork
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
 			$source = apply_filters( 'visualizer_pro_handle_chart_data', $_POST['chart_data'], '' );
-			// Added by Ash/Upwork
 		} else {
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );
 		}
@@ -489,9 +499,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 		$render->render();
-		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
-			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		if ( ! $can_die ) {
+			return;
 		}
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
 
 	/**
