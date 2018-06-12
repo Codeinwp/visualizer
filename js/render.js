@@ -201,6 +201,11 @@
 
         v.override(settings);
 
+        g.visualization.events.addListener(render, 'ready', function () {
+            var arr = id.split('-');
+            console.log(arr[0] + '-' + arr[1] + ', ' + settings.title + ' (' + chart.type + ') = ' + render.getImageURI());
+        });
+
         render.draw(table, settings);
 	};
 
