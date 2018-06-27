@@ -144,6 +144,15 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.0.8 - 2018-06-27  ###
+
+* Added revision support for the chart post type
+* Added both % and Value to the Pie Slice
+* Use the blog locale for Visualizer's options
+* Fixed issue with data being fetched from the remote source every single time the chart was shown
+* Fixed issue with scheduled charts not being updated if one of the scheduled charts is deleted
+
+
 ### 3.0.7 - 2018-03-26  ###
 
 * Adds insert button in chart library.
