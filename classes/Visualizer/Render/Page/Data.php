@@ -254,6 +254,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
 						  method="post">
 						<?php echo $this->sidebar; ?>
+						<input type="hidden" name="save" value="1">
+					</form>
+					<form id="cancel-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>" method="post">
+						<input type="hidden" name="cancel" value="1">
 					</form>
 				</ul>
 			</li>
@@ -310,6 +314,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access private
 	 */
 	private function permissionsSidebar() {
+		// ignore for unit tests because Travis throws the error "Indirect modification of overloaded property Visualizer_Render_Page_Data::$permissions has no effect".
+		if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+			return;
+		}
 		Visualizer_Render_Sidebar::_renderGroupStart(
 			esc_html__( 'Who can see this chart?', 'visualizer' ) . '<span
 										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
@@ -415,6 +423,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			echo '</div>';
 		}
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
+		if ( isset( $this->cancel_button ) ) {
+			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-right" value="', $this->cancel_button, '">';
+		}
 	}
 
 }

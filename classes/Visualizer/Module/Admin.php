@@ -62,7 +62,69 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
 
+		// revision support.
+		$this->_addFilter( 'wp_revisions_to_keep', 'limitRevisions', null, 10, 2 );
+		$this->_addAction( '_wp_put_post_revision', 'addRevision', null, 10, 1 );
+		$this->_addAction( 'wp_restore_post_revision', 'restoreRevision', null, 10, 2 );
+
 		$this->_addAction( 'admin_init', 'init' );
+	}
+
+	/**
+	 * No limits on revisions.
+	 */
+	public function limitRevisions( $num, $post ) {
+		if ( Visualizer_Plugin::CPT_VISUALIZER === $post->post_type ) {
+			return -1;
+		}
+		return $num;
+	}
+
+	/**
+	 * Add a revision.
+	 */
+	public function addRevision( $revision_id ) {
+		$parent_id = wp_is_post_revision( $revision_id );
+		if ( Visualizer_Plugin::CPT_VISUALIZER === get_post_type( $parent_id ) ) {
+			// add the meta data to this revision.
+			$meta = get_post_meta( $parent_id, '', true );
+
+			if ( $meta ) {
+				foreach ( $meta as $key => $value ) {
+					if ( 0 === strpos( $key, 'visualizer' ) ) {
+						add_metadata( 'post', $revision_id, $key, maybe_unserialize( $value[0] ) );
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Restore a revision.
+	 */
+	public function restoreRevision( $post_id, $revision_id ) {
+		if ( Visualizer_Plugin::CPT_VISUALIZER === get_post_type( $post_id ) ) {
+			// get the meta information from the revision.
+			$meta = get_metadata( 'post', $revision_id, '', true );
+
+			// delete all meta information from the post before adding.
+			$post_meta = get_post_meta( $post_id, '', true );
+			if ( $post_meta ) {
+				foreach ( $meta as $key => $value ) {
+					if ( 0 === strpos( $key, 'visualizer' ) ) {
+						delete_post_meta( $post_id, $key );
+					}
+				}
+			}
+
+			if ( $meta ) {
+				foreach ( $meta as $key => $value ) {
+					if ( 0 === strpos( $key, 'visualizer' ) ) {
+						add_post_meta( $post_id, $key, maybe_unserialize( $value[0] ) );
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -441,6 +503,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$query  = new WP_Query( $query_args );
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
+
+			// if the user has updated a chart and instead of saving it, has closed the modal. If the user refreshes, they should get the original chart.
+			$chart = $this->handleExistingRevisions( $chart->ID, $chart );
+
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 			unset( $settings['height'], $settings['width'] );
@@ -469,6 +535,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						array(
 							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
 							'library' => 'yes',
+							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
 						), $ajaxurl
 					),
 					'edit'   => add_query_arg(
