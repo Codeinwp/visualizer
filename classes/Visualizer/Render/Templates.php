@@ -64,10 +64,7 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderLibraryChart() {
-		echo '<div class="visualizer-library-chart-footer visualizer-clearfix">';
-			echo '<a class="visualizer-library-chart-action visualizer-library-chart-delete" href="javascript:;" title="', esc_attr__( 'Delete', 'visualizer' ), '"></a>';
-			echo '<a class="visualizer-library-chart-action visualizer-library-chart-insert" href="javascript:;" title="', esc_attr__( 'Insert', 'visualizer' ), '"></a>';
-
+		echo '<div class="visualizer-library-chart-footer visualizer-clearfix visualizer-library-media-popup">';
 			echo '<span class="visualizer-library-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">&nbsp;[visualizer id=&quot;{{data.id}}&quot;]&nbsp;</span>';
 		echo '</div>';
 	}

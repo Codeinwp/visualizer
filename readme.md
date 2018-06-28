@@ -144,6 +144,22 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.0.7 - 2018-03-26  ###
+
+* Adds insert button in chart library.
+* Remove frontend assets where they are not needed.
+* Improve non-English charts compatibility. 
+* Adds a filter to change charts locale.
+
+
+### 3.0.6 - 2018-02-27  ###
+
+* Fix UTF-8 support while saving the data. 
+* Improve editing experience.  
+* Improves compatibility with Premium version. 
+* Adds chart button into TinyMCE editor.
+
+
 ### 3.0.5 - 2018-01-05  ###
 
 * Fix chart rendering bug in firefox.

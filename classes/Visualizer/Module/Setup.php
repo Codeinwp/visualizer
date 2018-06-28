@@ -116,6 +116,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			Visualizer_Plugin::CPT_VISUALIZER, array(
 				'label'  => 'Visualizer Charts',
 				'public' => false,
+				'supports' => array( 'revisions' ),
 			)
 		);
 	}

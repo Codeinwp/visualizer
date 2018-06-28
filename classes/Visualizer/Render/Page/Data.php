@@ -166,7 +166,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</li>
 							</ul>
 						</li>
-						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', '' ); ?> ">
+						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="viz-group-title viz-sub-group"
 								data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
@@ -223,8 +223,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							</div>
 						</li>
 
-						<?php if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'dbwizard' ) !== false ) { ?>
 						<?php
+						if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'dbwizard' ) !== false ) {
 							$save_query = add_query_arg(
 								array(
 									'action' => Visualizer_Plugin::ACTION_SAVE_DB_QUERY,
@@ -234,50 +234,54 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							);
 						?>
 						<li class="viz-group ">
-							<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from database', 'visualizer' ); ?><span
-										class="dashicons dashicons-lock"></span></h2>
-							<div class="viz-group-content edit-data-content">
-								<div>
-									<p class="viz-group-description"><?php _e( 'You can import data from the database here.', 'visualizer' ); ?></p>
-									<form id="vz-db-wizard" action="<?php echo $save_query; ?>" method="post" target="thehole">
-										<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from the database.', 'visualizer' ); ?></p>
-										<select name="refresh" id="vz-db-import-time" class="visualizer-select">
+						<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from database', 'visualizer' ); ?><span
+								class="dashicons dashicons-lock"></span></h2>
+						<div class="viz-group-content edit-data-content">
+						<div>
+							<p class="viz-group-description"><?php _e( 'You can import data from the database here.', 'visualizer' ); ?></p>
+							<form id="vz-db-wizard" action="<?php echo $save_query; ?>" method="post" target="thehole">
+								<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from the database.', 'visualizer' ); ?></p>
+								<select name="refresh" id="vz-db-import-time" class="visualizer-select">
+									<?php
+									$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+									$schedules = apply_filters(
+										'visualizer_schedules', array(
+											'0'  => __( 'Live', 'visualizer' ),
+											'1'  => __( 'Each hour', 'visualizer' ),
+											'12' => __( 'Each 12 hours', 'visualizer' ),
+											'24' => __( 'Each day', 'visualizer' ),
+											'36' => __( 'Each 3 days', 'visualizer' ),
+										)
+									);
+									foreach ( $schedules as $num => $name ) {
+										$extra = $num == $hours ? 'selected' : '';
+										?>
+										<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 											<?php
-											$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-											$schedules = apply_filters(
-												'visualizer_schedules', array(
-													'0'  => __( 'Live', 'visualizer' ),
-													'1'  => __( 'Each hour', 'visualizer' ),
-													'12' => __( 'Each 12 hours', 'visualizer' ),
-													'24' => __( 'Each day', 'visualizer' ),
-													'36' => __( 'Each 3 days', 'visualizer' ),
-												)
-											);
-											foreach ( $schedules as $num => $name ) {
-												$extra = $num == $hours ? 'selected' : '';
-												?>
-												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
-												<?php
-											}
-											?>
-										</select>
-										<input type="hidden" name="params" id="viz-db-wizard-params">
+									}
+									?>
+									</select>
+									<input type="hidden" name="params" id="viz-db-wizard-params">
 
-										<input type="button" id="db-chart-button" class="button button-secondary "
-											   value="<?php _e( 'Create Query', 'visualizer' ); ?>" data-current="chart"
-											   data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-											   data-t-chart="<?php _e( 'Create Query', 'visualizer' ); ?>">
+									<input type="button" id="db-chart-button" class="button button-secondary "
+									   value="<?php _e( 'Create Query', 'visualizer' ); ?>" data-current="chart"
+									   data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+									   data-t-chart="<?php _e( 'Create Query', 'visualizer' ); ?>">
 										<input type="button" id="db-chart-save-button" class="button button-primary "
-											   value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+									   value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 									</form>
 								</div>
 							</div>
 						</li>
 						<?php } ?>
 
-						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
+						<?php
+							// we will auto-open the manual data feature but only when pro is active.
+							$pro_class = apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' );
+						?>
+						<li class="viz-group <?php echo $pro_class; ?> <?php echo empty( $pro_class ) ? 'open' : ''; ?> ">
 							<h2 class="viz-group-title viz-sub-group visualizer-editor-tab"
-								data-current="chart"><?php _e( 'Add data manually', 'visualizer' ); ?><span
+								data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
 								<input type="hidden" id="chart-data" name="chart_data">
@@ -309,6 +313,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
 						  method="post">
 						<?php echo $this->sidebar; ?>
+						<input type="hidden" name="save" value="1">
+					</form>
+					<form id="cancel-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>" method="post">
+						<input type="hidden" name="cancel" value="1">
 					</form>
 				</ul>
 			</li>
@@ -365,6 +373,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access private
 	 */
 	private function permissionsSidebar() {
+		// ignore for unit tests because Travis throws the error "Indirect modification of overloaded property Visualizer_Render_Page_Data::$permissions has no effect".
+		if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+			return;
+		}
 		Visualizer_Render_Sidebar::_renderGroupStart(
 			esc_html__( 'Who can see this chart?', 'visualizer' ) . '<span
 										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
@@ -460,15 +472,19 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		// changed by Ash/Upwork
-		echo '<div class="toolbar-div">';
-		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'types' ), '">';
-		esc_html_e( 'Back', 'visualizer' );
-		echo '</a>';
-		echo '</div>';
+		// don't show back button at all.
+		// NOTE: We can't be selective on the post_status here because when a new chart reaches the settings screen, its status changes to publish.
+		if ( ! VISUALIZER_SKIP_CHART_TYPE_PAGE ) {
+			echo '<div class="toolbar-div">';
+			echo '<a class="button button-large" href="', add_query_arg( 'tab', 'types' ), '">';
+			esc_html_e( 'Back', 'visualizer' );
+			echo '</a>';
+			echo '</div>';
+		}
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
-		echo '</div>';
-
+		if ( isset( $this->cancel_button ) ) {
+			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-right" value="', $this->cancel_button, '">';
+		}
 	}
 
 	/**
