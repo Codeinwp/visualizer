@@ -69,6 +69,9 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	 */
 	public function addVirtualPage() {
 		add_rewrite_rule( '^visualizer-get-chart/([0-9]+)/?', 'index.php?page=visualizer-get-chart&_chart=$matches[1]', 'top' );
+		if ( is_admin() ) {
+			flush_rewrite_rules();
+		}
 	}
 
 	/**
@@ -83,7 +86,7 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	 * Is this an AMP request?
 	 */
 	public static function is_amp() {
-		return is_amp_endpoint();
+		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 	}
 
 	/**
