@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.0.7';
+	const VERSION = '3.0.8';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -62,6 +62,8 @@ class Visualizer_Plugin {
 	const FILTER_GET_CHART_SERIES = 'visualizer-get-chart-series';
 	const FILTER_GET_CHART_DATA = 'visualizer-get-chart-data';
 	const FILTER_GET_CHART_SETTINGS = 'visualizer-get-chart-settings';
+	const FILTER_UNDO_REVISIONS = 'visualizer-undo-revisions';
+	const FILTER_HANDLE_REVISIONS = 'visualizer-handle-revisions';
 
 	const CF_CHART_URL = 'visualizer-chart-url';
 	const CF_CHART_SCHEDULE = 'visualizer-chart-schedule';
@@ -97,6 +99,9 @@ class Visualizer_Plugin {
 	 * @access private
 	 */
 	private function __construct() {
+		if ( VISUALIZER_DEBUG ) {
+			add_action( 'themeisle_log_event', array( $this, 'themeisle_log_event_debug' ), 10, 5 );
+		}
 	}
 
 	/**
@@ -182,6 +187,16 @@ class Visualizer_Plugin {
 	 * @access private
 	 */
 	private function __clone() {
+	}
+
+	/**
+	 * For local testing, overrides the 'themeisle_log_event' hook and redirects to error.log.
+	 */
+	final function themeisle_log_event_debug( $name, $message, $type, $file, $line ) {
+		if ( Visualizer_Plugin::NAME !== $name ) {
+			return;
+		}
+		error_log( sprintf( '%s (%s): %s in %s:%s', $name, $type, $message, $file, $line ) );
 	}
 
 }

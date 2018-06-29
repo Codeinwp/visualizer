@@ -201,6 +201,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return Visualizer_Module_AMP::get_iframe( $atts['id'] );
 		}
 
+		// in case revisions exist.
+		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
+			$chart = get_post( $chart->ID );
+		}
+
 		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
@@ -234,9 +239,12 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$id         = $id . '-' . rand();
 		$arguments  = array( '', $id, $settings );
+		$css        = '';
 		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );
-		$css        = $arguments[0];
-		$settings   = $arguments[2];
+		if ( ! empty( $arguments ) ) {
+			$css        = $arguments[0];
+			$settings   = $arguments[2];
+		}
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(

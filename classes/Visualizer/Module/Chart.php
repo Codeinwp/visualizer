@@ -57,9 +57,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EDIT_CHART, 'renderChartPages' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_UPLOAD_DATA, 'uploadData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CLONE_CHART, 'cloneChart' );
-		// Added by Ash/Upwork
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EXPORT_DATA, 'exportData' );
-		// Added by Ash/Upwork
 	}
 
 	/**
@@ -211,7 +209,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
-			$default_type = 'line';
+			$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
 			$source       = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $default_type . '.csv' );
 			$source->fetch();
 			$chart_id = wp_insert_post(
@@ -269,8 +267,19 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$tab    = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
 
 		// skip chart type pages only for existing charts.
-		if ( VISUALIZER_SKIP_CHART_TYPE_PAGE && 'auto-draft' !== $this->_chart->post_status ) {
+		if ( VISUALIZER_SKIP_CHART_TYPE_PAGE && 'auto-draft' !== $this->_chart->post_status && ( ! empty( $_GET['tab'] ) && 'visualizer' === $_GET['tab'] ) ) {
 			$tab = 'settings';
+		}
+
+		if ( isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] ) ) {
+			// if the cancel button is clicked.
+			$this->undoRevisions( $chart_id, true );
+		} elseif ( isset( $_POST['save'] ) && 1 === intval( $_POST['save'] ) ) {
+			// if the save button is clicked.
+			$this->undoRevisions( $chart_id, false );
+		} else {
+			// if the edit button is clicked.
+			$this->_chart = $this->handleExistingRevisions( $chart_id, $this->_chart );
 		}
 
 		switch ( $tab ) {
@@ -357,6 +366,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
 				? esc_html__( 'Save Chart', 'visualizer' )
 				: esc_html__( 'Create Chart', 'visualizer' );
+			if ( filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART ) {
+				$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
+			}
 		} else {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
@@ -426,18 +438,30 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function uploadData() {
+		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
+		// otherwise, assume this is a normal web request.
+		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
+
 		// validate nonce
-		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
+			if ( ! $can_die ) {
+				return;
+			}
 			status_header( 403 );
 			exit;
 		}
+
 		// check chart, if chart exists
+		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+			if ( ! $can_die ) {
+				return;
+			}
 			status_header( 400 );
 			exit;
 		}
+
 		if ( ! isset( $_POST['vz-import-time'] ) ) {
 			apply_filters( 'visualizer_pro_remove_schedule', $chart_id );
 		}
@@ -456,10 +480,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
-			// Added by Ash/Upwork
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
 			$source = apply_filters( 'visualizer_pro_handle_chart_data', $_POST['chart_data'], '' );
-			// Added by Ash/Upwork
 		} else {
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );
 		}
@@ -477,9 +499,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 		$render->render();
-		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
-			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		if ( ! $can_die ) {
+			return;
 		}
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
 
 	/**
@@ -599,4 +622,5 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 		wp_iframe( array( $render, 'render' ) );
 	}
+
 }

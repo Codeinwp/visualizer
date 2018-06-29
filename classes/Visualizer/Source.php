@@ -222,16 +222,30 @@ abstract class Visualizer_Source {
 					}
 					break;
 				case 'string':
-					// condition introduced for Issue with non-English text #240 where languages such as Hebrew get messed up.
-					if ( function_exists( 'mb_detect_encoding' ) && mb_detect_encoding( $data[ $i ] ) !== 'UTF-8' ) {
-						$data[ $i ] = utf8_encode( $data[ $i ] );
-					}
+					$data[ $i ] = $this->toUTF8( $data[ $i ] );
 					break;
 			}
 		}
 
 		// error_log(print_r($data,true));
 		return $data;
+	}
+
+
+	/**
+	 * Converts values to UTF8, if required.
+	 *
+	 * @access protected
+	 *
+	 * @param string $datum The data to convert.
+	 *
+	 * @return string The converted data.
+	 */
+	protected final function toUTF8( $datum ) {
+		if ( ! function_exists( 'mb_detect_encoding' ) || mb_detect_encoding( $datum ) !== 'ASCII' ) {
+			$datum = \ForceUTF8\Encoding::toUTF8( $datum );
+		}
+		return $datum;
 	}
 
 }
