@@ -197,6 +197,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
+		if ( Visualizer_Module_AMP::is_amp() ) {
+			return Visualizer_Module_AMP::get_iframe( $atts['id'] );
+		}
+
 		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
