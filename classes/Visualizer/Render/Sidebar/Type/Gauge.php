@@ -55,7 +55,17 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 	 */
 	protected function _renderGeneralSettings() {
 		self::_renderGroupStart( esc_html__( 'General Settings', 'visualizer' ) );
-			self::_renderSectionStart();
+
+			self::_renderSectionStart( esc_html__( 'Title', 'visualizer' ), false );
+				self::_renderTextItem(
+					esc_html__( 'Chart Title', 'visualizer' ),
+					'title',
+					$this->title,
+					esc_html__( 'Text to display in the back-end admin area.', 'visualizer' )
+				);
+			self::_renderSectionEnd();
+
+			self::_renderSectionStart( esc_html__( 'Gauge Settings', 'visualizer' ), false );
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
