@@ -1,6 +1,10 @@
 /* global google */
 /* global visualizer */
 /* global console */
+
+// this will store the images for each chart rendered.
+var __visualizer_chart_images   = [];
+
 (function(v, g) {
 	var gv;
 
@@ -200,6 +204,15 @@
         }
 
         v.override(settings);
+
+        g.visualization.events.addListener(render, 'ready', function () {
+            var arr = id.split('-');
+            try{
+                __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = render.getImageURI();
+            }catch(error){
+                console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
+            }
+        });
 
         render.draw(table, settings);
 	};
