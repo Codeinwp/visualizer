@@ -207,7 +207,11 @@ var __visualizer_chart_images   = [];
 
         g.visualization.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
-            __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = render.getImageURI();
+            try{
+                __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = render.getImageURI();
+            }catch(error){
+                console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
+            }
         });
 
         render.draw(table, settings);
