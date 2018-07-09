@@ -38,16 +38,31 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _toHTML() {
+		$this->_supportsAnimation = false;
 		$this->_renderGeneralSettings();
-		$this->_renderGreenColorSettings();
-		$this->_renderYellowColorSettings();
-		$this->_renderRedColorSettings();
+		$this->_renderGaugeSettings();
 		$this->_renderViewSettings();
 		$this->_renderAdvancedSettings();
 	}
 
 	/**
-	 * Renders chart general settings group.
+	 * Renders Gauge settings group.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderGaugeSettings() {
+		self::_renderGroupStart( esc_html__( 'Gauge Settings', 'visualizer' ) );
+			$this->_renderTickSettings();
+			$this->_renderGreenColorSettings();
+			$this->_renderYellowColorSettings();
+			$this->_renderRedColorSettings();
+		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders general settings group.
 	 *
 	 * @since 1.0.0
 	 *
@@ -66,39 +81,49 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Gauge Settings', 'visualizer' ), false );
+	}
 
-				echo '<div class="viz-section-item">';
-					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Min And Max Values', 'visualizer' ), '</b>';
+	/**
+	 * Renders tick settings group.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderTickSettings() {
+		self::_renderSectionStart( esc_html__( 'Tick Settings', 'visualizer' ), false );
 
-					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
-						echo '<tr>';
-							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="min" class="control-text" value="', esc_attr( $this->min ), '" placeholder="0">';
-							echo '</td>';
-							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="max" class="control-text" value="', esc_attr( $this->max ), '" placeholder="100">';
-							echo '</td>';
-						echo '</tr>';
-					echo '</table>';
+			echo '<div class="viz-section-item">';
+				echo '<a class="more-info" href="javascript:;">[?]</a>';
+				echo '<b>', esc_html__( 'Min And Max Values', 'visualizer' ), '</b>';
 
-					echo '<p class="viz-section-description">';
-						esc_html_e( 'The maximal and minimal values of the gauge.', 'visualizer' );
-					echo '</p>';
-				echo '</div>';
+				echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
+					echo '<tr>';
+						echo '<td class="viz-section-table-column">';
+							echo '<input type="text" name="min" class="control-text" value="', esc_attr( $this->min ), '" placeholder="0">';
+						echo '</td>';
+						echo '<td class="viz-section-table-column">';
+							echo '<input type="text" name="max" class="control-text" value="', esc_attr( $this->max ), '" placeholder="100">';
+						echo '</td>';
+					echo '</tr>';
+				echo '</table>';
 
-				self::_renderTextItem(
-					esc_html__( 'Minor Ticks', 'visualizer' ),
-					'minorTicks',
-					$this->minorTicks,
-					esc_html__( 'The number of minor tick section in each major tick section.', 'visualizer' ),
-					2
-				);
+				echo '<p class="viz-section-description">';
+					esc_html_e( 'The maximal and minimal values of the gauge.', 'visualizer' );
+				echo '</p>';
+			echo '</div>';
 
-				$this->_renderFormatField();
+			self::_renderTextItem(
+				esc_html__( 'Minor Ticks', 'visualizer' ),
+				'minorTicks',
+				$this->minorTicks,
+				esc_html__( 'The number of minor tick section in each major tick section.', 'visualizer' ),
+				2
+			);
 
-			self::_renderSectionEnd();
-		self::_renderGroupEnd();
+			$this->_renderFormatField();
+
+		self::_renderSectionEnd();
 	}
 
 	/**
@@ -109,8 +134,7 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderGreenColorSettings() {
-		self::_renderGroupStart( esc_html__( 'Green Color', 'visualizer' ) );
-			self::_renderSectionStart();
+			self::_renderSectionStart( esc_html__( 'Green Color', 'visualizer' ), false );
 				self::_renderSectionDescription( esc_html__( 'Configure the green section of the gauge chart.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
@@ -140,7 +164,6 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 					'#109618'
 				);
 			self::_renderSectionEnd();
-		self::_renderGroupEnd();
 	}
 
 	/**
@@ -151,8 +174,7 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderYellowColorSettings() {
-		self::_renderGroupStart( esc_html__( 'Yellow Color', 'visualizer' ) );
-			self::_renderSectionStart();
+			self::_renderSectionStart( esc_html__( 'Yellow Color', 'visualizer' ), false );
 				self::_renderSectionDescription( esc_html__( 'Configure the yellow section of the gauge chart.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
@@ -182,7 +204,6 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 					'#FF9900'
 				);
 			self::_renderSectionEnd();
-		self::_renderGroupEnd();
 	}
 
 	/**
@@ -193,8 +214,7 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _renderRedColorSettings() {
-		self::_renderGroupStart( esc_html__( 'Red Color', 'visualizer' ) );
-			self::_renderSectionStart();
+			self::_renderSectionStart( esc_html__( 'Red Color', 'visualizer' ), false );
 				self::_renderSectionDescription( esc_html__( 'Configure the red section of the gauge chart.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
@@ -224,7 +244,6 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 					'#DC3912'
 				);
 			self::_renderSectionEnd();
-		self::_renderGroupEnd();
 	}
 
 	/**

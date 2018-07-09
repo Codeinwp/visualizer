@@ -40,6 +40,12 @@ var __visualizer_chart_images   = [];
 			render = new gv[render](container);
 		}
 
+        if (settings['animation'] && parseInt(settings['animation']['startup']) === 1)
+        {
+            settings['animation']['startup'] = true;
+            settings['animation']['duration'] = parseInt(settings['animation']['duration']);
+        }
+
 		switch (chart.type) {
 			case 'pie':
 				if (settings.slices) {
