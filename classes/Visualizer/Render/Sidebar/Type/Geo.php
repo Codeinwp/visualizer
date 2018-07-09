@@ -38,6 +38,7 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _toHTML() {
+		$this->_supportsAnimation = false;
 		$this->_renderMapSettings();
 		$this->_renderColorAxisSettings();
 		$this->_renderSizeAxisSettings();

@@ -84,6 +84,14 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	protected $_alignments;
 
 	/**
+	 * Whether this chart supports animation or not.
+	 *
+	 * @access protected
+	 * @var bool
+	 */
+	protected $_supportsAnimation = true;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -311,7 +319,56 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderSectionStart( esc_html__( 'Tooltip', 'visualizer' ), false );
 				$this->_renderTooltipSettigns();
 			self::_renderSectionEnd();
+
+			$this->_renderAnimationSettings();
+
 		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders animation settings section.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAnimationSettings() {
+		if ( ! $this->_supportsAnimation ) {
+			return;
+		}
+
+		self::_renderSectionStart( esc_html__( 'Animation', 'visualizer' ), false );
+
+		self::_renderCheckboxItem(
+			esc_html__( 'Animate on startup', 'visualizer' ),
+			'animation[startup]',
+			$this->animation['startup'],
+			true,
+			esc_html__( 'Determines if the chart will animate on the initial draw.', 'visualizer' )
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Duration', 'visualizer' ),
+			'animation[duration]',
+			isset( $this->animation['duration'] ) ? $this->animation['duration'] : 0,
+			esc_html__( 'The duration of the animation, in milliseconds', 'visualizer' ),
+			0,
+			'number'
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Easing', 'visualizer' ),
+			'animation[easing]',
+			isset( $this->animation['easing'] ) ? $this->animation['easing'] : null,
+			array(
+				'linear'    => esc_html__( 'Constant speed', 'visualizer' ),
+				'in'    => esc_html__( 'Start slow and speed up', 'visualizer' ),
+				'out'   => esc_html__( 'Start fast and slow down', 'visualizer' ),
+				'inAndOut'  => esc_html__( 'Start slow, speed up, then slow down', 'visualizer' ),
+			),
+			esc_html__( 'The easing function applied to the animation.', 'visualizer' )
+		);
+
+		self::_renderSectionEnd();
+
 	}
 
 	/**
