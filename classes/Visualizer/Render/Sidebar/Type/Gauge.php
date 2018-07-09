@@ -61,6 +61,13 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 		self::_renderGroupEnd();
 	}
 
+	/**
+	 * Renders general settings group.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
 	protected function _renderGeneralSettings() {
 		self::_renderGroupStart( esc_html__( 'General Settings', 'visualizer' ) );
 
