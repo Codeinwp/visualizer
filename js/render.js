@@ -1,6 +1,10 @@
 /* global google */
 /* global visualizer */
 /* global console */
+
+// this will store the images for each chart rendered.
+var __visualizer_chart_images   = [];
+
 (function(v, g) {
 	var gv;
 
@@ -35,6 +39,12 @@
 
 			render = new gv[render](container);
 		}
+
+        if (settings['animation'] && parseInt(settings['animation']['startup']) === 1)
+        {
+            settings['animation']['startup'] = true;
+            settings['animation']['duration'] = parseInt(settings['animation']['duration']);
+        }
 
 		switch (chart.type) {
 			case 'pie':
@@ -200,6 +210,17 @@
         }
 
         v.override(settings);
+
+        g.visualization.events.addListener(render, 'ready', function () {
+            var arr = id.split('-');
+            try{
+                var img = render.getImageURI();
+                __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
+                jQuery('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+            }catch(error){
+                console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
+            }
+        });
 
         render.draw(table, settings);
 	};

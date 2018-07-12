@@ -38,12 +38,34 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _toHTML() {
+		$this->_supportsAnimation = false;
+		$this->_renderGeneralSettings();
 		$this->_renderMapSettings();
 		$this->_renderColorAxisSettings();
 		$this->_renderSizeAxisSettings();
 		$this->_renderMagnifyingGlassSettings();
 		$this->_renderViewSettings();
 		$this->_renderAdvancedSettings();
+	}
+
+	/**
+	 * Renders general settings group.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderGeneralSettings() {
+		self::_renderGroupStart( esc_html__( 'General Settings', 'visualizer' ) );
+			self::_renderSectionStart( esc_html__( 'Title', 'visualizer' ), false );
+				self::_renderTextItem(
+					esc_html__( 'Chart Title', 'visualizer' ),
+					'title',
+					$this->title,
+					esc_html__( 'Text to display in the back-end admin area.', 'visualizer' )
+				);
+			self::_renderSectionEnd();
+		self::_renderGroupEnd();
 	}
 
 	/**
