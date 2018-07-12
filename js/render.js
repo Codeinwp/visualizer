@@ -214,7 +214,9 @@ var __visualizer_chart_images   = [];
         g.visualization.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
             try{
-                __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = render.getImageURI();
+                var img = render.getImageURI();
+                __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
+                jQuery('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
             }catch(error){
                 console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
             }
