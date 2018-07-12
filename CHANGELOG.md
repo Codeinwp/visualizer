@@ -1,4 +1,10 @@
 
+ ### v3.0.9 - 2018-07-12 
+ **Changes:** 
+ * New chart title option for the back-end of the charts that don't allow a title on the front-end
+* Store the png images of the charts in a global array that can be used in JS
+* Added options for charts animations
+ 
  ### v3.0.8 - 2018-06-27 
  **Changes:** 
  * Added revision support for the chart post type

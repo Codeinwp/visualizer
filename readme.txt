@@ -144,6 +144,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 3.0.9 - 2018-07-12  = 
+
+* New chart title option for the back-end of the charts that don't allow a title on the front-end
+* Store the png images of the charts in a global array that can be used in JS
+* Added options for charts animations
+
+
 = 3.0.8 - 2018-06-27  = 
 
 * Added revision support for the chart post type
