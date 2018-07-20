@@ -224,21 +224,21 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 				self::_renderColorPickerItem(
 					esc_html__( 'Minimum Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					! empty( $this->colorAxis['color'][0] ) ? $this->colorAxis['color'][0] : null,
+					! empty( $this->colorAxis['colors'][0] ) ? $this->colorAxis['colors'][0] : null,
 					'#efe6dc'
 				);
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Intermediate Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					! empty( $this->colorAxis['color'][1] ) ? $this->colorAxis['color'][1] : null,
+					! empty( $this->colorAxis['colors'][1] ) ? $this->colorAxis['colors'][1] : null,
 					'#82bf7c'
 				);
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Maximum Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					! empty( $this->colorAxis['color'][2] ) ? $this->colorAxis['color'][2] : null,
+					! empty( $this->colorAxis['colors'][2] ) ? $this->colorAxis['colors'][2] : null,
 					'#109618'
 				);
 
