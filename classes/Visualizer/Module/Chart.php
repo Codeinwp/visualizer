@@ -307,9 +307,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
 			if ( $this->_chart->post_status == 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
+
+				// ensure that a revision is not created. If a revision is created it will have the proper data and the parent of the revision will have default data.
+				// we do not want any difference in data so disable revisions temporarily.
+				add_filter( 'wp_revisions_to_keep', '__return_false' );
 				wp_update_post( $this->_chart->to_array() );
 			}
-			update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
+			// save meta data only when it is NOT being canceled.
+			if ( ! ( isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] ) ) ) {
+				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
+			}
 			$render       = new Visualizer_Render_Page_Send();
 			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );
 			wp_iframe( array( $render, 'render' ) );
