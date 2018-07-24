@@ -1,0 +1,7 @@
+.v-form-spinner {
+	display: none;
+}
+
+.v-form-spinner.v-form-loading {
+	display: block;
+}
