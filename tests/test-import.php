@@ -222,7 +222,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 						$data[ $i ] = ( is_numeric( $data[ $i ] ) ) ? floatval( $data[ $i ] * $multiplyValuesBy ) : ( is_numeric( str_replace( ',', '', $data[ $i ] ) ) ? floatval( ( str_replace( ',', '', $data[ $i ] ) ) * $multiplyValuesBy ) : null );
 						break;
 					case 'boolean':
-						$data[ $i ] = ! empty( $data[ $i ] ) ? filter_validate( $data[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
+						$data[ $i ] = ! empty( $data[ $i ] ) ? filter_var( $data[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
 						break;
 					case 'timeofday':
 						$date = new DateTime( '1984-03-16T' . $data[ $i ] );

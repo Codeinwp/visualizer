@@ -38,12 +38,34 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 	 * @access protected
 	 */
 	protected function _toHTML() {
+		$this->_supportsAnimation = false;
+		$this->_renderGeneralSettings();
 		$this->_renderMapSettings();
 		$this->_renderColorAxisSettings();
 		$this->_renderSizeAxisSettings();
 		$this->_renderMagnifyingGlassSettings();
 		$this->_renderViewSettings();
 		$this->_renderAdvancedSettings();
+	}
+
+	/**
+	 * Renders general settings group.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderGeneralSettings() {
+		self::_renderGroupStart( esc_html__( 'General Settings', 'visualizer' ) );
+			self::_renderSectionStart( esc_html__( 'Title', 'visualizer' ), false );
+				self::_renderTextItem(
+					esc_html__( 'Chart Title', 'visualizer' ),
+					'title',
+					$this->title,
+					esc_html__( 'Text to display in the back-end admin area.', 'visualizer' )
+				);
+			self::_renderSectionEnd();
+		self::_renderGroupEnd();
 	}
 
 	/**
@@ -202,21 +224,21 @@ class Visualizer_Render_Sidebar_Type_Geo extends Visualizer_Render_Sidebar {
 				self::_renderColorPickerItem(
 					esc_html__( 'Minimum Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					! empty( $this->colorAxis['color'][0] ) ? $this->colorAxis['color'][0] : null,
+					! empty( $this->colorAxis['colors'][0] ) ? $this->colorAxis['colors'][0] : null,
 					'#efe6dc'
 				);
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Intermediate Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					! empty( $this->colorAxis['color'][1] ) ? $this->colorAxis['color'][1] : null,
+					! empty( $this->colorAxis['colors'][1] ) ? $this->colorAxis['colors'][1] : null,
 					'#82bf7c'
 				);
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Maximum Value', 'visualizer' ),
 					'colorAxis[colors][]',
-					! empty( $this->colorAxis['color'][2] ) ? $this->colorAxis['color'][2] : null,
+					! empty( $this->colorAxis['colors'][2] ) ? $this->colorAxis['colors'][2] : null,
 					'#109618'
 				);
 
