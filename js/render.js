@@ -185,7 +185,8 @@ var __visualizer_chart_images   = [];
             switch(chart.type){
                 case 'table':
                     for(i in settings.series){
-                        v.format_data(table, series[i].type, settings.series[i].format, parseInt(i) + 1);
+                        i = parseInt(i);
+                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
                 default:
