@@ -231,9 +231,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'focusTarget' => 'datum',
 					)
 				);
+
 				do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 			}
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
+			if ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) {
+				return;
+			}
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 		// enqueue and register scripts and styles
@@ -487,7 +491,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		if ( $source ) {
 			if ( $source->fetch() ) {
-				$chart->post_content = $source->getData();
+				$content	= $source->getData();
+				if ( array_key_exists( 'data', $content ) && ! empty( $content['data'] ) ) {
+					$chart->post_content = $content;
+				}
 				wp_update_post( $chart->to_array() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );

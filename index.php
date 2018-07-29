@@ -85,15 +85,8 @@ function visualizer_launch() {
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
 	$plugin->setModule( Visualizer_Module_Chart::NAME );
-	if ( is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
-		// set admin modules
-		$plugin->setModule( Visualizer_Module_Admin::NAME );
-	}
-
-	if ( ! is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
-		// set frontend modules
-		$plugin->setModule( Visualizer_Module_Frontend::NAME );
-	}
+	$plugin->setModule( Visualizer_Module_Admin::NAME );
+	$plugin->setModule( Visualizer_Module_Frontend::NAME );
 
 	if ( function_exists( 'register_block_type' ) ) {
 		$plugin->setModule( Visualizer_Module_Gutenberg::NAME );

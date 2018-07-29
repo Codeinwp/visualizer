@@ -64,11 +64,17 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 			'visualizer-block', 'vjs', array(
 				'i10n'  => array(
 					'plugin'	=> 'Visualizer',
+					'loading'	=> __( 'Loading', 'visualizer' ) . '...',
 				),
+				'urls'	=> array(
+					'create_form'	=> 'visualizer/v' . intval( VISUALIZER_REST_VERSION ) . '/create_form/',
+					'create_chart'	=> get_rest_url( null, 'visualizer/v' . intval( VISUALIZER_REST_VERSION ) . '/create_chart/' ),
+				),
+				'nonce'		=> wp_create_nonce( 'wp_rest' ),
 			)
 		);
 
-		wp_enqueue_style( 'visualizer-block-css', PIRATEFORMS_URL . 'css/gutenberg/block.css' );
+		wp_enqueue_style( 'visualizer-block-css', VISUALIZER_ABSURL . '/css/gutenberg/block.css' );
 	}
 
 
@@ -88,7 +94,7 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 	 * Render the pirate form block.
 	 */
 	function render_block( $atts = null ) {
-		$arributes  = array();
+		$attributes  = array();
 		if ( is_array( $atts ) && $atts ) {
 			if ( array_key_exists( 'id', $atts ) ) {
 				$attributes['id'] = $atts['form_id'];
@@ -113,12 +119,124 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 	 */
 	public function register_endpoints() {
 		register_rest_route(
+			'visualizer', '/v' . intval( VISUALIZER_REST_VERSION ) . '/create_form/',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'create_form' ),
+			)
+		);
+		register_rest_route(
+			'visualizer', '/v' . intval( VISUALIZER_REST_VERSION ) . '/create_chart/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'create_chart' ),
+			)
+		);
+		register_rest_route(
 			'visualizer', '/v' . intval( VISUALIZER_REST_VERSION ) . '/get_chart/(?P<id>\d+)/',
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_chart' ),
 			)
 		);
+	}
+
+	/**
+	 * Get the HTML for chart creation.
+	 */
+	function create_form( WP_REST_Request $request ) {
+		$render = new Visualizer_Render_Templates();
+		$render->setTemplateName( 'gutenberg-create-chart-form' );
+		$html	= $render->toHtml();
+
+		return new WP_REST_Response( array( 'html' => $html ) );
+	}
+
+	/**
+	 * Get the HTML for chart creation.
+	 */
+	function create_chart( WP_REST_Request $request ) {
+		$return = $this->validate_params( $request, array( 'type', 'source' ) );
+		if ( is_wp_error( $return ) ) {
+			return $return;
+		}
+
+		$_files	= $request->get_file_params();
+		$_post	= $_POST;
+
+		$_POST	= array();
+
+		$_GET	= array(
+			'type'	=> $return['type'],
+		);
+
+		if ( ! defined( 'VISUALIZER_DO_NOT_DIE' ) ) {
+			define( 'VISUALIZER_DO_NOT_DIE', true );
+		}
+
+		do_action( 'wp_ajax_' . Visualizer_Plugin::ACTION_CREATE_CHART );
+
+		$chart_id			= null;
+		// lets get the new chart created.
+		$query					= new WP_Query(array(
+			'post_author'  => get_current_user_id(),
+			'post_status'  => 'auto-draft',
+			'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+			'post_title'   => 'Visualization',
+			'posts_per_page'	=> 1,
+			'fields'		=> 'ids',
+			'orderby'		=> 'post_date',
+			'order'			=> 'DESC',
+		));
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$chart_id	= $query->post;
+			}
+		}
+
+		$source				= $return['source'];
+
+		switch ( $source ) {
+			case 'csv':
+				$_FILES['local_data']		= $_files['file'];
+				break;
+			case 'url':
+				$return = $this->validate_params( $request, array( 'remote_data' ) );
+				if ( is_wp_error( $return ) ) {
+					return $return;
+				}
+
+				$_POST		= array(
+					'remote_data'	=> $_post['remote_data'],
+				);
+				break;
+			case 'chart':
+				$return = $this->validate_params( $request, array( 'chart' ) );
+				if ( is_wp_error( $return ) ) {
+					return $return;
+				}
+
+				$source_chart			= get_post( $_post['chart'] );
+				$_POST['chart_data']	= $source_chart->post_content;
+				break;
+		}
+
+		$html		= '<div id="canvas"></div>';
+		if ( 'manual' !== $source ) {
+			$_GET['nonce']	= wp_create_nonce();
+			$_GET['chart']  = $chart_id;
+			ob_start();
+			do_action( 'wp_ajax_' . Visualizer_Plugin::ACTION_UPLOAD_DATA );
+			$html		.= ob_get_clean();
+		}
+
+		wp_update_post( array( 'ID' => $chart_id, 'post_status' => 'publish' ) );
+
+
+		$html			.= do_shortcode( "[visualizer id='$chart_id']");
+
+		return new WP_REST_Response( array( 'html' => $html ) );
 	}
 
 	/**
@@ -130,7 +248,7 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 			return $return;
 		}
 
-		return new WP_REST_Response( array( 'html' => $this->render_block( $request->get_param( 'id' ) ) ) );
+		return new WP_REST_Response( array( 'html' => $this->render_block( $return['id'] ) ) );
 	}
 
 	/**
@@ -143,7 +261,7 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 			if ( ! is_numeric( $value ) && empty( $value ) ) {
 				return new WP_Error( $param . '_invalid', sprintf( __( 'Invalid %s', 'visualizer' ), $param ), array( 'status' => 403 ) );
 			} else {
-				$return[] = $value;
+				$return[ $param ] = $value;
 			}
 		}
 

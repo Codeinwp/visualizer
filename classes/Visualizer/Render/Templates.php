@@ -42,6 +42,12 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 		'library-empty',
 	);
 
+	private $_template_name	= null;
+
+	public function setTemplateName( $name ) {
+		$this->_template_name = $name;
+	}
+
 	/**
 	 * Renders concreate template and wraps it into script tag.
 	 *
@@ -51,9 +57,24 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 * @param string $callback The name of the function to render a template.
 	 */
 	private function _renderTemplate( $id, $callback ) {
-		echo '<script id="tmpl-visualizer-', $id, '" type="text/html">';
+		if ( $this->_template_name ) {
 			call_user_func( array( $this, $callback ) );
-		echo '</script>';
+		} else {
+			echo '<script id="tmpl-visualizer-', $id, '" type="text/html">';
+				call_user_func( array( $this, $callback ) );
+			echo '</script>';
+		}
+	}
+
+	/**
+	 * Renders gutenberg-create-chart-form template.
+	 *
+	 * @access protected
+	 */
+	protected function _renderGutenbergCreateChartForm() {
+		$types	= Visualizer_Module_Admin::_getChartTypesLocalized( true, true, false );
+		$charts	= Visualizer_Module_Admin::getCharts();
+		require_once VISUALIZER_ABSPATH . '/templates/gutenberg-create-chart-form.php';
 	}
 
 	/**
@@ -100,7 +121,12 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _toHTML() {
-		foreach ( $this->_templates as $template ) {
+		$templates	= $this->_templates;
+		if ( $this->_template_name ) {
+			$templates	= array( $this->_template_name );
+		}
+
+		foreach ( $templates as $template ) {
 			$callback = '_render' . str_replace( ' ', '', ucwords( str_replace( '-', ' ', $template ) ) );
 			$this->_renderTemplate( $template, $callback );
 		}
