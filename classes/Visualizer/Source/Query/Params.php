@@ -98,6 +98,8 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	private function build_query() {
 		$args       = $this->_params;
 
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Building query with params %s', print_r( $args, true ) ), 'debug', __FILE__, __LINE__ );
+
 		$table      = $args['from'];
 		$tables     = array( $table );
 		$mapping    = self::get_db_table_mapping();
@@ -140,7 +142,11 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 				if ( empty( $column ) ) {
 					continue;
 				}
-				$table  = strstr( $column, '.', true );
+				if ( strpos( $column, '.' ) !== false ) {
+					$table  = strstr( $column, '.', true );
+				} else {
+					$table  = $args['from'];
+				}
 				$scraps[] = array(
 					'table'     => $table,
 					'col'       => $column,
@@ -154,7 +160,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 						if ( $scrap['col'] === $col['name'] ) {
 							$operator   = $args[ $col['type'] . '-operator' ][ $scrap['index'] ];
 							$operand    = $args[ $col['type'] ][ $scrap['index'] ];
-							$where[]    = $scrap['col'] . " $operator $operand";
+							$where[]    = $scrap['col'] . " $operator '$operand'";
 						}
 					}
 				}
@@ -176,6 +182,8 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 
 		$query          = $select . $from . $where . $group . $order . $limit;
 		$this->_query   = $query;
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Firing query: %s', $this->_query ), 'debug', __FILE__, __LINE__ );
 	}
 
 	/**
