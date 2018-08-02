@@ -491,10 +491,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		if ( $source ) {
 			if ( $source->fetch() ) {
-				$content	= $source->getData();
-				if ( array_key_exists( 'data', $content ) && ! empty( $content['data'] ) ) {
-					$chart->post_content = $content;
-				}
+				$chart->post_content = $source->getData();
 				wp_update_post( $chart->to_array() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
