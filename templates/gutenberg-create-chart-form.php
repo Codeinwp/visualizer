@@ -14,6 +14,7 @@
 			<option value="csv"><?php _e( 'Import data from file', 'visualizer' ); ?></option>
 			<option value="url"><?php _e( 'Import data from URL', 'visualizer' ); ?></option>
 			<option value="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?></option>
+			<option value="existing"><?php _e( 'Insert existing chart', 'visualizer' ); ?></option>
 			<option value="manual"><?php _e( 'Manual Data', 'visualizer' ); ?></option>
 		</select>
 
@@ -26,6 +27,17 @@
 			</span>
 			<span data-source="chart" data-form-enctype="application/x-www-form-urlencoded">
 				<select name="chart" class="gutenberg-create-chart-chart">
+				<?php
+					foreach ( $charts as $chart ) {
+				?>
+					<option value="<?php echo $chart['id'];?>"><?php echo $chart['name'];?></option>
+				<?php
+					}
+				?>
+				</select>
+			</span>
+			<span data-source="existing" data-form-enctype="application/x-www-form-urlencoded">
+				<select name="chart" class="gutenberg-create-chart-existing">
 				<?php
 					foreach ( $charts as $chart ) {
 				?>

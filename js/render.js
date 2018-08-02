@@ -238,6 +238,10 @@ var __visualizer_chart_images   = [];
     };
 
 	v.render = function() {
+        jQuery('body').on('visualizer:gutenberg:renderinline:chart', function(event, data){
+            v.charts = data.charts;
+            v.renderChart(data.id);
+        });
 		for (var id in (v.charts || {})) {
 			v.renderChart(id);
 		}

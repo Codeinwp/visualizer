@@ -17,7 +17,7 @@ const {
 var el = wp.element.createElement;
 
 const consoleLog = msg => {
-    //console.log(msg);
+    console.log(msg);
 }
 
 registerBlockType( 'visualizer/chart', {
@@ -33,14 +33,19 @@ registerBlockType( 'visualizer/chart', {
             type: 'number',
             default: -1
         },
-        ui_loading: {
+        // the random number that is added to create the container id
+        random: {
+            type: 'number',
+            default: -1
+        },
+        inspector_loading: {
             type: 'number',
             default: -1
         },
         // the class of the spinner container.
         spinner: {
             type: 'string',
-            default: 'pf-form-spinner',
+            default: 'v-form-spinner',
         },
         // contains the html to be shown in the block.
         html: {
@@ -51,28 +56,102 @@ registerBlockType( 'visualizer/chart', {
         label: {
             type: 'string',
             default: '',
-        },
+        }
     },
     edit: props => {
+        // temporary state machine: START
+        const getTemporaryStateID = ($id, $random) => {
+            return 'v-temp-' + $id + '-' + $random;
+        }
+
+        const createTemporaryState = ($id, $random) => {
+            jQuery('<div id="' + getTemporaryStateID($id, $random) + '">').remove().insertAfter('body');
+            setTemporaryState($id, $random, 0);
+        }
+
+        const removeTemporaryState = () => {
+            jQuery('#' + getTemporaryStateID(-1, -1)).remove();
+            jQuery('#' + getTemporaryStateID(0, 0)).remove();
+        }
+
+        const getTemporaryState = ($id, $random) => {
+            if(jQuery('#' + getTemporaryStateID($id, $random)).length === 0){
+                createTemporaryState($id, $random);
+            }
+            return parseInt( jQuery('#' + getTemporaryStateID($id, $random)).val() );
+        }
+
+        const setTemporaryState = ($id, $random, $value) => {
+            if(jQuery('#' + getTemporaryStateID($id, $random)).length === 0){
+                createTemporaryState($id, $random);
+            }
+            jQuery('#' + getTemporaryStateID($id, $random)).val($value);
+        }
+        // temporary state machine: END
+
         const getCreateChartScreen = () => {
-            if(props.attributes.ui_loading === 1){
+            if(getTemporaryState(0, 0) === 1){
                 return;
             }
+            setTemporaryState(0, 0, 1);
 
-            props.setAttributes( { ui_loading: 1, spinner: 'pf-form-spinner pf-form-loading', label: vjs.i10n.loading } );
+            props.setAttributes( { label: vjs.i10n.loading } );
 
             wp.apiRequest( { path: vjs.urls.create_form } )
                 .then(
                     (data) => {
                         if ( this.unmounting ) {
-                            props.setAttributes( { ui_loading: 0, spinner: 'pf-form-spinner', label: '' } );
+                            props.setAttributes( { label: '' } );
                             return data;
                         }
 
-                        props.setAttributes( { ui_loading: 0, spinner: 'pf-form-spinner', html: data.html, label: '' } );
+                        props.setAttributes( { label: '', html: data.html, chart_id: data.chart_id } );
                     }
             );
         };
+
+        const getChartData = ($id, $random) => {
+            if(getTemporaryState($id, $random) === 1){
+                return;
+            }
+            setTemporaryState($id, $random, 1);
+
+            consoleLog("getting chart data for " + $id + $random);
+
+            props.setAttributes( { label: vjs.i10n.loading } );
+
+            wp.apiRequest( { path: vjs.urls.get_chart.replace('#', $id).replace('#', $random) } )
+                .then(
+                    (data) => {
+                        if ( this.unmounting ) {
+                            props.setAttributes( { label: '' } );
+                            return data;
+                        }
+
+                        props.setAttributes( { label: '' } );
+
+                        consoleLog("got chart data for " + $id + $random);
+                        consoleLog(data);
+                        consoleLog("triggering visualizer:gutenberg:renderinline:chart");
+
+                        jQuery('body').trigger('visualizer:gutenberg:renderinline:chart', {id: 'visualizer-' + data.chart_id + '-' + data.random, charts: data.charts});
+                        removeTemporaryState();
+                    }
+            );
+        };
+
+        const registerTriggers = () => {
+            jQuery('body').off('visualizer:gutenberg:loading:chart').on('visualizer:internal:loading:chart', function(event, data){
+                props.setAttributes( { label: vjs.i10n.loading, html: vjs.i10n.loading } );
+            });
+            jQuery('body').off('visualizer:gutenberg:render:chart').on('visualizer:gutenberg:render:chart', function(event, data){
+                consoleLog(data);
+                props.setAttributes( {  label: '', html: data.data.html, chart_id: data.data.chart_id, random: data.data.random } );
+                consoleLog("triggering visualizer:gutenberg:renderinline:chart");
+                jQuery('body').trigger('visualizer:gutenberg:renderinline:chart', {id: 'visualizer-' + data.data.chart_id + '-' + data.data.random, charts: data.data.charts});
+                removeTemporaryState();
+            });
+        }
 
         const innerHTML = () => {
             return { __html: props.attributes.html };
@@ -88,8 +167,15 @@ registerBlockType( 'visualizer/chart', {
             }
             return null;
         }
-        if(props.attributes.chart_id === -1 && props.attributes.ui_loading === -1){
-            getCreateChartScreen();
+
+        registerTriggers();
+
+        if(getTemporaryState(props.attributes.chart_id, props.attributes.random) === 0){
+            if(typeof(props.attributes.chart_id) == "undefined" || props.attributes.chart_id === -1){
+                getCreateChartScreen();
+            } else {
+                getChartData(props.attributes.chart_id, props.attributes.random);
+            }
         }
 
         return [
@@ -114,9 +200,17 @@ $(document).on('ready', function(){
             form.find(".gutenberg-create-chart-source-attributes span[data-source='" + value + "']").show();
             var enctype = form.find(".gutenberg-create-chart-source-attributes span[data-source='" + value + "']").attr("data-form-enctype");
             form.attr("enctype", enctype);
+
+            var type = form.find('.gutenberg-create-chart-type');
+            type.show();
+            if('existing' === value){
+                type.hide();
+            }
         });
 
         $('body').on('click', '.gutenberg-create-chart', function(e){
+            $('body').trigger('visualizer:gutenberg:loading:chart', {});
+
             var form = $(this).parents("form");
             var src = form.find('.gutenberg-create-chart-source').val();
             var type = form.find('.gutenberg-create-chart-type').val();
@@ -135,6 +229,9 @@ $(document).on('ready', function(){
                 case 'chart':
                     data.append( 'chart', form.find('.gutenberg-create-chart-chart').val() );
                     break;
+                case 'existing':
+                    data.append( 'chart', form.find('.gutenberg-create-chart-existing').val() );
+                    break;
             }
 
             $.ajax({
@@ -147,8 +244,7 @@ $(document).on('ready', function(){
 				    xhr.setRequestHeader( 'X-WP-Nonce', vjs.nonce );
 			    },
                 success : function(data){
-                    console.log(data.html);
-                    form.parent().html(data.html);
+                    $('body').trigger('visualizer:gutenberg:render:chart', {data: data});
                 }
             });
         });

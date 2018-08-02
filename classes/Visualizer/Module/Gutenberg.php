@@ -69,10 +69,15 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 				'urls'	=> array(
 					'create_form'	=> 'visualizer/v' . intval( VISUALIZER_REST_VERSION ) . '/create_form/',
 					'create_chart'	=> get_rest_url( null, 'visualizer/v' . intval( VISUALIZER_REST_VERSION ) . '/create_chart/' ),
+					'get_chart'	=> 'visualizer/v' . intval( VISUALIZER_REST_VERSION ) . '/get_chart/#/#/',
 				),
 				'nonce'		=> wp_create_nonce( 'wp_rest' ),
 			)
 		);
+
+		wp_enqueue_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_enqueue_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
+		wp_enqueue_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
 
 		wp_enqueue_style( 'visualizer-block-css', VISUALIZER_ABSURL . '/css/gutenberg/block.css' );
 	}
@@ -94,12 +99,17 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 	 * Render the pirate form block.
 	 */
 	function render_block( $atts = null ) {
+		global $wp_version;
+
 		$attributes  = array();
 		if ( is_array( $atts ) && $atts ) {
-			if ( array_key_exists( 'id', $atts ) ) {
-				$attributes['id'] = $atts['form_id'];
+			if ( array_key_exists( 'chart_id', $atts ) ) {
+				$attributes['id'] = $atts['chart_id'];
 			}
-		} else {
+			if ( array_key_exists( 'random', $atts ) ) {
+				$attributes['random'] = $atts['random'];
+			}
+		} elseif ( $atts ) {
 			$attributes['id'] = $atts;
 		}
 
@@ -133,12 +143,27 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 			)
 		);
 		register_rest_route(
-			'visualizer', '/v' . intval( VISUALIZER_REST_VERSION ) . '/get_chart/(?P<id>\d+)/',
+			'visualizer', '/v' . intval( VISUALIZER_REST_VERSION ) . '/get_chart/(?P<id>\d+)/(?P<random>\d+)/',
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_chart' ),
 			)
 		);
+	}
+
+	/**
+	 * Get the HTML for the chart.
+	 */
+	function get_chart( WP_REST_Request $request ) {
+		$return = $this->validate_params( $request, array( 'id', 'random' ) );
+		if ( is_wp_error( $return ) ) {
+			return $return;
+		}
+
+		$id			= $return['id'];
+		$random		= $return['random'];
+		$charts		= $this->get_chart_data( $id, $random );
+		return new WP_REST_Response( array( 'chart_id' => $id, 'random' => $random, 'charts' => $charts ) );
 	}
 
 	/**
@@ -174,28 +199,33 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 			define( 'VISUALIZER_DO_NOT_DIE', true );
 		}
 
-		do_action( 'wp_ajax_' . Visualizer_Plugin::ACTION_CREATE_CHART );
-
 		$chart_id			= null;
-		// lets get the new chart created.
-		$query					= new WP_Query(array(
-			'post_author'  => get_current_user_id(),
-			'post_status'  => 'auto-draft',
-			'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
-			'post_title'   => 'Visualization',
-			'posts_per_page'	=> 1,
-			'fields'		=> 'ids',
-			'orderby'		=> 'post_date',
-			'order'			=> 'DESC',
-		));
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$chart_id	= $query->post;
+		$source				= $return['source'];
+
+		// handle special case.
+		if ( 'existing' !== $source ) {
+			do_action( 'wp_ajax_' . Visualizer_Plugin::ACTION_CREATE_CHART );
+
+			// lets get the new chart created.
+			$query					= new WP_Query(array(
+				'post_author'  => get_current_user_id(),
+				'post_status'  => 'auto-draft',
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_title'   => 'Visualization',
+				'posts_per_page'	=> 1,
+				'fields'		=> 'ids',
+				'orderby'		=> 'post_date',
+				'order'			=> 'DESC',
+			));
+			if ( $query->have_posts() ) {
+				while ( $query->have_posts() ) {
+					$query->the_post();
+					$chart_id	= $query->post;
+				}
 			}
 		}
 
-		$source				= $return['source'];
+		$upload_data		= true;
 
 		switch ( $source ) {
 			case 'csv':
@@ -220,10 +250,23 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 				$source_chart			= get_post( $_post['chart'] );
 				$_POST['chart_data']	= $source_chart->post_content;
 				break;
+			case 'existing':
+				$return = $this->validate_params( $request, array( 'chart' ) );
+				if ( is_wp_error( $return ) ) {
+					return $return;
+				}
+
+				$chart_id				= $_post['chart'];
+				// fall-through.
+			case 'manual':
+				$upload_data	= false;
+				break;
 		}
 
 		$html		= '<div id="canvas"></div>';
-		if ( 'manual' !== $source ) {
+
+		// except existing and manual.
+		if ( $upload_data ) {
 			$_GET['nonce']	= wp_create_nonce();
 			$_GET['chart']  = $chart_id;
 			ob_start();
@@ -231,24 +274,44 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 			$html		.= ob_get_clean();
 		}
 
-		wp_update_post( array( 'ID' => $chart_id, 'post_status' => 'publish' ) );
-
-
-		$html			.= do_shortcode( "[visualizer id='$chart_id']");
-
-		return new WP_REST_Response( array( 'html' => $html ) );
-	}
-
-	/**
-	 * Get the requested form's HTML content.
-	 */
-	function get_chart( WP_REST_Request $request ) {
-		$return = $this->validate_params( $request, array( 'id' ) );
-		if ( is_wp_error( $return ) ) {
-			return $return;
+		// except existing
+		if ( 'existing' != $source ) {
+			wp_update_post( array( 'ID' => $chart_id, 'post_status' => 'publish' ) );
 		}
 
-		return new WP_REST_Response( array( 'html' => $this->render_block( $return['id'] ) ) );
+		$random			= null;
+		$html			.= do_shortcode( "[visualizer id='$chart_id']");
+		// search for the random number that is added to "visualizer-$chartid-" to make "visualizer-$chartid-$random".
+		$matches		= array();
+		preg_match( "/visualizer\-{$chart_id}\-([0-9]+)/", $html, $matches );
+		if(2 === count($matches) ){
+			$random		= $matches[1];
+		}
+	
+		$charts		= $this->get_chart_data( $chart_id, $random );
+		return new WP_REST_Response( array( 'html' => $html, 'chart_id' => $chart_id, 'random' => $random, 'charts' => $charts ) );
+	}
+
+	private function get_chart_data( $chart_id, $random ) {
+		$chart	= get_post( $chart_id );
+
+		// copied from Visualizer_Frontend
+		$type		= get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$settings	= get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+		$series		= apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true ), $chart_id, $type );
+		$settings	= apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart_id, $type );
+		$data		= apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart_id, $type );
+
+		$id		= sprintf( 'visualizer-%d-%d', $chart_id, $random );
+		// add chart to the array
+		$charts[ $id ] = array(
+			'type'     => $type,
+			'series'   => $series,
+			'settings' => $settings,
+			'data'     => $data,
+		);
+
+		return $charts;
 	}
 
 	/**

@@ -202,7 +202,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$chart = get_post( $chart->ID );
 		}
 
-		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
 		$class  = $defaultClass . ' ' . $class . ' ' . 'visualizer-front-' . $atts['id'];
@@ -233,7 +232,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
 
-		$id         = $id . '-' . rand();
+		// random is provided from gutenberg.
+		$rand		= array_key_exists( 'random', $atts ) ? $atts['random'] : rand();
+		$id			= sprintf( 'visualizer-%d-%d', $atts['id'], $rand );
 		$arguments  = array( '', $id, $settings );
 		$css        = '';
 		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );
