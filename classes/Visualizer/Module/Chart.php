@@ -254,12 +254,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+		wp_register_script( 'visualizer-customization', VISUALIZER_ABSURL . 'js/customization.js', array(), null, true );
 
 		wp_register_script(
 			'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array(
 				'google-jsapi-old',
 				'google-jsapi-new',
 				'visualizer-frame',
+				'visualizer-customization',
 			), Visualizer_Plugin::VERSION, true
 		);
 
