@@ -51,6 +51,7 @@ class Visualizer_Plugin {
 	const ACTION_UPLOAD_DATA = 'visualizer-upload-data';
 	// Added by Ash/Upwork
 	const ACTION_EXPORT_DATA = 'visualizer-export-data';
+	const ACTION_SAVE_SETTINGS = 'visualizer-save-settings';
 
 	/**
 	 *Action used for fetching specific users/roles for permissions.
@@ -64,6 +65,7 @@ class Visualizer_Plugin {
 	const FILTER_GET_CHART_SETTINGS = 'visualizer-get-chart-settings';
 	const FILTER_UNDO_REVISIONS = 'visualizer-undo-revisions';
 	const FILTER_HANDLE_REVISIONS = 'visualizer-handle-revisions';
+	const FILTER_GET_CHART_ARRAY = 'visualizer-get-chart-array';
 
 	const CF_CHART_URL = 'visualizer-chart-url';
 	const CF_CHART_SCHEDULE = 'visualizer-chart-schedule';

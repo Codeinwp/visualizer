@@ -233,8 +233,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// random is provided from gutenberg.
-		$rand		= array_key_exists( 'random', $atts ) ? $atts['random'] : rand();
-		$id			= sprintf( 'visualizer-%d-%d', $atts['id'], $rand );
+		$rand       = array_key_exists( 'random', $atts ) ? $atts['random'] : rand();
+		$id         = sprintf( 'visualizer-%d-%d', $atts['id'], $rand );
 		$arguments  = array( '', $id, $settings );
 		$css        = '';
 		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );

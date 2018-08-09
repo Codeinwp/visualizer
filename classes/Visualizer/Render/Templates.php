@@ -42,8 +42,19 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 		'library-empty',
 	);
 
-	private $_template_name	= null;
+	/**
+	 * The name of the specific template to render.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $_template_name = null;
 
+	/**
+	 * Sets the template name.
+	 *
+	 * @param string $name The name of the template.
+	 */
 	public function setTemplateName( $name ) {
 		$this->_template_name = $name;
 	}
@@ -72,8 +83,8 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderGutenbergCreateChartForm() {
-		$types	= Visualizer_Module_Admin::_getChartTypesLocalized( true, true, false );
-		$charts	= Visualizer_Module_Admin::getCharts();
+		$types  = Visualizer_Module_Admin::_getChartTypesLocalized( true, true, false );
+		$charts = Visualizer_Module_Admin::getCharts();
 		require_once VISUALIZER_ABSPATH . '/templates/gutenberg-create-chart-form.php';
 	}
 
@@ -121,9 +132,9 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _toHTML() {
-		$templates	= $this->_templates;
+		$templates  = $this->_templates;
 		if ( $this->_template_name ) {
-			$templates	= array( $this->_template_name );
+			$templates  = array( $this->_template_name );
 		}
 
 		foreach ( $templates as $template ) {

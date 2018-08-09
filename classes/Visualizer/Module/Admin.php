@@ -620,19 +620,24 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		return $plugin_meta;
 	}
 
+	/**
+	 * Get all charts.
+	 */
 	public static function getCharts() {
 		$charts            = array();
-		$query             = new WP_Query( array(
-			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
-			'post_status'	=> 'publish',
-			'posts_per_page' => 300,
-			'no_found_rows'  => true,
-		) );
+		$query             = new WP_Query(
+			array(
+				'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'   => 'publish',
+				'posts_per_page' => 300,
+				'no_found_rows'  => true,
+			)
+		);
 		while ( $query->have_posts() ) {
-			$chart		= $query->next_post();
-			$settings	= get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
-			$title		= empty( $settings['title'] ) ? '#' . $chart->ID : $settings['title'];
-			$charts[]	= array( 'name' => $title, 'id' => $chart->ID );
+			$chart      = $query->next_post();
+			$settings   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+			$title      = empty( $settings['title'] ) ? '#' . $chart->ID : $settings['title'];
+			$charts[]   = array( 'name' => $title, 'id' => $chart->ID );
 		}
 		return $charts;
 	}

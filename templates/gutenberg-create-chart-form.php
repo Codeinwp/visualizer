@@ -1,11 +1,11 @@
 <form id="gutenberg-create-chart-form" method="POST">
 	<select name="type" class="gutenberg-create-chart-type">
 	<?php
-		foreach ( $types as $type => $label ) {
+	foreach ( $types as $type => $label ) {
 	?>
-		<option value="<?php echo $type;?>"><?php echo $label; ?></option>
+	<option value="<?php echo $type; ?>"><?php echo $label; ?></option>
 	<?php
-		}
+	}
 	?>
 	</select>
 
@@ -28,22 +28,22 @@
 			<span data-source="chart" data-form-enctype="application/x-www-form-urlencoded">
 				<select name="chart" class="gutenberg-create-chart-chart">
 				<?php
-					foreach ( $charts as $chart ) {
+				foreach ( $charts as $chart ) {
 				?>
-					<option value="<?php echo $chart['id'];?>"><?php echo $chart['name'];?></option>
+				<option value="<?php echo $chart['id']; ?>"><?php echo $chart['name']; ?></option>
 				<?php
-					}
+				}
 				?>
 				</select>
 			</span>
 			<span data-source="existing" data-form-enctype="application/x-www-form-urlencoded">
 				<select name="chart" class="gutenberg-create-chart-existing">
 				<?php
-					foreach ( $charts as $chart ) {
+				foreach ( $charts as $chart ) {
 				?>
-					<option value="<?php echo $chart['id'];?>"><?php echo $chart['name'];?></option>
+				<option value="<?php echo $chart['id']; ?>"><?php echo $chart['name']; ?></option>
 				<?php
-					}
+				}
 				?>
 				</select>
 			</span>
@@ -53,5 +53,5 @@
 		</span>
 	</div>
 
-	<input type="button" name="create_chart" class="gutenberg-create-chart" value="<?php esc_html_e( 'Create Chart', 'visualizer' );?>">
+	<input type="button" name="create_chart" class="gutenberg-create-chart" value="<?php esc_html_e( 'Create Chart', 'visualizer' ); ?>">
 </form>

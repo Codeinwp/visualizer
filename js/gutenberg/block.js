@@ -42,6 +42,11 @@ registerBlockType( 'visualizer/chart', {
             type: 'number',
             default: -1
         },
+        // the inspector HTML.
+        inspector: {
+            type: 'string',
+            default: ''
+        },
         // the class of the spinner container.
         spinner: {
             type: 'string',
@@ -55,7 +60,7 @@ registerBlockType( 'visualizer/chart', {
         // the label to show in gutenberg.
         label: {
             type: 'string',
-            default: '',
+            default: vjs.i10n.loading,
         }
     },
     edit: props => {
@@ -130,9 +135,9 @@ registerBlockType( 'visualizer/chart', {
 
                         props.setAttributes( { label: '' } );
 
-                        consoleLog("got chart data for " + $id + $random);
-                        consoleLog(data);
-                        consoleLog("triggering visualizer:gutenberg:renderinline:chart");
+                        consoleLog("got chart data for " + $id + $random);consoleLog(data);
+                        props.setAttributes( { inspector: data.settings } );
+                        consoleLog("triggering visualizer:gutenberg:renderinline:chart with");consoleLog(props.attributes);
 
                         jQuery('body').trigger('visualizer:gutenberg:renderinline:chart', {id: 'visualizer-' + data.chart_id + '-' + data.random, charts: data.charts});
                         removeTemporaryState();
@@ -140,16 +145,22 @@ registerBlockType( 'visualizer/chart', {
             );
         };
 
+        const updatePreview = ($settings) => {
+            jQuery('body').trigger('visualizer:gutenberg:update:settings', {settings: $settings, id: 'visualizer-' + props.attributes.chart_id + '-' + props.attributes.random});
+        }
+
         const registerTriggers = () => {
-            jQuery('body').off('visualizer:gutenberg:loading:chart').on('visualizer:internal:loading:chart', function(event, data){
-                props.setAttributes( { label: vjs.i10n.loading, html: vjs.i10n.loading } );
+            // update the preview
+            jQuery('body').off('visualizer:gutenberg:update:preview').on('visualizer:gutenberg:update:preview', function(event, data){
+                updatePreview(data);
             });
+            // the loading state
+            jQuery('body').off('visualizer:gutenberg:loading:chart').on('visualizer:gutenberg:loading:chart', function(event, data){
+                props.setAttributes( { label: vjs.i10n.loading, html: '' } );
+            });
+            // render chart after creation
             jQuery('body').off('visualizer:gutenberg:render:chart').on('visualizer:gutenberg:render:chart', function(event, data){
-                consoleLog(data);
                 props.setAttributes( {  label: '', html: data.data.html, chart_id: data.data.chart_id, random: data.data.random } );
-                consoleLog("triggering visualizer:gutenberg:renderinline:chart");
-                jQuery('body').trigger('visualizer:gutenberg:renderinline:chart', {id: 'visualizer-' + data.data.chart_id + '-' + data.data.random, charts: data.data.charts});
-                removeTemporaryState();
             });
         }
 
@@ -157,12 +168,21 @@ registerBlockType( 'visualizer/chart', {
             return { __html: props.attributes.html };
         }
 
+        const settingsInnerHTML = () => {
+            return { __html: props.attributes.inspector };
+        }
+
+        const isChartValid = () => {
+            return ! ( typeof(props.attributes.chart_id) == 'undefined' || props.attributes.chart_id === -1 );
+        }
+
         const getInspectorControls = () => {
-            if(!! props.isSelected){
+            if(!! props.isSelected && isChartValid()){
                 return <InspectorControls> 
                         <div className={ props.attributes.spinner }>
                             <Spinner />
                         </div>
+                        <div className={ props.className } dangerouslySetInnerHTML={ settingsInnerHTML() }></div>
                     </InspectorControls>;
             }
             return null;
@@ -171,9 +191,10 @@ registerBlockType( 'visualizer/chart', {
         registerTriggers();
 
         if(getTemporaryState(props.attributes.chart_id, props.attributes.random) === 0){
-            if(typeof(props.attributes.chart_id) == "undefined" || props.attributes.chart_id === -1){
+            if(!isChartValid()){
                 getCreateChartScreen();
             } else {
+                consoleLog("calling getChartData for " + props.attributes.chart_id);
                 getChartData(props.attributes.chart_id, props.attributes.random);
             }
         }
@@ -189,13 +210,85 @@ registerBlockType( 'visualizer/chart', {
     },
 } );
 
-$(document).on('ready', function(){
-    doMisc();
+jQuery(document).on('ready', function(){
+    handleCreateChart();
+    handleSettings();
+    handleChangeSettings();
 
-    function doMisc() {
-        $('body').on('change', '.gutenberg-create-chart-source', function(e){
-            var form = $(this).parents("form");
-            var value = $(this).val();
+    function handleChangeSettings(){
+        jQuery('body')
+            .on('change keyup', 'form.settings-form .control-text', updateChart)
+            .on('change', 'form.settings-form .control-select, form.settings-form .control-checkbox', updateChart)
+            .on('change keyup', 'form.settings-form textarea[name="manual"]', validateJSON)
+            .on('click', 'form.settings-form .save-settings', saveSettings);
+    }
+
+    function saveSettings(e) {
+        e.preventDefault();
+        var settings = jQuery(this).parents('form.settings-form').serialize();
+        jQuery.ajax({
+            url     : ajaxurl,
+            data    : {
+                settings    : settings,
+                action      : vjs.ajax.save_settings,
+                id          : jQuery(this).parents('form.settings-form').attr('data-chart-id'),
+                nonce       : vjs.ajax.nonce
+            },
+            method  : 'POST',
+            success : function(data){
+            }
+        });
+    }
+
+	var timeout;
+
+    function updateChart() {
+        var settings = jQuery(this).parents('form.settings-form').serializeObject();
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            consoleLog("triggering visualizer:gutenberg:update:preview");
+            jQuery('body').trigger('visualizer:gutenberg:update:preview', settings);
+        }, 1000);
+    }
+
+    function validateJSON() {
+        jQuery(this).parents('form.settings-form').find('.visualizer-error-manual').remove();
+        try{
+            var options = JSON.parse(jQuery(this).val());
+        }catch(error){
+            jQuery('<div class="visualizer-error visualizer-error-manual">Invalid JSON: ' + error + '</div>').insertAfter(jQuery(this));
+        }
+    }
+
+    function handleSettings(){
+        jQuery('body').on('click', '.viz-group-title', function() {
+            var parent = jQuery(this).parent();
+
+            if (parent.hasClass('open')) {
+                parent.removeClass('open');
+            } else {
+                parent.parent().find('.viz-group.open').removeClass('open');
+                parent.addClass('open');
+            }
+
+            // TODO: this does not seem to work. If we choose x then y then z, color y is shown. The n-1 color is shown. But double click works.
+            jQuery(this).parents('form.settings-form').find('.color-picker-hex').wpColorPicker({
+                change: updateChart,
+                clear: updateChart
+            });
+
+        }).on('click', '.viz-section-title', function() {
+            jQuery(this).toggleClass('open').parent().find('.viz-section-items').toggle();
+        }).on('click', '.more-info', function() {
+            jQuery(this).parent().find('.viz-section-description:first').toggle();
+            return false;
+        });
+    }
+
+    function handleCreateChart() {
+        jQuery('body').on('change', '.gutenberg-create-chart-source', function(e){
+            var form = jQuery(this).parents("form");
+            var value = jQuery(this).val();
             form.find(".gutenberg-create-chart-source-attributes span").hide();
             form.find(".gutenberg-create-chart-source-attributes span[data-source='" + value + "']").show();
             var enctype = form.find(".gutenberg-create-chart-source-attributes span[data-source='" + value + "']").attr("data-form-enctype");
@@ -208,10 +301,10 @@ $(document).on('ready', function(){
             }
         });
 
-        $('body').on('click', '.gutenberg-create-chart', function(e){
-            $('body').trigger('visualizer:gutenberg:loading:chart', {});
+        jQuery('body').on('click', '.gutenberg-create-chart', function(e){
+            jQuery('body').trigger('visualizer:gutenberg:loading:chart', {});
 
-            var form = $(this).parents("form");
+            var form = jQuery(this).parents("form");
             var src = form.find('.gutenberg-create-chart-source').val();
             var type = form.find('.gutenberg-create-chart-type').val();
             var data = new FormData();
@@ -234,7 +327,7 @@ $(document).on('ready', function(){
                     break;
             }
 
-            $.ajax({
+            jQuery.ajax({
                 url     : vjs.urls.create_chart,
                 data    : data,
                 method  : 'POST',
@@ -244,12 +337,69 @@ $(document).on('ready', function(){
 				    xhr.setRequestHeader( 'X-WP-Nonce', vjs.nonce );
 			    },
                 success : function(data){
-                    $('body').trigger('visualizer:gutenberg:render:chart', {data: data});
+                    consoleLog("triggering visualizer:gutenberg:render:chart for " + src);
+                    jQuery('body').trigger('visualizer:gutenberg:render:chart', {data: data});
                 }
             });
         });
-
-        
     }
-
 });
+
+(function($) {
+	$.fn.serializeObject = function() {
+		var self = this,
+			json = {},
+			push_counters = {},
+			patterns = {
+				"validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+				"key": /[a-zA-Z0-9_]+|(?=\[\])/g,
+				"push": /^$/,
+				"fixed": /^\d+$/,
+				"named": /^[a-zA-Z0-9_]+$/
+			};
+
+		this.build = function(base, key, value) {
+			base[key] = value;
+			return base;
+		};
+
+		this.push_counter = function(key) {
+			if (push_counters[key] === undefined) {
+				push_counters[key] = 0;
+			}
+			return push_counters[key]++;
+		};
+
+		$.each($(this).serializeArray(), function() {
+			// skip invalid keys
+			if (!patterns.validate.test(this.name)) {
+				return;
+			}
+
+			var k,
+				keys = this.name.match(patterns.key),
+				merge = this.value,
+				reverse_key = this.name;
+
+			while ((k = keys.pop()) !== undefined) {
+				// adjust reverse_key
+				reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
+
+				if (k.match(patterns.push)) {
+					// push
+					merge = self.build([], self.push_counter(reverse_key), merge);
+				} else if (k.match(patterns.fixed)) {
+					// fixed
+					merge = self.build([], k, merge);
+				} else if (k.match(patterns.named)) {
+					// named
+					merge = self.build({}, k, merge);
+				}
+			}
+
+			json = $.extend(true, json, merge);
+		});
+
+		return json;
+	};
+})(jQuery);

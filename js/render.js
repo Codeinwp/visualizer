@@ -203,13 +203,16 @@ var __visualizer_chart_images   = [];
 				if (formatter) {
 					formatter.format(table, i + 1);
 				}
+                
+                var arr = id.split('-');
+                jQuery('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: i + 1});
 			}
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
             formatter = new g.visualization.NumberFormat({pattern: settings.format});
             formatter.format(table, 1);
         }
 
-        v.override(settings);
+        v.override(settings, id);
 
         g.visualization.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
@@ -225,7 +228,7 @@ var __visualizer_chart_images   = [];
         render.draw(table, settings);
 	};
 
-    v.override = function(settings) {
+    v.override = function(settings, id) {
         if (settings.manual) {
             try{
                 var options = JSON.parse(settings.manual);
@@ -234,14 +237,22 @@ var __visualizer_chart_images   = [];
             }catch(error){
                 console.error("Error while adding manual configuration override " + settings.manual);
             }
+            v.renderChart(id);
         }
     };
 
-	v.render = function() {
+    v.gutenbergEvents = function() {
+        jQuery('body').on('visualizer:gutenberg:update:settings', function(event, data){
+            v.charts[data.id].settings = data.settings;
+            v.renderChart(data.id);
+        });
         jQuery('body').on('visualizer:gutenberg:renderinline:chart', function(event, data){
             v.charts = data.charts;
             v.renderChart(data.id);
-        });
+        });      
+    };
+
+	v.render = function() {
 		for (var id in (v.charts || {})) {
 			v.renderChart(id);
 		}
@@ -250,6 +261,7 @@ var __visualizer_chart_images   = [];
 	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
 	g.charts.setOnLoadCallback(function() {
 		gv = g.visualization;
+        v.gutenbergEvents();
 		v.render();
 	});
 })(visualizer, google);
