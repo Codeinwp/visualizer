@@ -186,7 +186,7 @@ var __visualizer_chart_images   = [];
                 case 'table':
                     for(i in settings.series){
                         i = parseInt(i);
-                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
+                        v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
                 default:
@@ -194,7 +194,7 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1]) {
                             continue;
                         }
-                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
+                        v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
             }
@@ -217,7 +217,7 @@ var __visualizer_chart_images   = [];
         render.draw(table, settings);
 	};
 
-    v.format_data = function(table, type, format, index) {
+    v.format_data = function(id, table, type, format, index) {
         if (!format || format === '') {
             return;
         }
@@ -237,6 +237,10 @@ var __visualizer_chart_images   = [];
         if (formatter) {
             formatter.format(table, index);
         }
+
+        var arr = id.split('-');
+        jQuery('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: index});
+
     };
 
     v.override = function(settings) {
