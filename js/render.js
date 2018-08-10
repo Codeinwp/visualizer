@@ -199,7 +199,7 @@ var __visualizer_chart_images   = [];
                     break;
             }
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
-            v.format_data(table, 'number', settings.format, 1);
+            v.format_data(id, table, 'number', settings.format, 1);
         }
         v.override(settings);
 
