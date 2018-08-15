@@ -182,33 +182,28 @@ var __visualizer_chart_images   = [];
         }
 
 		if (settings.series) {
-			for (i = 0; i < settings.series.length; i++) {
-				format = settings.series[i].format;
-				if (!format || format === '' || !series[i + 1]) {
-					continue;
-				}
-
-				formatter = null;
-				switch (series[i + 1].type) {
-					case 'number':
-						formatter = new g.visualization.NumberFormat({pattern: format});
-						break;
-					case 'date':
-					case 'datetime':
-					case 'timeofday':
-						formatter = new g.visualization.DateFormat({pattern: format});
-						break;
-				}
-
-				if (formatter) {
-					formatter.format(table, i + 1);
-				}
-			}
+            switch(chart.type){
+                case 'table':
+                    for(i in settings.series){
+                        i = parseInt(i);
+                        if (!series[i + 1]) {
+                            continue;
+                        }
+                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
+                    }
+                    break;
+                default:
+                    for (i = 0; i < settings.series.length; i++) {
+                        if (!series[i + 1]) {
+                            continue;
+                        }
+                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
+                    }
+                    break;
+            }
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
-            formatter = new g.visualization.NumberFormat({pattern: settings.format});
-            formatter.format(table, 1);
+            v.format_data(table, 'number', settings.format, 1);
         }
-
         v.override(settings);
 
         g.visualization.events.addListener(render, 'ready', function () {
@@ -224,6 +219,28 @@ var __visualizer_chart_images   = [];
 
         render.draw(table, settings);
 	};
+
+    v.format_data = function(table, type, format, index) {
+        if (!format || format === '') {
+            return;
+        }
+
+        var formatter = null;
+        switch (type) {
+            case 'number':
+                formatter = new g.visualization.NumberFormat({pattern: format});
+                break;
+            case 'date':
+            case 'datetime':
+            case 'timeofday':
+                formatter = new g.visualization.DateFormat({pattern: format});
+                break;
+        }
+
+        if (formatter) {
+            formatter.format(table, index);
+        }
+    };
 
     v.override = function(settings) {
         if (settings.manual) {

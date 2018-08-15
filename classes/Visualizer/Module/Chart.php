@@ -494,7 +494,20 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		if ( $source ) {
 			if ( $source->fetch() ) {
-				$chart->post_content = $source->getData();
+				$content    = $source->getData();
+				$populate   = true;
+				if ( is_string( $content ) && is_array( unserialize( $content ) ) ) {
+					$json   = unserialize( $content );
+					// if source exists, so should data. if source exists but data is blank, do not populate the chart.
+					// if we populate the data even if it is empty, the chart will show "Table has no columns".
+					if ( array_key_exists( 'source', $json ) && ! empty( $json['source'] ) && ( ! array_key_exists( 'data', $json ) || empty( $json['data'] ) ) ) {
+						do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Not populating chart data as source exists (%s) but data is empty!', $json['source'] ), 'warn', __FILE__, __LINE__ );
+						$populate   = false;
+					}
+				}
+				if ( $populate ) {
+					$chart->post_content = $content;
+				}
 				wp_update_post( $chart->to_array() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
