@@ -144,6 +144,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.0.11 - 2018-08-15  ###
+
+* Fixed issue with the Series Settings options for the Table Chart
+* Fixed issue with chart showing "Table has no columns" with remote sources
+
+
 ### 3.0.10 - 2018-07-20  ###
 
 * Fixed problem with chart reverting to the default values
