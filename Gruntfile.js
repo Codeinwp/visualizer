@@ -10,6 +10,8 @@ module.exports = function (grunt) {
 	// jshint ignore: start
 	config.taskMap['faq_builder'] = 'grunt-helpscout-faq';
 	// jshint ignore: end
+    config.files.js.push( '!js/gutenberg/*.js' );
+    config.files.js.push( '!webpack.config.js' );
 	loader(grunt, config).init();
 	loader( grunt, config ).init();
 };

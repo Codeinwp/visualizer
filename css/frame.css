@@ -1034,7 +1034,7 @@ span.viz-section-error {
 	color: #ff000;
 }
 
-#visualizer-error-manual {
+#visualizer-error-manual, .visualizer-error-manual {
 	color: #ff595e;
 }
 

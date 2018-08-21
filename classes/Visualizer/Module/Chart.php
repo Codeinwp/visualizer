@@ -58,6 +58,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_UPLOAD_DATA, 'uploadData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_CLONE_CHART, 'cloneChart' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_EXPORT_DATA, 'exportData' );
+		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_ARRAY, '_getChartArray', 10, 2 );
 	}
 
 	/**
@@ -99,7 +100,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$charts = array();
 		while ( $query->have_posts() ) {
 			$chart            = $query->next_post();
-			$chart_data       = $this->_getChartArray( $chart );
+			$chart_data       = $this->_getChartArray( null, $chart );
 			$chart_data['id'] = $chart->ID;
 			$charts[]         = $chart_data;
 		}
@@ -117,16 +118,21 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @access private
+	 * @access public
 	 *
-	 * @param WP_Post $chart The chart object.
+	 * @param array       $data The original data of the chart.
+	 * @param WP_Post|int $chart The chart object/id.
 	 *
 	 * @return array The array of chart data.
 	 */
-	private function _getChartArray( WP_Post $chart = null ) {
+	public function _getChartArray( $data, $chart = null ) {
+		if ( ! is_null( $chart ) && is_numeric( $chart ) ) {
+			$chart  = get_post( $chart );
+		}
 		if ( is_null( $chart ) ) {
 			$chart = $this->_chart;
 		}
+
 		$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 		$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
@@ -231,9 +237,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'focusTarget' => 'datum',
 					)
 				);
+
 				do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 			}
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
+			if ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) {
+				return;
+			}
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 		// enqueue and register scripts and styles
@@ -244,13 +254,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+		wp_register_script( 'visualizer-customization', VISUALIZER_ABSURL . 'js/customization.js', array(), null, true );
+
 		wp_register_script(
 			'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array(
 				'google-jsapi-old',
 				'google-jsapi-new',
 				'visualizer-frame',
+				'visualizer-customization',
 			), Visualizer_Plugin::VERSION, true
 		);
+
 		wp_register_script(
 			'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array(
 				'wp-color-picker',

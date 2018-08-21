@@ -1,0 +1,15 @@
+.v-form-spinner {
+	display: none;
+}
+
+.v-form-spinner.v-form-loading {
+	display: block;
+}
+
+span.gutenberg-create-chart-source-attributes span:nth-of-type(n+2) {
+	display: none;
+}
+
+.visualizer-actions {
+	display: none;
+}

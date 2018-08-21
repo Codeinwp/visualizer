@@ -157,7 +157,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	public function enqueueScripts() {
 		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-customization', VISUALIZER_ABSURL . 'js/customization.js', array(), null, true );
+		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
@@ -202,7 +203,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$chart = get_post( $chart->ID );
 		}
 
-		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
 		$class  = $defaultClass . ' ' . $class . ' ' . 'visualizer-front-' . $atts['id'];
@@ -233,7 +233,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
 
-		$id         = $id . '-' . rand();
+		// random is provided from gutenberg.
+		$rand       = array_key_exists( 'random', $atts ) ? $atts['random'] : rand();
+		$id         = sprintf( 'visualizer-%d-%d', $atts['id'], $rand );
 		$arguments  = array( '', $id, $settings );
 		$css        = '';
 		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );

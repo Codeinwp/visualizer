@@ -197,14 +197,15 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1]) {
                             continue;
                         }
-                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
+                        v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
             }
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
-            v.format_data(table, 'number', settings.format, 1);
+            v.format_data(id, table, 'number', settings.format, 1);
         }
-        v.override(settings);
+
+        v.override(settings, id);
 
         g.visualization.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
@@ -220,7 +221,7 @@ var __visualizer_chart_images   = [];
         render.draw(table, settings);
 	};
 
-    v.format_data = function(table, type, format, index) {
+    v.format_data = function(id, table, type, format, index) {
         if (!format || format === '') {
             return;
         }
@@ -240,9 +241,13 @@ var __visualizer_chart_images   = [];
         if (formatter) {
             formatter.format(table, index);
         }
+
+        var arr = id.split('-');
+        jQuery('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: index});
+
     };
 
-    v.override = function(settings) {
+    v.override = function(settings, id) {
         if (settings.manual) {
             try{
                 var options = JSON.parse(settings.manual);
@@ -251,7 +256,19 @@ var __visualizer_chart_images   = [];
             }catch(error){
                 console.error("Error while adding manual configuration override " + settings.manual);
             }
+            v.renderChart(id);
         }
+    };
+
+    v.gutenbergEvents = function() {
+        jQuery('body').on('visualizer:gutenberg:update:settings', function(event, data){
+            v.charts[data.id].settings = data.settings;
+            v.renderChart(data.id);
+        });
+        jQuery('body').on('visualizer:gutenberg:renderinline:chart', function(event, data){
+            v.charts = data.charts;
+            v.renderChart(data.id);
+        });      
     };
 
 	v.render = function() {
@@ -263,6 +280,7 @@ var __visualizer_chart_images   = [];
 	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
 	g.charts.setOnLoadCallback(function() {
 		gv = g.visualization;
+        v.gutenbergEvents();
 		v.render();
 	});
 })(visualizer, google);
