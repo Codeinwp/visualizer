@@ -202,6 +202,11 @@
         v.override(settings);
 
         render.draw(table, settings);
+
+        // trigger an event to resize the chart.
+        // NOTE: currently there are no listeners implemented.
+        var arr = id.split('-');
+        jQuery('body').trigger('visualizer:render:chart:resize', {id: arr[1], height: jQuery('#' + id + ' svg').attr('height'), width: jQuery('#' + id + ' svg').attr('width')});
 	};
 
     v.override = function(settings) {

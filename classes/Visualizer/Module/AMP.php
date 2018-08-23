@@ -40,7 +40,7 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	 * @param Visualizer_Plugin $plugin The instance of the plugin.
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
-		$this->_addAction( 'amp_post_template_head', 'addToHeader' );
+		$this->_addFilter( 'amp_post_template_data', 'addToHeader' );
 		$this->_addAction( 'query_vars', 'registerVar' );
 		$this->_addAction( 'init', 'addVirtualPage', null, 9 );
 		$this->_addAction( 'template_include', 'showOnlyChart' );
@@ -60,8 +60,14 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	/**
 	 * Add the iframe component to the header.
 	 */
-	public function addToHeader() {
-		echo '<script async custom-element="amp-iframe" src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script>';
+	public function addToHeader( $data ) {
+		$data['amp_component_scripts'] = array_merge(
+			$data['amp_component_scripts'],
+			array(
+				'amp-iframe' => 'https://cdn.ampproject.org/v0/amp-iframe-latest.js',
+			)
+		);
+		return $data;
 	}
 
 	/**
