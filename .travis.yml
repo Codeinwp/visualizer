@@ -72,3 +72,5 @@ deploy:
 after_deploy:
 - chmod +x bin/deploy.sh
 - ". ./bin/deploy.sh"
+after_failure:
+- cat "logs/phpcs.log"

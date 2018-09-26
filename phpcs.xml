@@ -32,6 +32,7 @@
         <exclude name="Squiz.PHP.CommentedOutCode" />
         <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
         <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
+        <exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
     </rule>
     <rule ref="WordPress-Docs">
 

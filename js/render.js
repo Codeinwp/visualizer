@@ -118,7 +118,7 @@ var __visualizer_chart_images   = [];
 				return;
 		}
 
-		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime')) {
+		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime' || series[0].type === 'timeofday')) {
 			axis = false;
 			switch (chart.type) {
 				case 'line':
