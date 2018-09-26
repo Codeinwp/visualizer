@@ -174,7 +174,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
 				'nonce'  => wp_create_nonce(),
 				'chart'  => $chart_id,
-			), $ajax_url
+			),
+			$ajax_url
 		);
 		$clone_url   = add_query_arg(
 			array(
@@ -182,14 +183,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				'nonce'  => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
 				'chart'  => $chart_id,
 				'type'   => $this->type,
-			), $ajax_url
+			),
+			$ajax_url
 		);
 		$export_link = add_query_arg(
 			array(
 				'action'   => Visualizer_Plugin::ACTION_EXPORT_DATA,
 				'chart'    => $chart_id,
 				'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
-			), admin_url( 'admin-ajax.php' )
+			),
+			admin_url( 'admin-ajax.php' )
 		);
 		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';

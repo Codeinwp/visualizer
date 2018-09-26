@@ -220,7 +220,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			wp_enqueue_script( 'visualizer-media-controller', VISUALIZER_ABSURL . 'js/media/controller.js', array( 'visualizer-media-collection' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-view', VISUALIZER_ABSURL . 'js/media/view.js', array( 'visualizer-media-controller' ), Visualizer_Plugin::VERSION, true );
 			wp_localize_script(
-				'visualizer-media-view', 'visualizer', array(
+				'visualizer-media-view',
+				'visualizer',
+				array(
 					'i10n' => array(
 						'insert'    => __( 'Insert', 'visualizer' ),
 					),
@@ -286,7 +288,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		$types = array_merge(
-			$additional, array(
+			$additional,
+			array(
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie', 'visualizer' ),
 					'enabled' => true,
@@ -403,18 +406,28 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
 			wp_enqueue_media();
 			wp_enqueue_script(
-				'visualizer-library', VISUALIZER_ABSURL . 'js/library.js', array(
+				'visualizer-library',
+				VISUALIZER_ABSURL . 'js/library.js',
+				array(
 					'jquery',
 					'media-views',
-				), Visualizer_Plugin::VERSION, true
+				),
+				Visualizer_Plugin::VERSION,
+				true
 			);
 			wp_enqueue_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+			wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 			wp_enqueue_script(
-				'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array(
+				'visualizer-render',
+				VISUALIZER_ABSURL . 'js/render.js',
+				array(
 					'google-jsapi-old',
 					'visualizer-library',
-				), Visualizer_Plugin::VERSION, true
+					'visualizer-customization',
+				),
+				Visualizer_Plugin::VERSION,
+				true
 			);
 		}
 	}
@@ -459,7 +472,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function renderLibraryPage() {
 		// get current page
 		$page = filter_input(
-			INPUT_GET, 'vpage', FILTER_VALIDATE_INT, array(
+			INPUT_GET,
+			'vpage',
+			FILTER_VALIDATE_INT,
+			array(
 				'options' => array(
 					'min_range' => 1,
 					'default'   => 1,
@@ -525,7 +541,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
 		wp_localize_script(
-			'visualizer-library', 'visualizer', array(
+			'visualizer-library',
+			'visualizer',
+			array(
 				'language'  => $this->get_language(),
 				'map_api_key' => get_option( 'visualizer-map-api-key' ),
 				'charts' => $charts,
@@ -536,13 +554,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
 							'library' => 'yes',
 							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
-						), $ajaxurl
+						),
+						$ajaxurl
 					),
 					'edit'   => add_query_arg(
 						array(
 							'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
 							'library' => 'yes',
-						), $ajaxurl
+						),
+						$ajaxurl
 					),
 				),
 			)
