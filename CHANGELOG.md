@@ -1,4 +1,15 @@
 
+ ### v3.0.11 - 2018-08-15 
+ **Changes:** 
+ * Fixed issue with the Series Settings options for the Table Chart
+* Fixed issue with chart showing "Table has no columns" with remote sources
+ 
+ ### v3.0.10 - 2018-07-20 
+ **Changes:** 
+ * Fixed problem with chart reverting to the default values
+* Fixed problem with Boolean column type
+* Fixed problem with the Geo chart type not saving colors options
+ 
  ### v3.0.9 - 2018-07-12 
  **Changes:** 
  * New chart title option for the back-end of the charts that don't allow a title on the front-end
