@@ -107,7 +107,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 */
 	public function setupCustomPostTypes() {
 		register_post_type(
-			Visualizer_Plugin::CPT_VISUALIZER, array(
+			Visualizer_Plugin::CPT_VISUALIZER,
+			array(
 				'label'  => 'Visualizer Charts',
 				'public' => false,
 				'supports' => array( 'revisions' ),

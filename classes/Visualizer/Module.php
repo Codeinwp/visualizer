@@ -400,10 +400,10 @@ class Visualizer_Module {
 	 */
 	protected function get_user_customization_js() {
 		// use this as the JS file in case we are not able to create the file in uploads.
-		$default	= VISUALIZER_ABSURL . 'js/customization.js';
+		$default    = VISUALIZER_ABSURL . 'js/customization.js';
 
-		$uploads	= wp_get_upload_dir();
-		$specific	= $uploads['baseurl'] . '/visualizer/customization.js';
+		$uploads    = wp_get_upload_dir();
+		$specific   = $uploads['baseurl'] . '/visualizer/customization.js';
 
 		// for testing on user sites (before we send them the correctly customized file).
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
@@ -414,8 +414,8 @@ class Visualizer_Module {
 		WP_Filesystem();
 		global $wp_filesystem;
 
-		$dir	= $wp_filesystem->wp_content_dir() . 'uploads/visualizer';
-		$file	= $wp_filesystem->wp_content_dir() . 'uploads/visualizer/customization.js';
+		$dir    = $wp_filesystem->wp_content_dir() . 'uploads/visualizer';
+		$file   = $wp_filesystem->wp_content_dir() . 'uploads/visualizer/customization.js';
 
 		if ( $wp_filesystem->is_readable( $file ) ) {
 			return $specific;
@@ -435,7 +435,7 @@ class Visualizer_Module {
 
 		// if file does not exist, copy.
 		if ( ! $wp_filesystem->exists( $file ) ) {
-			$src	= str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
+			$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
 			if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
 				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
 				return $default;

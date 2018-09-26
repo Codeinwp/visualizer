@@ -183,7 +183,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'manual',
 				$this->manual,
 				sprintf(
-					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ), '<br><code>' . $example . '</code>'
+					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ),
+					'<br><code>' . $example . '</code>'
 				),
 				'',
 				array( 'rows' => 5 )

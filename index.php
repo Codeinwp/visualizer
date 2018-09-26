@@ -129,13 +129,3 @@ function visualizer_register_parrot( $plugins ) {
 spl_autoload_register( 'visualizer_autoloader' );
 // launch the plugin
 visualizer_launch();
-
-
-/* uncomment only for local/testing */
-//add_action( 'themeisle_log_event', 'visualizer_themeisle_log_event', 10, 5 );
-function visualizer_themeisle_log_event( $name, $msg, $type, $file, $line ) {
-	if ( $name !== Visualizer_Plugin::NAME ) {
-		return;
-	}
-	error_log( sprintf( '%s: %s in %s on %s', $type, $msg, $file, $line ) );
-}
