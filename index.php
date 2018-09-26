@@ -69,6 +69,9 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
+	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
+	define( 'VISUALIZER_TEST_JS_CUSTOMIZATION', false );
+
 	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 		define( 'VISUALIZER_CSV_DELIMITER', ',' );
 	}
@@ -126,3 +129,13 @@ function visualizer_register_parrot( $plugins ) {
 spl_autoload_register( 'visualizer_autoloader' );
 // launch the plugin
 visualizer_launch();
+
+
+/* uncomment only for local/testing */
+//add_action( 'themeisle_log_event', 'visualizer_themeisle_log_event', 10, 5 );
+function visualizer_themeisle_log_event( $name, $msg, $type, $file, $line ) {
+	if ( $name !== Visualizer_Plugin::NAME ) {
+		return;
+	}
+	error_log( sprintf( '%s: %s in %s on %s', $type, $msg, $file, $line ) );
+}
