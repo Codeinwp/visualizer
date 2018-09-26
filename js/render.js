@@ -118,7 +118,7 @@ var __visualizer_chart_images   = [];
 				return;
 		}
 
-		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime')) {
+		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime' || series[0].type === 'timeofday')) {
 			axis = false;
 			switch (chart.type) {
 				case 'line':
@@ -186,6 +186,9 @@ var __visualizer_chart_images   = [];
                 case 'table':
                     for(i in settings.series){
                         i = parseInt(i);
+                        if (!series[i + 1]) {
+                            continue;
+                        }
                         v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;

@@ -33,7 +33,7 @@
         <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
 		<exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
-    </rule>
+   </rule>
     <rule ref="WordPress-Docs">
 
     </rule>
