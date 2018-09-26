@@ -99,7 +99,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 */
 	private function get_actions() {
 		return apply_filters(
-			'visualizer_action_buttons', array(
+			'visualizer_action_buttons',
+			array(
 				'print'     => __( 'Print', 'visualizer' ),
 				'csv'       => __( 'CSV', 'visualizer' ),
 				'xls'       => __( 'Excel', 'visualizer' ),
@@ -157,7 +158,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	public function enqueueScripts() {
 		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
+		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
@@ -185,7 +187,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				'series' => false, // series filter hook
 				'data'   => false, // data filter hook
 				'settings'   => false, // data filter hook
-			), $atts
+			),
+			$atts
 		);
 
 		// if empty id or chart does not exists, then return empty string
@@ -253,7 +256,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		// enqueue visualizer render and update render localizations
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
-			'visualizer-render', 'visualizer', array(
+			'visualizer-render',
+			'visualizer',
+			array(
 				'charts'        => $this->_charts,
 				'language'  => $this->get_language(),
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),

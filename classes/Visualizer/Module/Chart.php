@@ -72,7 +72,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
 			'posts_per_page' => 9,
 			'paged'          => filter_input(
-				INPUT_GET, 'page', FILTER_VALIDATE_INT, array(
+				INPUT_GET,
+				'page',
+				FILTER_VALIDATE_INT,
+				array(
 					'options' => array(
 						'min_range' => 1,
 						'default'   => 1,
@@ -171,7 +174,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$capable      = current_user_can( 'delete_posts' );
 		if ( $nonce && $capable ) {
 			$chart_id = filter_input(
-				$input_method, 'chart', FILTER_VALIDATE_INT, array(
+				$input_method,
+				'chart',
+				FILTER_VALIDATE_INT,
+				array(
 					'options' => array(
 						'min_range' => 1,
 					),
@@ -227,7 +233,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				add_post_meta(
-					$chart_id, Visualizer_Plugin::CF_SETTINGS, array(
+					$chart_id,
+					Visualizer_Plugin::CF_SETTINGS,
+					array(
 						'focusTarget' => 'datum',
 					)
 				);
@@ -244,18 +252,28 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 		wp_register_script(
-			'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array(
+			'visualizer-render',
+			VISUALIZER_ABSURL . 'js/render.js',
+			array(
 				'google-jsapi-old',
 				'google-jsapi-new',
 				'visualizer-frame',
-			), Visualizer_Plugin::VERSION, true
+				'visualizer-customization',
+			),
+			Visualizer_Plugin::VERSION,
+			true
 		);
 		wp_register_script(
-			'visualizer-preview', VISUALIZER_ABSURL . 'js/preview.js', array(
+			'visualizer-preview',
+			VISUALIZER_ABSURL . 'js/preview.js',
+			array(
 				'wp-color-picker',
 				'visualizer-render',
-			), Visualizer_Plugin::VERSION, true
+			),
+			Visualizer_Plugin::VERSION,
+			true
 		);
 		// added by Ash/Upwork
 		if ( VISUALIZER_PRO ) {
@@ -344,7 +362,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-preview' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
-			'visualizer-render', 'visualizer', array(
+			'visualizer-render',
+			'visualizer',
+			array(
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
@@ -538,7 +558,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$capable  = current_user_can( 'edit_posts' );
 		if ( $nonce && $capable ) {
 			$chart_id = filter_input(
-				INPUT_GET, 'chart', FILTER_VALIDATE_INT, array(
+				INPUT_GET,
+				'chart',
+				FILTER_VALIDATE_INT,
+				array(
 					'options' => array(
 						'min_range' => 1,
 					),
@@ -570,7 +593,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					array(
 						'page' => 'visualizer',
 						'type' => filter_input( INPUT_GET, 'type' ),
-					), admin_url( 'upload.php' )
+					),
+					admin_url( 'upload.php' )
 				);
 			}
 		}
@@ -590,7 +614,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$capable  = current_user_can( 'edit_posts' );
 		if ( $capable ) {
 			$chart_id = isset( $_GET['chart'] ) ? filter_var(
-				$_GET['chart'], FILTER_VALIDATE_INT, array(
+				$_GET['chart'],
+				FILTER_VALIDATE_INT,
+				array(
 					'options' => array(
 						'min_range' => 1,
 					),
@@ -623,7 +649,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
-			'visualizer-render', 'visualizer', array(
+			'visualizer-render',
+			'visualizer',
+			array(
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),

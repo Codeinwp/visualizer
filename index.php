@@ -69,6 +69,9 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
+	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
+	define( 'VISUALIZER_TEST_JS_CUSTOMIZATION', false );
+
 	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 		define( 'VISUALIZER_CSV_DELIMITER', ',' );
 	}
