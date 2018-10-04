@@ -95,7 +95,7 @@ function visualizer_launch() {
 
 	// set frontend modules
 	$plugin->setModule( Visualizer_Module_Frontend::NAME );
-	
+
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload_52.php';
 	if ( is_readable( $vendor_file ) ) {
 		include_once( $vendor_file );
