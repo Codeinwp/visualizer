@@ -93,10 +93,9 @@ function visualizer_launch() {
 		$plugin->setModule( Visualizer_Module_Admin::NAME );
 	}
 
-	if ( ! is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
-		// set frontend modules
-		$plugin->setModule( Visualizer_Module_Frontend::NAME );
-	}
+	// set frontend modules
+	$plugin->setModule( Visualizer_Module_Frontend::NAME );
+	
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload_52.php';
 	if ( is_readable( $vendor_file ) ) {
 		include_once( $vendor_file );

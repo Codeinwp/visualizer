@@ -54,6 +54,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		parent::__construct( $plugin );
 
 		$this->_addAction( 'wp_enqueue_scripts', 'enqueueScripts' );
+		$this->_addAction( 'visualizer_enqueue_scripts', 'enqueueScripts' );
 		$this->_addFilter( 'visualizer_get_language', 'getLanguage' );
 		$this->_addShortcode( 'visualizer', 'renderChart' );
 
