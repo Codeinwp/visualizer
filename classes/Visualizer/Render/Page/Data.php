@@ -175,7 +175,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													'nonce'  => wp_create_nonce(),
 												), admin_url( 'admin-ajax.php' )
 											);
-											$charts_to_import	= Visualizer_Module_Admin::getCharts();
+											$charts_to_import   = Visualizer_Module_Admin::getCharts();
 											foreach ( $charts_to_import as $import ) {
 												?>
 												<option value="<?php echo $import['id']; ?>"><?php echo $import['name']; ?></option>
