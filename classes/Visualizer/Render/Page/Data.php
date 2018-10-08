@@ -161,7 +161,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</li>
 						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="viz-group-title viz-sub-group"
-								data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
+								data-current="chart"><?php _e( 'Import data from other chart', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<div class="viz-group-content edit-data-content">
 								<div>
@@ -175,18 +175,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													'nonce'  => wp_create_nonce(),
 												), admin_url( 'admin-ajax.php' )
 											);
-											$query_args_charts = array(
-												'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
-												'posts_per_page' => 300,
-												'no_found_rows'  => true,
-											);
-											$charts            = array();
-											$query             = new WP_Query( $query_args_charts );
-											while ( $query->have_posts() ) {
-												$chart    = $query->next_post();
-												$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+											$charts_to_import	= Visualizer_Module_Admin::getCharts();
+											foreach ( $charts_to_import as $import ) {
 												?>
-												<option value="<?php echo $chart->ID; ?>"><?php echo empty( $settings['title'] ) ? '#' . $chart->ID : $settings['title']; ?></option>
+												<option value="<?php echo $import['id']; ?>"><?php echo $import['name']; ?></option>
 												<?php
 											}
 											?>

@@ -125,7 +125,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @return array The array of chart data.
 	 */
-	public function _getChartArray( $data, $chart = null ) {
+	public function _getChartArray( $data = null, $chart = null ) {
 		if ( ! is_null( $chart ) && is_numeric( $chart ) ) {
 			$chart  = get_post( $chart );
 		}

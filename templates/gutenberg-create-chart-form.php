@@ -13,7 +13,7 @@
 		<select name="source" class="gutenberg-create-chart-source">
 			<option value="csv"><?php _e( 'Import data from file', 'visualizer' ); ?></option>
 			<option value="url"><?php _e( 'Import data from URL', 'visualizer' ); ?></option>
-			<option value="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?></option>
+			<option value="chart"><?php _e( 'Import data from other chart', 'visualizer' ); ?></option>
 			<option value="existing"><?php _e( 'Insert existing chart', 'visualizer' ); ?></option>
 			<option value="manual"><?php _e( 'Manual Data', 'visualizer' ); ?></option>
 		</select>

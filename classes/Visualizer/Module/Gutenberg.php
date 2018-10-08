@@ -343,7 +343,7 @@ class Visualizer_Module_Gutenberg extends Visualizer_Module {
 		$settings   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
 		$series     = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true ), $chart_id, $type );
 		$settings   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart_id, $type );
-		$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart_id, $type );
+		$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart_id, $type );
 
 		$id     = sprintf( 'visualizer-%d-%d', $chart_id, $random );
 

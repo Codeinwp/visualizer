@@ -623,7 +623,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
-	 * Get all charts.
+	 * Get all charts except scheduled charts. We do not want them to be importable as they do not contain the data in the post_content.
 	 */
 	public static function getCharts() {
 		$charts            = array();
@@ -633,6 +633,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'post_status'   => 'publish',
 				'posts_per_page' => 300,
 				'no_found_rows'  => true,
+				'meta_query'	 => array(
+					array(
+						'key'	=> 'visualizer-chart-schedule',
+						'compare'	=> 'NOT EXISTS',
+					),
+				),
 			)
 		);
 		while ( $query->have_posts() ) {
