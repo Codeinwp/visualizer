@@ -395,4 +395,54 @@ class Visualizer_Module {
 		return reset( $array );
 	}
 
+	/**
+	 * Gets/creates the JS where user-specific customizations can be/have been added.
+	 */
+	protected function get_user_customization_js() {
+		// use this as the JS file in case we are not able to create the file in uploads.
+		$default    = VISUALIZER_ABSURL . 'js/customization.js';
+
+		$uploads    = wp_get_upload_dir();
+		$specific   = $uploads['baseurl'] . '/visualizer/customization.js';
+
+		// for testing on user sites (before we send them the correctly customized file).
+		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
+			return $default;
+		}
+
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		WP_Filesystem();
+		global $wp_filesystem;
+
+		$dir    = $wp_filesystem->wp_content_dir() . 'uploads/visualizer';
+		$file   = $wp_filesystem->wp_content_dir() . 'uploads/visualizer/customization.js';
+
+		if ( $wp_filesystem->is_readable( $file ) ) {
+			return $specific;
+		}
+
+		if ( $wp_filesystem->exists( $file ) && ! $wp_filesystem->is_readable( $file ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to read file %s', $file ), 'error', __FILE__, __LINE__ );
+			return $default;
+		}
+
+		if ( ! $wp_filesystem->exists( $dir ) ) {
+			if ( ( $done = $wp_filesystem->mkdir( $dir ) ) === false ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
+				return $default;
+			}
+		}
+
+		// if file does not exist, copy.
+		if ( ! $wp_filesystem->exists( $file ) ) {
+			$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
+			if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
+				return $default;
+			}
+		}
+
+		return $specific;
+	}
+
 }

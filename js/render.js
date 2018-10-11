@@ -118,7 +118,7 @@ var __visualizer_chart_images   = [];
 				return;
 		}
 
-		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime')) {
+		if (series[0] && (series[0].type === 'date' || series[0].type === 'datetime' || series[0].type === 'timeofday')) {
 			axis = false;
 			switch (chart.type) {
 				case 'line':
@@ -189,7 +189,7 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1]) {
                             continue;
                         }
-                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
+                        v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
                 default:
@@ -197,12 +197,12 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1]) {
                             continue;
                         }
-                        v.format_data(table, series[i + 1].type, settings.series[i].format, i + 1);
+                        v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
             }
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
-            v.format_data(table, 'number', settings.format, 1);
+            v.format_data(id, table, 'number', settings.format, 1);
         }
         v.override(settings);
 
@@ -220,7 +220,7 @@ var __visualizer_chart_images   = [];
         render.draw(table, settings);
 	};
 
-    v.format_data = function(table, type, format, index) {
+    v.format_data = function(id, table, type, format, index) {
         if (!format || format === '') {
             return;
         }
@@ -240,6 +240,10 @@ var __visualizer_chart_images   = [];
         if (formatter) {
             formatter.format(table, index);
         }
+
+        var arr = id.split('-');
+        jQuery('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: index});
+
     };
 
     v.override = function(settings) {

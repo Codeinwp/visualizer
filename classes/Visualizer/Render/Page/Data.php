@@ -64,7 +64,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
 				'nonce'  => wp_create_nonce(),
 				'chart'  => $this->chart->ID,
-			), admin_url( 'admin-ajax.php' )
+			),
+			admin_url( 'admin-ajax.php' )
 		);
 		?>
 		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>"></span>
@@ -135,11 +136,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 														class="visualizer-select">
 													<?php
 													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
-													$schedules = array(
-														'1'  => __( 'Each hour', 'visualizer' ),
-														'12' => __( 'Each 12 hours', 'visualizer' ),
-														'24' => __( 'Each day', 'visualizer' ),
-														'36' => __( 'Each 3 days', 'visualizer' ),
+													$schedules = apply_filters(
+														'visualizer_chart_schedules', array(
+															'1'  => __( 'Each hour', 'visualizer' ),
+															'12' => __( 'Each 12 hours', 'visualizer' ),
+															'24' => __( 'Each day', 'visualizer' ),
+															'36' => __( 'Each 3 days', 'visualizer' ),
+														)
 													);
 													foreach ( $schedules as $num => $name ) {
 														$extra = $num == $hours ? 'selected' : '';
@@ -173,7 +176,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 												array(
 													'action' => ( VISUALIZER_PRO ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
 													'nonce'  => wp_create_nonce(),
-												), admin_url( 'admin-ajax.php' )
+												),
+												admin_url( 'admin-ajax.php' )
 											);
 											$query_args_charts = array(
 												'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
@@ -297,7 +301,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					array(
 						'nonce' => wp_create_nonce(),
 						'tab' => 'permissions',
-					), remove_query_arg( 'tab', $_SERVER['REQUEST_URI'] )
+					),
+					remove_query_arg( 'tab', $_SERVER['REQUEST_URI'] )
 				);
 ?>
 " method="post">
@@ -320,7 +325,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		}
 		Visualizer_Render_Sidebar::_renderGroupStart(
 			esc_html__( 'Who can see this chart?', 'visualizer' ) . '<span
-										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
+										class="dashicons dashicons-lock"></span>',
+			'',
+			apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
 		);
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can view the chart on the front-end.', 'visualizer' ) );
@@ -362,7 +369,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 		Visualizer_Render_Sidebar::_renderGroupStart(
 			esc_html__( 'Who can edit this chart?', 'visualizer' ) . '<span
-										class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
+										class="dashicons dashicons-lock"></span>',
+			'',
+			apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
 		);
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can edit the chart on the front-end.', 'visualizer' ) );
