@@ -203,6 +203,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			$wpdb->prefix . 'posts' => $wpdb->prefix . 'postmeta',
 			$wpdb->prefix . 'users' => $wpdb->prefix . 'usermeta',
 			$wpdb->prefix . 'terms' => $wpdb->prefix . 'termmeta',
+			$wpdb->prefix . 'comments' => $wpdb->prefix . 'commentmeta',
 		);
 		$mapping = apply_filters( 'visualizer_pro_db_table_mapping', $mapping );
 		$mapping += array_flip( $mapping );
@@ -224,6 +225,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 		$posts = array( $wpdb->prefix . 'posts', $wpdb->prefix . 'postmeta' );
 		$users = array( $wpdb->prefix . 'users', $wpdb->prefix . 'usermeta' );
 		$terms = array( $wpdb->prefix . 'terms', $wpdb->prefix . 'termmeta' );
+		$comments = array( $wpdb->prefix . 'comments', $wpdb->prefix . 'commentmeta' );
 
 		if ( in_array( $table1, $posts ) && in_array( $table2, $posts ) ) {
 			return $wpdb->prefix . 'posts.ID = ' . $wpdb->prefix . 'postmeta.post_id';
@@ -233,6 +235,9 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 		}
 		if ( in_array( $table1, $terms ) && in_array( $table2, $terms ) ) {
 			return $wpdb->prefix . 'terms.term_id = ' . $wpdb->prefix . 'termmeta.term_id';
+		}
+		if ( in_array( $table1, $comments ) && in_array( $table2, $comments ) ) {
+			return $wpdb->prefix . 'comments.comment_id = ' . $wpdb->prefix . 'commentmeta.comment_id';
 		}
 
 		return apply_filters( 'visualizer_pro_db_fk_constraint', '', $table1, $table2 );
