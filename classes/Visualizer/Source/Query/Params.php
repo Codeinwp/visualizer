@@ -64,7 +64,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			if ( ! is_null( $first ) ) {
 				break;
 			}
-			$table  = $tables;
+			$table  = is_array( $tables ) ? $tables[0] : $tables;
 			$col    = $column;
 			if ( 0 !== strpos( $column, 'count(' ) ) {
 				if ( count( $tables ) > 1 ) {
