@@ -484,6 +484,10 @@ div.viz-group-content .viz-group-description {
 	background-position: -600px -225px;
 }
 
+.type-box-htmltable .type-label {
+	background-position: -301px -670px;
+}
+
 .type-box-table .type-label {
 	background-position: -301px -670px;
 }

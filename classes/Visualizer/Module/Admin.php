@@ -326,9 +326,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 					'enabled' => true,
 				),
+				'htmltable' => array(
+					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
+					'enabled' => true,
+				),
 				// pro types
 				'table'       => array(
-					'name'    => esc_html__( 'Table', 'visualizer' ),
+					'name'    => esc_html__( 'Table (Deprecated)', 'visualizer' ),
 					'enabled' => false,
 				),
 				'timeline'    => array(

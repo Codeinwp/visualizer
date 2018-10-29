@@ -385,6 +385,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				),
 			)
 		);
+		do_action( 'visualizer_load_assets_' . $data['type'] );
 		$render          = new Visualizer_Render_Page_Data();
 		$render->chart   = $this->_chart;
 		$render->type    = $data['type'];

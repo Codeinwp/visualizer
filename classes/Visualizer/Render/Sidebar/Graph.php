@@ -81,7 +81,19 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			'out'  => esc_html__( 'Outside the chart', 'visualizer' ),
 			'none' => esc_html__( 'None', 'visualizer' ),
 		);
+		
+		$this->hooks();
 	}
+
+	/**
+	 * Registers additional hooks.
+	 *
+	 * @access protected
+	 */
+	protected function hooks() {
+		// empty.
+	}
+
 
 	/**
 	 * Renders chart title settings.

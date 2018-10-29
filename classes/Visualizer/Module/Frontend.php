@@ -255,6 +255,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		);
 
 		// enqueue visualizer render and update render localizations
+		do_action( 'visualizer_load_assets_' . $type );
+
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
 			'visualizer-render',
