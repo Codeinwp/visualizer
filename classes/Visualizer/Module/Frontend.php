@@ -157,10 +157,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access public
 	 */
 	public function enqueueScripts() {
-		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
@@ -254,16 +251,26 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'data'     => $data,
 		);
 
-		// enqueue visualizer render and update render localizations
-		do_action( 'visualizer_load_assets_' . $type );
+		$name	= 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
+		if ( class_exists( $name ) ) {
+			$classss	= new $name;
+		}
 
-		wp_enqueue_script( 'visualizer-render' );
+		wp_register_script(
+			"visualizer-render-$type",
+			VISUALIZER_ABSURL . 'js/render-facade.js',
+			apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
+			Visualizer_Plugin::VERSION,
+			true
+		);
+
+		wp_enqueue_script( "visualizer-render-$type" );
 		wp_localize_script(
-			'visualizer-render',
+			"visualizer-render-$type",
 			'visualizer',
 			array(
 				'charts'        => $this->_charts,
-				'language'  => $this->get_language(),
+				'language'		=> $this->get_language(),
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 				'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
 				'i10n'          => array(

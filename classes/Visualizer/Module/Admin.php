@@ -419,20 +419,26 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				Visualizer_Plugin::VERSION,
 				true
 			);
-			wp_enqueue_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+
 			wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-			wp_enqueue_script(
-				'visualizer-render',
-				VISUALIZER_ABSURL . 'js/render.js',
-				array(
-					'google-jsapi-old',
-					'visualizer-library',
-					'visualizer-customization',
-				),
-				Visualizer_Plugin::VERSION,
-				true
-			);
+
+			$query = $this->getQuery();
+			while ( $query->have_posts() ) {
+				$chart = $query->next_post();
+				$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+				$name	= 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
+				if ( ! class_exists( $name ) ) {
+					continue;
+				}
+				$class	= new $name;
+				wp_enqueue_script(
+					"visualizer-render-$type",
+					VISUALIZER_ABSURL . 'js/render-facade.js',
+					apply_filters( 'visualizer_assets_render', array( 'visualizer-library', 'visualizer-customization' ), true ),
+					Visualizer_Plugin::VERSION,
+					true
+				);
+			}
 		}
 	}
 
@@ -466,14 +472,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_libraryPage = add_submenu_page( 'upload.php', $title, $title, 'edit_posts', Visualizer_Plugin::NAME, $callback );
 	}
 
-	/**
-	 * Renders visualizer library page.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
-	 */
-	public function renderLibraryPage() {
+	private function getQuery() {
+		static $q;
+		if ( ! is_null( $q ) ) {
+			return $q;
+		}
+
 		// get current page
 		$page = filter_input(
 			INPUT_GET,
@@ -517,10 +521,39 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$meta[]                   = $query;
 			$query_args['meta_query'] = $meta;
 		}
-		// Added by Ash/Upwork
-		// fetch charts
+		$q = new WP_Query( $query_args );
+		return $q;
+	}
+
+	/**
+	 * Renders visualizer library page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
+	public function renderLibraryPage() {
 		$charts = array();
-		$query  = new WP_Query( $query_args );
+		$query = $this->getQuery();
+
+		// get current page
+		$page = filter_input(
+			INPUT_GET,
+			'vpage',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+					'default'   => 1,
+				),
+			)
+		);
+		// add chart type filter to the query arguments
+		$filter = filter_input( INPUT_GET, 'type' );
+		if ( ! ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) ) {
+			$filter = 'all';
+		}
+
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
 

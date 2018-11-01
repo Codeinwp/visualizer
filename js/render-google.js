@@ -5,10 +5,8 @@
 // this will store the images for each chart rendered.
 var __visualizer_chart_images   = [];
 
-(function(v, g) {
+(function($) {
 	var gv;
-
-	v.objects = {};
 
 	v.renderChart = function(id) {
 		var chart, render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
@@ -206,7 +204,7 @@ var __visualizer_chart_images   = [];
         }
         v.override(settings);
 
-        g.visualization.events.addListener(render, 'ready', function () {
+        gv.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
             try{
                 var img = render.getImageURI();
@@ -228,12 +226,12 @@ var __visualizer_chart_images   = [];
         var formatter = null;
         switch (type) {
             case 'number':
-                formatter = new g.visualization.NumberFormat({pattern: format});
+                formatter = new gv.NumberFormat({pattern: format});
                 break;
             case 'date':
             case 'datetime':
             case 'timeofday':
-                formatter = new g.visualization.DateFormat({pattern: format});
+                formatter = new gv.DateFormat({pattern: format});
                 break;
         }
 
@@ -264,12 +262,15 @@ var __visualizer_chart_images   = [];
 		}
 	};
 
-	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
-	g.charts.setOnLoadCallback(function() {
-		gv = g.visualization;
-		v.render();
-	});
-})(visualizer, google);
+    jQuery('body').on('visualizer:render:chart:start', function(event, v){
+        v.objects = {};
+        google.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
+        goggle.charts.setOnLoadCallback(function() {
+            gv = google.visualization;
+            v.render();
+        });
+    });
+})(jQuery);
 
 (function($, v) {
 	var resizeTimeout;

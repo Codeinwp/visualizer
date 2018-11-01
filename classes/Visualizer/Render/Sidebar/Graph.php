@@ -62,6 +62,14 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	protected $_positions;
 
 	/**
+	 * Is this a google chart?
+	 *
+	 * @access protected
+	 * @var bool
+	 */
+	protected $_is_google_chart = true;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -91,8 +99,31 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 * @access protected
 	 */
 	protected function hooks() {
-		// empty.
+		if ( $this->_is_google_chart ) {
+			add_filter( 'visualizer_assets_render', array( $this, 'load_google_assets' ), 10, 2 );
+		}
 	}
+
+	function load_google_assets( $deps, $is_frontend ) {
+		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+		wp_register_script(
+			'visualizer-render-google',
+			VISUALIZER_ABSURL . 'js/render-google.js',
+			array(
+				'google-jsapi-old',
+			),
+			Visualizer_Plugin::VERSION,
+			true
+		);
+
+		return array_merge( 
+			$deps,
+			array( 'visualizer-render-google' )
+		);
+
+	}
+
 
 
 	/**

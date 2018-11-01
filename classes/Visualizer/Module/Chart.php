@@ -250,18 +250,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
-		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 		wp_register_script(
 			'visualizer-render',
-			VISUALIZER_ABSURL . 'js/render.js',
-			array(
-				'google-jsapi-old',
-				'google-jsapi-new',
-				'visualizer-frame',
-				'visualizer-customization',
-			),
+			VISUALIZER_ABSURL . 'js/render-facade.js',
+			apply_filters( 'visualizer_assets_render', array( 'visualizer-frame', 'visualizer-customization' ), false ),
 			Visualizer_Plugin::VERSION,
 			true
 		);
@@ -356,11 +349,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 		unset( $data['settings']['width'], $data['settings']['height'] );
-		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-preview' );
-		wp_enqueue_script( 'visualizer-render' );
+		wp_enqueue_script( 'visualizer-render' ); // isn't this redundant if above we have defined render as dependency?
 		wp_localize_script(
 			'visualizer-render',
 			'visualizer',
@@ -385,7 +377,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				),
 			)
 		);
-		do_action( 'visualizer_load_assets_' . $data['type'] );
+
 		$render          = new Visualizer_Render_Page_Data();
 		$render->chart   = $this->_chart;
 		$render->type    = $data['type'];

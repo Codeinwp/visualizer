@@ -24,7 +24,7 @@
  *
  * @since 1.0.0
  */
-class Table extends Visualizer_Render_Sidebar_Columnar {
+class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sidebar_Columnar {
 
 	/**
 	 * Constructor.
@@ -37,6 +37,7 @@ class Table extends Visualizer_Render_Sidebar_Columnar {
 	public function __construct( $data = array() ) {
 		parent::__construct( $data );
 		$this->_includeCurveTypes = false;
+		$this->_is_google_chart = false;
 	}
 
 	/**
@@ -45,7 +46,7 @@ class Table extends Visualizer_Render_Sidebar_Columnar {
 	 * @access protected
 	 */
 	protected function hooks() {
-		add_action( 'visualizer_load_assets_htmltable', array( $this, 'load_assets' ) );
+		$this->load_assets();
 	}
 
 	public function load_assets() {
