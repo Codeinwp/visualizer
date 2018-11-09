@@ -113,7 +113,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 */
 	public function setupCustomPostTypes() {
 		register_post_type(
-			Visualizer_Plugin::CPT_VISUALIZER, array(
+			Visualizer_Plugin::CPT_VISUALIZER,
+			array(
 				'label'  => 'Visualizer Charts',
 				'public' => false,
 				'supports' => array( 'revisions' ),
@@ -182,8 +183,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return $chart;
 		}
 
-		$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_PARAMS, true );
-		$source     = new Visualizer_Source_Query_Params( $params );
+		$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, true );
+		$source     = new Visualizer_Source_Query( $params );
 		$source->fetch( false );
 		$error      = $source->get_error();
 		if ( empty( $error ) ) {

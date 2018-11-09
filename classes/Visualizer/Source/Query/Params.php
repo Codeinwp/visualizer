@@ -205,7 +205,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			$wpdb->prefix . 'terms' => $wpdb->prefix . 'termmeta',
 			$wpdb->prefix . 'comments' => $wpdb->prefix . 'commentmeta',
 		);
-		$mapping = apply_filters( 'visualizer_pro_db_table_mapping', $mapping );
+		$mapping = apply_filters( 'visualizer_db_table_mapping', $mapping );
 		$mapping += array_flip( $mapping );
 		set_transient( 'visualizer_db_table_mapping', $mapping, HOUR_IN_SECONDS );
 		return $mapping;
@@ -240,7 +240,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			return $wpdb->prefix . 'comments.comment_id = ' . $wpdb->prefix . 'commentmeta.comment_id';
 		}
 
-		return apply_filters( 'visualizer_pro_db_fk_constraint', '', $table1, $table2 );
+		return apply_filters( 'visualizer_db_fk_constraint', '', $table1, $table2 );
 	}
 
 	/**
@@ -276,7 +276,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 				$columns[]  = array( 'name' => $col, 'type' => $type );
 			}
 		}
-		$mapping    = apply_filters( 'visualizer_pro_db_table_columns', $columns, $table );
+		$mapping    = apply_filters( 'visualizer_db_table_columns', $columns, $table );
 		set_transient( "visualizer_db_{$table}_columns", $columns, DAY_IN_SECONDS );
 		return $columns;
 	}
@@ -319,16 +319,33 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 			return $tables;
 		}
 
-		$prefix = apply_filters( 'visualizer_pro_db_prefix', $wpdb->prefix );
+		$prefix = apply_filters( 'visualizer_db_prefix', $wpdb->prefix );
 		$sql    = $wpdb->get_col( 'SHOW TABLES', 0 );
 		foreach ( $sql as $table ) {
 			if ( empty( $prefix ) || 0 === strpos( $table, $prefix ) ) {
 				$tables[] = $table;
 			}
 		}
-		$tables = apply_filters( 'visualizer_pro_db_tables', $tables );
+		$tables = apply_filters( 'visualizer_db_tables', $tables );
 		set_transient( 'visualizer_db_tables', $tables, HOUR_IN_SECONDS );
 		return $tables;
+	}
+
+	/**
+	 * Gets all tables and their columns.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public static function get_all_db_tables_column_mapping() {
+		$mapping    = array();
+		$tables     = self::get_db_tables();
+		foreach ( $tables as $table ) {
+			$cols   = self::get_db_table_columns( $table, true );
+			$names  = wp_list_pluck( $cols, 'name' );
+			$mapping[ $table ] = $names;
+		}
+		return $mapping;
 	}
 
 

@@ -28,11 +28,6 @@ if ( class_exists( 'Visualizer_Pro', false ) ) {
 } else {
 	defined( 'VISUALIZER_PRO' ) || define( 'VISUALIZER_PRO', false );
 }
-// Added by Ash/Upwork
-define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
-
-// if x and y features are required, this value should read x,y or x|y or x;y.
-define( 'VISUALIZER_ENABLE_BETA_FEATURES', 'dbwizard' );
 
 /**
  * Automatically loads classes for the plugin. Checks a namespace and loads only
@@ -80,6 +75,14 @@ function visualizer_launch() {
 	if ( ! defined( 'VISUALIZER_DEBUG' ) ) {
 		define( 'VISUALIZER_DEBUG', false );
 	}
+
+	define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
+
+	// if x and y features are required, this value should read x,y or x|y or x;y.
+	define( 'VISUALIZER_ENABLE_BETA_FEATURES', 'db-query' );
+
+	// the link to pre-build queries.
+	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://something.' );
 
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();

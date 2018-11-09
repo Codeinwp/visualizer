@@ -60,7 +60,6 @@ class Visualizer_Plugin {
 	 *Action used for fetching db import data.
 	 */
 	const ACTION_FETCH_DB_DATA = 'visualizer-fetch-db-data';
-	const ACTION_FETCH_DB_COLS = 'visualizer-fetch-db-columns';
 	const ACTION_SAVE_DB_QUERY = 'visualizer-save-db-query';
 
 	// custom filters
@@ -71,8 +70,8 @@ class Visualizer_Plugin {
 	const FILTER_UNDO_REVISIONS = 'visualizer-undo-revisions';
 	const FILTER_HANDLE_REVISIONS = 'visualizer-handle-revisions';
 
-	const CF_DB_PARAMS = 'visualizer-db-params';
 	const CF_DB_SCHEDULE = 'visualizer-db-schedule';
+	const CF_DB_QUERY = 'visualizer-db-query';
 
 	const CF_CHART_URL = 'visualizer-chart-url';
 	const CF_CHART_SCHEDULE = 'visualizer-chart-schedule';

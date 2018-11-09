@@ -49,7 +49,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 * @access public
 	 * @param string $query The query.
 	 */
-	public function __construct( $query ) {
+	public function __construct( $query = null ) {
 		$this->_query = $query;
 	}
 
@@ -66,9 +66,12 @@ class Visualizer_Source_Query extends Visualizer_Source {
 		}
 
 		global $wpdb;
+		$wpdb->hide_errors();
 		// @codingStandardsIgnoreStart
 		$rows       = $wpdb->get_results( $this->_query, ARRAY_A );
 		// @codingStandardsIgnoreEnd
+		$wpdb->show_errors();
+
 		if ( $rows ) {
 			$results    = array();
 			$headers    = array();
@@ -92,9 +95,10 @@ class Visualizer_Source_Query extends Visualizer_Source {
 				return $this->html( $headers, $results );
 			}
 			return $this->object( $headers, $results );
-		} else {
-			$this->_error = $wpdb->last_error;
 		}
+
+		$this->_error = $wpdb->last_error;
+		return null;
 	}
 
 	/**

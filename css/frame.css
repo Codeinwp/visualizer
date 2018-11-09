@@ -1233,3 +1233,33 @@ span.viz-section-error {
 .db-wizard-where-template-remove {
 	background-color: #ff0d00;
 }
+
+#db-query-form .CodeMirror-scroll {
+	margin: 0;
+	padding: 0;
+	height: 50%;
+	overflow: hidden !important;
+}
+
+#db-query-form .CodeMirror-wrap {
+	width: 90%;
+	height: 200px;
+}
+
+.visualizer-db-query-form > div {
+	display: inline-block;
+	vertical-align: middle;
+	width: 15%;
+}
+
+.visualizer-db-query-form > div:first-child {
+	width: 70%;
+}
+
+.db-wizard-error {
+	color: #ff0000;
+}
+
+.db-wizard-hints {
+	color: #0000ff;
+}
