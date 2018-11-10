@@ -111,10 +111,19 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	private function get_col_type( $col_num ) {
 		global $wpdb;
 		switch ( $wpdb->get_col_info( 'type', $col_num ) ) {
+			case 0:
+			case 5:
+			case 4:
+			case 9:
+			case 3:
+			case 2:
+			case 246:
 			case 8:
 				// numeric.
 				return 'number';
+			case 10:
 			case 12:
+			case 14:
 				// date.
 				return 'date';
 		}
