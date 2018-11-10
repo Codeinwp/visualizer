@@ -253,22 +253,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_script( 'visualizer-chosen', VISUALIZER_ABSURL . 'js/lib/chosen.jquery.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION );
 		wp_register_style( 'visualizer-chosen', VISUALIZER_ABSURL . 'css/lib/chosen.min.css', array(), Visualizer_Plugin::VERSION );
 
-		// data tables assets.
-		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
-		wp_register_style( 'visualizer-datatables', '//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css', array(), Visualizer_Plugin::VERSION );
-		wp_register_style( 'visualizer-datatables-ui', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', array( 'visualizer-datatables' ), Visualizer_Plugin::VERSION );
-
-		// code mirror assets.
-		wp_register_script( 'visualizer-codemirror-core', '//codemirror.net/lib/codemirror.js', array( 'jquery' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-codemirror-placeholder', '//codemirror.net/addon/display/placeholder.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-codemirror-matchbrackets', '//codemirror.net/addon/edit/matchbrackets.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-codemirror-closebrackets', '//codemirror.net/addon/edit/closebrackets.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-codemirror-sql', '//codemirror.net/mode/sql/sql.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-codemirror-sql-hint', '//codemirror.net/addon/hint/sql-hint.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.js', array(  'visualizer-codemirror-sql', 'visualizer-codemirror-sql-hint', 'visualizer-codemirror-placeholder', 'visualizer-codemirror-matchbrackets', 'visualizer-codemirror-closebrackets' ), Visualizer_Plugin::VERSION );
-		wp_register_style( 'visualizer-codemirror-core', '//codemirror.net/lib/codemirror.css', array(), Visualizer_Plugin::VERSION );
-		wp_register_style( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.css', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
@@ -335,6 +319,60 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	}
 
 	/**
+	 * Load code editor assets.
+	 */
+	private function loadCodeEditorAssets() {
+		global $wp_version;
+
+		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'db-query' ) === false ) {
+			return;
+		}
+
+		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping();
+
+		// data tables assets.
+		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_register_style( 'visualizer-datatables', '//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_register_style( 'visualizer-datatables-ui', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', array( 'visualizer-datatables' ), Visualizer_Plugin::VERSION );
+
+		wp_enqueue_script( 'visualizer-datatables' );
+		wp_enqueue_style( 'visualizer-datatables-ui' );
+
+		if ( version_compare( $wp_version, '4.9.0', '<' ) ) {
+			// code mirror assets.
+			wp_register_script( 'visualizer-codemirror-core', '//codemirror.net/lib/codemirror.js', array( 'jquery' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-placeholder', '//codemirror.net/addon/display/placeholder.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-matchbrackets', '//codemirror.net/addon/edit/matchbrackets.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-closebrackets', '//codemirror.net/addon/edit/closebrackets.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-sql', '//codemirror.net/mode/sql/sql.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-sql-hint', '//codemirror.net/addon/hint/sql-hint.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.js', array(  'visualizer-codemirror-sql', 'visualizer-codemirror-sql-hint', 'visualizer-codemirror-placeholder', 'visualizer-codemirror-matchbrackets', 'visualizer-codemirror-closebrackets' ), Visualizer_Plugin::VERSION );
+			wp_register_style( 'visualizer-codemirror-core', '//codemirror.net/lib/codemirror.css', array(), Visualizer_Plugin::VERSION );
+			wp_register_style( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.css', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
+
+			wp_enqueue_script( 'visualizer-codemirror-hint' );
+			wp_enqueue_style( 'visualizer-codemirror-hint' );
+		} else {
+			wp_enqueue_code_editor(
+				array(
+					'type' => 'sql',
+					'codemirror' => array(
+						'autofocus'         => true,
+						'lineWrapping'      => true,
+						'dragDrop'          => false,
+						'matchBrackets'     => true,
+						'autoCloseBrackets' => true,
+						'extraKeys'         => array( 'Ctrl-Space' => 'autocomplete' ),
+						'hintOptions'       => array( 'tables' => $table_col_mapping ),
+					),
+				)
+			);
+		}
+
+		return $table_col_mapping;
+	}
+
+	/**
 	 * Handle data and settings page
 	 */
 	private function _handleDataAndSettingsPage() {
@@ -380,13 +418,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-preview' );
 
-		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'db-query' ) !== false ) {
-			wp_enqueue_script( 'visualizer-chosen' );
-			wp_enqueue_script( 'visualizer-datatables' );
-			wp_enqueue_style( 'visualizer-datatables-ui' );
-			wp_enqueue_script( 'visualizer-codemirror-hint' );
-			wp_enqueue_style( 'visualizer-codemirror-hint' );
-		}
+		wp_enqueue_script( 'visualizer-chosen' );
+
+		$table_col_mapping  = $this->loadCodeEditorAssets();
 
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
@@ -415,7 +449,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					),
 				),
 				'db_query' => array(
-					'tables'    => Visualizer_Source_Query_Params::get_all_db_tables_column_mapping(),
+					'tables'    => $table_col_mapping,
 				),
 			)
 		);

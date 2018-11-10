@@ -171,17 +171,17 @@
     // https://codemirror.net/
     function init_db_import_component(){
         var table_columns = visualizer.db_query.tables;
-        var cm = CodeMirror.fromTextArea($('.visualizer-db-query').get(0), {
+        var code_mirror = wp.CodeMirror || CodeMirror;
+        var cm = code_mirror.fromTextArea($('.visualizer-db-query').get(0), {
                     value: $('.visualizer-db-query').val(),
                     autofocus: true,
                     mode: 'text/x-mysql',
                     lineWrapping: true,
                     dragDrop: false,
-                    matchBrackets : true,
-                    autoCloseBrackets : true,
+                    matchBrackets: true,
+                    autoCloseBrackets: true,
                     extraKeys: {"Ctrl-Space": "autocomplete"},
-                    hintOptions: { tables: table_columns },
-                    placeholder: visualizer.db_query.placeholder
+                    hintOptions: { tables: table_columns }
         });
 
         // force refresh so that the query shows on first time load. Otherwise you have to click on the editor for it to show.

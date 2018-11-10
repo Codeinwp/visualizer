@@ -246,7 +246,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from the database.', 'visualizer' ); ?></p>
 							<select name="refresh" id="vz-db-import-time" class="visualizer-select">
 							<?php
-							$bttn_label = empty( $source_of_chart ) ? __( 'Create Query', 'visualizer' ) : __( 'Modify Query', 'visualizer' );
+							$bttn_label = 'visualizer_source_query' === $source_of_chart ? __( 'Modify Query', 'visualizer' ) : __( 'Create Query', 'visualizer' );
 							$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
 							$schedules = apply_filters(
 								'visualizer_schedules', array(
@@ -499,7 +499,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 */
 	private function add_additional_content() {
 		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'db-query' ) !== false ) {
-			$query = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_QUERY, true );
+			$source = strtolower( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SOURCE, true ) );
+			$query = '';
+			if ( 'visualizer_source_query' === $source ) {
+				$query = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_QUERY, true );
+			}
 			Visualizer_Render_Layout::show( 'db-query', $query );
 		}
 	}
