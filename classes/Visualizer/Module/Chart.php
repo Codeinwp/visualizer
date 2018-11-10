@@ -324,6 +324,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	private function loadCodeEditorAssets() {
 		global $wp_version;
 
+		if ( ! VISUALIZER_PRO ) {
+			return;
+		}
+
 		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'db-query' ) === false ) {
 			return;
 		}
@@ -451,6 +455,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'db_query' => array(
 					'tables'    => $table_col_mapping,
 				),
+				'is_pro'    => VISUALIZER_PRO,
 			)
 		);
 		$render          = new Visualizer_Render_Page_Data();

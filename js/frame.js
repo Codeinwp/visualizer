@@ -18,7 +18,10 @@
         $('li.viz-group.' + source).addClass('open');
 
         init_permissions();
-        init_db_import();
+
+        if(visualizer.is_pro) {
+            init_db_import();
+        }
 
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');
