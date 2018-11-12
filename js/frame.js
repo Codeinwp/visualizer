@@ -13,6 +13,21 @@
     $(document).ready(function () {
         init_permissions();
 
+        // update the manual configuation link to point to the correct chart type.
+        var type = $('#visualizer-chart-id').attr('data-chart-type');
+        var chart_type_in_api_link  = type + 'chart';
+        switch (type) {
+            case "gauge":
+            case "table":
+            case "timeline":
+                chart_type_in_api_link = type;
+                break;
+        }
+
+        if($('span.viz-gvlink').length > 0) {
+            $('span.viz-gvlink').html($('span.viz-gvlink').html().replace('?', chart_type_in_api_link));
+        }
+
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');
             $(this).parent().addClass('type-label-selected');
