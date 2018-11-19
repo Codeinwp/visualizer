@@ -77,7 +77,7 @@ class Visualizer_Gutenberg_Block {
 		} else {
 			$version = $this->version;
 		}
-	
+
 		// Enqueue the bundled block JS file
 		wp_enqueue_script( 'handsontable', $handsontableJS );
 		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable' ), $version );
@@ -92,9 +92,9 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		$translation_array = array(
-			'isPro'		=> $type,
+			'isPro'     => $type,
 			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
-			'absurl'	=> VISUALIZER_ABSURL,
+			'absurl'    => VISUALIZER_ABSURL,
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
@@ -213,15 +213,15 @@ class Visualizer_Gutenberg_Block {
 
 		$schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
 
-		if ( ! empty ( $import ) && ! empty ( $schedule ) ) {
+		if ( ! empty( $import ) && ! empty( $schedule ) ) {
 			$data['visualizer-chart-url'] = $import;
 			$data['visualizer-chart-schedule'] = $schedule;
 		}
 
 		if ( VISUALIZER_PRO ) {
 			$permissions = get_post_meta( $post_id, Visualizer_PRO::CF_PERMISSIONS, true );
-		
-			if ( ! empty ( $permissions ) ) {
+
+			if ( ! empty( $permissions ) ) {
 				$data['visualizer-permissions'] = $permissions;
 			}
 		}
@@ -288,7 +288,6 @@ class Visualizer_Gutenberg_Block {
 	public function format_chart_data( $data, $series ) {
 		foreach ( $series as $i => $row ) {
 			// if no value exists for the seires, then add null
-
 			if ( ! isset( $series[ $i ] ) ) {
 				$series[ $i ] = null;
 			}
@@ -297,19 +296,19 @@ class Visualizer_Gutenberg_Block {
 				continue;
 			}
 
-			if ( $row['type'] ==  'number' ) {
+			if ( $row['type'] == 'number' ) {
 				foreach ( $data as $o => $col ) {
 					$data[ $o ][ $i ] = ( is_numeric( $col[ $i ] ) ) ? floatval( $col[ $i ] ) : ( is_numeric( str_replace( ',', '', $col[ $i ] ) ) ? floatval( str_replace( ',', '', $col[ $i ] ) ) : null );
 				}
 			}
 
-			if ( $row['type'] ==  'boolean' ) {
+			if ( $row['type'] == 'boolean' ) {
 				foreach ( $data as $o => $col ) {
 					$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_validate( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
 				}
 			}
 
-			if ( $row['type'] ==  'timeofday' ) {
+			if ( $row['type'] == 'timeofday' ) {
 				foreach ( $data as $o => $col ) {
 					$date = new DateTime( '1984-03-16T' . $col[ $i ] );
 					if ( $date ) {
@@ -323,9 +322,9 @@ class Visualizer_Gutenberg_Block {
 				}
 			}
 
-			if ( $row['type'] ==  'string' ) {
+			if ( $row['type'] == 'string' ) {
 				foreach ( $data as $o => $col ) {
-					$data[ $o ][ $i ] =  $this->toUTF8( $col[ $i ] );
+					$data[ $o ][ $i ] = $this->toUTF8( $col[ $i ] );
 				}
 			}
 		}
@@ -385,8 +384,8 @@ class Visualizer_Gutenberg_Block {
 				if ( ! empty( $users ) ) {
 					$i = 0;
 					foreach ( $users as $user ) {
-						$options[$i]['value'] = $user->ID;
-						$options[$i]['label'] = $user->display_name;
+						$options[ $i ]['value'] = $user->ID;
+						$options[ $i ]['label'] = $user->display_name;
 						$i++;
 					}
 				}
@@ -399,8 +398,8 @@ class Visualizer_Gutenberg_Block {
 				if ( ! empty( $roles ) ) {
 					$i = 0;
 					foreach ( get_editable_roles() as $name => $info ) {
-						$options[$i]['value'] = $name;
-						$options[$i]['label'] = $name;
+						$options[ $i ]['value'] = $name;
+						$options[ $i ]['label'] = $name;
 						$i++;
 					}
 				}

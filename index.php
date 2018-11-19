@@ -8,9 +8,9 @@
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
-    WordPress Available:  yes
-    Requires License:    no
-    Pro Slug:    visualizer-pro
+	WordPress Available:  yes
+	Requires License:    no
+	Pro Slug:    visualizer-pro
 	License URI: http://www.opensource.org/licenses/gpl-license.php
 */
 
