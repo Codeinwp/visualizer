@@ -84,6 +84,15 @@ function visualizer_launch() {
 
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
+
+	// instantiate Gutenberg block
+	add_action(
+		'plugins_loaded', function () {
+			if ( function_exists( 'register_block_type' ) ) {
+				Visualizer_Gutenberg_Block::get_instance();
+			}}
+	);
+
 	// set general modules
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
