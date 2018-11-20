@@ -470,6 +470,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_libraryPage = add_submenu_page( 'upload.php', $title, $title, 'edit_posts', Visualizer_Plugin::NAME, $callback );
 	}
 
+	/**
+	 * Get the instance of WP_Query that fetches the charts as per the given criteria.
+	 */
 	private function getQuery() {
 		static $q;
 		if ( ! is_null( $q ) ) {
@@ -552,7 +555,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$filter = 'all';
 		}
 
-		$css		= '';
+		$css        = '';
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
 
@@ -574,7 +577,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
 			$library = $this->load_chart_type( $chart->ID );
 
-			$id			= 'visualizer-' . $chart->ID;
+			$id         = 'visualizer-' . $chart->ID;
 			$arguments  = $this->get_inline_custom_css( $id, $settings );
 			if ( ! empty( $arguments ) ) {
 				$css        .= $arguments[0];
@@ -618,7 +621,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						$ajaxurl
 					),
 				),
-				'page_type'	=> 'library',
+				'page_type' => 'library',
 			)
 		);
 		// render library page
@@ -626,7 +629,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render->charts     = $charts;
 		$render->type       = $filter;
 		$render->types      = self::_getChartTypesLocalized();
-		$render->custom_css		= $css;
+		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
 				'base'    => add_query_arg( 'vpage', '%#%' ),

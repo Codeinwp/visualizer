@@ -7,7 +7,7 @@ var __visualizer_chart_images   = [];
 
 (function($) {
 	var gv;
-    var all_charts;
+    var all_charts, objects;
 
 	function renderChart(id) {
 		var chart, render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;

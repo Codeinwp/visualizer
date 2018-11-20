@@ -35,7 +35,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @param array $data The data what has to be associated with this render.
 	 */
 	public function __construct( $data = array() ) {
-		$this->_library	= 'datatables';
+		$this->_library = 'datatables';
 		$this->_includeCurveTypes = false;
 
 		parent::__construct( $data );
@@ -58,8 +58,8 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @access public
 	 */
 	function load_assets( $deps, $is_frontend ) {
-		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );	
-		wp_enqueue_style( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css', array(), Visualizer_Plugin::VERSION );	
+		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css', array(), Visualizer_Plugin::VERSION );
 
 		wp_register_script(
 			'visualizer-render-datatables-lib',
@@ -71,7 +71,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 			true
 		);
 
-		return array_merge( 
+		return array_merge(
 			$deps,
 			array( 'visualizer-render-datatables-lib' )
 		);
@@ -207,7 +207,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 		self::_renderGroupStart( esc_html__( 'Row/Cell Settings', 'visualizer' ) );
 
 			self::_renderSectionStart( esc_html__( 'Odd Table Row', 'visualizer' ) );
-				
+
 				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
 
 				self::_renderColorPickerItem(
@@ -327,7 +327,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @access protected
 	 */
 	protected function _renderSeriesSettings() {
-		
+
 	}
 
 }

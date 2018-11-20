@@ -241,7 +241,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$settings   = $arguments[1];
 		}
 
-		$library	= $this->load_chart_type( $chart->ID );
+		$library    = $this->load_chart_type( $chart->ID );
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(
@@ -266,13 +266,13 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'visualizer',
 			array(
 				'charts'        => $this->_charts,
-				'language'		=> $this->get_language(),
+				'language'      => $this->get_language(),
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 				'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
 				'i10n'          => array(
 					'copied'        => __( 'Copied!', 'visualizer' ),
 				),
-				'page_type'	=> 'frontend',
+				'page_type' => 'frontend',
 			)
 		);
 		wp_enqueue_style( 'visualizer-front' );

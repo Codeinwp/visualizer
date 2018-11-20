@@ -31,8 +31,11 @@
  */
 abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sidebar {
 
+	/**
+	 * The constructor.
+	 */
 	public function __construct( $data = array() ) {
-		$this->_library	= 'google';
+		$this->_library = 'google';
 		parent::__construct( $data );
 	}
 
@@ -47,6 +50,9 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 		}
 	}
 
+	/**
+	 * Loads the assets.
+	 */
 	function load_google_assets( $deps, $is_frontend ) {
 		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
@@ -60,7 +66,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			true
 		);
 
-		return array_merge( 
+		return array_merge(
 			$deps,
 			array( 'visualizer-render-google-lib' )
 		);

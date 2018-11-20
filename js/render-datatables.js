@@ -1,4 +1,5 @@
 /* global console */
+/* global visualizer */
 
 (function($) {
     var all_charts;
@@ -42,7 +43,7 @@
             rows.push(row);
         }
 
-        var settings = {
+        settings = {
             destroy: true,
             paging: false,
             searching: false,
@@ -70,7 +71,7 @@
         var select = {
             info: false
         };
-        $.extend( settings, { select } );
+        $.extend( settings, { select } ); // jshint ignore:line
 
         // in preview mode, cssClassNames will not exist when a color is changed.
         if(typeof chart.settings['cssClassNames'] !== 'undefined'){
@@ -89,7 +90,7 @@
             }
         }
 
-        for (var i in chart.settings) {
+        for (i in chart.settings) {
             var valoo = chart.settings[i];
 
             // remove the type suffix to get the name of the setting.
@@ -107,7 +108,7 @@
             // if the setting name has an '_' this means it is a sub-setting e.g. select_items means { select: { items: ... } }.
             var array = i.split('_');
             if(array.length === 2){
-                i = eval( array[0] );
+                i = eval( array[0] ); // jshint ignore:line
                 i[ array[1] ] = valoo;
             }
             settings[i] = valoo;

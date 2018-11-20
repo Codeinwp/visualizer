@@ -450,11 +450,11 @@ class Visualizer_Module {
 	 */
 	protected function load_chart_type( $chart_id ) {
 		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-		$name	= 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
-		$class	= null;
+		$name   = 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
+		$class  = null;
 		if ( class_exists( $name ) ) {
-			$class	= new $name;
-		} else if ( true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
+			$class  = new $name;
+		} elseif ( true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
 			$class = new $name;
 		}
 		return is_null( $class ) ? null : $class->getLibrary();
@@ -464,8 +464,8 @@ class Visualizer_Module {
 	 * Generates the inline CSS to apply to the chart and adds these classes to the settings.
 	 *
 	 * @access public
-	 * @param int	$id			The id of the chart.
-	 * @param array	$settings	The settings of the chart.
+	 * @param int   $id         The id of the chart.
+	 * @param array $settings   The settings of the chart.
 	 */
 	protected function get_inline_custom_css( $id, $settings ) {
 		$css        = '';
@@ -493,7 +493,7 @@ class Visualizer_Module {
 
 		$settings['cssClassNames']  = $classes;
 
-		$arguments	= array( $css, $settings );
+		$arguments  = array( $css, $settings );
 		apply_filters_ref_array( 'visualizer_inline_css', array( &$arguments ) );
 
 		return $arguments;

@@ -141,7 +141,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
 		}
 
-		$css		= '';
+		$css        = '';
 		$arguments  = $this->get_inline_custom_css( 'visualizer-' . $chart->ID, $settings );
 		if ( ! empty( $arguments ) ) {
 			$css        = $arguments[0];
@@ -154,7 +154,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'settings' => $settings,
 			'data'     => $data,
 			'library'  => $library,
-			'css'		=> $css,
+			'css'       => $css,
 		);
 	}
 
@@ -401,7 +401,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render          = new Visualizer_Render_Page_Data();
 		$render->chart   = $this->_chart;
 		$render->type    = $data['type'];
-		$render->custom_css	 = $data['css'];
+		$render->custom_css  = $data['css'];
 		$render->sidebar = $sidebar;
 		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
 			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
@@ -546,7 +546,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
-				$render->id		= $chart->ID;
+				$render->id     = $chart->ID;
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
 			} else {
