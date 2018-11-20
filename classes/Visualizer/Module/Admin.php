@@ -326,7 +326,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 					'enabled' => true,
 				),
-				'htmltable' => array(
+				'dataTable' => array(
 					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
 					'enabled' => true,
 				),
@@ -425,14 +425,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$query = $this->getQuery();
 			while ( $query->have_posts() ) {
 				$chart = $query->next_post();
-				$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
-				$name	= 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
-				if ( ! class_exists( $name ) ) {
+				$library = $this->load_chart_type( $chart->ID );
+				if ( is_null( $library ) ) {
 					continue;
 				}
-				$class	= new $name;
 				wp_enqueue_script(
-					"visualizer-render-$type",
+					"visualizer-render-$library",
 					VISUALIZER_ABSURL . 'js/render-facade.js',
 					apply_filters( 'visualizer_assets_render', array( 'visualizer-library', 'visualizer-customization' ), true ),
 					Visualizer_Plugin::VERSION,
@@ -554,25 +552,43 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$filter = 'all';
 		}
 
+		$css		= '';
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
 
 			// if the user has updated a chart and instead of saving it, has closed the modal. If the user refreshes, they should get the original chart.
 			$chart = $this->handleExistingRevisions( $chart->ID, $chart );
 
+			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
+			$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
+			if ( ! empty( $atts['settings'] ) ) {
+				$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
+			}
+
 			unset( $settings['height'], $settings['width'] );
-			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
+			$library = $this->load_chart_type( $chart->ID );
+
+			$id			= 'visualizer-' . $chart->ID;
+			$arguments  = $this->get_inline_custom_css( $id, $settings );
+			if ( ! empty( $arguments ) ) {
+				$css        .= $arguments[0];
+				$settings   = $arguments[1];
+			}
+
 			// add chart to the array
-			$charts[ 'visualizer-' . $chart->ID ] = array(
+			$charts[ $id ] = array(
 				'id'       => $chart->ID,
 				'type'     => $type,
 				'series'   => $series,
 				'settings' => $settings,
 				'data'     => $data,
+				'library'  => $library,
 			);
 		}
 		// enqueue charts array
@@ -602,6 +618,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						$ajaxurl
 					),
 				),
+				'page_type'	=> 'library',
 			)
 		);
 		// render library page
@@ -609,6 +626,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render->charts     = $charts;
 		$render->type       = $filter;
 		$render->types      = self::_getChartTypesLocalized();
+		$render->custom_css		= $css;
 		$render->pagination = paginate_links(
 			array(
 				'base'    => add_query_arg( 'vpage', '%#%' ),

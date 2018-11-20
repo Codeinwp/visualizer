@@ -133,12 +133,28 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 		$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
+		$library = $this->load_chart_type( $chart->ID );
+
+		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+		$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
+		if ( ! empty( $atts['settings'] ) ) {
+			$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
+		}
+
+		$css		= '';
+		$arguments  = $this->get_inline_custom_css( 'visualizer-' . $chart->ID, $settings );
+		if ( ! empty( $arguments ) ) {
+			$css        = $arguments[0];
+			$settings   = $arguments[1];
+		}
 
 		return array(
 			'type'     => $type,
 			'series'   => $series,
-			'settings' => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true ),
+			'settings' => $settings,
 			'data'     => $data,
+			'library'  => $library,
+			'css'		=> $css,
 		);
 	}
 
@@ -244,6 +260,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
+
+		$this->load_chart_type( $chart_id );
+
 		// enqueue and register scripts and styles
 		wp_register_script( 'visualizer-chosen', VISUALIZER_ABSURL . 'js/lib/chosen.jquery.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION );
 		wp_register_style( 'visualizer-chosen', VISUALIZER_ABSURL . 'css/lib/chosen.min.css', array(), Visualizer_Plugin::VERSION );
@@ -375,12 +394,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'permissions'   => Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA,
 					),
 				),
+				'page_type' => 'chart',
 			)
 		);
 
 		$render          = new Visualizer_Render_Page_Data();
 		$render->chart   = $this->_chart;
 		$render->type    = $data['type'];
+		$render->custom_css	 = $data['css'];
 		$render->sidebar = $sidebar;
 		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
 			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
@@ -525,6 +546,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+				$render->id		= $chart->ID;
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
 			} else {

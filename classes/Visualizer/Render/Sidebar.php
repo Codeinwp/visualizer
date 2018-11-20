@@ -92,6 +92,14 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	protected $_supportsAnimation = true;
 
 	/**
+	 * Which library does this this chart implement?
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_library = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -124,6 +132,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			'1' => esc_html__( 'Yes', 'visualizer' ),
 			'0' => esc_html__( 'No', 'visualizer' ),
 		);
+
+		$this->hooks();
 	}
 
 	/**
@@ -747,6 +757,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<textarea class="control-text" ', $attributes, ' name="', $name, '" placeholder="', $placeholder, '">', $value, '</textarea>';
 			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
+	}
+
+	/**
+	 * Returns the library this chart implements.
+	 */
+	public function getLibrary() {
+		return $this->_library;
 	}
 
 }

@@ -20,50 +20,52 @@
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
 /**
- * Renders data uploading respond.
+ * Base class for sidebar settigns of graph based charts.
  *
  * @category Visualizer
  * @package Render
- * @subpackage Page
+ * @subpackage Sidebar
  *
  * @since 1.0.0
+ * @abstract
  */
-class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
+abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sidebar {
+
+	public function __construct( $data = array() ) {
+		$this->_library	= 'google';
+		parent::__construct( $data );
+	}
 
 	/**
-	 * Renders page template.
-	 *
-	 * @since 1.0.0
+	 * Registers additional hooks.
 	 *
 	 * @access protected
 	 */
-	protected function _toHTML() {
-		echo '<!DOCTYPE html>';
-		echo '<html>';
-			echo '<head>';
-				echo '<script type="text/javascript">';
-					echo '(function() {';
-		if ( empty( $this->message ) ) {
-			echo 'var win = window.dialogArguments || opener || parent || top;';
-			echo 'if (win.visualizer) {';
-			echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
-			echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
-			echo 'win.visualizer.update();';
-			echo '}';
-
-			// added by Ash/Upwork
-			if ( VISUALIZER_PRO ) {
-				global $Visualizer_Pro;
-				$Visualizer_Pro->_addUpdateHook( $this->series, $this->data );
-			}
-		} else {
-			echo 'alert("', $this->message, '");';
+	protected function hooks() {
+		if ( $this->_library === 'google' ) {
+			add_filter( 'visualizer_assets_render', array( $this, 'load_google_assets' ), 10, 2 );
 		}
-					echo '})();';
-				echo '</script>';
-			echo '</head>';
-			echo '<body></body>';
-		echo '</html>';
 	}
+
+	function load_google_assets( $deps, $is_frontend ) {
+		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+		wp_register_script(
+			'visualizer-render-google-lib',
+			VISUALIZER_ABSURL . 'js/render-google.js',
+			array(
+				'google-jsapi-old',
+			),
+			Visualizer_Plugin::VERSION,
+			true
+		);
+
+		return array_merge( 
+			$deps,
+			array( 'visualizer-render-google-lib' )
+		);
+
+	}
+
 
 }

@@ -49,6 +49,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		echo '<div id="canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
+		echo $this->custom_css;
 	}
 
 	/**

@@ -24,7 +24,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sidebar_Columnar {
+class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar {
 
 	/**
 	 * Constructor.
@@ -35,9 +35,10 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 	 * @param array $data The data what has to be associated with this render.
 	 */
 	public function __construct( $data = array() ) {
-		parent::__construct( $data );
+		$this->_library	= 'datatables';
 		$this->_includeCurveTypes = false;
-		$this->_is_google_chart = false;
+
+		parent::__construct( $data );
 	}
 
 	/**
@@ -46,11 +47,34 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 	 * @access protected
 	 */
 	protected function hooks() {
-		$this->load_assets();
+		if ( $this->_library === 'datatables' ) {
+			add_filter( 'visualizer_assets_render', array( $this, 'load_assets' ), 10, 2 );
+		}
 	}
 
-	public function load_assets() {
-		error_log("yeah");
+	/**
+	 * Registers assets.
+	 *
+	 * @access public
+	 */
+	function load_assets( $deps, $is_frontend ) {
+		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );	
+		wp_enqueue_style( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css', array(), Visualizer_Plugin::VERSION );	
+
+		wp_register_script(
+			'visualizer-render-datatables-lib',
+			VISUALIZER_ABSURL . 'js/render-datatables.js',
+			array(
+				'visualizer-datatables',
+			),
+			Visualizer_Plugin::VERSION,
+			true
+		);
+
+		return array_merge( 
+			$deps,
+			array( 'visualizer-render-datatables-lib' )
+		);
 	}
 
 	/**
@@ -63,10 +87,8 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 	protected function _toHTML() {
 		$this->_supportsAnimation = false;
 		$this->_renderGeneralSettings();
-		$this->_renderColumnarSettings();
+		$this->_renderTableSettings();
 		$this->_renderSeriesSettings();
-		$this->_renderViewSettings();
-		$this->_renderAdvancedSettings();
 	}
 
 	/**
@@ -96,15 +118,15 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 	 *
 	 * @access protected
 	 */
-	protected function _renderColumnarSettings() {
+	protected function _renderTableSettings() {
 		self::_renderGroupStart( esc_html__( 'Table Settings', 'visualizer' ) );
 			self::_renderSectionStart();
 
 				self::_renderCheckboxItem(
 					esc_html__( 'Enable Pagination', 'visualizer' ),
-					'pagination',
-					$this->pagination,
-					1,
+					'paging_bool',
+					$this->paging_bool,
+					'true',
 					esc_html__( 'To enable paging through the data.', 'visualizer' )
 				);
 
@@ -112,119 +134,82 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 
 				self::_renderTextItem(
 					esc_html__( 'Number of rows per page', 'visualizer' ),
-					'pageSize',
-					$this->pageSize,
+					'pageLength',
+					$this->pageLength,
 					esc_html__( 'The number of rows in each page, when paging is enabled.', 'visualizer' ),
 					'10'
 				);
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
+				self::_renderSelectItem(
+					esc_html__( 'Pagination type', 'visualizer' ),
+					'pagingType',
+					$this->pagingType,
+					array(
+						'numbers'  => esc_html__( 'Page number buttons only', 'visualizer' ),
+						'simple'  => esc_html__( '\'Previous\' and \'Next\' buttons only', 'visualizer' ),
+						'simple_numbers'  => esc_html__( '\'Previous\' and \'Next\' buttons, plus page numbers', 'visualizer' ),
+						'full'  => esc_html__( '\'First\', \'Previous\', \'Next\' and \'Last\' buttons', 'visualizer' ),
+						'full_numbers'  => esc_html__( '\'First\', \'Previous\', \'Next\' and \'Last\' buttons, plus page numbers', 'visualizer' ),
+						'first_last_numbers'  => esc_html__( '\'First\' and \'Last\' buttons, plus page numbers', 'visualizer' ),
+					),
+					esc_html__( 'Determines what type of pagination options to show.', 'visualizer' )
+				);
+
+				do_action( 'visualizer_chart_settings', __CLASS__, $this->_data, 'pagination' );
+
+				echo '<div class="viz-section-delimiter section-delimiter"></div>';
+
+				self::_renderCheckboxItem(
+					esc_html__( 'Scroll Collapse', 'visualizer' ),
+					'scrollCollapse_bool',
+					$this->scrollCollapse_bool,
+					'true',
+					esc_html__( 'Allow the table to reduce in height when a limited number of rows are shown', 'visualizer' )
+				);
+
+				echo '<div class="viz-section-delimiter section-delimiter"></div>';
+
 				self::_renderCheckboxItem(
 					esc_html__( 'Disable Sort', 'visualizer' ),
-					'sort',
-					$this->sort,
-					'disable',
+					'ordering_bool',
+					$this->ordering_bool,
+					'false',
 					esc_html__( 'To disable sorting on columns.', 'visualizer' )
 				);
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
-				self::_renderTextItem(
-					esc_html__( 'Freeze Columns', 'visualizer' ),
-					'frozenColumns',
-					$this->frozenColumns,
-					esc_html__( 'The number of columns from the left that will be frozen.', 'visualizer' ),
-					'',
-					'number',
-					array(
-						'min' => 0,
-					)
+				self::_renderCheckboxItem(
+					esc_html__( 'Freeze Header/Footer', 'visualizer' ),
+					'fixedHeader_bool',
+					$this->fixedHeader_bool,
+					'true',
+					esc_html__( 'Freeze the header and footer.', 'visualizer' )
 				);
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
 				self::_renderCheckboxItem(
-					esc_html__( 'Allow HTML', 'visualizer' ),
-					'allowHtml',
-					$this->allowHtml,
-					1,
-					esc_html__( 'If enabled, formatted values of cells that include HTML tags will be rendered as HTML.', 'visualizer' )
+					esc_html__( 'Responsive table?', 'visualizer' ),
+					'responsive_bool',
+					$this->responsive_bool,
+					'true',
+					esc_html__( 'Enable the table to be responsive.', 'visualizer' )
 				);
 
-				echo '<div class="viz-section-delimiter section-delimiter"></div>';
-
-				self::_renderCheckboxItem(
-					esc_html__( 'Right to Left table', 'visualizer' ),
-					'rtlTable',
-					$this->rtlTable,
-					1,
-					esc_html__( 'Adds basic support for right-to-left languages.', 'visualizer' )
-				);
+				do_action( 'visualizer_chart_settings', __CLASS__, $this->_data, 'table' );
 
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 
 		self::_renderGroupStart( esc_html__( 'Row/Cell Settings', 'visualizer' ) );
-			self::_renderSectionStart( esc_html__( 'Header Row', 'visualizer' ) );
-				self::_renderColorPickerItem(
-					esc_html__( 'Background Color', 'visualizer' ),
-					'customcss[headerRow][background-color]',
-					isset( $this->customcss['headerRow']['background-color'] ) ? $this->customcss['headerRow']['background-color'] : null,
-					null
-				);
-
-				self::_renderColorPickerItem(
-					esc_html__( 'Color', 'visualizer' ),
-					'customcss[headerRow][color]',
-					isset( $this->customcss['headerRow']['color'] ) ? $this->customcss['headerRow']['color'] : null,
-					null
-				);
-
-				self::_renderTextItem(
-					esc_html__( 'Text Orientation', 'visualizer' ),
-					'customcss[headerRow][transform]',
-					isset( $this->customcss['headerRow']['transform'] ) ? $this->customcss['headerRow']['transform'] : null,
-					esc_html__( 'In degrees.', 'visualizer' ),
-					'',
-					'number',
-					array(
-						'min' => -180,
-						'max' => 180,
-					)
-				);
-			self::_renderSectionEnd();
-
-			self::_renderSectionStart( esc_html__( 'Table Row', 'visualizer' ) );
-				self::_renderColorPickerItem(
-					esc_html__( 'Background Color', 'visualizer' ),
-					'customcss[tableRow][background-color]',
-					isset( $this->customcss['tableRow']['background-color'] ) ? $this->customcss['tableRow']['background-color'] : null,
-					null
-				);
-
-				self::_renderColorPickerItem(
-					esc_html__( 'Color', 'visualizer' ),
-					'customcss[tableRow][color]',
-					isset( $this->customcss['tableRow']['color'] ) ? $this->customcss['tableRow']['color'] : null,
-					null
-				);
-
-				self::_renderTextItem(
-					esc_html__( 'Text Orientation', 'visualizer' ),
-					'customcss[tableRow][transform]',
-					isset( $this->customcss['tableRow']['transform'] ) ? $this->customcss['tableRow']['transform'] : null,
-					esc_html__( 'In degrees.', 'visualizer' ),
-					'',
-					'number',
-					array(
-						'min' => -180,
-						'max' => 180,
-					)
-				);
-			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Odd Table Row', 'visualizer' ) );
+				
+				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
+
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
 					'customcss[oddTableRow][background-color]',
@@ -253,83 +238,28 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 				);
 			self::_renderSectionEnd();
 
-			self::_renderSectionStart( esc_html__( 'Selected Table Row', 'visualizer' ) );
+			self::_renderSectionStart( esc_html__( 'Even Table Row', 'visualizer' ) );
+
+				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
+
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
-					'customcss[selectedTableRow][background-color]',
-					isset( $this->customcss['selectedTableRow']['background-color'] ) ? $this->customcss['selectedTableRow']['background-color'] : null,
+					'customcss[evenTableRow][background-color]',
+					isset( $this->customcss['evenTableRow']['background-color'] ) ? $this->customcss['evenTableRow']['background-color'] : null,
 					null
 				);
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Color', 'visualizer' ),
-					'customcss[selectedTableRow][color]',
-					isset( $this->customcss['selectedTableRow']['color'] ) ? $this->customcss['selectedTableRow']['color'] : null,
+					'customcss[evenTableRow][color]',
+					isset( $this->customcss['evenTableRow']['color'] ) ? $this->customcss['evenTableRow']['color'] : null,
 					null
 				);
 
 				self::_renderTextItem(
 					esc_html__( 'Text Orientation', 'visualizer' ),
-					'customcss[selectedTableRow][transform]',
-					isset( $this->customcss['selectedTableRow']['transform'] ) ? $this->customcss['selectedTableRow']['transform'] : null,
-					esc_html__( 'In degrees.', 'visualizer' ),
-					'',
-					'number',
-					array(
-						'min' => -180,
-						'max' => 180,
-					)
-				);
-			self::_renderSectionEnd();
-
-			self::_renderSectionStart( esc_html__( 'Hover Table Row', 'visualizer' ) );
-				self::_renderColorPickerItem(
-					esc_html__( 'Background Color', 'visualizer' ),
-					'customcss[hoverTableRow][background-color]',
-					isset( $this->customcss['hoverTableRow']['background-color'] ) ? $this->customcss['hoverTableRow']['background-color'] : null,
-					null
-				);
-
-				self::_renderColorPickerItem(
-					esc_html__( 'Color', 'visualizer' ),
-					'customcss[hoverTableRow][color]',
-					isset( $this->customcss['hoverTableRow']['color'] ) ? $this->customcss['hoverTableRow']['color'] : null,
-					null
-				);
-
-				self::_renderTextItem(
-					esc_html__( 'Text Orientation', 'visualizer' ),
-					'customcss[hoverTableRow][transform]',
-					isset( $this->customcss['hoverTableRow']['transform'] ) ? $this->customcss['hoverTableRow']['transform'] : null,
-					esc_html__( 'In degrees.', 'visualizer' ),
-					'',
-					'number',
-					array(
-						'min' => -180,
-						'max' => 180,
-					)
-				);
-			self::_renderSectionEnd();
-
-			self::_renderSectionStart( esc_html__( 'Header Cell', 'visualizer' ) );
-				self::_renderColorPickerItem(
-					esc_html__( 'Background Color', 'visualizer' ),
-					'customcss[headerCell][background-color]',
-					isset( $this->customcss['headerCell']['background-color'] ) ? $this->customcss['headerCell']['background-color'] : null,
-					null
-				);
-
-				self::_renderColorPickerItem(
-					esc_html__( 'Color', 'visualizer' ),
-					'customcss[headerCell][color]',
-					isset( $this->customcss['headerCell']['color'] ) ? $this->customcss['headerCell']['color'] : null,
-					null
-				);
-
-				self::_renderTextItem(
-					esc_html__( 'Text Orientation', 'visualizer' ),
-					'customcss[headerCell][transform]',
-					isset( $this->customcss['headerCell']['transform'] ) ? $this->customcss['headerCell']['transform'] : null,
+					'customcss[evenTableRow][transform]',
+					isset( $this->customcss['evenTableRow']['transform'] ) ? $this->customcss['evenTableRow']['transform'] : null,
 					esc_html__( 'In degrees.', 'visualizer' ),
 					'',
 					'number',
@@ -341,6 +271,9 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Table Cell', 'visualizer' ) );
+
+				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
+
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
 					'customcss[tableCell][background-color]',
@@ -369,6 +302,8 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 				);
 			self::_renderSectionEnd();
 
+			do_action( 'visualizer_chart_settings', __CLASS__, $this->_data, 'style' );
+
 		self::_renderGroupEnd();
 	}
 
@@ -392,7 +327,7 @@ class Visualizer_Render_Sidebar_Type_Html_Table extends Visualizer_Render_Sideba
 	 * @access protected
 	 */
 	protected function _renderSeriesSettings() {
-		parent::_renderSeriesSettings();
+		
 	}
 
 }
