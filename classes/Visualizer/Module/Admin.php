@@ -395,8 +395,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				break;
 			default:
 				// remove the option to create a Google Table chart.
+				$deprecated[]   = 'table';
+
+				// rename the new table chart type.
 				if ( self::hasChartType( 'table' ) ) {
-					$deprecated[]   = 'table';
 					if ( $get2Darray ) {
 						$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
 					} else {
