@@ -73,14 +73,16 @@
         };
         $.extend( settings, { select } ); // jshint ignore:line
 
+        var stripe = ['', ''];
+
         // in preview mode, cssClassNames will not exist when a color is changed.
         if(typeof chart.settings['cssClassNames'] !== 'undefined'){
             if(typeof chart.settings['cssClassNames']['oddTableRow'] !== 'undefined'){
-                $.extend($.fn.dataTable.ext.classes, { sStripeOdd: chart.settings['cssClassNames']['oddTableRow'] } );
+                stripe[0] = chart.settings['cssClassNames']['oddTableRow'];
             }
 
             if(typeof chart.settings['cssClassNames']['evenTableRow'] !== 'undefined'){
-                $.extend($.fn.dataTable.ext.classes, { sStripeEven: chart.settings['cssClassNames']['evenTableRow'] } );
+                stripe[1] = chart.settings['cssClassNames']['evenTableRow'];
             }
 
             if(typeof chart.settings['cssClassNames']['selectedTableItem'] !== 'undefined'){
@@ -123,7 +125,9 @@
         table.DataTable( {
             data: rows,
             columns: cols,
+            stripeClasses: stripe,
         } );
+
     }
 
     function render(v) {

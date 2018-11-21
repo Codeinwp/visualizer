@@ -519,4 +519,24 @@ class Visualizer_Module {
 		return $property . ': ' . $value;
 	}
 
+	/**
+	 * Determines if charts have been created of the particular chart type.
+	 */
+	protected static function hasChartType( $type ) {
+		$args = array(
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+			'fields'        => 'ids',
+			'post_status'   => 'publish',
+			'meta_query'    => array(
+				array(
+					'key'       => Visualizer_Plugin::CF_CHART_TYPE,
+					'value'     => $type,
+				),
+			),
+		);
+
+		$q = new WP_Query( $args );
+		return $q->found_posts > 0;
+	}
+
 }

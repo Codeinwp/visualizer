@@ -53,7 +53,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		parent::__construct( $plugin );
 		$this->_addAction( 'load-post.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'load-post-new.php', 'enqueueMediaScripts' );
-		$this->_addAction( 'admin_footer', 'renderTempaltes' );
+		$this->_addAction( 'admin_footer', 'renderTemplates' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts', null, 8 );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
@@ -278,7 +278,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access private
 	 * @return array The associated array of chart types with localized names.
 	 */
-	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false, $add_select = false ) {
+	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false, $add_select = false, $where = null ) {
 		$additional = array();
 		if ( $add_select ) {
 			$additional['select'] = array(
@@ -372,6 +372,45 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$types = $doubleD;
 		}
 
+		return self::handleDeprecatedCharts( $types, $enabledOnly, $get2Darray, $where );
+	}
+
+	/**
+	 * Handle (soon-to-be) deprecated charts.
+	 */
+	private static function handleDeprecatedCharts( $types, $enabledOnly, $get2Darray, $where ) {
+		$deprecated = array();
+
+		switch ( $where ) {
+			case 'library':
+				// if the user has a Google Table chart, show it as deprecated otherwise remove the option from the library.
+				if ( ! self::hasChartType( 'table' ) ) {
+					$deprecated[]   = 'table';
+					if ( $get2Darray ) {
+						$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
+					} else {
+						$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
+					}
+				}
+				break;
+			default:
+				// remove the option to create a Google Table chart.
+				if ( self::hasChartType( 'table' ) ) {
+					$deprecated[]   = 'table';
+					if ( $get2Darray ) {
+						$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
+					} else {
+						$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
+					}
+				}
+		}
+
+		if ( $deprecated ) {
+			foreach ( $deprecated as $type ) {
+				unset( $types[ $type ] );
+			}
+		}
+
 		return $types;
 	}
 
@@ -383,7 +422,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @access public
 	 */
-	public function renderTempaltes() {
+	public function renderTemplates() {
 		global $pagenow;
 		if ( 'post.php' != $pagenow && 'post-new.php' != $pagenow ) {
 			return;
@@ -628,7 +667,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render             = new Visualizer_Render_Library();
 		$render->charts     = $charts;
 		$render->type       = $filter;
-		$render->types      = self::_getChartTypesLocalized();
+		$render->types      = self::_getChartTypesLocalized( false, false, false, true );
 		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
