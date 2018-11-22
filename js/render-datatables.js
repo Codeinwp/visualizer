@@ -127,7 +127,7 @@
             columns: cols,
             stripeClasses: stripe,
         } );
-
+        $('#canvas .loader').remove();
     }
 
     function render(v) {
