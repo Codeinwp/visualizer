@@ -8,9 +8,9 @@
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
-    WordPress Available:  yes
-    Requires License:    no
-    Pro Slug:    visualizer-pro
+	WordPress Available:  yes
+	Requires License:    no
+	Pro Slug:    visualizer-pro
 	License URI: http://www.opensource.org/licenses/gpl-license.php
 */
 
@@ -84,6 +84,15 @@ function visualizer_launch() {
 
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
+
+	// instantiate Gutenberg block
+	add_action(
+		'plugins_loaded', function () {
+			if ( function_exists( 'register_block_type' ) ) {
+				Visualizer_Gutenberg_Block::get_instance();
+			}}
+	);
+
 	// set general modules
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
