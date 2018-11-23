@@ -66,20 +66,20 @@ class Visualizer_Gutenberg_Block {
 	 * Enqueue front end and editor JavaScript and CSS
 	 */
 	public function enqueue_gutenberg_scripts() {
-		$blockPath = VISUALIZER_ABSURL . '/classes/Visualizer/Gutenberg/build/block.js';
-		$handsontableJS = VISUALIZER_ABSURL . '/classes/Visualizer/Gutenberg/build/handsontable.js';
-		$stylePath = VISUALIZER_ABSURL . '/classes/Visualizer/Gutenberg/build/block.css';
-		$handsontableCSS = VISUALIZER_ABSURL . '/classes/Visualizer/Gutenberg/build/handsontable.css';
+		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
+		$handsontableJS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js';
+		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css';
+		$handsontableCSS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css';
 
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
-			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
+			$version = filemtime( VISUALIZER_ABSPATH . 'classes/Visualizer/Gutenberg/build/block.js' );
 		} else {
 			$version = $this->version;
 		}
 
 		// Enqueue the bundled block JS file
 		wp_enqueue_script( 'handsontable', $handsontableJS );
-		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable' ), $version );
+		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable' ), $version, true );
 
 		$type = 'community';
 
