@@ -290,6 +290,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$types = array_merge(
 			$additional,
 			array(
+				'dataTable' => array(
+					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
+					'enabled' => true,
+				),
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie', 'visualizer' ),
 					'enabled' => true,
@@ -324,10 +328,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 				'candlestick' => array(
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
-					'enabled' => true,
-				),
-				'dataTable' => array(
-					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
 					'enabled' => true,
 				),
 				// pro types
