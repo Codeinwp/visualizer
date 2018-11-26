@@ -5,9 +5,11 @@
     var all_charts;
 
     function renderChart(id, v) {
-        var chart, render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
+        renderSpecificChart(id, all_charts[id], v);
+    }
 
-        chart = all_charts[id];
+    function renderSpecificChart(id, chart, v) {
+        var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
 
         if(chart.library !== 'datatables'){
             return;
@@ -54,6 +56,7 @@
 
         if(typeof v.page_type !== 'undefined'){
             switch(v.page_type){
+                case 'post':
                 case 'library':
                     $.extend( settings, { 
                             scrollX: 150,
@@ -146,6 +149,10 @@
     $('body').on('visualizer:render:chart:start', function(event, v){
         all_charts = v.charts;
         render(v);
+    });
+
+    $('body').on('visualizer:render:specificchart:start', function(event, v){
+        renderSpecificChart(v.id, v.chart, v.v);
     });
 
 

@@ -10,9 +10,12 @@ var __visualizer_chart_images   = [];
     var all_charts, objects;
 
 	function renderChart(id) {
-		var chart, render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
+        renderSpecificChart(id, all_charts[id]);
+    }
 
-		chart = all_charts[id];
+    function renderSpecificChart(id, chart) {
+        var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
+
         if(chart.library !== 'google'){
             return;
         }
@@ -214,7 +217,7 @@ var __visualizer_chart_images   = [];
             try{
                 var img = render.getImageURI();
                 __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
-                jQuery('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+                $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
             }catch(error){
                 console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
             }
@@ -245,7 +248,7 @@ var __visualizer_chart_images   = [];
         }
 
         var arr = id.split('-');
-        jQuery('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: index});
+        $('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: index});
 
     }
 
@@ -253,7 +256,7 @@ var __visualizer_chart_images   = [];
         if (settings.manual) {
             try{
                 var options = JSON.parse(settings.manual);
-                jQuery.extend(settings, options);
+                $.extend(settings, options);
                 delete settings.manual;
             }catch(error){
                 console.error("Error while adding manual configuration override " + settings.manual);
@@ -316,7 +319,7 @@ var __visualizer_chart_images   = [];
         });
 	}
 
-    jQuery('body').on('visualizer:render:chart:start', function(event, v){
+    $('body').on('visualizer:render:chart:start', function(event, v){
         objects = {};
         google.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
         google.charts.setOnLoadCallback(function() {
@@ -326,5 +329,10 @@ var __visualizer_chart_images   = [];
         });
     });
 
+    $('body').on('visualizer:render:specificchart:start', function(event, v){
+        objects = {};
+        gv = google.visualization;
+        renderSpecificChart(v.id, v.chart);
+    });
 
 })(jQuery);

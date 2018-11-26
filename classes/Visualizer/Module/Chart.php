@@ -63,6 +63,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	/**
 	 * Fetches charts from database.
 	 *
+	 * This method is also called from the media pop-up (classic editor: create a post and add chart from insert content).
+	 *
 	 * @since 1.0.0
 	 *
 	 * @access public
@@ -104,6 +106,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$chart            = $query->next_post();
 			$chart_data       = $this->_getChartArray( $chart );
 			$chart_data['id'] = $chart->ID;
+			$chart_data['library'] = $this->load_chart_type( $chart->ID );
+			$css                = '';
+			$settings           = $chart_data['settings'];
+			$arguments          = $this->get_inline_custom_css( 'visualizer-chart-' . $chart->ID, $settings );
+			if ( ! empty( $arguments ) ) {
+				$css        = $arguments[0];
+				$settings   = $arguments[1];
+			}
+			$chart_data['settings'] = $settings;
+			$chart_data['css'] = $css;
 			$charts[]         = $chart_data;
 		}
 		self::_sendResponse(

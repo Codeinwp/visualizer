@@ -366,6 +366,10 @@ div.viz-group-content .viz-group-description {
 	float: right;
 }
 
+#toolbar .push-left {
+	float: left;
+}
+
 .toolbar-div a {
 	float: left;
 }

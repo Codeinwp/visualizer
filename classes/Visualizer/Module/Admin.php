@@ -213,9 +213,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		global $typenow;
 		if ( post_type_supports( $typenow, 'editor' ) ) {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
-			wp_enqueue_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array( 'media-editor' ), null, true );
-			wp_enqueue_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
-			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', array( 'visualizer-google-jsapi-old' ), Visualizer_Plugin::VERSION, true );
+
+			// Load all the assets for the different libraries we support.
+			$deps   = Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) );
+			$deps   += Visualizer_Render_Sidebar_Type_DataTable::enqueue_assets( array( 'media-editor' ) );
+
+			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', $deps, Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-collection', VISUALIZER_ABSURL . 'js/media/collection.js', array( 'visualizer-media-model' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-controller', VISUALIZER_ABSURL . 'js/media/controller.js', array( 'visualizer-media-collection' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-view', VISUALIZER_ABSURL . 'js/media/view.js', array( 'visualizer-media-controller' ), Visualizer_Plugin::VERSION, true );
@@ -392,6 +395,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
 					}
 				}
+
+				// if a user has a Gauge/Candlestick chart, then let them keep using it.
+				if ( ! VISUALIZER_PRO ) {
+					if ( ! self::hasChartType( 'gauge' ) ) {
+						$deprecated[]   = 'gauge';
+					}
+					if ( ! self::hasChartType( 'candlestick' ) ) {
+						$deprecated[]   = 'candlestick';
+					}
+				}
 				break;
 			default:
 				// remove the option to create a Google Table chart.
@@ -403,6 +416,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
 					} else {
 						$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
+					}
+				}
+
+				// if a user has a Gauge/Candlestick chart, then let them keep using it.
+				if ( ! VISUALIZER_PRO ) {
+					if ( ! self::hasChartType( 'gauge' ) ) {
+						$deprecated[]   = 'gauge';
+					}
+					if ( ! self::hasChartType( 'candlestick' ) ) {
+						$deprecated[]   = 'candlestick';
 					}
 				}
 		}

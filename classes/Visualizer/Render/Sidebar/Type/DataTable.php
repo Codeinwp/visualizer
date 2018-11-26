@@ -26,6 +26,23 @@
  */
 class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar {
 
+
+	/**
+	 * The URL for the JavaScript file.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private static $_js     = '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js';
+
+	/**
+	 * The URL for the CSS file.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private static $_css    = '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css';
+
 	/**
 	 * Constructor.
 	 *
@@ -58,8 +75,8 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @access public
 	 */
 	function load_assets( $deps, $is_frontend ) {
-		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
-		wp_enqueue_style( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_register_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );
 
 		wp_register_script(
 			'visualizer-render-datatables-lib',
@@ -78,6 +95,16 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	}
 
 	/**
+	 * Enqueue assets.
+	 */
+	public static function enqueue_assets( $deps = array() ) {
+		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );
+		wp_enqueue_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_script( 'visualizer-render-datatables-lib', VISUALIZER_ABSURL . 'js/render-datatables.js', array_merge( $deps, array( 'jquery-ui-core', 'visualizer-datatables' ) ), Visualizer_Plugin::VERSION, true );
+		return 'visualizer-render-datatables-lib';
+	}
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0
@@ -89,6 +116,22 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 		$this->_renderGeneralSettings();
 		$this->_renderTableSettings();
 		$this->_renderSeriesSettings();
+		$this->_renderAdvancedSettings();
+	}
+
+	/**
+	 * Renders chart advanced settings group.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAdvancedSettings() {
+		self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) );
+			self::_renderSectionStart();
+				self::_renderSectionDescription( esc_html__( 'Configure frontend actions here.', 'visualizer' ) );
+			self::_renderSectionEnd();
+
+			$this->_renderActionSettings();
+		self::_renderGroupEnd();
 	}
 
 	/**
