@@ -125,8 +125,6 @@
 
         $.extend( $.fn.dataTable.defaults, settings );
 
-console.log(settings);
-
         // allow user to extend the settings.
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
 
