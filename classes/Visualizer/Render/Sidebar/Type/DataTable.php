@@ -177,8 +177,8 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 
 				self::_renderTextItem(
 					esc_html__( 'Number of rows per page', 'visualizer' ),
-					'pageLength',
-					$this->pageLength,
+					'pageLength_int',
+					$this->pageLength_int,
 					esc_html__( 'The number of rows in each page, when paging is enabled.', 'visualizer' ),
 					'10'
 				);

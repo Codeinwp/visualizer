@@ -51,7 +51,7 @@
             searching: false,
             ordering: true,
             select: false,
-            lengthChange: false
+            lengthChange: false,
         };
 
         if(typeof v.page_type !== 'undefined'){
@@ -99,7 +99,7 @@
             var valoo = chart.settings[i];
 
             // remove the type suffix to get the name of the setting.
-            i = i.replace(/_bool/g, '');
+            i = i.replace(/_bool/g, '').replace(/_int/g, '');
 
             switch(valoo){
                 case 'true':
@@ -108,6 +108,10 @@
                 case 'false':
                     valoo = false;
                     break;
+                default:
+                    if(parseInt(valoo) > 0){
+                        valoo = parseInt(valoo);
+                    }
             }
 
             // if the setting name has an '_' this means it is a sub-setting e.g. select_items means { select: { items: ... } }.
@@ -121,6 +125,8 @@
 
         $.extend( $.fn.dataTable.defaults, settings );
 
+console.log(settings);
+
         // allow user to extend the settings.
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
 
@@ -130,7 +136,7 @@
             columns: cols,
             stripeClasses: stripe,
         } );
-        $('#canvas .loader').remove();
+        $('.loader').remove();
     }
 
     function render(v) {
