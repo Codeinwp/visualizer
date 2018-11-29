@@ -227,7 +227,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</li>
 
 						<?php
-						if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'db-query' ) !== false ) {
 							$save_query = add_query_arg(
 								array(
 									'action' => Visualizer_Plugin::ACTION_SAVE_DB_QUERY,
@@ -278,7 +277,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							</div>
 							</div>
 						</li>
-						<?php } ?>
 
 						<?php
 							// we will auto-open the manual data feature but only when pro is active and source is empty.
@@ -498,14 +496,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access private
 	 */
 	private function add_additional_content() {
-		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'db-query' ) !== false ) {
-			$source = strtolower( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SOURCE, true ) );
-			$query = '';
-			if ( 'visualizer_source_query' === $source ) {
-				$query = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_QUERY, true );
-			}
-			Visualizer_Render_Layout::show( 'db-query', $query );
+		$source = strtolower( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SOURCE, true ) );
+		$query = '';
+		if ( 'visualizer_source_query' === $source ) {
+			$query = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_QUERY, true );
 		}
+		Visualizer_Render_Layout::show( 'db-query', $query );
 	}
 
 }

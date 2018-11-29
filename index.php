@@ -79,7 +79,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
 
 	// if x and y features are required, this value should read x,y or x|y or x;y.
-	define( 'VISUALIZER_ENABLE_BETA_FEATURES', 'db-query' );
+	define( 'VISUALIZER_ENABLE_BETA_FEATURES', '' );
 
 	// the link to pre-build queries.
 	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
