@@ -79,7 +79,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<div class='db-wizard-hints'>
 				<ul>
 					<li><?php echo sprintf( __( 'For examples of pre-built queries that you can use, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
-					<li><?php _e( 'Use Control+Space for autocomplete', 'visualizer' ); ?></li>
+					<li><?php echo sprintf( __( 'Use %1$sControl+Space%2$s for autocomplete', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
 				</ul>
 			</div>
 			<div class='db-wizard-error'></div>
