@@ -75,7 +75,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @access public
 	 */
 	function load_assets( $deps, $is_frontend ) {
-		wp_register_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_register_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
 		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );
 
 		wp_register_script(
@@ -115,7 +115,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 		$this->_supportsAnimation = false;
 		$this->_renderGeneralSettings();
 		$this->_renderTableSettings();
-		// $this->_renderColumnSettings();
+		 $this->_renderColumnSettings();
 		$this->_renderAdvancedSettings();
 	}
 
@@ -368,6 +368,74 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 			}
 		}
 		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders format field according to series type.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @access protected
+	 * @param int $index The index of the series.
+	 */
+	protected function _renderFormatField( $index = 0 ) {
+		switch ( $this->__series[ $index ]['type'] ) {
+			case 'number':
+				self::_renderTextItem(
+					esc_html__( 'Thousands Separator', 'visualizer' ),
+					'series[' . $index . '][format][thousands]',
+					isset( $this->series[ $index ]['format']['thousands'] ) ? $this->series[ $index ]['format']['thousands'] : ',',
+					null,
+					','
+				);
+				self::_renderTextItem(
+					esc_html__( 'Decimal Separator', 'visualizer' ),
+					'series[' . $index . '][format][decimal]',
+					isset( $this->series[ $index ]['format']['decimal'] ) ? $this->series[ $index ]['format']['decimal'] : '.',
+					null,
+					'.'
+				);
+				self::_renderTextItem(
+					esc_html__( 'Precision', 'visualizer' ),
+					'series[' . $index . '][format][precision]',
+					isset( $this->series[ $index ]['format']['precision'] ) ? $this->series[ $index ]['format']['precision'] : '',
+					esc_html__( 'Round values to how many decimal places?', 'visualizer' ),
+					''
+				);
+				self::_renderTextItem(
+					esc_html__( 'Prefix', 'visualizer' ),
+					'series[' . $index . '][format][prefix]',
+					isset( $this->series[ $index ]['format']['prefix'] ) ? $this->series[ $index ]['format']['prefix'] : '',
+					null,
+					''
+				);
+				self::_renderTextItem(
+					esc_html__( 'Suffix', 'visualizer' ),
+					'series[' . $index . '][format][suffix]',
+					isset( $this->series[ $index ]['format']['suffix'] ) ? $this->series[ $index ]['format']['suffix'] : '',
+					null,
+					''
+				);
+				break;
+			case 'date':
+			case 'datetime':
+			case 'timeofday':
+				self::_renderTextItem(
+					esc_html__( 'Display Date Format', 'visualizer' ),
+					'series[' . $index . '][format][to]',
+					isset( $this->series[ $index ]['format']['to'] ) ? $this->series[ $index ]['format']['to'] : '',
+					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>' ),
+					'Do MMM YYYY'
+				);
+				self::_renderTextItem(
+					esc_html__( 'Source Date Format', 'visualizer' ),
+					'series[' . $index . '][format][from]',
+					isset( $this->series[ $index ]['format']['from'] ) ? $this->series[ $index ]['format']['from'] : '',
+					sprintf( esc_html__( 'What format is the source date in? Similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>' ),
+					'YYYY-MM-DD'
+				);
+				break;
+		}
 	}
 
 }
