@@ -65,6 +65,11 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			return false;
 		}
 
+		// impose a limit if no limit clause is provided.
+		if ( strpos( strtolower( $this->_query ), ' limit ' ) === false ) {
+			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 300 );
+		}
+
 		global $wpdb;
 		$wpdb->hide_errors();
 		// @codingStandardsIgnoreStart
