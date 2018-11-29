@@ -158,6 +158,7 @@
             return render;
         }
 
+        /* jshint ignore:start */
         switch(type){
             case 'number':
                 var parts = ['', '', '', '', ''];
@@ -186,6 +187,7 @@
                 }
                 break;
         }
+        /* jshint ignore:end */
         return render;
     }
 
@@ -214,6 +216,8 @@
 
 })(jQuery);
 
+
+/* jshint ignore:start */
 
 /**
  * Date / time formats often from back from server APIs in a format that you
@@ -331,3 +335,5 @@ $.fn.dataTable.render.moment = function ( from, to, locale ) {
  
  
 }));
+
+/* jshint ignore:end */
