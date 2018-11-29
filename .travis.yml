@@ -74,3 +74,4 @@ after_deploy:
 - ". ./bin/deploy.sh"
 after_failure:
 - cat "logs/phpcs.log"
+- cat "logs/jslogs.log"
