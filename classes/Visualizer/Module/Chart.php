@@ -326,10 +326,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return;
 		}
 
-		if ( strpos( VISUALIZER_ENABLE_BETA_FEATURES, 'db-query' ) === false ) {
-			return;
-		}
-
 		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping();
 
 		// data tables assets.
