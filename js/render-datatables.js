@@ -9,7 +9,7 @@
     }
 
     function renderSpecificChart(id, chart, v) {
-        var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
+        var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter, type, rows, cols;
 
         if(chart.library !== 'datatables'){
             return;
@@ -25,24 +25,6 @@
 
         if($('#' + id).find('table.dataTable').length === 0){
             $('#' + id).append($('<table class="dataTable table table-striped"></table>'));
-        }
-
-        var cols = [];
-        for (j = 0; j < series.length; j++) {
-            var col = { title: series[j].label, data: series[j].label, type: series[j].type };
-            if(typeof chart.settings['cssClassNames'] !== 'undefined' && typeof chart.settings['cssClassNames']['tableCell'] !== 'undefined'){
-                col['className'] = chart.settings['cssClassNames']['tableCell'];
-            }
-            cols.push(col);
-        }
-
-        var rows = [];
-        for (i = 0; i < data.length; i++) {
-            row = [];
-            for (j = 0; j < series.length; j++) {
-                row[ series[j].label ] = data[i][j];
-            }
-            rows.push(row);
         }
 
         settings = {
@@ -125,6 +107,39 @@
 
         $.extend( $.fn.dataTable.defaults, settings );
 
+        cols = [];
+        for (j = 0; j < series.length; j++) {
+            type = series[j].type;
+            switch(type){
+                case 'number':
+                    type = 'num';
+                    break;
+                case 'date':
+                case 'datetime':
+                case 'timeofday':
+                    type = 'date';
+                    break;
+            }
+            var col = { title: series[j].label, data: series[j].label, type: type };
+            if(typeof chart.settings['cssClassNames'] !== 'undefined' && typeof chart.settings['cssClassNames']['tableCell'] !== 'undefined'){
+                col['className'] = chart.settings['cssClassNames']['tableCell'];
+            }
+            cols.push(col);
+        }
+
+        rows = [];
+        for (i = 0; i < data.length; i++) {
+            row = [];
+            for (j = 0; j < series.length; j++) {
+                var datum = data[i][j];
+                if(typeof settings.series[j] !== 'undefined' && typeof settings.series[j].format !== 'undefined'){
+                    datum = formatData(data[i][j], settings.series[j].type, settings.series[j].format);
+                }
+                row[ series[j].label ] = datum;
+            }
+            rows.push(row);
+        }
+
         // allow user to extend the settings.
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
 
@@ -135,6 +150,18 @@
             stripeClasses: stripe,
         } );
         $('.loader').remove();
+    }
+
+    function formatData(datum, type, format){
+        switch(type){
+            case 'number':
+                break;
+            case 'date':
+            case 'datetime':
+            case 'timeofday':
+                break;
+        }
+        return datum;
     }
 
     function render(v) {

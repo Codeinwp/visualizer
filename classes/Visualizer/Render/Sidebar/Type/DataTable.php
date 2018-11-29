@@ -115,7 +115,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 		$this->_supportsAnimation = false;
 		$this->_renderGeneralSettings();
 		$this->_renderTableSettings();
-		$this->_renderSeriesSettings();
+		// $this->_renderColumnSettings();
 		$this->_renderAdvancedSettings();
 	}
 
@@ -350,17 +350,6 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 		self::_renderGroupEnd();
 	}
 
-	/**
-	 * Renders concreate series settings.
-	 *
-	 * @since 1.4.0
-	 *
-	 * @access protected
-	 * @param int $index The series index.
-	 */
-	protected function _renderSeries( $index ) {
-		$this->_renderFormatField( $index );
-	}
 
 	/**
 	 * Renders combo series settings
@@ -369,8 +358,16 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 *
 	 * @access protected
 	 */
-	protected function _renderSeriesSettings() {
-
+	protected function _renderColumnSettings() {
+		self::_renderGroupStart( esc_html__( 'Column Settings', 'visualizer' ) );
+		for ( $i = 0, $cnt = count( $this->__series ) - 1; $i < $cnt; $i++ ) {
+			if ( ! empty( $this->__series[ $i ]['label'] ) ) {
+				self::_renderSectionStart( esc_html( $this->__series[ $i ]['label'] ), false );
+					$this->_renderFormatField( $i );
+				self::_renderSectionEnd();
+			}
+		}
+		self::_renderGroupEnd();
 	}
 
 }
