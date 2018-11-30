@@ -68,8 +68,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			),
 			admin_url( 'admin-ajax.php' )
 		);
+
+		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		?>
-		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>"></span>
+		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-type="<?php echo $type; ?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
 		<ul class="viz-group-wrapper full-height">
 			<li class="viz-group viz-group-category open" id="vz-chart-source">
