@@ -23,9 +23,10 @@
             return;
         }
 
-        if($('#' + id).find('table.dataTable').length === 0){
-            $('#' + id).append($('<table class="dataTable table table-striped"></table>'));
+        if($('#' + id).find('table.visualizer-data-table').length > 0){
+            $('#' + id).empty();
         }
+        $('#' + id).append($('<table class="dataTable visualizer-data-table table table-striped"></table>'));
 
         settings = {
             destroy: true,
@@ -121,7 +122,7 @@
                     break;
             }
 
-            render = addRenderer(series[j].type, settings.series[j]);
+            render = addRenderer(series[j].type, settings.series, j);
 
             var col = { title: series[j].label, data: series[j].label, type: type, render: render };
             if(typeof chart.settings['cssClassNames'] !== 'undefined' && typeof chart.settings['cssClassNames']['tableCell'] !== 'undefined'){
@@ -143,7 +144,7 @@
         // allow user to extend the settings.
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
 
-        table = $('#' + id + ' table.dataTable');
+        table = $('#' + id + ' table.visualizer-data-table');
         table.DataTable( {
             data: rows,
             columns: cols,
@@ -152,11 +153,13 @@
         $('.loader').remove();
     }
 
-    function addRenderer(type, series){
+    function addRenderer(type, series, index){
         var render = null;
-        if(typeof series === 'undefined' || typeof series.format === 'undefined'){
+        if(typeof series === 'undefined' || typeof series[index] === 'undefined' || typeof series[index].format === 'undefined' ){
             return render;
         }
+
+        series = series[index];
 
         /* jshint ignore:start */
         switch(type){

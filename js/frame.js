@@ -19,7 +19,7 @@
 
         init_permissions();
 
-        if(visualizer.is_pro) {
+        if(typeof visualizer !== 'undefined' && visualizer.is_pro) {
             init_db_import();
         }
 

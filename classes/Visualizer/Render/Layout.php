@@ -71,6 +71,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<form id='db-query-form'>
 						<textarea name='query' class='visualizer-db-query' placeholder="<?php _e( 'Your query goes here', 'visualizer' ); ?>"><?php echo $query; ?></textarea>
 					</form>
+					<div class='db-wizard-error'></div>
 				</div>
 				<div>
 					<input type="button" class="button button-primary" id='visualizer-query-fetch' value='<?php _e( 'Show Results', 'visualizer' ); ?>'>
@@ -82,7 +83,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<li><?php echo sprintf( __( 'Use %1$sControl+Space%2$s for autocompleting keywords or tables/columns.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
 				</ul>
 			</div>
-			<div class='db-wizard-error'></div>
 			<div class='db-wizard-results'></div>
 
 		</div>
