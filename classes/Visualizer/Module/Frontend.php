@@ -157,10 +157,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access public
 	 */
 	public function enqueueScripts() {
-		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
@@ -237,14 +234,14 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
 
-		$id         = $id . '-' . rand();
-		$arguments  = array( '', $id, $settings );
 		$css        = '';
-		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );
+		$arguments  = $this->get_inline_custom_css( $id, $settings );
 		if ( ! empty( $arguments ) ) {
 			$css        = $arguments[0];
-			$settings   = $arguments[2];
+			$settings   = $arguments[1];
 		}
+
+		$library    = $this->load_chart_type( $chart->ID );
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(
@@ -252,21 +249,30 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'series'   => $series,
 			'settings' => $settings,
 			'data'     => $data,
+			'library'  => $library,
 		);
 
-		// enqueue visualizer render and update render localizations
-		wp_enqueue_script( 'visualizer-render' );
+		wp_register_script(
+			"visualizer-render-$library",
+			VISUALIZER_ABSURL . 'js/render-facade.js',
+			apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
+			Visualizer_Plugin::VERSION,
+			true
+		);
+
+		wp_enqueue_script( "visualizer-render-$library" );
 		wp_localize_script(
-			'visualizer-render',
+			"visualizer-render-$library",
 			'visualizer',
 			array(
 				'charts'        => $this->_charts,
-				'language'  => $this->get_language(),
+				'language'      => $this->get_language(),
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 				'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
 				'i10n'          => array(
 					'copied'        => __( 'Copied!', 'visualizer' ),
 				),
+				'page_type' => 'frontend',
 			)
 		);
 		wp_enqueue_style( 'visualizer-front' );

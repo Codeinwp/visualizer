@@ -291,3 +291,7 @@ input:checked + .visualizer-slider:before {
 button.media-modal-close {
 	display: none !important;
 }
+
+.dataTables_scrollBody {
+	overflow: hidden !important;
+}

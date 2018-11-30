@@ -445,4 +445,98 @@ class Visualizer_Module {
 		return $specific;
 	}
 
+	/**
+	 * Load the class for the given chart's chart type so that its assets can be loaded.
+	 */
+	protected function load_chart_type( $chart_id ) {
+		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$name   = 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
+		$class  = null;
+		if ( class_exists( $name ) ) {
+			$class  = new $name;
+		} elseif ( true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
+			$class = new $name;
+		}
+		return is_null( $class ) ? null : $class->getLibrary();
+	}
+
+	/**
+	 * Generates the inline CSS to apply to the chart and adds these classes to the settings.
+	 *
+	 * @access public
+	 * @param int   $id         The id of the chart.
+	 * @param array $settings   The settings of the chart.
+	 */
+	protected function get_inline_custom_css( $id, $settings ) {
+		$css        = '';
+
+		$arguments  = array( '', $settings );
+		if ( ! isset( $settings['customcss'] ) ) {
+			return $arguments;
+		}
+
+		$classes    = array();
+		$css        = '<style type="text/css" name="visualizer-custom-css" id="customcss-' . $id . '">';
+		foreach ( $settings['customcss'] as $name => $element ) {
+			$attributes = array();
+			foreach ( $element as $property => $value ) {
+				$attributes[]   = $this->handle_css_property( $property, $value );
+			}
+			$class_name = $id . $name;
+			$properties = implode( '; ', array_filter( $attributes ) );
+			if ( ! empty( $properties ) ) {
+				$css    .= '.' . $class_name . ' {' . $properties . ' !important;}';
+				$classes[ $name ] = $class_name;
+			}
+		}
+		$css        .= '</style>';
+
+		$settings['cssClassNames']  = $classes;
+
+		$arguments  = array( $css, $settings );
+		apply_filters_ref_array( 'visualizer_inline_css', array( &$arguments ) );
+
+		return $arguments;
+	}
+
+	/**
+	 * Handles CSS properties that might need special syntax.
+	 *
+	 * @access private
+	 * @param string $property The name of the css property.
+	 * @param string $value The value of the css property.
+	 */
+	private function handle_css_property( $property, $value ) {
+		if ( empty( $property ) || empty( $value ) ) {
+			return '';
+		}
+
+		switch ( $property ) {
+			case 'transform':
+				$value  = 'rotate(' . $value . 'deg)';
+				break;
+		}
+		return $property . ': ' . $value;
+	}
+
+	/**
+	 * Determines if charts have been created of the particular chart type.
+	 */
+	protected static function hasChartType( $type ) {
+		$args = array(
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+			'fields'        => 'ids',
+			'post_status'   => 'publish',
+			'meta_query'    => array(
+				array(
+					'key'       => Visualizer_Plugin::CF_CHART_TYPE,
+					'value'     => $type,
+				),
+			),
+		);
+
+		$q = new WP_Query( $args );
+		return $q->found_posts > 0;
+	}
+
 }
