@@ -625,6 +625,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 			// if the user has updated a chart and instead of saving it, has closed the modal. If the user refreshes, they should get the original chart.
 			$chart = $this->handleExistingRevisions( $chart->ID, $chart );
+			// refresh a "live" db query chart.
+			$chart = apply_filters( 'visualizer_schedule_refresh_chart', $chart, $chart->ID, false );
 
 			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 
@@ -639,6 +641,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			unset( $settings['height'], $settings['width'] );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
+
 			$library = $this->load_chart_type( $chart->ID );
 
 			$id         = 'visualizer-' . $chart->ID;

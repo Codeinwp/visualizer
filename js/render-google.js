@@ -173,7 +173,7 @@ var __visualizer_chart_images   = [];
         for (i = 0; i < data.length; i++) {
 			row = [];
 			for (j = 0; j < series.length; j++) {
-				if (series[j].type === 'date' || series[j].type === 'datetime') {
+				if (series[j].type === 'date' || series[j].type === 'datetime') {                  
 					date = new Date(data[i][j]);
 					data[i][j] = null;
 					if (Object.prototype.toString.call(date) === "[object Date]") {
