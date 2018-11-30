@@ -1,4 +1,11 @@
 
+ ### v3.0.12 - 2018-10-11 
+ **Changes:** 
+ * Added filter to enable users to change schedule of charts.
+* Fixed bug with line chart with timeofday column.
+* Fixed bug with scheduled charts that sometimes did not show updated data.
+* Javascript can be customized on a per user basis that will not be wiped out on update.
+ 
  ### v3.0.11 - 2018-08-15 
  **Changes:** 
  * Fixed issue with the Series Settings options for the Table Chart

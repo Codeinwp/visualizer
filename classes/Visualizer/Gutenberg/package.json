@@ -1,0 +1,43 @@
+{
+	"name": "visualizer-gutenberg-block",
+	"scripts": {
+		"dev": "cross-env BABEL_ENV=default NODE_ENV=development webpack --watch",
+		"build": "cross-env BABEL_ENV=default NODE_ENV=production webpack",
+		"lint": "eslint src"
+	},
+	"main": "src/index.js",
+	"version": "1.0.0",
+	"license": "MIT",
+	"dependencies": {
+		"@handsontable/react": "^1.1.0",
+		"classnames": "^2.2.6",
+		"deep-filter": "^1.0.2",
+		"handsontable": "^5.0.2",
+		"is-plain-object": "^2.0.4",
+		"merge": "^1.2.1",
+		"react": "16.4.1",
+		"react-google-charts": "^3.0.8",
+		"react-json-editor-ajrm": "^2.5.8"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.1.6",
+		"@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+		"@babel/plugin-transform-async-to-generator": "^7.1.0",
+		"@babel/plugin-transform-react-jsx": "^7.1.6",
+		"@babel/preset-env": "^7.1.6",
+		"autoprefixer": "^9.3.1",
+		"babel-loader": "^8.0.4",
+		"cross-env": "3.2.4",
+		"css-loader": "^1.0.1",
+		"eslint": "^5.7.0",
+		"eslint-config-wordpress": "^2.0.0",
+		"eslint-loader": "^2.1.1",
+		"eslint-plugin-react": "^7.11.1",
+		"mini-css-extract-plugin": "^0.4.4",
+		"node-sass": "^4.10.0",
+		"postcss-loader": "^3.0.0",
+		"sass-loader": "^7.1.0",
+		"webpack": "^4.25.1",
+		"webpack-cli": "^3.1.2"
+	}
+}

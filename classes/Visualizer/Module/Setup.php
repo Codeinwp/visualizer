@@ -118,6 +118,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				'label'  => 'Visualizer Charts',
 				'public' => false,
 				'supports' => array( 'revisions' ),
+				'show_in_rest'          => true,
+				'rest_base'             => 'visualizer',
+				'rest_controller_class' => 'WP_REST_Posts_Controller',
 			)
 		);
 	}

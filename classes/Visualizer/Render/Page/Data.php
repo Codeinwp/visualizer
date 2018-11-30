@@ -54,6 +54,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		echo '<div id="canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
+		echo $this->custom_css;
 	}
 
 	/**
@@ -75,8 +76,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 		// this will allow us to open the correct source tab by default.
 		$source_of_chart    = strtolower( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SOURCE, true ) );
+		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		?>
-		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>"></span>
+		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>" data-chart-type="<?php echo $type; ?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
 		<ul class="viz-group-wrapper full-height">
 			<li class="viz-group viz-group-category open" id="vz-chart-source">
@@ -347,7 +349,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				$this->$k   = $v;
 			}
 		}
-?>
+		?>
 		<li class="viz-group viz-group-category bottom-fixed sidebar-footer-link" id="vz-chart-permissions">
 			<h2><span class="dashicons dashicons-admin-users"></span><?php _e( 'Permissions', 'visualizer' ); ?></h2>
 			<div class="viz-group-header">
@@ -364,13 +366,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					),
 					remove_query_arg( 'tab', $_SERVER['REQUEST_URI'] )
 				);
-?>
+				?>
 " method="post">
 					<?php $this->permissionsSidebar(); ?>
 				</form>
 			</ul>
 		</li>
-<?php
+		<?php
 	}
 
 	/**
@@ -493,7 +495,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		}
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 		if ( isset( $this->cancel_button ) ) {
-			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-right" value="', $this->cancel_button, '">';
+			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-left" value="', $this->cancel_button, '">';
 		}
 	}
 

@@ -365,6 +365,10 @@ div.viz-group-content .viz-group-description {
 	float: right;
 }
 
+#toolbar .push-left {
+	float: left;
+}
+
 .toolbar-div a {
 	float: left;
 }
@@ -481,6 +485,10 @@ div.viz-group-content .viz-group-description {
 
 .type-box-column .type-label {
 	background-position: -600px -225px;
+}
+
+.type-box-dataTable .type-label {
+	background-position: -301px -670px;
 }
 
 .type-box-table .type-label {
