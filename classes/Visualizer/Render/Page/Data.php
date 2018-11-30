@@ -290,7 +290,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				$this->$k   = $v;
 			}
 		}
-?>
+		?>
 		<li class="viz-group viz-group-category bottom-fixed sidebar-footer-link" id="vz-chart-permissions">
 			<h2><span class="dashicons dashicons-admin-users"></span><?php _e( 'Permissions', 'visualizer' ); ?></h2>
 			<div class="viz-group-header">
@@ -307,13 +307,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					),
 					remove_query_arg( 'tab', $_SERVER['REQUEST_URI'] )
 				);
-?>
+				?>
 " method="post">
 					<?php $this->permissionsSidebar(); ?>
 				</form>
 			</ul>
 		</li>
-<?php
+		<?php
 	}
 
 	/**
