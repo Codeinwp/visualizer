@@ -417,12 +417,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			);
 			wp_enqueue_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
 			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+			wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 			wp_enqueue_script(
 				'visualizer-render',
 				VISUALIZER_ABSURL . 'js/render.js',
 				array(
 					'google-jsapi-old',
 					'visualizer-library',
+					'visualizer-customization',
 				),
 				Visualizer_Plugin::VERSION,
 				true
