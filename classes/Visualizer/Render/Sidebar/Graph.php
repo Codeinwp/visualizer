@@ -29,7 +29,7 @@
  * @since 1.0.0
  * @abstract
  */
-abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar {
+abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar_Google {
 
 	/**
 	 * Determines whether we need to render vertical gridlines options or not.

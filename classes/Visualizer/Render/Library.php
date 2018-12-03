@@ -78,6 +78,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$filterBy = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
 		}
 		// Added by Ash/Upwork
+		echo $this->custom_css;
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 		echo '<ul class="subsubsub">';
 		foreach ( $this->types as $type => $array ) {

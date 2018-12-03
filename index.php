@@ -1,16 +1,16 @@
 <?php
 
 /*
-	Plugin Name: Visualizer: Charts and Graphs Lite
+	Plugin Name: Visualizer: Tables and Charts Manager for WordPress (Lite)
 	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
 	Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-	Version: 3.0.12
+	Version: 3.1.0
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
-    WordPress Available:  yes
-    Requires License:    no
-    Pro Slug:    visualizer-pro
+	WordPress Available:  yes
+	Requires License:    no
+	Pro Slug:    visualizer-pro
 	License URI: http://www.opensource.org/licenses/gpl-license.php
 */
 
@@ -23,14 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
 	return;
 }
-// Added by Ash/Upwork
 if ( class_exists( 'Visualizer_Pro', false ) ) {
 	define( 'VISUALIZER_PRO', true );
 } else {
 	defined( 'VISUALIZER_PRO' ) || define( 'VISUALIZER_PRO', false );
 }
-// Added by Ash/Upwork
-define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
 
 /**
  * Automatically loads classes for the plugin. Checks a namespace and loads only
@@ -82,8 +79,25 @@ function visualizer_launch() {
 		define( 'VISUALIZER_DEBUG', false );
 	}
 
+	define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
+
+	// if x and y features are required, this value should read x,y or x|y or x;y.
+	define( 'VISUALIZER_ENABLE_BETA_FEATURES', '' );
+
+	// the link to pre-build queries.
+	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
+
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
+
+	// instantiate Gutenberg block
+	add_action(
+		'plugins_loaded', function () {
+			if ( function_exists( 'register_block_type' ) ) {
+				Visualizer_Gutenberg_Block::get_instance();
+			}}
+	);
+
 	// set general modules
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );

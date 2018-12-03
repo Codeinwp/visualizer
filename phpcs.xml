@@ -31,8 +31,8 @@
         <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
         <exclude name="Squiz.PHP.CommentedOutCode" />
         <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
-        <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
         <exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
+        <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
     </rule>
     <rule ref="WordPress-Docs">
 
