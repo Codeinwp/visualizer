@@ -19,7 +19,7 @@
 
         init_permissions();
 
-        if(visualizer.is_pro) {
+        if(typeof visualizer !== 'undefined' && visualizer.is_pro) {
             init_db_import();
         }
 
@@ -261,6 +261,7 @@
         });
 
         $( '#db-chart-button' ).on( 'click', function(){
+            $('#content').css('width', 'calc(100% - 300px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 $(this).val( $(this).attr( 'data-t-filter' ) );
                 $(this).html( $(this).attr( 'data-t-filter' ) );
