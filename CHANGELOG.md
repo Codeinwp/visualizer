@@ -1,4 +1,9 @@
 
+ ### v3.1.0 - 2018-12-03 
+ **Changes:** 
+ * Add Table chart
+* Fix date format in sample files
+ 
  ### v3.0.12 - 2018-10-11 
  **Changes:** 
  * Added filter to enable users to change schedule of charts.
