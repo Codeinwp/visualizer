@@ -141,8 +141,8 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 
 		self::_renderSelectItem(
 			esc_html__( 'Text Position', 'visualizer' ),
-			'vAxis[textPosition]',
-			isset( $this->vAxis['textPosition'] ) ? $this->vAxis['textPosition'] : '',
+			'hAxis[textPosition]',
+			isset( $this->hAxis['textPosition'] ) ? $this->hAxis['textPosition'] : '',
 			$this->_positions,
 			esc_html__( 'Position of the horizontal axis text, relative to the chart area.', 'visualizer' )
 		);
@@ -253,8 +253,8 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 
 		self::_renderSelectItem(
 			esc_html__( 'Text Position', 'visualizer' ),
-			'hAxis[textPosition]',
-			isset( $this->hAxis['textPosition'] ) ? $this->hAxis['textPosition'] : '',
+			'vAxis[textPosition]',
+			isset( $this->vAxis['textPosition'] ) ? $this->vAxis['textPosition'] : '',
 			$this->_positions,
 			esc_html__( 'Position of the vertical axis text, relative to the chart area.', 'visualizer' )
 		);
