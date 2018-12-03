@@ -80,7 +80,7 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar_Goo
 				);
 			self::_renderSectionEnd();
 
-			self::_renderSectionStart( esc_html__( 'Gauge Settings', 'visualizer' ), false );
+		self::_renderGroupEnd();
 	}
 
 	/**
