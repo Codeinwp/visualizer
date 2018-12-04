@@ -321,12 +321,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'name'    => esc_html__( 'Column', 'visualizer' ),
 					'enabled' => true,
 				),
-				'gauge'       => array(
-					'name'    => esc_html__( 'Gauge', 'visualizer' ),
-					'enabled' => true,
-				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
+					'enabled' => true,
+				),
+				'gauge'       => array(
+					'name'    => esc_html__( 'Gauge', 'visualizer' ),
 					'enabled' => true,
 				),
 				'candlestick' => array(
@@ -399,10 +399,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
 				if ( ! VISUALIZER_PRO ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
-						$deprecated[]   = 'gauge';
+						if ( $get2Darray ) {
+							$deprecated[]   = 'gauge';
+						} else {
+							$types['gauge']['enabled'] = false;
+						}
 					}
 					if ( ! self::hasChartType( 'candlestick' ) ) {
-						$deprecated[]   = 'candlestick';
+						if ( $get2Darray ) {
+							$deprecated[]   = 'candlestick';
+						} else {
+							$types['candlestick']['enabled'] = false;
+						}
 					}
 				}
 				break;
@@ -422,10 +430,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
 				if ( ! VISUALIZER_PRO ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
-						$deprecated[]   = 'gauge';
+						if ( $get2Darray ) {
+							$deprecated[]   = 'gauge';
+						} else {
+							$types['gauge']['enabled'] = false;
+						}
 					}
 					if ( ! self::hasChartType( 'candlestick' ) ) {
-						$deprecated[]   = 'candlestick';
+						if ( $get2Darray ) {
+							$deprecated[]   = 'candlestick';
+						} else {
+							$types['candlestick']['enabled'] = false;
+						}
 					}
 				}
 		}
