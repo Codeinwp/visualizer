@@ -184,16 +184,16 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			self::_renderSectionStart( esc_html__( 'Grid Lines', 'visualizer' ), false );
 			self::_renderTextItem(
 				esc_html__( 'Count', 'visualizer' ),
-				'vAxis[gridlines][count]',
-				isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
-				esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
+				'hAxis[gridlines][count]',
+				isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
+				esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
 				5
 			);
 
 			self::_renderColorPickerItem(
 				esc_html__( 'Color', 'visualizer' ),
-				'vAxis[gridlines][color]',
-				isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
+				'hAxis[gridlines][color]',
+				isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
 				'#ccc'
 			);
 			self::_renderSectionEnd();
@@ -296,16 +296,16 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			self::_renderSectionStart( esc_html__( 'Grid Lines', 'visualizer' ), false );
 			self::_renderTextItem(
 				esc_html__( 'Count', 'visualizer' ),
-				'hAxis[gridlines][count]',
-				isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
-				esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
+				'vAxis[gridlines][count]',
+				isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
+				esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
 				5
 			);
 
 			self::_renderColorPickerItem(
 				esc_html__( 'Color', 'visualizer' ),
-				'hAxis[gridlines][color]',
-				isset( $this->hAxis['gridlines']['color'] ) ? $this->hAxis['gridlines']['color'] : null,
+				'vAxis[gridlines][color]',
+				isset( $this->vAxis['gridlines']['color'] ) ? $this->vAxis['gridlines']['color'] : null,
 				'#ccc'
 			);
 			self::_renderSectionEnd();
