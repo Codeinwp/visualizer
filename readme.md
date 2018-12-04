@@ -1,6 +1,6 @@
-# Visualizer: Tables and Charts Manager for WordPress (Lite) #
+# Visualizer: Tables and Charts Manager for WordPress (Lite) # #
 **Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [rozroz](https://profiles.wordpress.org/rozroz)  
-**Tags:** chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables
+**Tags:** chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables  
 **Requires at least:** 3.5  
 **Tested up to:** 4.9  
 **Stable tag:** trunk  
@@ -31,7 +31,7 @@ The plugin uses Google Visualization API and DataTables.net to add responsive & 
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
 
-### 10 Chart types + 2 more in the pro version ###
+### 9 Chart types + 3 more in the pro version ###
 This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is line chart,flow chart, area chart, bar chart, column chart, pie chart, geo chart, gauge chart, candlestick chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. The premium version can act as a interactive WordPress Table plugin, with sorting capabilities.
 
 ### Flexible and customizable ###
@@ -145,6 +145,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.1.0 - 2018-12-03  ###
+
+* Add Table chart
+* Fix date format in sample files
+
+
 ### 3.0.12 - 2018-10-11  ###
 
 * Added filter to enable users to change schedule of charts.

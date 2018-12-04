@@ -145,6 +145,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 3.1.0 - 2018-12-03  = 
+
+* Add Table chart
+* Fix date format in sample files
+
+
 = 3.0.12 - 2018-10-11  = 
 
 * Added filter to enable users to change schedule of charts.
