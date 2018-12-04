@@ -419,12 +419,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				$deprecated[]   = 'table';
 
 				// rename the new table chart type.
-				if ( self::hasChartType( 'table' ) ) {
-					if ( $get2Darray ) {
-						$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
-					} else {
-						$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
-					}
+				if ( $get2Darray ) {
+					$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
+				} else {
+					$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
 				}
 
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
