@@ -295,3 +295,8 @@ button.media-modal-close {
 .dataTables_scrollBody {
 	overflow: hidden !important;
 }
+
+.dataTables_wrapper {
+    height: 300px;
+    overflow: hidden !important;
+}
