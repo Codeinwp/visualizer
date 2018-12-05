@@ -145,6 +145,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.1.1 - 2018-12-05  ###
+
+* Fix issue with Gutenberg support
+* Fix issue with loading new Table chart
+* Fix options that don't work correctly with some charts
+
+
 ### 3.1.0 - 2018-12-03  ###
 
 * Add Table chart
