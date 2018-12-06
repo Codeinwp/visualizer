@@ -5,26 +5,32 @@
 // this will store the images for each chart rendered.
 var __visualizer_chart_images   = [];
 
-(function(v, g) {
+(function($) {
 	var gv;
+    var all_charts, objects;
 
-	v.objects = {};
+	function renderChart(id) {
+        renderSpecificChart(id, all_charts[id]);
+    }
 
-	v.renderChart = function(id) {
-		var chart, render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
+    function renderSpecificChart(id, chart) {
+        var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
 
-		chart = v.charts[id];
-		series = chart.series;
+        if(chart.library !== 'google'){
+            return;
+        }
+
+        series = chart.series;
 		data = chart.data;
 		settings = chart.settings;
 
-		container = document.getElementById(id);
+        container = document.getElementById(id);
         if (container == null) {
             return;
         }
 		table = new gv.DataTable({cols: series});
 
-		render = v.objects[id] || null;
+		render = objects[id] || null;
 		if (!render) {
             switch (chart.type) {
                 case "gauge":
@@ -167,7 +173,7 @@ var __visualizer_chart_images   = [];
         for (i = 0; i < data.length; i++) {
 			row = [];
 			for (j = 0; j < series.length; j++) {
-				if (series[j].type === 'date' || series[j].type === 'datetime') {
+				if (series[j].type === 'date' || series[j].type === 'datetime') {                  
 					date = new Date(data[i][j]);
 					data[i][j] = null;
 					if (Object.prototype.toString.call(date) === "[object Date]") {
@@ -189,7 +195,7 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1]) {
                             continue;
                         }
-                        v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
+                        format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
                 default:
@@ -197,30 +203,30 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1]) {
                             continue;
                         }
-                        v.format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
+                        format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
             }
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
-            v.format_data(id, table, 'number', settings.format, 1);
+            format_data(id, table, 'number', settings.format, 1);
         }
-        v.override(settings);
+        override(settings);
 
-        g.visualization.events.addListener(render, 'ready', function () {
+        gv.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
             try{
                 var img = render.getImageURI();
                 __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
-                jQuery('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+                $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
             }catch(error){
                 console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
             }
         });
 
         render.draw(table, settings);
-	};
+	}
 
-    v.format_data = function(id, table, type, format, index) {
+    function format_data(id, table, type, format, index) {
         if (!format || format === '') {
             return;
         }
@@ -228,12 +234,12 @@ var __visualizer_chart_images   = [];
         var formatter = null;
         switch (type) {
             case 'number':
-                formatter = new g.visualization.NumberFormat({pattern: format});
+                formatter = new gv.NumberFormat({pattern: format});
                 break;
             case 'date':
             case 'datetime':
             case 'timeofday':
-                formatter = new g.visualization.DateFormat({pattern: format});
+                formatter = new gv.DateFormat({pattern: format});
                 break;
         }
 
@@ -242,116 +248,50 @@ var __visualizer_chart_images   = [];
         }
 
         var arr = id.split('-');
-        jQuery('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: index});
+        $('body').trigger('visualizer:format:chart', {id: parseInt(arr[1]), data: table, column: index});
 
-    };
+    }
 
-    v.override = function(settings) {
+    function override(settings) {
         if (settings.manual) {
             try{
                 var options = JSON.parse(settings.manual);
-                jQuery.extend(settings, options);
+                $.extend(settings, options);
                 delete settings.manual;
             }catch(error){
                 console.error("Error while adding manual configuration override " + settings.manual);
             }
         }
-    };
+    }
 
-	v.render = function() {
-		for (var id in (v.charts || {})) {
-			v.renderChart(id);
+	function render() {
+		for (var id in (all_charts || {})) {
+			renderChart(id);
 		}
-	};
+	}
 
-	g.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
-	g.charts.setOnLoadCallback(function() {
-		gv = g.visualization;
-		v.render();
-	});
-})(visualizer, google);
+    if(typeof visualizer !== 'undefined'){
+        // called while updating the chart.
+        visualizer.update = function(){
+            renderChart('canvas');
+        };
+    }
 
-(function($, v) {
-	var resizeTimeout;
+
+    var resizeTimeout;
 
 	$(document).ready(function() {
 		$(window).resize(function() {
 			clearTimeout(resizeTimeout);
-			resizeTimeout = setTimeout(v.render, 100);
+			resizeTimeout = setTimeout(render, 100);
 		});
 
         resizeHiddenContainers(true);
-        initActionsButtons();
     });
 
     $(window).load(function(){
         resizeHiddenContainers(true);
     });
-
-    function initActionsButtons() {
-        if($('a.visualizer-action[data-visualizer-type=copy]').length > 0) {
-            var clipboard = new Clipboard('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
-            clipboard.on('success', function(e) {
-                window.alert(v.i10n['copied']);
-            });
-        }
-        $('a.visualizer-action[data-visualizer-type!=copy]').on('click', function(e) {
-            var type    = $(this).attr( 'data-visualizer-type' );
-            var chart   = $(this).attr( 'data-visualizer-chart-id' );
-            var lock    = $('.visualizer-front.visualizer-front-' + chart);
-            lock.lock();
-            e.preventDefault();
-            $.ajax({
-                url     : v.rest_url.replace('#id#', chart).replace('#type#', type),
-                success: function(data) {
-                    if (data && data.data) {
-                        switch(type){
-                            case 'csv':
-                                var a = document.createElement("a");
-                                document.body.appendChild(a);
-                                a.style = "display: none";
-                                var blob = new Blob([data.data.csv], {type: $(this).attr( 'data-visualizer-mime' ) }),
-                                    url = window.URL.createObjectURL(blob);
-                                a.href = url;
-                                a.download = data.data.name;
-                                a.click();
-                                setTimeout(function () {
-                                    window.URL.revokeObjectURL(url);
-                                }, 100);
-                                break;
-                            case 'xls':
-                                var $a = $("<a>");
-                                $a.attr("href",data.data.csv);
-                                $("body").append($a);
-                                $a.attr("download",data.data.name);
-                                $a[0].click();
-                                $a.remove();
-                                break;
-                            case 'print':
-                                var iframe = $('<iframe>').attr("name", "print-visualization").attr("id", "print-visualization").css("position", "absolute");
-                                iframe.appendTo($('body'));
-                                var iframe_doc = iframe.get(0).contentWindow || iframe.get(0).contentDocument.document || iframe.get(0).contentDocument;
-                                iframe_doc.document.open();
-                                iframe_doc.document.write(data.data.csv);
-                                iframe_doc.document.close();
-                                setTimeout(function(){
-                                    window.frames['print-visualization'].focus();
-                                    window.frames['print-visualization'].print();
-                                    iframe.remove();
-                                }, 500);
-                                break;
-                            default:
-                                if(window.visualizer_perform_action) {
-                                    window.visualizer_perform_action(type, chart, data.data);
-                                }
-                                break;
-                        }
-                    }
-                    lock.unlock();
-                }
-            });
-        });
-    }
 
     function resizeHiddenContainers(everytime){
         $(".visualizer-front").parents().each(function(){
@@ -379,53 +319,20 @@ var __visualizer_chart_images   = [];
         });
 	}
 
-})(jQuery, visualizer);
-
-(function ($) {
-    $.fn.lock = function () {
-        $(this).each(function () {
-            var $this = $(this);
-            var position = $this.css('position');
-
-            if (!position) {
-                position = 'static';
-            }
-
-            switch (position) {
-                case 'absolute':
-                case 'relative':
-                    break;
-                default:
-                    $this.css('position', 'relative');
-                    break;
-            }
-            $this.data('position', position);
-
-            var width = $this.width(),
-                height = $this.height();
-
-            var locker = $('<div class="locker"></div>');
-            locker.width(width).height(height);
-
-            var loader = $('<div class="locker-loader"></div>');
-            loader.width(width).height(height);
-
-            locker.append(loader);
-            $this.append(locker);
-            $(window).resize(function () {
-                $this.find('.locker,.locker-loader').width($this.width()).height($this.height());
-            });
+    $('body').on('visualizer:render:chart:start', function(event, v){
+        objects = {};
+        google.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
+        google.charts.setOnLoadCallback(function() {
+            gv = google.visualization;
+            all_charts = v.charts;
+            render();
         });
+    });
 
-        return $(this);
-    };
+    $('body').on('visualizer:render:specificchart:start', function(event, v){
+        objects = {};
+        gv = google.visualization;
+        renderSpecificChart(v.id, v.chart);
+    });
 
-    $.fn.unlock = function () {
-        $(this).each(function () {
-            $(this).find('.locker').remove();
-            $(this).css('position', $(this).data('position'));
-        });
-
-        return $(this);
-    };
 })(jQuery);

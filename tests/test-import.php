@@ -133,6 +133,46 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Testing database import feature.
+	 *
+	 * @access public
+	 */
+	public function test_db_import() {
+		$this->markTestSkipped( 'this test is disabled till we can figure out why its not recognizing the new ajax methods' );
+		$this->create_chart();
+		$this->_setRole( 'administrator' );
+
+		$ids = $this->factory->post->create_many( 10 );
+
+		global $wpdb;
+
+		$_GET   = array(
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION ),
+			'chart' => $this->chart,
+		);
+		$_POST  = array(
+			'params'    => array(
+				'from'      => $wpdb->prefix . 'posts',
+				'select'    => 'count(*), ' . $wpdb->prefix . 'posts.ID',
+				'group'     => $wpdb->prefix . 'posts.ID',
+				'limit'     => 5,
+			),
+			'refresh'   => 1,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_SAVE_DB_QUERY );
+		} catch ( WPAjaxDieContinueException  $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee ) {
+			// We expected this, do nothing.
+		}
+
+		$post = get_post( $this->chart );
+		echo $post->post_content;
+	}
+
+	/**
 	 * Provide the fileURL for uploading the file
 	 *
 	 * @access public

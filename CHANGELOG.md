@@ -1,4 +1,22 @@
 
+ ### v3.1.1 - 2018-12-05 
+ **Changes:** 
+ * Fix issue with Gutenberg support
+* Fix issue with loading new Table chart
+* Fix options that don't work correctly with some charts
+ 
+ ### v3.1.0 - 2018-12-03 
+ **Changes:** 
+ * Add Table chart
+* Fix date format in sample files
+ 
+ ### v3.0.12 - 2018-10-11 
+ **Changes:** 
+ * Added filter to enable users to change schedule of charts.
+* Fixed bug with line chart with timeofday column.
+* Fixed bug with scheduled charts that sometimes did not show updated data.
+* Javascript can be customized on a per user basis that will not be wiped out on update.
+ 
  ### v3.0.11 - 2018-08-15 
  **Changes:** 
  * Fixed issue with the Series Settings options for the Table Chart

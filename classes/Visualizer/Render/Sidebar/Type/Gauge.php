@@ -28,7 +28,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar_Google {
 
 	/**
 	 * Renders template.
@@ -80,7 +80,7 @@ class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar {
 				);
 			self::_renderSectionEnd();
 
-			self::_renderSectionStart( esc_html__( 'Gauge Settings', 'visualizer' ), false );
+		self::_renderGroupEnd();
 	}
 
 	/**

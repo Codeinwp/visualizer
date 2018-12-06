@@ -53,7 +53,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		parent::__construct( $plugin );
 		$this->_addAction( 'load-post.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'load-post-new.php', 'enqueueMediaScripts' );
-		$this->_addAction( 'admin_footer', 'renderTempaltes' );
+		$this->_addAction( 'admin_footer', 'renderTemplates' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts', null, 8 );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
@@ -213,9 +213,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		global $typenow;
 		if ( post_type_supports( $typenow, 'editor' ) ) {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
-			wp_enqueue_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array( 'media-editor' ), null, true );
-			wp_enqueue_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
-			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', array( 'visualizer-google-jsapi-old' ), Visualizer_Plugin::VERSION, true );
+
+			// Load all the assets for the different libraries we support.
+			$deps   = array(
+				Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) ),
+				Visualizer_Render_Sidebar_Type_DataTable::enqueue_assets( array( 'media-editor' ) ),
+			);
+
+			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', $deps, Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-collection', VISUALIZER_ABSURL . 'js/media/collection.js', array( 'visualizer-media-model' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-controller', VISUALIZER_ABSURL . 'js/media/controller.js', array( 'visualizer-media-collection' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-view', VISUALIZER_ABSURL . 'js/media/view.js', array( 'visualizer-media-controller' ), Visualizer_Plugin::VERSION, true );
@@ -278,7 +283,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access private
 	 * @return array The associated array of chart types with localized names.
 	 */
-	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false, $add_select = false ) {
+	public static function _getChartTypesLocalized( $enabledOnly = false, $get2Darray = false, $add_select = false, $where = null ) {
 		$additional = array();
 		if ( $add_select ) {
 			$additional['select'] = array(
@@ -290,6 +295,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$types = array_merge(
 			$additional,
 			array(
+				'dataTable' => array(
+					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
+					'enabled' => true,
+				),
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie', 'visualizer' ),
 					'enabled' => true,
@@ -314,12 +323,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'name'    => esc_html__( 'Column', 'visualizer' ),
 					'enabled' => true,
 				),
-				'gauge'       => array(
-					'name'    => esc_html__( 'Gauge', 'visualizer' ),
-					'enabled' => true,
-				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
+					'enabled' => true,
+				),
+				'gauge'       => array(
+					'name'    => esc_html__( 'Gauge', 'visualizer' ),
 					'enabled' => true,
 				),
 				'candlestick' => array(
@@ -328,7 +337,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 				// pro types
 				'table'       => array(
-					'name'    => esc_html__( 'Table', 'visualizer' ),
+					'name'    => esc_html__( 'Table (Deprecated)', 'visualizer' ),
 					'enabled' => false,
 				),
 				'timeline'    => array(
@@ -368,6 +377,81 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$types = $doubleD;
 		}
 
+		return self::handleDeprecatedCharts( $types, $enabledOnly, $get2Darray, $where );
+	}
+
+	/**
+	 * Handle (soon-to-be) deprecated charts.
+	 */
+	private static function handleDeprecatedCharts( $types, $enabledOnly, $get2Darray, $where ) {
+		$deprecated = array();
+
+		switch ( $where ) {
+			case 'library':
+				// if the user has a Google Table chart, show it as deprecated otherwise remove the option from the library.
+				if ( ! self::hasChartType( 'table' ) ) {
+					$deprecated[]   = 'table';
+					if ( $get2Darray ) {
+						$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
+					} else {
+						$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
+					}
+				}
+
+				// if a user has a Gauge/Candlestick chart, then let them keep using it.
+				if ( ! VISUALIZER_PRO ) {
+					if ( ! self::hasChartType( 'gauge' ) ) {
+						if ( $get2Darray ) {
+							$deprecated[]   = 'gauge';
+						} else {
+							$types['gauge']['enabled'] = false;
+						}
+					}
+					if ( ! self::hasChartType( 'candlestick' ) ) {
+						if ( $get2Darray ) {
+							$deprecated[]   = 'candlestick';
+						} else {
+							$types['candlestick']['enabled'] = false;
+						}
+					}
+				}
+				break;
+			default:
+				// remove the option to create a Google Table chart.
+				$deprecated[]   = 'table';
+
+				// rename the new table chart type.
+				if ( $get2Darray ) {
+					$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
+				} else {
+					$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
+				}
+
+				// if a user has a Gauge/Candlestick chart, then let them keep using it.
+				if ( ! VISUALIZER_PRO ) {
+					if ( ! self::hasChartType( 'gauge' ) ) {
+						if ( $get2Darray ) {
+							$deprecated[]   = 'gauge';
+						} else {
+							$types['gauge']['enabled'] = false;
+						}
+					}
+					if ( ! self::hasChartType( 'candlestick' ) ) {
+						if ( $get2Darray ) {
+							$deprecated[]   = 'candlestick';
+						} else {
+							$types['candlestick']['enabled'] = false;
+						}
+					}
+				}
+		}
+
+		if ( $deprecated ) {
+			foreach ( $deprecated as $type ) {
+				unset( $types[ $type ] );
+			}
+		}
+
 		return $types;
 	}
 
@@ -379,7 +463,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @access public
 	 */
-	public function renderTempaltes() {
+	public function renderTemplates() {
 		global $pagenow;
 		if ( 'post.php' != $pagenow && 'post-new.php' != $pagenow ) {
 			return;
@@ -415,20 +499,24 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				Visualizer_Plugin::VERSION,
 				true
 			);
-			wp_enqueue_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-			wp_enqueue_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
+
 			wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-			wp_enqueue_script(
-				'visualizer-render',
-				VISUALIZER_ABSURL . 'js/render.js',
-				array(
-					'google-jsapi-old',
-					'visualizer-library',
-					'visualizer-customization',
-				),
-				Visualizer_Plugin::VERSION,
-				true
-			);
+
+			$query = $this->getQuery();
+			while ( $query->have_posts() ) {
+				$chart = $query->next_post();
+				$library = $this->load_chart_type( $chart->ID );
+				if ( is_null( $library ) ) {
+					continue;
+				}
+				wp_enqueue_script(
+					"visualizer-render-$library",
+					VISUALIZER_ABSURL . 'js/render-facade.js',
+					apply_filters( 'visualizer_assets_render', array( 'visualizer-library', 'visualizer-customization' ), true ),
+					Visualizer_Plugin::VERSION,
+					true
+				);
+			}
 		}
 	}
 
@@ -463,13 +551,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
-	 * Renders visualizer library page.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
+	 * Get the instance of WP_Query that fetches the charts as per the given criteria.
 	 */
-	public function renderLibraryPage() {
+	private function getQuery() {
+		static $q;
+		if ( ! is_null( $q ) ) {
+			return $q;
+		}
+
 		// get current page
 		$page = filter_input(
 			INPUT_GET,
@@ -513,29 +602,79 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$meta[]                   = $query;
 			$query_args['meta_query'] = $meta;
 		}
-		// Added by Ash/Upwork
-		// fetch charts
+		$q = new WP_Query( $query_args );
+		return $q;
+	}
+
+	/**
+	 * Renders visualizer library page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 */
+	public function renderLibraryPage() {
 		$charts = array();
-		$query  = new WP_Query( $query_args );
+		$query = $this->getQuery();
+
+		// get current page
+		$page = filter_input(
+			INPUT_GET,
+			'vpage',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+					'default'   => 1,
+				),
+			)
+		);
+		// add chart type filter to the query arguments
+		$filter = filter_input( INPUT_GET, 'type' );
+		if ( ! ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) ) {
+			$filter = 'all';
+		}
+
+		$css        = '';
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
 
 			// if the user has updated a chart and instead of saving it, has closed the modal. If the user refreshes, they should get the original chart.
 			$chart = $this->handleExistingRevisions( $chart->ID, $chart );
+			// refresh a "live" db query chart.
+			$chart = apply_filters( 'visualizer_schedule_refresh_chart', $chart, $chart->ID, false );
+
+			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 
 			// fetch and update settings
 			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
+			$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
+			if ( ! empty( $atts['settings'] ) ) {
+				$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
+			}
+
 			unset( $settings['height'], $settings['width'] );
-			$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
+
+			$library = $this->load_chart_type( $chart->ID );
+
+			$id         = 'visualizer-' . $chart->ID;
+			$arguments  = $this->get_inline_custom_css( $id, $settings );
+			if ( ! empty( $arguments ) ) {
+				$css        .= $arguments[0];
+				$settings   = $arguments[1];
+			}
+
 			// add chart to the array
-			$charts[ 'visualizer-' . $chart->ID ] = array(
+			$charts[ $id ] = array(
 				'id'       => $chart->ID,
 				'type'     => $type,
 				'series'   => $series,
 				'settings' => $settings,
 				'data'     => $data,
+				'library'  => $library,
 			);
 		}
 		// enqueue charts array
@@ -565,13 +704,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						$ajaxurl
 					),
 				),
+				'page_type' => 'library',
 			)
 		);
 		// render library page
 		$render             = new Visualizer_Render_Library();
 		$render->charts     = $charts;
 		$render->type       = $filter;
-		$render->types      = self::_getChartTypesLocalized();
+		$render->types      = self::_getChartTypesLocalized( false, false, false, true );
+		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
 				'base'    => add_query_arg( 'vpage', '%#%' ),

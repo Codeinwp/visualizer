@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.0.12';
+	const VERSION = '3.1.2';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -49,13 +49,18 @@ class Visualizer_Plugin {
 	const ACTION_CLONE_CHART = 'visualizer-clone-chart';
 	const ACTION_DELETE_CHART = 'visualizer-delete-chart';
 	const ACTION_UPLOAD_DATA = 'visualizer-upload-data';
-	// Added by Ash/Upwork
 	const ACTION_EXPORT_DATA = 'visualizer-export-data';
 
 	/**
 	 *Action used for fetching specific users/roles for permissions.
 	 */
 	const ACTION_FETCH_PERMISSIONS_DATA = 'visualizer-fetch-permissions-data';
+
+	/**
+	 *Action used for fetching db import data.
+	 */
+	const ACTION_FETCH_DB_DATA = 'visualizer-fetch-db-data';
+	const ACTION_SAVE_DB_QUERY = 'visualizer-save-db-query';
 
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';
@@ -64,6 +69,9 @@ class Visualizer_Plugin {
 	const FILTER_GET_CHART_SETTINGS = 'visualizer-get-chart-settings';
 	const FILTER_UNDO_REVISIONS = 'visualizer-undo-revisions';
 	const FILTER_HANDLE_REVISIONS = 'visualizer-handle-revisions';
+
+	const CF_DB_SCHEDULE = 'visualizer-db-schedule';
+	const CF_DB_QUERY = 'visualizer-db-query';
 
 	const CF_CHART_URL = 'visualizer-chart-url';
 	const CF_CHART_SCHEDULE = 'visualizer-chart-schedule';
