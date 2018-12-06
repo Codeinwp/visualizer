@@ -215,8 +215,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
 
 			// Load all the assets for the different libraries we support.
-			$deps   = Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) );
-			$deps   += Visualizer_Render_Sidebar_Type_DataTable::enqueue_assets( array( 'media-editor' ) );
+			$deps   = array(
+				Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) ),
+				Visualizer_Render_Sidebar_Type_DataTable::enqueue_assets( array( 'media-editor' ) ),
+			);
 
 			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', $deps, Visualizer_Plugin::VERSION, true );
 			wp_enqueue_script( 'visualizer-media-collection', VISUALIZER_ABSURL . 'js/media/collection.js', array( 'visualizer-media-model' ), Visualizer_Plugin::VERSION, true );
