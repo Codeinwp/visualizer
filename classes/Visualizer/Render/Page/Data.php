@@ -328,6 +328,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				</ul>
 			</li>
 
+			<li class="viz-group viz-group-category bottom-fixed sidebar-footer-link" id="vz-chart-docs">
+				<h2><span class="dashicons dashicons-editor-help"></span><a href="https://docs.themeisle.com/category/657-visualizer" target="_blank"><?php _e( 'Docs', 'visualizer' ); ?></a></h2>
+			</li>
+
 			<?php $this->getPermissionsLink( $this->chart->ID ); ?>
 
 			<li class="viz-group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; <?php echo date( 'Y', current_time( 'timestamp' ) ); ?></li>
