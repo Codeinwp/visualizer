@@ -47,6 +47,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
 		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', null, 10, 3 );
 
+		$this->_addAction( 'activated_plugin', 'onActivation' );
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
@@ -144,6 +145,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
 		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, 'hourly', 'visualizer_schedule_refresh_db' );
 	}
+
+	/**
+	 * On activation of the plugin
+	 */
+	public function onActivation( $plugin ) {
+		if( $plugin == VISUALIZER_BASENAME ) {
+			wp_redirect( admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ) );
+			exit();
+		}
+	}
+	
 
 	/**
 	 * Deactivate the plugin
