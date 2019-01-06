@@ -133,7 +133,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php _e( 'You can choose here to synchronize your chart data with a remote CSV file.', 'visualizer' ); ?> </p>
 										<p class="viz-group-description"> <?php _e( 'You can also synchronize with your Google Spreadsheet file, for more info check <a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
-										<p class="viz-group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwritting the current data with the one from the URL.', 'visualizer' ); ?></p>
+										<p class="viz-group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwriting the current data with the one from the URL.', 'visualizer' ); ?></p>
 										<form id="vz-schedule-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
