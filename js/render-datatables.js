@@ -57,7 +57,8 @@
         var select = {
             info: false
         };
-        $.extend( settings, { select } ); // jshint ignore:line
+        // we cannot use { select } below because https://github.com/Codeinwp/visualizer/issues/357
+        $.extend( settings, { info: false } ); // jshint ignore:line
 
         var stripe = ['', ''];
 
