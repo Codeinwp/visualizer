@@ -145,6 +145,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 3.1.2 - 2018-12-06  = 
+
+* Fix bug "Warning: A non-numeric value encountered"
+* Tested with WP 5.0
+
+
 = 3.1.1 - 2018-12-05  = 
 
 * Fix issue with Gutenberg support

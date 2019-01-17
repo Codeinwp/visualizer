@@ -1,4 +1,9 @@
 
+ ### v3.1.2 - 2018-12-06 
+ **Changes:** 
+ * Fix bug "Warning: A non-numeric value encountered"
+* Tested with WP 5.0
+ 
  ### v3.1.1 - 2018-12-05 
  **Changes:** 
  * Fix issue with Gutenberg support
