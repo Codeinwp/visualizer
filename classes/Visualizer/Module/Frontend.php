@@ -245,6 +245,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$library    = $this->load_chart_type( $chart->ID );
 
+		$id         = $id . '-' . rand();
+
 		// add chart to the array
 		$this->_charts[ $id ] = array(
 			'type'     => $type,
