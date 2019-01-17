@@ -1,8 +1,8 @@
 === Visualizer: Tables and Charts Manager for WordPress (Lite) # ===
-Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle,rozroz
+Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle,contactashish13
 Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables
 Requires at least: 3.5
-Tested up to: 4.9
+Tested up to: 5.0
 Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -145,6 +145,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 3.1.2 - 2018-12-06  = 
+
+* Fix bug "Warning: A non-numeric value encountered"
+* Tested with WP 5.0
+
+
 = 3.1.1 - 2018-12-05  = 
 
 * Fix issue with Gutenberg support
