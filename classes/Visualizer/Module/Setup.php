@@ -150,12 +150,12 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * On activation of the plugin
 	 */
 	public function onActivation( $plugin ) {
-		if( $plugin == VISUALIZER_BASENAME ) {
+		if ( $plugin == VISUALIZER_BASENAME ) {
 			wp_redirect( admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ) );
 			exit();
 		}
 	}
-	
+
 
 	/**
 	 * Deactivate the plugin
