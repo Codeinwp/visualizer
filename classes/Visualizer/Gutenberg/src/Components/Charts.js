@@ -91,11 +91,18 @@ class Charts extends Component {
 											title = `#${charts[i].id}`;
 										}
 
-										// Format chart type for Gauge chart.
-										if ( 0 <= [ 'gauge', 'table', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
-											chart = startCase( data['visualizer-chart-type']);
+										if ( 0 <= [ 'gauge', 'table', 'timeline', 'dataTable' ].indexOf( data['visualizer-chart-type']) ) {
+											if ( 'dataTable' === data['visualizer-chart-type']) {
+												chart = data['visualizer-chart-type'];
+											} else {
+												chart = startCase( data['visualizer-chart-type']);
+											}
 										} else {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
+										}
+
+										if ( 'dataTable' === chart ) {
+											return;
 										}
 
 										return (

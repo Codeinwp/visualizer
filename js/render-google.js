@@ -132,6 +132,7 @@ var __visualizer_chart_images   = [];
 				case 'scatter':
 				case 'candlestick':
 				case 'column':
+				case 'combo':
 					axis = settings.hAxis;
 					break;
 				case 'bar':
