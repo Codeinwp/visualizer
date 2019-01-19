@@ -219,7 +219,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'actions[]',
 				isset( $this->actions ) && in_array( 'print', $this->actions ) ? true : false,
 				'print',
-				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the data.', 'visualizer' ),
+				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the chart/data.', 'visualizer' ),
 				$disable_actions
 			);
 			self::_renderCheckboxItem(

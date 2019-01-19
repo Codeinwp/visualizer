@@ -8,6 +8,8 @@ var __visualizer_chart_images   = [];
 (function($) {
 	var gv;
     var all_charts, objects;
+    // so that we know which charts belong to our library.
+    var rendered_charts = [];
 
 	function renderChart(id) {
         renderSpecificChart(id, all_charts[id]);
@@ -19,6 +21,7 @@ var __visualizer_chart_images   = [];
         if(chart.library !== 'google'){
             return;
         }
+        rendered_charts[id] = 'yes';
 
         series = chart.series;
 		data = chart.data;
@@ -215,6 +218,7 @@ var __visualizer_chart_images   = [];
 
         gv.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
+            __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = '';
             try{
                 var img = render.getImageURI();
                 __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
@@ -334,6 +338,26 @@ var __visualizer_chart_images   = [];
         objects = {};
         gv = google.visualization;
         renderSpecificChart(v.id, v.chart);
+    });
+
+    // front end actions
+    $('body').on('visualizer:action:specificchart', function(event, v){
+        switch(v.action){
+            case 'print':
+                var id = v.id;
+                if(typeof rendered_charts[id] === 'undefined'){
+                    return;
+                }
+                var arr = id.split('-');
+                var img = __visualizer_chart_images[ arr[0] + '-' + arr[1] ];
+                // for charts that have no rendered image defined, we print the data instead.
+                var html = v.data;
+                if(img !== ''){
+                    html = "<html><body><img src='" + img + "' /></body></html>";
+                }
+                $('body').trigger('visualizer:action:specificchart:defaultprint', {data: html});
+                break;
+        }
     });
 
 })(jQuery);

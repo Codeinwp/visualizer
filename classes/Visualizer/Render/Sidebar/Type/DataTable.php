@@ -33,7 +33,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @access private
 	 * @var string
 	 */
-	private static $_js     = '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js';
+	private static $_js     = '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.4/b-print-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js';
 
 	/**
 	 * The URL for the CSS file.
@@ -41,7 +41,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @access private
 	 * @var string
 	 */
-	private static $_css    = '//cdn.datatables.net/v/dt/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css';
+	private static $_css    = '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.4/b-print-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css';
 
 	/**
 	 * Constructor.
