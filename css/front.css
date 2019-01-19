@@ -20,3 +20,8 @@
 	z-index: 1001;
 	background: url(../images/ajax-loader.gif) no-repeat center center;
 }
+
+/* datatables */
+.dt-button {
+	display: none !important;
+}
