@@ -175,7 +175,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>' ) . '</span>' );
+				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
 
 			$example    = '
 {

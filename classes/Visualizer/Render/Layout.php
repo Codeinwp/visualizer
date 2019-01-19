@@ -64,7 +64,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 */
 	public static function _renderDbQuery( $args ) {
 		$query      = $args[1];
-	?>
+		?>
 		<div id='visualizer-db-query' style="display: none">
 			<div class="visualizer-db-query-form">
 				<div>
@@ -86,7 +86,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<div class='db-wizard-results'></div>
 
 		</div>
-	<?php
+		<?php
 	}
 
 	/**
@@ -98,32 +98,32 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$headers    = $args[1];
 		$results    = $args[2];
 		ob_start();
-	?>
+		?>
 		<table cellspacing="0" width="100%" id="results">
 			<thead>
 				<tr>
-	<?php
-	foreach ( $headers as $header ) {
-		echo '<th>' . $header['label'] . '</th>';
-	}
-	?>
+		<?php
+		foreach ( $headers as $header ) {
+			echo '<th>' . $header['label'] . '</th>';
+		}
+		?>
 				</tr>
 			</thead>
 			<tfoot>
 			</tfoot>
 			<tbody>					
-	<?php
-	foreach ( $results as $result ) {
-		echo '<tr>';
-		foreach ( $result as $r ) {
-			echo '<td>' . $r . '</td>';
+		<?php
+		foreach ( $results as $result ) {
+			echo '<tr>';
+			foreach ( $result as $r ) {
+				echo '<td>' . $r . '</td>';
+			}
+			echo '</tr>';
 		}
-		echo '</tr>';
-	}
-	?>
+		?>
 			</tbody>
 		</table>
-	<?php
+		<?php
 		return ob_get_clean();
 	}
 }

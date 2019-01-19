@@ -112,7 +112,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php _e( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?> </p>
 										<p class="viz-group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
-										<p class="viz-group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+										<p class="viz-group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
@@ -132,8 +132,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											class="dashicons dashicons-lock"></span></span>
 									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php _e( 'You can choose here to synchronize your chart data with a remote CSV file.', 'visualizer' ); ?> </p>
-										<p class="viz-group-description"> <?php _e( 'You can also synchronize with your Google Spreadsheet file, for more info check <a href="https://github.com/Codeinwp/visualizer/wiki/How-can-I-populate-data-from-Google-Spreadsheet%3F" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
-										<p class="viz-group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwritting the current data with the one from the URL.', 'visualizer' ); ?></p>
+										<p class="viz-group-description"> <?php _e( 'You can also synchronize with your Google Spreadsheet file, for more info check <a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+										<p class="viz-group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwriting the current data with the one from the URL.', 'visualizer' ); ?></p>
 										<form id="vz-schedule-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
@@ -326,6 +326,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						<input type="hidden" name="cancel" value="1">
 					</form>
 				</ul>
+			</li>
+
+			<li class="viz-group viz-group-category bottom-fixed sidebar-footer-link" id="vz-chart-docs">
+				<h2><span class="dashicons dashicons-editor-help"></span><a href="https://docs.themeisle.com/category/657-visualizer" target="_blank"><?php _e( 'Docs', 'visualizer' ); ?></a></h2>
 			</li>
 
 			<?php $this->getPermissionsLink( $this->chart->ID ); ?>

@@ -63,6 +63,7 @@ function visualizer_autoloader( $class ) {
 function visualizer_launch() {
 	// setup environment
 	define( 'VISUALIZER_BASEFILE', __FILE__ );
+	define( 'VISUALIZER_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
