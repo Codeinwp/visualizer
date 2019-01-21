@@ -121,11 +121,13 @@ class Visualizer_Gutenberg_Block {
 	 * Gutenberg Block Callback Function
 	 */
 	public function gutenberg_block_callback( $attr ) {
-		$id = $attr['id'];
-		if ( empty( $id ) || $id === 'none' ) {
-			return ''; // no id = no fun
+		if ( isset( $attr['id'] ) ) {
+			$id = $attr['id'];
+			if ( empty( $id ) || $id === 'none' ) {
+				return ''; // no id = no fun
+			}
+			return '[visualizer id="' . $id . '"]';
 		}
-		return '[visualizer id="' . $id . '"]';
 	}
 
 	/**
