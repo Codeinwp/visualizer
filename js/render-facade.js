@@ -14,6 +14,7 @@
         $('a.visualizer-action[data-visualizer-type!=copy]').off('click').on('click', function(e) {
             var type    = $(this).attr( 'data-visualizer-type' );
             var chart   = $(this).attr( 'data-visualizer-chart-id' );
+            var container   = $(this).attr( 'data-visualizer-container-id' );
             var lock    = $('.visualizer-front.visualizer-front-' + chart);
             lock.lock();
             e.preventDefault();
@@ -44,7 +45,7 @@
                                 $a.remove();
                                 break;
                             case 'print':
-                                $('body').trigger('visualizer:action:specificchart', {action: 'print', id: 'visualizer-' + chart, data: data.data.csv});
+                                $('body').trigger('visualizer:action:specificchart', {action: 'print', id: container, data: data.data.csv});
                                 break;
                             default:
                                 if(window.visualizer_perform_action) {
