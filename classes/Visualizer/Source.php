@@ -248,4 +248,113 @@ abstract class Visualizer_Source {
 		return $datum;
 	}
 
+	/**
+	 * Determines the formats of date/time columns.
+	 *
+	 * @access public
+	 *
+	 * @param array $series The actual array of series.
+	 * @param array $data The actual array of data.
+	 *
+	 * @return array
+	 */
+	public static final function get_date_formats_if_exists( $series, $data ) {
+		$date_formats = array();
+		$types = array();
+		$index = 0;
+		foreach ( $series as $column ) {
+			if ( in_array( $column['type'], array( 'date', 'datetime', 'timeofday' ) ) ) {
+				$types[] = array( 'index' => $index, 'type' => $column['type'] );
+			}
+			$index++;
+		}
+
+		if ( ! $types ) {
+			return $date_formats;
+		}
+
+		$random = $data;
+		// let's randomly pick 5 data points instead of cycling through the entire data set.
+		if ( count( $data ) > 5 ) {
+			$random = array();
+			for ( $x = 0; $x < 5; $x++ ) {
+				$random = $data[ rand( 0, count( $data ) - 1 ) ];
+			}
+		}
+
+		foreach ( $types as $type ) {
+			$formats = array();
+			foreach ( $random as $datum ) {
+				$f = self::determine_date_format( $datum[ $type['index'] ], $type['type'] );
+				if ( $f ) {
+					$formats[] = $f;
+				}
+			}
+			// if there are multiple formats, use the most frequent format.
+			$formats = array_filter( $formats );
+			if ( $formats ) {
+				$formats = array_count_values( $formats );
+				arsort( $formats );
+				$formats = array_keys( $formats );
+				$final_format = reset( $formats );
+				// we have determined the PHP format; now we have to change this into the JS format where m = MM, d = DD etc.
+				$date_formats[] = array( 'index' => $type['index'], 'format' => str_replace( array( 'Y', 'm', 'd', 'H', 'i', 's' ), array( 'YYYY', 'MM', 'DD', 'HH', 'mm', 'ss' ), $final_format ) );
+			}
+		}
+		return $date_formats;
+	}
+
+	/**
+	 * Determines the date/time format of the given string.
+	 *
+	 * @access private
+	 *
+	 * @param string $value The string.
+	 * @param string $type 'date', 'timeofday' or 'datetime'.
+	 *
+	 * @return string|null
+	 */
+	private static final function determine_date_format( $value, $type ) {
+		if ( version_compare( phpversion(), '5.3.0', '<' ) ) {
+			return null;
+		}
+
+		$formats = array(
+			'Y/m/d',
+			'Y-m-d',
+			'm/d/Y',
+			'm-d-Y',
+			'd-m-Y',
+			'd/m/Y',
+		);
+
+		switch ( $type ) {
+			case 'datetime':
+				$formats += array(
+					'Y/m/d H:i:s',
+					'Y-m-d H:i:s',
+					'm/d/Y H:i:s',
+					'm-d-Y H:i:s',
+				);
+				break;
+			case 'timeofday':
+				$formats += array(
+					'H:i:s',
+					'H:i',
+				);
+				break;
+		}
+
+		$formats = apply_filters( 'visualizer_date_formats', $formats, $type );
+
+		foreach ( $formats as $format ) {
+			$return = DateTime::createFromFormat( $format, $value );
+			if ( $return !== false ) {
+				return $format;
+			}
+		}
+		// invalid format
+		return null;
+	}
+
 }

@@ -3,6 +3,8 @@
 
 (function($) {
     var all_charts;
+    // so that we know which charts belong to our library.
+    var rendered_charts = [];
 
     function renderChart(id, v) {
         renderSpecificChart(id, all_charts[id], v);
@@ -14,6 +16,7 @@
         if(chart.library !== 'datatables'){
             return;
         }
+        rendered_charts[id] = 'yes';
 
         series = chart.series;
         data = chart.data;
@@ -35,6 +38,14 @@
             ordering: true,
             select: false,
             lengthChange: false,
+            buttons: {
+                buttons: [{
+                  extend: 'print',
+                  text: '',
+                  title: ''
+                }]
+            },
+            dom: 'Bfrtip',
         };
 
         if(typeof v.page_type !== 'undefined'){
@@ -57,7 +68,8 @@
         var select = {
             info: false
         };
-        $.extend( settings, { select } ); // jshint ignore:line
+        // we cannot use { select } below because https://github.com/Codeinwp/visualizer/issues/357
+        $.extend( settings, { info: false } ); // jshint ignore:line
 
         var stripe = ['', ''];
 
@@ -216,6 +228,18 @@
         renderSpecificChart(v.id, v.chart, v.v);
     });
 
+    // front end actions
+    $('body').on('visualizer:action:specificchart', function(event, v){
+        switch(v.action){
+            case 'print':
+                var id = v.id;
+                if(typeof rendered_charts[id] === 'undefined'){
+                    return;
+                }
+                $('#' + id + ' .buttons-print').trigger('click');
+                break;
+        }
+    });
 
 })(jQuery);
 

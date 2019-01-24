@@ -245,6 +245,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$library    = $this->load_chart_type( $chart->ID );
 
+		$id         = $id . '-' . rand();
+
 		// add chart to the array
 		$this->_charts[ $id ] = array(
 			'type'     => $type,
@@ -293,7 +295,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					$mime       = end( $array );
 				}
 				$label          = $actions[ $key ];
-				$actions_div    .= '<a href="#" class="visualizer-action visualizer-action-' . $key . '" data-visualizer-type="' . $key . '" data-visualizer-chart-id="' . $atts['id'] . '" data-visualizer-mime="' . $mime . '" title="' . $label . '" ';
+				$actions_div    .= '<a href="#" class="visualizer-action visualizer-action-' . $key . '" data-visualizer-type="' . $key . '" data-visualizer-chart-id="' . $atts['id'] . '" data-visualizer-container-id="' . $id . '" data-visualizer-mime="' . $mime . '" title="' . $label . '" ';
 
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );

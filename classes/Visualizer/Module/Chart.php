@@ -163,6 +163,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$settings   = $arguments[1];
 		}
 
+		$date_formats = Visualizer_Source::get_date_formats_if_exists( $series, $data );
+
 		return array(
 			'type'     => $type,
 			'series'   => $series,
@@ -170,6 +172,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'data'     => $data,
 			'library'  => $library,
 			'css'       => $css,
+			'date_formats'       => $date_formats,
 		);
 	}
 

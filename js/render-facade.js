@@ -11,9 +11,10 @@
                 window.alert(v.i10n['copied']);
             });
         }
-        $('a.visualizer-action[data-visualizer-type!=copy]').on('click', function(e) {
+        $('a.visualizer-action[data-visualizer-type!=copy]').off('click').on('click', function(e) {
             var type    = $(this).attr( 'data-visualizer-type' );
             var chart   = $(this).attr( 'data-visualizer-chart-id' );
+            var container   = $(this).attr( 'data-visualizer-container-id' );
             var lock    = $('.visualizer-front.visualizer-front-' + chart);
             lock.lock();
             e.preventDefault();
@@ -44,17 +45,7 @@
                                 $a.remove();
                                 break;
                             case 'print':
-                                var iframe = $('<iframe>').attr("name", "print-visualization").attr("id", "print-visualization").css("position", "absolute");
-                                iframe.appendTo($('body'));
-                                var iframe_doc = iframe.get(0).contentWindow || iframe.get(0).contentDocument.document || iframe.get(0).contentDocument;
-                                iframe_doc.document.open();
-                                iframe_doc.document.write(data.data.csv);
-                                iframe_doc.document.close();
-                                setTimeout(function(){
-                                    window.frames['print-visualization'].focus();
-                                    window.frames['print-visualization'].print();
-                                    iframe.remove();
-                                }, 500);
+                                $('body').trigger('visualizer:action:specificchart', {action: 'print', id: container, data: data.data.csv});
                                 break;
                             default:
                                 if(window.visualizer_perform_action) {
@@ -72,7 +63,24 @@
     $(document).ready(function(){
         $('body').trigger('visualizer:render:chart:start', visualizer);
         initActionsButtons(visualizer);
+        registerDefaultActions();
     });
+
+    function registerDefaultActions(){
+        $('body').off('visualizer:action:specificchart:defaultprint').on('visualizer:action:specificchart:defaultprint', function(event, v){
+            var iframe = $('<iframe>').attr("name", "print-visualization").attr("id", "print-visualization").css("position", "absolute");
+            iframe.appendTo($('body'));
+            var iframe_doc = iframe.get(0).contentWindow || iframe.get(0).contentDocument.document || iframe.get(0).contentDocument;
+            iframe_doc.document.open();
+            iframe_doc.document.write(v.data);
+            iframe_doc.document.close();
+            setTimeout(function(){
+                window.frames['print-visualization'].focus();
+                window.frames['print-visualization'].print();
+                iframe.remove();
+            }, 500);
+        });
+    }
 })(jQuery, visualizer);
 
 (function ($) {
