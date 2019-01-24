@@ -231,7 +231,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$disable_actions
 			);
 
-			$disabled   = ! ( class_exists( 'PHPExcel' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && version_compare( PHP_VERSION, '5.2.0', '>' ) );
+			$disabled   = ! self::is_excel_enabled();
 			self::_renderCheckboxItem(
 				esc_html__( 'Excel', 'visualizer' ),
 				'actions[]',
@@ -249,6 +249,18 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$disable_actions
 			);
 		self::_renderSectionEnd();
+	}
+
+	/**
+	 * Checks if the Excel module can be enabled.
+	 */
+	private static function is_excel_enabled() {
+		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once( $vendor_file );
+		}
+
+		return class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && extension_loaded( 'fileinfo' ) && version_compare( PHP_VERSION, '5.6.0', '>' );
 	}
 
 	/**
