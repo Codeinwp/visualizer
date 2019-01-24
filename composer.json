@@ -23,12 +23,13 @@
   "require": {
     "codeinwp/themeisle-sdk": "master",
     "xrstf/composer-php52": "^1.0.20",
-    "PHPOffice/PHPExcel": "^1.8.1",
+    "phpoffice/phpspreadsheet": "^1.6.0",
     "neitanod/forceutf8": "~2.0"
   },
   "autoload": {
     "files": [
-      "vendor/codeinwp/themeisle-sdk/load.php"
+      "vendor/codeinwp/themeisle-sdk/load.php",
+      "vendor/phpoffice/phpspreadsheet/src/Bootstrap.php"
     ]
   },
   "minimum-stability": "dev",
