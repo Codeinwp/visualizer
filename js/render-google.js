@@ -294,7 +294,7 @@ var __visualizer_chart_images   = [];
         resizeHiddenContainers(true);
     });
 
-    $(window).load(function(){
+    $(window).on('load', function(){
         resizeHiddenContainers(true);
     });
 
