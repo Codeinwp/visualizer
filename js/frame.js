@@ -5,7 +5,7 @@
 /* global CodeMirror */
 
 (function ($) {
-    $(window).load(function(){
+    $(window).on('load', function(){
         // scroll to the selected chart type.
         if($('label.type-label.type-label-selected').length > 0) {
             $('label.type-label.type-label-selected')[0].scrollIntoView();
