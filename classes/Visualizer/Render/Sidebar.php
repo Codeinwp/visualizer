@@ -363,7 +363,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		self::_renderCheckboxItem(
 			esc_html__( 'Animate on startup', 'visualizer' ),
 			'animation[startup]',
-			$this->animation['startup'],
+			isset( $this->animation['startup'] ) ? $this->animation['startup'] : 0,
 			true,
 			esc_html__( 'Determines if the chart will animate on the initial draw.', 'visualizer' )
 		);
