@@ -45,7 +45,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		register_activation_hook( VISUALIZER_BASEFILE, array( $this, 'activate' ) );
 		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
 		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
-		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', null, 10, 3 );
+		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
 
 		$this->_addAction( 'activated_plugin', 'onActivation' );
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
