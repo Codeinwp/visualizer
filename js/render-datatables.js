@@ -57,7 +57,7 @@
         var select = {
             info: false
         };
-        $.extend( settings, { select } ); // jshint ignore:line
+        $.extend( settings, { select: select } ); // jshint ignore:line
 
         var stripe = ['', ''];
 
