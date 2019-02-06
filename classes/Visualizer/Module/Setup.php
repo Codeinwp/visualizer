@@ -201,7 +201,6 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			}
 		}
 
-
 		$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, true );
 		$source     = new Visualizer_Source_Query( $params );
 		$source->fetch( false );

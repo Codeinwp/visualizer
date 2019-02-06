@@ -48,7 +48,6 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 *
 	 * @access public
 	 * @param string $query The query.
-	 * @param array $values The values of the prepared statement.
 	 */
 	public function __construct( $query = null ) {
 		$this->_query = $query;

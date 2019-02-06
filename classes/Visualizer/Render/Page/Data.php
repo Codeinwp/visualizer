@@ -77,7 +77,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		// this will allow us to open the correct source tab by default.
 		$source_of_chart    = strtolower( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SOURCE, true ) );
 		// both import from wp and import from db have the same source so we need to differentiate.
-		$filter_config		= get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_FILTER_CONFIG, true );
+		$filter_config      = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_FILTER_CONFIG, true );
 		// if filter config is present, then its import from wp.
 		if ( ! empty( $filter_config ) ) {
 			$source_of_chart .= '_wp';

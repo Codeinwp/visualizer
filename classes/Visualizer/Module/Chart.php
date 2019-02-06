@@ -873,9 +873,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$hours = $_POST['refresh'];
 
 		// copy transients to actual meta.
-		$filter_config	= get_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_FILTER_CONFIG, true );
+		$filter_config  = get_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_FILTER_CONFIG, true );
 		if ( ! empty( $filter_config ) ) {
-			$query	= get_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_DB_QUERY, true );
+			$query  = get_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_DB_QUERY, true );
 			delete_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_FILTER_CONFIG );
 			delete_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_DB_QUERY );
 
