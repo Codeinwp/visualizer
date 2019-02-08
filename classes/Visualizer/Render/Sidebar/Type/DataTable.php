@@ -364,7 +364,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderColumnSettings() {
 		self::_renderGroupStart( esc_html__( 'Column Settings', 'visualizer' ) );
-		for ( $i = 0, $cnt = count( $this->__series ) - 1; $i < $cnt; $i++ ) {
+		for ( $i = 0, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
 			if ( ! empty( $this->__series[ $i ]['label'] ) ) {
 				self::_renderSectionStart( esc_html( $this->__series[ $i ]['label'] ), false );
 					$this->_renderFormatField( $i );
