@@ -872,24 +872,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$hours = $_POST['refresh'];
 
-		// copy transients to actual meta.
-		$filter_config  = get_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_FILTER_CONFIG, true );
-		if ( ! empty( $filter_config ) ) {
-			$query  = get_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_DB_QUERY, true );
-			delete_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_FILTER_CONFIG );
-			delete_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_DB_QUERY );
-
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_FILTER_CONFIG, $filter_config );
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, $query );
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, 'Visualizer_Source_Query' );
-		}
-
-		update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );
-		$schedules              = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
-		$schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
-		update_option( Visualizer_Plugin::CF_DB_SCHEDULE, $schedules );
-
+		do_action( 'visualizer_save_filter', $chart_id, $hours );
 
 		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
