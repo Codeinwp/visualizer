@@ -136,7 +136,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 		if ( empty( $feature ) || ( in_array( $feature, $biz_features ) && ! apply_filters( 'visualizer_is_business', false ) ) ) {
 			$plan = 'PRO';
 			if ( in_array( $feature, $biz_features ) ) {
-				$plan = 'BUSINESS';
+				$plan = 'DEVELOPER';
 			}
 			$return = '<div class="only-pro-content">';
 			$return .= '	<div class="only-pro-container">';
