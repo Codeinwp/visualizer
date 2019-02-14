@@ -57,25 +57,32 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 * Fetches information from source, parses it and builds series and data arrays.
 	 *
 	 * @param bool $as_html Should the result be fetched as an HTML table or as an object.
+	 * @param bool $results_as_numeric_array Should the result be fetched as ARRAY_N instead of ARRAY_A.
+	 * @param bool $raw_results Should the result be returned without processing.
 	 * @access public
 	 * @return boolean TRUE on success, otherwise FALSE.
 	 */
-	public function fetch( $as_html = false ) {
+	public function fetch( $as_html = false, $results_as_numeric_array = false, $raw_results = false ) {
 		if ( empty( $this->_query ) ) {
 			return false;
 		}
 
 		// impose a limit if no limit clause is provided.
 		if ( strpos( strtolower( $this->_query ), ' limit ' ) === false ) {
-			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 300 );
+			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 1000 );
 		}
 
 		global $wpdb;
 		$wpdb->hide_errors();
 		// @codingStandardsIgnoreStart
-		$rows       = $wpdb->get_results( $this->_query, ARRAY_A );
+		$rows       = $wpdb->get_results( $this->_query, $results_as_numeric_array ? ARRAY_N : ARRAY_A );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Firing query %s to get results %s with error %s', $this->_query, print_r( $rows, true ), print_r( $wpdb->last_error, true ) ), 'debug', __FILE__, __LINE__ );
 		// @codingStandardsIgnoreEnd
 		$wpdb->show_errors();
+
+		if ( $raw_results ) {
+			return $rows;
+		}
 
 		if ( $rows ) {
 			$results    = array();
