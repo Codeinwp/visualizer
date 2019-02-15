@@ -86,7 +86,7 @@ class Visualizer_Gutenberg_Block {
 		if ( VISUALIZER_PRO ) {
 			$type = 'pro';
 			if ( apply_filters( 'visualizer_is_business', false ) ) {
-				$type = 'business';
+				$type = 'developer';
 			}
 		}
 
