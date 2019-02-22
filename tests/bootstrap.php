@@ -13,7 +13,7 @@ if ( ! $_tests_dir ) {
  */
 define( 'WP_USE_THEMES', false );
 define( 'WP_TESTS_FORCE_KNOWN_BUGS', true );
-define( 'TI_UNIT_TESTING' , true );
+define( 'TI_UNIT_TESTING', true );
 
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
