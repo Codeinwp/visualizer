@@ -249,8 +249,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
 				'posts_per_page'        => 50,
+				'date_query' => array(
+					array(
+						'before' => 'today',
+					),
+				),
 			)
 		);
+
 		if ( $query->have_posts() ) {
 			$ids = array();
 			while ( $query->have_posts() ) {
