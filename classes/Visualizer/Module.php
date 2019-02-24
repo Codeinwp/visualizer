@@ -253,24 +253,29 @@ class Visualizer_Module {
 	 * @param string $filename The name of the file to use.
 	 */
 	private function _getExcel( $rows, $filename ) {
-		// PHPExcel does not like sheet names longer than 31 characters.
+		// PHPExcel did not like sheet names longer than 31 characters and we will assume the same with PhpSpreadsheet
 		$chart      = substr( $filename, 0, 30 );
 		$filename   .= '.xlsx';
 
+		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once( $vendor_file );
+		}
+
 		$xlsData    = '';
-		if ( class_exists( 'PHPExcel' ) ) {
-			$doc        = new PHPExcel();
+		if ( class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) ) {
+			$doc        = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 			$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
 			$doc->getActiveSheet()->setTitle( sanitize_title( $chart ) );
 			$doc        = apply_filters( 'visualizer_excel_doc', $doc );
-			$writer = PHPExcel_IOFactory::createWriter( $doc, 'Excel2007' );
+			$writer = PhpOffice\PhpSpreadsheet\IOFactory::createWriter( $doc, 'Xlsx' );
 			ob_start();
 			$writer->save( 'php://output' );
 			$xlsData = ob_get_contents();
 			ob_end_clean();
 		} else {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PHPExcel does not exist!', 'error', __FILE__, __LINE__ );
-			error_log( 'Class PHPExcel does not exist!' );
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!', 'error', __FILE__, __LINE__ );
+			error_log( 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!' );
 		}
 		return array(
 			'csv'  => 'data:application/vnd.ms-excel;base64,' . base64_encode( $xlsData ),

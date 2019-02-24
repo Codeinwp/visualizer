@@ -61,6 +61,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_FETCH_DB_DATA, 'getQueryData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_DB_QUERY, 'saveQuery' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 	}
 
 	/**
@@ -163,6 +164,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$settings   = $arguments[1];
 		}
 
+		$date_formats = Visualizer_Source::get_date_formats_if_exists( $series, $data );
+
 		return array(
 			'type'     => $type,
 			'series'   => $series,
@@ -170,6 +173,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'data'     => $data,
 			'library'  => $library,
 			'css'       => $css,
+			'date_formats'       => $date_formats,
 		);
 	}
 
@@ -234,6 +238,34 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	}
 
 	/**
+	 * Delete charts that are still in auto-draft mode.
+	 */
+	private function deleteOldCharts() {
+		$query = new WP_Query(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'  => 'auto-draft',
+				'fields'                => 'ids',
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+				'posts_per_page'        => 50,
+				'date_query' => array(
+					array(
+						'before' => 'today',
+					),
+				),
+			)
+		);
+
+		if ( $query->have_posts() ) {
+			$ids = array();
+			while ( $query->have_posts() ) {
+				wp_delete_post( $query->next_post(), true );
+			}
+		}
+	}
+
+	/**
 	 * Renders appropriate page for chart builder. Creates new auto draft chart
 	 * if no chart has been specified.
 	 *
@@ -246,6 +278,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+			$this->deleteOldCharts();
 			$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
 			$source       = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $default_type . '.csv' );
 			$source->fetch();
@@ -589,7 +622,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		if ( ! isset( $_POST['chart_data_src'] ) || Visualizer_Plugin::CF_SOURCE_FILTER !== $_POST['chart_data_src'] ) {
 			// delete the filters in case this chart is being uploaded from other data sources
-			delete_post_meta( $chart_id, 'visualizer-filter-config' );
+			delete_post_meta( $chart_id, Visualizer_Plugin::CF_FILTER_CONFIG );
+			delete_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_FILTER_CONFIG );
+			delete_post_meta( $chart_id, '__transient-' . Visualizer_Plugin::CF_DB_QUERY );
 
 			// delete "import from db" specific parameters.
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY );
@@ -606,7 +641,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			$source = apply_filters( 'visualizer_pro_handle_chart_data', $_POST['chart_data'], '' );
+			$source = apply_filters( 'visualizer_pro_handle_chart_data', $_POST['chart_data'], '', $chart_id, $_POST );
 		} else {
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );
 		}
@@ -839,6 +874,35 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 		$render->render();
+		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
+			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		}
+	}
+
+
+	/**
+	 * Saves the filter query and the schedule.
+	 *
+	 * @access public
+	 */
+	public function saveFilter() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY . Visualizer_Plugin::VERSION, 'security' );
+
+		$chart_id   = filter_input(
+			INPUT_GET,
+			'chart',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			)
+		);
+
+		$hours = $_POST['refresh'];
+
+		do_action( 'visualizer_save_filter', $chart_id, $hours );
+
 		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}

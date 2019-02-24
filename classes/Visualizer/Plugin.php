@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.1.2';
+	const VERSION = '3.1.3';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -41,6 +41,7 @@ class Visualizer_Plugin {
 	const CF_SETTINGS = 'visualizer-settings';
 
 	const CF_SOURCE_FILTER = 'visualizer-source-filter';
+	const CF_FILTER_CONFIG = 'visualizer-filter-config';
 
 	// custom actions
 	const ACTION_GET_CHARTS = 'visualizer-get-charts';
@@ -61,6 +62,7 @@ class Visualizer_Plugin {
 	 */
 	const ACTION_FETCH_DB_DATA = 'visualizer-fetch-db-data';
 	const ACTION_SAVE_DB_QUERY = 'visualizer-save-db-query';
+	const ACTION_SAVE_FILTER_QUERY = 'visualizer-save-filter-query';
 
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';

@@ -5,7 +5,7 @@
 /* global CodeMirror */
 
 (function ($) {
-    $(window).load(function(){
+    $(window).on('load', function(){
         // scroll to the selected chart type.
         if($('label.type-label.type-label-selected').length > 0) {
             $('label.type-label.type-label-selected')[0].scrollIntoView();
@@ -21,6 +21,7 @@
 
         if(typeof visualizer !== 'undefined' && visualizer.is_pro) {
             init_db_import();
+            init_filter_import();
         }
 
         // update the manual configuation link to point to the correct chart type.
@@ -218,6 +219,12 @@
         // from the editor. Let's force this.
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
+        });
+    }
+
+    function init_filter_import() {
+        $( '#db-filter-save-button' ).on( 'click', function(){
+            $('#vz-filter-wizard').submit();
         });
     }
 

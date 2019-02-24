@@ -175,7 +175,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>' ) . '</span>' );
+				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
 
 			$example    = '
 {
@@ -219,7 +219,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'actions[]',
 				isset( $this->actions ) && in_array( 'print', $this->actions ) ? true : false,
 				'print',
-				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the data.', 'visualizer' ),
+				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the chart/data.', 'visualizer' ),
 				$disable_actions
 			);
 			self::_renderCheckboxItem(
@@ -231,7 +231,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$disable_actions
 			);
 
-			$disabled   = ! ( class_exists( 'PHPExcel' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && version_compare( PHP_VERSION, '5.2.0', '>' ) );
+			$disabled   = ! self::is_excel_enabled();
 			self::_renderCheckboxItem(
 				esc_html__( 'Excel', 'visualizer' ),
 				'actions[]',
@@ -249,6 +249,18 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$disable_actions
 			);
 		self::_renderSectionEnd();
+	}
+
+	/**
+	 * Checks if the Excel module can be enabled.
+	 */
+	private static function is_excel_enabled() {
+		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once( $vendor_file );
+		}
+
+		return class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && extension_loaded( 'fileinfo' ) && version_compare( PHP_VERSION, '5.6.0', '>' );
 	}
 
 	/**
@@ -351,7 +363,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		self::_renderCheckboxItem(
 			esc_html__( 'Animate on startup', 'visualizer' ),
 			'animation[startup]',
-			$this->animation['startup'],
+			isset( $this->animation['startup'] ) ? $this->animation['startup'] : 0,
 			true,
 			esc_html__( 'Determines if the chart will animate on the initial draw.', 'visualizer' )
 		);
