@@ -23,6 +23,8 @@
             init_db_import();
         }
 
+        init_json_import();
+
         // update the manual configuation link to point to the correct chart type.
         var type = $('#visualizer-chart-id').attr('data-chart-type');
         var chart_type_in_api_link  = type + 'chart';
@@ -286,6 +288,31 @@
             $('#viz-db-wizard-params').val($('#db-query-form').serialize());
             $('#vz-db-wizard').submit();
         });
+    }
+
+    function init_json_import(){
+        $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+
+        $( '#json-chart-button' ).on( 'click', function(){
+            $('#content').css('width', 'calc(100% - 300px)');
+            if( $(this).attr( 'data-current' ) === 'chart'){
+                $(this).val( $(this).attr( 'data-t-filter' ) );
+                $(this).html( $(this).attr( 'data-t-filter' ) );
+                $(this).attr( 'data-current', 'filter' );
+                $( '.visualizer-editor-lhs' ).hide();
+                $( '#visualizer-json-screen' ).css("z-index", "9999").show();
+                $( '#canvas' ).hide();
+            }else{
+                var filter_button = $(this);
+                $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+                $('#canvas').lock();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+            }
+        } );
+
     }
 
     function start_ajax(element){

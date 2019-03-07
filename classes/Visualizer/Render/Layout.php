@@ -58,6 +58,31 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	}
 
 	/**
+	 * Show the JSON/REST parameters boxes.
+	 *
+	 * @access public
+	 */
+	public static function _renderJsonScreen( $args ) {
+		$id      = $args[1];
+		?>
+		<div id='visualizer-json-screen' style="display: none">
+			<div class="visualizer-json-form">
+				<form id="json-parameters-form">
+					<input
+						type="url"
+						id="vz-import-json-url"
+						name="url"
+						value="<?php echo get_post_meta( $id, Visualizer_Plugin::CF_CHART_URL, true ); ?>"
+						placeholder="<?php esc_html_e( 'Please enter the URL', 'visualizer' ); ?>"
+						class="visualizer-input visualizer-remote-url">
+					<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch', 'visualizer' ); ?></button>
+				</form>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Show the DB query box.
 	 *
 	 * @access public
