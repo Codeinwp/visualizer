@@ -248,7 +248,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$id         = $id . '-' . rand();
 
 		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
-		if ( $amp->is_amp() ) {
+		if ( $amp && $amp->is_amp() ) {
 			return '<div id="' . $id . '"' . $class . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
 		}
 
