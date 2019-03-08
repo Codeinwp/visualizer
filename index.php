@@ -104,10 +104,6 @@ function visualizer_launch() {
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
 	$plugin->setModule( Visualizer_Module_Chart::NAME );
 
-	if ( Visualizer_Module_AMP::is_amp() ) {
-		$plugin->setModule( Visualizer_Module_AMP::NAME );
-	}
-
 	if ( is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
 		// set admin modules
 		$plugin->setModule( Visualizer_Module_Admin::NAME );
@@ -115,6 +111,8 @@ function visualizer_launch() {
 
 	// set frontend modules
 	$plugin->setModule( Visualizer_Module_Frontend::NAME );
+
+	$plugin->setModule( Visualizer_Module_AMP::NAME );
 
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload_52.php';
 	if ( is_readable( $vendor_file ) ) {
