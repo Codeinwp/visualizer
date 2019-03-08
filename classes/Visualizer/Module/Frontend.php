@@ -197,10 +197,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
-		if ( Visualizer_Module_AMP::is_amp() ) {
-			return Visualizer_Module_AMP::get_iframe( $atts['id'] );
-		}
-
 		// in case revisions exist.
 		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
 			$chart = get_post( $chart->ID );
@@ -244,6 +240,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		if ( ! empty( $arguments ) ) {
 			$css        = $arguments[0];
 			$settings   = $arguments[2];
+		}
+
+		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
+		if ( $amp->is_amp() ) {
+			return '<div id="' . $id . '"' . $class . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
 		}
 
 		// add chart to the array

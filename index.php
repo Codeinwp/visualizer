@@ -85,6 +85,11 @@ function visualizer_launch() {
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
 	$plugin->setModule( Visualizer_Module_Chart::NAME );
+
+	if ( Visualizer_Module_AMP::is_amp() ) {
+		$plugin->setModule( Visualizer_Module_AMP::NAME );
+	}
+
 	if ( is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
 		// set admin modules
 		$plugin->setModule( Visualizer_Module_Admin::NAME );

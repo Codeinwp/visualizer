@@ -41,20 +41,6 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		$this->_addFilter( 'amp_post_template_data', 'addToHeader' );
-		$this->_addAction( 'query_vars', 'registerVar' );
-		$this->_addAction( 'init', 'addVirtualPage', null, 9 );
-		$this->_addAction( 'template_include', 'showOnlyChart' );
-	}
-
-	/**
-	 * Returns the template that shows only the chart sans the header etc.
-	 */
-	public function showOnlyChart( $template ) {
-		$chart  = get_query_var( '_chart' );
-		if ( $chart ) {
-			return VISUALIZER_ABSPATH . '/templates/visualizer-get-chart.php';
-		}
-		return $template;
 	}
 
 	/**
@@ -71,24 +57,6 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	}
 
 	/**
-	 * Register the virtual page.
-	 */
-	public function addVirtualPage() {
-		add_rewrite_rule( '^visualizer-get-chart/([0-9]+)/?', 'index.php?page=visualizer-get-chart&_chart=$matches[1]', 'top' );
-		if ( is_admin() ) {
-			flush_rewrite_rules();
-		}
-	}
-
-	/**
-	 * Register the virtual page vars.
-	 */
-	public function registerVar( $vars ) {
-		$vars[] = '_chart';
-		return $vars;
-	}
-
-	/**
 	 * Is this an AMP request?
 	 */
 	public static function is_amp() {
@@ -96,12 +64,11 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	}
 
 	/**
-	 * Loads the iframe HTML.
+	 * Loads the alterview view of the chart.
 	 */
-	public static function get_iframe( $chart ) {
-		ob_start();
-		include VISUALIZER_ABSPATH . '/templates/amp-iframe.php';
-		return ob_get_clean();
+	public function get_chart( $chart, $data, $series, $settings ) {
+		$output = $this->_getDataAs( $chart->ID, 'print' );
+		return $output['csv'];
 	}
 
 }
