@@ -67,8 +67,8 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	 * Loads the alterview view of the chart.
 	 */
 	public function get_chart( $chart, $data, $series, $settings ) {
-		$view = apply_filters( 'visualizer_amp_view', false, $chart, $data, $series, $settings );
-		if ( $view ) {
+		$view = apply_filters( 'visualizer_amp_view', null, $chart, $data, $series, $settings );
+		if ( ! is_null( $view ) ) {
 			return $view;
 		}
 		$output = $this->_getDataAs( $chart->ID, 'print' );
