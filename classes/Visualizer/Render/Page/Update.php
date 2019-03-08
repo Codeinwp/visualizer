@@ -48,7 +48,7 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			echo 'if (win.visualizer) {';
 			echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
 			echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
-			echo 'win.visualizer.render();';
+			echo 'win.visualizer.update();';
 			echo '}';
 
 			// added by Ash/Upwork

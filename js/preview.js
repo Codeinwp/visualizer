@@ -17,7 +17,7 @@
 				delete settings['height'];
 
 				v.charts.canvas.settings = settings;
-				v.render();
+				v.update();
 			}, 1000);
 		}
 
@@ -31,7 +31,7 @@
         }
 
 		$('.control-text').change(updateChart).keyup(updateChart);
-		$('.control-select, .control-checkbox').change(updateChart);
+		$('.control-select, .control-checkbox, .control-check').change(updateChart);
 		$('.color-picker-hex').wpColorPicker({
 			change: updateChart,
 			clear: updateChart

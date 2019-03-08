@@ -1,9 +1,11 @@
 /* global prompt */
 /* global visualizer */
 /* global alert */
+/* global ajaxurl */
+/* global CodeMirror */
 
 (function ($) {
-    $(window).load(function(){
+    $(window).on('load', function(){
         // scroll to the selected chart type.
         if($('label.type-label.type-label-selected').length > 0) {
             $('label.type-label.type-label-selected')[0].scrollIntoView();
@@ -11,7 +13,31 @@
     });
 
     $(document).ready(function () {
+        // open the correct source tab.
+        var source = $('#visualizer-chart-id').attr('data-chart-source');
+        $('li.viz-group.' + source).addClass('open');
+
         init_permissions();
+
+        if(typeof visualizer !== 'undefined' && visualizer.is_pro) {
+            init_db_import();
+            init_filter_import();
+        }
+
+        // update the manual configuation link to point to the correct chart type.
+        var type = $('#visualizer-chart-id').attr('data-chart-type');
+        var chart_type_in_api_link  = type + 'chart';
+        switch (type) {
+            case "gauge":
+            case "table":
+            case "timeline":
+                chart_type_in_api_link = type;
+                break;
+        }
+
+        if($('span.viz-gvlink').length > 0) {
+            $('span.viz-gvlink').html($('span.viz-gvlink').html().replace('?', chart_type_in_api_link));
+        }
 
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');
@@ -160,6 +186,123 @@
             });
         });
     }
+
+    // https://codemirror.net/
+    function init_db_import_component(){
+        var table_columns = visualizer.db_query.tables;
+        var code_mirror = wp.CodeMirror || CodeMirror;
+        var cm = code_mirror.fromTextArea($('.visualizer-db-query').get(0), {
+                    value: $('.visualizer-db-query').val(),
+                    autofocus: true,
+                    mode: 'text/x-mysql',
+                    lineWrapping: true,
+                    dragDrop: false,
+                    matchBrackets: true,
+                    autoCloseBrackets: true,
+                    extraKeys: {"Ctrl-Space": "autocomplete"},
+                    hintOptions: { tables: table_columns }
+        });
+
+        // force refresh so that the query shows on first time load. Otherwise you have to click on the editor for it to show.
+        $('body').on('visualizer:db:query:focus', function(event, data){
+            cm.refresh();
+        });
+
+        cm.focus();
+        
+        // update text area.
+        cm.on('inputRead', function(x, y){
+            cm.save();
+        });
+
+        // backspace and delete do not register so the text box does not get empty if the entire query is deleted
+        // from the editor. Let's force this.
+        $('body').on('visualizer:db:query:update', function(event, data){
+            cm.save();
+        });
+    }
+
+    function init_filter_import() {
+        $( '#db-filter-save-button' ).on( 'click', function(){
+            $('#vz-filter-wizard').submit();
+        });
+    }
+
+    function init_db_import(){
+        $( '#visualizer-db-query' ).css("z-index", "-1").hide();
+
+        init_db_import_component();
+
+        $('#visualizer-query-fetch').on('click', function(e){
+
+            $('body').trigger('visualizer:db:query:update', {});
+            if($('.visualizer-db-query').val() === ''){
+                return;
+            }
+            
+            start_ajax($('#visualizer-db-query'));
+            $('.db-wizard-results').empty();
+            $('.db-wizard-error').empty();
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['db_get_data'],
+                    'security'  : visualizer.ajax['nonces']['db_get_data'],
+                    'params'    : $('#db-query-form').serialize()
+                },
+                success : function(data){
+                    if(data.success){
+                        $('.db-wizard-results').html(data.data.table);
+                        $('#results').DataTable({
+                            "paging":   false
+                        });
+                    }else{
+                        $('.db-wizard-error').html(data.data.msg);
+                    }
+                },
+                complete: function(){
+                    end_ajax($('#visualizer-db-query'));
+                }
+            });
+        });
+
+        $( '#db-chart-button' ).on( 'click', function(){
+            $('#content').css('width', 'calc(100% - 300px)');
+            if( $(this).attr( 'data-current' ) === 'chart'){
+                $(this).val( $(this).attr( 'data-t-filter' ) );
+                $(this).html( $(this).attr( 'data-t-filter' ) );
+                $(this).attr( 'data-current', 'filter' );
+                $( '.visualizer-editor-lhs' ).hide();
+                $( '#visualizer-db-query' ).css("z-index", "9999").show();
+                $('body').trigger('visualizer:db:query:focus', {});
+                $( '#canvas' ).hide();
+            }else{
+                var filter_button = $(this);
+                $( '#visualizer-db-query' ).css("z-index", "-1").hide();
+                $('#canvas').lock();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+                $( '#db-chart-save-button' ).trigger('click');
+            }
+        } );
+
+        $( '#db-chart-save-button' ).on( 'click', function(){
+            $('#viz-db-wizard-params').val($('#db-query-form').serialize());
+            $('#vz-db-wizard').submit();
+        });
+    }
+
+    function start_ajax(element){
+        element.lock();
+    }
+
+    function end_ajax(element){
+        element.unlock();
+    }
+
 })(jQuery);
 
 (function ($) {

@@ -1,16 +1,16 @@
 <?php
 
 /*
-	Plugin Name: Visualizer: Charts and Graphs Lite
+	Plugin Name: Visualizer: Tables and Charts Manager for WordPress (Lite)
 	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
 	Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-	Version: 3.0.8
+	Version: 3.1.3
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
-    WordPress Available:  yes
-    Requires License:    no
-    Pro Slug:    visualizer-pro
+	WordPress Available:  yes
+	Requires License:    no
+	Pro Slug:    visualizer-pro
 	License URI: http://www.opensource.org/licenses/gpl-license.php
 */
 
@@ -23,14 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
 	return;
 }
-// Added by Ash/Upwork
 if ( class_exists( 'Visualizer_Pro', false ) ) {
 	define( 'VISUALIZER_PRO', true );
 } else {
 	defined( 'VISUALIZER_PRO' ) || define( 'VISUALIZER_PRO', false );
 }
-// Added by Ash/Upwork
-define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
 
 /**
  * Automatically loads classes for the plugin. Checks a namespace and loads only
@@ -66,9 +63,13 @@ function visualizer_autoloader( $class ) {
 function visualizer_launch() {
 	// setup environment
 	define( 'VISUALIZER_BASEFILE', __FILE__ );
+	define( 'VISUALIZER_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
+	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
+	define( 'VISUALIZER_TEST_JS_CUSTOMIZATION', false );
+
 	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 		define( 'VISUALIZER_CSV_DELIMITER', ',' );
 	}
@@ -79,8 +80,25 @@ function visualizer_launch() {
 		define( 'VISUALIZER_DEBUG', false );
 	}
 
+	define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
+
+	// if x and y features are required, this value should read x,y or x|y or x;y.
+	define( 'VISUALIZER_ENABLE_BETA_FEATURES', '' );
+
+	// the link to pre-build queries.
+	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
+
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
+
+	// instantiate Gutenberg block
+	add_action(
+		'plugins_loaded', function () {
+			if ( function_exists( 'register_block_type' ) ) {
+				Visualizer_Gutenberg_Block::get_instance();
+			}}
+	);
+
 	// set general modules
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
@@ -93,12 +111,10 @@ function visualizer_launch() {
 	if ( is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
 		// set admin modules
 		$plugin->setModule( Visualizer_Module_Admin::NAME );
-	} else {
-		// set frontend modules
-		$plugin->setModule( Visualizer_Module_Frontend::NAME );
 	}
 
-	$plugin->setModule( Visualizer_Module_AMP::NAME );
+	// set frontend modules
+	$plugin->setModule( Visualizer_Module_Frontend::NAME );
 
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload_52.php';
 	if ( is_readable( $vendor_file ) ) {

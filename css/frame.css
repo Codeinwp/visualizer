@@ -6,6 +6,7 @@
 	right: 0;
 	bottom: 60px;
 	left: 0;
+	width: auto;
 	background-color: white;
 }
 
@@ -85,7 +86,6 @@
 	font-weight: 600;
 	line-height: 21px;
 	cursor: pointer;
-	-webkit-transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
 	transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
 }
 
@@ -124,7 +124,6 @@
 	background: #fff;
 	box-shadow: none;
 	cursor: pointer;
-	-webkit-transition: color 0.15s ease-in-out,border-color 0.15s ease-in-out,background 0.15s ease-in-out;
 	transition: color 0.15s ease-in-out,border-color 0.15s ease-in-out,background 0.15s ease-in-out;
 }
 
@@ -366,6 +365,10 @@ div.viz-group-content .viz-group-description {
 	float: right;
 }
 
+#toolbar .push-left {
+	float: left;
+}
+
 .toolbar-div a {
 	float: left;
 }
@@ -484,6 +487,10 @@ div.viz-group-content .viz-group-description {
 	background-position: -600px -225px;
 }
 
+.type-box-dataTable .type-label {
+	background-position: -301px -670px;
+}
+
 .type-box-table .type-label {
 	background-position: -301px -670px;
 }
@@ -578,7 +585,6 @@ div.viz-group-content .viz-group-description {
 	text-shadow: none!important;
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
-	-webkit-transition: all 0.3s ease 0s;
 	transition: all 0.3s ease 0s;
 }
 
@@ -589,8 +595,6 @@ div.viz-group-content .viz-group-description {
 	background: #2f8cea  url("../images/computer.png") no-repeat scroll 7px -36px !important;
 	box-shadow: 0 1px 0 rgba(171, 171, 171, 0.5) inset, 0 1px 0 rgba(0, 0, 0, 0.15) !important;
 	box-shadow: none !important;
-	-webkit-transition: all 0.3s ease 0s;
-	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease 0s;
 	transition: all 0.3s ease;
 }
@@ -609,7 +613,6 @@ div.viz-group-content .viz-group-description {
 	box-shadow: none !important;
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
-	-webkit-transition: all 0.3s ease 0s;
 	transition: all 0.3s ease 0s;
 	/*margin-left: 2px !important;*/
 }
@@ -621,8 +624,6 @@ div.viz-group-content .viz-group-description {
 	color: white !important;
 	background: #89b158   url("../images/web.png") no-repeat scroll 7px -38px !important;
 	box-shadow: none !important;
-	-webkit-transition: all 0.3s ease 0s;
-	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease 0s;
 	transition: all 0.3s ease;
 }
@@ -644,7 +645,6 @@ div.viz-group-content .viz-group-description {
 	box-shadow: none !important;
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
-	-webkit-transition: all 0.3s ease 0s;
 	transition: all 0.3s ease 0s;
 	/*margin-left: 2px !important;
 	margin-top: 2px !important;*/
@@ -657,8 +657,6 @@ div.viz-group-content .viz-group-description {
 	color: white !important;
 	background: #10aecb   url("../images/from_chart.png") no-repeat scroll 7px -36px !important;
 	box-shadow: none !important;
-	-webkit-transition: all 0.3s ease 0s;
-	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease 0s;
 	transition: all 0.3s ease;
 	/*margin-top: 2px !important;*/
@@ -684,7 +682,6 @@ button#editor-chart-button {
 	background-color: #2f8cea !important;
 	box-shadow: none !important;
 	text-shadow: none;
-	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
 
@@ -695,7 +692,6 @@ button#editor-chart-button {
 	box-shadow: none !important;
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
-	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
 
@@ -706,7 +702,6 @@ button#editor-chart-button {
 	box-shadow: none !important;
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
-	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
 
@@ -728,7 +723,6 @@ button#editor-chart-button {
 	box-shadow: none !important;
 	font-family: "Open Sans",sans-serif;
 	font-weight: 700;
-	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
 
@@ -981,7 +975,6 @@ button#editor-chart-button {
 	width: 100%;
 	opacity: 0;
 	background: rgba(253,253,253,0.9);
-	-webkit-transition: 0.5s ease;
 	transition: 0.5s ease;
 }
 
@@ -1014,7 +1007,6 @@ button#editor-chart-button {
 	font-weight: 600;
 	text-decoration: none;
 	text-transform: uppercase;
-	-webkit-transition: 0.1s ease;
 	transition: 0.1s ease;
 }
 
@@ -1055,4 +1047,290 @@ span.viz-section-error {
 #permissions-form .only-pro-feature > ul {
 	position: relative;
 	text-align: center;
+}
+
+/******************************************************************************/
+/********************************  DB WIZARD  ***********************************/
+/******************************************************************************/
+.db-wizard-condition .select-condition {
+	display: none;
+}
+
+.db-wizard-condition .select-condition.active {
+	display: block;
+	max-width: 50%;
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #eee;
+	font-weight: 500;
+}
+
+.db-wizard-results {
+	width: calc(100% - 350px);
+}
+
+#db-wizard-form {
+	padding: 25px;
+}
+
+.db-wizard-query label {
+	display: block;
+	min-width: 150px;
+	padding: 20px 0 5px;
+	color: rgba(0,0,0,0.85);
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.db-wizard-query .db-wizard-where label,
+.db-wizard-query .db-wizard-from label {
+	padding-top: 0;
+}
+
+.db-wizard-query > div:not(:last-child) {
+	margin-bottom: 15px;
+}
+
+.db-wizard-query .select-condition > div {
+	display: block;
+}
+
+.db-wizard-query .chosen-container {
+	width: auto;
+}
+
+.db-wizard-query .chosen-container-single .chosen-single {
+	border: 1px solid #ccc;
+	background: #fff;
+	box-shadow: none;
+	font-size: 13px;
+	font-weight: 500;
+}
+
+.db-wizard-templates,
+.db-wizard-templates > div {
+	display: block;
+}
+
+.db-wizard-templates > div {
+	box-sizing: border-box;
+	width: 50%;
+	margin-top: 20px;
+	padding: 20px;
+	border: 1px solid #efefef;
+}
+
+.db-wizard-templates > div:first-child {
+	margin-top: 0;
+}
+
+.db-wizard-query .chosen-container-multi .chosen-choices {
+	padding: 5px;
+	border-color: #ccc;
+	background: #fff;
+	box-shadow: none;
+}
+
+.db-wizard-results .dataTables_wrapper .dataTables_filter input,
+.db-wizard-query .select-condition-operand input,
+.db-wizard-limit input {
+	width: 50%;
+	padding-left: 7px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	background: #fff;
+	box-shadow: none;
+	font-size: 13px;
+}
+
+.db-wizard-limit input {
+	display: inline;
+	width: 150px;
+	margin: 0 0 20px 20px;
+}
+
+.db-wizard-limit label {
+	display: inline;
+}
+
+.db-wizard-query .select-condition-operand input::-webkit-input-placeholder {
+	color: #cdcdcd;
+}
+
+.db-wizard-query .select-condition-operand input:-ms-input-placeholder {
+	color: #cdcdcd;
+}
+
+.db-wizard-query .select-condition-operand input::placeholder {
+	color: #cdcdcd;
+}
+
+.db-wizard-query .chosen-container-multi .chosen-choices li.search-choice {
+	padding: 5px 30px 5px 5px;
+	border-color: #ccc;
+	background: #fff;
+	box-shadow: none;
+	font-weight: 600;
+}
+
+.db-wizard-results table > thead > tr > th {
+	padding: 15px 8px;
+	border: none;
+	color: #252422;
+	background: #fff;
+	font-size: 18px;
+	font-weight: 500;
+	text-align: left;
+}
+
+.db-wizard-results table > tbody > tr > td,
+.dataTables_info {
+	padding: 15px 8px;
+	border-top: 1px solid #a2a2a2;
+	color: #252422;
+	font-size: 14px;
+	font-weight: 300;
+}
+
+.db-wizard-results table > tbody > tr.odd {
+	background-color: #f7f7f7;
+}
+
+.db-wizard-results table.dataTable.no-footer {
+	border: none;
+}
+
+.db-wizard-results .dataTables_wrapper .dataTables_info {
+	border-top: 1px solid #ccc5b9;
+	color: #a2a2a2;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.db-wizard-results .dataTables_filter label {
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.db-wizard-where-template-remove,
+.db-wizard-where-template-add {
+	width: auto;
+	height: 25px;
+	margin-top: 10px;
+	border: none;
+	border-radius: 3px;
+	color: #fff;
+	font-size: 12px;
+	cursor: pointer;
+	transition: 0.3s ease;
+}
+
+.db-wizard-where-template-remove:hover,
+.db-wizard-where-template-add:hover {
+	opacity: 0.8;
+}
+
+.db-wizard-results .dataTables_wrapper .dataTables_filter {
+	float: none;
+	text-align: left;
+}
+
+.db-wizard-where-template-add {
+	background-color: #34a85e;
+}
+
+.db-wizard-where-template-remove {
+	background-color: #ff0d00;
+}
+
+#db-query-form .CodeMirror-scroll {
+	overflow: hidden !important;
+	height: 50%;
+	margin: 0;
+	padding: 0;
+}
+
+#db-query-form .CodeMirror-wrap {
+	height: 200px;
+	padding: 15px;
+	color: #fff;
+	background: #282923;
+	font-size: 15px;
+}
+
+#db-query-form .CodeMirror-wrap .CodeMirror-cursor {
+	border-left: 1px solid #fff !important;
+}
+
+#db-query-form .CodeMirror-wrap .CodeMirror-placeholder {
+	color: #fff;
+}
+
+#db-query-form .CodeMirror-wrap pre {
+	color: #fff !important;
+}
+
+#db-query-form .CodeMirror-wrap pre .cm-keyword {
+	color: #f92472 !important;
+}
+
+#db-query-form .CodeMirror-wrap pre .cm-comment {
+	color: #74705d !important;
+}
+
+#db-query-form .CodeMirror-wrap pre .cm-number,
+#db-query-form .CodeMirror-wrap pre .cm-string {
+	color: #fff !important;
+}
+
+.visualizer-db-query-form > div {
+	display: block;
+	width: 15%;
+	vertical-align: middle;
+}
+
+#visualizer-db-query {
+	padding: 20px;
+}
+
+.visualizer-db-query-form > div:first-child {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.db-wizard-error {
+	color: #f00;
+}
+
+.db-wizard-hints {
+	margin-bottom: 30px;
+	color: #0085ba;
+}
+
+.db-wizard-hints .visualizer-emboss,
+.db-wizard-hints a {
+	color: #f92472;
+}
+
+.db-wizard-hints ul {
+	list-style: square;
+}
+
+.db-wizard-results .dataTables_wrapper .dataTables_info {
+	width: calc(100% - 17px);
+}
+
+#vz-chart-docs {
+	right: 85px;
+    bottom: 40px;
+    width: 35%;
+}
+
+#vz-chart-docs a {
+	text-decoration: none;
+}
+
+/* datatables */
+.dt-button {
+	display: none !important;
 }

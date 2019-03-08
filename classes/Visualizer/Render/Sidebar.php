@@ -84,6 +84,22 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	protected $_alignments;
 
 	/**
+	 * Whether this chart supports animation or not.
+	 *
+	 * @access protected
+	 * @var bool
+	 */
+	protected $_supportsAnimation = true;
+
+	/**
+	 * Which library does this this chart implement?
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_library = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -116,6 +132,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			'1' => esc_html__( 'Yes', 'visualizer' ),
 			'0' => esc_html__( 'No', 'visualizer' ),
 		);
+
+		$this->hooks();
 	}
 
 	/**
@@ -157,7 +175,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( __( 'Configure the graph by providing configuration variables right from the', 'visualizer' ) . ' <a href="https://developers.google.com/chart/interactive/docs/reference" target="_blank">Google Visualization</a> API.' );
+				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
 
 			$example    = '
 {
@@ -175,7 +193,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'manual',
 				$this->manual,
 				sprintf(
-					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ), '<br><code>' . $example . '</code>'
+					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ),
+					'<br><code>' . $example . '</code>'
 				),
 				'',
 				array( 'rows' => 5 )
@@ -200,7 +219,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'actions[]',
 				isset( $this->actions ) && in_array( 'print', $this->actions ) ? true : false,
 				'print',
-				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the data.', 'visualizer' ),
+				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the chart/data.', 'visualizer' ),
 				$disable_actions
 			);
 			self::_renderCheckboxItem(
@@ -212,7 +231,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$disable_actions
 			);
 
-			$disabled   = ! ( class_exists( 'PHPExcel' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && version_compare( PHP_VERSION, '5.2.0', '>' ) );
+			$disabled   = ! self::is_excel_enabled();
 			self::_renderCheckboxItem(
 				esc_html__( 'Excel', 'visualizer' ),
 				'actions[]',
@@ -230,6 +249,18 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$disable_actions
 			);
 		self::_renderSectionEnd();
+	}
+
+	/**
+	 * Checks if the Excel module can be enabled.
+	 */
+	private static function is_excel_enabled() {
+		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once( $vendor_file );
+		}
+
+		return class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && extension_loaded( 'fileinfo' ) && version_compare( PHP_VERSION, '5.6.0', '>' );
 	}
 
 	/**
@@ -311,7 +342,56 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderSectionStart( esc_html__( 'Tooltip', 'visualizer' ), false );
 				$this->_renderTooltipSettigns();
 			self::_renderSectionEnd();
+
+			$this->_renderAnimationSettings();
+
 		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders animation settings section.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAnimationSettings() {
+		if ( ! $this->_supportsAnimation ) {
+			return;
+		}
+
+		self::_renderSectionStart( esc_html__( 'Animation', 'visualizer' ), false );
+
+		self::_renderCheckboxItem(
+			esc_html__( 'Animate on startup', 'visualizer' ),
+			'animation[startup]',
+			isset( $this->animation['startup'] ) ? $this->animation['startup'] : 0,
+			true,
+			esc_html__( 'Determines if the chart will animate on the initial draw.', 'visualizer' )
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Duration', 'visualizer' ),
+			'animation[duration]',
+			isset( $this->animation['duration'] ) ? $this->animation['duration'] : 0,
+			esc_html__( 'The duration of the animation, in milliseconds', 'visualizer' ),
+			0,
+			'number'
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Easing', 'visualizer' ),
+			'animation[easing]',
+			isset( $this->animation['easing'] ) ? $this->animation['easing'] : null,
+			array(
+				'linear'    => esc_html__( 'Constant speed', 'visualizer' ),
+				'in'    => esc_html__( 'Start slow and speed up', 'visualizer' ),
+				'out'   => esc_html__( 'Start fast and slow down', 'visualizer' ),
+				'inAndOut'  => esc_html__( 'Start slow, speed up, then slow down', 'visualizer' ),
+			),
+			esc_html__( 'The easing function applied to the animation.', 'visualizer' )
+		);
+
+		self::_renderSectionEnd();
+
 	}
 
 	/**
@@ -689,6 +769,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<textarea class="control-text" ', $attributes, ' name="', $name, '" placeholder="', $placeholder, '">', $value, '</textarea>';
 			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
+	}
+
+	/**
+	 * Returns the library this chart implements.
+	 */
+	public function getLibrary() {
+		return $this->_library;
 	}
 
 }

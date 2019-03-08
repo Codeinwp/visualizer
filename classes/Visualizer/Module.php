@@ -253,24 +253,29 @@ class Visualizer_Module {
 	 * @param string $filename The name of the file to use.
 	 */
 	private function _getExcel( $rows, $filename ) {
-		// PHPExcel does not like sheet names longer than 31 characters.
+		// PHPExcel did not like sheet names longer than 31 characters and we will assume the same with PhpSpreadsheet
 		$chart      = substr( $filename, 0, 30 );
 		$filename   .= '.xlsx';
 
+		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once( $vendor_file );
+		}
+
 		$xlsData    = '';
-		if ( class_exists( 'PHPExcel' ) ) {
-			$doc        = new PHPExcel();
+		if ( class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) ) {
+			$doc        = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 			$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
 			$doc->getActiveSheet()->setTitle( sanitize_title( $chart ) );
 			$doc        = apply_filters( 'visualizer_excel_doc', $doc );
-			$writer = PHPExcel_IOFactory::createWriter( $doc, 'Excel2007' );
+			$writer = PhpOffice\PhpSpreadsheet\IOFactory::createWriter( $doc, 'Xlsx' );
 			ob_start();
 			$writer->save( 'php://output' );
 			$xlsData = ob_get_contents();
 			ob_end_clean();
 		} else {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PHPExcel does not exist!', 'error', __FILE__, __LINE__ );
-			error_log( 'Class PHPExcel does not exist!' );
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!', 'error', __FILE__, __LINE__ );
+			error_log( 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!' );
 		}
 		return array(
 			'csv'  => 'data:application/vnd.ms-excel;base64,' . base64_encode( $xlsData ),
@@ -399,6 +404,154 @@ class Visualizer_Module {
 			return '';
 		}
 		return reset( $array );
+	}
+
+	/**
+	 * Gets/creates the JS where user-specific customizations can be/have been added.
+	 */
+	protected function get_user_customization_js() {
+		// use this as the JS file in case we are not able to create the file in uploads.
+		$default    = VISUALIZER_ABSURL . 'js/customization.js';
+
+		$uploads    = wp_get_upload_dir();
+		$specific   = $uploads['baseurl'] . '/visualizer/customization.js';
+
+		// for testing on user sites (before we send them the correctly customized file).
+		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
+			return $default;
+		}
+
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		WP_Filesystem();
+		global $wp_filesystem;
+
+		$dir    = $wp_filesystem->wp_content_dir() . 'uploads/visualizer';
+		$file   = $wp_filesystem->wp_content_dir() . 'uploads/visualizer/customization.js';
+
+		if ( $wp_filesystem->is_readable( $file ) ) {
+			return $specific;
+		}
+
+		if ( $wp_filesystem->exists( $file ) && ! $wp_filesystem->is_readable( $file ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to read file %s', $file ), 'error', __FILE__, __LINE__ );
+			return $default;
+		}
+
+		if ( ! $wp_filesystem->exists( $dir ) ) {
+			if ( ( $done = $wp_filesystem->mkdir( $dir ) ) === false ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
+				return $default;
+			}
+		}
+
+		// if file does not exist, copy.
+		if ( ! $wp_filesystem->exists( $file ) ) {
+			$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
+			if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
+				return $default;
+			}
+		}
+
+		return $specific;
+	}
+
+	/**
+	 * Load the class for the given chart's chart type so that its assets can be loaded.
+	 */
+	protected function load_chart_type( $chart_id ) {
+		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$name   = 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
+		$class  = null;
+		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
+			$class  = new $name;
+		}
+
+		if ( is_null( $class ) && VISUALIZER_PRO ) {
+			// lets see if this type exists in pro. New Lite(3.1.0+) & old Pro(1.8.0-).
+			$class  = apply_filters( 'visualizer_pro_chart_type_sidebar', null, array( 'type' => $type, 'settings' => get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ) ) );
+		}
+
+		return is_null( $class ) ? null : $class->getLibrary();
+	}
+
+	/**
+	 * Generates the inline CSS to apply to the chart and adds these classes to the settings.
+	 *
+	 * @access public
+	 * @param int   $id         The id of the chart.
+	 * @param array $settings   The settings of the chart.
+	 */
+	protected function get_inline_custom_css( $id, $settings ) {
+		$css        = '';
+
+		$arguments  = array( '', $settings );
+		if ( ! isset( $settings['customcss'] ) ) {
+			return $arguments;
+		}
+
+		$classes    = array();
+		$css        = '<style type="text/css" name="visualizer-custom-css" id="customcss-' . $id . '">';
+		foreach ( $settings['customcss'] as $name => $element ) {
+			$attributes = array();
+			foreach ( $element as $property => $value ) {
+				$attributes[]   = $this->handle_css_property( $property, $value );
+			}
+			$class_name = $id . $name;
+			$properties = implode( '; ', array_filter( $attributes ) );
+			if ( ! empty( $properties ) ) {
+				$css    .= '.' . $class_name . ' {' . $properties . ' !important;}';
+				$classes[ $name ] = $class_name;
+			}
+		}
+		$css        .= '</style>';
+
+		$settings['cssClassNames']  = $classes;
+
+		$arguments  = array( $css, $settings );
+		apply_filters_ref_array( 'visualizer_inline_css', array( &$arguments ) );
+
+		return $arguments;
+	}
+
+	/**
+	 * Handles CSS properties that might need special syntax.
+	 *
+	 * @access private
+	 * @param string $property The name of the css property.
+	 * @param string $value The value of the css property.
+	 */
+	private function handle_css_property( $property, $value ) {
+		if ( empty( $property ) || empty( $value ) ) {
+			return '';
+		}
+
+		switch ( $property ) {
+			case 'transform':
+				$value  = 'rotate(' . $value . 'deg)';
+				break;
+		}
+		return $property . ': ' . $value;
+	}
+
+	/**
+	 * Determines if charts have been created of the particular chart type.
+	 */
+	protected static function hasChartType( $type ) {
+		$args = array(
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+			'fields'        => 'ids',
+			'post_status'   => 'publish',
+			'meta_query'    => array(
+				array(
+					'key'       => Visualizer_Plugin::CF_CHART_TYPE,
+					'value'     => $type,
+				),
+			),
+		);
+
+		$q = new WP_Query( $args );
+		return $q->found_posts > 0;
 	}
 
 }

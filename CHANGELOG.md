@@ -1,4 +1,64 @@
 
+ ### v3.1.3 - 2019-02-24 
+ **Changes:** 
+ * Fix issue with changing column settings of the last column in table chart
+* Add support for query language to get subset of data from Google Spreadsheet
+* Fix conflict with jquery 3.3.x
+* Migrated PHPExcel to PhpSpreadsheet
+* Front end action 'print' should print the chart and fall back to printing the data
+* Fix issue with table chart not showing in IE
+* Fix issue with multiple instances of same chart not showing
+* Fix issue with date type column does not work with Combo charts
+* Tested with WP 5.1
+ 
+ ### v3.1.2 - 2018-12-06 
+ **Changes:** 
+ * Fix bug "Warning: A non-numeric value encountered"
+* Tested with WP 5.0
+ 
+ ### v3.1.1 - 2018-12-05 
+ **Changes:** 
+ * Fix issue with Gutenberg support
+* Fix issue with loading new Table chart
+* Fix options that don't work correctly with some charts
+ 
+ ### v3.1.0 - 2018-12-03 
+ **Changes:** 
+ * Add Table chart
+* Fix date format in sample files
+ 
+ ### v3.0.12 - 2018-10-11 
+ **Changes:** 
+ * Added filter to enable users to change schedule of charts.
+* Fixed bug with line chart with timeofday column.
+* Fixed bug with scheduled charts that sometimes did not show updated data.
+* Javascript can be customized on a per user basis that will not be wiped out on update.
+ 
+ ### v3.0.11 - 2018-08-15 
+ **Changes:** 
+ * Fixed issue with the Series Settings options for the Table Chart
+* Fixed issue with chart showing "Table has no columns" with remote sources
+ 
+ ### v3.0.10 - 2018-07-20 
+ **Changes:** 
+ * Fixed problem with chart reverting to the default values
+* Fixed problem with Boolean column type
+* Fixed problem with the Geo chart type not saving colors options
+ 
+ ### v3.0.9 - 2018-07-12 
+ **Changes:** 
+ * New chart title option for the back-end of the charts that don't allow a title on the front-end
+* Store the png images of the charts in a global array that can be used in JS
+* Added options for charts animations
+ 
+ ### v3.0.8 - 2018-06-27 
+ **Changes:** 
+ * Added revision support for the chart post type
+* Added both % and Value to the Pie Slice
+* Use the blog locale for Visualizer's options
+* Fixed issue with data being fetched from the remote source every single time the chart was shown
+* Fixed issue with scheduled charts not being updated if one of the scheduled charts is deleted
+ 
  ### v3.0.7 - 2018-03-26 
  **Changes:** 
  * Adds insert button in chart library.
