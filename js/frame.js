@@ -4,6 +4,19 @@
 /* global ajaxurl */
 /* global CodeMirror */
 
+/*
+THIS IS TEMPORARY AND CAN BE DELETED ONCE THE FEATURE IS IMPLEMENTED
+
+- LHS form has a text box to accept url
+- fetch will do ajax call and fetch url. add filter here so that one can add authentication also if required to fetching.
+- url will be parsed and array elements will be determined. the keys in the array elements can form the series. we are going to ask the user which ones to use.
+- do we look at only the first level for array elements (data: []) or even Nth level (data: { series: [] } }?
+- we store the potential keys in some format and display to the user along with the data type that key can take. so dropdown of keys vs. dropdown of data types
+- the user selects the keys to use (there should be someway of showing the full json, well as showing all the values the key has taken maybe on hover)
+- the user selects the keys and the data types and submits
+- we should store the full path of the key from the root element
+*/
+
 (function ($) {
     $(window).on('load', function(){
         // scroll to the selected chart type.
@@ -313,6 +326,25 @@
             }
         } );
 
+
+        $( '#visualizer-json-fetch' ).on( 'click', function(e){
+            e.preventDefault();
+            start_ajax( $( '#visualizer-json-screen' ) );
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['parse_json'],
+                    'security'  : visualizer.ajax['nonces']['parse_json'],
+                    'params'    : $('#json-parameters-form').serialize()
+                },
+                success : function(data){
+                },
+                complete: function(){
+                    end_ajax($('#visualizer-json-screen'));
+                }
+            });
+        });
     }
 
     function start_ajax(element){

@@ -61,6 +61,7 @@ class Visualizer_Plugin {
 	 */
 	const ACTION_FETCH_DB_DATA = 'visualizer-fetch-db-data';
 	const ACTION_SAVE_DB_QUERY = 'visualizer-save-db-query';
+	const ACTION_PARSE_JSON = 'visualizer-parse-json';
 
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';

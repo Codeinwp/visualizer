@@ -61,6 +61,42 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_FETCH_DB_DATA, 'getQueryData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_DB_QUERY, 'saveQuery' );
+
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_PARSE_JSON, 'parseJSON' );
+	}
+
+	public function parseJSON() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_PARSE_JSON . Visualizer_Plugin::VERSION, 'security' );
+
+		$params     = wp_parse_args( $_POST['params'] );
+
+		$this->processJSON( $params['url'] );
+	}
+
+	private function processJSON( $url ) {
+		$response	= wp_remote_get( $url );
+		$json	= wp_remote_retrieve_body( $response );
+		$array	= json_decode( $json, true );
+		$this->markJSON( '', $array );
+		error_log(json_encode( $array ) );
+	}
+
+	function markJSON( $root, &$array ) {
+		foreach ( $array as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$append = '';
+				if ( ! is_numeric( $key ) ) {
+					$append = '>' . $key;
+				}
+				$new_key = $this->markJSON( $root . $append, $value );
+				error_log("sent $root$append got $new_key vs $key ");
+			} else {
+				if ( ! empty( $root ) ) {
+					//error_log("else $root>$key");
+					return "$root>$key";
+				}
+			}
+		}
 	}
 
 	/**
@@ -467,10 +503,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'nonces'  => array(
 						'permissions'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA ),
 						'db_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION ),
+						'parse_json'   => wp_create_nonce( Visualizer_Plugin::ACTION_PARSE_JSON . Visualizer_Plugin::VERSION ),
 					),
 					'actions' => array(
 						'permissions'   => Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA,
 						'db_get_data'   => Visualizer_Plugin::ACTION_FETCH_DB_DATA,
+						'parse_json'   => Visualizer_Plugin::ACTION_PARSE_JSON,
 					),
 				),
 				'db_query' => array(
