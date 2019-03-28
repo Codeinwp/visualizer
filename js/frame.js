@@ -4,19 +4,6 @@
 /* global ajaxurl */
 /* global CodeMirror */
 
-/*
-THIS IS TEMPORARY AND CAN BE DELETED ONCE THE FEATURE IS IMPLEMENTED
-
-- LHS form has a text box to accept url
-- fetch will do ajax call and fetch url. add filter here so that one can add authentication also if required to fetching.
-- url will be parsed and array elements will be determined. the keys in the array elements can form the series. we are going to ask the user which ones to use.
-- do we look at only the first level for array elements (data: []) or even Nth level (data: { series: [] } }?
-- we store the potential keys in some format and display to the user along with the data type that key can take. so dropdown of keys vs. dropdown of data types
-- the user selects the keys to use (there should be someway of showing the full json, well as showing all the values the key has taken maybe on hover)
-- the user selects the keys and the data types and submits
-- we should store the full path of the key from the root element
-*/
-
 (function ($) {
     $(window).on('load', function(){
         // scroll to the selected chart type.
@@ -29,6 +16,7 @@ THIS IS TEMPORARY AND CAN BE DELETED ONCE THE FEATURE IS IMPLEMENTED
         // open the correct source tab.
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
+        $('li.viz-group.' + source + ' span.viz-section-title.' + source).addClass('open');
 
         init_permissions();
 
@@ -329,22 +317,69 @@ THIS IS TEMPORARY AND CAN BE DELETED ONCE THE FEATURE IS IMPLEMENTED
 
         $( '#visualizer-json-fetch' ).on( 'click', function(e){
             e.preventDefault();
+            $('#json-root-form').hide();
+            $('#visualizer-json-screen .json-table').html('');
             start_ajax( $( '#visualizer-json-screen' ) );
             $.ajax({
                 url     : ajaxurl,
                 method  : 'post',
                 data    : {
-                    'action'    : visualizer.ajax['actions']['parse_json'],
-                    'security'  : visualizer.ajax['nonces']['parse_json'],
-                    'params'    : $('#json-parameters-form').serialize()
+                    'action'    : visualizer.ajax['actions']['json_get_roots'],
+                    'security'  : visualizer.ajax['nonces']['json_get_roots'],
+                    'params'    : $('#json-endpoint-form').serialize()
                 },
                 success : function(data){
+                    if(data.success){
+                        $('#json-root-form [name="url"]').val(data.data.url);
+                        $('#vz-import-json-root').empty();
+                        $.each(data.data.roots, function(i, name){
+                            $('#vz-import-json-root').append('<option value="' + name + '">' + name + '</option>');
+                        });
+                        $('#json-root-form').fadeIn('medium');
+                    }
                 },
                 complete: function(){
                     end_ajax($('#visualizer-json-screen'));
                 }
             });
         });
+
+        $( '#visualizer-json-parse' ).on( 'click', function(e){
+            e.preventDefault();
+            $('#visualizer-json-screen .json-table').html('');
+            start_ajax( $( '#visualizer-json-screen' ) );
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['json_get_data'],
+                    'security'  : visualizer.ajax['nonces']['json_get_data'],
+                    'params'    : $('#json-root-form').serialize()
+                },
+                success : function(data){
+                    if(data.success){
+                        $('#json-conclude-form [name="url"]').val(data.data.url);
+                        $('#json-conclude-form [name="root"]').val(data.data.root);
+                        $('#json-conclude-form .json-table').html(data.data.table);
+                        $('#json-conclude-form .results').DataTable({
+                            paging: false,
+                            searching: false,
+                            ordering: false,
+                            select: false
+                        });
+                        $('#json-conclude-form').show();
+                    }
+                },
+                complete: function(){
+                    end_ajax($('#visualizer-json-screen'));
+                }
+            });
+        });
+
+        $('#visualizer-json-screen').on( 'click', '#visualizer-json-conclude', function(e){
+            $( '#json-chart-button' ).trigger('click');
+        });
+
     }
 
     function start_ajax(element){

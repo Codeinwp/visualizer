@@ -62,42 +62,70 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_FETCH_DB_DATA, 'getQueryData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_DB_QUERY, 'saveQuery' );
 
-		$this->_addAjaxAction( Visualizer_Plugin::ACTION_PARSE_JSON, 'parseJSON' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_GET_ROOTS, 'getJsonRoots' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_GET_DATA, 'getJsonData' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_SET_DATA, 'setJsonData' );
 	}
 
-	public function parseJSON() {
-		check_ajax_referer( Visualizer_Plugin::ACTION_PARSE_JSON . Visualizer_Plugin::VERSION, 'security' );
+	public function getJsonRoots() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION, 'security' );
 
 		$params     = wp_parse_args( $_POST['params'] );
 
-		$this->processJSON( $params['url'] );
+		$source	= new Visualizer_Source_Json( $params );
+
+		$roots = $source->fetchRoots();
+		wp_send_json_success( array( 'url' => $params['url'], 'roots' => $roots ) );
 	}
 
-	private function processJSON( $url ) {
-		$response	= wp_remote_get( $url );
-		$json	= wp_remote_retrieve_body( $response );
-		$array	= json_decode( $json, true );
-		$this->markJSON( '', $array );
-		error_log(json_encode( $array ) );
+	public function getJsonData() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION, 'security' );
+
+		$params	= wp_parse_args( $_POST['params'] );
+
+		$source	= new Visualizer_Source_Json( $params );
+
+		$data	= $source->parse();
+		$data	= Visualizer_Render_Layout::show( 'json-table', $data );
+		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'] ) );
 	}
 
-	function markJSON( $root, &$array ) {
-		foreach ( $array as $key => $value ) {
-			if ( is_array( $value ) ) {
-				$append = '';
-				if ( ! is_numeric( $key ) ) {
-					$append = '>' . $key;
-				}
-				$new_key = $this->markJSON( $root . $append, $value );
-				error_log("sent $root$append got $new_key vs $key ");
-			} else {
-				if ( ! empty( $root ) ) {
-					//error_log("else $root>$key");
-					return "$root>$key";
-				}
-			}
+	public function setJsonData() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION, 'security' );
+
+		$params = $_POST;
+		$chart_id = $_GET['chart'];
+
+		if ( empty( $chart_id ) ) {
+			wp_die();
 		}
+
+		$chart	= get_post( $chart_id );
+
+		$source	= new Visualizer_Source_Json( $params );
+		$source->fetch();
+
+		$content    = $source->getData();
+		$chart->post_content = $content;
+		wp_update_post( $chart->to_array() );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
+
+
+		//wp_send_json_success( array( 'data' => $content, 'series' => $source->getSeries() ) );
+
+		$render			= new Visualizer_Render_Page_Update();
+		$render->id     = $chart->ID;
+		$render->data   = json_encode( $source->getRawData() );
+		$render->series = json_encode( $source->getSeries() );
+		$render->render();
+
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 	}
+
 
 	/**
 	 * Fetches charts from database.
@@ -503,12 +531,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'nonces'  => array(
 						'permissions'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA ),
 						'db_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION ),
-						'parse_json'   => wp_create_nonce( Visualizer_Plugin::ACTION_PARSE_JSON . Visualizer_Plugin::VERSION ),
+						'json_get_roots'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION ),
+						'json_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION ),
 					),
 					'actions' => array(
 						'permissions'   => Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA,
 						'db_get_data'   => Visualizer_Plugin::ACTION_FETCH_DB_DATA,
-						'parse_json'   => Visualizer_Plugin::ACTION_PARSE_JSON,
+						'json_get_roots'   => Visualizer_Plugin::ACTION_JSON_GET_ROOTS,
+						'json_get_data'   => Visualizer_Plugin::ACTION_JSON_GET_DATA,
 					),
 				),
 				'db_query' => array(

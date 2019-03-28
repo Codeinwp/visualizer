@@ -103,7 +103,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</form>
 							</div>
 						</li>
-						<li class="viz-group visualizer-import-url visualizer_source_csv_remote">
+						<li class="viz-group visualizer-import-url visualizer_source_csv_remote visualizer_source_json">
 							<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' ); ?></h2>
 							<ul class="viz-group-content">
 								<li class="viz-subsection">

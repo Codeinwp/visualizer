@@ -61,7 +61,11 @@ class Visualizer_Plugin {
 	 */
 	const ACTION_FETCH_DB_DATA = 'visualizer-fetch-db-data';
 	const ACTION_SAVE_DB_QUERY = 'visualizer-save-db-query';
-	const ACTION_PARSE_JSON = 'visualizer-parse-json';
+	const ACTION_JSON_GET_ROOTS = 'visualizer-json-get-roots';
+	const ACTION_JSON_GET_DATA = 'visualizer-json-get-data';
+	const ACTION_JSON_SET_DATA = 'visualizer-json-set-data';
+	const CF_JSON_URL = 'visualizer-json-url';
+	const CF_JSON_ROOT = 'visualizer-json-root';
 
 	// custom filters
 	const FILTER_CHART_WRAPPER_CLASS = 'visualizer-chart-wrapper-class';
