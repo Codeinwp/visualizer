@@ -58,6 +58,14 @@ abstract class Visualizer_Source {
 	protected $_series = array();
 
 	/**
+	 * The error message.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_error;
+
+	/**
 	 * Return allowed types
 	 *
 	 * @since 1.0.1
@@ -356,5 +364,16 @@ abstract class Visualizer_Source {
 		// invalid format
 		return null;
 	}
+
+	/**
+	 * Returns the error, if any.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function get_error() {
+		return $this->_error;
+	}
+
 
 }

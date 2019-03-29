@@ -185,10 +185,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 												<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
-												<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
+												<select name="vz-json-time" id="vz-json-time" class="visualizer-select" data-chart="<?php echo $this->chart->ID; ?>">
 													<?php
 													$bttn_label = 'visualizer_source_json' === $source_of_chart ? __( 'Modify Parameters', 'visualizer' ) : __( 'Create Parameters', 'visualizer' );
-													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
+													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
 													$schedules = apply_filters(
 														'visualizer_chart_schedules', array(
 															'-1' => __( 'One-time', 'visualizer' ),

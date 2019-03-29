@@ -387,6 +387,27 @@
             $( '#json-chart-button' ).trigger('click');
         });
 
+        $('#json-chart-save-button').on('click', function(e){
+            e.preventDefault();
+            $('#canvas').lock();
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['json_set_schedule'],
+                    'security'  : visualizer.ajax['nonces']['json_set_schedule'],
+                    'chart'     : $('#vz-json-time').attr('data-chart'),
+                    'time'      : $('#vz-json-time').val()
+                },
+                success : function(data){
+                    // do nothing.
+                },
+                complete: function(){
+                    $('#canvas').unlock();
+                }
+            });
+        });
+
     }
 
     function start_ajax(element){

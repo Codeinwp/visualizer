@@ -65,9 +65,47 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_GET_ROOTS, 'getJsonRoots' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_GET_DATA, 'getJsonData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_SET_DATA, 'setJsonData' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE, 'setJsonSchedule' );
 
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 
+	}
+
+	public function setJsonSchedule() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION, 'security' );
+
+		$chart_id = filter_input(
+			INPUT_POST,
+			'chart',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			)
+		);
+
+		if ( ! $chart_id ) {
+			wp_send_json_error();
+		}
+
+		$time = filter_input(
+			INPUT_POST,
+			'time',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			)
+		);
+
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE );
+
+		if ( -1 < $time ) {
+			add_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, $time );
+		}
+		wp_send_json_success();
 	}
 
 	public function getJsonRoots() {
@@ -565,12 +603,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'db_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION ),
 						'json_get_roots'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION ),
 						'json_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION ),
+						'json_set_schedule'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
 					),
 					'actions' => array(
 						'permissions'   => Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA,
 						'db_get_data'   => Visualizer_Plugin::ACTION_FETCH_DB_DATA,
 						'json_get_roots'   => Visualizer_Plugin::ACTION_JSON_GET_ROOTS,
 						'json_get_data'   => Visualizer_Plugin::ACTION_JSON_GET_DATA,
+						'json_set_schedule'   => Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE,
 					),
 				),
 				'db_query' => array(

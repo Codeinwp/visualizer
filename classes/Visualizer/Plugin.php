@@ -66,8 +66,10 @@ class Visualizer_Plugin {
 	const ACTION_JSON_GET_ROOTS = 'visualizer-json-get-roots';
 	const ACTION_JSON_GET_DATA = 'visualizer-json-get-data';
 	const ACTION_JSON_SET_DATA = 'visualizer-json-set-data';
+	const ACTION_JSON_SET_SCHEDULE = 'visualizer-json-set-schedule';
 	const CF_JSON_URL = 'visualizer-json-url';
 	const CF_JSON_ROOT = 'visualizer-json-root';
+	const CF_JSON_SCHEDULE = 'visualizer-json-schedule';
 
 	const ACTION_SAVE_FILTER_QUERY = 'visualizer-save-filter-query';
 
