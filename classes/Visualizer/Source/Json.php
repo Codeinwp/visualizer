@@ -146,7 +146,9 @@ class Visualizer_Source_Json extends Visualizer_Source {
 				$root = $this->getRootElements( $now, $key, $root, $value );
 			}
 		}
-		return array_filter( array_unique( $root ) );
+		$roots = array_filter( array_unique( $root ) );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Roots found for %s = ', $this->_url, print_r( $roots, true ) ), 'debug', __FILE__, __LINE__ );
+		return $roots;
 	}
 
 	/**
@@ -194,6 +196,8 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 		}
 
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Series found for %s = ', $this->_url, print_r( $this->_series, true ) ), 'debug', __FILE__, __LINE__ );
+
 		return true;
 	}
 
@@ -218,6 +222,8 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 			$this->_data[] = $this->_normalizeData( $data_row );
 		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Data found for %s = ', $this->_url, print_r( $this->_data, true ) ), 'debug', __FILE__, __LINE__ );
 
 		return true;
 	}
