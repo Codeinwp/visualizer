@@ -65,7 +65,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @param string $url The url to the data.
+	 * @param array $params The array that contains the definition of the data.
 	 */
 	public function __construct( $params = null ) {
 		$this->_args = $params;
@@ -77,23 +77,37 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		}
 	}
 
+	/**
+	 * Get the root elements for JSON-endpoint.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
 	public function fetchRoots() {
 		return $this->getRootElements( '', '', array(), $this->getJSON() );
 	}
 
+	/**
+	 * Parse the JSON-endpoint from the chosen root as the base.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
 	public function parse() {
-		$array	= $this->getJSON();
-		$root	= array_filter( explode( '>', $this->_root ) );
-		$leaf	= $array;
+		$array  = $this->getJSON();
+		$root   = array_filter( explode( '>', $this->_root ) );
+		$leaf   = $array;
 		foreach ( $root as $tag ) {
 			if ( array_key_exists( $tag, $leaf ) ) {
 				$leaf = $array[ $tag ];
 			} else {
 				// if the tag does not exist, we assume it is present in the 0th element of the current array.
-				$leaf = $leaf[0][$tag];
+				$leaf = $leaf[0][ $tag ];
 			}
 		}
-		
+
 		// now that we have got the final array we need to operate on, we will use this as the collection of series.
 		// but we will filter out all elements of this array that have array as a value.
 		$data = array();
@@ -103,14 +117,23 @@ class Visualizer_Source_Json extends Visualizer_Source {
 				if ( is_array( $value ) ) {
 					continue;
 				}
-				$inner_data[$key] = $value;
+				$inner_data[ $key ] = $value;
 			}
 			$data[] = $inner_data;
 		}
 
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with rooot %s is %s = ', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
+
 		return $data;
 	}
 
+	/**
+	 * Get the root elements for JSON-endpoint.
+	 *
+	 * @since ?
+	 *
+	 * @access private
+	 */
 	private function getRootElements( $parent, $now, $root, $array ) {
 		foreach ( $array as $key => $value ) {
 			if ( is_array( $value ) && ! empty( $value ) ) {
@@ -126,13 +149,24 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		return array_filter( array_unique( $root ) );
 	}
 
+	/**
+	 * Get the JSON for the JSON-endpoint.
+	 *
+	 * @since ?
+	 *
+	 * @access private
+	 */
 	private function getJSON() {
 		$response = wp_remote_get( $this->_url, apply_filters( 'visualizer_json_args', array() ) );
 		if ( is_wp_error( $response ) ) {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = ', $this->_url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
 			return null;
 		}
-		$array	= json_decode( wp_remote_retrieve_body( $response ), true );
+
+		$array  = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'JSON array for the endpoint is %s = ', print_r( $array, true ) ), 'debug', __FILE__, __LINE__ );
+
 		return $array;
 	}
 
@@ -145,7 +179,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @access private
 	 */
 	private function _fetchSeries() {
-		$params	= $this->_args;
+		$params = $this->_args;
 		$headers = array_filter( $params['header'] );
 		$types = array_filter( $params['type'] );
 		$header_row = $type_row = array();
@@ -171,10 +205,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @access private
 	 */
 	private function _fetchData() {
-		$params	= $this->_args;
+		$params = $this->_args;
 
-		$headers	= wp_list_pluck( $this->_series, 'label' );
-		$data	= $this->parse();
+		$headers    = wp_list_pluck( $this->_series, 'label' );
+		$data   = $this->parse();
 		foreach ( $data as $line ) {
 			$data_row = array();
 			foreach ( $line as $header => $value ) {
@@ -197,13 +231,20 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @return boolean TRUE on success, otherwise FALSE.
 	 */
 	public function fetch() {
-		$params	= $this->_args;
+		$params = $this->_args;
 		$this->_fetchSeries();
 		$this->_fetchData();
 
 		return true;
 	}
 
+	/**
+	 * Refresh the data for the provided series.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
 	public function refresh( $series ) {
 		$this->_series = $series;
 		$this->_fetchData();

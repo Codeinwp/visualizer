@@ -64,7 +64,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 */
 	public static function _renderJsonScreen( $args ) {
 		$id      = $args[1];
-		$action	= add_query_arg(
+		$action = add_query_arg(
 			array(
 				'action' => Visualizer_Plugin::ACTION_JSON_SET_DATA,
 				'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
@@ -89,14 +89,14 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						class="visualizer-input visualizer-remote-url">
 					<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch', 'visualizer' ); ?></button>
 				</form>
-				<form id="json-root-form" style="<?php echo empty( $root ) ? "display: none" : "" ?>">
+				<form id="json-root-form" style="<?php echo empty( $root ) ? 'display: none' : ''; ?>">
 					<select name="root" id="vz-import-json-root">
-					<?php 
-						if ( ! empty( $root ) ) {
-					?>
-						<option value="<?php echo $root; ?>"><?php echo $root; ?></option>
 					<?php
-						}
+					if ( ! empty( $root ) ) {
+						?>
+						<option value="<?php echo $root; ?>"><?php echo $root; ?></option>
+						<?php
+					}
 					?>
 					</select>
 					<input type="hidden" name="url" value="<?php echo $url; ?>">
@@ -189,8 +189,8 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 * @access public
 	 */
 	public static function _renderJsonTable( $args ) {
-		$data		= $args[1];
-		$headers	= array_keys( $data[0] );
+		$data       = $args[1];
+		$headers    = array_keys( $data[0] );
 		ob_start();
 		?>
 		<table cellspacing="0" width="100%" class="results">
@@ -208,17 +208,17 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<tbody>	
 				<tr>
 		<?php
-				foreach ( $headers as $header ) {
-					echo '<td><input name="header[]" type="hidden" value="' . $header . '"><select name="type[' . $header . ']">';
-					echo '<option value="">' . __( 'Exclude', 'visualizer' ) . '</option>';
-					echo '<option value="0" disabled>--' . __( 'OR', 'visualizer' ) . '--</option>';
+		foreach ( $headers as $header ) {
+			echo '<td><input name="header[]" type="hidden" value="' . $header . '"><select name="type[' . $header . ']">';
+			echo '<option value="">' . __( 'Exclude', 'visualizer' ) . '</option>';
+			echo '<option value="0" disabled>--' . __( 'OR', 'visualizer' ) . '--</option>';
 
-					foreach( Visualizer_Source::getAllowedTypes() as $type ) {
-						echo '<option value="' . $type . '">' . $type . '</option>';
-					}
+			foreach ( Visualizer_Source::getAllowedTypes() as $type ) {
+				echo '<option value="' . $type . '">' . $type . '</option>';
+			}
 
-					echo '</select></td>';
-				}
+			echo '</select></td>';
+		}
 		?>
 				</tr>
 		<?php

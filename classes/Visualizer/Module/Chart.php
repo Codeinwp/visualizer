@@ -71,6 +71,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 	}
 
+	/**
+	 * Sets the schedule for how JSON-endpoint charts should be updated.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
 	public function setJsonSchedule() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION, 'security' );
 
@@ -108,29 +115,50 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_send_json_success();
 	}
 
+	/**
+	 * Get the root elements for JSON-endpoint.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
 	public function getJsonRoots() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION, 'security' );
 
 		$params     = wp_parse_args( $_POST['params'] );
 
-		$source	= new Visualizer_Source_Json( $params );
+		$source = new Visualizer_Source_Json( $params );
 
 		$roots = $source->fetchRoots();
 		wp_send_json_success( array( 'url' => $params['url'], 'roots' => $roots ) );
 	}
 
+	/**
+	 * Get the data for the JSON-endpoint corresponding to the chosen root.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
 	public function getJsonData() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION, 'security' );
 
-		$params	= wp_parse_args( $_POST['params'] );
+		$params = wp_parse_args( $_POST['params'] );
 
-		$source	= new Visualizer_Source_Json( $params );
+		$source = new Visualizer_Source_Json( $params );
 
-		$data	= $source->parse();
-		$data	= Visualizer_Render_Layout::show( 'json-table', $data );
+		$data   = $source->parse();
+		$data   = Visualizer_Render_Layout::show( 'json-table', $data );
 		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'] ) );
 	}
 
+	/**
+	 * Updates the database with the correct post parameters for JSON-endpoint charts.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
 	public function setJsonData() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION, 'security' );
 
@@ -141,9 +169,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_die();
 		}
 
-		$chart	= get_post( $chart_id );
+		$chart  = get_post( $chart_id );
 
-		$source	= new Visualizer_Source_Json( $params );
+		$source = new Visualizer_Source_Json( $params );
 		$source->fetch();
 
 		$content    = $source->getData();
@@ -155,10 +183,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
 
-
-		//wp_send_json_success( array( 'data' => $content, 'series' => $source->getSeries() ) );
-
-		$render			= new Visualizer_Render_Page_Update();
+		// wp_send_json_success( array( 'data' => $content, 'series' => $source->getSeries() ) );
+		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
 		$render->data   = json_encode( $source->getRawData() );
 		$render->series = json_encode( $source->getSeries() );

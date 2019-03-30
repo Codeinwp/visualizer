@@ -219,9 +219,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 					}
 				}
 
-				$url		= get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true );
-				$root		= get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true );
-				$series		= get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+				$url        = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true );
+				$root       = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true );
+				$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
 				$source     = new Visualizer_Source_Json( array( 'url' => $url, 'root' => $root ) );
 				$source->refresh( $series );
 				break;
