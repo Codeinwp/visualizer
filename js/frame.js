@@ -301,6 +301,7 @@
     function init_json_import(){
         $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
 
+        // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
             $('#content').css('width', 'calc(100% - 300px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
@@ -321,7 +322,7 @@
             }
         } );
 
-
+        // fetch the roots for the provided endpoint
         $( '#visualizer-json-fetch' ).on( 'click', function(e){
             e.preventDefault();
             $('#json-root-form').hide();
@@ -351,6 +352,7 @@
             });
         });
 
+        // fetch the data for the chosen root
         $( '#visualizer-json-parse' ).on( 'click', function(e){
             e.preventDefault();
             $('#visualizer-json-screen .json-table').html('');
@@ -383,10 +385,12 @@
             });
         });
 
+        // when the data is set and the chart is updated, toggle the screen so that the chart is shown
         $('#visualizer-json-screen').on( 'click', '#visualizer-json-conclude', function(e){
             $( '#json-chart-button' ).trigger('click');
         });
 
+        // update the schedule
         $('#json-chart-save-button').on('click', function(e){
             e.preventDefault();
             $('#canvas').lock();
