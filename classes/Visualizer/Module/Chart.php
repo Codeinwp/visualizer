@@ -183,7 +183,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
 
-		// wp_send_json_success( array( 'data' => $content, 'series' => $source->getSeries() ) );
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
 		$render->data   = json_encode( $source->getRawData() );
@@ -766,6 +765,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY );
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
 		}
+
+		// delete json related data.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
 
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
