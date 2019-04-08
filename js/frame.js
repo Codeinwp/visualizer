@@ -13,10 +13,11 @@
     });
 
     $(document).ready(function () {
-        // open the correct source tab.
+        // open the correct source tab/sub-tab.
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
         $('li.viz-group.' + source + ' span.viz-section-title.' + source).addClass('open');
+        $('li.viz-group.' + source + ' span.viz-section-title.' + source + '.open').parent().find('div.viz-section-items').show();
 
         init_permissions();
 
@@ -299,7 +300,13 @@
     }
 
     function init_json_import(){
+        var regex = new RegExp(visualizer.json_tag_separator, 'g');
+
         $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+        $('.visualizer-json-form').accordion({
+            heightStyle: 'content',
+            active: 0
+        });
 
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
@@ -319,14 +326,16 @@
                 filter_button.html( filter_button.attr( 'data-t-chart' ) );
                 filter_button.attr( 'data-current', 'chart' );
                 $( '#canvas' ).css("z-index", "1").show();
+                $('#canvas').unlock();
             }
         } );
 
         // fetch the roots for the provided endpoint
         $( '#visualizer-json-fetch' ).on( 'click', function(e){
             e.preventDefault();
-            $('#json-root-form').hide();
-            $('#visualizer-json-screen .json-table').html('');
+            $('.visualizer-json-form').accordion( 'option', 'active', 0 );
+            $('.visualizer-json-form h3.viz-step:not(.step1)').addClass('ui-state-disabled');
+            $('.json-table').html('');
             start_ajax( $( '#visualizer-json-screen' ) );
             $.ajax({
                 url     : ajaxurl,
@@ -341,9 +350,12 @@
                         $('#json-root-form [name="url"]').val(data.data.url);
                         $('#vz-import-json-root').empty();
                         $.each(data.data.roots, function(i, name){
-                            $('#vz-import-json-root').append('<option value="' + name + '">' + name + '</option>');
+                            $('#vz-import-json-root').append('<option value="' + name + '">' + name.replace(regex, visualizer.json_tag_separator_view) + '</option>');
                         });
                         $('#json-root-form').fadeIn('medium');
+                        json_accordion_activate(1, true);
+                    }else{
+                        alert(visualizer.l10n.json_error);
                     }
                 },
                 complete: function(){
@@ -355,7 +367,8 @@
         // fetch the data for the chosen root
         $( '#visualizer-json-parse' ).on( 'click', function(e){
             e.preventDefault();
-            $('#visualizer-json-screen .json-table').html('');
+            $('.visualizer-json-form h3.viz-step:not(.step1):not(.step2)').addClass('ui-state-disabled');
+            $('.json-table').html('');
             start_ajax( $( '#visualizer-json-screen' ) );
             $.ajax({
                 url     : ajaxurl,
@@ -367,16 +380,32 @@
                 },
                 success : function(data){
                     if(data.success){
+                        $('#vz-import-json-paging option:not(.static)').remove();
+                        if(data.data.paging.length > 0){
+                            var $template = $('#vz-import-json-paging').attr('data-template');
+                            $.each(data.data.paging, function(i, name){
+                                var display = name.replace(regex, visualizer.json_tag_separator_view);
+                                display = $template.replace('?', display);
+                                $('#vz-import-json-paging').append('<option value="' + name + '">' + display + '</option>');
+                            });
+                            $('.json-pagination').show();
+                        }
                         $('#json-conclude-form [name="url"]').val(data.data.url);
                         $('#json-conclude-form [name="root"]').val(data.data.root);
                         $('#json-conclude-form .json-table').html(data.data.table);
-                        $('#json-conclude-form .results').DataTable({
+                        var $table = $('#json-conclude-form .results').DataTable({
                             paging: false,
                             searching: false,
                             ordering: false,
-                            select: false
+                            select: false,
+                            "scrollX": "100%",
+                            info: false,
                         });
-                        $('#json-conclude-form').show();
+                        json_accordion_activate(3, true);
+                        json_accordion_activate(2, false);
+                        $table.columns.adjust().draw();
+                    }else{
+                        alert(visualizer.l10n.json_error);
                     }
                 },
                 complete: function(){
@@ -386,8 +415,13 @@
         });
 
         // when the data is set and the chart is updated, toggle the screen so that the chart is shown
-        $('#visualizer-json-screen').on( 'click', '#visualizer-json-conclude', function(e){
+        $('#json-conclude-form').on( 'submit', function(e){
+            // populate the form elements that are in the misc tab.
+            $('#json-conclude-form-helper .json-form-element').each(function(x, y){
+                $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
+            });
             $( '#json-chart-button' ).trigger('click');
+            $('#canvas').lock();
         });
 
         // update the schedule
@@ -412,6 +446,13 @@
             });
         });
 
+    }
+
+    function json_accordion_activate($step, $activate){
+        $('.visualizer-json-form h3.viz-step.step' + ( $step + 1 )).removeClass('ui-state-disabled');
+        if($activate){
+            $('.visualizer-json-form').accordion( 'option', 'active', $step );
+        }
     }
 
     function start_ajax(element){

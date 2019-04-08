@@ -130,6 +130,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$source = new Visualizer_Source_Json( $params );
 
 		$roots = $source->fetchRoots();
+		if ( empty( $roots ) ) {
+			wp_send_json_error();
+		}
+
 		wp_send_json_success( array( 'url' => $params['url'], 'roots' => $roots ) );
 	}
 
@@ -145,11 +149,21 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$params = wp_parse_args( $_POST['params'] );
 
+		$chart_id = $params['chart'];
+
+		if ( empty( $chart_id ) ) {
+			wp_die();
+		}
+
 		$source = new Visualizer_Source_Json( $params );
 
 		$data   = $source->parse();
-		$data   = Visualizer_Render_Layout::show( 'json-table', $data );
-		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'] ) );
+		if ( empty( $data ) ) {
+			wp_send_json_error();
+		}
+
+		$data   = Visualizer_Render_Layout::show( 'json-table', $data, $chart_id );
+		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'], 'paging' => $source->getPaginationElements() ) );
 	}
 
 	/**
@@ -182,6 +196,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
+		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING );
+		if ( ! empty( $params['paging'] ) ) {
+			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
+		}
 
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
@@ -445,7 +463,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_style( 'visualizer-chosen', VISUALIZER_ABSURL . 'css/lib/chosen.min.css', array(), Visualizer_Plugin::VERSION );
 
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen', 'jquery-ui-accordion' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 		wp_register_script(
 			'visualizer-render',
@@ -614,6 +632,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
+					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -643,6 +662,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				),
 				'is_pro'    => VISUALIZER_PRO,
 				'page_type' => 'chart',
+				'json_tag_separator' => Visualizer_Source_Json::TAG_SEPARATOR,
+				'json_tag_separator_view' => Visualizer_Source_Json::TAG_SEPARATOR_VIEW,
 			)
 		);
 
@@ -769,6 +790,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// delete json related data.
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING );
 
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();

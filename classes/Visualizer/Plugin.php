@@ -70,6 +70,7 @@ class Visualizer_Plugin {
 	const CF_JSON_URL = 'visualizer-json-url';
 	const CF_JSON_ROOT = 'visualizer-json-root';
 	const CF_JSON_SCHEDULE = 'visualizer-json-schedule';
+	const CF_JSON_PAGING = 'visualizer-json-paging';
 
 	const ACTION_SAVE_FILTER_QUERY = 'visualizer-save-filter-query';
 

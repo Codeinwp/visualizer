@@ -50,6 +50,16 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	protected $_root;
 
 	/**
+	 * The paging element.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_paging;
+
+	/**
 	 * The array that contains the definition of the data.
 	 *
 	 * @since 1.0.0
@@ -58,6 +68,9 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @var array
 	 */
 	protected $_args;
+
+	const TAG_SEPARATOR = '>';
+	const TAG_SEPARATOR_VIEW = ' &#x27A4; ';
 
 	/**
 	 * Constructor.
@@ -75,6 +88,11 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( isset( $this->_args['root'] ) ) {
 			$this->_root = trim( $this->_args['root'] );
 		}
+		if ( isset( $this->_args['paging'] ) ) {
+			$this->_paging = trim( $this->_args['paging'] );
+		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Constructor called for params = %s', print_r( $params, true ) ), 'debug', __FILE__, __LINE__ );
 	}
 
 	/**
@@ -85,7 +103,60 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @access public
 	 */
 	public function fetchRoots() {
-		return $this->getRootElements( '', '', array(), $this->getJSON() );
+		$roots  = apply_filters( 'visualizer_json_get_root_elements', false, $this->_url );
+		if ( false !== $roots ) {
+			return $roots;
+		}
+		return $this->getRootElements( 'root', '', array(), $this->getJSON() );
+	}
+
+	/**
+	 * Get the name of the elements that are likely to contain the paginated URLs.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function getPaginationElements() {
+		$pages = array();
+		$root   = explode( self::TAG_SEPARATOR, $this->_root );
+		// the pagination element is usually one level above the root element we are going to use
+		// e.g. if the data is in root > results, the pagination element (let's call it "next") would be root > next and not root > results > next.
+		array_pop( $root );
+
+		// base of the next element.
+		$base = implode( self::TAG_SEPARATOR, $root );
+		// get rid of the first element as that is the faux root element indicator
+		array_shift( $root );
+
+		$array  = $this->getJSON();
+		if ( is_null( $array ) ) {
+			return $pages;
+		}
+
+		$leaf   = $array;
+		if ( ! empty( $root ) ) {
+			foreach ( $root as $tag ) {
+				if ( array_key_exists( $tag, $leaf ) ) {
+					$leaf = $array[ $tag ];
+				} else {
+					// if the tag does not exist, we assume it is present in the 0th element of the current array.
+					$leaf = $leaf[0][ $tag ];
+				}
+			}
+		}
+
+		foreach ( $leaf as $key => $value ) {
+			// the paging element's value will most probably contain the url of the feed.
+			if ( is_string( $value ) && 0 === stripos( $value, $this->_url ) ) {
+				$paging[] = $key;
+			}
+		}
+
+		foreach ( array_filter( array_unique( $paging ) ) as $page ) {
+			$pages[] = $base . self::TAG_SEPARATOR . $page;
+		}
+		return $pages;
 	}
 
 	/**
@@ -96,35 +167,83 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @access public
 	 */
 	public function parse() {
-		$array  = $this->getJSON();
-		$root   = array_filter( explode( '>', $this->_root ) );
+		$url    = $this->_url;
+		$data   = array();
+		$page   = 1;
+
+		while ( ! is_null( $url ) && $page++ < apply_filters( 'visualizer_json_fetch_pages', 5, $this->_url ) ) {
+			$array  = $this->getJSON( $url );
+			if ( is_null( $array ) ) {
+				return $data;
+			}
+
+			$root   = explode( self::TAG_SEPARATOR, $this->_root );
+			// get rid of the first element as that is the faux root element indicator
+			array_shift( $root );
+			$leaf   = $array;
+			foreach ( $root as $tag ) {
+				if ( array_key_exists( $tag, $leaf ) ) {
+					$leaf = $leaf[ $tag ];
+				} else {
+					// if the tag does not exist, we assume it is present in the 0th element of the current array.
+					// TODO: we may want to change this to a filter later.
+					$leaf = $leaf[0][ $tag ];
+				}
+			}
+
+			// now that we have got the final array we need to operate on, we will use this as the collection of series.
+			// but we will filter out all elements of this array that have array as a value.
+			foreach ( $leaf as $datum ) {
+				$inner_data = array();
+				foreach ( $datum as $key => $value ) {
+					if ( is_array( $value ) ) {
+						continue;
+					}
+					$inner_data[ $key ] = $value;
+				}
+				// if we want to exclude entire rows on the basis of some data/key.
+				if ( apply_filters( 'visualizer_json_include_row', true, $inner_data ) ) {
+					$data[] = $inner_data;
+				}
+			}
+
+			$url    = $this->getNextPage( $array );
+		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with rooot %s is %s = ', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
+
+		return $data;
+	}
+
+	/**
+	 * Get the next page URL.
+	 *
+	 * @since ?
+	 *
+	 * @access private
+	 */
+	private function getNextPage( $array ) {
+		if ( empty( $this->_paging ) ) {
+			return null;
+		}
+
+		$root   = explode( self::TAG_SEPARATOR, $this->_paging );
+		// get rid of the first element as that is the faux root element indicator
+		array_shift( $root );
 		$leaf   = $array;
 		foreach ( $root as $tag ) {
 			if ( array_key_exists( $tag, $leaf ) ) {
 				$leaf = $array[ $tag ];
 			} else {
 				// if the tag does not exist, we assume it is present in the 0th element of the current array.
+				// TODO: we may want to change this to a filter later.
 				$leaf = $leaf[0][ $tag ];
 			}
 		}
 
-		// now that we have got the final array we need to operate on, we will use this as the collection of series.
-		// but we will filter out all elements of this array that have array as a value.
-		$data = array();
-		foreach ( $leaf as $datum ) {
-			$inner_data = array();
-			foreach ( $datum as $key => $value ) {
-				if ( is_array( $value ) ) {
-					continue;
-				}
-				$inner_data[ $key ] = $value;
-			}
-			$data[] = $inner_data;
-		}
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Got next page as %s for paging element %s', $leaf, $this->_paging ), 'debug', __FILE__, __LINE__ );
 
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with rooot %s is %s = ', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
-
-		return $data;
+		return $leaf;
 	}
 
 	/**
@@ -135,10 +254,14 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @access private
 	 */
 	private function getRootElements( $parent, $now, $root, $array ) {
+		if ( is_null( $array ) ) {
+			return array();
+		}
+
 		foreach ( $array as $key => $value ) {
 			if ( is_array( $value ) && ! empty( $value ) ) {
 				if ( ! is_numeric( $key ) ) {
-					$now = sprintf( '%s>%s', $parent, $key );
+					$now = sprintf( '%s%s%s', $parent, self::TAG_SEPARATOR, $key );
 					$root[] = $now;
 				} else {
 					$now = $parent;
@@ -158,10 +281,14 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 *
 	 * @access private
 	 */
-	private function getJSON() {
-		$response = wp_remote_get( $this->_url, apply_filters( 'visualizer_json_args', array() ) );
+	private function getJSON( $url = null ) {
+		if ( is_null( $url ) ) {
+			$url = $this->_url;
+		}
+		// allow hooks to use any other args such as method=POST.
+		$response = wp_remote_request( $url, apply_filters( 'visualizer_json_args', array( 'method' => 'GET' ) ) );
 		if ( is_wp_error( $response ) ) {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = ', $this->_url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = ', $url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
 			return null;
 		}
 
@@ -212,7 +339,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		$params = $this->_args;
 
 		$headers    = wp_list_pluck( $this->_series, 'label' );
-		$data   = $this->parse();
+		$data       = $this->parse();
 		foreach ( $data as $line ) {
 			$data_row = array();
 			foreach ( $line as $header => $value ) {
@@ -237,10 +364,8 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @return boolean TRUE on success, otherwise FALSE.
 	 */
 	public function fetch() {
-		$params = $this->_args;
 		$this->_fetchSeries();
 		$this->_fetchData();
-
 		return true;
 	}
 

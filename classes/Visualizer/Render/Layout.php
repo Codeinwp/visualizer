@@ -58,62 +58,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	}
 
 	/**
-	 * Show the JSON/REST parameters boxes.
-	 *
-	 * @access public
-	 */
-	public static function _renderJsonScreen( $args ) {
-		$id      = $args[1];
-		$action = add_query_arg(
-			array(
-				'action' => Visualizer_Plugin::ACTION_JSON_SET_DATA,
-				'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
-				'chart'  => $id,
-			),
-			admin_url( 'admin-ajax.php' )
-		);
-
-		$url = get_post_meta( $id, Visualizer_Plugin::CF_JSON_URL, true );
-		$root = get_post_meta( $id, Visualizer_Plugin::CF_JSON_ROOT, true );
-
-		?>
-		<div id="visualizer-json-screen" style="display: none">
-			<div class="visualizer-json-form">
-				<form id="json-endpoint-form">
-					<input
-						type="url"
-						id="vz-import-json-url"
-						name="url"
-						value="<?php echo $url; ?>"
-						placeholder="<?php esc_html_e( 'Please enter the URL', 'visualizer' ); ?>"
-						class="visualizer-input visualizer-remote-url">
-					<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch', 'visualizer' ); ?></button>
-				</form>
-				<form id="json-root-form" style="<?php echo empty( $root ) ? 'display: none' : ''; ?>">
-					<select name="root" id="vz-import-json-root">
-					<?php
-					if ( ! empty( $root ) ) {
-						?>
-						<option value="<?php echo $root; ?>"><?php echo $root; ?></option>
-						<?php
-					}
-					?>
-					</select>
-					<input type="hidden" name="url" value="<?php echo $url; ?>">
-					<button class="button button-secondary button-small" id="visualizer-json-parse"><?php esc_html_e( 'Parse', 'visualizer' ); ?></button>
-				</form>
-				<form id="json-conclude-form" action="<?php echo $action; ?>" method="post" style="display: none" target="thehole">
-					<input type="hidden" name="url">
-					<input type="hidden" name="root">
-					<input type="hidden" name="chart" value="<?php echo $id; ?>">
-					<div class="json-table"></div>
-				</form>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Show the DB query box.
 	 *
 	 * @access public
@@ -184,18 +128,121 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	}
 
 	/**
-	 * Show the DB wizard's results table.
+	 * Show the JSON/REST parameters boxes.
+	 *
+	 * @access public
+	 */
+	public static function _renderJsonScreen( $args ) {
+		$id      = $args[1];
+		$action = add_query_arg(
+			array(
+				'action' => Visualizer_Plugin::ACTION_JSON_SET_DATA,
+				'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
+				'chart'  => $id,
+			),
+			admin_url( 'admin-ajax.php' )
+		);
+
+		$url = get_post_meta( $id, Visualizer_Plugin::CF_JSON_URL, true );
+		$root = get_post_meta( $id, Visualizer_Plugin::CF_JSON_ROOT, true );
+		$paging = get_post_meta( $id, Visualizer_Plugin::CF_JSON_PAGING, true );
+
+		?>
+		<div id="visualizer-json-screen" style="display: none">
+			<div class="visualizer-json-form">
+				<h3 class="viz-step step1"><?php _e( 'STEP 1: Specify the JSON endpoint/URL', 'visualizer' ); ?></h3>
+				<div>
+					<form id="json-endpoint-form">
+						<input
+							type="url"
+							id="vz-import-json-url"
+							name="url"
+							value="<?php echo $url; ?>"
+							placeholder="<?php esc_html_e( 'Please enter the URL', 'visualizer' ); ?>"
+							class="visualizer-input">
+						<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch Endpoint', 'visualizer' ); ?></button>
+					</form>
+				</div>
+				<h3 class="viz-step step2 <?php echo empty( $url ) ? 'ui-state-disabled' : ''; ?> json-root-form"><?php _e( 'STEP 2: Choose the JSON root', 'visualizer' ); ?></h3>
+				<div>
+					<form id="json-root-form">
+						<input type="hidden" name="chart" value="<?php echo $id; ?>">
+						<select name="root" id="vz-import-json-root">
+						<?php
+						if ( ! empty( $root ) ) {
+							?>
+							<option value="<?php echo $root; ?>"><?php echo str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $root ); ?></option>
+							<?php
+						}
+						?>
+						</select>
+						<input type="hidden" name="url" value="<?php echo $url; ?>">
+						<button class="button button-secondary button-small" id="visualizer-json-parse"><?php esc_html_e( 'Parse Endpoint', 'visualizer' ); ?></button>
+					</form>
+				</div>
+				<h3 class="viz-step step3 <?php echo empty( $root ) ? 'ui-state-disabled' : ''; ?>"><?php _e( 'STEP 3: Specify miscellaneous parameters', 'visualizer' ); ?></h3>
+				<div>
+					<form id="json-conclude-form-helper">
+						<div class="json-pagination">
+							<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
+								<option value="0" class="static"><?php _e( 'Don\'t use pagination', 'visualizer' ); ?></option>
+							<?php
+							if ( ! empty( $paging ) ) {
+								?>
+								<option value="<?php echo $paging; ?>"><?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
+								<?php
+							}
+							?>
+							</select>
+						</div>
+					</form>
+				</div>
+				<h3 class="viz-step step4 ui-state-disabled"><?php _e( 'STEP 4: Select the data to display in the chart', 'visualizer' ); ?></h3>
+				<div>
+					<form id="json-conclude-form" action="<?php echo $action; ?>" method="post" target="thehole">
+						<input type="hidden" name="url">
+						<input type="hidden" name="root">
+						<input type="hidden" name="chart" value="<?php echo $id; ?>">
+
+						<div class="json-wizard-hints">
+							<ul class="json-info">
+								<li><?php _e( 'Select whether to include the data in the chart. Each column selected will form one series.', 'visualizer' ); ?></li>
+								<li><?php _e( 'If a column is selected to be included, specify its data type.', 'visualizer' ); ?></li>
+								<li><?php _e( 'You can select any number of columns but the chart type selected will determine how many will display in the chart.', 'visualizer' ); ?></li>
+							</ul>
+						</div>
+						<div class="json-table"></div>
+						<button class="button button-primary" id="visualizer-json-conclude"><?php esc_html_e( 'Show Chart', 'visualizer' ); ?></button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Show the JSON endpoint's parsed table.
 	 *
 	 * @access public
 	 */
 	public static function _renderJsonTable( $args ) {
 		$data       = $args[1];
+		$chart_id   = $args[2];
 		$headers    = array_keys( $data[0] );
+		$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+		if ( $series ) {
+			$temp   = $series;
+			$series = array();
+			foreach ( $temp as $array ) {
+				$series[ $array['label'] ] = $array['type'];
+			}
+		}
 		ob_start();
 		?>
-		<table cellspacing="0" width="100%" class="results">
+		<table cellspacing="0" width="100%" class="results cell-border stripe">
 			<thead>
 				<tr>
+					<th><?php _e( 'Label', 'visualizer' ); ?></th>
 		<?php
 		foreach ( $headers as $header ) {
 			echo '<th>' . $header . '</th>';
@@ -207,14 +254,16 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			</tfoot>
 			<tbody>	
 				<tr>
+					<th><?php _e( 'Data Type', 'visualizer' ); ?></th>
 		<?php
 		foreach ( $headers as $header ) {
 			echo '<td><input name="header[]" type="hidden" value="' . $header . '"><select name="type[' . $header . ']">';
-			echo '<option value="">' . __( 'Exclude', 'visualizer' ) . '</option>';
-			echo '<option value="0" disabled>--' . __( 'OR', 'visualizer' ) . '--</option>';
+			echo '<option value="" title="' . __( 'Exclude from chart', 'visualizer' ) . '">' . __( 'Exclude', 'visualizer' ) . '</option>';
+			echo '<option value="0" disabled title="' . __( 'Include in chart and select data type', 'visualizer' ) . '">--' . __( 'OR', 'visualizer' ) . '--</option>';
 
 			foreach ( Visualizer_Source::getAllowedTypes() as $type ) {
-				echo '<option value="' . $type . '">' . $type . '</option>';
+				$selected = array_key_exists( $header, $series ) && $type === $series[ $header ] ? 'selected' : '';
+				echo '<option value="' . $type . '" ' . $selected . '>' . $type . '</option>';
 			}
 
 			echo '</select></td>';
@@ -224,6 +273,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		<?php
 		foreach ( $data as $row ) {
 			echo '<tr>';
+			echo '<th>' . __( 'Value', 'visualizer' ) . '</th>';
 			foreach ( array_values( $row ) as $value ) {
 				echo '<td>' . $value . '</td>';
 			}
@@ -232,7 +282,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		?>
 			</tbody>
 		</table>
-		<button class="button button-primary" id="visualizer-json-conclude"><?php esc_html_e( 'Use', 'visualizer' ); ?></button>
 		<?php
 		return ob_get_clean();
 	}

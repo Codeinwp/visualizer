@@ -221,8 +221,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 				$url        = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true );
 				$root       = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true );
+				$paging     = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING, true );
 				$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-				$source     = new Visualizer_Source_Json( array( 'url' => $url, 'root' => $root ) );
+				$source     = new Visualizer_Source_Json( array( 'url' => $url, 'root' => $root, 'paging' => $paging ) );
 				$source->refresh( $series );
 				break;
 			default:
@@ -231,6 +232,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		$error      = $source->get_error();
 		if ( empty( $error ) ) {
+			add_filter( 'wp_revisions_to_keep', '__return_false' );
 			if ( $load_series ) {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 			}
