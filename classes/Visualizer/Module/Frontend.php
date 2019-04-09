@@ -190,7 +190,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		);
 
 		// if empty id or chart does not exists, then return empty string
-		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
+		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return '';
 		}
 
@@ -199,6 +200,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// in case revisions exist.
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
 			$chart = get_post( $chart->ID );
 		}
