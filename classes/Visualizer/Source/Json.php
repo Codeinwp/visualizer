@@ -286,7 +286,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			$url = $this->_url;
 		}
 		// allow hooks to use any other args such as method=POST.
-		$response = wp_remote_request( $url, apply_filters( 'visualizer_json_args', array( 'method' => 'GET' ) ) );
+		$response = wp_remote_request( $url, apply_filters( 'visualizer_json_args', array( 'method' => 'GET' ), $url ) );
 		if ( is_wp_error( $response ) ) {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = ', $url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
 			return null;
