@@ -801,7 +801,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( isset( $_POST['vz-import-time'] ) ) {
 				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $_POST['remote_data'], $_POST['vz-import-time'] );
 			}
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
