@@ -153,6 +153,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<h3 class="viz-step step1"><?php _e( 'STEP 1: Specify the JSON endpoint/URL', 'visualizer' ); ?></h3>
 				<div>
 					<form id="json-endpoint-form">
+						<div class="json-wizard-hints">
+							<ul class="json-info">
+								<li><?php echo sprintf( __( 'If you want to add authentication, add headers to the endpoint or change the request in any way, please refer to our document %1$shere%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/1043-visualizer-how-to-extend-rest-endpoints-with-json-response" target="_blank">', '</a>' ); ?></li>
+							</ul>
+						</div>
+
 						<input
 							type="url"
 							id="vz-import-json-url"
@@ -208,6 +214,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							<ul class="json-info">
 								<li><?php _e( 'Select whether to include the data in the chart. Each column selected will form one series.', 'visualizer' ); ?></li>
 								<li><?php _e( 'If a column is selected to be included, specify its data type.', 'visualizer' ); ?></li>
+								<li><?php _e( 'You can use drag/drop to reorder the columns but this column position is not saved. So when you reload the table, you may have to reorder again.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can select any number of columns but the chart type selected will determine how many will display in the chart.', 'visualizer' ); ?></li>
 							</ul>
 						</div>

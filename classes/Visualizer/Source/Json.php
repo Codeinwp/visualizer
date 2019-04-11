@@ -146,6 +146,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 		}
 
+		$paging = array();
 		foreach ( $leaf as $key => $value ) {
 			// the paging element's value will most probably contain the url of the feed.
 			if ( is_string( $value ) && 0 === stripos( $value, $this->_url ) ) {
@@ -202,7 +203,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 					$inner_data[ $key ] = $value;
 				}
 				// if we want to exclude entire rows on the basis of some data/key.
-				if ( apply_filters( 'visualizer_json_include_row', true, $inner_data ) ) {
+				if ( apply_filters( 'visualizer_json_include_row', true, $inner_data, $this->_root, $this->_url ) ) {
 					$data[] = $inner_data;
 				}
 			}

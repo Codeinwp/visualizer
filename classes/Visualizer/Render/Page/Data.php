@@ -161,7 +161,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 														)
 													);
 													foreach ( $schedules as $num => $name ) {
-														$extra = $num === $hours ? 'selected' : '';
+														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+														$extra = $num == $hours ? 'selected' : '';
 														?>
 														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 														<?php
@@ -200,7 +201,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 														)
 													);
 													foreach ( $schedules as $num => $name ) {
-														$extra = $num === $hours ? 'selected' : '';
+														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+														$extra = $num == $hours ? 'selected' : '';
 														?>
 														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 														<?php
@@ -294,7 +296,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											)
 										);
 										foreach ( $schedules as $num => $name ) {
-											$extra = $num === $hours ? 'selected' : '';
+											// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+											$extra = $num == $hours ? 'selected' : '';
 											?>
 											<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 												<?php
@@ -342,7 +345,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									)
 								);
 								foreach ( $schedules as $num => $name ) {
-									$extra = $num === $hours ? 'selected' : '';
+									// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+									$extra = $num == $hours ? 'selected' : '';
 									?>
 									<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 										<?php
