@@ -69,6 +69,23 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		add_action( 'rest_api_init', array( $this, 'endpoint_register' ) );
+
+		$this->_addFilter( 'script_loader_tag', 'script_loader_tag', null, 10, 3 );
+	}
+
+	/**
+	 * Adds the async attribute to certain scripts.
+	 */
+	function script_loader_tag( $tag, $handle, $src ) {
+		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
+
+		foreach ( $scripts as $async ) {
+			if ( $async === $handle ) {
+				$tag = str_replace( ' src', ' async="async" defer="defer" src', $tag );
+				break;
+			}
+		}
+		return $tag;
 	}
 
 	/**
