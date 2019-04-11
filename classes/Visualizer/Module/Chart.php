@@ -478,6 +478,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				),
 				'is_pro'    => VISUALIZER_PRO,
 				'page_type' => 'chart',
+				'is_front'  => false,
 			)
 		);
 

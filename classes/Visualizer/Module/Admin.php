@@ -705,6 +705,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					),
 				),
 				'page_type' => 'library',
+				'is_front'  => false,
 			)
 		);
 		// render library page

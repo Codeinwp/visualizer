@@ -277,6 +277,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'copied'        => __( 'Copied!', 'visualizer' ),
 				),
 				'page_type' => 'frontend',
+				'is_front'  => true,
 			)
 		);
 		wp_enqueue_style( 'visualizer-front' );
