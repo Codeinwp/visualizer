@@ -1363,6 +1363,7 @@ span.viz-section-error {
 
 #json-conclude-form .json-table tr th {
 	background-color: #cccccc;
+	cursor: move;
 }
 
 #json-conclude-form .json-wizard-hints .json-info {
@@ -1372,4 +1373,6 @@ span.viz-section-error {
 .viz-step.ui-state-active {
 	border-color: #0085BA !important;
 	background: #0085BA !important;
+	color: #ffffff;
 }
+

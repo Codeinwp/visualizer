@@ -399,7 +399,9 @@
                             ordering: false,
                             select: false,
                             "scrollX": "100%",
+                            "scrollY": "400px",
                             info: false,
+                            colReorder: true
                         });
                         json_accordion_activate(3, true);
                         json_accordion_activate(2, false);
