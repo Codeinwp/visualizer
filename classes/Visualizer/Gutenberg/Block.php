@@ -46,7 +46,7 @@ class Visualizer_Gutenberg_Block {
 	 * Returns an instance of this class.
 	 */
 	public static function get_instance() {
-		if ( null == self::$instance ) {
+		if ( null === self::$instance ) {
 			self::$instance = new Visualizer_Gutenberg_Block();
 		}
 		return self::$instance;
@@ -297,19 +297,19 @@ class Visualizer_Gutenberg_Block {
 				continue;
 			}
 
-			if ( $row['type'] == 'number' ) {
+			if ( $row['type'] === 'number' ) {
 				foreach ( $data as $o => $col ) {
 					$data[ $o ][ $i ] = ( is_numeric( $col[ $i ] ) ) ? floatval( $col[ $i ] ) : ( is_numeric( str_replace( ',', '', $col[ $i ] ) ) ? floatval( str_replace( ',', '', $col[ $i ] ) ) : null );
 				}
 			}
 
-			if ( $row['type'] == 'boolean' ) {
+			if ( $row['type'] === 'boolean' ) {
 				foreach ( $data as $o => $col ) {
 					$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_validate( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
 				}
 			}
 
-			if ( $row['type'] == 'timeofday' ) {
+			if ( $row['type'] === 'timeofday' ) {
 				foreach ( $data as $o => $col ) {
 					$date = new DateTime( '1984-03-16T' . $col[ $i ] );
 					if ( $date ) {
@@ -323,7 +323,7 @@ class Visualizer_Gutenberg_Block {
 				}
 			}
 
-			if ( $row['type'] == 'string' ) {
+			if ( $row['type'] === 'string' ) {
 				foreach ( $data as $o => $col ) {
 					$data[ $o ][ $i ] = $this->toUTF8( $col[ $i ] );
 				}

@@ -148,7 +148,7 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 		}
 
 		$scheme = parse_url( $this->_filename, PHP_URL_SCHEME );
-		if ( $allow_url_fopen && in_array( $scheme, stream_get_wrappers() ) ) {
+		if ( $allow_url_fopen && in_array( $scheme, stream_get_wrappers(), true ) ) {
 			return parent::_get_file_handle( $filename );
 		}
 

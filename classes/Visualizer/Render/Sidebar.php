@@ -217,7 +217,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderCheckboxItem(
 				esc_html__( 'Print', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'print', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'print', $this->actions, true ) ? true : false,
 				'print',
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the chart/data.', 'visualizer' ),
 				$disable_actions
@@ -225,7 +225,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderCheckboxItem(
 				esc_html__( 'CSV', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'csv;application/csv', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'csv;application/csv', $this->actions, true ) ? true : false,
 				'csv;application/csv',
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable downloading the data as a CSV.', 'visualizer' ),
 				$disable_actions
@@ -235,7 +235,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderCheckboxItem(
 				esc_html__( 'Excel', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'xls;application/vnd.ms-excel', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'xls;application/vnd.ms-excel', $this->actions, true ) ? true : false,
 				'xls;application/vnd.ms-excel',
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : ( $disabled ? '<span class="viz-section-error">' . esc_html__( 'Enable the ZIP and XML extensions to use this setting.', 'visualizer' ) . '</span>' : esc_html__( 'To enable downloading the data as an Excel spreadsheet.', 'visualizer' ) ),
 				$disable_actions || $disabled
@@ -243,7 +243,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderCheckboxItem(
 				esc_html__( 'Copy', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'copy', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'copy', $this->actions, true ) ? true : false,
 				'copy',
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable copying the data to the clipboard.', 'visualizer' ),
 				$disable_actions
@@ -565,7 +565,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<b>', $title, '</b>';
 			echo '<select class="control-select ', implode( ' ', $classes ) , '" name="', $name, '" ', ( $multiple ? 'multiple' : '' ), ' ' , $atts, '>';
 		foreach ( $options as $key => $label ) {
-			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value ) ? 'selected' : '' ) : selected( $key, $value, false );
+			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value, true ) ? 'selected' : '' ) : selected( $key, $value, false );
 			echo '<option value="', $key, '"', $extra, '>';
 			echo $label;
 			echo '</option>';
@@ -748,7 +748,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value == $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
+			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value === $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
 			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}
