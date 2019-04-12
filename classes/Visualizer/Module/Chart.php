@@ -424,7 +424,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		defined( 'IFRAME_REQUEST' ) || define( 'IFRAME_REQUEST', 1 );
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			$this->deleteOldCharts();
 			$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
@@ -766,7 +765,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			if ( ! $can_die ) {
 				return;

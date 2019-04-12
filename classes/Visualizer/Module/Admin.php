@@ -133,7 +133,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access  public
 	 */
 	public function init() {
-		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' === get_user_option( 'rich_editing' ) ) {
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' == get_user_option( 'rich_editing' ) ) {
 			$this->_addFilter( 'mce_external_languages', 'add_tinymce_lang', 10, 1 );
 			$this->_addFilter( 'mce_external_plugins', 'tinymce_plugin', 10, 1 );
 			$this->_addFilter( 'mce_buttons', 'register_mce_button', 10, 1 );
