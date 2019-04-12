@@ -227,16 +227,16 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 		$terms = array( $wpdb->prefix . 'terms', $wpdb->prefix . 'termmeta' );
 		$comments = array( $wpdb->prefix . 'comments', $wpdb->prefix . 'commentmeta' );
 
-		if ( in_array( $table1, $posts ) && in_array( $table2, $posts ) ) {
+		if ( in_array( $table1, $posts, true ) && in_array( $table2, $posts, true ) ) {
 			return $wpdb->prefix . 'posts.ID = ' . $wpdb->prefix . 'postmeta.post_id';
 		}
-		if ( in_array( $table1, $users ) && in_array( $table2, $users ) ) {
+		if ( in_array( $table1, $users, true ) && in_array( $table2, $users, true ) ) {
 			return $wpdb->prefix . 'users.ID = ' . $wpdb->prefix . 'usermeta.user_id';
 		}
-		if ( in_array( $table1, $terms ) && in_array( $table2, $terms ) ) {
+		if ( in_array( $table1, $terms, true ) && in_array( $table2, $terms, true ) ) {
 			return $wpdb->prefix . 'terms.term_id = ' . $wpdb->prefix . 'termmeta.term_id';
 		}
-		if ( in_array( $table1, $comments ) && in_array( $table2, $comments ) ) {
+		if ( in_array( $table1, $comments, true ) && in_array( $table2, $comments, true ) ) {
 			return $wpdb->prefix . 'comments.comment_id = ' . $wpdb->prefix . 'commentmeta.comment_id';
 		}
 

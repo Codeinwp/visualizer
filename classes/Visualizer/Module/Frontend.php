@@ -207,7 +207,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		);
 
 		// if empty id or chart does not exists, then return empty string
-		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return '';
 		}
 

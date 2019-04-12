@@ -76,6 +76,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 		// this will allow us to open the correct source tab by default.
 		$source_of_chart    = strtolower( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SOURCE, true ) );
+		// both import from wp and import from db have the same source so we need to differentiate.
+		$filter_config      = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_FILTER_CONFIG, true );
+		// if filter config is present, then its import from wp.
+		if ( ! empty( $filter_config ) ) {
+			$source_of_chart .= '_wp';
+		}
 		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		?>
 		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>" data-chart-type="<?php echo $type; ?>"></span>
@@ -155,6 +161,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 														)
 													);
 													foreach ( $schedules as $num => $name ) {
+														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 														$extra = $num == $hours ? 'selected' : '';
 														?>
 														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
@@ -215,16 +222,50 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							</div>
 						</li>
 
-						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'schedule-chart' ); ?> ">
+						<?php
+							$save_filter = add_query_arg(
+								array(
+									'action' => Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY,
+									'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY . Visualizer_Plugin::VERSION ),
+									'chart'  => $this->chart->ID,
+								), admin_url( 'admin-ajax.php' )
+							);
+						?>
+						<li class="viz-group visualizer_source_query_wp <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'schedule-chart' ); ?> ">
 							<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from WordPress', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<div class="viz-group-content edit-data-content">
 								<div>
 									<p class="viz-group-description"><?php _e( 'You can import data from WordPress here.', 'visualizer' ); ?></p>
-									<input type="button" id="filter-chart-button" class="button button-primary "
-										   value="<?php _e( 'Create Filters', 'visualizer' ); ?>" data-current="chart"
-										   data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-										   data-t-chart="<?php _e( 'Create Filters', 'visualizer' ); ?>">
+									<form id="vz-filter-wizard" action="<?php echo $save_filter; ?>" method="post" target="thehole">
+										<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from WordPress.', 'visualizer' ); ?></p>
+										<select name="refresh" id="vz-filter-import-time" class="visualizer-select">
+										<?php
+										$bttn_label = 'visualizer_source_query_wp' === $source_of_chart ? __( 'Modify Filter', 'visualizer' ) : __( 'Create Filter', 'visualizer' );
+										$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+										$schedules = apply_filters(
+											'visualizer_schedules', array(
+												'0'  => __( 'Live', 'visualizer' ),
+												'1'  => __( 'Each hour', 'visualizer' ),
+												'12' => __( 'Each 12 hours', 'visualizer' ),
+												'24' => __( 'Each day', 'visualizer' ),
+												'72' => __( 'Each 3 days', 'visualizer' ),
+											)
+										);
+										foreach ( $schedules as $num => $name ) {
+											// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+											$extra = $num == $hours ? 'selected' : '';
+											?>
+											<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+												<?php
+										}
+										?>
+										</select>
+
+										<input type="button" id="filter-chart-button" class="button button-secondary" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
+										<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
+									</form>
 									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'schedule-chart' ); ?>
 								</div>
 							</div>
@@ -261,25 +302,22 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								)
 							);
 							foreach ( $schedules as $num => $name ) {
+								// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 								$extra = $num == $hours ? 'selected' : '';
 								?>
-								<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
-									<?php
+									<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+										<?php
 							}
 							?>
-							</select>
-							<input type="hidden" name="params" id="viz-db-wizard-params">
+								</select>
+								<input type="hidden" name="params" id="viz-db-wizard-params">
 
-							<input type="button" id="db-chart-button" class="button button-secondary "
-							   value="<?php echo $bttn_label; ?>" data-current="chart"
-							   data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-							   data-t-chart="<?php echo $bttn_label; ?>">
-								<input type="button" id="db-chart-save-button" class="button button-primary "
-							   value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+								<input type="button" id="db-chart-button" class="button button-secondary" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
+								<input type="button" id="db-chart-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 								<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
-								</form>
-							</div>
-							</div>
+							</form>
+						</div>
+						</div>
 						</li>
 
 						<?php
