@@ -62,8 +62,20 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	private function _fetchSeries( &$handle ) {
 		// read column titles
 		$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
-		// read series types
-		$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+		$types = null;
+
+		if ( false !== strpos( $this->_filename, 'tqx=out:csv' ) ) {
+			$attributes = $this->_fetchSeriesForGoogleQueryLanguage( $labels );
+			if ( ! $attributes['abort'] ) {
+				$labels = $attributes['labels'];
+				$types = $attributes['types'];
+			}
+		}
+
+		if ( is_null( $types ) ) {
+			// read series types
+			$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+		}
 
 		if ( ! $labels || ! $types ) {
 			return false;
@@ -158,4 +170,45 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		return __CLASS__;
 	}
 
+	/**
+	 * Adds support for QueryLanguage https://developers.google.com/chart/interactive/docs/querylanguage
+	 * where the user can provide something like /gviz/tq?tq=select%20A%2C%20B%20&tqx=out:csv after the URL of the raw spreadsheet
+	 * to get the subset of data specified by the query
+	 * this will conflate the heading and the type into one value viz. for heading XXX and type string, the value will become "XXX string"
+	 * so we need to split them apart logically
+	 * also the $types variable now contains the first row because the header and the type got conflated
+	 */
+	private function _fetchSeriesForGoogleQueryLanguage( $labels, $types = array() ) {
+		$new_labels = array();
+		$new_types = array();
+		$abort = false;
+		foreach ( $labels as $label ) {
+			// get the index of the last space
+			$index = strrpos( $label, ' ' );
+			if ( $index === false ) {
+				// no space here? something has gone wrong; abort the entire process.
+				$abort = true;
+				break;
+			}
+			$type = trim( substr( $label, $index + 1 ) );
+			if ( ! self::_validateTypes( array( $type ) ) ) {
+				// some other data type? abort the entire process.
+				$abort = true;
+				break;
+			}
+			$label = substr( $label, 0, $index );
+			$new_labels[] = $label;
+			$new_types[] = $type;
+		}
+		if ( ! $abort ) {
+			$labels = $new_labels;
+			$types = $new_types;
+		}
+
+		return array(
+			'abort' => $abort,
+			'labels'    => $labels,
+			'types' => $types,
+		);
+	}
 }
