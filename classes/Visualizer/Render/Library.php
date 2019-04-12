@@ -99,7 +99,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
 			echo '<li class="visualizer-list-item all">';
-			if ( $type == $this->type ) {
+			if ( $type === $this->type ) {
 				echo '<a class="  current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
 				echo $label;
 				echo '</a>';

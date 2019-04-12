@@ -84,7 +84,7 @@ abstract class Visualizer_Source {
 	 */
 	protected static function _validateTypes( $types ) {
 		foreach ( $types as $type ) {
-			if ( ! in_array( $type, self::$allowed_types ) ) {
+			if ( ! in_array( $type, self::$allowed_types, true ) ) {
 				return false;
 			}
 		}
@@ -263,7 +263,7 @@ abstract class Visualizer_Source {
 		$types = array();
 		$index = 0;
 		foreach ( $series as $column ) {
-			if ( in_array( $column['type'], array( 'date', 'datetime', 'timeofday' ) ) ) {
+			if ( in_array( $column['type'], array( 'date', 'datetime', 'timeofday' ), true ) ) {
 				$types[] = array( 'index' => $index, 'type' => $column['type'] );
 			}
 			$index++;
