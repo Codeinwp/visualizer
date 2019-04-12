@@ -95,7 +95,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$filter = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
 		}
 
-		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
+		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes(), true ) ) {
 			$query_args['meta_query'] = array(
 				array(
 					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
@@ -202,7 +202,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function deleteChart() {
-		$is_post      = $_SERVER['REQUEST_METHOD'] == 'POST';
+		$is_post      = $_SERVER['REQUEST_METHOD'] === 'POST';
 		$input_method = $is_post ? INPUT_POST : INPUT_GET;
 		$chart_id     = $success = false;
 		$nonce        = wp_verify_nonce( filter_input( $input_method, 'nonce' ) );
@@ -220,7 +220,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 			if ( $chart_id ) {
 				$chart   = get_post( $chart_id );
-				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 			}
 		}
 		if ( $success ) {
@@ -277,7 +277,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		defined( 'IFRAME_REQUEST' ) || define( 'IFRAME_REQUEST', 1 );
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			$this->deleteOldCharts();
 			$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
 			$source       = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $default_type . '.csv' );
@@ -436,8 +436,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( isset( $_POST['map_api_key'] ) ) {
 			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
 		}
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
-			if ( $this->_chart->post_status == 'auto-draft' ) {
+		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
+			if ( $this->_chart->post_status === 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
 
 				// ensure that a revision is not created. If a revision is created it will have the proper data and the parent of the revision will have default data.
@@ -464,7 +464,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$sidebar->__data   = $data['data'];
 		} else {
 			$sidebar = apply_filters( 'visualizer_pro_chart_type_sidebar', '', $data );
-			if ( $sidebar != '' ) {
+			if ( $sidebar !== '' ) {
 				$sidebar->__series = $data['series'];
 				$sidebar->__data   = $data['data'];
 			}
@@ -517,10 +517,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->custom_css  = $data['css'];
 		$render->sidebar = $sidebar;
 		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
-			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
+			$render->button = filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART
 				? esc_html__( 'Save Chart', 'visualizer' )
 				: esc_html__( 'Create Chart', 'visualizer' );
-			if ( filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART ) {
+			if ( filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART ) {
 				$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
 			}
 		} else {
@@ -543,9 +543,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function _handleTypesPage() {
 		// process post request
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
-			if ( in_array( $type, Visualizer_Plugin::getChartTypes() ) ) {
+			if ( in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
 				// save new chart type
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, $type );
 				// if the chart has default data, update it with appropriate default data for new type
@@ -608,7 +608,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			if ( ! $can_die ) {
 				return;
 			}
@@ -638,6 +638,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( isset( $_POST['vz-import-time'] ) ) {
 				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $_POST['remote_data'], $_POST['vz-import-time'] );
 			}
+			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
@@ -703,7 +704,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 			if ( $chart_id ) {
 				$chart   = get_post( $chart_id );
-				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 			}
 		}
 		$redirect = wp_get_referer();

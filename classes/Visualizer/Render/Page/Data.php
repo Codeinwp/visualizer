@@ -161,6 +161,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 														)
 													);
 													foreach ( $schedules as $num => $name ) {
+														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 														$extra = $num == $hours ? 'selected' : '';
 														?>
 														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
@@ -252,6 +253,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											)
 										);
 										foreach ( $schedules as $num => $name ) {
+											// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 											$extra = $num == $hours ? 'selected' : '';
 											?>
 											<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
@@ -283,29 +285,30 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							class="dashicons dashicons-lock"></span></h2>
 						<div class="viz-group-content edit-data-content">
 						<div>
-							<p class="viz-group-description"><?php _e( 'You can import data from the database here.', 'visualizer' ); ?></p>
-							<form id="vz-db-wizard" action="<?php echo $save_query; ?>" method="post" target="thehole">
-								<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from the database.', 'visualizer' ); ?></p>
-								<select name="refresh" id="vz-db-import-time" class="visualizer-select">
-								<?php
-								$bttn_label = 'visualizer_source_query' === $source_of_chart ? __( 'Modify Query', 'visualizer' ) : __( 'Create Query', 'visualizer' );
-								$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-								$schedules = apply_filters(
-									'visualizer_schedules', array(
-										'0'  => __( 'Live', 'visualizer' ),
-										'1'  => __( 'Each hour', 'visualizer' ),
-										'12' => __( 'Each 12 hours', 'visualizer' ),
-										'24' => __( 'Each day', 'visualizer' ),
-										'72' => __( 'Each 3 days', 'visualizer' ),
-									)
-								);
-								foreach ( $schedules as $num => $name ) {
-									$extra = $num == $hours ? 'selected' : '';
-									?>
+						<p class="viz-group-description"><?php _e( 'You can import data from the database here.', 'visualizer' ); ?></p>
+						<form id="vz-db-wizard" action="<?php echo $save_query; ?>" method="post" target="thehole">
+							<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from the database.', 'visualizer' ); ?></p>
+							<select name="refresh" id="vz-db-import-time" class="visualizer-select">
+							<?php
+							$bttn_label = 'visualizer_source_query' === $source_of_chart ? __( 'Modify Query', 'visualizer' ) : __( 'Create Query', 'visualizer' );
+							$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+							$schedules = apply_filters(
+								'visualizer_schedules', array(
+									'0'  => __( 'Live', 'visualizer' ),
+									'1'  => __( 'Each hour', 'visualizer' ),
+									'12' => __( 'Each 12 hours', 'visualizer' ),
+									'24' => __( 'Each day', 'visualizer' ),
+									'72' => __( 'Each 3 days', 'visualizer' ),
+								)
+							);
+							foreach ( $schedules as $num => $name ) {
+								// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+								$extra = $num == $hours ? 'selected' : '';
+								?>
 									<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 										<?php
-								}
-								?>
+							}
+							?>
 								</select>
 								<input type="hidden" name="params" id="viz-db-wizard-params">
 

@@ -42,7 +42,7 @@ if ( class_exists( 'Visualizer_Pro', false ) ) {
 function visualizer_autoloader( $class ) {
 	$namespaces = array( 'Visualizer' );
 	foreach ( $namespaces as $namespace ) {
-		if ( substr( $class, 0, strlen( $namespace ) ) == $namespace ) {
+		if ( substr( $class, 0, strlen( $namespace ) ) === $namespace ) {
 			$filename = dirname( __FILE__ ) . str_replace( '_', DIRECTORY_SEPARATOR, "_classes_{$class}.php" );
 			if ( is_readable( $filename ) ) {
 				require $filename;
