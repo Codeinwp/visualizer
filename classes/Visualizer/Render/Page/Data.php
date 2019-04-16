@@ -158,7 +158,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 															'12' => __( 'Each 12 hours', 'visualizer' ),
 															'24' => __( 'Each day', 'visualizer' ),
 															'72' => __( 'Each 3 days', 'visualizer' ),
-														)
+														),
+														'csv',
+														$this->chart->ID
 													);
 													foreach ( $schedules as $num => $name ) {
 														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
@@ -185,38 +187,47 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON/REST source. For more info check <a href="" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
-												<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
-												<select name="vz-json-time" id="vz-json-time" class="visualizer-select" data-chart="<?php echo $this->chart->ID; ?>">
 													<?php
 													$bttn_label = 'visualizer_source_json' === $source_of_chart ? __( 'Modify Parameters', 'visualizer' ) : __( 'Create Parameters', 'visualizer' );
-													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
-													$schedules = apply_filters(
-														'visualizer_chart_schedules', array(
-															'-1' => __( 'One-time', 'visualizer' ),
-															'0' => __( 'Live', 'visualizer' ),
-															'1'  => __( 'Each hour', 'visualizer' ),
-															'12' => __( 'Each 12 hours', 'visualizer' ),
-															'24' => __( 'Each day', 'visualizer' ),
-															'72' => __( 'Each 3 days', 'visualizer' ),
-														)
-													);
-													foreach ( $schedules as $num => $name ) {
-														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-														$extra = $num == $hours ? 'selected' : '';
+													if ( VISUALIZER_PRO ) {
 														?>
-														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+												<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
+												<select name="vz-json-time" id="vz-json-time" class="visualizer-select" data-chart="<?php echo $this->chart->ID; ?>">
+														<?php
+														$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
+														$schedules = apply_filters(
+															'visualizer_chart_schedules', array(
+																'-1' => __( 'One-time', 'visualizer' ),
+															),
+															'json',
+															$this->chart->ID
+														);
+														foreach ( $schedules as $num => $name ) {
+															// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+															$extra = $num == $hours ? 'selected' : '';
+															?>
+															<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+															<?php
+														}
+														?>
+													</select>
 														<?php
 													}
 													?>
-												</select>
 											</div>
 
 											<input type="button" id="json-chart-button" class="button button-secondary "
 											value="<?php echo $bttn_label; ?>" data-current="chart"
 											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 											data-t-chart="<?php echo $bttn_label; ?>">
+											<?php
+											if ( VISUALIZER_PRO ) {
+												?>
 											<input type="button" id="json-chart-save-button" class="button button-primary "
 											value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+												<?php
+											}
+											?>
 										</form>
 									</div>
 								</li>

@@ -189,17 +189,30 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<h3 class="viz-step step3 <?php echo empty( $root ) ? 'ui-state-disabled' : ''; ?>"><?php _e( 'STEP 3: Specify miscellaneous parameters', 'visualizer' ); ?></h3>
 				<div>
 					<form id="json-conclude-form-helper">
-						<div class="json-pagination">
-							<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
-								<option value="0" class="static"><?php _e( 'Don\'t use pagination', 'visualizer' ); ?></option>
-							<?php
-							if ( ! empty( $paging ) ) {
-								?>
-								<option value="<?php echo $paging; ?>"><?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
+						<div class="<?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
+							<div class="json-pagination">
+								<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
+									<option value="0" class="static"><?php _e( 'Don\'t use pagination', 'visualizer' ); ?></option>
 								<?php
-							}
-							?>
-							</select>
+								if ( ! empty( $paging ) ) {
+									?>
+									<option value="<?php echo $paging; ?>"><?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
+									<?php
+								}
+								?>
+								</select>
+								<?php
+								if ( ! VISUALIZER_PRO ) {
+									?>
+								<br/>
+								<br/>
+								<br/>
+								<br/>
+									<?php
+								}
+								?>
+								<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
+							</div>
 						</div>
 					</form>
 				</div>
