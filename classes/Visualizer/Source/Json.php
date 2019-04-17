@@ -197,6 +197,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			// in this, all values of `$leaf` would be a string, not an array.
 			$values = array_values( $leaf );
 			if ( ! is_array( $values[0] ) ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Looks like a flat-series = %s', print_r( $leaf, true ) ), 'debug', __FILE__, __LINE__ );
 				$inner_data = array();
 				foreach ( $leaf as $datum => $value ) {
 					$inner_data[ $datum ] = $value;
@@ -206,15 +207,11 @@ class Visualizer_Source_Json extends Visualizer_Source {
 				// we will filter out all elements of this array that have array as a value.
 				foreach ( $leaf as $datum ) {
 					$inner_data = array();
-					if ( is_array( $datum ) ) {
-						foreach ( $datum as $key => $value ) {
-							if ( is_array( $value ) ) {
-								continue;
-							}
-							$inner_data[ $key ] = $value;
+					foreach ( $datum as $key => $value ) {
+						if ( is_array( $value ) ) {
+							continue;
 						}
-					} else {
-						$inner_data[ $datum ] = $array;
+						$inner_data[ $key ] = $value;
 					}
 					// if we want to exclude entire rows on the basis of some data/key.
 					if ( apply_filters( 'visualizer_json_include_row', true, $inner_data, $this->_root, $this->_url ) ) {
