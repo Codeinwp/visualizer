@@ -193,18 +193,33 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 
 			// now that we have got the final array we need to operate on, we will use this as the collection of series.
-			// but we will filter out all elements of this array that have array as a value.
-			foreach ( $leaf as $datum ) {
+			// lets check if the series is a flat-series e.g. https://api.exchangeratesapi.io/latest
+			// in this, all values of `$leaf` would be a string, not an array.
+			$values = array_values( $leaf );
+			if ( ! is_array( $values[0] ) ) {
 				$inner_data = array();
-				foreach ( $datum as $key => $value ) {
-					if ( is_array( $value ) ) {
-						continue;
-					}
-					$inner_data[ $key ] = $value;
+				foreach ( $leaf as $datum => $value ) {
+					$inner_data[ $datum ] = $value;
 				}
-				// if we want to exclude entire rows on the basis of some data/key.
-				if ( apply_filters( 'visualizer_json_include_row', true, $inner_data, $this->_root, $this->_url ) ) {
-					$data[] = $inner_data;
+				$data[] = $inner_data;
+			} else {
+				// we will filter out all elements of this array that have array as a value.
+				foreach ( $leaf as $datum ) {
+					$inner_data = array();
+					if ( is_array( $datum ) ) {
+						foreach ( $datum as $key => $value ) {
+							if ( is_array( $value ) ) {
+								continue;
+							}
+							$inner_data[ $key ] = $value;
+						}
+					} else {
+						$inner_data[ $datum ] = $array;
+					}
+					// if we want to exclude entire rows on the basis of some data/key.
+					if ( apply_filters( 'visualizer_json_include_row', true, $inner_data, $this->_root, $this->_url ) ) {
+						$data[] = $inner_data;
+					}
 				}
 			}
 
