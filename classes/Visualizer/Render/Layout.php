@@ -259,7 +259,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		}
 		ob_start();
 		?>
-		<table cellspacing="0" width="100%" class="results cell-border stripe">
+		<table cellspacing="0" width="100%" class="results cell-border stripe viz-json-table">
 			<thead>
 				<tr>
 					<th><?php _e( 'Label', 'visualizer' ); ?></th>

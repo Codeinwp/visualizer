@@ -393,7 +393,8 @@
                         $('#json-conclude-form [name="url"]').val(data.data.url);
                         $('#json-conclude-form [name="root"]').val(data.data.root);
                         $('#json-conclude-form .json-table').html(data.data.table);
-                        var $table = $('#json-conclude-form .results').DataTable({
+
+                        var settings = {
                             paging: false,
                             searching: false,
                             ordering: false,
@@ -401,8 +402,26 @@
                             "scrollX": "100%",
                             "scrollY": "400px",
                             info: false,
-                            colReorder: true
-                        });
+                            colReorder: true,
+                        };
+
+                        // show column visibility button only when more than 6 columns are found (including the Label column)
+                        if($('table.viz-json-table thead tr th').length > 6){
+                            $.extend( settings, { 
+                                dom: 'Bt',
+                                buttons: [
+                                    {
+                                        extend: 'colvis',
+                                        columns: ':gt(0)',
+                                        collectionLayout: 'four-column'
+                                    }
+                                ]
+                            } );
+                        }
+
+                        $.extend( $.fn.dataTable.defaults, settings );
+                        var $table = $('#json-conclude-form .results').DataTable();
+
                         json_accordion_activate(3, true);
                         json_accordion_activate(2, false);
                         $table.columns.adjust().draw();

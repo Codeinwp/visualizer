@@ -1335,7 +1335,7 @@ span.viz-section-error {
 }
 
 /* datatables */
-.dt-button {
+.db-wizard-results .dt-button {
 	display: none !important;
 }
 
@@ -1375,4 +1375,3 @@ span.viz-section-error {
 	background: #0085BA !important;
 	color: #ffffff;
 }
-
