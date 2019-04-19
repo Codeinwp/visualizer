@@ -216,6 +216,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// in case revisions exist.
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
 			$chart = get_post( $chart->ID );
 		}

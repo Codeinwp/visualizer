@@ -231,6 +231,7 @@ class Visualizer_Module {
 		}
 		rewind( $fp );
 		$csv = '';
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		while ( ( $array = fgetcsv( $fp ) ) !== false ) {
 			if ( strlen( $csv ) > 0 ) {
 				$csv .= PHP_EOL;
@@ -438,6 +439,7 @@ class Visualizer_Module {
 		}
 
 		if ( ! $wp_filesystem->exists( $dir ) ) {
+			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 			if ( ( $done = $wp_filesystem->mkdir( $dir ) ) === false ) {
 				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
 				return $default;
@@ -447,6 +449,7 @@ class Visualizer_Module {
 		// if file does not exist, copy.
 		if ( ! $wp_filesystem->exists( $file ) ) {
 			$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
+			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 			if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
 				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
 				return $default;

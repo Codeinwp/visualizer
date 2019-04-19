@@ -146,8 +146,8 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 			}
 
 			// fetch data
+			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 			while ( ( $data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE ) ) !== false ) {
-
 				$this->_data[] = $this->_normalizeData( $data );
 			}
 
