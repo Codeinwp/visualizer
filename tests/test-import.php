@@ -201,13 +201,14 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 		$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
 		$_series = array();
 		for ( $i = 0, $len = count( $labels ); $i < $len; $i ++ ) {
-			$default_type = $i == 0 ? 'string' : 'number';
+			$default_type = $i === 0 ? 'string' : 'number';
 			$_series[]    = array(
 				'label' => $labels[ $i ],
 				'type'  => isset( $types[ $i ] ) ? $types[ $i ] : $default_type,
 			);
 		}
 		$_content = array();
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		while ( ( $data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE ) ) !== false ) {
 			foreach ( $_series as $i => $series ) {
 				// if no value exists for the seires, then add null

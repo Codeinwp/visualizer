@@ -1302,17 +1302,21 @@ span.viz-section-error {
 	color: #f00;
 }
 
-.db-wizard-hints {
+.db-wizard-hints,
+.json-wizard-hints {
 	margin-bottom: 30px;
 	color: #0085ba;
 }
 
 .db-wizard-hints .visualizer-emboss,
-.db-wizard-hints a {
+.db-wizard-hints a,
+.json-wizard-hints .visualizer-emboss,
+.json-wizard-hints a {
 	color: #f92472;
 }
 
-.db-wizard-hints ul {
+.db-wizard-hints ul,
+.json-wizard-hints ul {
 	list-style: square;
 }
 
@@ -1332,8 +1336,7 @@ span.viz-section-error {
 
 /******************************************************************************/
 /********************************  data tables  *******************************/
-/******************************************************************************/
-.dt-button {
+.db-wizard-results .dt-button {
 	display: none !important;
 }
 
@@ -1357,4 +1360,41 @@ span.viz-section-error {
 	padding: 15px;
 	height: 200px;
 	font-size: 15px;
+}
+
+/* json source */
+#json-conclude-form .results {
+	min-width: 10px !important;
+}
+
+#json-conclude-form .json-table,
+#vz-import-json-url,
+#vz-import-json-root,
+#vz-import-json-paging {
+	width: 90%;
+}
+
+#json-conclude-form .json-table,
+#json-conclude-form button#visualizer-json-conclude {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#json-conclude-form .json-table tbody tr:first-child {
+	background-color: #ececec;
+}
+
+#json-conclude-form .json-table tr th {
+	background-color: #cccccc;
+	cursor: move;
+}
+
+#json-conclude-form .json-wizard-hints .json-info {
+	margin: 1% 0px;
+}
+
+.viz-step.ui-state-active {
+	border-color: #0085BA !important;
+	background: #0085BA !important;
+	color: #ffffff;
 }

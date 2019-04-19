@@ -133,9 +133,9 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 		$biz_features   = array( 'schedule-chart', 'chart-permissions', 'db-query' );
 		$return  = '';
 		$feature = strval( $feature );
-		if ( empty( $feature ) || ( in_array( $feature, $biz_features ) && ! apply_filters( 'visualizer_is_business', false ) ) ) {
+		if ( empty( $feature ) || ( in_array( $feature, $biz_features, true ) && ! apply_filters( 'visualizer_is_business', false ) ) ) {
 			$plan = 'PRO';
-			if ( in_array( $feature, $biz_features ) ) {
+			if ( in_array( $feature, $biz_features, true ) ) {
 				$plan = 'DEVELOPER';
 			}
 			$return = '<div class="only-pro-content">';
@@ -147,7 +147,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			$return .= ' 	</div>';
 			$return .= '</div>';
 		}
-		if ( empty( $feature ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
+		if ( empty( $feature ) && VISUALIZER_PRO ) {
 			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
 			$return = '';
 		}
