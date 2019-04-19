@@ -133,6 +133,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access  public
 	 */
 	public function init() {
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' == get_user_option( 'rich_editing' ) ) {
 			$this->_addFilter( 'mce_external_languages', 'add_tinymce_lang', 10, 1 );
 			$this->_addFilter( 'mce_external_plugins', 'tinymce_plugin', 10, 1 );
@@ -465,7 +466,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderTemplates() {
 		global $pagenow;
-		if ( 'post.php' != $pagenow && 'post-new.php' != $pagenow ) {
+		if ( 'post.php' !== $pagenow && 'post-new.php' !== $pagenow ) {
 			return;
 		}
 		$render = new Visualizer_Render_Templates();
@@ -485,7 +486,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @param string $suffix The current page suffix.
 	 */
 	public function enqueueLibraryScripts( $suffix ) {
-		if ( $suffix == $this->_libraryPage ) {
+		if ( $suffix === $this->_libraryPage ) {
 			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
 			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
 			wp_enqueue_media();
@@ -579,7 +580,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		);
 		// add chart type filter to the query arguments
 		$filter = filter_input( INPUT_GET, 'type' );
-		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
+		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes(), true ) ) {
 			$query_args['meta_query'] = array(
 				array(
 					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
@@ -631,7 +632,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		);
 		// add chart type filter to the query arguments
 		$filter = filter_input( INPUT_GET, 'type' );
-		if ( ! ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) ) {
+		if ( ! ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes(), true ) ) ) {
 			$filter = 'all';
 		}
 
@@ -705,6 +706,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					),
 				),
 				'page_type' => 'library',
+				'is_front'  => false,
 			)
 		);
 		// render library page
@@ -738,7 +740,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array Updated array of action links.
 	 */
 	public function getPluginActionLinks( $links, $file ) {
-		if ( $file == plugin_basename( VISUALIZER_BASEFILE ) ) {
+		if ( $file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			array_unshift(
 				$links,
 				sprintf(
@@ -765,7 +767,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array Updated array of plugin meta links.
 	 */
 	public function getPluginMetaLinks( $plugin_meta, $plugin_file ) {
-		if ( $plugin_file == plugin_basename( VISUALIZER_BASEFILE ) ) {
+		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
 				'<a href="https://github.com/codeinwp/visualizer/wiki" target="_blank">%s</a>',

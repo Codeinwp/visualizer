@@ -292,7 +292,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 		$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
 		$_series = array();
 		for ( $i = 0, $len = count( $labels ); $i < $len; $i ++ ) {
-			$default_type = $i == 0 ? 'string' : 'number';
+			$default_type = $i === 0 ? 'string' : 'number';
 			$_series[]    = array(
 				'label' => $labels[ $i ],
 				'type'  => isset( $types[ $i ] ) ? $types[ $i ] : $default_type,

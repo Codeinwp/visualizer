@@ -159,7 +159,7 @@ class Visualizer_Module {
 		$success    = false;
 		if ( $chart_id ) {
 			$chart   = get_post( $chart_id );
-			$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+			$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 		}
 		if ( $success ) {
 			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );

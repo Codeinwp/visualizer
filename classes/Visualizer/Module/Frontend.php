@@ -69,6 +69,23 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		add_action( 'rest_api_init', array( $this, 'endpoint_register' ) );
+
+		$this->_addFilter( 'script_loader_tag', 'script_loader_tag', null, 10, 3 );
+	}
+
+	/**
+	 * Adds the async attribute to certain scripts.
+	 */
+	function script_loader_tag( $tag, $handle, $src ) {
+		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
+
+		foreach ( $scripts as $async ) {
+			if ( $async === $handle ) {
+				$tag = str_replace( ' src', ' async="async" defer="defer" src', $tag );
+				break;
+			}
+		}
+		return $tag;
 	}
 
 	/**
@@ -190,7 +207,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		);
 
 		// if empty id or chart does not exists, then return empty string
-		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return '';
 		}
 
@@ -282,6 +299,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'copied'        => __( 'Copied!', 'visualizer' ),
 				),
 				'page_type' => 'frontend',
+				'is_front'  => true,
 			)
 		);
 		wp_enqueue_style( 'visualizer-front' );
