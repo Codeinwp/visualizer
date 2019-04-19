@@ -49,12 +49,21 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	}
 
 	/**
-	 * Show the fake editor (just an empty div).
+	 * Show the text editor.
 	 *
 	 * @access public
 	 */
-	public static function _renderFauxEditor( $args ) {
-		echo '<div id="chart-lhs" class="visualizer-editor-lhs" style="display: none"></div>';
+	public static function _renderTableEditor( $args ) {
+		$chart_id = $args[1];
+		$csv = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, array(), $chart_id, 'csv' );
+		$data = '';
+		if ( ! empty( $csv ) && isset( $csv['string'] ) ) {
+			$data = str_replace( PHP_EOL, "\n", $csv['string'] );
+		}
+		echo '<div id="chart-editor" class="visualizer-editor-lhs visualizer-editor-text" style="display: none">
+					<textarea id="edited_text">' . $data . '</textarea>
+					<button id="viz-text-editor-button" class="button button-primary">' . __( 'Update Data', 'visualizer' ) . '</button>
+			</div>';
 	}
 
 	/**

@@ -1330,7 +1330,31 @@ span.viz-section-error {
 	text-decoration: none;
 }
 
-/* datatables */
+/******************************************************************************/
+/********************************  data tables  *******************************/
+/******************************************************************************/
 .dt-button {
 	display: none !important;
+}
+
+/******************************************************************************/
+/********************************  text editor  *******************************/
+/******************************************************************************/
+.visualizer-editor-text {
+	padding: 20px;
+	display: inline-block;
+	z-index: 9999;
+	box-sizing: border-box;
+	width: 100%;
+	padding-right: 320px;
+}
+
+.visualizer-editor-text textarea {
+	width: 100%;
+	overflow: auto;
+	background: #282923;
+	color: #ffffff;
+	padding: 15px;
+	height: 200px;
+	font-size: 15px;
 }

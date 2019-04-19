@@ -305,11 +305,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			Visualizer_Plugin::VERSION,
 			true
 		);
+		wp_register_script( 'visualizer-editor-text', VISUALIZER_ABSURL . 'js/text-editor.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+
 		// added by Ash/Upwork
 		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_addScriptsAndStyles();
 		}
+
 		// dispatch pages
 		$this->_chart = get_post( $chart_id );
 		$tab    = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
@@ -446,6 +449,25 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
 
+		if ( ! VISUALIZER_PRO ) {
+			wp_enqueue_script( 'visualizer-editor-text' );
+			$csv = $this->_getDataAs( $this->_chart->ID, 'csv' );
+			wp_localize_script(
+				'visualizer-editor-text',
+				'visualizer1',
+				array(
+					'data'      => str_replace( PHP_EOL, '\n\r', $csv['csv'] ),
+					'ajax'      => array(
+						'url'     => admin_url( 'admin-ajax.php' ),
+						'nonces'  => array(
+						),
+						'actions' => array(
+						),
+					),
+				)
+			);
+		}
+
 		$table_col_mapping  = $this->loadCodeEditorAssets();
 
 		wp_localize_script(
@@ -553,7 +575,36 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function renderFlattrScript() {
 		echo '';
 	}
-	// changed by Ash/Upwork
+
+	/**
+	 * Processes the CSV that is sent in the request as a string.
+	 *
+	 * @since 3.2.0
+	 */
+	private function handleCSVasString( $data ) {
+		$source = null;
+		if ( VISUALIZER_PRO ) {
+			$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
+		} else {
+			// data coming in from the text editor.
+			$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );
+			$handle  = fopen( $tmpfile, 'w' );
+			$values = preg_split( '/[\n\r]+/', stripslashes( trim( $data ) ) );
+			if ( $values ) {
+				foreach ( $values as $row ) {
+					if ( empty( $row ) ) {
+						continue;
+					}
+					$columns = explode( ',', $row );
+					fputcsv( $handle, $columns );
+				}
+			}
+			$source = new Visualizer_Source_Csv( $tmpfile );
+			fclose( $handle );
+		}
+		return $source;
+	}
+
 	/**
 	 * Parses uploaded CSV file and saves new data for the chart.
 	 *
@@ -609,7 +660,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			$source = apply_filters( 'visualizer_pro_handle_chart_data', $_POST['chart_data'], '' );
+			$source = $this->handleCSVasString( $_POST['chart_data'] );
 		} else {
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );
 		}
