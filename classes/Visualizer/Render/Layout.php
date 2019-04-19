@@ -245,9 +245,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 *
 	 * @access public
 	 */
-	public static function _renderJsonTable( $args ) {
+	public static function _renderEditorTable( $args ) {
 		$data       = $args[1];
 		$chart_id   = $args[2];
+		$class      = $args[3];
+		$classes    = implode( ' ', array_merge( array( 'viz-editor-table' ), $class ) );
+
 		$headers    = array_keys( $data[0] );
 		$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
 		if ( $series ) {
@@ -259,7 +262,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		}
 		ob_start();
 		?>
-		<table cellspacing="0" width="100%" class="results cell-border stripe viz-json-table">
+		<table cellspacing="0" width="100%" class="results cell-border stripe <?php echo $classes; ?>">
 			<thead>
 				<tr>
 					<th><?php _e( 'Label', 'visualizer' ); ?></th>

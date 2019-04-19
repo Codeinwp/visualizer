@@ -162,7 +162,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_send_json_error();
 		}
 
-		$data   = Visualizer_Render_Layout::show( 'json-table', $data, $chart_id );
+		$data   = Visualizer_Render_Layout::show( 'editor-table', $data, $chart_id, 'viz-json-table' );
 		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'], 'paging' => $source->getPaginationElements() ) );
 	}
 
