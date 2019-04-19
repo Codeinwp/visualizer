@@ -312,6 +312,12 @@ class Visualizer_Module {
 		$table      = '<table class="visualizer-print">';
 		$index      = 0;
 		foreach ( $rows as $row ) {
+			// skip the data type row.
+			if ( 1 === $index ) {
+				$index++;
+				continue;
+			}
+
 			$table  .= '<tr>';
 			foreach ( $row as $col ) {
 				if ( $index === 0 ) {

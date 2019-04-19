@@ -665,6 +665,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'page_type' => 'chart',
 				'json_tag_separator' => Visualizer_Source_Json::TAG_SEPARATOR,
 				'json_tag_separator_view' => Visualizer_Source_Json::TAG_SEPARATOR_VIEW,
+				'is_front'  => false,
 			)
 		);
 
