@@ -1,4 +1,4 @@
-# Visualizer: Tables and Charts Manager for WordPress (Lite) # #
+# Visualizer: Tables and Charts Manager for WordPress # #
 **Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [contactashish13](https://profiles.wordpress.org/contactashish13)  
 **Tags:** chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables  
 **Requires at least:** 3.5  
@@ -11,7 +11,7 @@ A simple and quite powerful WordPress chart plugin to create and embed interacti
 
 ## Description ##
  
-<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress (Lite) plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts & tables into your WordPress posts and pages.
+<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts & tables into your WordPress posts and pages.
 
 The plugin uses Google Visualization API and DataTables.net to add responsive & animated charts/diagrams, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases. Is the best Excel to WordPress solution who let's you insert charts to your wp site using a simple chart builder.
 
@@ -145,6 +145,19 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.1.3 - 2019-02-24  ###
+
+* Fix issue with changing column settings of the last column in table chart
+* Add support for query language to get subset of data from Google Spreadsheet
+* Fix conflict with jquery 3.3.x
+* Migrated PHPExcel to PhpSpreadsheet
+* Front end action 'print' should print the chart and fall back to printing the data
+* Fix issue with table chart not showing in IE
+* Fix issue with multiple instances of same chart not showing
+* Fix issue with date type column does not work with Combo charts
+* Tested with WP 5.1
+
+
 ### 3.1.2 - 2018-12-06  ###
 
 * Fix bug "Warning: A non-numeric value encountered"

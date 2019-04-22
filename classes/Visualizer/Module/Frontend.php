@@ -220,6 +220,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// in case revisions exist.
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
 			$chart = get_post( $chart->ID );
 		}
@@ -267,6 +268,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$library    = $this->load_chart_type( $chart->ID );
 
 		$id         = $id . '-' . rand();
+
+		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
+		if ( $amp && $amp->is_amp() ) {
+			return '<div id="' . $id . '"' . $class . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
+		}
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(

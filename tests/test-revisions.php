@@ -299,6 +299,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 			);
 		}
 		$_content = array();
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		while ( ( $data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE ) ) !== false ) {
 			foreach ( $_series as $i => $series ) {
 				// if no value exists for the seires, then add null
