@@ -77,6 +77,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * Adds the async attribute to certain scripts.
 	 */
 	function script_loader_tag( $tag, $handle, $src ) {
+		if ( is_admin() ) {
+			return $tag;
+		}
+
 		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
 
 		foreach ( $scripts as $async ) {
