@@ -45,7 +45,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
 			}
 		} else {
-			Visualizer_Render_Layout::show( 'table-editor', $this->chart->ID );
+			Visualizer_Render_Layout::show( 'simple-editor-screen', $this->chart->ID );
 		}
 
 		$this->add_additional_content();
@@ -388,7 +388,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 							<div class="viz-group-content edit-data-content">
 								<div>
-									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), VISUALIZER_PRO ? 'spreadsheet like' : 'simple text' ); ?></p>
+									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), VISUALIZER_PRO ? 'spreadsheet like' : 'simple' ); ?></p>
+									<?php if ( ! VISUALIZER_PRO ) { ?>
+										<p class="viz-group-description"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' );?></label></p>
+									<?php } ?>
 									<input type="button" id="editor-chart-button" class="button button-primary "
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
 										   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
