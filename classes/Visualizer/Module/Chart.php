@@ -799,15 +799,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access private
 	 */
 	private function handleTabularData() {
-		$csv		= array();
+		$csv        = array();
 		// the datatable mentions the headers twice, so lets remove the duplicates.
-		$headers	= array_unique( array_filter( $_POST['header'] ) );
-		$types		= $_POST['type'];
+		$headers    = array_unique( array_filter( $_POST['header'] ) );
+		$types      = $_POST['type'];
 
 		// capture all the indexes that correspond to excluded columns.
-		$exclude	= array();
-		$index		= 0;
-		foreach( $types as $type ) {
+		$exclude    = array();
+		$index      = 0;
+		foreach ( $types as $type ) {
 			if ( empty( $type ) ) {
 				$exclude[] = $index;
 			}
@@ -819,27 +819,27 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// so unset the headers that have been renamed.
 		if ( count( $headers ) !== count( $types ) ) {
 			$to = count( $headers );
-			for( $i = count( $types ); $i < $to; $i++ ) {
+			for ( $i = count( $types ); $i < $to; $i++ ) {
 				unset( $headers[ $i + 1 ] );
 			}
 		}
 
-		$columns	= array();
-		for( $i = 0; $i < count( $headers ); $i++ ) {
-			if ( ! isset( $_POST['data' . $i] ) ) {
+		$columns    = array();
+		for ( $i = 0; $i < count( $headers ); $i++ ) {
+			if ( ! isset( $_POST[ 'data' . $i ] ) ) {
 				continue;
 			}
-			$columns[$i] = $_POST['data' . $i];
+			$columns[ $i ] = $_POST[ 'data' . $i ];
 		}
 
-		$csv[]		= $headers;
-		$csv[]		= $types;
-		for( $j = 0; $j < count( $columns[0] ); $j++ ) {
+		$csv[]      = $headers;
+		$csv[]      = $types;
+		for ( $j = 0; $j < count( $columns[0] ); $j++ ) {
 			$row = array();
-			for( $i = 0; $i < count( $headers ); $i++ ) {
-				$row[] = $columns[$i][$j];
+			for ( $i = 0; $i < count( $headers ); $i++ ) {
+				$row[] = $columns[ $i ][ $j ];
 			}
-			$csv[]	= $row;
+			$csv[]  = $row;
 		}
 
 		$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );

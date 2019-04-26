@@ -1,3 +1,5 @@
+/* global visualizer1 */
+
 (function($, v) {
 
     $(document).ready(function(){
@@ -9,7 +11,6 @@
         $( '#editor-chart-button' ).on( 'click', function(){
             $('.viz-simple-editor-type').hide();
             if($("#simple-editor-type").is(':checked')){
-                console.log("checked with " + $("#simple-editor-type").val());
                 switch($("#simple-editor-type").val()) {
                     case 'textarea':
                         showText($(this));

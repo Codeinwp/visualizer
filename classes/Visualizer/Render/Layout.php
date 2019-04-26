@@ -288,7 +288,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		?>
 		<div class="viz-simple-editor-type viz-text-editor">
 			<textarea id="edited_text"><?php echo $data; ?></textarea>
-			<button id="viz-text-editor-button" class="button button-primary"><?php _e( 'Save &amp; Show Chart', 'visualizer' );?></button>
+			<button id="viz-text-editor-button" class="button button-primary"><?php _e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
 		</div>
 		<?php
 	}
@@ -302,18 +302,18 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$data       = $args[1];
 		$chart_id   = $args[2];
 		$class      = $args[3];
-		$echo		= $args[4];
+		$echo       = $args[4];
 		$editable_data = $args[5];
 		$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-		$headers	= array();
+		$headers    = array();
 
 		if ( is_null( $data ) ) {
 			foreach ( $series as $column ) {
 				$headers[] = $column['label'];
 			}
-			$chart		= get_post( $chart_id );
-			$type		= get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-			$data		= apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $type );
+			$chart      = get_post( $chart_id );
+			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+			$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $type );
 		} else {
 			$headers    = array_keys( $data[0] );
 		}

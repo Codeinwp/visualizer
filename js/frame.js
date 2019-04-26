@@ -396,7 +396,7 @@
                         $('#json-conclude-form [name="root"]').val(data.data.root);
                         $('#json-conclude-form .json-table').html(data.data.table);
 
-                        $table = create_editor_table( '#json-conclude-form' );
+                        var $table = create_editor_table( '#json-conclude-form' );
 
                         json_accordion_activate(3, true);
                         json_accordion_activate(2, false);
@@ -447,7 +447,7 @@
 
     function init_editor_table() {
         $('body').on('visualizer:db:editor:table:init', function(event, data){
-            $table = create_editor_table('.viz-table-editor');
+            var $table = create_editor_table('.viz-table-editor');
             $('body').on('visualizer:db:editor:table:redraw', function(event, data){
                 $table.draw();
             });
