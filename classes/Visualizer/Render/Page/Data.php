@@ -45,7 +45,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
 			}
 		} else {
-			Visualizer_Render_Layout::show( 'faux-editor' );
+			Visualizer_Render_Layout::show( 'simple-editor-screen', $this->chart->ID );
 		}
 
 		$this->add_additional_content();
@@ -375,10 +375,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</li>
 
 						<?php
-							// we will auto-open the manual data feature but only when pro is active and source is empty.
-							$pro_class = apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' );
+							// we will auto-open the manual data feature only when source is empty.
 						?>
-						<li class="viz-group <?php echo $pro_class; ?> <?php echo empty( $source_of_chart ) && empty( $pro_class ) ? 'open' : ''; ?> ">
+						<li class="viz-group <?php echo empty( $source_of_chart ) ? 'open' : ''; ?> ">
 							<h2 class="viz-group-title viz-sub-group visualizer-editor-tab"
 								data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
@@ -389,13 +388,14 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 							<div class="viz-group-content edit-data-content">
 								<div>
-									<p class="viz-group-description"><?php _e( 'You can manually edit the chart data using the spreadsheet like editor.', 'visualizer' ); ?></p>
+									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), VISUALIZER_PRO ? 'spreadsheet like' : 'simple' ); ?></p>
+									<?php if ( ! VISUALIZER_PRO ) { ?>
+										<p class="viz-group-description"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
+									<?php } ?>
 									<input type="button" id="editor-chart-button" class="button button-primary "
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
 										   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 										   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>">
-
-									<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
 								</div>
 							</div>
 						</li>

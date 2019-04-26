@@ -49,15 +49,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	}
 
 	/**
-	 * Show the fake editor (just an empty div).
-	 *
-	 * @access public
-	 */
-	public static function _renderFauxEditor( $args ) {
-		echo '<div id="chart-lhs" class="visualizer-editor-lhs" style="display: none"></div>';
-	}
-
-	/**
 	 * Show the DB query box.
 	 *
 	 * @access public
@@ -154,7 +145,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<div>
 					<form id="json-endpoint-form">
 						<div class="json-wizard-hints">
-							<ul class="json-info">
+							<ul class="info">
 								<li><?php echo sprintf( __( 'If you want to add authentication, add headers to the endpoint or change the request in any way, please refer to our document %1$shere%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/1043-visualizer-how-to-extend-rest-endpoints-with-json-response" target="_blank">', '</a>' ); ?></li>
 							</ul>
 						</div>
@@ -223,8 +214,8 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						<input type="hidden" name="root">
 						<input type="hidden" name="chart" value="<?php echo $id; ?>">
 
-						<div class="json-wizard-hints">
-							<ul class="json-info">
+						<div class="json-wizard-hints html-table-editor-hints">
+							<ul class="info">
 								<li><?php _e( 'Select whether to include the data in the chart. Each column selected will form one series.', 'visualizer' ); ?></li>
 								<li><?php _e( 'If a column is selected to be included, specify its data type.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can use drag/drop to reorder the columns but this column position is not saved. So when you reload the table, you may have to reorder again.', 'visualizer' ); ?></li>
@@ -232,10 +223,72 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							</ul>
 						</div>
 						<div class="json-table"></div>
-						<button class="button button-primary" id="visualizer-json-conclude"><?php esc_html_e( 'Show Chart', 'visualizer' ); ?></button>
+						<button class="button button-primary" id="visualizer-json-conclude"><?php esc_html_e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
 					</form>
 				</div>
 			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Show the simple editor(s).
+	 *
+	 * @access public
+	 */
+	public static function _renderSimpleEditorScreen( $args ) {
+		$chart_id   = $args[1];
+		$action = add_query_arg(
+			array(
+				'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
+				'nonce'  => wp_create_nonce(),
+				'chart'  => $chart_id,
+			),
+			admin_url( 'admin-ajax.php' )
+		);
+		?>
+			<div class="viz-simple-editor">
+				<div class="viz-simple-editor-type viz-table-editor">
+					<form id="table-editor-form" action="<?php echo $action; ?>" method="post" target="thehole">
+						<div class="html-table-editor-hints">
+							<ul class="info">
+								<li><?php _e( 'Select whether to include the data in the chart. Each column selected will form one series.', 'visualizer' ); ?></li>
+								<li><?php _e( 'If a column is selected to be included, specify its data type.', 'visualizer' ); ?></li>
+								<li><?php _e( 'You can use drag/drop to reorder the columns but this column position is not saved. So when you reload the table, you may have to reorder again.', 'visualizer' ); ?></li>
+								<li><?php _e( 'You can select any number of columns but the chart type selected will determine how many will display in the chart.', 'visualizer' ); ?></li>
+							</ul>
+						</div>
+						<div class="viz-html-table">
+							<?php Visualizer_Render_Layout::show( 'editor-table', null, $chart_id, 'viz-html-table', true, true ); ?>
+						</div>
+						<input type="hidden" name="table_data" value="yes">
+						<button class="button button-primary" id="visualizer-save-html-table"><?php esc_html_e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
+					</form>
+				</div>
+
+				<?php Visualizer_Render_Layout::show( 'text-editor', $chart_id ); ?>
+
+			</div>
+		<?php
+
+	}
+
+	/**
+	 * Show the text area editor.
+	 *
+	 * @access public
+	 */
+	public static function _renderTextEditor( $args ) {
+		$chart_id = $args[1];
+		$csv = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, array(), $chart_id, 'csv' );
+		$data = '';
+		if ( ! empty( $csv ) && isset( $csv['string'] ) ) {
+			$data = str_replace( PHP_EOL, "\n", $csv['string'] );
+		}
+		?>
+		<div class="viz-simple-editor-type viz-text-editor">
+			<textarea id="edited_text"><?php echo $data; ?></textarea>
+			<button id="viz-text-editor-button" class="button button-primary"><?php _e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
 		</div>
 		<?php
 	}
@@ -249,10 +302,24 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$data       = $args[1];
 		$chart_id   = $args[2];
 		$class      = $args[3];
-		$classes    = implode( ' ', array_merge( array( 'viz-editor-table' ), $class ) );
-
-		$headers    = array_keys( $data[0] );
+		$echo       = $args[4];
+		$editable_data = $args[5];
 		$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+		$headers    = array();
+
+		if ( is_null( $data ) ) {
+			foreach ( $series as $column ) {
+				$headers[] = $column['label'];
+			}
+			$chart      = get_post( $chart_id );
+			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+			$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $type );
+		} else {
+			$headers    = array_keys( $data[0] );
+		}
+
+		$classes    = implode( ' ', array( 'viz-editor-table', $class ) );
+
 		if ( $series ) {
 			$temp   = $series;
 			$series = array();
@@ -260,7 +327,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				$series[ $array['label'] ] = $array['type'];
 			}
 		}
-		ob_start();
+		if ( ! $echo ) {
+			ob_start();
+		}
 		?>
 		<table cellspacing="0" width="100%" class="results cell-border stripe <?php echo $classes; ?>">
 			<thead>
@@ -268,19 +337,28 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<th><?php _e( 'Label', 'visualizer' ); ?></th>
 		<?php
 		foreach ( $headers as $header ) {
-			echo '<th>' . $header . '</th>';
+			if ( $editable_data ) {
+				echo '<th><input type="text" name="header[]" value="' . esc_attr( $header ) . '"></th>';
+			} else {
+				echo '<th>' . $header . '</th>';
+			}
 		}
 		?>
 				</tr>
 			</thead>
-			<tfoot>
-			</tfoot>
 			<tbody>	
 				<tr>
 					<th><?php _e( 'Data Type', 'visualizer' ); ?></th>
 		<?php
+		$index = 0;
 		foreach ( $headers as $header ) {
-			echo '<td><input name="header[]" type="hidden" value="' . $header . '"><select name="type[' . $header . ']">';
+			echo '<td>';
+			if ( $editable_data ) {
+				echo '<select name="type[]">';
+			} else {
+				echo '<input name="header[]" type="hidden" value="' . $header . '">';
+				echo '<select name="type[' . $header . ']">';
+			}
 			echo '<option value="" title="' . __( 'Exclude from chart', 'visualizer' ) . '">' . __( 'Exclude', 'visualizer' ) . '</option>';
 			echo '<option value="0" disabled title="' . __( 'Include in chart and select data type', 'visualizer' ) . '">--' . __( 'OR', 'visualizer' ) . '--</option>';
 
@@ -297,15 +375,23 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		foreach ( $data as $row ) {
 			echo '<tr>';
 			echo '<th>' . __( 'Value', 'visualizer' ) . '</th>';
+			$index = 0;
 			foreach ( array_values( $row ) as $value ) {
-				echo '<td>' . $value . '</td>';
+				if ( $editable_data ) {
+					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( $value ) . '"></td>';
+				} else {
+					echo '<td>' . $value . '</td>';
+				}
 			}
+
 			echo '</tr>';
 		}
 		?>
 			</tbody>
 		</table>
 		<?php
-		return ob_get_clean();
+		if ( ! $echo ) {
+			return ob_get_clean();
+		}
 	}
 }

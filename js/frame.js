@@ -28,6 +28,8 @@
 
         init_json_import();
 
+        init_editor_table();
+
         // update the manual configuation link to point to the correct chart type.
         var type = $('#visualizer-chart-id').attr('data-chart-type');
         var chart_type_in_api_link  = type + 'chart';
@@ -394,33 +396,7 @@
                         $('#json-conclude-form [name="root"]').val(data.data.root);
                         $('#json-conclude-form .json-table').html(data.data.table);
 
-                        var settings = {
-                            paging: false,
-                            searching: false,
-                            ordering: false,
-                            select: false,
-                            "scrollX": "100%",
-                            "scrollY": "400px",
-                            info: false,
-                            colReorder: true,
-                        };
-
-                        // show column visibility button only when more than 6 columns are found (including the Label column)
-                        if($('table.viz-json-table thead tr th').length > 6){
-                            $.extend( settings, { 
-                                dom: 'Bt',
-                                buttons: [
-                                    {
-                                        extend: 'colvis',
-                                        columns: ':gt(0)',
-                                        collectionLayout: 'four-column'
-                                    }
-                                ]
-                            } );
-                        }
-
-                        $.extend( $.fn.dataTable.defaults, settings );
-                        var $table = $('#json-conclude-form .results').DataTable();
+                        var $table = create_editor_table( '#json-conclude-form' );
 
                         json_accordion_activate(3, true);
                         json_accordion_activate(2, false);
@@ -467,6 +443,48 @@
             });
         });
 
+    }
+
+    function init_editor_table() {
+        $('body').on('visualizer:db:editor:table:init', function(event, data){
+            var $table = create_editor_table('.viz-table-editor');
+            $('body').on('visualizer:db:editor:table:redraw', function(event, data){
+                $table.draw();
+            });
+        });
+    }
+
+    function create_editor_table(element) {
+        var settings = {
+            paging: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            scrollX: "100%",
+            scrollY: "400px",
+            info: false,
+            colReorder: {
+                fixedColumnsLeft: 1
+            }
+        };
+
+        // show column visibility button only when more than 6 columns are found (including the Label column)
+        if($(element + ' table.viz-editor-table thead tr th').length > 6){
+            $.extend( settings, { 
+                dom: 'Bt',
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        columns: ':gt(0)',
+                        collectionLayout: 'four-column'
+                    }
+                ]
+            } );
+        }
+
+        $.extend( $.fn.dataTable.defaults, settings );
+        var $table = $(element + ' .viz-editor-table').DataTable();
+        return $table;
     }
 
     function json_accordion_activate($step, $activate){

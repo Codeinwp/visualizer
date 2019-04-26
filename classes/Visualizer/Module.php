@@ -66,6 +66,7 @@ class Visualizer_Module {
 
 		$this->_addFilter( Visualizer_Plugin::FILTER_UNDO_REVISIONS, 'undoRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
+		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, 'getDataAs', 10, 3 );
 
 	}
 
@@ -148,6 +149,15 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * A wrapper around the actual function _getDataAs. This function is invoked as a filter.
+	 *
+	 * @since 3.2.0
+	 */
+	public function getDataAs( $final, $chart_id, $type ) {
+		return $this->_getDataAs( $chart_id, $type );
+	}
+
+	/**
 	 * Extracts the data for a chart and prepares it for the given type.
 	 *
 	 * @access public
@@ -223,9 +233,10 @@ class Visualizer_Module {
 	private function _getCSV( $rows, $filename ) {
 		$filename .= '.csv';
 
+		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 		$fp = tmpfile();
 		// support for MS Excel
-		fprintf( $fp, $bom = ( chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) ) );
+		fprintf( $fp, $bom );
 		foreach ( $rows as $row ) {
 			fputcsv( $fp, $row );
 		}
@@ -243,6 +254,7 @@ class Visualizer_Module {
 		return array(
 			'csv'  => $csv,
 			'name' => $filename,
+			'string' => str_replace( $bom, '', $csv ),
 		);
 	}
 
