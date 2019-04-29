@@ -44,10 +44,10 @@
                                 break;
                             case 'xls':
                                 if(window.navigator.msSaveOrOpenBlob){
-                                    var blob = new Blob([s2ab(atob(data.data.raw))], {type: '' });
+                                    blob = new Blob([s2ab(atob(data.data.raw))], {type: '' });
                                     window.navigator.msSaveOrOpenBlob(blob, data.data.name);
                                 } else {
-                                    var $a = $("<a>");
+                                    var $a = $("<a>"); // jshint ignore:line
                                     $a.attr("href", data.data.csv);
                                     $("body").append($a);
                                     $a.attr("download", data.data.name);
@@ -72,10 +72,12 @@
     }
 
     function s2ab(s) {
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-      for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i=0; i !== s.length; ++i) {
+            view[i] = s.charCodeAt(i) & 0xFF;
+        }
+        return buf;
     }
 
     $(document).ready(function(){
