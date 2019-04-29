@@ -1,4 +1,16 @@
 
+ ### v3.1.3 - 2019-02-24 
+ **Changes:** 
+ * Fix issue with changing column settings of the last column in table chart
+* Add support for query language to get subset of data from Google Spreadsheet
+* Fix conflict with jquery 3.3.x
+* Migrated PHPExcel to PhpSpreadsheet
+* Front end action 'print' should print the chart and fall back to printing the data
+* Fix issue with table chart not showing in IE
+* Fix issue with multiple instances of same chart not showing
+* Fix issue with date type column does not work with Combo charts
+* Tested with WP 5.1
+ 
  ### v3.1.2 - 2018-12-06 
  **Changes:** 
  * Fix bug "Warning: A non-numeric value encountered"

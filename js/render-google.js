@@ -325,8 +325,42 @@ var __visualizer_chart_images   = [];
 	}
 
     $('body').on('visualizer:render:chart:start', function(event, v){
+        var $chart_types = ['corechart', 'geochart', 'gauge', 'table', 'timeline'];
+        if(v.is_front == true){ // jshint ignore:line
+            // check what all chart types to load.
+            $chart_types = [];
+            $.each(v.charts, function(i, c){
+                var $type = c.type;
+                switch($type){
+                    case 'bar':
+                    case 'column':
+                    case 'line':
+                    case 'area':
+                    case 'stepped area':
+                    case 'bubble':
+                    case 'pie':
+                    case 'donut':
+                    case 'combo':
+                    case 'candlestick':
+                    case 'histogram':
+                    case 'scatter':
+                        $type = 'corechart';
+                        break;
+                    case 'geo':
+                        $type = 'geochart';
+                        break;
+                    case 'dataTable':
+                        $type = null;
+                        break;
+                }
+                if($type != null){
+                    $chart_types.push($type);
+                }
+            });
+        }
+
         objects = {};
-        google.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
+        google.charts.load("current", {packages: $chart_types, mapsApiKey: v.map_api_key, 'language' : v.language});
         google.charts.setOnLoadCallback(function() {
             gv = google.visualization;
             all_charts = v.charts;

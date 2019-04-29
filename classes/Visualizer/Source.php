@@ -58,6 +58,14 @@ abstract class Visualizer_Source {
 	protected $_series = array();
 
 	/**
+	 * The error message.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_error;
+
+	/**
 	 * Return allowed types
 	 *
 	 * @since 1.0.1
@@ -84,7 +92,7 @@ abstract class Visualizer_Source {
 	 */
 	protected static function _validateTypes( $types ) {
 		foreach ( $types as $type ) {
-			if ( ! in_array( $type, self::$allowed_types ) ) {
+			if ( ! in_array( $type, self::$allowed_types, true ) ) {
 				return false;
 			}
 		}
@@ -194,7 +202,6 @@ abstract class Visualizer_Source {
 	 */
 	protected function _normalizeData( $data ) {
 		// normalize values
-		// error_log(print_r($data,true));
 		foreach ( $this->_series as $i => $series ) {
 			// if no value exists for the seires, then add null
 			if ( ! isset( $data[ $i ] ) ) {
@@ -221,14 +228,20 @@ abstract class Visualizer_Source {
 						);
 					}
 					break;
+				case 'datetime':
+					// let's check if the date is a Unix epoch
+					$value = DateTime::createFromFormat( 'U', $data[ $i ] );
+					if ( $value !== false && ! is_wp_error( $value ) ) {
+						$data[ $i ] = $value->format( 'Y-m-d H:i:s' );
+					}
+					break;
 				case 'string':
 					$data[ $i ] = $this->toUTF8( $data[ $i ] );
 					break;
 			}
 		}
 
-		// error_log(print_r($data,true));
-		return $data;
+		return apply_filters( 'visualizer_format_data', $data, $this->_series );
 	}
 
 
@@ -263,7 +276,7 @@ abstract class Visualizer_Source {
 		$types = array();
 		$index = 0;
 		foreach ( $series as $column ) {
-			if ( in_array( $column['type'], array( 'date', 'datetime', 'timeofday' ) ) ) {
+			if ( in_array( $column['type'], array( 'date', 'datetime', 'timeofday' ), true ) ) {
 				$types[] = array( 'index' => $index, 'type' => $column['type'] );
 			}
 			$index++;
@@ -278,7 +291,7 @@ abstract class Visualizer_Source {
 		if ( count( $data ) > 5 ) {
 			$random = array();
 			for ( $x = 0; $x < 5; $x++ ) {
-				$random = $data[ rand( 0, count( $data ) - 1 ) ];
+				$random[] = $data[ rand( 0, count( $data ) - 1 ) ];
 			}
 		}
 
@@ -330,17 +343,22 @@ abstract class Visualizer_Source {
 
 		switch ( $type ) {
 			case 'datetime':
-				$formats += array(
-					'Y/m/d H:i:s',
-					'Y-m-d H:i:s',
-					'm/d/Y H:i:s',
-					'm-d-Y H:i:s',
+				$formats = array_merge(
+					$formats, array(
+						'U',
+						'Y/m/d H:i:s',
+						'Y-m-d H:i:s',
+						'm/d/Y H:i:s',
+						'm-d-Y H:i:s',
+					)
 				);
 				break;
 			case 'timeofday':
-				$formats += array(
-					'H:i:s',
-					'H:i',
+				$formats = array_merge(
+					$formats, array(
+						'H:i:s',
+						'H:i',
+					)
 				);
 				break;
 		}
@@ -349,12 +367,23 @@ abstract class Visualizer_Source {
 
 		foreach ( $formats as $format ) {
 			$return = DateTime::createFromFormat( $format, $value );
-			if ( $return !== false ) {
+			if ( $return !== false && ! is_wp_error( $return ) ) {
 				return $format;
 			}
 		}
 		// invalid format
 		return null;
 	}
+
+	/**
+	 * Returns the error, if any.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function get_error() {
+		return $this->_error;
+	}
+
 
 }
