@@ -218,7 +218,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// Load all the assets for the different libraries we support.
 			$deps   = array(
 				Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) ),
-				Visualizer_Render_Sidebar_Type_DataTable::enqueue_assets( array( 'media-editor' ) ),
+				Visualizer_Render_Sidebar_Type_DataTable_DataTable::enqueue_assets( array( 'media-editor' ) ),
 			);
 
 			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', $deps, Visualizer_Plugin::VERSION, true );
@@ -299,55 +299,68 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'dataTable' => array(
 					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'DataTable' ),
 				),
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'area'        => array(
 					'name'    => esc_html__( 'Area', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'geo'         => array(
 					'name'    => esc_html__( 'Geo', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'bar'         => array(
 					'name'    => esc_html__( 'Bar', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'column'      => array(
 					'name'    => esc_html__( 'Column', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'gauge'       => array(
 					'name'    => esc_html__( 'Gauge', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'candlestick' => array(
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 					'enabled' => true,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				// pro types
 				'table'       => array(
 					'name'    => esc_html__( 'Table (Deprecated)', 'visualizer' ),
 					'enabled' => false,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'timeline'    => array(
 					'name'    => esc_html__( 'Timeline', 'visualizer' ),
 					'enabled' => false,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 				'combo'       => array(
 					'name'    => esc_html__( 'Combo', 'visualizer' ),
 					'enabled' => false,
+					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
 			)
 		);
@@ -388,6 +401,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$deprecated = array();
 
 		switch ( $where ) {
+			case 'types':
+				return $types;
+				break;
 			case 'library':
 				// if the user has a Google Table chart, show it as deprecated otherwise remove the option from the library.
 				if ( ! self::hasChartType( 'table' ) ) {
@@ -694,6 +710,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
 							'library' => 'yes',
 							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
+							'chart-library'      => isset( $_GET['chart-library'] ) ? $_GET['chart-library'] : '',
 						),
 						$ajaxurl
 					),

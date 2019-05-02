@@ -28,7 +28,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Gauge extends Visualizer_Render_Sidebar_Google {
+class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Render_Sidebar_Google {
 
 	/**
 	 * Renders template.

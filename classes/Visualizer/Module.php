@@ -475,8 +475,7 @@ class Visualizer_Module {
 	 * Load the class for the given chart's chart type so that its assets can be loaded.
 	 */
 	protected function load_chart_type( $chart_id ) {
-		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-		$name   = 'Visualizer_Render_Sidebar_Type_' . ucwords( $type );
+		$name	= $this->load_chart_class_name( $chart_id );
 		$class  = null;
 		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
 			$class  = new $name;
@@ -488,6 +487,21 @@ class Visualizer_Module {
 		}
 
 		return is_null( $class ) ? null : $class->getLibrary();
+	}
+
+	protected function load_chart_class_name( $chart_id ) {
+		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$lib    = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+
+		// backward compatibility.
+		if ( empty( $lib ) ) {
+			$lib = 'GoogleCharts';
+			if ( 'dataTable' === $type ) {
+				$lib = 'DataTable';
+			}
+		}
+		$name   = 'Visualizer_Render_Sidebar_Type_' . $lib . '_' . ucwords( $type );
+		return $name;
 	}
 
 	/**

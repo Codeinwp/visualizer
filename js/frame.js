@@ -13,6 +13,10 @@
     });
 
     $(document).ready(function () {
+        onReady();
+    });
+
+    function onReady() {
         // open the correct source tab/sub-tab.
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
@@ -115,7 +119,32 @@
             $('#cancel-form').submit();
         });
 
-    });
+        init_type_vs_library();
+
+    }
+
+    function init_type_vs_library() {
+        var $data = $('select.viz-select-library').attr('data-type-vs-library');
+        if(typeof $data === 'undefined' || $data.length === 0){
+            return;
+        }
+        var $typeVsLibrary = JSON.parse( $('select.viz-select-library').attr('data-type-vs-library') );
+        // disable all unsupported libraries for the chart type.
+        $('input.type-radio').on('click', function(){
+            enable_libraries_for($(this).val(), $typeVsLibrary);
+        });
+
+        enable_libraries_for($('input.type-radio:checked').val(), $typeVsLibrary);
+    }
+
+    function enable_libraries_for($type, $typeVsLibrary) {
+        $('select.viz-select-library option').addClass('disabled').attr('disabled', 'disabled');
+        var $libs = $typeVsLibrary[$type];
+        $.each($libs, function( i, $lib ) {
+            $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
+        });
+        $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
+    }
 
     function init_permissions(){
         $('#vz-chart-permissions h2').click(function () {

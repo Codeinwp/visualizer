@@ -608,7 +608,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		$data          = $this->_getChartArray();
 		$sidebar       = '';
-		$sidebar_class = 'Visualizer_Render_Sidebar_Type_' . ucfirst( $data['type'] );
+		$sidebar_class = $this->load_chart_class_name( $data['id'] );
 		if ( class_exists( $sidebar_class, true ) ) {
 			$sidebar           = new $sidebar_class( $data['settings'] );
 			$sidebar->__series = $data['series'];
@@ -724,8 +724,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			if ( in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
+				$library = filter_input( INPUT_POST, 'chart-library' );
+				if ( empty( $library ) ) {
+					// library cannot be empty.
+					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Chart library empty while creating the chart! Aborting...', 'error', __FILE__, __LINE__ );
+					return;
+				}
+
 				// save new chart type
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, $type );
+				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, $library );
 				// if the chart has default data, update it with appropriate default data for new type
 				if ( filter_var( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, true ), FILTER_VALIDATE_BOOLEAN ) ) {
 					$source = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $type . '.csv' );

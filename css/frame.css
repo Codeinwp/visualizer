@@ -762,6 +762,10 @@ button#editor-chart-button {
 	display: none;
 }
 
+.viz-select-library option:first-child {
+	font-weight: bold;
+}
+
 /* ====== RESPONSIVE ======  */
 
 @media (max-width: 1366px) {

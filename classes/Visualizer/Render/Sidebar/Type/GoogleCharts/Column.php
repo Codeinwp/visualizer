@@ -20,7 +20,7 @@
 // | Author: Eugene Manuilov <eugene@manuilov.org>                        |
 // +----------------------------------------------------------------------+
 /**
- * Class for line chart sidebar settings.
+ * Class for column chart sidebar settings.
  *
  * @category Visualizer
  * @package Render
@@ -28,7 +28,34 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Line extends Visualizer_Render_Sidebar_Linear {
+class Visualizer_Render_Sidebar_Type_GoogleCharts_Column extends Visualizer_Render_Sidebar_Columnar {
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @param array $data The data what has to be associated with this render.
+	 */
+	public function __construct( $data = array() ) {
+		parent::__construct( $data );
+
+		// disable vertical gridlines settings
+		$this->_verticalGridLines = false;
+	}
+
+	/**
+	 * Renders general settings block for vertical axis settings.
+	 *
+	 * @since 1.4.3
+	 *
+	 * @access protected
+	 */
+	protected function _renderVerticalAxisGeneralSettings() {
+		parent::_renderVerticalAxisGeneralSettings();
+		$this->_renderVerticalAxisFormatField();
+	}
 
 	/**
 	 * Renders template.
@@ -40,31 +67,10 @@ class Visualizer_Render_Sidebar_Type_Line extends Visualizer_Render_Sidebar_Line
 	protected function _toHTML() {
 		$this->_renderGeneralSettings();
 		$this->_renderAxesSettings();
-		$this->_renderLineSettings();
+		$this->_renderColumnarSettings();
 		$this->_renderSeriesSettings();
 		$this->_renderViewSettings();
 		$this->_renderAdvancedSettings();
-	}
-
-	/**
-	 * Renders line settings items.
-	 *
-	 * @since 1.4.0
-	 *
-	 * @access protected
-	 */
-	protected function _renderLineSettingsItems() {
-		parent::_renderLineSettingsItems();
-
-		echo '<div class="viz-section-delimiter"></div>';
-
-		self::_renderSelectItem(
-			esc_html__( 'Interpolate Nulls', 'visualizer' ),
-			'interpolateNulls',
-			$this->interpolateNulls,
-			$this->_yesno,
-			esc_html__( 'Whether to guess the value of missing points. If yes, it will guess the value of any missing data based on neighboring points. If no, it will leave a break in the line at the unknown point.', 'visualizer' )
-		);
 	}
 
 }

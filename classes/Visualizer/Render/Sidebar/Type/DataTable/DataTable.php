@@ -24,7 +24,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Render_Sidebar {
 
 
 	/**
