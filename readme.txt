@@ -145,6 +145,15 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 == Changelog ==
+= 3.2.0 - 2019-05-03  = 
+
+* Add support for charts in AMP requests
+* Add support to show charts from JSON/REST endpoints
+* Fix loading of Google Visualization javascript files
+* Add simple editors for editing chart data
+* Tested up to WP 5.2
+
+
 = 3.1.3 - 2019-02-24  = 
 
 * Fix issue with changing column settings of the last column in table chart
