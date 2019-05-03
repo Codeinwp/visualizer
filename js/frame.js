@@ -13,9 +13,11 @@
     });
 
     $(document).ready(function () {
-        // open the correct source tab.
+        // open the correct source tab/sub-tab.
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
+        $('li.viz-group.' + source + ' span.viz-section-title.' + source).addClass('open');
+        $('li.viz-group.' + source + ' span.viz-section-title.' + source + '.open').parent().find('div.viz-section-items').show();
 
         init_permissions();
 
@@ -23,6 +25,10 @@
             init_db_import();
             init_filter_import();
         }
+
+        init_json_import();
+
+        init_editor_table();
 
         // update the manual configuation link to point to the correct chart type.
         var type = $('#visualizer-chart-id').attr('data-chart-type');
@@ -293,6 +299,199 @@
             $('#viz-db-wizard-params').val($('#db-query-form').serialize());
             $('#vz-db-wizard').submit();
         });
+    }
+
+    function init_json_import(){
+        var regex = new RegExp(visualizer.json_tag_separator, 'g');
+
+        $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+        $('.visualizer-json-form').accordion({
+            heightStyle: 'content',
+            active: 0
+        });
+
+        // toggle between chart and create/modify parameters
+        $( '#json-chart-button' ).on( 'click', function(){
+            $('#content').css('width', 'calc(100% - 300px)');
+            if( $(this).attr( 'data-current' ) === 'chart'){
+                $(this).val( $(this).attr( 'data-t-filter' ) );
+                $(this).html( $(this).attr( 'data-t-filter' ) );
+                $(this).attr( 'data-current', 'filter' );
+                $( '.visualizer-editor-lhs' ).hide();
+                $( '#visualizer-json-screen' ).css("z-index", "9999").show();
+                $( '#canvas' ).hide();
+            }else{
+                var filter_button = $(this);
+                $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+                $('#canvas').lock();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+                $('#canvas').unlock();
+            }
+        } );
+
+        // fetch the roots for the provided endpoint
+        $( '#visualizer-json-fetch' ).on( 'click', function(e){
+            e.preventDefault();
+            $('.visualizer-json-form').accordion( 'option', 'active', 0 );
+            $('.visualizer-json-form h3.viz-step:not(.step1)').addClass('ui-state-disabled');
+            $('.json-table').html('');
+            start_ajax( $( '#visualizer-json-screen' ) );
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['json_get_roots'],
+                    'security'  : visualizer.ajax['nonces']['json_get_roots'],
+                    'params'    : $('#json-endpoint-form').serialize()
+                },
+                success : function(data){
+                    if(data.success){
+                        $('#json-root-form [name="url"]').val(data.data.url);
+                        $('#vz-import-json-root').empty();
+                        $.each(data.data.roots, function(i, name){
+                            $('#vz-import-json-root').append('<option value="' + name + '">' + name.replace(regex, visualizer.json_tag_separator_view) + '</option>');
+                        });
+                        $('#json-root-form').fadeIn('medium');
+                        json_accordion_activate(1, true);
+                    }else{
+                        alert(visualizer.l10n.json_error);
+                    }
+                },
+                complete: function(){
+                    end_ajax($('#visualizer-json-screen'));
+                }
+            });
+        });
+
+        // fetch the data for the chosen root
+        $( '#visualizer-json-parse' ).on( 'click', function(e){
+            e.preventDefault();
+            $('.visualizer-json-form h3.viz-step:not(.step1):not(.step2)').addClass('ui-state-disabled');
+            $('.json-table').html('');
+            start_ajax( $( '#visualizer-json-screen' ) );
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['json_get_data'],
+                    'security'  : visualizer.ajax['nonces']['json_get_data'],
+                    'params'    : $('#json-root-form').serialize()
+                },
+                success : function(data){
+                    if(data.success){
+                        $('#vz-import-json-paging option:not(.static)').remove();
+                        if(data.data.paging.length > 0){
+                            var $template = $('#vz-import-json-paging').attr('data-template');
+                            $.each(data.data.paging, function(i, name){
+                                var display = name.replace(regex, visualizer.json_tag_separator_view);
+                                display = $template.replace('?', display);
+                                $('#vz-import-json-paging').append('<option value="' + name + '">' + display + '</option>');
+                            });
+                            $('.json-pagination').show();
+                        }
+                        $('#json-conclude-form [name="url"]').val(data.data.url);
+                        $('#json-conclude-form [name="root"]').val(data.data.root);
+                        $('#json-conclude-form .json-table').html(data.data.table);
+
+                        var $table = create_editor_table( '#json-conclude-form' );
+
+                        json_accordion_activate(3, true);
+                        json_accordion_activate(2, false);
+                        $table.columns.adjust().draw();
+                    }else{
+                        alert(visualizer.l10n.json_error);
+                    }
+                },
+                complete: function(){
+                    end_ajax($('#visualizer-json-screen'));
+                }
+            });
+        });
+
+        // when the data is set and the chart is updated, toggle the screen so that the chart is shown
+        $('#json-conclude-form').on( 'submit', function(e){
+            // populate the form elements that are in the misc tab.
+            $('#json-conclude-form-helper .json-form-element').each(function(x, y){
+                $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
+            });
+            $( '#json-chart-button' ).trigger('click');
+            $('#canvas').lock();
+        });
+
+        // update the schedule
+        $('#json-chart-save-button').on('click', function(e){
+            e.preventDefault();
+            $('#canvas').lock();
+            $.ajax({
+                url     : ajaxurl,
+                method  : 'post',
+                data    : {
+                    'action'    : visualizer.ajax['actions']['json_set_schedule'],
+                    'security'  : visualizer.ajax['nonces']['json_set_schedule'],
+                    'chart'     : $('#vz-json-time').attr('data-chart'),
+                    'time'      : $('#vz-json-time').val()
+                },
+                success : function(data){
+                    // do nothing.
+                },
+                complete: function(){
+                    $('#canvas').unlock();
+                }
+            });
+        });
+
+    }
+
+    function init_editor_table() {
+        $('body').on('visualizer:db:editor:table:init', function(event, data){
+            var $table = create_editor_table('.viz-table-editor');
+            $('body').on('visualizer:db:editor:table:redraw', function(event, data){
+                $table.draw();
+            });
+        });
+    }
+
+    function create_editor_table(element) {
+        var settings = {
+            paging: false,
+            searching: false,
+            ordering: false,
+            select: false,
+            scrollX: "100%",
+            scrollY: "400px",
+            info: false,
+            colReorder: {
+                fixedColumnsLeft: 1
+            }
+        };
+
+        // show column visibility button only when more than 6 columns are found (including the Label column)
+        if($(element + ' table.viz-editor-table thead tr th').length > 6){
+            $.extend( settings, { 
+                dom: 'Bt',
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        columns: ':gt(0)',
+                        collectionLayout: 'four-column'
+                    }
+                ]
+            } );
+        }
+
+        $.extend( $.fn.dataTable.defaults, settings );
+        var $table = $(element + ' .viz-editor-table').DataTable();
+        return $table;
+    }
+
+    function json_accordion_activate($step, $activate){
+        $('.visualizer-json-form h3.viz-step.step' + ( $step + 1 )).removeClass('ui-state-disabled');
+        if($activate){
+            $('.visualizer-json-form').accordion( 'option', 'active', $step );
+        }
     }
 
     function start_ajax(element){

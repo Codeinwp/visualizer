@@ -1302,17 +1302,24 @@ span.viz-section-error {
 	color: #f00;
 }
 
-.db-wizard-hints {
+.db-wizard-hints,
+.json-wizard-hints,
+.html-table-editor-hints {
 	margin-bottom: 30px;
 	color: #0085ba;
 }
 
 .db-wizard-hints .visualizer-emboss,
-.db-wizard-hints a {
+.db-wizard-hints a,
+.html-table-editor-hints a,
+.json-wizard-hints .visualizer-emboss,
+.json-wizard-hints a {
 	color: #f92472;
 }
 
-.db-wizard-hints ul {
+.db-wizard-hints ul,
+.html-table-editor-hints ul,
+.json-wizard-hints ul {
 	list-style: square;
 }
 
@@ -1330,7 +1337,98 @@ span.viz-section-error {
 	text-decoration: none;
 }
 
-/* datatables */
-.dt-button {
+/******************************************************************************/
+/********************************  data tables  *******************************/
+/******************************************************************************/
+.db-wizard-results .dt-button {
 	display: none !important;
+}
+
+/******************************************************************************/
+/********************************  json table *********************************/
+/******************************************************************************/
+#json-conclude-form .results {
+	min-width: 10px !important;
+}
+
+#json-conclude-form .json-table,
+#vz-import-json-url,
+#vz-import-json-root,
+#vz-import-json-paging {
+	width: 85%;
+}
+
+#json-conclude-form .json-table,
+#json-conclude-form button#visualizer-json-conclude {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.viz-editor-table tbody tr:first-child {
+	background-color: #ececec !important;
+}
+
+.viz-editor-table tr th {
+	background-color: #cccccc;
+}
+
+.viz-editor-table thead tr th:nth-child(n+1) {
+	cursor: move !important;
+}
+
+#json-conclude-form .json-wizard-hints .info,
+.html-table-editor-hints .info {
+	margin: 1% 0px;
+}
+
+.viz-step.ui-state-active {
+	border-color: #0085BA !important;
+	background: #0085BA !important;
+	color: #ffffff;
+}
+
+/******************************************************************************/
+/********************************  html table editor **************************/
+/******************************************************************************/
+.viz-simple-editor-type,
+.viz-simple-editor {
+	display: none;
+}
+
+.viz-table-editor {
+	width: 75%;
+	margin-left: 2%;
+}
+
+.viz-html-table,
+button#visualizer-save-html-table {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+
+/******************************************************************************/
+/********************************  text area editor **************************/
+/******************************************************************************/
+.viz-text-editor {
+	padding: 20px;
+	z-index: 9999;
+	box-sizing: border-box;
+	padding-right: 320px;
+}
+
+.viz-text-editor textarea {
+	width: 85%;
+	overflow: auto;
+	background: #282923;
+	color: #ffffff;
+	padding: 15px;
+	height: 400px;
+	font-size: 15px;
+}
+
+.viz-text-editor textarea,
+button#viz-text-editor-button {
+	display: inline-block;
+	vertical-align: middle;
 }

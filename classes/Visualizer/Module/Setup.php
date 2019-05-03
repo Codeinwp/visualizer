@@ -154,7 +154,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return;
 		}
 
-		if ( $plugin == VISUALIZER_BASENAME ) {
+		if ( $plugin === VISUALIZER_BASENAME ) {
 			wp_redirect( admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ) );
 			exit();
 		}
@@ -192,26 +192,50 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		// check if the source is correct.
 		$source     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
-		if ( $source !== 'Visualizer_Source_Query' ) {
-			return $chart;
-		}
+		$load_series = false;
+		switch ( $source ) {
+			case 'Visualizer_Source_Query':
+				// check if its a live-data chart or a cached-data chart.
+				if ( ! $force ) {
+					$hours = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+					if ( ! empty( $hours ) ) {
+						// cached, bail!
+						return $chart;
+					}
+				}
 
-		// check if its a live-data chart or a cached-data chart.
-		if ( ! $force ) {
-			$hours = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-			if ( ! empty( $hours ) ) {
-				// cached, bail!
+				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, true );
+				$source     = new Visualizer_Source_Query( $params );
+				$source->fetch( false );
+				$load_series = true;
+				break;
+			case 'Visualizer_Source_Json':
+				// check if its a live-data chart or a cached-data chart.
+				if ( ! $force ) {
+					$hours = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
+					if ( ! empty( $hours ) ) {
+						// cached, bail!
+						return $chart;
+					}
+				}
+
+				$url        = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true );
+				$root       = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true );
+				$paging     = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING, true );
+				$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+				$source     = new Visualizer_Source_Json( array( 'url' => $url, 'root' => $root, 'paging' => $paging ) );
+				$source->refresh( $series );
+				break;
+			default:
 				return $chart;
-			}
 		}
-
-		$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, true );
-		$source     = new Visualizer_Source_Query( $params );
-		$source->fetch( false );
 
 		$error      = $source->get_error();
 		if ( empty( $error ) ) {
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+			add_filter( 'wp_revisions_to_keep', '__return_false' );
+			if ( $load_series ) {
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+			}
 
 			wp_update_post(
 				array(

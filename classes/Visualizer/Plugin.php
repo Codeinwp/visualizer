@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.1.3';
+	const VERSION = '3.2.0';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -62,6 +62,16 @@ class Visualizer_Plugin {
 	 */
 	const ACTION_FETCH_DB_DATA = 'visualizer-fetch-db-data';
 	const ACTION_SAVE_DB_QUERY = 'visualizer-save-db-query';
+
+	const ACTION_JSON_GET_ROOTS = 'visualizer-json-get-roots';
+	const ACTION_JSON_GET_DATA = 'visualizer-json-get-data';
+	const ACTION_JSON_SET_DATA = 'visualizer-json-set-data';
+	const ACTION_JSON_SET_SCHEDULE = 'visualizer-json-set-schedule';
+	const CF_JSON_URL = 'visualizer-json-url';
+	const CF_JSON_ROOT = 'visualizer-json-root';
+	const CF_JSON_SCHEDULE = 'visualizer-json-schedule';
+	const CF_JSON_PAGING = 'visualizer-json-paging';
+
 	const ACTION_SAVE_FILTER_QUERY = 'visualizer-save-filter-query';
 
 	// custom filters
@@ -71,6 +81,7 @@ class Visualizer_Plugin {
 	const FILTER_GET_CHART_SETTINGS = 'visualizer-get-chart-settings';
 	const FILTER_UNDO_REVISIONS = 'visualizer-undo-revisions';
 	const FILTER_HANDLE_REVISIONS = 'visualizer-handle-revisions';
+	const FILTER_GET_CHART_DATA_AS = 'visualizer-get-chart-data-as';
 
 	const CF_DB_SCHEDULE = 'visualizer-db-schedule';
 	const CF_DB_QUERY = 'visualizer-db-query';

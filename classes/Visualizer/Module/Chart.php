@@ -61,8 +61,155 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_FETCH_DB_DATA, 'getQueryData' );
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_DB_QUERY, 'saveQuery' );
+
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_GET_ROOTS, 'getJsonRoots' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_GET_DATA, 'getJsonData' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_SET_DATA, 'setJsonData' );
+		$this->_addAjaxAction( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE, 'setJsonSchedule' );
+
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
+
 	}
+
+	/**
+	 * Sets the schedule for how JSON-endpoint charts should be updated.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function setJsonSchedule() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION, 'security' );
+
+		$chart_id = filter_input(
+			INPUT_POST,
+			'chart',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			)
+		);
+
+		if ( ! $chart_id ) {
+			wp_send_json_error();
+		}
+
+		$time = filter_input(
+			INPUT_POST,
+			'time',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+				),
+			)
+		);
+
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE );
+
+		if ( -1 < $time ) {
+			add_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, $time );
+		}
+		wp_send_json_success();
+	}
+
+	/**
+	 * Get the root elements for JSON-endpoint.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function getJsonRoots() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION, 'security' );
+
+		$params     = wp_parse_args( $_POST['params'] );
+
+		$source = new Visualizer_Source_Json( $params );
+
+		$roots = $source->fetchRoots();
+		if ( empty( $roots ) ) {
+			wp_send_json_error();
+		}
+
+		wp_send_json_success( array( 'url' => $params['url'], 'roots' => $roots ) );
+	}
+
+	/**
+	 * Get the data for the JSON-endpoint corresponding to the chosen root.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function getJsonData() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION, 'security' );
+
+		$params = wp_parse_args( $_POST['params'] );
+
+		$chart_id = $params['chart'];
+
+		if ( empty( $chart_id ) ) {
+			wp_die();
+		}
+
+		$source = new Visualizer_Source_Json( $params );
+
+		$data   = $source->parse();
+		if ( empty( $data ) ) {
+			wp_send_json_error();
+		}
+
+		$data   = Visualizer_Render_Layout::show( 'editor-table', $data, $chart_id, 'viz-json-table', false, false );
+		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'], 'paging' => $source->getPaginationElements() ) );
+	}
+
+	/**
+	 * Updates the database with the correct post parameters for JSON-endpoint charts.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function setJsonData() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION, 'security' );
+
+		$params = $_POST;
+		$chart_id = $_GET['chart'];
+
+		if ( empty( $chart_id ) ) {
+			wp_die();
+		}
+
+		$chart  = get_post( $chart_id );
+
+		$source = new Visualizer_Source_Json( $params );
+		$source->fetch();
+
+		$content    = $source->getData();
+		$chart->post_content = $content;
+		wp_update_post( $chart->to_array() );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
+		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING );
+		if ( ! empty( $params['paging'] ) ) {
+			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
+		}
+
+		$render         = new Visualizer_Render_Page_Update();
+		$render->id     = $chart->ID;
+		$render->data   = json_encode( $source->getRawData() );
+		$render->series = json_encode( $source->getSeries() );
+		$render->render();
+
+		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+	}
+
 
 	/**
 	 * Fetches charts from database.
@@ -95,7 +242,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$filter = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
 		}
 
-		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes() ) ) {
+		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes(), true ) ) {
 			$query_args['meta_query'] = array(
 				array(
 					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
@@ -202,7 +349,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function deleteChart() {
-		$is_post      = $_SERVER['REQUEST_METHOD'] == 'POST';
+		$is_post      = $_SERVER['REQUEST_METHOD'] === 'POST';
 		$input_method = $is_post ? INPUT_POST : INPUT_GET;
 		$chart_id     = $success = false;
 		$nonce        = wp_verify_nonce( filter_input( $input_method, 'nonce' ) );
@@ -220,7 +367,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 			if ( $chart_id ) {
 				$chart   = get_post( $chart_id );
-				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 			}
 		}
 		if ( $success ) {
@@ -277,7 +424,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		defined( 'IFRAME_REQUEST' ) || define( 'IFRAME_REQUEST', 1 );
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			$this->deleteOldCharts();
 			$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
 			$source       = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $default_type . '.csv' );
@@ -316,7 +463,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_style( 'visualizer-chosen', VISUALIZER_ABSURL . 'css/lib/chosen.min.css', array(), Visualizer_Plugin::VERSION );
 
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen', 'jquery-ui-accordion' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 		wp_register_script(
 			'visualizer-render',
@@ -335,11 +482,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			Visualizer_Plugin::VERSION,
 			true
 		);
+		wp_register_script( 'visualizer-editor-simple', VISUALIZER_ABSURL . 'js/simple-editor.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+
 		// added by Ash/Upwork
 		if ( VISUALIZER_PRO ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_addScriptsAndStyles();
 		}
+
 		// dispatch pages
 		$this->_chart = get_post( $chart_id );
 		$tab    = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'visualizer';
@@ -381,19 +531,20 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	private function loadCodeEditorAssets() {
 		global $wp_version;
 
+		$wp_scripts = wp_scripts();
+
+		// data tables assets.
+		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-2.0.0/sl-1.3.0/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_register_style( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-2.0.0/sl-1.3.0/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_register_style( 'visualizer-jquery-ui', sprintf( '//ajax.googleapis.com/ajax/libs/jqueryui/%s/themes/smoothness/jquery-ui.css', $wp_scripts->registered['jquery-ui-core']->ver ), array( 'visualizer-datatables' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_script( 'visualizer-datatables' );
+		wp_enqueue_style( 'visualizer-jquery-ui' );
+
 		if ( ! VISUALIZER_PRO ) {
 			return;
 		}
 
 		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping();
-
-		// data tables assets.
-		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
-		wp_register_style( 'visualizer-datatables', '//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css', array(), Visualizer_Plugin::VERSION );
-		wp_register_style( 'visualizer-datatables-ui', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', array( 'visualizer-datatables' ), Visualizer_Plugin::VERSION );
-
-		wp_enqueue_script( 'visualizer-datatables' );
-		wp_enqueue_style( 'visualizer-datatables-ui' );
 
 		if ( version_compare( $wp_version, '4.9.0', '<' ) ) {
 			// code mirror assets.
@@ -436,8 +587,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( isset( $_POST['map_api_key'] ) ) {
 			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
 		}
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
-			if ( $this->_chart->post_status == 'auto-draft' ) {
+		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
+			if ( $this->_chart->post_status === 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
 
 				// ensure that a revision is not created. If a revision is created it will have the proper data and the parent of the revision will have default data.
@@ -464,7 +615,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$sidebar->__data   = $data['data'];
 		} else {
 			$sidebar = apply_filters( 'visualizer_pro_chart_type_sidebar', '', $data );
-			if ( $sidebar != '' ) {
+			if ( $sidebar !== '' ) {
 				$sidebar->__series = $data['series'];
 				$sidebar->__data   = $data['data'];
 			}
@@ -476,6 +627,23 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
 
+		if ( ! VISUALIZER_PRO ) {
+			wp_enqueue_script( 'visualizer-editor-simple' );
+			wp_localize_script(
+				'visualizer-editor-simple',
+				'visualizer1',
+				array(
+					'ajax'      => array(
+						'url'     => admin_url( 'admin-ajax.php' ),
+						'nonces'  => array(
+						),
+						'actions' => array(
+						),
+					),
+				)
+			);
+		}
+
 		$table_col_mapping  = $this->loadCodeEditorAssets();
 
 		wp_localize_script(
@@ -485,6 +653,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
+					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -497,10 +666,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'nonces'  => array(
 						'permissions'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA ),
 						'db_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION ),
+						'json_get_roots'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION ),
+						'json_get_data'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION ),
+						'json_set_schedule'   => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
 					),
 					'actions' => array(
 						'permissions'   => Visualizer_Plugin::ACTION_FETCH_PERMISSIONS_DATA,
 						'db_get_data'   => Visualizer_Plugin::ACTION_FETCH_DB_DATA,
+						'json_get_roots'   => Visualizer_Plugin::ACTION_JSON_GET_ROOTS,
+						'json_get_data'   => Visualizer_Plugin::ACTION_JSON_GET_DATA,
+						'json_set_schedule'   => Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE,
 					),
 				),
 				'db_query' => array(
@@ -508,6 +683,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				),
 				'is_pro'    => VISUALIZER_PRO,
 				'page_type' => 'chart',
+				'json_tag_separator' => Visualizer_Source_Json::TAG_SEPARATOR,
+				'json_tag_separator_view' => Visualizer_Source_Json::TAG_SEPARATOR_VIEW,
+				'is_front'  => false,
 			)
 		);
 
@@ -517,10 +695,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->custom_css  = $data['css'];
 		$render->sidebar = $sidebar;
 		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
-			$render->button = filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART
+			$render->button = filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART
 				? esc_html__( 'Save Chart', 'visualizer' )
 				: esc_html__( 'Create Chart', 'visualizer' );
-			if ( filter_input( INPUT_GET, 'action' ) == Visualizer_Plugin::ACTION_EDIT_CHART ) {
+			if ( filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART ) {
 				$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
 			}
 		} else {
@@ -543,9 +721,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function _handleTypesPage() {
 		// process post request
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
-			if ( in_array( $type, Visualizer_Plugin::getChartTypes() ) ) {
+			if ( in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
 				// save new chart type
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, $type );
 				// if the chart has default data, update it with appropriate default data for new type
@@ -583,7 +761,105 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function renderFlattrScript() {
 		echo '';
 	}
-	// changed by Ash/Upwork
+
+	/**
+	 * Processes the CSV that is sent in the request as a string.
+	 *
+	 * @since 3.2.0
+	 */
+	private function handleCSVasString( $data ) {
+		$source = null;
+		if ( VISUALIZER_PRO ) {
+			$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
+		} else {
+			// data coming in from the text editor.
+			$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );
+			$handle  = fopen( $tmpfile, 'w' );
+			$values = preg_split( '/[\n\r]+/', stripslashes( trim( $data ) ) );
+			if ( $values ) {
+				foreach ( $values as $row ) {
+					if ( empty( $row ) ) {
+						continue;
+					}
+					$columns = explode( ',', $row );
+					fputcsv( $handle, $columns );
+				}
+			}
+			$source = new Visualizer_Source_Csv( $tmpfile );
+			fclose( $handle );
+		}
+		return $source;
+	}
+
+	/**
+	 * Parses the data uploaded as an HTML table.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @access private
+	 */
+	private function handleTabularData() {
+		$csv        = array();
+		// the datatable mentions the headers twice, so lets remove the duplicates.
+		$headers    = array_unique( array_filter( $_POST['header'] ) );
+		$types      = $_POST['type'];
+
+		// capture all the indexes that correspond to excluded columns.
+		$exclude    = array();
+		$index      = 0;
+		foreach ( $types as $type ) {
+			if ( empty( $type ) ) {
+				$exclude[] = $index;
+			}
+			$index++;
+		}
+
+		// when N headers are being renamed, the number of headers increases by N
+		// because of the way datatable duplicates header information
+		// so unset the headers that have been renamed.
+		if ( count( $headers ) !== count( $types ) ) {
+			$to = count( $headers );
+			for ( $i = count( $types ); $i < $to; $i++ ) {
+				unset( $headers[ $i + 1 ] );
+			}
+		}
+
+		$columns    = array();
+		for ( $i = 0; $i < count( $headers ); $i++ ) {
+			if ( ! isset( $_POST[ 'data' . $i ] ) ) {
+				continue;
+			}
+			$columns[ $i ] = $_POST[ 'data' . $i ];
+		}
+
+		$csv[]      = $headers;
+		$csv[]      = $types;
+		for ( $j = 0; $j < count( $columns[0] ); $j++ ) {
+			$row = array();
+			for ( $i = 0; $i < count( $headers ); $i++ ) {
+				$row[] = $columns[ $i ][ $j ];
+			}
+			$csv[]  = $row;
+		}
+
+		$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );
+		$handle  = fopen( $tmpfile, 'w' );
+
+		if ( $csv ) {
+			$index = 0;
+			foreach ( $csv as $row ) {
+				// remove all the cells corresponding to the excluded headers.
+				foreach ( $exclude as $j ) {
+					unset( $row[ $j ] );
+				}
+				fputcsv( $handle, $row );
+			}
+		}
+		$source = new Visualizer_Source_Csv( $tmpfile );
+		fclose( $handle );
+		return $source;
+	}
+
 	/**
 	 * Parses uploaded CSV file and saves new data for the chart.
 	 *
@@ -608,7 +884,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			if ( ! $can_die ) {
 				return;
 			}
@@ -631,6 +907,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
 		}
 
+		// delete json related data.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING );
+
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
 		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
@@ -638,10 +919,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( isset( $_POST['vz-import-time'] ) ) {
 				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $_POST['remote_data'], $_POST['vz-import-time'] );
 			}
+			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			$source = apply_filters( 'visualizer_pro_handle_chart_data', $_POST['chart_data'], '', $chart_id, $_POST );
+			$source = $this->handleCSVasString( $_POST['chart_data'] );
+		} elseif ( isset( $_POST['table_data'] ) && 'yes' === $_POST['table_data'] ) {
+			$source = $this->handleTabularData();
 		} else {
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );
 		}
@@ -703,7 +987,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 			if ( $chart_id ) {
 				$chart   = get_post( $chart_id );
-				$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 			}
 		}
 		$redirect = wp_get_referer();

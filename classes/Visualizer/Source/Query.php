@@ -36,14 +36,6 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	protected $_query;
 
 	/**
-	 * The error message.
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $_error;
-
-	/**
 	 * Constructor.
 	 *
 	 * @access public
@@ -176,16 +168,6 @@ class Visualizer_Source_Query extends Visualizer_Source {
 		$this->_data = $data;
 
 		return true;
-	}
-
-	/**
-	 * Returns the error, if any.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function get_error() {
-		return $this->_error;
 	}
 
 	/**
