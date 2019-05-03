@@ -69,6 +69,27 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		add_action( 'rest_api_init', array( $this, 'endpoint_register' ) );
+
+		$this->_addFilter( 'script_loader_tag', 'script_loader_tag', null, 10, 3 );
+	}
+
+	/**
+	 * Adds the async attribute to certain scripts.
+	 */
+	function script_loader_tag( $tag, $handle, $src ) {
+		if ( is_admin() ) {
+			return $tag;
+		}
+
+		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
+
+		foreach ( $scripts as $async ) {
+			if ( $async === $handle ) {
+				$tag = str_replace( ' src', ' async="async" defer="defer" src', $tag );
+				break;
+			}
+		}
+		return $tag;
 	}
 
 	/**
@@ -199,6 +220,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// in case revisions exist.
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
 			$chart = get_post( $chart->ID );
 		}
@@ -247,6 +269,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$id         = $id . '-' . rand();
 
+		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
+		if ( $amp && $amp->is_amp() ) {
+			return '<div id="' . $id . '"' . $class . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
+		}
+
 		// add chart to the array
 		$this->_charts[ $id ] = array(
 			'type'     => $type,
@@ -277,6 +304,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'copied'        => __( 'Copied!', 'visualizer' ),
 				),
 				'page_type' => 'frontend',
+				'is_front'  => true,
 			)
 		);
 		wp_enqueue_style( 'visualizer-front' );
