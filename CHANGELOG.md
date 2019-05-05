@@ -1,4 +1,8 @@
 
+ ### v3.2.1 - 2019-05-05 
+ **Changes:** 
+ * Fix issue with async loading of scripts
+ 
  ### v3.2.0 - 2019-05-03 
  **Changes:** 
  * Add support for charts in AMP requests

@@ -145,6 +145,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.2.1 - 2019-05-05  ###
+
+* Fix issue with async loading of scripts
+
+
 ### 3.2.0 - 2019-05-03  ###
 
 * Add support for charts in AMP requests
