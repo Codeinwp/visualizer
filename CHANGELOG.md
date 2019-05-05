@@ -1,4 +1,12 @@
 
+ ### v3.2.0 - 2019-05-03 
+ **Changes:** 
+ * Add support for charts in AMP requests
+* Add support to show charts from JSON/REST endpoints
+* Fix loading of Google Visualization javascript files
+* Add simple editors for editing chart data
+* Tested up to WP 5.2
+ 
  ### v3.1.3 - 2019-02-24 
  **Changes:** 
  * Fix issue with changing column settings of the last column in table chart

@@ -11,7 +11,7 @@ A simple and quite powerful WordPress chart plugin to create and embed interacti
 
 ## Description ##
  
-<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts & tables into your WordPress posts and pages.
+<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress (Lite) plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts & tables into your WordPress posts and pages.
 
 The plugin uses Google Visualization API and DataTables.net to add responsive & animated charts/diagrams, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases. Is the best Excel to WordPress solution who let's you insert charts to your wp site using a simple chart builder.
 
@@ -145,6 +145,15 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.2.0 - 2019-05-03  ###
+
+* Add support for charts in AMP requests
+* Add support to show charts from JSON/REST endpoints
+* Fix loading of Google Visualization javascript files
+* Add simple editors for editing chart data
+* Tested up to WP 5.2
+
+
 ### 3.1.3 - 2019-02-24  ###
 
 * Fix issue with changing column settings of the last column in table chart
