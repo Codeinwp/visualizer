@@ -85,7 +85,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		foreach ( $scripts as $async ) {
 			if ( $async === $handle ) {
-				$tag = str_replace( ' src', ' async="async" defer="defer" src', $tag );
+				$tag = str_replace( ' src', ' defer="defer" src', $tag );
 				break;
 			}
 		}
