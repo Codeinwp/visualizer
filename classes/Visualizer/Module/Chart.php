@@ -769,7 +769,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function handleCSVasString( $data ) {
 		$source = null;
-		if ( VISUALIZER_PRO ) {
+
+		// do not check for VISUALIZER_PRO here as that is false:
+		// @issue https://github.com/Codeinwp/visualizer/issues/412
+		if ( has_filter( 'visualizer_pro_handle_chart_data' ) ) {
 			$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
 		} else {
 			// data coming in from the text editor.
