@@ -260,8 +260,21 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											while ( $query->have_posts() ) {
 												$chart    = $query->next_post();
 												$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
+												$title       = '#' . $chart->ID;
+												if ( ! empty( $settings['title'] ) ) {
+													$title  = $settings['title'];
+												}
+												// for ChartJS, title is an array.
+												if ( is_array( $title ) && isset( $title['text'] ) ) {
+													$title = $title['text'];
+												}
+												if ( empty( $title ) ) {
+													$title	= '#' . $chart->ID;
+												}
+
 												?>
-												<option value="<?php echo $chart->ID; ?>"><?php echo empty( $settings['title'] ) ? '#' . $chart->ID : $settings['title']; ?></option>
+												<option value="<?php echo $chart->ID; ?>"><?php echo $title ; ?></option>
 												<?php
 											}
 											?>

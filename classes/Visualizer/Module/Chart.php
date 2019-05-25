@@ -608,7 +608,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		$data          = $this->_getChartArray();
 		$sidebar       = '';
-		$sidebar_class = $this->load_chart_class_name( $data['id'] );
+		$sidebar_class = $this->load_chart_class_name( $this->_chart->ID );
 		if ( class_exists( $sidebar_class, true ) ) {
 			$sidebar           = new $sidebar_class( $data['settings'] );
 			$sidebar->__series = $data['series'];
@@ -723,8 +723,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// process post request
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
+			$library = filter_input( INPUT_POST, 'chart-library' );
 			if ( in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
-				$library = filter_input( INPUT_POST, 'chart-library' );
 				if ( empty( $library ) ) {
 					// library cannot be empty.
 					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Chart library empty while creating the chart! Aborting...', 'error', __FILE__, __LINE__ );

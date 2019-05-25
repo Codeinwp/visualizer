@@ -75,9 +75,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 	 * @access public
 	 */
 	function load_assets( $deps, $is_frontend ) {
-		if ( ! wp_script_is( 'moment', 'registered' ) ) {
-			wp_register_script( 'moment', '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js', array(), Visualizer_Plugin::VERSION );
-		}
+		$this->load_dependent_assets( array( 'moment' ) );
 
 		wp_register_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
 		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );

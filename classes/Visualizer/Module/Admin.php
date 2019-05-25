@@ -306,6 +306,11 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'enabled' => true,
 					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
+				'polarArea'         => array(
+					'name'    => esc_html__( 'Polar Area', 'visualizer' ),
+					'enabled' => true,
+					'supports'	=> array( 'ChartJS' ),
+				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
@@ -319,7 +324,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'geo'         => array(
 					'name'    => esc_html__( 'Geo', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'	=> array( 'Google Charts' ),
 				),
 				'bar'         => array(
 					'name'    => esc_html__( 'Bar', 'visualizer' ),
@@ -339,18 +344,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'gauge'       => array(
 					'name'    => esc_html__( 'Gauge', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'	=> array( 'Google Charts' ),
 				),
 				'candlestick' => array(
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'	=> array( 'Google Charts' ),
 				),
 				// pro types
 				'table'       => array(
 					'name'    => esc_html__( 'Table (Deprecated)', 'visualizer' ),
 					'enabled' => false,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'	=> array( 'Google Charts' ),
 				),
 				'timeline'    => array(
 					'name'    => esc_html__( 'Timeline', 'visualizer' ),

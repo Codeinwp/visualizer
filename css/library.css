@@ -305,3 +305,8 @@ button.media-modal-close {
 .dt-button {
 	display: none !important;
 }
+
+/* chartjs */
+#visualizer-library canvas.chartjs-render-monitor {
+	height: 100% !important;
+}

@@ -169,6 +169,14 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( ! empty( $settings[0]['title'] ) ) {
 			$title  = $settings[0]['title'];
 		}
+		// for ChartJS, title is an array.
+		if ( is_array( $title ) && isset( $title['text'] ) ) {
+			$title = $title['text'];
+		}
+		if ( empty( $title ) ) {
+			$title	= '#' . $chart_id;
+		}
+
 		$ajax_url    = admin_url( 'admin-ajax.php' );
 		$delete_url  = add_query_arg(
 			array(
