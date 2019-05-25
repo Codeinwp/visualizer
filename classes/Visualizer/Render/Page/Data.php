@@ -83,8 +83,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			$source_of_chart .= '_wp';
 		}
 		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$lib               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		?>
-		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>" data-chart-type="<?php echo $type; ?>"></span>
+		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>" data-chart-type="<?php echo $type; ?>" data-chart-lib="<?php echo $lib; ?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
 		<ul class="viz-group-wrapper full-height">
 			<li class="viz-group viz-group-category open" id="vz-chart-source">

@@ -456,11 +456,19 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 
-		$this->load_chart_type( $chart_id );
+		$lib = $this->load_chart_type( $chart_id );
+
+		// the alpha color picker (RGBA) is supported only by chartjs
+		$color_picker_dep = 'wp-color-picker';
+		if ( $lib === 'chartjs' && ! wp_script_is( 'wp-color-picker-alpha', 'registered' ) ) {
+			wp_register_script( 'wp-color-picker-alpha', VISUALIZER_ABSURL . 'js/lib/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ), Visualizer_Plugin::VERSION );
+			$color_picker_dep = 'wp-color-picker-alpha';
+		}
 
 		// enqueue and register scripts and styles
 		wp_register_script( 'visualizer-chosen', VISUALIZER_ABSURL . 'js/lib/chosen.jquery.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION );
 		wp_register_style( 'visualizer-chosen', VISUALIZER_ABSURL . 'css/lib/chosen.min.css', array(), Visualizer_Plugin::VERSION );
+
 
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen', 'jquery-ui-accordion' ), Visualizer_Plugin::VERSION, true );
@@ -476,7 +484,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer-preview',
 			VISUALIZER_ABSURL . 'js/preview.js',
 			array(
-				'wp-color-picker',
+				$color_picker_dep,
 				'visualizer-render',
 			),
 			Visualizer_Plugin::VERSION,
