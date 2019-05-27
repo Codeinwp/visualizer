@@ -7,7 +7,7 @@
  * @package Render
  * @subpackage Sidebar
  *
- * @since 3.2.0
+ * @since 3.3.0
  */
 class Visualizer_Render_Sidebar_Type_ChartJS_Bar extends Visualizer_Render_Sidebar_Type_ChartJS_Linear {
 
