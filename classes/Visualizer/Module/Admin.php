@@ -306,11 +306,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'enabled' => true,
 					'supports'	=> array( 'Google Charts', 'ChartJS' ),
 				),
-				'polarArea'         => array(
-					'name'    => esc_html__( 'Polar Area', 'visualizer' ),
-					'enabled' => true,
-					'supports'	=> array( 'ChartJS' ),
-				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
@@ -319,7 +314,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'area'        => array(
 					'name'    => esc_html__( 'Area', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					// in ChartJS, the fill option is used to make this an area: https://www.chartjs.org/docs/latest/charts/area.html
+					'supports'	=> array( 'Google Charts' ),
 				),
 				'geo'         => array(
 					'name'    => esc_html__( 'Geo', 'visualizer' ),
@@ -339,7 +335,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'	=> array( 'Google Charts' ),
 				),
 				'gauge'       => array(
 					'name'    => esc_html__( 'Gauge', 'visualizer' ),
@@ -365,7 +361,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'combo'       => array(
 					'name'    => esc_html__( 'Combo', 'visualizer' ),
 					'enabled' => false,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'	=> array( 'Google Charts' ),
 				),
 			)
 		);
@@ -376,6 +372,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				if ( ! is_array( $array ) ) {
 					// support for old pro
 					$array  = array( 'enabled' => true, 'name' => $array );
+				}
+				// backward compatibility for PRO before v1.9.0
+				if ( ! array_key_exists( 'supports', $array ) ) {
+					$array['supports'] = array( 'Google Charts' );
 				}
 				if ( ! $array['enabled'] ) {
 					continue;
@@ -390,6 +390,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				if ( ! is_array( $array ) ) {
 					// support for old pro
 					$array  = array( 'enabled' => true, 'name' => $array );
+				}
+				// backward compatibility for PRO before v1.9.0
+				if ( ! array_key_exists( 'supports', $array ) ) {
+					$array['supports'] = array( 'Google Charts' );
 				}
 				$doubleD[ $type ] = $array['name'];
 			}

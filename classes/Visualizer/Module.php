@@ -483,7 +483,8 @@ class Visualizer_Module {
 
 		if ( is_null( $class ) && VISUALIZER_PRO ) {
 			// lets see if this type exists in pro. New Lite(3.1.0+) & old Pro(1.8.0-).
-			$class  = apply_filters( 'visualizer_pro_chart_type_sidebar', null, array( 'type' => $type, 'settings' => get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ) ) );
+			$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+			$class  = apply_filters( 'visualizer_pro_chart_type_sidebar', null, array( 'id' => $chart_id, 'type' => $type, 'settings' => get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ) ) );
 		}
 
 		return is_null( $class ) ? null : $class->getLibrary();
