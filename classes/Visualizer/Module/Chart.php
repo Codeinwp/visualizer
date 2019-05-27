@@ -458,9 +458,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$lib = $this->load_chart_type( $chart_id );
 
-		// the alpha color picker (RGBA) is supported only by chartjs
+		// the alpha color picker (RGBA) is not supported by google.
 		$color_picker_dep = 'wp-color-picker';
-		if ( $lib === 'chartjs' && ! wp_script_is( 'wp-color-picker-alpha', 'registered' ) ) {
+		if ( in_array( $lib, array( 'chartjs', 'datatables' ), true ) && ! wp_script_is( 'wp-color-picker-alpha', 'registered' ) ) {
 			wp_register_script( 'wp-color-picker-alpha', VISUALIZER_ABSURL . 'js/lib/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ), Visualizer_Plugin::VERSION );
 			$color_picker_dep = 'wp-color-picker-alpha';
 		}
