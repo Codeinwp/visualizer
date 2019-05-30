@@ -293,6 +293,7 @@ class Visualizer_Module {
 		return array(
 			'csv'  => 'data:application/vnd.ms-excel;base64,' . base64_encode( $xlsData ),
 			'name' => $filename,
+			'raw' => base64_encode( $xlsData ),
 		);
 	}
 

@@ -185,7 +185,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON/REST', 'visualizer' ); ?>
 									<span class="dashicons dashicons-lock"></span></span>
 									<div class="viz-section-items section-items">
-										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON/REST source. For more info check <a href="" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON/REST source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 													<?php
@@ -404,7 +404,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<div>
 									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), VISUALIZER_PRO ? 'spreadsheet like' : 'simple' ); ?></p>
 									<?php if ( ! VISUALIZER_PRO ) { ?>
-										<p class="viz-group-description"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
+										<p class="viz-group-description simple-editor-type"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
 									<?php } ?>
 									<input type="button" id="editor-chart-button" class="button button-primary "
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
