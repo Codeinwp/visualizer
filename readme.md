@@ -1,8 +1,8 @@
-# Visualizer: Tables and Charts Manager for WordPress (Lite) # #
-**Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [contactashish13](https://profiles.wordpress.org/rozroz)    
+# Visualizer: Tables and Charts Manager for WordPress # #
+**Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [contactashish13](https://profiles.wordpress.org/contactashish13)  
 **Tags:** chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables  
 **Requires at least:** 3.5  
-**Tested up to:** 5.0  
+**Tested up to:** 5.2  
 **Stable tag:** trunk  
 **License:** GPL v2.0 or later  
 **License URI:** http://www.opensource.org/licenses/gpl-license.php  
@@ -145,6 +145,34 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 5. Charts library
 
 ## Changelog ##
+### 3.2.0 - 2019-05-03  ###
+
+* Add support for charts in AMP requests
+* Add support to show charts from JSON/REST endpoints
+* Fix loading of Google Visualization javascript files
+* Add simple editors for editing chart data
+* Tested up to WP 5.2
+
+
+### 3.1.3 - 2019-02-24  ###
+
+* Fix issue with changing column settings of the last column in table chart
+* Add support for query language to get subset of data from Google Spreadsheet
+* Fix conflict with jquery 3.3.x
+* Migrated PHPExcel to PhpSpreadsheet
+* Front end action 'print' should print the chart and fall back to printing the data
+* Fix issue with table chart not showing in IE
+* Fix issue with multiple instances of same chart not showing
+* Fix issue with date type column does not work with Combo charts
+* Tested with WP 5.1
+
+
+### 3.1.2 - 2018-12-06  ###
+
+* Fix bug "Warning: A non-numeric value encountered"
+* Tested with WP 5.0
+
+
 ### 3.1.1 - 2018-12-05  ###
 
 * Fix issue with Gutenberg support

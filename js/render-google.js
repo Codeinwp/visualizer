@@ -8,6 +8,8 @@ var __visualizer_chart_images   = [];
 (function($) {
 	var gv;
     var all_charts, objects;
+    // so that we know which charts belong to our library.
+    var rendered_charts = [];
 
 	function renderChart(id) {
         renderSpecificChart(id, all_charts[id]);
@@ -19,6 +21,7 @@ var __visualizer_chart_images   = [];
         if(chart.library !== 'google'){
             return;
         }
+        rendered_charts[id] = 'yes';
 
         series = chart.series;
 		data = chart.data;
@@ -132,6 +135,7 @@ var __visualizer_chart_images   = [];
 				case 'scatter':
 				case 'candlestick':
 				case 'column':
+				case 'combo':
 					axis = settings.hAxis;
 					break;
 				case 'bar':
@@ -214,6 +218,7 @@ var __visualizer_chart_images   = [];
 
         gv.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
+            __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = '';
             try{
                 var img = render.getImageURI();
                 __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
@@ -289,7 +294,7 @@ var __visualizer_chart_images   = [];
         resizeHiddenContainers(true);
     });
 
-    $(window).load(function(){
+    $(window).on('load', function(){
         resizeHiddenContainers(true);
     });
 
@@ -320,8 +325,42 @@ var __visualizer_chart_images   = [];
 	}
 
     $('body').on('visualizer:render:chart:start', function(event, v){
+        var $chart_types = ['corechart', 'geochart', 'gauge', 'table', 'timeline'];
+        if(v.is_front == true){ // jshint ignore:line
+            // check what all chart types to load.
+            $chart_types = [];
+            $.each(v.charts, function(i, c){
+                var $type = c.type;
+                switch($type){
+                    case 'bar':
+                    case 'column':
+                    case 'line':
+                    case 'area':
+                    case 'stepped area':
+                    case 'bubble':
+                    case 'pie':
+                    case 'donut':
+                    case 'combo':
+                    case 'candlestick':
+                    case 'histogram':
+                    case 'scatter':
+                        $type = 'corechart';
+                        break;
+                    case 'geo':
+                        $type = 'geochart';
+                        break;
+                    case 'dataTable':
+                        $type = null;
+                        break;
+                }
+                if($type != null){
+                    $chart_types.push($type);
+                }
+            });
+        }
+
         objects = {};
-        google.charts.load("current", {packages: ["corechart", "geochart", "gauge", "table", "timeline"], mapsApiKey: v.map_api_key, 'language' : v.language});
+        google.charts.load("current", {packages: $chart_types, mapsApiKey: v.map_api_key, 'language' : v.language});
         google.charts.setOnLoadCallback(function() {
             gv = google.visualization;
             all_charts = v.charts;
@@ -333,6 +372,26 @@ var __visualizer_chart_images   = [];
         objects = {};
         gv = google.visualization;
         renderSpecificChart(v.id, v.chart);
+    });
+
+    // front end actions
+    $('body').on('visualizer:action:specificchart', function(event, v){
+        switch(v.action){
+            case 'print':
+                var id = v.id;
+                if(typeof rendered_charts[id] === 'undefined'){
+                    return;
+                }
+                var arr = id.split('-');
+                var img = __visualizer_chart_images[ arr[0] + '-' + arr[1] ];
+                // for charts that have no rendered image defined, we print the data instead.
+                var html = v.data;
+                if(img !== ''){
+                    html = "<html><body><img src='" + img + "' /></body></html>";
+                }
+                $('body').trigger('visualizer:action:specificchart:defaultprint', {data: html});
+                break;
+        }
     });
 
 })(jQuery);

@@ -175,7 +175,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>' ) . '</span>' );
+				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
 
 			$example    = '
 {
@@ -217,25 +217,25 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderCheckboxItem(
 				esc_html__( 'Print', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'print', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'print', $this->actions, true ) ? true : false,
 				'print',
-				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the data.', 'visualizer' ),
+				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable printing the chart/data.', 'visualizer' ),
 				$disable_actions
 			);
 			self::_renderCheckboxItem(
 				esc_html__( 'CSV', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'csv;application/csv', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'csv;application/csv', $this->actions, true ) ? true : false,
 				'csv;application/csv',
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable downloading the data as a CSV.', 'visualizer' ),
 				$disable_actions
 			);
 
-			$disabled   = ! ( class_exists( 'PHPExcel' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && version_compare( PHP_VERSION, '5.2.0', '>' ) );
+			$disabled   = ! self::is_excel_enabled();
 			self::_renderCheckboxItem(
 				esc_html__( 'Excel', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'xls;application/vnd.ms-excel', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'xls;application/vnd.ms-excel', $this->actions, true ) ? true : false,
 				'xls;application/vnd.ms-excel',
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : ( $disabled ? '<span class="viz-section-error">' . esc_html__( 'Enable the ZIP and XML extensions to use this setting.', 'visualizer' ) . '</span>' : esc_html__( 'To enable downloading the data as an Excel spreadsheet.', 'visualizer' ) ),
 				$disable_actions || $disabled
@@ -243,12 +243,24 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderCheckboxItem(
 				esc_html__( 'Copy', 'visualizer' ),
 				'actions[]',
-				isset( $this->actions ) && in_array( 'copy', $this->actions ) ? true : false,
+				isset( $this->actions ) && in_array( 'copy', $this->actions, true ) ? true : false,
 				'copy',
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable copying the data to the clipboard.', 'visualizer' ),
 				$disable_actions
 			);
 		self::_renderSectionEnd();
+	}
+
+	/**
+	 * Checks if the Excel module can be enabled.
+	 */
+	private static function is_excel_enabled() {
+		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once( $vendor_file );
+		}
+
+		return class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && extension_loaded( 'fileinfo' ) && version_compare( PHP_VERSION, '5.6.0', '>' );
 	}
 
 	/**
@@ -351,7 +363,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		self::_renderCheckboxItem(
 			esc_html__( 'Animate on startup', 'visualizer' ),
 			'animation[startup]',
-			$this->animation['startup'],
+			isset( $this->animation['startup'] ) ? $this->animation['startup'] : 0,
 			true,
 			esc_html__( 'Determines if the chart will animate on the initial draw.', 'visualizer' )
 		);
@@ -553,7 +565,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<b>', $title, '</b>';
 			echo '<select class="control-select ', implode( ' ', $classes ) , '" name="', $name, '" ', ( $multiple ? 'multiple' : '' ), ' ' , $atts, '>';
 		foreach ( $options as $key => $label ) {
-			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value ) ? 'selected' : '' ) : selected( $key, $value, false );
+			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value, true ) ? 'selected' : '' ) : selected( $key, $value, false );
 			echo '<option value="', $key, '"', $extra, '>';
 			echo $label;
 			echo '</option>';
@@ -736,7 +748,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value == $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
+			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value === $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
 			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}

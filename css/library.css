@@ -300,3 +300,8 @@ button.media-modal-close {
     height: 300px;
     overflow: hidden !important;
 }
+
+/* datatables */
+.dt-button {
+	display: none !important;
+}

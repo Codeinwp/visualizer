@@ -66,6 +66,7 @@ class Visualizer_Module {
 
 		$this->_addFilter( Visualizer_Plugin::FILTER_UNDO_REVISIONS, 'undoRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
+		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, 'getDataAs', 10, 3 );
 
 	}
 
@@ -148,6 +149,15 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * A wrapper around the actual function _getDataAs. This function is invoked as a filter.
+	 *
+	 * @since 3.2.0
+	 */
+	public function getDataAs( $final, $chart_id, $type ) {
+		return $this->_getDataAs( $chart_id, $type );
+	}
+
+	/**
 	 * Extracts the data for a chart and prepares it for the given type.
 	 *
 	 * @access public
@@ -159,7 +169,7 @@ class Visualizer_Module {
 		$success    = false;
 		if ( $chart_id ) {
 			$chart   = get_post( $chart_id );
-			$success = $chart && $chart->post_type == Visualizer_Plugin::CPT_VISUALIZER;
+			$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 		}
 		if ( $success ) {
 			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
@@ -223,14 +233,16 @@ class Visualizer_Module {
 	private function _getCSV( $rows, $filename ) {
 		$filename .= '.csv';
 
+		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 		$fp = tmpfile();
 		// support for MS Excel
-		fprintf( $fp, $bom = ( chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) ) );
+		fprintf( $fp, $bom );
 		foreach ( $rows as $row ) {
 			fputcsv( $fp, $row );
 		}
 		rewind( $fp );
 		$csv = '';
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		while ( ( $array = fgetcsv( $fp ) ) !== false ) {
 			if ( strlen( $csv ) > 0 ) {
 				$csv .= PHP_EOL;
@@ -242,6 +254,7 @@ class Visualizer_Module {
 		return array(
 			'csv'  => $csv,
 			'name' => $filename,
+			'string' => str_replace( $bom, '', $csv ),
 		);
 	}
 
@@ -253,28 +266,34 @@ class Visualizer_Module {
 	 * @param string $filename The name of the file to use.
 	 */
 	private function _getExcel( $rows, $filename ) {
-		// PHPExcel does not like sheet names longer than 31 characters.
+		// PHPExcel did not like sheet names longer than 31 characters and we will assume the same with PhpSpreadsheet
 		$chart      = substr( $filename, 0, 30 );
 		$filename   .= '.xlsx';
 
+		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once( $vendor_file );
+		}
+
 		$xlsData    = '';
-		if ( class_exists( 'PHPExcel' ) ) {
-			$doc        = new PHPExcel();
+		if ( class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) ) {
+			$doc        = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 			$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
 			$doc->getActiveSheet()->setTitle( sanitize_title( $chart ) );
 			$doc        = apply_filters( 'visualizer_excel_doc', $doc );
-			$writer = PHPExcel_IOFactory::createWriter( $doc, 'Excel2007' );
+			$writer = PhpOffice\PhpSpreadsheet\IOFactory::createWriter( $doc, 'Xlsx' );
 			ob_start();
 			$writer->save( 'php://output' );
 			$xlsData = ob_get_contents();
 			ob_end_clean();
 		} else {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PHPExcel does not exist!', 'error', __FILE__, __LINE__ );
-			error_log( 'Class PHPExcel does not exist!' );
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!', 'error', __FILE__, __LINE__ );
+			error_log( 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!' );
 		}
 		return array(
 			'csv'  => 'data:application/vnd.ms-excel;base64,' . base64_encode( $xlsData ),
 			'name' => $filename,
+			'raw' => base64_encode( $xlsData ),
 		);
 	}
 
@@ -306,6 +325,12 @@ class Visualizer_Module {
 		$table      = '<table class="visualizer-print">';
 		$index      = 0;
 		foreach ( $rows as $row ) {
+			// skip the data type row.
+			if ( 1 === $index ) {
+				$index++;
+				continue;
+			}
+
 			$table  .= '<tr>';
 			foreach ( $row as $col ) {
 				if ( $index === 0 ) {
@@ -427,6 +452,7 @@ class Visualizer_Module {
 		}
 
 		if ( ! $wp_filesystem->exists( $dir ) ) {
+			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 			if ( ( $done = $wp_filesystem->mkdir( $dir ) ) === false ) {
 				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
 				return $default;
@@ -436,6 +462,7 @@ class Visualizer_Module {
 		// if file does not exist, copy.
 		if ( ! $wp_filesystem->exists( $file ) ) {
 			$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
+			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 			if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
 				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
 				return $default;
