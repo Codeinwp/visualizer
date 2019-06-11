@@ -285,7 +285,17 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			isset( $this->animation['easing'] ) ? $this->animation['easing'] : null,
 			array(
 				'linear'    => esc_html__( 'Constant speed', 'visualizer' ),
-				'easeInQuart'    => esc_html__( 'Start slow and speed up', 'visualizer' ),
+				'easeInQuad' => esc_html__( 'easeInQuad', 'visualizer' ),
+				'easeOutQuad' => esc_html__( 'easeOutQuad', 'visualizer' ),
+				'easeInOutQuad' => esc_html__( 'easeInOutQuad', 'visualizer' ),
+				'easeInCubic' => esc_html__( 'easeInCubic', 'visualizer' ),
+				'easeOutCubic' => esc_html__( 'easeOutCubic', 'visualizer' ),
+				'easeInOutCubic' => esc_html__( 'easeInOutCubic', 'visualizer' ),
+				'easeInQuart' => esc_html__( 'easeInQuart', 'visualizer' ),
+				'easeOutQuart' => esc_html__( 'easeOutQuart', 'visualizer' ),
+				'easeInOutQuart' => esc_html__( 'easeInOutQuart', 'visualizer' ),
+				'easeInQuint' => esc_html__( 'easeInQuint', 'visualizer' ),
+				'easeOutQuint' => esc_html__( 'easeOutQuint', 'visualizer' ),
 			),
 			esc_html__( 'The easing function applied to the animation.', 'visualizer' )
 		);
