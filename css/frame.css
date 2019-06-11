@@ -762,6 +762,10 @@ button#editor-chart-button {
 	display: none;
 }
 
+.viz-select-library {
+	color: #0085ba;
+}
+
 .viz-select-library option:first-child {
 	font-weight: bold;
 }
