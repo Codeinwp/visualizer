@@ -206,7 +206,19 @@ class Visualizer_Module {
 				}
 			}
 
-			$filename   = isset( $settings['title'] ) && ! empty( $settings['title'] ) ? $settings['title'] : 'visualizer#' . $chart_id;
+			$title       = 'visualizer#' . $chart_id;
+			if ( ! empty( $settings['title'] ) ) {
+				$title  = $settings['title'];
+			}
+			// for ChartJS, title is an array.
+			if ( is_array( $title ) && isset( $title['text'] ) ) {
+				$title = $title['text'];
+			}
+			if ( empty( $title ) ) {
+				$title	= 'visualizer#' . $chart_id;
+			}
+
+			$filename   = $title;
 
 			switch ( $type ) {
 				case 'csv':
