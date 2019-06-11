@@ -159,6 +159,15 @@
     }
 
     function handleAxes(settings, chart){
+        if(typeof settings['yAxes'] !== 'undefined' && typeof settings['xAxes'] !== 'undefined'){
+            // stacking has to be defined on both axes.
+            if(typeof settings['yAxes']['stacked_bool'] !== 'undefined'){
+                settings['xAxes']['stacked_bool'] = 'true';
+            }
+            if(typeof settings['xAxes']['stacked_bool'] !== 'undefined'){
+                settings['yAxes']['stacked_bool'] = 'true';
+            }
+        }
         configureAxes(settings, 'yAxes', chart);
         configureAxes(settings, 'xAxes', chart);
     }
@@ -173,6 +182,7 @@
                         $val = '';
                         if(j === 'labelString'){ 
                             $o['display'] = true;
+                            $val = settings[axis][i][j];
                         }else if(i === 'ticks'){
                             // number values under ticks need to be converted to numbers or the library throws a JS error.
                             $val = parseFloat(settings[axis][i][j]);
@@ -379,7 +389,11 @@
                 if(typeof rendered_charts[id] === 'undefined'){
                     return;
                 }
-                $('#' + id + ' .buttons-print').trigger('click');
+                var canvas = $('#' + id + ' canvas');
+                var win = window.open();
+                win.document.write("<br><img src='" + canvas[0].toDataURL() + "'/>");
+                win.document.close();
+                win.onload = function () { win.print(); setTimeout(win.close, 500); };
                 break;
         }
     });
