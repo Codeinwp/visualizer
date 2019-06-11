@@ -174,7 +174,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$title = $title['text'];
 		}
 		if ( empty( $title ) ) {
-			$title	= '#' . $chart_id;
+			$title  = '#' . $chart_id;
 		}
 
 		$ajax_url    = admin_url( 'admin-ajax.php' );

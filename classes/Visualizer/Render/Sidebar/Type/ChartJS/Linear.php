@@ -136,7 +136,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 	 */
 	protected function _renderHorizontalAxisGeneralSettings() {
 		self::_renderSectionStart( esc_html__( 'General Settings', 'visualizer' ), false );
-		
+
 			self::_renderTextItem(
 				esc_html__( 'Axis Title', 'visualizer' ),
 				'xAxes[scaleLabel][labelString]',
@@ -164,19 +164,19 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="xAxes[scaleLabel][fontFamily]" class="control-select">';
 								echo '<option></option>';
-									foreach ( self::$_fontFamilies as $font => $label ) {
-										echo '<option value="', $font, '"', selected( $font, $this->xAxes['scaleLabel']['fontFamily'], false ), '>';
-										echo $label;
-										echo '</option>';
-									}
+		foreach ( self::$_fontFamilies as $font => $label ) {
+			echo '<option value="', $font, '"', selected( $font, $this->xAxes['scaleLabel']['fontFamily'], false ), '>';
+			echo $label;
+			echo '</option>';
+		}
 							echo '</select>';
 						echo '</td>';
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="xAxes[scaleLabel][fontSize]" class="control-select">';
 								echo '<option></option>';
-									for ( $i = 7; $i <= 20; $i++ ) {
-										echo '<option value="', $i, '"', selected( $i, $this->xAxes['scaleLabel']['fontSize'], false ), '>', $i, '</option>';
-									}
+		for ( $i = 7; $i <= 20; $i++ ) {
+			echo '<option value="', $i, '"', selected( $i, $this->xAxes['scaleLabel']['fontSize'], false ), '>', $i, '</option>';
+		}
 							echo '</select>';
 						echo '</td>';
 					echo '</tr>';
@@ -238,7 +238,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 	 */
 	protected function _renderVerticalAxisGeneralSettings() {
 		self::_renderSectionStart( esc_html__( 'General Settings', 'visualizer' ), false );
-		
+
 			self::_renderTextItem(
 				esc_html__( 'Axis Title', 'visualizer' ),
 				'yAxes[scaleLabel][labelString]',
@@ -266,19 +266,19 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="yAxes[scaleLabel][fontFamily]" class="control-select">';
 								echo '<option></option>';
-									foreach ( self::$_fontFamilies as $font => $label ) {
-										echo '<option value="', $font, '"', selected( $font, $this->yAxes['scaleLabel']['fontFamily'], false ), '>';
-										echo $label;
-										echo '</option>';
-									}
+		foreach ( self::$_fontFamilies as $font => $label ) {
+			echo '<option value="', $font, '"', selected( $font, $this->yAxes['scaleLabel']['fontFamily'], false ), '>';
+			echo $label;
+			echo '</option>';
+		}
 							echo '</select>';
 						echo '</td>';
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="yAxes[scaleLabel][fontSize]" class="control-select">';
 								echo '<option></option>';
-									for ( $i = 7; $i <= 20; $i++ ) {
-										echo '<option value="', $i, '"', selected( $i, $this->yAxes['scaleLabel']['fontSize'], false ), '>', $i, '</option>';
-									}
+		for ( $i = 7; $i <= 20; $i++ ) {
+			echo '<option value="', $i, '"', selected( $i, $this->yAxes['scaleLabel']['fontSize'], false ), '>', $i, '</option>';
+		}
 							echo '</select>';
 						echo '</td>';
 					echo '</tr>';

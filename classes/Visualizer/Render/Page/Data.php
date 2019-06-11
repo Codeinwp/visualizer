@@ -271,11 +271,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													$title = $title['text'];
 												}
 												if ( empty( $title ) ) {
-													$title	= '#' . $chart->ID;
+													$title  = '#' . $chart->ID;
 												}
 
 												?>
-												<option value="<?php echo $chart->ID; ?>"><?php echo $title ; ?></option>
+												<option value="<?php echo $chart->ID; ?>"><?php echo $title; ?></option>
 												<?php
 											}
 											?>

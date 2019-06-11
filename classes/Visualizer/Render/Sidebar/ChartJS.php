@@ -29,9 +29,28 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 
 	}
 
-	// methods implemented by each chart type, if required.
-	protected function _renderChartTypeSeries( $index ){}
-	protected function _renderChartTypeSettings(){}
+	/**
+	 * Renders concrete series settings for the Bar chart.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access protected
+	 * @param int $index The series index.
+	 */
+	protected function _renderChartTypeSeries( $index ) {
+		// empty.
+	}
+
+	/**
+	 * Renders settings specific to the Bar chart.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access protected
+	 */
+	protected function _renderChartTypeSettings() {
+		// empty
+	}
 
 	/**
 	 * Registers additional hooks.
@@ -168,19 +187,19 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="fontName" class="control-select">';
 									echo '<option></option>';
-										foreach ( self::$_fontFamilies as $font => $label ) {
-											echo '<option value="', $font, '"', selected( $font, $this->fontName, false ), '>';
-											echo $label;
-											echo '</option>';
-										}
+		foreach ( self::$_fontFamilies as $font => $label ) {
+			echo '<option value="', $font, '"', selected( $font, $this->fontName, false ), '>';
+			echo $label;
+			echo '</option>';
+		}
 								echo '</select>';
 							echo '</td>';
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="fontSize" class="control-select">';
 									echo '<option></option>';
-										for ( $i = 7; $i <= 20; $i++ ) {
-											echo '<option value="', $i, '"', selected( $i, $this->fontSize, false ), '>', $i, '</option>';
-										}
+		for ( $i = 7; $i <= 20; $i++ ) {
+			echo '<option value="', $i, '"', selected( $i, $this->fontSize, false ), '>', $i, '</option>';
+		}
 								echo '</select>';
 							echo '</td>';
 						echo '</tr>';
@@ -218,19 +237,19 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="legend[labels][fontName]" class="control-select">';
 									echo '<option></option>';
-										foreach ( self::$_fontFamilies as $font => $label ) {
-											echo '<option value="', $font, '"', selected( $font, $this->legend['labels']['fontName'], false ), '>';
-											echo $label;
-											echo '</option>';
-										}
+		foreach ( self::$_fontFamilies as $font => $label ) {
+			echo '<option value="', $font, '"', selected( $font, $this->legend['labels']['fontName'], false ), '>';
+			echo $label;
+			echo '</option>';
+		}
 								echo '</select>';
 							echo '</td>';
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="legend[labels][fontSize]" class="control-select">';
 									echo '<option></option>';
-										for ( $i = 7; $i <= 20; $i++ ) {
-											echo '<option value="', $i, '"', selected( $i, $this->legend['labels']['fontSize'], false ), '>', $i, '</option>';
-										}
+		for ( $i = 7; $i <= 20; $i++ ) {
+			echo '<option value="', $i, '"', selected( $i, $this->legend['labels']['fontSize'], false ), '>', $i, '</option>';
+		}
 								echo '</select>';
 							echo '</td>';
 						echo '</tr>';
@@ -244,7 +263,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					);
 
 				echo '</div>';
-
 
 			self::_renderSectionEnd();
 

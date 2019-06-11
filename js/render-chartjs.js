@@ -1,5 +1,8 @@
 /* global console */
 /* global visualizer */
+/* global Chart */
+/* global numeral */
+/* global moment */
 
 (function($) {
     var all_charts;
@@ -131,7 +134,8 @@
         }
 
         if(typeof settings['tooltip'] !== 'undefined' && typeof settings['tooltip']['intersect'] !== 'undefined'){
-            settings['tooltip']['intersect'] = settings['tooltip']['intersect'] == true || parseInt(settings['tooltip']['intersect']) === 1; 
+            // jshint ignore:line
+            settings['tooltip']['intersect'] = settings['tooltip']['intersect'] == true || parseInt(settings['tooltip']['intersect']) === 1;  // jshint ignore:line
         }
 
         if(typeof settings['fontName'] !== 'undefined' && settings['fontName'] !== ''){
@@ -146,7 +150,7 @@
 
         // handle legend defaults.
         if(typeof settings['legend'] !== 'undefined' && typeof settings['legend']['labels'] !== 'undefined') {
-            for(i in settings['legend']['labels']){
+            for(var i in settings['legend']['labels']){
                 if(settings['legend']['labels'][i] !== 'undefined' && settings['legend']['labels'][i] === ''){
                     delete settings['legend']['labels'][i];
                 }
@@ -174,12 +178,12 @@
 
     function configureAxes(settings, axis, chart) {
         if(typeof settings[axis] !== 'undefined'){
-            $features = {};
-            for(i in settings[axis]){
-                $o = {};
+            var $features = {};
+            for(var i in settings[axis]){
+                var $o = {};
                 if(Array.isArray(settings[axis][i]) || typeof settings[axis][i] === 'object'){
-                    for(j in settings[axis][i]){
-                        $val = '';
+                    for(var j in settings[axis][i]){
+                        var $val = '';
                         if(j === 'labelString'){ 
                             $o['display'] = true;
                             $val = settings[axis][i][j];
@@ -222,7 +226,7 @@
                 }
                 $features[i] = $o;
             }
-            $scales = {};
+            var $scales = {};
             $scales['scales'] = {};
             $scales['scales'][axis] = [];
             if(typeof settings['scales'] !== 'undefined' && typeof settings[axis + 'set'] === 'undefined'){
@@ -234,13 +238,13 @@
             if(typeof $scales['scales'][axis] === 'undefined'){
                 $scales['scales'][axis] = [];
             }
-            $axis = $scales['scales'][axis];
+            var $axis = $scales['scales'][axis];
 
             $axis.push($features);
             $.extend(settings, $scales);
 
             // to prevent duplication, indicates that the axis has been set.
-            $custom = {};
+            var $custom = {};
             $custom[axis + 'set'] = 'yes';
             $.extend(settings, $custom);
         }
@@ -252,12 +256,12 @@
                 case 'xAxes':
                     settings.scales.xAxes[0].ticks.callback = function(value, index, values){
                         return format_datum(value, format);
-                    }
+                    };
                     break;
                 case 'yAxes':
                     settings.scales.yAxes[0].ticks.callback = function(value, index, values){
                         return format_datum(value, format);
-                    }
+                    };
                     break;
             }
             delete settings[axis + '_format'];
@@ -272,15 +276,17 @@
 
         var atts = [];
         // collect all the types of attributes
-        for(j in settings.slices[0]){
+        for(var j in settings.slices[0]){
             // weight screws up the rendering for some reason, so we will ignore it.
-            if(j === 'weight') continue;
+            if(j === 'weight') {
+                continue;
+            }
             atts.push(j);
         }
 
         for (j = 0; j < atts.length; j++) {
             var values = [];
-            for (i = 0; i < rows.length; i++) {
+            for (var i = 0; i < rows.length; i++) {
                 values.push(settings.slices[i][atts[j]]);
             }
             var object = {};
@@ -293,8 +299,8 @@
         if(typeof settings.series === 'undefined' || typeof settings.series[j] === 'undefined'){
             return;
         }
-        for(i in settings.series[j]){
-            $attribute = {};
+        for(var i in settings.series[j]){
+            var $attribute = {};
             $attribute[i] = settings.series[j][i];
             $.extend($attributes, $attribute);
         }

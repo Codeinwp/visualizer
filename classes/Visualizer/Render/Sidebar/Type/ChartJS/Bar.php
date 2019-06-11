@@ -68,58 +68,58 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Bar extends Visualizer_Render_Sideb
 			$type = str_replace( 'Visualizer_Render_Sidebar_Type_ChartJS_', '', get_class( $this ) );
 
 			// Bar type will work on the Y-axis and Column on the X-axis
-			switch ( $type ) {
-				case 'Column':
-					self::_renderTextItem(
-						esc_html__( 'Bar Percentage', 'visualizer' ),
-						'xAxes[barPercentage_int]',
-						isset( $this->xAxes['barPercentage_int'] ) ? $this->xAxes['barPercentage_int'] : 0.9,
-						esc_html__( 'Percent (0-1) of the available width each bar should be within the category width.', 'visualizer' ),
-						0.9,
-						'number',
-						array( 'min' => 0, 'max' => 1, 'step' => 0.1 )
-					);
-					self::_renderTextItem(
-						esc_html__( 'Bar Thickness', 'visualizer' ),
-						'xAxes[barThickness]',
-						isset( $this->xAxes['barThickness'] ) ? $this->xAxes['barThickness'] : '',
-						esc_html__( 'Manually set width of each bar in pixels. If set to "flex", it computes "optimal" sample widths that globally arrange bars side by side. If not set (default), bars are equally sized based on the smallest interval.', 'visualizer' ),
-						''
-					);
-					self::_renderCheckboxItem(
-						esc_html__( 'Stacked', 'visualizer' ),
-						'xAxes[stacked_bool]',
-						isset( $this->xAxes['stacked_bool'] ) ? $this->xAxes['stacked_bool'] : false,
-						'true',
-						esc_html__( 'If checked, series elements are stacked.', 'visualizer' )
-					);
-					break;
-				case 'Bar':
-					self::_renderTextItem(
-						esc_html__( 'Bar Percentage', 'visualizer' ),
-						'yAxes[barPercentage_int]',
-						isset( $this->yAxes['barPercentage_int'] ) ? $this->yAxes['barPercentage_int'] : 0.9,
-						esc_html__( 'Percent (0-1) of the available width each bar should be within the category width.', 'visualizer' ),
-						0.9,
-						'number',
-						array( 'min' => 0, 'max' => 1, 'step' => 0.1 )
-					);
-					self::_renderTextItem(
-						esc_html__( 'Bar Thickness', 'visualizer' ),
-						'yAxes[barThickness]',
-						isset( $this->yAxes['barThickness'] ) ? $this->yAxes['barThickness'] : '',
-						esc_html__( 'Manually set width of each bar in pixels. If set to "flex", it computes "optimal" sample widths that globally arrange bars side by side. If not set (default), bars are equally sized based on the smallest interval.', 'visualizer' ),
-						''
-					);
-					self::_renderCheckboxItem(
-						esc_html__( 'Stacked', 'visualizer' ),
-						'yAxes[stacked_bool]',
-						isset( $this->yAxes['stacked_bool'] ) ? $this->yAxes['stacked_bool'] : false,
-						'true',
-						esc_html__( 'If checked, series elements are stacked.', 'visualizer' )
-					);
-					break;
-			}
+		switch ( $type ) {
+			case 'Column':
+				self::_renderTextItem(
+					esc_html__( 'Bar Percentage', 'visualizer' ),
+					'xAxes[barPercentage_int]',
+					isset( $this->xAxes['barPercentage_int'] ) ? $this->xAxes['barPercentage_int'] : 0.9,
+					esc_html__( 'Percent (0-1) of the available width each bar should be within the category width.', 'visualizer' ),
+					0.9,
+					'number',
+					array( 'min' => 0, 'max' => 1, 'step' => 0.1 )
+				);
+				self::_renderTextItem(
+					esc_html__( 'Bar Thickness', 'visualizer' ),
+					'xAxes[barThickness]',
+					isset( $this->xAxes['barThickness'] ) ? $this->xAxes['barThickness'] : '',
+					esc_html__( 'Manually set width of each bar in pixels. If set to "flex", it computes "optimal" sample widths that globally arrange bars side by side. If not set (default), bars are equally sized based on the smallest interval.', 'visualizer' ),
+					''
+				);
+				self::_renderCheckboxItem(
+					esc_html__( 'Stacked', 'visualizer' ),
+					'xAxes[stacked_bool]',
+					isset( $this->xAxes['stacked_bool'] ) ? $this->xAxes['stacked_bool'] : false,
+					'true',
+					esc_html__( 'If checked, series elements are stacked.', 'visualizer' )
+				);
+				break;
+			case 'Bar':
+				self::_renderTextItem(
+					esc_html__( 'Bar Percentage', 'visualizer' ),
+					'yAxes[barPercentage_int]',
+					isset( $this->yAxes['barPercentage_int'] ) ? $this->yAxes['barPercentage_int'] : 0.9,
+					esc_html__( 'Percent (0-1) of the available width each bar should be within the category width.', 'visualizer' ),
+					0.9,
+					'number',
+					array( 'min' => 0, 'max' => 1, 'step' => 0.1 )
+				);
+				self::_renderTextItem(
+					esc_html__( 'Bar Thickness', 'visualizer' ),
+					'yAxes[barThickness]',
+					isset( $this->yAxes['barThickness'] ) ? $this->yAxes['barThickness'] : '',
+					esc_html__( 'Manually set width of each bar in pixels. If set to "flex", it computes "optimal" sample widths that globally arrange bars side by side. If not set (default), bars are equally sized based on the smallest interval.', 'visualizer' ),
+					''
+				);
+				self::_renderCheckboxItem(
+					esc_html__( 'Stacked', 'visualizer' ),
+					'yAxes[stacked_bool]',
+					isset( $this->yAxes['stacked_bool'] ) ? $this->yAxes['stacked_bool'] : false,
+					'true',
+					esc_html__( 'If checked, series elements are stacked.', 'visualizer' )
+				);
+				break;
+		}
 
 			self::_renderSectionEnd();
 

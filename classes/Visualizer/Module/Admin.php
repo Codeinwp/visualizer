@@ -299,69 +299,69 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'dataTable' => array(
 					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'DataTable' ),
+					'supports'  => array( 'DataTable' ),
 				),
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'area'        => array(
 					'name'    => esc_html__( 'Area', 'visualizer' ),
 					'enabled' => true,
 					// in ChartJS, the fill option is used to make this an area: https://www.chartjs.org/docs/latest/charts/area.html
-					'supports'	=> array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts' ),
 				),
 				'geo'         => array(
 					'name'    => esc_html__( 'Geo', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts' ),
 				),
 				'bar'         => array(
 					'name'    => esc_html__( 'Bar', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'column'      => array(
 					'name'    => esc_html__( 'Column', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts' ),
 				),
 				'gauge'       => array(
 					'name'    => esc_html__( 'Gauge', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts' ),
 				),
 				'candlestick' => array(
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 					'enabled' => true,
-					'supports'	=> array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts' ),
 				),
 				// pro types
 				'table'       => array(
 					'name'    => esc_html__( 'Table (Deprecated)', 'visualizer' ),
 					'enabled' => false,
-					'supports'	=> array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts' ),
 				),
 				'timeline'    => array(
 					'name'    => esc_html__( 'Timeline', 'visualizer' ),
 					'enabled' => false,
-					'supports'	=> array( 'Google Charts', 'ChartJS' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'combo'       => array(
 					'name'    => esc_html__( 'Combo', 'visualizer' ),
 					'enabled' => false,
-					'supports'	=> array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts' ),
 				),
 			)
 		);

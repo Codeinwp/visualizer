@@ -98,7 +98,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Pie extends Visualizer_Render_Sideb
 	 */
 	protected function _renderChartTypeSettings() {
 		self::_renderGroupStart( esc_html__( 'Pie Settings', 'visualizer' ) );
-		
+
 			self::_renderSectionStart( esc_html__( 'General', 'visualizer' ), false );
 
 				self::_renderCheckboxItem(
@@ -112,7 +112,6 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Pie extends Visualizer_Render_Sideb
 			self::_renderSectionEnd();
 
 		self::_renderGroupEnd();
-
 
 		self::_renderGroupStart( esc_html__( 'Slices Settings', 'visualizer' ) );
 		for ( $i = 0, $cnt = count( $this->__data ); $i < $cnt; $i++ ) {

@@ -114,21 +114,21 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		$libraries = array_unique( $libraries );
 
 		if ( ! empty( $libraries ) ) {
-	?>
-		<select name="chart-library" class="viz-select-library" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) );?>">
+			?>
+		<select name="chart-library" class="viz-select-library" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) ); ?>">
 			<option value=""><?php esc_html_e( 'Use Library', 'visualizer' ); ?></option>
-	<?php
+			<?php
 			foreach ( $libraries as $library ) {
-	?>
+				?>
 			<option value="<?php echo $this->_removeSpaceFromLibrary( $library ); ?>"><?php echo $library; ?></option>
-	<?php
+				<?php
 			}
-	?>
+			?>
 		</select>
-	<?php
+			<?php
 		}
-	?>
+		?>
 		<input type="submit" class="button button-primary button-large push-right" value="<?php esc_attr_e( 'Next', 'visualizer' ); ?>">
-	<?php
+		<?php
 	}
 }

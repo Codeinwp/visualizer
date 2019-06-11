@@ -215,7 +215,7 @@ class Visualizer_Module {
 				$title = $title['text'];
 			}
 			if ( empty( $title ) ) {
-				$title	= 'visualizer#' . $chart_id;
+				$title  = 'visualizer#' . $chart_id;
 			}
 
 			$filename   = $title;
@@ -488,7 +488,7 @@ class Visualizer_Module {
 	 * Load the class for the given chart's chart type so that its assets can be loaded.
 	 */
 	protected function load_chart_type( $chart_id ) {
-		$name	= $this->load_chart_class_name( $chart_id );
+		$name   = $this->load_chart_class_name( $chart_id );
 		$class  = null;
 		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
 			$class  = new $name;
@@ -503,6 +503,9 @@ class Visualizer_Module {
 		return is_null( $class ) ? null : $class->getLibrary();
 	}
 
+	/**
+	 * Returns the class name for the given chart's chart type.
+	 */
 	protected function load_chart_class_name( $chart_id ) {
 		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$lib    = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
