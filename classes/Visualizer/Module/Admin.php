@@ -363,6 +363,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'enabled' => false,
 					'supports'  => array( 'Google Charts' ),
 				),
+				'polarArea'       => array(
+					'name'    => esc_html__( 'Polar Area', 'visualizer' ),
+					'enabled' => false,
+					'supports' => array( 'ChartJS' ),
+				),
+				'radar'       => array(
+					'name'    => esc_html__( 'Radar', 'visualizer' ),
+					'enabled' => false,
+					'supports' => array( 'ChartJS' ),
+				),
 			)
 		);
 		$types = apply_filters( 'visualizer_pro_chart_types', $types );
