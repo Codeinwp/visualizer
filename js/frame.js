@@ -331,6 +331,10 @@
     }
 
     function init_json_import(){
+        if(typeof visualizer === 'undefined'){
+            return;
+        }
+
         var regex = new RegExp(visualizer.json_tag_separator, 'g');
 
         $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
