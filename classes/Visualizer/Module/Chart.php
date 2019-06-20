@@ -749,6 +749,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					wp_update_post( $this->_chart->to_array() );
 					update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				}
+
+				Visualizer_Module_Utility::set_defaults( $this->_chart, $type, $library );
+
 				// redirect to next tab
 				// changed by Ash/Upwork
 				wp_redirect( add_query_arg( 'tab', 'settings' ) );

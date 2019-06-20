@@ -100,6 +100,7 @@ function visualizer_launch() {
 	);
 
 	// set general modules
+	$plugin->setModule( Visualizer_Module_Utility::NAME );
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
 	$plugin->setModule( Visualizer_Module_Chart::NAME );
