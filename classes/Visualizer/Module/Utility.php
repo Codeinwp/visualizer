@@ -75,7 +75,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 		}
 
 		// Sanitize $color if "#" is provided
-		if ( $color[0] !== '#' ) {
+		if ( strpos( $color, '#' ) === 0 ) {
 			$color = substr( $color, 1 );
 		}
 
