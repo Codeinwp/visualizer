@@ -11,5 +11,5 @@
  */
 class Visualizer_Render_Sidebar_Type_ChartJS_Column extends Visualizer_Render_Sidebar_Type_ChartJS_Bar {
 
-
+	// empty.
 }

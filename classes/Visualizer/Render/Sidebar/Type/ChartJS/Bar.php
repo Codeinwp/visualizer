@@ -42,6 +42,13 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Bar extends Visualizer_Render_Sideb
 			null
 		);
 
+		self::_renderColorPickerItem(
+			esc_html__( 'Bar background color when hovered', 'visualizer' ),
+			'series[' . $index . '][hoverBackgroundColor]',
+			isset( $this->series[ $index ]['hoverBackgroundColor'] ) ? $this->series[ $index ]['hoverBackgroundColor'] : null,
+			null
+		);
+
 		self::_renderTextItem(
 			esc_html__( 'Bar border width', 'visualizer' ),
 			'series[' . $index . '][borderWidth]',
