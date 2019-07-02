@@ -20,7 +20,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 		parent::__construct( $data );
 
 		$this->_legendPositions = array(
-			''       => '',
 			'left'  => esc_html__( 'Left of the chart', 'visualizer' ),
 			'right'  => esc_html__( 'Right of the chart', 'visualizer' ),
 			'top'    => esc_html__( 'Above the chart', 'visualizer' ),
@@ -215,7 +214,8 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 				self::_renderSelectItem(
 					esc_html__( 'Position', 'visualizer' ),
 					'legend[position]',
-					$this->legend['position'],
+					// let's have a default otherwise the chart behaves weird when hovering in edit mode
+					isset( $this->legend['position'] ) ? $this->legend['position'] : 'top',
 					$this->_legendPositions,
 					esc_html__( 'Determines where to place the legend, compared to the chart area.', 'visualizer' )
 				);
