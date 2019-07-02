@@ -106,14 +106,15 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	}
 
 	/**
-	 * Gets a random color from the array of chart colors.
+	 * Gets a random color from the array of chart colors and returns it as well as its transparent equivalent.
 	 *
 	 * @since 3.3.0
 	 *
 	 * @access private
 	 */
 	private static function get_random_color() {
-		return self::hex2rgba( self::$_CHART_COLORS[ rand( 0, count( self::$_CHART_COLORS ) - 1 ) ], 0.5 );
+		$color = self::$_CHART_COLORS[ rand( 0, count( self::$_CHART_COLORS ) - 1 ) ];
+		return array( self::hex2rgba( $color, 0.5 ), $color );
 	}
 
 	/**
@@ -138,7 +139,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 		$name   = 'series';
 		$count  = count( $series );
 		$max    = $count - 1;
-		$colors = array();
+		$attributes = array();
 		switch ( $type ) {
 			case 'polarArea':
 				// fall through.
@@ -151,7 +152,8 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'bar':
 				for ( $i = 0; $i < $max; $i++ ) {
-					$colors[]['backgroundColor'] = self::get_random_color();
+					$colors = self::get_random_color();
+					$attributes[] = array( 'backgroundColor' => $colors[0], 'hoverBackgroundColor' => $colors[1] );
 				}
 				break;
 			case 'radar':
@@ -160,15 +162,15 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'area':
 				for ( $i = 0; $i < $max; $i++ ) {
-					$colors[]['borderColor'] = self::get_random_color();
+					$colors = self::get_random_color();
+					$attributes[] = array( 'borderColor' => $colors[0] );
 				}
 				break;
 		}
-		if ( $colors ) {
-			$settings[ $name ] = $colors;
+		if ( $attributes ) {
+			$settings[ $name ] = $attributes;
 			update_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, $settings );
 		}
-		error_log( 'aya' );
 	}
 
 }
