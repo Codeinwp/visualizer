@@ -31,7 +31,7 @@
         }
 
         // eliminate the jitter/flicker while editing charts.
-        if(v.is_front == false){
+        if(v.is_front == false){ // jshint ignore:line
             $('#' + id).empty();
         }
 
