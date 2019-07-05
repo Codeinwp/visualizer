@@ -186,9 +186,16 @@ class Visualizer_Source_Json extends Visualizer_Source {
 				if ( array_key_exists( $tag, $leaf ) ) {
 					$leaf = $leaf[ $tag ];
 				} else {
-					// if the tag does not exist, we assume it is present in the 0th element of the current array.
-					// TODO: we may want to change this to a filter later.
-					$leaf = $leaf[0][ $tag ];
+					// if the tag does not exist, we assume it is present in every element of the current array.
+					$temp = array();
+					for ( $depth = 0; $depth < count( $leaf ); $depth++ ) {
+						if ( ! isset( $leaf[ $depth ][ $tag ] ) ) {
+							do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Element %s not present at depth %d. Ignoring.', $tag, $depth ), 'debug', __FILE__, __LINE__ );
+							continue;
+						}
+						$temp[] = $leaf[ $depth ][ $tag ];
+					}
+					$leaf = $temp;
 				}
 			}
 
@@ -204,6 +211,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 				}
 				$data[] = $inner_data;
 			} else {
+				$row_num = 0;
 				// we will filter out all elements of this array that have array as a value.
 				foreach ( $leaf as $datum ) {
 					$inner_data = array();
@@ -213,12 +221,14 @@ class Visualizer_Source_Json extends Visualizer_Source {
 						}
 						$inner_data[ $key ] = $value;
 					}
-					// if we want to exclude entire rows on the basis of some data/key.
-					if ( apply_filters( 'visualizer_json_include_row', true, $inner_data, $this->_root, $this->_url ) ) {
+					// if we want to exclude entire rows on the basis of some data/key or row index.
+					if ( apply_filters( 'visualizer_json_include_row', true, $inner_data, $this->_root, $this->_url, ++$row_num ) ) {
 						$data[] = $inner_data;
 					}
 				}
 			}
+
+			$data = $this->collectCommonElements( $data );
 
 			$url    = $this->getNextPage( $array );
 		}
@@ -226,6 +236,40 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with rooot %s is %s = ', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
 
 		return $data;
+	}
+
+	/**
+	 * Determines which keys are common to all the data and returns an array with only those elements.
+	 * This is to ensure that the data set displayed on the table is consistent.
+	 *
+	 * @since ?
+	 *
+	 * @access private
+	 */
+	private function collectCommonElements( $data ) {
+		$keys       = array();
+		foreach ( $data as $datum ) {
+			if ( empty( $keys ) ) {
+				$keys   = array_keys( $datum );
+				continue;
+			}
+			$keys = array_intersect( $keys, array_keys( $datum ) );
+		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Extracting data only for the common keys = %s', print_r( $keys, true ) ), 'debug', __FILE__, __LINE__ );
+
+		$rows = array();
+		foreach ( $data as $datum ) {
+			foreach ( $datum as $key => $value ) {
+				if ( in_array( $key, $keys, true ) ) {
+					$row[ $key ] = $value;
+				}
+			}
+			$rows[] = $row;
+		}
+
+		return $rows;
+
 	}
 
 	/**
