@@ -30,6 +30,11 @@
             return;
         }
 
+        // eliminate the jitter/flicker while editing charts.
+        if(v.is_front == false){
+            $('#' + id).empty();
+        }
+
         if($('#' + id + ' canvas').length === 0){
             $('#' + id).append($('<canvas width="100%" height="90%"></canvas>'));
         }
