@@ -125,8 +125,11 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 *
 	 * @access public
 	 */
-	public static function set_defaults( $chart, $type, $library ) {
-		if ( $chart->post_status !== 'auto-draft' || $library !== 'ChartJS' ) {
+	public static function set_defaults( $chart, $post_status = 'auto-draft' ) {
+		$type           = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$library        = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+
+		if ( ( ! is_null( $post_status ) && $chart->post_status !== $post_status ) || $library !== 'ChartJS' ) {
 			return;
 		}
 

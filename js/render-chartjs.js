@@ -292,7 +292,9 @@
         for (j = 0; j < atts.length; j++) {
             var values = [];
             for (var i = 0; i < rows.length; i++) {
-                values.push(settings.slices[i][atts[j]]);
+                if(typeof settings.slices[i] !== 'undefined' && typeof settings.slices[i][atts[j]] !== 'undefined'){
+                    values.push(settings.slices[i][atts[j]]);
+                }
             }
             var object = {};
             object[ atts[ j ] ] = values;

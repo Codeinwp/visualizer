@@ -750,7 +750,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				}
 
-				Visualizer_Module_Utility::set_defaults( $this->_chart, $type, $library );
+				Visualizer_Module_Utility::set_defaults( $this->_chart );
 
 				// redirect to next tab
 				// changed by Ash/Upwork
@@ -970,9 +970,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+
+				Visualizer_Module_Utility::set_defaults( $chart, null );
+
+				$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
 				$render->id     = $chart->ID;
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
+				$render->settings = json_encode( $settings );
 			} else {
 				$render->message = esc_html__( 'CSV file is broken or invalid. Please, try again.', 'visualizer' );
 			}
