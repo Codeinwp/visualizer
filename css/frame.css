@@ -89,6 +89,10 @@
 	transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
 }
 
+.viz-title-small {
+	font-size: smaller;
+}
+
 .viz-group-wrapper .viz-group .viz-group:hover .viz-group-title,
 .viz-group-wrapper .viz-group .viz-group.open .viz-group-title {
 	border-left-color: #0073aa;

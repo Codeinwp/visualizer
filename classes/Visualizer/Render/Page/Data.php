@@ -98,7 +98,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?></h2>
 							<div class="viz-group-content">
 								<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
-								<p class="viz-group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
+								<p class="viz-group-description"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 								<form id="vz-csv-file-form" action="<?php echo $upload_link; ?>" method="post"
 									  target="thehole" enctype="multipart/form-data">
 									<input type="hidden" id="remote-data" name="remote_data">
@@ -118,7 +118,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php _e( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?> </p>
-										<p class="viz-group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
+										<p class="viz-group-description"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you have using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 										<p class="viz-group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
@@ -421,6 +421,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				<div class="viz-group-header">
 					<button class="customize-section-back" tabindex="0"></button>
 					<h3 class="viz-group-title viz-main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>
+					<h4 class="viz-group-title viz-title-small"><?php _e( 'If you have just updated/modified the chart data, you may need to save it before the new data reflects in the settings.', 'visualizer' ); ?></h4>
 				</div>
 				<ul class="viz-group-content">
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
