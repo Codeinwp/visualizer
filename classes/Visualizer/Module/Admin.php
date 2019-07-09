@@ -297,12 +297,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$additional,
 			array(
 				'dataTable' => array(
-					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
+					'name'    => esc_html__( 'Table', 'visualizer' ),
 					'enabled' => true,
 					'supports'  => array( 'DataTable' ),
 				),
 				'pie'         => array(
-					'name'    => esc_html__( 'Pie', 'visualizer' ),
+					'name'    => esc_html__( 'Pie/Donut', 'visualizer' ),
 					'enabled' => true,
 					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
@@ -314,7 +314,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'area'        => array(
 					'name'    => esc_html__( 'Area', 'visualizer' ),
 					'enabled' => true,
-					// in ChartJS, the fill option is used to make this an area: https://www.chartjs.org/docs/latest/charts/area.html
+					// in ChartJS, the fill option is used to make Line chart an area: https://www.chartjs.org/docs/latest/charts/area.html
 					'supports'  => array( 'Google Charts' ),
 				),
 				'geo'         => array(
@@ -369,7 +369,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'supports' => array( 'ChartJS' ),
 				),
 				'radar'       => array(
-					'name'    => esc_html__( 'Radar', 'visualizer' ),
+					'name'    => esc_html__( 'Radar/Spider', 'visualizer' ),
 					'enabled' => false,
 					'supports' => array( 'ChartJS' ),
 				),
