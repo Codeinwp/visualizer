@@ -120,8 +120,17 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div id="visualizer-content-wrapper">';
 		if ( ! empty( $this->charts ) ) {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
+			$count = 0;
 			foreach ( $this->charts as $placeholder_id => $chart ) {
 				$this->_renderChartBox( $placeholder_id, $chart['id'] );
+				// show the sidebar after the first 3 charts.
+				if ( $count++ === 2 ) {
+					$this->_renderSidebar();
+				}
+			}
+			// show the sidebar if there are less than 3 charts.
+			if ( $count < 3 ) {
+				$this->_renderSidebar();
 			}
 			echo '</div>';
 		} else {
@@ -140,9 +149,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</span>';
 			echo '</div>';
 			echo '</div>';
+			$this->_renderSidebar();
 			echo '</div>';
 		}
-		$this->_renderSidebar();
 		echo '</div>';
 		if ( is_array( $this->pagination ) ) {
 			echo '<ul class=" subsubsub">';
@@ -229,11 +238,13 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<h3>' . __( 'Gain more editing power', 'visualizer' ) . '</h3><ul>';
 			echo '<li>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
+			echo '<li>' . __( 'Use database query to create charts', 'visualizer' ) . '</li>';
+			echo '<li>' . __( 'Create charts from WordPress tables', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Private charts', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
-			echo '<li>' . __( '3 more chart types', 'visualizer' ) . '</li></ul>';
-			echo '<a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a>';
+			echo '<li>' . __( '6 more chart types', 'visualizer' ) . '</li></ul>';
+			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
 			echo '</div>';
 			echo '</div>';
 		}
