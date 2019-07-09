@@ -190,7 +190,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 					$temp = array();
 					for ( $depth = 0; $depth < count( $leaf ); $depth++ ) {
 						if ( ! isset( $leaf[ $depth ][ $tag ] ) ) {
-							do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Element %s not present at depth %d. Ignoring.', $tag, $depth ), 'debug', __FILE__, __LINE__ );
+							do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Element %s not present at depth %d in %d elements. Ignoring.', $tag, $depth, count( $leaf ) ), 'debug', __FILE__, __LINE__ );
 							continue;
 						}
 						$temp[] = $leaf[ $depth ][ $tag ];
@@ -241,6 +241,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	/**
 	 * Determines which keys are common to all the data and returns an array with only those elements.
 	 * This is to ensure that the data set displayed on the table is consistent.
+	 * Inconsistent data causes the table to not display.
 	 *
 	 * @since ?
 	 *
