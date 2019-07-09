@@ -48,6 +48,9 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			echo 'if (win.visualizer) {';
 			echo 'win.visualizer.charts.canvas.series = ', $this->series, ';';
 			echo 'win.visualizer.charts.canvas.data = ', $this->data, ';';
+			if ( $this->settings ) {
+				echo 'win.visualizer.charts.canvas.settings = ', $this->settings, ';';
+			}
 			echo 'win.visualizer.update();';
 			echo '}';
 
