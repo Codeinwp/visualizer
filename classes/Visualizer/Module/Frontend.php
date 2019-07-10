@@ -69,6 +69,27 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		add_action( 'rest_api_init', array( $this, 'endpoint_register' ) );
+
+		$this->_addFilter( 'script_loader_tag', 'script_loader_tag', null, 10, 3 );
+	}
+
+	/**
+	 * Adds the async attribute to certain scripts.
+	 */
+	function script_loader_tag( $tag, $handle, $src ) {
+		if ( is_admin() ) {
+			return $tag;
+		}
+
+		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
+
+		foreach ( $scripts as $async ) {
+			if ( $async === $handle ) {
+				$tag = str_replace( ' src', ' defer="defer" src', $tag );
+				break;
+			}
+		}
+		return $tag;
 	}
 
 	/**
@@ -157,10 +178,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access public
 	 */
 	public function enqueueScripts() {
-		wp_register_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
-		wp_register_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-		wp_register_script( 'visualizer-render', VISUALIZER_ABSURL . 'js/render.js', array( 'visualizer-google-jsapi-old', 'jquery', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
@@ -193,7 +211,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		);
 
 		// if empty id or chart does not exists, then return empty string
-		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type != Visualizer_Plugin::CPT_VISUALIZER ) {
+		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return '';
 		}
 
@@ -202,6 +220,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// in case revisions exist.
+		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
 		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
 			$chart = get_post( $chart->ID );
 		}
@@ -214,7 +233,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 
-		// faetch and update settings
+		$chart = apply_filters( 'visualizer_schedule_refresh_chart', $chart, $chart->ID, false );
+
+		// fetch and update settings
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 		if ( empty( $settings['height'] ) ) {
 			$settings['height'] = '400';
@@ -237,13 +258,20 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
 
-		$id         = $id . '-' . rand();
-		$arguments  = array( '', $id, $settings );
 		$css        = '';
-		apply_filters_ref_array( 'visualizer_pro_inline_css', array( &$arguments ) );
+		$arguments  = $this->get_inline_custom_css( $id, $settings );
 		if ( ! empty( $arguments ) ) {
 			$css        = $arguments[0];
-			$settings   = $arguments[2];
+			$settings   = $arguments[1];
+		}
+
+		$library    = $this->load_chart_type( $chart->ID );
+
+		$id         = $id . '-' . rand();
+
+		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
+		if ( $amp && $amp->is_amp() ) {
+			return '<div id="' . $id . '"' . $class . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
 		}
 
 		// add chart to the array
@@ -252,21 +280,31 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'series'   => $series,
 			'settings' => $settings,
 			'data'     => $data,
+			'library'  => $library,
 		);
 
-		// enqueue visualizer render and update render localizations
-		wp_enqueue_script( 'visualizer-render' );
+		wp_register_script(
+			"visualizer-render-$library",
+			VISUALIZER_ABSURL . 'js/render-facade.js',
+			apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
+			Visualizer_Plugin::VERSION,
+			true
+		);
+
+		wp_enqueue_script( "visualizer-render-$library" );
 		wp_localize_script(
-			'visualizer-render',
+			"visualizer-render-$library",
 			'visualizer',
 			array(
 				'charts'        => $this->_charts,
-				'language'  => $this->get_language(),
+				'language'      => $this->get_language(),
 				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 				'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
 				'i10n'          => array(
 					'copied'        => __( 'Copied!', 'visualizer' ),
 				),
+				'page_type' => 'frontend',
+				'is_front'  => true,
 			)
 		);
 		wp_enqueue_style( 'visualizer-front' );
@@ -285,7 +323,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					$mime       = end( $array );
 				}
 				$label          = $actions[ $key ];
-				$actions_div    .= '<a href="#" class="visualizer-action visualizer-action-' . $key . '" data-visualizer-type="' . $key . '" data-visualizer-chart-id="' . $atts['id'] . '" data-visualizer-mime="' . $mime . '" title="' . $label . '" ';
+				$actions_div    .= '<a href="#" class="visualizer-action visualizer-action-' . $key . '" data-visualizer-type="' . $key . '" data-visualizer-chart-id="' . $atts['id'] . '" data-visualizer-container-id="' . $id . '" data-visualizer-mime="' . $mime . '" title="' . $label . '" ';
 
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );

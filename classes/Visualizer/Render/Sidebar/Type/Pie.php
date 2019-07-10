@@ -28,7 +28,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Pie extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_Pie extends Visualizer_Render_Sidebar_Google {
 
 	/**
 	 * Renders template.
@@ -186,7 +186,7 @@ class Visualizer_Render_Sidebar_Type_Pie extends Visualizer_Render_Sidebar {
 			self::_renderTextItem(
 				esc_html__( 'Slice Offset', 'visualizer' ),
 				'slices[' . $i . '][offset]',
-				isset( $this->slices[ $i ]['color'] ) ? $this->slices[ $i ]['color'] : null,
+				isset( $this->slices[ $i ]['offset'] ) ? $this->slices[ $i ]['offset'] : null,
 				esc_html__( "How far to separate the slice from the rest of the pie, from 0.0 (not at all) to 1.0 (the pie's radius).", 'visualizer' ),
 				'0.0'
 			);

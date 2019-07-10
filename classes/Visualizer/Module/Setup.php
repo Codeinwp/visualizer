@@ -42,10 +42,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
+		register_activation_hook( VISUALIZER_BASEFILE, array( $this, 'activate' ) );
+		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
+		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
+		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
+
+		$this->_addAction( 'activated_plugin', 'onActivation' );
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
+
 	}
 	/**
 	 * Fetches the SDK logger data.
@@ -112,6 +119,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				'label'  => 'Visualizer Charts',
 				'public' => false,
 				'supports' => array( 'revisions' ),
+				'show_in_rest'          => true,
+				'rest_base'             => 'visualizer',
+				'rest_controller_class' => 'WP_REST_Posts_Controller',
 			)
 		);
 	}
@@ -126,6 +136,150 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 */
 	public function loadTextDomain() {
 		load_plugin_textdomain( Visualizer_Plugin::NAME, false, dirname( plugin_basename( VISUALIZER_BASEFILE ) ) . '/languages/' );
+	}
+
+	/**
+	 * Activate the plugin
+	 */
+	public function activate() {
+		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, 'hourly', 'visualizer_schedule_refresh_db' );
+	}
+
+	/**
+	 * On activation of the plugin
+	 */
+	public function onActivation( $plugin ) {
+		if ( defined( 'TI_UNIT_TESTING' ) ) {
+			return;
+		}
+
+		if ( $plugin === VISUALIZER_BASENAME ) {
+			wp_redirect( admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ) );
+			exit();
+		}
+	}
+
+
+	/**
+	 * Deactivate the plugin
+	 */
+	public function deactivate() {
+		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+	}
+
+	/**
+	 * Refresh the specific chart from the db.
+	 *
+	 * @param WP_Post $chart The chart object.
+	 * @param int     $chart_id The chart id.
+	 * @param bool    $force If this is true, then the chart data will be force refreshed. If false, data will be refreshed only if the chart requests live data.
+	 *
+	 * @access public
+	 */
+	public function refresh_db_for_chart( $chart, $chart_id, $force = false ) {
+		if ( ! $chart_id ) {
+			return $chart;
+		}
+
+		if ( ! $chart ) {
+			$chart = get_post( $chart_id );
+		}
+
+		if ( ! $chart ) {
+			return $chart;
+		}
+
+		// check if the source is correct.
+		$source     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
+		$load_series = false;
+		switch ( $source ) {
+			case 'Visualizer_Source_Query':
+				// check if its a live-data chart or a cached-data chart.
+				if ( ! $force ) {
+					$hours = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+					if ( ! empty( $hours ) ) {
+						// cached, bail!
+						return $chart;
+					}
+				}
+
+				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, true );
+				$source     = new Visualizer_Source_Query( $params );
+				$source->fetch( false );
+				$load_series = true;
+				break;
+			case 'Visualizer_Source_Json':
+				// check if its a live-data chart or a cached-data chart.
+				if ( ! $force ) {
+					$hours = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
+					if ( ! empty( $hours ) ) {
+						// cached, bail!
+						return $chart;
+					}
+				}
+
+				$url        = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true );
+				$root       = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true );
+				$paging     = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING, true );
+				$series     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+				$source     = new Visualizer_Source_Json( array( 'url' => $url, 'root' => $root, 'paging' => $paging ) );
+				$source->refresh( $series );
+				break;
+			default:
+				return $chart;
+		}
+
+		$error      = $source->get_error();
+		if ( empty( $error ) ) {
+			add_filter( 'wp_revisions_to_keep', '__return_false' );
+			if ( $load_series ) {
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+			}
+
+			wp_update_post(
+				array(
+					'ID'            => $chart_id,
+					'post_content'  => $source->getData(),
+				)
+			);
+
+			$chart = get_post( $chart_id );
+		}
+
+		return $chart;
+	}
+
+	/**
+	 * Refresh the db chart.
+	 *
+	 * @access public
+	 */
+	public function refreshDbChart() {
+		$schedules = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
+		if ( ! $schedules ) {
+			return;
+		}
+		if ( ! defined( 'VISUALIZER_DO_NOT_DIE' ) ) {
+			// define this so that the ajax call does not die
+			// this means that if the new version of pro and the old version of free are installed, only the first chart will be updated
+			define( 'VISUALIZER_DO_NOT_DIE', true );
+		}
+
+		$new_schedules = array();
+		$now           = time();
+		foreach ( $schedules as $chart_id => $time ) {
+			$new_schedules[ $chart_id ] = $time;
+			if ( $time > $now ) {
+				continue;
+			}
+
+			// if the time is nigh, we force an update.
+			$this->refresh_db_for_chart( null, $chart_id, true );
+			$hours                      = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+			$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
+		}
+		update_option( Visualizer_Plugin::CF_DB_SCHEDULE, $new_schedules );
 	}
 
 }

@@ -59,7 +59,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 				echo "<a class='pro-upsell' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 				echo "<span class='visualizder-pro-label'>" . __( 'PREMIUM', 'visualizer' ) . '</span>';
 			}
-			echo '<label class="type-label', $type == $this->type ? ' type-label-selected' : '', '">';
+			echo '<label class="type-label', $type === $this->type ? ' type-label-selected' : '', '">';
 			echo '<span>' . $array['name'] . '</span>';
 			if ( $array['enabled'] ) {
 				echo '<input type="radio" class="type-radio" name="type" value="', $type, '"', checked( $type, $this->type, false ), '>';

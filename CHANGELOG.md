@@ -1,4 +1,51 @@
 
+ ### v3.2.1 - 2019-05-05 
+ **Changes:** 
+ * Fix issue with async loading of scripts
+ 
+ ### v3.2.0 - 2019-05-03 
+ **Changes:** 
+ * Add support for charts in AMP requests
+* Add support to show charts from JSON/REST endpoints
+* Fix loading of Google Visualization javascript files
+* Add simple editors for editing chart data
+* Tested up to WP 5.2
+ 
+ ### v3.1.3 - 2019-02-24 
+ **Changes:** 
+ * Fix issue with changing column settings of the last column in table chart
+* Add support for query language to get subset of data from Google Spreadsheet
+* Fix conflict with jquery 3.3.x
+* Migrated PHPExcel to PhpSpreadsheet
+* Front end action 'print' should print the chart and fall back to printing the data
+* Fix issue with table chart not showing in IE
+* Fix issue with multiple instances of same chart not showing
+* Fix issue with date type column does not work with Combo charts
+* Tested with WP 5.1
+ 
+ ### v3.1.2 - 2018-12-06 
+ **Changes:** 
+ * Fix bug "Warning: A non-numeric value encountered"
+* Tested with WP 5.0
+ 
+ ### v3.1.1 - 2018-12-05 
+ **Changes:** 
+ * Fix issue with Gutenberg support
+* Fix issue with loading new Table chart
+* Fix options that don't work correctly with some charts
+ 
+ ### v3.1.0 - 2018-12-03 
+ **Changes:** 
+ * Add Table chart
+* Fix date format in sample files
+ 
+ ### v3.0.12 - 2018-10-11 
+ **Changes:** 
+ * Added filter to enable users to change schedule of charts.
+* Fixed bug with line chart with timeofday column.
+* Fixed bug with scheduled charts that sometimes did not show updated data.
+* Javascript can be customized on a per user basis that will not be wiped out on update.
+ 
  ### v3.0.11 - 2018-08-15 
  **Changes:** 
  * Fixed issue with the Series Settings options for the Table Chart
