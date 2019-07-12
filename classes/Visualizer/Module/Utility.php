@@ -183,7 +183,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 * @access private
 	 */
 	private static function set_defaults_chartjs( $chart, $post_status ) {
-		$type	= get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 
