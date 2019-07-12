@@ -118,8 +118,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	}
 
 	/**
-	 * Sets some defaults (colors etc.) in the chart.
-	 * Currently only for ChartJS.
+	 * Sets some defaults in the chart.
 	 *
 	 * @since 3.3.0
 	 *
@@ -129,20 +128,69 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 		$type           = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$library        = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 
-		if ( ( ! is_null( $post_status ) && $chart->post_status !== $post_status ) || $library !== 'ChartJS' ) {
+		// if post_status is null, operate on the chart irrespective of the post_status
+		if ( ( ! is_null( $post_status ) && $chart->post_status !== $post_status ) ) {
 			return;
 		}
 
-		$series = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
-		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+		$series         = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		if ( ! $series || ! is_array( $series ) ) {
 			return;
 		}
 
+		switch ( $library ) {
+			case 'ChartJS':
+				self::set_defaults_chartjs( $chart, $post_status );
+				break;
+			case 'GoogleCharts':
+				self::set_defaults_google( $chart, $post_status );
+				break;
+		}
+	}
+
+	/**
+	 * Sets some defaults in the chart for Google charts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access private
+	 */
+	private static function set_defaults_google( $chart, $post_status ) {
+		$type           = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+
+		$attributes     = array();
+		if ( $post_status === 'auto-draft' ) {
+			switch ( $type ) {
+				case 'combo':
+					// chart type 'bars' and first series 'line'.
+					$attributes['seriesType'] = 'bars';
+					$attributes['series'][0]['type'] = 'line';
+					break;
+			}
+		}
+
+		if ( $attributes ) {
+			$settings       = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+			update_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, array_merge( $settings, $attributes ) );
+		}
+	}
+
+	/**
+	 * Sets some defaults in the chart for ChartJS charts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access private
+	 */
+	private static function set_defaults_chartjs( $chart, $post_status ) {
+		$type	= get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$series = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
+		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
+		$attributes = array();
 		$name   = 'series';
 		$count  = count( $series );
 		$max    = $count - 1;
-		$attributes = array();
 		switch ( $type ) {
 			case 'polarArea':
 				// fall through.
@@ -170,10 +218,10 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				}
 				break;
 		}
+
 		if ( $attributes ) {
 			$settings[ $name ] = $attributes;
 			update_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, $settings );
 		}
 	}
-
 }
