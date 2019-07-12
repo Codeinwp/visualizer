@@ -790,11 +790,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function load_dependent_assets( $libs ) {
 		if ( in_array( 'moment', $libs, true ) && ! wp_script_is( 'moment', 'registered' ) ) {
-			wp_register_script( 'moment', '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js', array(), Visualizer_Plugin::VERSION );
+			wp_register_script( 'moment', VISUALIZER_ABSURL . 'js/lib/moment.min.js', array(), Visualizer_Plugin::VERSION );
 		}
 
 		if ( in_array( 'numeral', $libs, true ) && ! wp_script_is( 'numeral', 'registered' ) ) {
-			wp_register_script( 'numeral', '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js', array(), Visualizer_Plugin::VERSION );
+			wp_register_script( 'numeral', VISUALIZER_ABSURL . 'js/lib/numeral.min.js', array(), Visualizer_Plugin::VERSION );
 		}
 
 	}
