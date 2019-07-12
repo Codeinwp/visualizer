@@ -160,6 +160,14 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	}
 
 	/**
+	 * Add the correct description for the manual configuration box.
+	 */
+	protected function _renderManualConfigDescription() {
+		self::_renderSectionStart();
+			self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
+	}
+
+	/**
 	 * Renders chart advanced settings group.
 	 *
 	 * @access protected
@@ -174,9 +182,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		self::_renderGroupEnd();
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
-			self::_renderSectionStart();
-				self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
-
+			$this->_renderManualConfigDescription();
 			$example    = '
 {
 	"vAxis": {
@@ -591,7 +597,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<b>', $title, '</b>';
 			echo '<div>';
-				echo '<input type="text" class="color-picker-hex" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default : esc_attr( $value ), '" data-default-color="', $default, '">';
+				echo '<input type="text" class="color-picker-hex color-picker" data-alpha="true" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default : esc_attr( $value ), '" data-default-color="', $default, '">';
 			echo '</div>';
 		echo '</div>';
 	}
@@ -748,7 +754,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value === $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
+			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value == $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
 			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}
@@ -778,4 +785,17 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		return $this->_library;
 	}
 
+	/**
+	 * Loads generic libraries conditionally.
+	 */
+	protected function load_dependent_assets( $libs ) {
+		if ( in_array( 'moment', $libs, true ) && ! wp_script_is( 'moment', 'registered' ) ) {
+			wp_register_script( 'moment', '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js', array(), Visualizer_Plugin::VERSION );
+		}
+
+		if ( in_array( 'numeral', $libs, true ) && ! wp_script_is( 'numeral', 'registered' ) ) {
+			wp_register_script( 'numeral', '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js', array(), Visualizer_Plugin::VERSION );
+		}
+
+	}
 }
