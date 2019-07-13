@@ -331,6 +331,7 @@ class Editor extends Component {
 		if ( 'renderChart' === this.state.route && null !== this.state.chart ) {
 			return (
 				<ChartRender
+					id={ this.props.attributes.id }
 					chart={ this.state.chart }
 					className={ this.props.className }
 					editChart={ this.editChart }
@@ -405,6 +406,7 @@ class Editor extends Component {
 
 				{ ( 'chartSelect' === this.state.route && null !== this.state.chart ) &&
 					<ChartSelect
+						id={ this.props.attributes.id }
 						chart={ this.state.chart }
 						editSettings={ this.editSettings }
 						editPermissions={ this.editPermissions }

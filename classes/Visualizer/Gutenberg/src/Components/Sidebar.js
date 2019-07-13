@@ -46,11 +46,11 @@ class Sidebar extends Component {
 
 				<GeneralSettings chart={ this.props.chart } edit={ this.props.edit } />
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<HorizontalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<VerticalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
@@ -98,12 +98,14 @@ class Sidebar extends Component {
 					<TimelineSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( 0 <= [ 'table' ].indexOf( type ) ) && (
+				{ ( 0 <= [ 'table', 'dataTable' ].indexOf( type ) ) && (
 					<Fragment>
 
 						<TableSettings chart={ this.props.chart } edit={ this.props.edit } />
 
-						<RowCellSettings chart={ this.props.chart } edit={ this.props.edit } />
+						{ ( -1 >= [ 'dataTable' ].indexOf( type ) ) && (
+							<RowCellSettings chart={ this.props.chart } edit={ this.props.edit } />
+						) }
 
 					</Fragment>
 				) }
@@ -112,7 +114,7 @@ class Sidebar extends Component {
 					<ComboSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'timeline', 'gauge', 'geo', 'pie' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'timeline', 'gauge', 'geo', 'pie', 'dataTable' ].indexOf( type ) ) && (
 					<SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
@@ -120,12 +122,15 @@ class Sidebar extends Component {
 					<SlicesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				<LayoutAndChartArea chart={ this.props.chart } edit={ this.props.edit } />
+				{ ( -1 >= [ 'dataTable' ].indexOf( type ) ) && (
+					<LayoutAndChartArea chart={ this.props.chart } edit={ this.props.edit } />
+				) }
 
 				<FrontendActions chart={ this.props.chart } edit={ this.props.edit } />
 
-				<ManualConfiguration chart={ this.props.chart } edit={ this.props.edit } />
-
+				{ ( -1 >= [ 'dataTable' ].indexOf( type ) ) && (
+					<ManualConfiguration chart={ this.props.chart } edit={ this.props.edit } />
+				) }
 			</Fragment>
 		);
 	}

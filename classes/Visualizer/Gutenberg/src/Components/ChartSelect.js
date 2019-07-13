@@ -3,6 +3,8 @@
  */
 import { Chart } from 'react-google-charts';
 
+import DataTable from './DataTable.js';
+
 import FileImport from './Import/FileImport.js';
 
 import RemoteImport from './Import/RemoteImport.js';
@@ -57,8 +59,12 @@ class ChartSelect extends Component {
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
 
-		if ( 0 <= [ 'gauge', 'table', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
-			chart = startCase( this.props.chart['visualizer-chart-type']);
+		if ( 0 <= [ 'gauge', 'table', 'timeline', 'dataTable' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+			if ( 'dataTable' === data['visualizer-chart-type']) {
+				chart = data['visualizer-chart-type'];
+			} else {
+				chart = startCase( this.props.chart['visualizer-chart-type']);
+			}
 		} else {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
 		}
@@ -120,17 +126,27 @@ class ChartSelect extends Component {
 				<div className="visualizer-settings__chart">
 
 					{ ( null !== this.props.chart ) &&
-						<Chart
-							chartType={ chart }
-							rows={ data['visualizer-data'] }
-							columns={ data['visualizer-series'] }
-							options={
-								isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
-									merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
-									compact( this.props.chart['visualizer-settings'])
-							}
-							height="500px"
-						/>
+
+						( 'dataTable' === chart ) ? (
+							<DataTable
+								id={ this.props.id }
+								rows={ data['visualizer-data'] }
+								columns={ data['visualizer-series'] }
+								options={ data['visualizer-settings'] }
+							/>
+						) : (
+							<Chart
+								chartType={ chart }
+								rows={ data['visualizer-data'] }
+								columns={ data['visualizer-series'] }
+								options={
+									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
+										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
+										compact( this.props.chart['visualizer-settings'])
+								}
+								height="500px"
+							/>
+						)
 					}
 
 				</div>

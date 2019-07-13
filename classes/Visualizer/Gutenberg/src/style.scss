@@ -108,6 +108,11 @@
 			}
 		}
 
+		.dataTables_wrapper {
+			background: #fff;
+			padding: 10px;
+		}
+
 		.visualizer-no-charts {
 			padding-top: 25px;
 		}
@@ -115,6 +120,11 @@
 
 	.visualizer-settings__chart {
 		text-align: center;
+
+		.dataTables_wrapper {
+			background: #fff;
+			padding: 10px;
+		}
 	}
 
 	.visualizer-settings__controls {
