@@ -3,6 +3,8 @@
  */
 import { Chart } from 'react-google-charts';
 
+import DataTable from './DataTable.js';
+
 import { formatDate, filterCharts } from '../utils.js';
 
 /**
@@ -80,7 +82,6 @@ class Charts extends Component {
 								<div className="visualizer-settings__charts-grid">
 
 									{ ( Object.keys( charts ) ).map( i => {
-
 										const data = formatDate( charts[i]['chart_data']);
 
 										let title, chart;
@@ -101,10 +102,6 @@ class Charts extends Component {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
 										}
 
-										if ( 'dataTable' === chart ) {
-											return;
-										}
-
 										return (
 											<div className="visualizer-settings__charts-single">
 
@@ -112,12 +109,21 @@ class Charts extends Component {
 													{ title }
 												</div>
 
-												<Chart
-													chartType={ chart }
-													rows={ data['visualizer-data'] }
-													columns={ data['visualizer-series'] }
-													options={ filterCharts( data['visualizer-settings']) }
-												/>
+												{ ( 'dataTable' === chart ) ? (
+													<DataTable
+														id={ charts[i].id }
+														rows={ data['visualizer-data'] }
+														columns={ data['visualizer-series'] }
+														chartsScreen={ true }
+													/>
+												) : (
+													<Chart
+														chartType={ chart }
+														rows={ data['visualizer-data'] }
+														columns={ data['visualizer-series'] }
+														options={ filterCharts( data['visualizer-settings']) }
+													/>
+												) }
 
 												<div
 													className="visualizer-settings__charts-controls"
