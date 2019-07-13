@@ -28,6 +28,7 @@ const {
 	Button,
 	ButtonGroup,
 	Dashicon,
+	Notice,
 	Placeholder,
 	Spinner
 } = wp.components;
@@ -350,6 +351,13 @@ class Editor extends Component {
 
 				{ 'home' === this.state.route && (
 					<div className="visualizer-settings__content">
+
+						<Notice
+							status="warning"
+							isDismissible={ false }
+						>
+							{ __( 'Right now the Visualizer block does not support display/editing of Table chart. It will be added in the next release. We recommend you to use shortcode if you want to display that particular chart type.' ) }
+						</Notice>
 
 						<div className="visualizer-settings__content-description">
 							{ __( 'Make a new chart or display an existing one?' ) }

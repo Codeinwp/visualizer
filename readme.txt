@@ -19,7 +19,7 @@ The plugin uses Google Visualization API and DataTables.net to add responsive & 
 >
 > * Import data from other charts
 > * Easy edit the data using a live editor
-> * 2 more chart types ( Combo and Timeline )
+> * 6 more chart types ( Combo, Timeline, Candlestick, Gauge, Radar/Spider, Polar Area )
 > * Additional options for some charts
 > * Auto synchronize with your online file.
 > * Create private charts.
@@ -32,7 +32,7 @@ The plugin uses Google Visualization API and DataTables.net to add responsive & 
 
 
 ### 9 Chart types + 3 more in the pro version ###
-This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is line chart,flow chart, area chart, bar chart, column chart, pie chart, geo chart, gauge chart, candlestick chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. The premium version can act as a interactive WordPress Table plugin, with sorting capabilities.
+This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is table chart, line chart, area chart, bar chart, column chart, pie chart, geo chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. The premium version can act as a interactive WordPress Table plugin, with sorting capabilities.
 
 ### Flexible and customizable ###
 Make the charts your own. Configure an extensive set of options to perfectly match the look and feel of your website. You can use Google Chart Tools with their default setting - all customization is optional and the basic setup is launch-ready. However, charts can be easily customizable in case your webpage adopts a style which is at odds with provided defaults. Every chart exposes a number of options that customize its look and feel.
@@ -138,11 +138,19 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Screenshots ==
 
-1. Chart type selection
-2. Chart data uploading
-3. Chart options editing
-4. Charts media library
-5. Charts library
+1. Chart selection
+2. Chart selection 2
+3. Library
+4. Download
+5. Line settings
+6. Pie settings
+7. Block editor - Pie chart settings
+8. Block editor - Pie chart
+9. Block editor - Chart library
+10. Block editor chart
+11. Bar settings
+12. Bar settings, Series settings
+13. Bar chart
 
 == Changelog ==
 = 3.2.1 - 2019-05-05  = 

@@ -456,7 +456,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 
-		$this->load_chart_type( $chart_id );
+		$lib = $this->load_chart_type( $chart_id );
+
+		// the alpha color picker (RGBA) is not supported by google.
+		$color_picker_dep = 'wp-color-picker';
+		if ( in_array( $lib, array( 'chartjs', 'datatables' ), true ) && ! wp_script_is( 'wp-color-picker-alpha', 'registered' ) ) {
+			wp_register_script( 'wp-color-picker-alpha', VISUALIZER_ABSURL . 'js/lib/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ), Visualizer_Plugin::VERSION );
+			$color_picker_dep = 'wp-color-picker-alpha';
+		}
 
 		// enqueue and register scripts and styles
 		wp_register_script( 'visualizer-chosen', VISUALIZER_ABSURL . 'js/lib/chosen.jquery.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION );
@@ -476,7 +483,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer-preview',
 			VISUALIZER_ABSURL . 'js/preview.js',
 			array(
-				'wp-color-picker',
+				$color_picker_dep,
 				'visualizer-render',
 			),
 			Visualizer_Plugin::VERSION,
@@ -608,7 +615,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		$data          = $this->_getChartArray();
 		$sidebar       = '';
-		$sidebar_class = 'Visualizer_Render_Sidebar_Type_' . ucfirst( $data['type'] );
+		$sidebar_class = $this->load_chart_class_name( $this->_chart->ID );
 		if ( class_exists( $sidebar_class, true ) ) {
 			$sidebar           = new $sidebar_class( $data['settings'] );
 			$sidebar->__series = $data['series'];
@@ -723,9 +730,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// process post request
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
+			$library = filter_input( INPUT_POST, 'chart-library' );
 			if ( in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
+				if ( empty( $library ) ) {
+					// library cannot be empty.
+					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Chart library empty while creating the chart! Aborting...', 'error', __FILE__, __LINE__ );
+					return;
+				}
+
 				// save new chart type
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_TYPE, $type );
+				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, $library );
 				// if the chart has default data, update it with appropriate default data for new type
 				if ( filter_var( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, true ), FILTER_VALIDATE_BOOLEAN ) ) {
 					$source = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $type . '.csv' );
@@ -734,6 +749,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					wp_update_post( $this->_chart->to_array() );
 					update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				}
+
+				Visualizer_Module_Utility::set_defaults( $this->_chart );
+
 				// redirect to next tab
 				// changed by Ash/Upwork
 				wp_redirect( add_query_arg( 'tab', 'settings' ) );
@@ -952,9 +970,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+
+				Visualizer_Module_Utility::set_defaults( $chart, null );
+
+				$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
 				$render->id     = $chart->ID;
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
+				$render->settings = json_encode( $settings );
 			} else {
 				$render->message = esc_html__( 'CSV file is broken or invalid. Please, try again.', 'visualizer' );
 			}

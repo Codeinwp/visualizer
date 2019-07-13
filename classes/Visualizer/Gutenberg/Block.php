@@ -194,6 +194,8 @@ class Visualizer_Gutenberg_Block {
 
 		$data['visualizer-chart-type'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 
+		$data['visualizer-chart-library'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+
 		$data['visualizer-source'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SOURCE, true );
 
 		$data['visualizer-default-data'] = get_post_meta( $post_id, Visualizer_Plugin::CF_DEFAULT_DATA, true );

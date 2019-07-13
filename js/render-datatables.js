@@ -90,6 +90,7 @@
             }
         }
 
+        var additional = [];
         for (i in chart.settings) {
             var valoo = chart.settings[i];
 
@@ -114,10 +115,16 @@
             if(array.length === 2){
                 i = eval( array[0] ); // jshint ignore:line
                 i[ array[1] ] = valoo;
+                additional[ array[0] ] = i;
+                if(array[0] === 'select' && array[1] === 'info' ){
+                    // enable main info or the selection info will not show.
+                    $.extend( settings, {info: true} );
+                }
+            } else {
+                settings[i] = valoo;
             }
-            settings[i] = valoo;
         }
-
+        $.extend( settings, additional );
         $.extend( $.fn.dataTable.defaults, settings );
 
         cols = [];
