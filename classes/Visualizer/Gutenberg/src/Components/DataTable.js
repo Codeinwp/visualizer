@@ -29,6 +29,8 @@ class DataTables extends Component {
 	}
 
 	initDataTable( tableColumns, tableRow ) {
+		const settings = this.props.options;
+
 		const columns = tableColumns.map( i => {
 			let type = i.type;
 
@@ -68,14 +70,16 @@ class DataTables extends Component {
 		});
 
 		this.table = jQuery( `#dataTable-instances-${ this.props.id }` ).DataTable({
+			destroy: true,
 			data: data,
 			columns: columns,
-			destroy: true,
-			paging: false,
+			paging: 'true' === settings.paging_bool ? true : false,
+			pageLength: settings.pageLength_int || 10,
+			pagingType: settings.pagingType,
+			lengthChange: 'true' === settings.lengthChange_bool ? true : false,
 			searching: false,
 			ordering: true,
 			select: false,
-			lengthChange: false,
 			responsive: this.props.chartsScreen ? true : false
 		});
 	}

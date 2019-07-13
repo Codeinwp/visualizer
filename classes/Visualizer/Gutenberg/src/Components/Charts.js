@@ -115,6 +115,7 @@ class Charts extends Component {
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														chartsScreen={ true }
+														options={ filterCharts( data['visualizer-settings']) }
 													/>
 												) : (
 													<Chart

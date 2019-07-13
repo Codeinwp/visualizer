@@ -132,6 +132,7 @@ class ChartSelect extends Component {
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
+								options={ data['visualizer-settings'] }
 							/>
 						) : (
 							<Chart
