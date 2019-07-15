@@ -65,8 +65,10 @@
             var wnd = window,
                 view = new vmv.Chart({action: vu.create});
 
+            // remove the 'type' while refreshing the library page on creation of a new chart.
+            // this is to avoid cases where users have filtered for chart type A and end up creating chart type B
             wnd.send_to_editor = function () {
-                wnd.location.href = vu.base;
+                wnd.location.href = vu.base.replace(/type=[a-zA-Z]*/, '');
             };
             view.open();
 
