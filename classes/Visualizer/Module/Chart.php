@@ -541,8 +541,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$wp_scripts = wp_scripts();
 
 		// data tables assets.
-		wp_register_script( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-2.0.0/sl-1.3.0/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
-		wp_register_style( 'visualizer-datatables', '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-2.0.0/sl-1.3.0/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_register_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
 		wp_register_style( 'visualizer-jquery-ui', sprintf( '//ajax.googleapis.com/ajax/libs/jqueryui/%s/themes/smoothness/jquery-ui.css', $wp_scripts->registered['jquery-ui-core']->ver ), array( 'visualizer-datatables' ), Visualizer_Plugin::VERSION );
 		wp_enqueue_script( 'visualizer-datatables' );
 		wp_enqueue_style( 'visualizer-jquery-ui' );
