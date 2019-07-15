@@ -28,22 +28,6 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 
 
 	/**
-	 * The URL for the JavaScript file.
-	 *
-	 * @access private
-	 * @var string
-	 */
-	private static $_js     = '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.4/b-print-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js';
-
-	/**
-	 * The URL for the CSS file.
-	 *
-	 * @access private
-	 * @var string
-	 */
-	private static $_css    = '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.4/b-print-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css';
-
-	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -77,8 +61,8 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 	function load_assets( $deps, $is_frontend ) {
 		$this->load_dependent_assets( array( 'moment' ) );
 
-		wp_register_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
-		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );
+		wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
 
 		wp_register_script(
 			'visualizer-render-datatables-lib',

@@ -101,6 +101,12 @@ class Charts extends Component {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
 										}
 
+										if ( data['visualizer-chart-library']) {
+											if ( 'ChartJS' === data['visualizer-chart-library']) {
+												return;
+											}
+										}
+
 										if ( 'dataTable' === chart ) {
 											return;
 										}
