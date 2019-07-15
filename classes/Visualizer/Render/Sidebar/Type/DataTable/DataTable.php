@@ -84,8 +84,8 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 	 * Enqueue assets.
 	 */
 	public static function enqueue_assets( $deps = array() ) {
-		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );
-		wp_enqueue_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_enqueue_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
 		wp_enqueue_script( 'visualizer-render-datatables-lib', VISUALIZER_ABSURL . 'js/render-datatables.js', array_merge( $deps, array( 'jquery-ui-core', 'visualizer-datatables' ) ), Visualizer_Plugin::VERSION, true );
 		return 'visualizer-render-datatables-lib';
 	}
