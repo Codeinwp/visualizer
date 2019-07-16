@@ -31,7 +31,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	const NAME = __CLASS__;
 
 	/**
-	 * Some default chart colors.
+	 * Some default distinct colors.
 	 *
 	 * @since 3.3.0
 	 *
@@ -39,7 +39,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 * @var _CHART_COLORS
 	 */
 	private static $_CHART_COLORS = array(
-		'#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6', '#DD4477', '#66AA00', '#B82E2E', '#316395', '#994499', '#22AA99', '#AAAA11', '#6633CC', '#E67300', '#8B0707', '#329262', '#5574A6', '#3B3EAC',
+		'#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080',
 	);
 
 
@@ -217,6 +217,11 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 					$attributes[] = array( 'borderColor' => $colors[0] );
 				}
 				break;
+		}
+
+		if ( $post_status === 'auto-draft' ) {
+			// the charts are huge in size so let's always get them down to 50%.
+			$settings['width'] = $settings['height'] = '50%';
 		}
 
 		if ( $attributes ) {
