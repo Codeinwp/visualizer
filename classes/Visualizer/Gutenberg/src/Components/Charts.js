@@ -108,10 +108,6 @@ class Charts extends Component {
 											}
 										}
 
-										if ( 'dataTable' === chart ) {
-											return;
-										}
-
 										return (
 											<div className="visualizer-settings__charts-single">
 

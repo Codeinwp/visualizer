@@ -1,7 +1,10 @@
 /**
  * WordPress dependencies
  */
-const { Component } = wp.element;
+const {
+	Component,
+	Fragment
+} = wp.element;
 
 class DataTables extends Component {
 	constructor() {
@@ -22,6 +25,12 @@ class DataTables extends Component {
 
 	componentDidUpdate( prevProps ) {
 		if ( this.props !== prevProps ) {
+			if ( this.props.options.responsive_bool !== prevProps.options.responsive_bool ) {
+				if ( 'true' === prevProps.options.responsive_bool ) {
+					document.getElementById( `dataTable-instances-${ this.props.id }` ).classList.remove( 'collapsed' );
+				}
+			}
+
 			this.table.destroy();
 			document.getElementById( `dataTable-instances-${ this.props.id }` ).innerHTML = '';
 			this.initDataTable( this.props.columns, this.props.rows );
@@ -76,17 +85,49 @@ class DataTables extends Component {
 			paging: 'true' === settings.paging_bool ? true : false,
 			pageLength: settings.pageLength_int || 10,
 			pagingType: settings.pagingType,
-			lengthChange: 'true' === settings.lengthChange_bool ? true : false,
+			ordering: 'false' === settings.ordering_bool ? false : true,
+			fixedHeader: 'true' === settings.fixedHeader_bool ? true : false,
+			scrollCollapse: this.props.chartsScreen && true || 'true' === settings.scrollCollapse_bool ? true : false,
+			scrollY: this.props.chartsScreen && 180 || ( 'true' === settings.scrollCollapse_bool && Number( settings.scrollY_int ) || false ),
+			responsive: this.props.chartsScreen && true || 'true' === settings.responsive_bool ? true : false,
 			searching: false,
-			ordering: true,
 			select: false,
-			responsive: this.props.chartsScreen ? true : false
+			lengthChange: false,
+			bFilter: false,
+			bInfo: false
 		});
 	}
 
 	render() {
+		const settings = this.props.options;
+
 		return (
-			<table id={ `dataTable-instances-${ this.props.id }` }></table>
+			<Fragment>
+				{ settings.customcss && (
+					<style>
+						{ `#dataTable-instances-${ this.props.id } tr.odd {
+							${ settings.customcss.oddTableRow.color ?  `color: ${ settings.customcss.oddTableRow.color } !important;` : '' }
+							${ settings.customcss.oddTableRow['background-color'] ?  `background-color: ${ settings.customcss.oddTableRow['background-color'] } !important;` : '' }
+							${ settings.customcss.oddTableRow.transform ?  `transform: rotate( ${ settings.customcss.oddTableRow.transform }deg ) !important;` : '' }
+						}
+
+						#dataTable-instances-${ this.props.id } tr.even {
+							${ settings.customcss.evenTableRow.color ?  `color: ${ settings.customcss.evenTableRow.color } !important;` : '' }
+							${ settings.customcss.evenTableRow['background-color'] ?  `background-color: ${ settings.customcss.evenTableRow['background-color'] } !important;` : '' }
+							${ settings.customcss.evenTableRow.transform ?  `transform: rotate( ${ settings.customcss.evenTableRow.transform }deg ) !important;` : '' }
+						}
+
+						#dataTable-instances-${ this.props.id } tr td,
+						#dataTable-instances-${ this.props.id }_wrapper tr th {
+							${ settings.customcss.tableCell.color ?  `color: ${ settings.customcss.tableCell.color } !important;` : '' }
+							${ settings.customcss.tableCell['background-color'] ?  `background-color: ${ settings.customcss.tableCell['background-color'] } !important;` : '' }
+							${ settings.customcss.tableCell.transform ?  `transform: rotate( ${ settings.customcss.tableCell.transform }deg ) !important;` : '' }
+						}` }
+					</style>
+				) }
+
+				<table id={ `dataTable-instances-${ this.props.id }` }></table>
+			</Fragment>
 		);
 	}
 }

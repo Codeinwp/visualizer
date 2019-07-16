@@ -103,9 +103,7 @@ class Sidebar extends Component {
 
 						<TableSettings chart={ this.props.chart } edit={ this.props.edit } />
 
-						{ ( -1 >= [ 'dataTable' ].indexOf( type ) ) && (
-							<RowCellSettings chart={ this.props.chart } edit={ this.props.edit } />
-						) }
+						<RowCellSettings chart={ this.props.chart } edit={ this.props.edit } />
 
 					</Fragment>
 				) }
