@@ -627,7 +627,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$sidebar->__data   = $data['data'];
 			}
 		}
-		unset( $data['settings']['width'], $data['settings']['height'] );
+		unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-preview' );
@@ -1090,7 +1090,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render        = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
 		$render->type  = $data['type'];
-		unset( $data['settings']['width'], $data['settings']['height'] );
+		unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
