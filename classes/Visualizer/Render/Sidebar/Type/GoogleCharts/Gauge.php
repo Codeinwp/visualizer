@@ -254,7 +254,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 	 * @access protected
 	 */
 	protected function _renderViewSettings() {
-		self::_renderGroupStart( esc_html__( 'Layout & Chart Area', 'visualizer' ) );
+		self::_renderGroupStart( esc_html__( 'Chart Size', 'visualizer' ) );
 			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
@@ -274,7 +274,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 					echo '</table>';
 
 					echo '<p class="viz-section-description">';
-						esc_html_e( 'Determines the total width and height of the chart.', 'visualizer' );
+						esc_html_e( 'Determines the total width and height of the chart. This will only show in the front-end.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 			self::_renderSectionEnd();

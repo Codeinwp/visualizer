@@ -355,8 +355,8 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	 * @access protected
 	 */
 	protected function _renderViewSettings() {
-		self::_renderGroupStart( esc_html__( 'Chart Area', 'visualizer' ) );
-			self::_renderSectionStart( esc_html__( 'Area', 'visualizer' ), false );
+		self::_renderGroupStart( esc_html__( 'Chart Size', 'visualizer' ) );
+			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
@@ -378,11 +378,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 						esc_html_e( 'Determines the total width and height of the chart. This will only show in the front-end.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
-
-				echo '<div class="viz-section-delimiter"></div>';
-
 			self::_renderSectionEnd();
-
 		self::_renderGroupEnd();
 	}
 }
