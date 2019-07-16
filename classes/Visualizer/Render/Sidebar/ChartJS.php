@@ -355,8 +355,8 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	 * @access protected
 	 */
 	protected function _renderViewSettings() {
-		self::_renderGroupStart( esc_html__( 'Layout & Chart Area', 'visualizer' ) );
-			self::_renderSectionStart( esc_html__( 'Layout', 'visualizer' ), false );
+		self::_renderGroupStart( esc_html__( 'Chart Size', 'visualizer' ) );
+			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
@@ -375,54 +375,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					echo '</table>';
 
 					echo '<p class="viz-section-description">';
-						esc_html_e( 'Determines the total width and height of the chart.', 'visualizer' );
-					echo '</p>';
-				echo '</div>';
-
-				echo '<div class="viz-section-delimiter"></div>';
-
-			self::_renderSectionEnd();
-
-			self::_renderSectionStart( esc_html__( 'Chart Area', 'visualizer' ), false );
-				self::_renderSectionDescription( esc_html__( 'Configure the placement and size of the chart area (where the chart itself is drawn, excluding axis and legends). Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
-
-				echo '<div class="viz-section-item">';
-					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Left And Top Margins', 'visualizer' ), '</b>';
-
-					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
-						echo '<tr>';
-							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="chartArea[left]" class="control-text" value="', $this->chartArea['left'] || $this->chartArea['left'] === '0' ? esc_attr( $this->chartArea['left'] ) : '', '" placeholder="20%">';
-							echo '</td>';
-							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="chartArea[top]" class="control-text" value="', $this->chartArea['top'] || $this->chartArea['top'] === '0' ? esc_attr( $this->chartArea['top'] ) : '', '" placeholder="20%">';
-							echo '</td>';
-						echo '</tr>';
-					echo '</table>';
-
-					echo '<p class="viz-section-description">';
-						esc_html_e( 'Determines how far to draw the chart from the left and top borders.', 'visualizer' );
-					echo '</p>';
-				echo '</div>';
-
-				echo '<div class="viz-section-item">';
-					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Width And Height Of Chart Area', 'visualizer' ), '</b>';
-
-					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
-						echo '<tr>';
-							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="chartArea[width]" class="control-text" value="', ! empty( $this->chartArea['width'] ) ? esc_attr( $this->chartArea['width'] ) : '', '" placeholder="60%">';
-							echo '</td>';
-							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="chartArea[height]" class="control-text" value="', ! empty( $this->chartArea['height'] ) ? esc_attr( $this->chartArea['height'] ) : '', '" placeholder="60%">';
-							echo '</td>';
-						echo '</tr>';
-					echo '</table>';
-
-					echo '<p class="viz-section-description">';
-						esc_html_e( 'Determines the width and hight of the chart area.', 'visualizer' );
+						esc_html_e( 'Determines the total width and height of the chart. This will only show in the front-end.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 			self::_renderSectionEnd();

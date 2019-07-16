@@ -438,8 +438,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderViewSettings() {
-		self::_renderGroupStart( esc_html__( 'Layout & Chart Area', 'visualizer' ) );
-			self::_renderSectionStart( esc_html__( 'Layout', 'visualizer' ), false );
+		self::_renderGroupStart( esc_html__( 'Chart Size & Placement', 'visualizer' ) );
+			self::_renderSectionStart( esc_html__( 'Chart Size/Layout', 'visualizer' ), false );
 				self::_renderSectionDescription( esc_html__( 'Configure the total size of the chart. Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
@@ -458,7 +458,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					echo '</table>';
 
 					echo '<p class="viz-section-description">';
-						esc_html_e( 'Determines the total width and height of the chart.', 'visualizer' );
+						esc_html_e( 'Determines the total width and height of the chart. This will only show in the front-end.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 
@@ -497,7 +497,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				echo '</div>';
 			self::_renderSectionEnd();
 
-			self::_renderSectionStart( esc_html__( 'Chart Area', 'visualizer' ), false );
+			self::_renderSectionStart( esc_html__( 'Placement', 'visualizer' ), false );
 				self::_renderSectionDescription( esc_html__( 'Configure the placement and size of the chart area (where the chart itself is drawn, excluding axis and legends). Two formats are supported: a number, or a number followed by %. A simple number is a value in pixels; a number followed by % is a percentage.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
