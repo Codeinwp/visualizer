@@ -219,6 +219,11 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				break;
 		}
 
+		if ( $post_status === 'auto-draft' ) {
+			// the charts are huge in size so let's always get them down to 50%.
+			$settings['width'] = $settings['height'] = '50%';
+		}
+
 		if ( $attributes ) {
 			$settings[ $name ] = $attributes;
 			update_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, $settings );
