@@ -11,6 +11,7 @@ class DataTables extends Component {
 		super( ...arguments );
 
 		this.initDataTable = this.initDataTable.bind( this );
+		this.dataRenderer = this.dataRenderer.bind( this );
 
 		this.table;
 	}
@@ -40,7 +41,7 @@ class DataTables extends Component {
 	initDataTable( tableColumns, tableRow ) {
 		const settings = this.props.options;
 
-		const columns = tableColumns.map( i => {
+		const columns = tableColumns.map( ( i, index ) => {
 			let type = i.type;
 
 			switch ( i.type ) {
@@ -58,13 +59,7 @@ class DataTables extends Component {
 				title: i.label,
 				data: i.label,
 				type: type,
-				render: ( data ) => {
-					if ( 'date' === type ) {
-						return moment( data ).format( 'MM-DD-YYYY' );
-					}
-
-					return data;
-				}
+				render: this.dataRenderer( data, type, index )
 			};
 		});
 
@@ -96,6 +91,46 @@ class DataTables extends Component {
 			bFilter: false,
 			bInfo: false
 		});
+	}
+
+	dataRenderer( data, type, index ) {
+		const settings = this.props.options;
+
+		if ( 'date' === type || 'datetime' === type || 'timeofday' === type ) {
+			if ( settings.series[index].format && settings.series[index].format.from && settings.series[index].format.to ) {
+				return $.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
+			}
+
+			return $.fn.dataTable.render.moment( 'MM-DD-YYYY' );
+		}
+
+		if ( 'num' === type ) {
+			const parts = [ '', '', '', '', '' ];
+
+			if ( '' !== typeof settings.series[index].format.thousands ) {
+				parts[0] = settings.series[index].format.thousands;
+			}
+
+			if ( '' !== typeof settings.series[index].format.decimal ) {
+				parts[1] = settings.series[index].format.decimal;
+			}
+
+			if ( '' !== typeof settings.series[index].format.precision ) {
+				parts[2] = settings.series[index].format.precision;
+			}
+
+			if ( '' !== typeof settings.series[index].format.prefix ) {
+				parts[3] = settings.series[index].format.prefix;
+			}
+
+			if ( '' !== typeof settings.series[index].format.suffix ) {
+				parts[4] = settings.series[index].format.suffix;
+			}
+
+			return $.fn.dataTable.render.number( ...parts );
+		}
+
+		return data;
 	}
 
 	render() {

@@ -20,6 +20,7 @@ import RowCellSettings from './Sidebar/RowCellSettings.js';
 import ComboSettings from './Sidebar/ComboSettings.js';
 import SeriesSettings from './Sidebar/SeriesSettings.js';
 import SlicesSettings from './Sidebar/SlicesSettings.js';
+import ColumnSettings from './Sidebar/ColumnSettings.js';
 import LayoutAndChartArea from './Sidebar/LayoutAndChartArea.js';
 import FrontendActions from './Sidebar/FrontendActions.js';
 import ManualConfiguration from './Sidebar/ManualConfiguration.js';
@@ -118,6 +119,10 @@ class Sidebar extends Component {
 
 				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && (
 					<SlicesSettings chart={ this.props.chart } edit={ this.props.edit } />
+				) }
+
+				{ ( 0 <= [ 'dataTable' ].indexOf( type ) ) && (
+					<ColumnSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
 				{ ( -1 >= [ 'dataTable' ].indexOf( type ) ) && (

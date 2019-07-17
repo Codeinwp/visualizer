@@ -152,8 +152,12 @@ class VerticalAxisSettings extends Component {
 							<TextControl
 								label={ __( 'Count' ) }
 								help={ __( 'The number of Vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.' ) }
-								value={ settings.vAxis.gridlines.count }
+								value={ settings.vAxis.gridlines ? settings.vAxis.gridlines.count : '' }
 								onChange={ e => {
+									if ( ! settings.vAxis.gridlines ) {
+										settings.vAxis.gridlines = {};
+									}
+
 									settings.vAxis.gridlines.count = e;
 									this.props.edit( settings );
 								} }
@@ -163,8 +167,12 @@ class VerticalAxisSettings extends Component {
 								label={ __( 'Color' ) }
 							>
 								<ColorPalette
-									value={ settings.vAxis.gridlines.color }
+									value={ settings.vAxis.gridlines ? settings.vAxis.gridlines.color : '' }
 									onChange={ e => {
+										if ( ! settings.vAxis.gridlines ) {
+											settings.vAxis.gridlines = {};
+										}
+
 										settings.vAxis.gridlines.color = e;
 										this.props.edit( settings );
 									} }
