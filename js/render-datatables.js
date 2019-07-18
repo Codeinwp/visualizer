@@ -65,7 +65,7 @@
                     } );
                     break;
                 case 'chart':
-                    delete chart.settings['scrollX'];
+                    delete chart.settings['scrollX']; // jshint ignore:line
                     // fall-through.
                 case 'frontend':
                     // empty.
@@ -74,7 +74,7 @@
         }
 
         if(typeof chart.settings['scrollX'] !== 'undefined'){
-            if(chart.settings['scrollX'] == 'true'){
+            if(chart.settings['scrollX'] == 'true'){ // jshint ignore:line
                 $classes = $classes + ' nowrap';
             }
         }
