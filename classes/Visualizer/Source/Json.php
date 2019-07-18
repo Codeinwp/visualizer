@@ -401,7 +401,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		foreach ( $data as $line ) {
 			$data_row = array();
 			foreach ( $line as $header => $value ) {
-				// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( in_array( $header, $headers ) ) {
 					$data_row[] = $value;
 				}
