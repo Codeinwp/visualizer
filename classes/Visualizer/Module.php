@@ -544,7 +544,7 @@ class Visualizer_Module {
 				$attributes[]   = $this->handle_css_property( $property, $value );
 			}
 			$class_name = $id . $name;
-			$properties = implode( '; ', array_filter( $attributes ) );
+			$properties = implode( ' !important; ', array_filter( $attributes ) );
 			if ( ! empty( $properties ) ) {
 				$css    .= '.' . $class_name . ' {' . $properties . ' !important;}';
 				$classes[ $name ] = $class_name;
