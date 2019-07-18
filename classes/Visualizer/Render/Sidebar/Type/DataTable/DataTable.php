@@ -190,12 +190,16 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
-				self::_renderCheckboxItem(
-					esc_html__( 'Scroll Collapse', 'visualizer' ),
-					'scrollCollapse_bool',
-					$this->scrollCollapse_bool,
-					'true',
-					esc_html__( 'Allow the table to reduce in height when a limited number of rows are shown', 'visualizer' )
+				self::_renderTextItem(
+					esc_html__( 'Table Height', 'visualizer' ),
+					'scrollY_int',
+					isset( $this->scrollY_int ) ? $this->scrollY_int : '',
+					esc_html__( 'Height of the table in pixels (the table will show a scrollbar).', 'visualizer' ),
+					'',
+					'number',
+					array(
+						'min' => 0,
+					)
 				);
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';

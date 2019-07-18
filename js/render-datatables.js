@@ -52,10 +52,13 @@
             switch(v.page_type){
                 case 'post':
                 case 'library':
+                    // remove scrollY if its greater than what will fit in the box (along with the legend).
+                    if(parseInt(chart.settings['scrollY_int']) > 180){
+                        chart.settings['scrollY_int'];
+                    }
                     $.extend( settings, { 
                             scrollX: 150,
                             scrollY: 180,
-                            scrollCollapse: true
                     } );
                     break;
                 case 'frontend':
