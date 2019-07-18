@@ -96,6 +96,10 @@ class DataTables extends Component {
 	dataRenderer( data, type, index ) {
 		const settings = this.props.options;
 
+		if ( undefined === settings.series[index]) {
+			return data;
+		}
+
 		if ( 'date' === type || 'datetime' === type || 'timeofday' === type ) {
 			if ( settings.series[index].format && settings.series[index].format.from && settings.series[index].format.to ) {
 				return $.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
@@ -107,23 +111,23 @@ class DataTables extends Component {
 		if ( 'num' === type ) {
 			const parts = [ '', '', '', '', '' ];
 
-			if ( '' !== typeof settings.series[index].format.thousands ) {
+			if ( settings.series[index].format.thousands ) {
 				parts[0] = settings.series[index].format.thousands;
 			}
 
-			if ( '' !== typeof settings.series[index].format.decimal ) {
+			if ( settings.series[index].format.decimal ) {
 				parts[1] = settings.series[index].format.decimal;
 			}
 
-			if ( '' !== typeof settings.series[index].format.precision ) {
+			if ( settings.series[index].format.precision ) {
 				parts[2] = settings.series[index].format.precision;
 			}
 
-			if ( '' !== typeof settings.series[index].format.prefix ) {
+			if ( settings.series[index].format.prefix ) {
 				parts[3] = settings.series[index].format.prefix;
 			}
 
-			if ( '' !== typeof settings.series[index].format.suffix ) {
+			if ( settings.series[index].format.suffix ) {
 				parts[4] = settings.series[index].format.suffix;
 			}
 

@@ -145,7 +145,7 @@ class Charts extends Component {
 									}) }
 								</div>
 
-								{ ! chartsLoaded && (
+								{ ! chartsLoaded && 5 < charts.length && (
 									<Button
 										isPrimary
 										isLarge

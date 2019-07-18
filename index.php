@@ -77,7 +77,7 @@ function visualizer_launch() {
 		define( 'VISUALIZER_CSV_ENCLOSURE', '"' );
 	}
 	if ( ! defined( 'VISUALIZER_DEBUG' ) ) {
-		define( 'VISUALIZER_DEBUG', true );
+		define( 'VISUALIZER_DEBUG', false );
 	}
 
 	define( 'VISUALIZER_SKIP_CHART_TYPE_PAGE', true );
