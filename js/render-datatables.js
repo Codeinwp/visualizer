@@ -29,8 +29,7 @@
         if($('#' + id).find('table.visualizer-data-table').length > 0){
             $('#' + id).empty();
         }
-        $('#' + id).append($('<table class="dataTable visualizer-data-table table table-striped"></table>'));
-
+        
         settings = {
             destroy: true,
             paging: false,
@@ -48,25 +47,39 @@
             dom: 'Bfrtip',
         };
 
+        var $classes = 'dataTable visualizer-data-table table table-striped';
+
         if(typeof v.page_type !== 'undefined'){
             switch(v.page_type){
                 case 'post':
+                    // fall-through.
                 case 'library':
                     // remove scrollY if its greater than what will fit in the box (along with the legend).
                     if(parseInt(chart.settings['scrollY_int']) > 180){
                         chart.settings['scrollY_int'];
                     }
+                    delete chart.settings['scrollX'];
                     $.extend( settings, { 
                             scrollX: 150,
                             scrollY: 180,
                     } );
                     break;
-                case 'frontend':
                 case 'chart':
+                    delete chart.settings['scrollX'];
+                    // fall-through.
+                case 'frontend':
                     // empty.
                     break;
             }
         }
+
+        if(typeof chart.settings['scrollX'] !== 'undefined'){
+            if(chart.settings['scrollX'] == 'true'){
+                $classes = $classes + ' nowrap';
+            }
+        }
+
+        $('#' + id).append($('<table class="' + $classes + '"></table>'));
 
         var select = {
             info: false

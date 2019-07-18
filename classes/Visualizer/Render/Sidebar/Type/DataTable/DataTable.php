@@ -202,6 +202,14 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					)
 				);
 
+				self::_renderCheckboxItem(
+					esc_html__( 'Enable Horizontal Scrolling', 'visualizer' ),
+					'scrollX',
+					$this->scrollX,
+					'true',
+					esc_html__( 'To disable wrapping of columns and enabling horizontal scrolling.', 'visualizer' )
+				);
+
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
 				self::_renderCheckboxItem(
