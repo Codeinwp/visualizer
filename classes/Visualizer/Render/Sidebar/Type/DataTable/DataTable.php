@@ -247,6 +247,38 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 
 		self::_renderGroupStart( esc_html__( 'Row/Cell Settings', 'visualizer' ) );
 
+			self::_renderSectionStart( esc_html__( 'Header Row', 'visualizer' ) );
+
+				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Background Color', 'visualizer' ),
+					'customcss[headerRow][background-color]',
+					isset( $this->customcss['headerRow']['background-color'] ) ? $this->customcss['headerRow']['background-color'] : null,
+					null
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Color', 'visualizer' ),
+					'customcss[headerRow][color]',
+					isset( $this->customcss['headerRow']['color'] ) ? $this->customcss['headerRow']['color'] : null,
+					null
+				);
+
+				self::_renderTextItem(
+					esc_html__( 'Text Orientation', 'visualizer' ),
+					'customcss[headerRow][transform]',
+					isset( $this->customcss['headerRow']['transform'] ) ? $this->customcss['headerRow']['transform'] : null,
+					esc_html__( 'In degrees.', 'visualizer' ),
+					'',
+					'number',
+					array(
+						'min' => -180,
+						'max' => 180,
+					)
+				);
+			self::_renderSectionEnd();
+
 			self::_renderSectionStart( esc_html__( 'Odd Table Row', 'visualizer' ) );
 
 				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );

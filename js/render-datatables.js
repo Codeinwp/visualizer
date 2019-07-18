@@ -185,6 +185,14 @@
             columns: cols,
             stripeClasses: stripe,
         } );
+
+        // header row is handled here as the class is added dynamically to it (after the table is rendered).
+        if(typeof chart.settings['cssClassNames'] !== 'undefined'){
+            if(typeof chart.settings['cssClassNames']['headerRow'] !== 'undefined'){
+                $('#' + id + ' table thead tr').addClass( chart.settings['cssClassNames']['headerRow'] );
+            }
+        }
+
         $('.loader').remove();
     }
 
