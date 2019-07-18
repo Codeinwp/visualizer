@@ -292,10 +292,6 @@ button.media-modal-close {
 	display: none !important;
 }
 
-.dataTables_scrollBody {
-	overflow: hidden !important;
-}
-
 .dataTables_wrapper {
     max-height: 300px;
     overflow: hidden !important;
