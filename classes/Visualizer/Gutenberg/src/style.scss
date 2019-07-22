@@ -106,6 +106,23 @@
 					cursor: pointer;
 				}
 			}
+
+			.visualizer-settings__create-charts {
+				display: block;
+				width: 270px;
+				height: 205px;
+				padding: 15px;
+				border: 1px solid #e0e0e0;
+				background-color: white;
+				background-image: url(../../../../images/chart_types_june2019_g.png);
+				background-repeat: no-repeat;
+				background-position: center center;
+			}
+		}
+
+		.dataTables_wrapper {
+			background: #fff;
+			padding: 10px;
 		}
 
 		.visualizer-no-charts {
@@ -115,6 +132,11 @@
 
 	.visualizer-settings__chart {
 		text-align: center;
+
+		.dataTables_wrapper {
+			background: #fff;
+			padding: 10px;
+		}
 	}
 
 	.visualizer-settings__controls {

@@ -53,6 +53,17 @@ module.exports = {
 							'production' === process.env.NODE_ENV ? 'compressed' : 'nested'
 					}
 				} ]
+			},
+			{
+				test: /\.(png|jpe?g|gif)$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: './[name].[ext]'
+						}
+					}
+				]
 			}
 		]
 	},

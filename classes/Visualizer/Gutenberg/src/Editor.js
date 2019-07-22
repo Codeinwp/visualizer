@@ -1,6 +1,8 @@
 /**
  * External dependencies
  */
+import CreateCharts from './Components/CreateCharts.js';
+
 import Charts from './Components/Charts.js';
 
 import ChartSelect from './Components/ChartSelect.js';
@@ -28,7 +30,6 @@ const {
 	Button,
 	ButtonGroup,
 	Dashicon,
-	Notice,
 	Placeholder,
 	Spinner
 } = wp.components;
@@ -55,6 +56,7 @@ class Editor extends Component {
 			 * Block Route Status
 			 *
 			 * home - Initial screen.
+			 * createChart - Option to create new charts.
 			 * showCharts - Display list of charts to pick.
 			 * chartSelect - Chart selected.
 			 * renderChart - Chart render.
@@ -331,6 +333,7 @@ class Editor extends Component {
 		if ( 'renderChart' === this.state.route && null !== this.state.chart ) {
 			return (
 				<ChartRender
+					id={ this.props.attributes.id }
 					chart={ this.state.chart }
 					className={ this.props.className }
 					editChart={ this.editChart }
@@ -351,21 +354,23 @@ class Editor extends Component {
 				{ 'home' === this.state.route && (
 					<div className="visualizer-settings__content">
 
-						<Notice
-							status="warning"
-							isDismissible={ false }
-						>
-							{ __( 'Right now the Visualizer block does not support display/editing of Table chart. It will be added in the next release. We recommend you to use shortcode if you want to display that particular chart type.' ) }
-						</Notice>
-
 						<div className="visualizer-settings__content-description">
 							{ __( 'Make a new chart or display an existing one?' ) }
 						</div>
 
-						<div className="visualizer-settings__content-option locked">
+						{ /* You can apply "locked" class to lock any of the following list items. */ }
+
+						<div
+							className="visualizer-settings__content-option locked"
+							onClick={ () => {
+								return false;
+								this.setState({ route: 'createChart' });
+								this.props.setAttributes({ route: 'createChart' });
+							} }
+						>
 
 							<span className="visualizer-settings__content-option-title">
-								{ __( 'Create a new chart (coming soon)' ) }
+								{ __( 'Create a new chart' ) }
 							</span>
 
 							<div className="visualizer-settings__content-option-icon">
@@ -401,10 +406,13 @@ class Editor extends Component {
 					</Placeholder>
 				) }
 
+				{ ( 'createChart' === this.state.route && false === this.state.isLoading ) && <CreateCharts/> }
+
 				{ ( 'showCharts' === this.state.route && false === this.state.isLoading ) && <Charts getChart={ this.getChart }/> }
 
 				{ ( 'chartSelect' === this.state.route && null !== this.state.chart ) &&
 					<ChartSelect
+						id={ this.props.attributes.id }
 						chart={ this.state.chart }
 						editSettings={ this.editSettings }
 						editPermissions={ this.editPermissions }
@@ -421,7 +429,7 @@ class Editor extends Component {
 
 				<div className="visualizer-settings__controls">
 
-					{ ( 'showCharts' === this.state.route || 'chartSelect' === this.state.route ) &&
+					{ ( 'createChart' === this.state.route || 'showCharts' === this.state.route || 'chartSelect' === this.state.route ) &&
 						<ButtonGroup>
 
 							<Button
@@ -429,7 +437,7 @@ class Editor extends Component {
 								isLarge
 								onClick={ () => {
 									let route;
-									if ( 'showCharts' === this.state.route ) {
+									if ( 'createChart' === this.state.route || 'showCharts' === this.state.route ) {
 										route = 'home';
 									} else if ( 'chartSelect' === this.state.route ) {
 										route = 'showCharts';
