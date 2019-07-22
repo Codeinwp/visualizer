@@ -81,6 +81,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo $this->custom_css;
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 		echo '<ul class="subsubsub">';
+		// All tab.
+		echo '<li class="visualizer-list-item all"><a class="' . ( ! isset( $_GET['type'] ) || empty( $_GET['type'] ) ? 'current' : '' ) . '" href="', esc_url( add_query_arg( array( 'vpage' => false, 'type' => false ) ) ), '">' . __( 'All', 'visualizer' ) . '</a> | </li>';
 		foreach ( $this->types as $type => $array ) {
 			if ( ! is_array( $array ) ) {
 				// support for old pro
@@ -98,9 +100,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
-			echo '<li class="visualizer-list-item all">';
+			echo '<li class="visualizer-list-item ' . esc_attr( $this->type ) . '">';
 			if ( $type === $this->type ) {
-				echo '<a class="  current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
+				echo '<a class="current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
 				echo $label;
 				echo '</a>';
 			} else {
