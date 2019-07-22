@@ -168,6 +168,21 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	}
 
 	/**
+	 * Add the correct example for the manual configuration box.
+	 */
+	protected function _renderManualConfigExample() {
+		return '{
+			"vAxis": {
+				"ticks": [5, 10, 15, 20],
+				"titleTextStyle": {
+					"color": "red"
+				},
+				"textPosition": "in"
+			}
+		}';
+	}
+
+	/**
 	 * Renders chart advanced settings group.
 	 *
 	 * @access protected
@@ -183,24 +198,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );
 			$this->_renderManualConfigDescription();
-			$example    = '
-{
-	"vAxis": {
-		"ticks": [5, 10, 15, 20],
-		"titleTextStyle": {
-			"color": "red"
-		},
-		"textPosition": "in"
-	}
-}';
-
 			self::_renderTextAreaItem(
 				esc_html__( 'Configuration', 'visualizer' ),
 				'manual',
 				$this->manual,
 				sprintf(
 					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ),
-					'<br><code>' . $example . '</code>'
+					'<br><code>' . $this->_renderManualConfigExample() . '</code>'
 				),
 				'',
 				array( 'rows' => 5 )

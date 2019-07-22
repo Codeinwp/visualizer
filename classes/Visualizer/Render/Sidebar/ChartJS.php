@@ -348,6 +348,16 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	}
 
 	/**
+	 * Add the correct example for the manual configuration box.
+	 */
+	protected function _renderManualConfigExample() {
+		return '{
+			"cutoutPercentage": 5,
+			"rotation": 60
+		}';
+	}
+
+	/**
 	 * Renders chart view settings group.
 	 *
 	 * @since 3.3.0
