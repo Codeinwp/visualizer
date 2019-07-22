@@ -808,7 +808,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
 				'<a href="https://docs.themeisle.com/category/657-visualizer" target="_blank">%s</a>',
-				esc_html__( 'Knowledge Base', 'visualizer' )
+				esc_html__( 'Docs', 'visualizer' )
 			);
 			// flattr link
 			$plugin_meta[] = sprintf(
