@@ -131,7 +131,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$roots = $source->fetchRoots();
 		if ( empty( $roots ) ) {
-			wp_send_json_error();
+			wp_send_json_error( array( 'msg' => $source->get_error() ) );
 		}
 
 		wp_send_json_success( array( 'url' => $params['url'], 'roots' => $roots ) );
@@ -159,7 +159,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$data   = $source->parse();
 		if ( empty( $data ) ) {
-			wp_send_json_error();
+			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
 
 		$data   = Visualizer_Render_Layout::show( 'editor-table', $data, $chart_id, 'viz-json-table', false, false );
