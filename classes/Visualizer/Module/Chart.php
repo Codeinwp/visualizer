@@ -964,7 +964,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_POST['table_data'] ) && 'yes' === $_POST['table_data'] ) {
 			$source = $this->handleTabularData();
 		} else {
-			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please, try again.', 'visualizer' );
+			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' );
 		}
 		if ( $source ) {
 			if ( $source->fetch() ) {
@@ -996,7 +996,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$render->series = json_encode( $source->getSeries() );
 				$render->settings = json_encode( $settings );
 			} else {
-				$render->message = esc_html__( 'CSV file is broken or invalid. Please, try again.', 'visualizer' );
+				$render->message = $source->get_error();
+				if ( empty( $render->message ) ) {
+					$render->message = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
+				}
 			}
 		}
 		$render->render();
