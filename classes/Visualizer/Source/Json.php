@@ -107,7 +107,12 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( false !== $roots ) {
 			return $roots;
 		}
-		return $this->getRootElements( 'root', '', array(), $this->getJSON() );
+		$roots = $this->getRootElements( 'root', '', array(), $this->getJSON() );
+		if ( empty( $roots ) ) {
+			$this->_error = esc_html__( 'This does not appear to be a valid JSON feed. Please try again.', 'visualizer' );
+			return false;
+		}
+		return $roots;
 	}
 
 	/**

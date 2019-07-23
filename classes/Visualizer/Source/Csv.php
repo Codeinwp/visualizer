@@ -77,20 +77,18 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 			$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
 		}
 
+		$labels = array_filter( $labels );
+		$types = array_filter( $types );
+
 		if ( ! $labels || ! $types ) {
+			$this->_error = esc_html__( 'File should have a heading row (1st row) and a data type row (2nd row). Please try again.', 'visualizer' );
 			return false;
 		}
 
-		// if no types were setup, re read labels and empty types array
 		$types = array_map( 'trim', $types );
 		if ( ! self::_validateTypes( $types ) ) {
-			// re open the file
-			fclose( $handle );
-			$handle = $this->_get_file_handle();
-
-			// re read the labels and empty types array
-			$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
-			$types = array();
+			$this->_error = esc_html__( 'Invalid data types detected in the data type row (2nd row). Please try again.', 'visualizer' );
+			return false;
 		}
 
 		for ( $i = 0, $len = count( $labels ); $i < $len; $i++ ) {
@@ -134,6 +132,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	public function fetch() {
 		// if filename is empty return false
 		if ( empty( $this->_filename ) ) {
+			$this->_error = esc_html__( 'No file provided. Please try again.', 'visualizer' );
 			return false;
 		}
 

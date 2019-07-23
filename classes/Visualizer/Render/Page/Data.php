@@ -182,10 +182,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</li>
 
 								<li class="viz-subsection">
-								<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON/REST', 'visualizer' ); ?>
+								<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?>
 									<span class="dashicons dashicons-lock"></span></span>
 									<div class="viz-section-items section-items">
-										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON/REST source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 													<?php
