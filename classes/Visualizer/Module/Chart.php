@@ -606,6 +606,22 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			// save meta data only when it is NOT being canceled.
 			if ( ! ( isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] ) ) ) {
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
+
+				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
+				// this will help in searching with the chart id.
+				$settings = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+				$title = null;
+				if ( isset( $settings['title'] ) && ! empty( $settings['title'] ) ) {
+					$title  = $settings['title'];
+					if ( is_array( $title ) ) {
+						$title  = $settings['title']['text'];
+					}
+				}
+				if ( empty( $title ) ) {
+					$title  = $this->_chart->ID;
+				}
+				$settings['internal_title'] = $title;
+				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $settings );
 			}
 			$render       = new Visualizer_Render_Page_Send();
 			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );

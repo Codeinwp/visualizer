@@ -81,6 +81,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo $this->custom_css;
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 		echo '<ul class="subsubsub">';
+		// All tab.
+		echo '<li class="visualizer-list-item all"><a class="' . ( ! isset( $_GET['type'] ) || empty( $_GET['type'] ) ? 'current' : '' ) . '" href="', esc_url( add_query_arg( array( 'vpage' => false, 'type' => false, 's' => false ) ) ), '">' . __( 'All', 'visualizer' ) . '</a> | </li>';
 		foreach ( $this->types as $type => $array ) {
 			if ( ! is_array( $array ) ) {
 				// support for old pro
@@ -92,15 +94,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 					array(
 						'type'  => $type,
 						'vpage' => false,
+						's' => false,
 					)
 				)
 			) . '">';
 			if ( ! $array['enabled'] ) {
 				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 			}
-			echo '<li class="visualizer-list-item all">';
+			echo '<li class="visualizer-list-item ' . esc_attr( $this->type ) . '">';
 			if ( $type === $this->type ) {
-				echo '<a class="  current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
+				echo '<a class="current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
 				echo $label;
 				echo '</a>';
 			} else {
@@ -112,9 +115,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		echo '</ul>';
 		echo '<form action="" method="get"><p id="visualizer-search" class="search-box">
-                <input type="search"   name="s" value="' . $filterBy . '">
+                <input type="search" placeholder="' . __( 'Enter title', 'visualizer' ) . '" name="s" value="' . $filterBy . '">
                 <input type="hidden" name="page" value="visualizer">
-                <input type="submit" id="search-submit" class="button button-secondary" value="' . esc_attr__( 'Search', 'visualizer' ) . '">
+                <button type="submit" id="search-submit" title="' . __( 'Search', 'visualizer' ) . '"><i class="dashicons dashicons-search"></i></button>
+                <button type="button" class="add-new-chart" title="' . __( 'Add New', 'visualizer' ) . '"><i class="dashicons dashicons-plus-alt"></i></button>
            </p> </form>';
 		echo '</div>';
 		echo '<div id="visualizer-content-wrapper">';

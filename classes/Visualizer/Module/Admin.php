@@ -58,6 +58,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
+		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
@@ -806,12 +807,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
-				'<a href="https://github.com/codeinwp/visualizer/wiki" target="_blank">%s</a>',
-				esc_html__( 'Knowledge Base', 'visualizer' )
+				'<a href="https://docs.themeisle.com/category/657-visualizer" target="_blank">%s</a>',
+				esc_html__( 'Docs', 'visualizer' )
 			);
 			// flattr link
 			$plugin_meta[] = sprintf(
-				'<a style="color:red" href="https://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/" target="_blank">%s</a>',
+				'<a style="color:red" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank">%s</a>',
 				esc_html__( 'Pro Addon', 'visualizer' )
 			);
 		}
