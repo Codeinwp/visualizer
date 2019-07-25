@@ -119,6 +119,9 @@
             }
         }
 
+        // remove this so that the eval does not fail.
+        delete chart.settings['internal_title'];
+
         var additional = [];
         for (i in chart.settings) {
             var valoo = chart.settings[i];
