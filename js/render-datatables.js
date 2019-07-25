@@ -6,8 +6,16 @@
     // so that we know which charts belong to our library.
     var rendered_charts = [];
 
+    // save the settings corresponding to cssClassNames so that when a table is being edited, they stripes etc. don't get reset
+    var cssClassNames;
+
     function renderChart(id, v) {
-        renderSpecificChart(id, all_charts[id], v);
+        var chart = all_charts[id];
+        if(chart.library !== 'datatables'){
+            return;
+        }
+        cssClassNames = null;
+        renderSpecificChart(id, chart, v);
     }
 
     function renderSpecificChart(id, chart, v) {
@@ -29,7 +37,7 @@
         if($('#' + id).find('table.visualizer-data-table').length > 0){
             $('#' + id).empty();
         }
-        
+
         settings = {
             destroy: true,
             paging: false,
@@ -89,8 +97,13 @@
 
         var stripe = ['', ''];
 
+        if(cssClassNames !== null){
+            chart.settings['cssClassNames'] = cssClassNames;
+        }
+
         // in preview mode, cssClassNames will not exist when a color is changed.
         if(typeof chart.settings['cssClassNames'] !== 'undefined'){
+            cssClassNames = chart.settings['cssClassNames'];
             if(typeof chart.settings['cssClassNames']['oddTableRow'] !== 'undefined'){
                 stripe[0] = chart.settings['cssClassNames']['oddTableRow'];
             }
@@ -246,7 +259,7 @@
     if(typeof visualizer !== 'undefined'){
         // called while updating the chart.
         visualizer.update = function(){
-            renderChart('canvas', visualizer);
+            renderSpecificChart('canvas', all_charts['canvas'], visualizer);
         };
     }
 
