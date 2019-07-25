@@ -157,7 +157,6 @@
             }
         }
         $.extend( settings, additional );
-        $.extend( $.fn.dataTable.defaults, settings );
 
         cols = [];
         for (j = 0; j < series.length; j++) {
@@ -192,15 +191,17 @@
             rows.push(row);
         }
 
-        // allow user to extend the settings.
-        $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
-
-        table = $('#' + id + ' table.visualizer-data-table');
-        table.DataTable( {
+        $.extend( settings, {
             data: rows,
             columns: cols,
             stripeClasses: stripe,
         } );
+
+        // allow user to extend the settings.
+        $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
+
+        table = $('#' + id + ' table.visualizer-data-table');
+        table.DataTable( settings );
 
         // header row is handled here as the class is added dynamically to it (after the table is rendered).
         if(typeof chart.settings['cssClassNames'] !== 'undefined'){
