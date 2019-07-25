@@ -515,8 +515,7 @@
             } );
         }
 
-        $.extend( $.fn.dataTable.defaults, settings );
-        var $table = $(element + ' .viz-editor-table').DataTable();
+        var $table = $(element + ' .viz-editor-table').DataTable(settings);
         return $table;
     }
 
