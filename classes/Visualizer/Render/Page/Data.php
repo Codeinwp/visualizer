@@ -38,11 +38,15 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 */
 	protected function _renderContent() {
 		// Added by Ash/Upwork
-		if ( VISUALIZER_PRO ) {
-			global $Visualizer_Pro;
-			$Visualizer_Pro->_addEditor( $this->chart->ID );
-			if ( method_exists( $Visualizer_Pro, '_addFilterWizard' ) ) {
-				$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
+		if ( Visualizer_Module::is_pro() ) {
+			do_action( 'visualizer_add_editor_etc', $this->chart->ID );
+
+			if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
+				global $Visualizer_Pro;
+				$Visualizer_Pro->_addEditor( $this->chart->ID );
+				if ( method_exists( $Visualizer_Pro, '_addFilterWizard' ) ) {
+					$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
+				}
 			}
 		} else {
 			Visualizer_Render_Layout::show( 'simple-editor-screen', $this->chart->ID );
@@ -190,7 +194,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											<div class="remote-file-section">
 													<?php
 													$bttn_label = 'visualizer_source_json' === $source_of_chart ? __( 'Modify Parameters', 'visualizer' ) : __( 'Create Parameters', 'visualizer' );
-													if ( VISUALIZER_PRO ) {
+													if ( Visualizer_Module::is_pro() ) {
 														?>
 												<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
 												<select name="vz-json-time" id="vz-json-time" class="visualizer-select" data-chart="<?php echo $this->chart->ID; ?>">
@@ -222,7 +226,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 											data-t-chart="<?php echo $bttn_label; ?>">
 											<?php
-											if ( VISUALIZER_PRO ) {
+											if ( Visualizer_Module::is_pro() ) {
 												?>
 											<input type="button" id="json-chart-save-button" class="button button-primary "
 											value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
@@ -246,7 +250,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											<?php
 											$fetch_link        = add_query_arg(
 												array(
-													'action' => ( VISUALIZER_PRO ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
+													'action' => Visualizer_Module::is_pro() ? Visualizer_Pro::ACTION_FETCH_DATA : '',
 													'nonce'  => wp_create_nonce(),
 												),
 												admin_url( 'admin-ajax.php' )
@@ -402,8 +406,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 							<div class="viz-group-content edit-data-content">
 								<div>
-									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), VISUALIZER_PRO ? 'spreadsheet like' : 'simple' ); ?></p>
-									<?php if ( ! VISUALIZER_PRO ) { ?>
+									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), Visualizer_Module::is_pro() ? 'spreadsheet like' : 'simple' ); ?></p>
+									<?php if ( ! Visualizer_Module::is_pro() ) { ?>
 										<p class="viz-group-description simple-editor-type"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
 									<?php } ?>
 									<input type="button" id="editor-chart-button" class="button button-primary "

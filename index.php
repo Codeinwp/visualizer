@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
 	return;
 }
+
+// support for pro versions before 3.3.0
 if ( class_exists( 'Visualizer_Pro', false ) ) {
 	define( 'VISUALIZER_PRO', true );
 } else {

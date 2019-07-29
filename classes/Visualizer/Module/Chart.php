@@ -491,8 +491,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		);
 		wp_register_script( 'visualizer-editor-simple', VISUALIZER_ABSURL . 'js/simple-editor.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 
-		// added by Ash/Upwork
-		if ( VISUALIZER_PRO ) {
+		do_action( 'visualizer_add_scripts' );
+
+		if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_addScriptsAndStyles();
 		}
@@ -547,7 +548,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-datatables' );
 		wp_enqueue_style( 'visualizer-jquery-ui' );
 
-		if ( ! VISUALIZER_PRO ) {
+		if ( ! Visualizer_Module::is_pro() ) {
 			return;
 		}
 
@@ -650,7 +651,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
 
-		if ( ! VISUALIZER_PRO ) {
+		if ( ! Visualizer_Module::is_pro() ) {
 			wp_enqueue_script( 'visualizer-editor-simple' );
 			wp_localize_script(
 				'visualizer-editor-simple',
@@ -704,7 +705,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'db_query' => array(
 					'tables'    => $table_col_mapping,
 				),
-				'is_pro'    => VISUALIZER_PRO,
+				'is_pro'    => Visualizer_Module::is_pro(),
 				'page_type' => 'chart',
 				'json_tag_separator' => Visualizer_Source_Json::TAG_SEPARATOR,
 				'json_tag_separator_view' => Visualizer_Source_Json::TAG_SEPARATOR_VIEW,
@@ -727,10 +728,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} else {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
-		if ( VISUALIZER_PRO ) {
+
+		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
+
+		if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
 		}
+
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 		wp_iframe( array( $render, 'render' ) );
 	}
@@ -804,7 +809,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	private function handleCSVasString( $data ) {
 		$source = null;
 
-		// do not check for VISUALIZER_PRO here as that is false:
 		// @issue https://github.com/Codeinwp/visualizer/issues/412
 		if ( has_filter( 'visualizer_pro_handle_chart_data' ) ) {
 			$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
@@ -1125,11 +1129,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				),
 			)
 		);
-		// Added by Ash/Upwork
-		if ( VISUALIZER_PRO ) {
+
+		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
+
+		if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
 		}
+
 		// Added by Ash/Upwork
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
 		wp_iframe( array( $render, 'render' ) );
