@@ -582,9 +582,24 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access public
 	 */
 	public function registerAdminMenu() {
-		$title              = esc_html__( 'Visualizer Library', 'visualizer' );
-		$callback           = array( $this, 'renderLibraryPage' );
-		$this->_libraryPage = add_submenu_page( 'upload.php', $title, $title, 'edit_posts', Visualizer_Plugin::NAME, $callback );
+		$this->_libraryPage = add_menu_page( __( 'Visualizer', 'visualizer' ), __( 'Visualizer', 'visualizer' ), 'edit_posts', Visualizer_Plugin::NAME, array( $this, 'renderLibraryPage' ), 'dashicons-chart-pie', 99.7666 );
+
+		add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'Chart Library', 'visualizer' ),
+			__( 'Chart Library', 'visualizer' ),
+			'edit_posts',
+			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME )
+		);
+		add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'Support', 'visualizer' ),
+			__( 'Support', 'visualizer' ) . '<span class="dashicons dashicons-editor-help more-features-icon" style="width: 17px; height: 17px; margin-left: 4px; color: #ffca54; font-size: 17px; vertical-align: -3px;"></span>',
+			'edit_posts',
+			'viz-support',
+			array( $this, 'renderSupportPage' )
+		);
+		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
 	}
 
 	/**
@@ -641,6 +656,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 		$q = new WP_Query( $query_args );
 		return $q;
+	}
+
+	/**
+	 * Renders support page.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access public
+	 */
+	public function renderSupportPage() {
+		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
+		include_once VISUALIZER_ABSPATH . '/templates/support.php';
 	}
 
 	/**
