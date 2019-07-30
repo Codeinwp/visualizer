@@ -236,7 +236,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * Render sidebar.
 	 */
 	private function _renderSidebar() {
-		if ( ! VISUALIZER_PRO ) {
+		if ( ! Visualizer_Module::is_pro() ) {
 			echo '<div id="visualizer-sidebar">';
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Gain more editing power', 'visualizer' ) . '</h3><ul>';

@@ -147,7 +147,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			$return .= ' 	</div>';
 			$return .= '</div>';
 		}
-		if ( empty( $feature ) && VISUALIZER_PRO ) {
+		if ( empty( $feature ) && Visualizer_Module::is_pro() ) {
 			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
 			$return = '';
 		}
