@@ -56,7 +56,7 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 
 			do_action( 'visualizer_add_update_hook', $this->series, $this->data );
 
-			if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
+			if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 				global $Visualizer_Pro;
 				$Visualizer_Pro->_addUpdateHook( $this->series, $this->data );
 			}

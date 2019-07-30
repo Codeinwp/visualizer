@@ -41,7 +41,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		if ( Visualizer_Module::is_pro() ) {
 			do_action( 'visualizer_add_editor_etc', $this->chart->ID );
 
-			if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
+			if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 				global $Visualizer_Pro;
 				$Visualizer_Pro->_addEditor( $this->chart->ID );
 				if ( method_exists( $Visualizer_Pro, '_addFilterWizard' ) ) {

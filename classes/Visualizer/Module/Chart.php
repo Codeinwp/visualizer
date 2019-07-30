@@ -493,7 +493,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		do_action( 'visualizer_add_scripts' );
 
-		if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
+		if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_addScriptsAndStyles();
 		}
@@ -731,7 +731,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
 
-		if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
+		if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
 		}
@@ -1132,7 +1132,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
 
-		if ( Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
+		if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
 			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
 		}
