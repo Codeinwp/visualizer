@@ -598,7 +598,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			__( 'Add New Chart', 'visualizer' ),
 			__( 'Add New Chart', 'visualizer' ),
 			'edit_posts',
-			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME . '&addnew' )
+			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew' )
 		);
 		add_submenu_page(
 			Visualizer_Plugin::NAME,
@@ -760,14 +760,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'map_api_key' => get_option( 'visualizer-map-api-key' ),
 				'charts' => $charts,
 				'urls'   => array(
-					'base'   => add_query_arg( array( 'vpage' => false, 'addnew' => false ) ),
+					'base'   => add_query_arg( array( 'vpage' => false, 'vaction' => false ) ),
 					'create' => add_query_arg(
 						array(
 							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
 							'library' => 'yes',
 							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
 							'chart-library'      => isset( $_GET['chart-library'] ) ? $_GET['chart-library'] : '',
-							'addnew' => false,
+							'vaction' => false,
 						),
 						$ajaxurl
 					),
@@ -775,7 +775,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						array(
 							'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
 							'library' => 'yes',
-							'addnew' => false,
+							'vaction' => false,
 						),
 						$ajaxurl
 					),
@@ -792,7 +792,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
-				'base'    => add_query_arg( array( 'vpage' => '%#%', 'addnew' => false ) ),
+				'base'    => add_query_arg( array( 'vpage' => '%#%', 'vaction' => false ) ),
 				'format'  => '',
 				'current' => $page,
 				'total'   => $query->max_num_pages,
