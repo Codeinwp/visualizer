@@ -1063,7 +1063,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'type' => filter_input( INPUT_GET, 'type' ),
 						'vaction' => false,
 					),
-					admin_url( 'upload.php' )
+					admin_url( 'admin.php' )
 				);
 			}
 		}

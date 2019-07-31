@@ -155,7 +155,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		}
 
 		if ( $plugin === VISUALIZER_BASENAME ) {
-			wp_redirect( admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ) );
+			wp_redirect( admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME ) );
 			exit();
 		}
 	}
