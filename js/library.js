@@ -75,6 +75,7 @@
 
             // remove the 'type' while refreshing the library page on creation of a new chart.
             // this is to avoid cases where users have filtered for chart type A and end up creating chart type B
+            // remove 'addnew' as well so that the popup doesnt keep popping up.
             wnd.send_to_editor = function () {
                 wnd.location.href = vu.base.replace(/type=[a-zA-Z]*/, '').replace(/addnew/, '');
             };
