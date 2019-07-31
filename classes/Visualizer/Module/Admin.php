@@ -593,6 +593,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		);
 		add_submenu_page(
 			Visualizer_Plugin::NAME,
+			__( 'Add New Chart', 'visualizer' ),
+			__( 'Add New Chart', 'visualizer' ),
+			'edit_posts',
+			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME . '&addnew' )
+		);
+		add_submenu_page(
+			Visualizer_Plugin::NAME,
 			__( 'Support', 'visualizer' ),
 			__( 'Support', 'visualizer' ) . '<span class="dashicons dashicons-editor-help more-features-icon" style="width: 17px; height: 17px; margin-left: 4px; color: #ffca54; font-size: 17px; vertical-align: -3px;"></span>',
 			'edit_posts',
@@ -751,13 +758,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'map_api_key' => get_option( 'visualizer-map-api-key' ),
 				'charts' => $charts,
 				'urls'   => array(
-					'base'   => add_query_arg( 'vpage', false ),
+					'base'   => add_query_arg( array( 'vpage' => false, 'addnew' => false ) ),
 					'create' => add_query_arg(
 						array(
 							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
 							'library' => 'yes',
 							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
 							'chart-library'      => isset( $_GET['chart-library'] ) ? $_GET['chart-library'] : '',
+							'addnew' => false,
 						),
 						$ajaxurl
 					),
@@ -765,6 +773,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						array(
 							'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
 							'library' => 'yes',
+							'addnew' => false,
 						),
 						$ajaxurl
 					),
@@ -781,7 +790,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
-				'base'    => add_query_arg( 'vpage', '%#%' ),
+				'base'    => add_query_arg( array( 'vpage' => '%#%', 'addnew' => false ) ),
 				'format'  => '',
 				'current' => $page,
 				'total'   => $query->max_num_pages,

@@ -82,7 +82,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 		echo '<ul class="subsubsub">';
 		// All tab.
-		echo '<li class="visualizer-list-item all"><a class="' . ( ! isset( $_GET['type'] ) || empty( $_GET['type'] ) ? 'current' : '' ) . '" href="', esc_url( add_query_arg( array( 'vpage' => false, 'type' => false, 's' => false ) ) ), '">' . __( 'All', 'visualizer' ) . '</a> | </li>';
+		echo '<li class="visualizer-list-item all"><a class="' . ( ! isset( $_GET['type'] ) || empty( $_GET['type'] ) ? 'current' : '' ) . '" href="', esc_url( add_query_arg( array( 'vpage' => false, 'type' => false, 'addnew' => false, 's' => false ) ) ), '">' . __( 'All', 'visualizer' ) . '</a> | </li>';
 		foreach ( $this->types as $type => $array ) {
 			if ( ! is_array( $array ) ) {
 				// support for old pro
@@ -94,6 +94,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 					array(
 						'type'  => $type,
 						'vpage' => false,
+						'addnew' => false,
 						's' => false,
 					)
 				)
