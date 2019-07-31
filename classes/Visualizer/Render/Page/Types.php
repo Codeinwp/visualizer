@@ -129,6 +129,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		}
 		?>
 		<input type="submit" class="button button-primary button-large push-right" value="<?php esc_attr_e( 'Next', 'visualizer' ); ?>">
+		<input type="button" class="button button-secondary button-large push-left viz-abort" value="<?php esc_attr_e( 'Abort &amp; Close', 'visualizer' ); ?>">
 		<?php
 	}
 }

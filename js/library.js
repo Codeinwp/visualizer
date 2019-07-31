@@ -65,6 +65,14 @@
             var wnd = window,
                 view = new vmv.Chart({action: vu.create});
 
+            window.parent.addEventListener('message', function(event){
+                switch(event.data) {
+                    case 'visualizer:mediaframe:close':
+                        view.close();
+                        break;
+                }
+            }, false);
+
             // remove the 'type' while refreshing the library page on creation of a new chart.
             // this is to avoid cases where users have filtered for chart type A and end up creating chart type B
             wnd.send_to_editor = function () {
@@ -108,6 +116,12 @@
             });
             return false;
         });
+
+        // if addnew is found as a GET request parameter, show the modal.
+        if(location.href.indexOf('addnew') !== -1){
+            $('.add-new-chart').trigger('click');
+        }
+
         $(window).resize(function () {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function () {
