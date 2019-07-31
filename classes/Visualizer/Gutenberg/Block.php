@@ -83,7 +83,7 @@ class Visualizer_Gutenberg_Block {
 
 		$type = 'community';
 
-		if ( VISUALIZER_PRO ) {
+		if ( Visualizer_Module::is_pro() ) {
 			$type = 'pro';
 			if ( apply_filters( 'visualizer_is_business', false ) ) {
 				$type = 'developer';
@@ -222,7 +222,7 @@ class Visualizer_Gutenberg_Block {
 			$data['visualizer-chart-schedule'] = $schedule;
 		}
 
-		if ( VISUALIZER_PRO ) {
+		if ( Visualizer_Module::is_pro() ) {
 			$permissions = get_post_meta( $post_id, Visualizer_PRO::CF_PERMISSIONS, true );
 
 			if ( ! empty( $permissions ) ) {
@@ -253,7 +253,7 @@ class Visualizer_Gutenberg_Block {
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
 			}
 
-			if ( VISUALIZER_PRO ) {
+			if ( Visualizer_Module::is_pro() ) {
 				update_post_meta( $data['id'], Visualizer_PRO::CF_PERMISSIONS, $data['visualizer-permissions'] );
 			}
 

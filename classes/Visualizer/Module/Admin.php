@@ -436,7 +436,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				}
 
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
-				if ( ! VISUALIZER_PRO ) {
+				if ( ! Visualizer_Module::is_pro() ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
 						if ( $get2Darray ) {
 							$deprecated[]   = 'gauge';
@@ -465,7 +465,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				}
 
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
-				if ( ! VISUALIZER_PRO ) {
+				if ( ! Visualizer_Module::is_pro() ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
 						if ( $get2Darray ) {
 							$deprecated[]   = 'gauge';

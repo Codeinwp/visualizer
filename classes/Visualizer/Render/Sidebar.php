@@ -575,7 +575,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<b>', $title, '</b>';
 			echo '<select class="control-select ', implode( ' ', $classes ) , '" name="', $name, '" ', ( $multiple ? 'multiple' : '' ), ' ' , $atts, '>';
 		foreach ( $options as $key => $label ) {
-			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value, true ) ? 'selected' : '' ) : selected( $key, $value, false );
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value ) ? 'selected' : '' ) : selected( $key, $value, false );
 			echo '<option value="', $key, '"', $extra, '>';
 			echo $label;
 			echo '</option>';
