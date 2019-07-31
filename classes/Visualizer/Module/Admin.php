@@ -820,7 +820,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				$links,
 				sprintf(
 					'<a href="%s">%s</a>',
-					admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ),
+					admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME ),
 					esc_html__( 'Library', 'visualizer' )
 				)
 			);
