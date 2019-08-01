@@ -1,40 +1,64 @@
-<!--
-Layout For Tutorial Page of Feedzy RSS Feeds
+<?php
+	$is_pro = Visualizer_Module::is_pro();
+?>
+	<div class="pro-feature">
+		<div class="pro-feature-inner">
+			<div class="pro-feature-features">
+				<h2>Welcome to Visualizer!</h2>
+				<p>Visualizer lets you easily create and customize responsive tables and charts so you can share your data effectively to your users.</p>
+				<p>With this version, you can already:</p>
 
-@since    ?
-@package  feedzy-rss-feeds
--->
-<div id="viz-features">
+				<ul style="list-style: disc; list-style-position: inside;">
+					<li>Create an unlimited number of tables and charts</li>
+					<li>Manually edit the data used by any graphs and tables</li>
+					<li>Import data from a URL or file</li>
+					<li>Fully customize the design and behavior of your tables and charts</li>
+					<?php if ( $is_pro ) { ?>
+					<li>Schedule regular updates to your charts</li>
+					<li>Import from the database or other charts</li>
+					<?php } ?>
+				</ul>
 
-	<div class="viz-features-content">
-	
-		<a name="shortcode"></a>
-		<div class="viz-feature">
-			<div class="viz-feature-features">
-			<h2>Shortcode</h2>
-				<p>Show feed items using the <code>[feedzy-rss-feeds]</code>shortcode in a few easy steps.</p>
-				<p>You can view our documentation <a href="https://docs.themeisle.com/article/658-feedzy-rss-feeds" target="_blank">here</a></p>
-			</div>
-			<div class="viz-feature-image">
-				<iframe width="600" height="300" src="https://www.youtube.com/embed/GEFAY2IxxEc?start=84" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				<?php if ( ! $is_pro ) { ?>
+				<p>We have many more features and charts, and offer email & chat support if you purchase our <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL; ?>">Pro Version</a>.</p>
+				<?php } ?>
 			</div>
 		</div>
+	</div>
+	<div class="clear"></div>
 
-		<div class="viz-feature">
-		<div class="viz-feature-features viz-feature-centered">
-			<h2>Grow your WordPress business with Feedzy today.</h4>
-		<div class="header-btns">
-			<?php
+	<div class="pro-feature">
+		<div class="pro-feature-inner">
+			<div class="pro-feature-features">
+				<h2>Documentation</h2>
+				<p>To get started with Visualizer, we recommend you first bookmark our main documentation page <a href="<?php echo VISUALIZER_MAIN_DOC; ?>">here</a>.</p>
 
-			if ( ! VISUALIZER_PRO ) {
-				?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=feedzy-support&tab=more' ) ); ?>" class="buy-now"><span
-			class="dashicons dashicons-cart"></span> Click here to see the additional features in Feedzy Pro</a>
-				<?php
-			}
-			?>
+				<p>
+					Notably, you could take a look at this first introductory tutorial: <a href="https://docs.themeisle.com/article/597-create-chart">How to create my first chart</a>.
+				</p>
+
+				<p>If you prefer learning through video, this could prove useful. It is a little dated however.</p>
+			</div>
+			<div class="pro-feature-image">
+				<iframe width="500" height="235" src="https://www.youtube.com/embed/hQO_evnb_tQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			</div>
+			<div class="clear"></div>
 		</div>
+	</div>
+	<div class="clear"></div>
 
-	</div><!-- .viz-features-content -->
 
-</div>
+	<div class="pro-feature">
+		<div class="pro-feature-inner">
+			<div class="pro-feature-features">
+				<h2>Need help?</h2>
+				<?php if ( ! $is_pro ) { ?>
+					<p>Our support channel for users of the free version can be found <a href="https://wordpress.org/support/plugin/visualizer/">here</a>.</p>
+				<?php } else { ?>
+					<p>Contact our premium support by logging in to your account <a href="https://store.themeisle.com/login/">here</a>.</p>
+				<?php } ?>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="clear"></div>

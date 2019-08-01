@@ -89,6 +89,7 @@ function visualizer_launch() {
 
 	// the link to pre-build queries.
 	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
+	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
 
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();

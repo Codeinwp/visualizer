@@ -845,7 +845,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
-				'<a href="https://docs.themeisle.com/category/657-visualizer" target="_blank">%s</a>',
+				'<a href="' . VISUALIZER_MAIN_DOC . '" target="_blank">%s</a>',
 				esc_html__( 'Docs', 'visualizer' )
 			);
 			// flattr link
