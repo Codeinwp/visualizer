@@ -1,0 +1,176 @@
+#viz-features .pro-features-header {
+	padding: 20px 10px;
+	border-top: 5px solid #252b37;
+	background: #fff;
+}
+
+#viz-features .logo {
+	display: inline-block;
+	margin: 0 0 0 20px;
+	padding: 0 0 0 70px;
+	color: #3c3c3c;
+	background: url(../img/wppr-logo.png) no-repeat left center;
+	font-family: "Open Sans", sans-serif;
+	font-size: 2em;
+	font-weight: 700;
+	line-height: 60px;
+	letter-spacing: -1px;
+}
+
+#viz-features .slogan {
+	display: inline-block;
+	margin: 0 0 0 5px;
+	padding: 0;
+	color: #858585;
+	font-family: "Open Sans", sans-serif;
+	font-size: 17px;
+	line-height: 3.5;
+}
+
+#viz-features .slogan a {
+	color: #858585;
+	font-weight: 600;
+	font-style: italic;
+	text-decoration: none;
+	transition: all 0.250s ease-in-out;
+}
+
+#viz-features .slogan a:hover {
+	color: #ff6160;
+}
+
+#viz-features .slogan a:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+#viz-features .header-btns {
+	float: right;
+	margin: 7px 20px;
+	text-align: right;
+}
+
+#viz-features .header-btns .buy-now {
+	display: inline-block;
+	margin-top: 2px;
+	margin-right: 5px;
+	padding: 15px 25px;
+	border-radius: 3px;
+	border-radius: 3px;
+	color: #fff;
+	background: #e33b3f;
+	font-family: "Open Sans", sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	text-decoration: none;
+	text-transform: uppercase;
+	transition: all 0.250s ease-in-out;
+}
+
+#viz-features .header-btns .buy-now:hover {
+	background: #252b37;
+}
+
+#viz-features .header-btns .buy-now .dashicons {
+	padding-right: 3px;
+}
+
+#viz-features .pro-features-header,
+#viz-features .pro-feature {
+	display: block;
+	margin: 10px;
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+}
+
+#viz-features .pro-feature .pro-feature-features,
+#viz-features .pro-feature .pro-feature-image {
+	display: table-cell;
+	margin: 0;
+	vertical-align: middle;
+}
+
+#viz-features .pro-feature .pro-feature-features {
+	box-sizing: border-box;
+	padding: 30px;
+}
+
+#viz-features .pro-feature .pro-feature-image {
+	width: 470px;
+}
+
+#viz-features .pro-feature .pro-feature-features h2 {
+	margin: 0 0 20px;
+	font-size: 28px;
+}
+
+#viz-features .pro-feature .pro-feature-features h4 {
+	margin: 0 0 10px;
+	font-size: 20px;
+}
+
+#viz-features .pro-feature .pro-feature-features p {
+	margin: 0 0 15px;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+#viz-features .pro-feature .pro-feature-image img {
+	width: 100%;
+	height: auto;
+}
+
+@media screen and (max-width: 1200px) {
+	#viz-features .pro-feature .pro-feature-features,
+	#viz-features .pro-feature .pro-feature-image {
+		display: block;
+	}
+
+	#viz-features .pro-feature .pro-feature-image {
+		width: 470px;
+		margin: 0 auto 20px;
+		text-align: center;
+	}
+
+	#viz-features .slogan {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	#viz-features {
+		text-align: center;
+	}
+
+	#viz-features .logo {
+		margin-left: 0;
+	}
+
+	#viz-features .header-btns {
+		display: block;
+		float: none;
+		margin: 0 0 10px 0;
+		text-align: center;
+	}
+}
+
+@media screen and (max-width: 782px) {
+	#cwp_form #header .button {
+		padding: 0 4px 1px !important;
+		font-size: 11px !important;
+	}
+
+	#cwp_form #header .logo h2 {
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	#viz-features .pro-feature .pro-feature-image {
+		width: 100%;
+	}
+}
+
+#viz-features .pro-feature .pro-feature-inner {
+	display: table;
+	width: 100%;
+	background: #fff;
+}

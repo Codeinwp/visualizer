@@ -440,7 +440,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			</li>
 
 			<li class="viz-group viz-group-category bottom-fixed sidebar-footer-link" id="vz-chart-docs">
-				<h2><span class="dashicons dashicons-editor-help"></span><a href="https://docs.themeisle.com/category/657-visualizer" target="_blank"><?php _e( 'Docs', 'visualizer' ); ?></a></h2>
+				<h2><span class="dashicons dashicons-editor-help"></span><a href="<?php echo VISUALIZER_MAIN_DOC; ?>" target="_blank"><?php _e( 'Docs', 'visualizer' ); ?></a></h2>
 			</li>
 
 			<?php $this->getPermissionsLink( $this->chart->ID ); ?>

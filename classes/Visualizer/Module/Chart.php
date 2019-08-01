@@ -380,7 +380,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				)
 			);
 		}
-		wp_redirect( wp_get_referer() );
+		wp_redirect( remove_query_arg( 'vaction', wp_get_referer() ) );
 		exit;
 	}
 
@@ -1040,7 +1040,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 			}
 		}
-		$redirect = wp_get_referer();
+		$redirect = remove_query_arg( 'vaction', wp_get_referer() );
 		if ( $success ) {
 			$new_chart_id = wp_insert_post(
 				array(
@@ -1061,8 +1061,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					array(
 						'page' => 'visualizer',
 						'type' => filter_input( INPUT_GET, 'type' ),
+						'vaction' => false,
 					),
-					admin_url( 'upload.php' )
+					admin_url( 'admin.php' )
 				);
 			}
 		}

@@ -121,6 +121,11 @@
 
         init_type_vs_library();
 
+        $('.viz-abort').on('click', function(e){
+            e.preventDefault();
+            window.parent.postMessage('visualizer:mediaframe:close', '*');
+        });
+
     }
 
     function init_type_vs_library() {
