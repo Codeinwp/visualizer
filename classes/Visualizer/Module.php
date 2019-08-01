@@ -601,6 +601,21 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Determines how many charts have been created.
+	 */
+	protected static function numberOfCharts() {
+		$args = array(
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+			'fields'        => 'ids',
+			'post_status'   => 'publish',
+			'posts_per_page'    => 300,
+		);
+
+		$q = new WP_Query( $args );
+		return $q->found_posts;
+	}
+
+	/**
 	 * Checks if the PRO version is active.
 	 *
 	 * @since 3.3.0
