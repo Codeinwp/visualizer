@@ -422,8 +422,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		switch ( $where ) {
 			case 'types':
-				return $types;
-				break;
+				// fall-through
 			case 'library':
 				// if the user has a Google Table chart, show it as deprecated otherwise remove the option from the library.
 				if ( ! self::hasChartType( 'table' ) ) {
