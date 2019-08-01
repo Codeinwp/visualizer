@@ -61,7 +61,7 @@
             }
         });
 
-        $('.add-new-h2, .add-new-chart').click(function () {
+        $('.add-new-chart').click(function () {
             var wnd = window,
                 view = new vmv.Chart({action: vu.create});
 

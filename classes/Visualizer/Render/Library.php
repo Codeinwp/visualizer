@@ -40,7 +40,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div id="visualizer-icon" class="icon32"><br></div>';
 		echo '<h2>';
 		esc_html_e( 'Visualizer Library', 'visualizer' );
-		echo ' <a href="javascript:;" class="add-new-h2">', esc_html__( 'Add New', 'visualizer' ), '</a>';
+		echo ' <a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a>';
+		if ( Visualizer_Module::is_pro() ) {
+			echo ' <a href="' . admin_url( 'options-general.php' ) . '" class="page-title-action">', esc_html__( 'License Settings', 'visualizer' ), '</a>';
+		}
 		echo '</h2>';
 		$this->_renderMessages();
 		$this->_renderLibrary();
@@ -142,7 +145,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 			echo '<div class="visualizer-chart">';
 			echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
-			echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', 'visualizer' ), '<p><h2><a href="javascript:;" class="add-new-h2">', esc_html__( 'Add New', 'visualizer' ), '</a></h2></p></div>';
+			echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', 'visualizer' ), '<p><h2><a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a></h2></p></div>';
 			echo '</div>';
 			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 			echo '<span class="visualizer-chart-action visualizer-nochart-delete"></span>';
