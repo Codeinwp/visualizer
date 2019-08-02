@@ -283,32 +283,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'library'  => $library,
 		);
 
-		wp_register_script(
-			"visualizer-render-$library",
-			VISUALIZER_ABSURL . 'js/render-facade.js',
-			apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
-			Visualizer_Plugin::VERSION,
-			true
-		);
-
-		wp_enqueue_script( "visualizer-render-$library" );
-		wp_localize_script(
-			"visualizer-render-$library",
-			'visualizer',
-			array(
-				'charts'        => $this->_charts,
-				'language'      => $this->get_language(),
-				'map_api_key'   => get_option( 'visualizer-map-api-key' ),
-				'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
-				'i10n'          => array(
-					'copied'        => __( 'Copied!', 'visualizer' ),
-				),
-				'page_type' => 'frontend',
-				'is_front'  => true,
-			)
-		);
-		wp_enqueue_style( 'visualizer-front' );
-
 		$actions_div            = '';
 		$actions_visible        = apply_filters( 'visualizer_pro_add_actions', isset( $settings['actions'] ) ? $settings['actions'] : array(), $atts['id'] );
 		if ( ! empty( $actions_visible ) ) {
@@ -339,6 +313,35 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		$actions_div            .= $css;
+
+		foreach ( $this->_charts as $id => $attributes ) {
+			$library = $attributes['library'];
+			wp_register_script(
+				"visualizer-render-$library",
+				VISUALIZER_ABSURL . 'js/render-facade.js',
+				apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
+				Visualizer_Plugin::VERSION,
+				true
+			);
+
+			wp_enqueue_script( "visualizer-render-$library" );
+			wp_localize_script(
+				"visualizer-render-$library",
+				'visualizer',
+				array(
+					'charts'        => $this->_charts,
+					'language'      => $this->get_language(),
+					'map_api_key'   => get_option( 'visualizer-map-api-key' ),
+					'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
+					'i10n'          => array(
+						'copied'        => __( 'Copied!', 'visualizer' ),
+					),
+					'page_type' => 'frontend',
+					'is_front'  => true,
+				)
+			);
+			wp_enqueue_style( 'visualizer-front' );
+		}
 
 		// return placeholder div
 		return $actions_div . '<div id="' . $id . '"' . $class . '></div>';
