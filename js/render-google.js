@@ -350,6 +350,8 @@ var __visualizer_chart_images   = [];
                         $type = 'geochart';
                         break;
                     case 'dataTable':
+                    case 'polarArea':
+                    case 'radar':
                         $type = null;
                         break;
                 }
