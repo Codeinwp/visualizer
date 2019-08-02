@@ -170,6 +170,13 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 						$attributes['series'][ $x ]['type'] = $types[ rand( 0, count( $types ) - 1 ) ];
 					}
 					break;
+				case 'candlestick':
+					// add stroke and fill color so that behavior is consistent.
+					$attributes['candlestick']['fallingColor']['stroke'] = '#3366cc';
+					$attributes['candlestick']['fallingColor']['fill'] = '#fff';
+					$attributes['candlestick']['risingColor']['stroke'] = '#3366cc';
+					$attributes['candlestick']['risingColor']['fill'] = '#3366cc';
+					break;
 			}
 		}
 
