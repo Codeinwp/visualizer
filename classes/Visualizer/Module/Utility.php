@@ -157,14 +157,18 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 */
 	private static function set_defaults_google( $chart, $post_status ) {
 		$type           = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$series         = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
 
 		$attributes     = array();
 		if ( $post_status === 'auto-draft' ) {
 			switch ( $type ) {
 				case 'combo':
-					// chart type 'bars' and first series 'line'.
+					// chart type 'bars' and randomly choose the type of each series.
+					$types = array( 'area', 'line', 'steppedArea', 'bar' );
 					$attributes['seriesType'] = 'bars';
-					$attributes['series'][0]['type'] = 'line';
+					for ( $x = 0; $x < count( $series ); $x++ ) {
+						$attributes['series'][ $x ]['type'] = $types[ rand( 0, count( $types ) - 1 ) ];
+					}
 					break;
 			}
 		}
