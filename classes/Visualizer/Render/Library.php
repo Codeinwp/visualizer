@@ -253,6 +253,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
 			echo '<li>' . __( '6 more chart types', 'visualizer' ) . '</li></ul>';
 			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
+			echo '<p><a href="' . VISUALIZER_SURVEY . '" target="_blank" class="">' . __( 'Don\'t see the features you need? Help us improve!', 'visualizer' ) . '</a></p>';
 			echo '</div>';
 			echo '</div>';
 		}

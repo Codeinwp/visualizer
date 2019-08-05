@@ -22,6 +22,8 @@
 	<h2 class="nav-tab-wrapper">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=help' ) ); ?>"
 		   class="nav-tab <?php echo $active_tab === 'help' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Support', 'visualizer' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=improve' ) ); ?>"
+		   class="nav-tab <?php echo $active_tab === 'improve' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Help us improve!', 'visualizer' ); ?></a>
 		<?php
 		if ( $show_more ) {
 			?>
@@ -42,6 +44,9 @@
 							break;
 						case 'more':
 							include_once VISUALIZER_ABSPATH . '/templates/upsell.php';
+							break;
+						case 'improve':
+							include_once VISUALIZER_ABSPATH . '/templates/improve.php';
 							break;
 					}
 					?>
