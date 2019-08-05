@@ -23,7 +23,7 @@
 				<p>We have many more features and charts, and offer email & chat support if you purchase our <a href="<?php echo Visualizer_Plugin::PRO_TEASER_URL; ?>">Pro Version</a>.</p>
 				<?php } ?>
 
-				<p>Ready to begin? Let's <a href="<?php echo admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew' ); ?>">create a chart!
+				<p>Ready to begin? Let's <a href="<?php echo admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew' ); ?>">create a chart!</a>
 			</div>
 		</div>
 	</div>
