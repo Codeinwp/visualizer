@@ -31,7 +31,8 @@ const {
 	ButtonGroup,
 	Dashicon,
 	Placeholder,
-	Spinner
+	Spinner,
+	Notice
 } = wp.components;
 
 class Editor extends Component {
@@ -354,19 +355,23 @@ class Editor extends Component {
 				{ 'home' === this.state.route && (
 					<div className="visualizer-settings__content">
 
+						<Notice
+							status="warning"
+							isDismissible={ false }
+						>
+							{ __( 'ChartsJS charts are currently not a avialable to select form the block. You can find them on Visualizer admin page.' ) }
+						</Notice>
+
 						<div className="visualizer-settings__content-description">
 							{ __( 'Make a new chart or display an existing one?' ) }
 						</div>
 
 						{ /* You can apply "locked" class to lock any of the following list items. */ }
 
-						<div
-							className="visualizer-settings__content-option locked"
-							onClick={ () => {
-								return false;
-								this.setState({ route: 'createChart' });
-								this.props.setAttributes({ route: 'createChart' });
-							} }
+						<a
+							href={ visualizerLocalize.adminPage }
+							target="_blank"
+							className="visualizer-settings__content-option"
 						>
 
 							<span className="visualizer-settings__content-option-title">
@@ -374,10 +379,10 @@ class Editor extends Component {
 							</span>
 
 							<div className="visualizer-settings__content-option-icon">
-								<Dashicon icon="lock" />
+								<Dashicon icon="arrow-right-alt2" />
 							</div>
 
-						</div>
+						</a>
 
 						<div
 							className="visualizer-settings__content-option"
