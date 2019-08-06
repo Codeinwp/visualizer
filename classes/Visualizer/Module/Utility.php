@@ -31,7 +31,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	const NAME = __CLASS__;
 
 	/**
-	 * Some default chart colors.
+	 * Some default distinct colors.
 	 *
 	 * @since 3.3.0
 	 *
@@ -39,7 +39,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 * @var _CHART_COLORS
 	 */
 	private static $_CHART_COLORS = array(
-		'#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6', '#DD4477', '#66AA00', '#B82E2E', '#316395', '#994499', '#22AA99', '#AAAA11', '#6633CC', '#E67300', '#8B0707', '#329262', '#5574A6', '#3B3EAC',
+		'#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080',
 	);
 
 
@@ -118,8 +118,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	}
 
 	/**
-	 * Sets some defaults (colors etc.) in the chart.
-	 * Currently only for ChartJS.
+	 * Sets some defaults in the chart.
 	 *
 	 * @since 3.3.0
 	 *
@@ -129,20 +128,80 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 		$type           = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$library        = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 
-		if ( ( ! is_null( $post_status ) && $chart->post_status !== $post_status ) || $library !== 'ChartJS' ) {
+		// if post_status is null, operate on the chart irrespective of the post_status
+		if ( ( ! is_null( $post_status ) && $chart->post_status !== $post_status ) ) {
 			return;
 		}
 
-		$series = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
-		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+		$series         = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		if ( ! $series || ! is_array( $series ) ) {
 			return;
 		}
 
+		switch ( $library ) {
+			case 'ChartJS':
+				self::set_defaults_chartjs( $chart, $post_status );
+				break;
+			case 'GoogleCharts':
+				self::set_defaults_google( $chart, $post_status );
+				break;
+		}
+	}
+
+	/**
+	 * Sets some defaults in the chart for Google charts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access private
+	 */
+	private static function set_defaults_google( $chart, $post_status ) {
+		$type           = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$series         = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
+
+		$attributes     = array();
+		if ( $post_status === 'auto-draft' ) {
+			switch ( $type ) {
+				case 'combo':
+					// chart type 'bars' and randomly choose the type of each series.
+					$types = array( 'area', 'line', 'steppedArea', 'bar' );
+					$attributes['seriesType'] = 'bars';
+					for ( $x = 0; $x < count( $series ); $x++ ) {
+						$attributes['series'][ $x ]['type'] = $types[ rand( 0, count( $types ) - 1 ) ];
+					}
+					break;
+				case 'candlestick':
+					// add stroke and fill color so that behavior is consistent.
+					$attributes['candlestick']['fallingColor']['stroke'] = '#3366cc';
+					$attributes['candlestick']['fallingColor']['fill'] = '#fff';
+					$attributes['candlestick']['risingColor']['stroke'] = '#3366cc';
+					$attributes['candlestick']['risingColor']['fill'] = '#3366cc';
+					break;
+			}
+		}
+
+		if ( $attributes ) {
+			$settings       = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+			update_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, array_merge( $settings, $attributes ) );
+		}
+	}
+
+	/**
+	 * Sets some defaults in the chart for ChartJS charts.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access private
+	 */
+	private static function set_defaults_chartjs( $chart, $post_status ) {
+		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$series = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
+		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
+		$attributes = array();
 		$name   = 'series';
 		$count  = count( $series );
 		$max    = $count - 1;
-		$attributes = array();
 		switch ( $type ) {
 			case 'polarArea':
 				// fall through.
@@ -170,10 +229,15 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				}
 				break;
 		}
+
+		if ( $post_status === 'auto-draft' ) {
+			// the charts are huge in size so let's always get them down to 50%.
+			$settings['width'] = $settings['height'] = '50%';
+		}
+
 		if ( $attributes ) {
 			$settings[ $name ] = $attributes;
 			update_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, $settings );
 		}
 	}
-
 }

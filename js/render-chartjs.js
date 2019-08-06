@@ -104,6 +104,9 @@
         }
 
         if(v.is_front == false){ // jshint ignore:line
+            // this line needs to be included twice. This is not an error.
+            // if this one is removed, the preview gets messed up.
+            // if this line is included all the time, in this very place (out of the if), the front-end gets messed up.
             $.extend(settings, { responsive: true, maintainAspectRatio: false });
         }
 
@@ -117,6 +120,16 @@
             },
             options: settings
         });
+
+        // this line needs to be included twice. This is not an error.
+        $.extend(settings, { responsive: true, maintainAspectRatio: false });
+
+        // chart area
+        if(v.is_front == true){ // jshint ignore:line
+            $('#' + id).css('position', 'relative');
+            chartjs.canvas.parentNode.style.height = settings.height;
+            chartjs.canvas.parentNode.style.width = settings.width;
+        }
 
         // allow user to extend the settings.
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});

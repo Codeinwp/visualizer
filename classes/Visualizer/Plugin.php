@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.2.1';
+	const VERSION = '3.3.0';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -90,7 +90,7 @@ class Visualizer_Plugin {
 	const CF_CHART_URL = 'visualizer-chart-url';
 	const CF_CHART_SCHEDULE = 'visualizer-chart-schedule';
 	// Added by Ash/Upwork
-	const PRO_TEASER_URL = 'http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/';
+	const PRO_TEASER_URL = 'http://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/#pricing';
 	const PRO_TEASER_TITLE = 'Check PRO version ';
 	// Added by Ash/Upwork
 	/**

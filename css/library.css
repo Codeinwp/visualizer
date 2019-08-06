@@ -292,10 +292,6 @@ button.media-modal-close {
 	display: none !important;
 }
 
-.dataTables_scrollBody {
-	overflow: hidden !important;
-}
-
 .dataTables_wrapper {
     max-height: 300px;
     overflow: hidden !important;
@@ -309,4 +305,9 @@ button.media-modal-close {
 /* chartjs */
 #visualizer-library canvas.chartjs-render-monitor {
 	height: 100% !important;
+}
+
+div#visualizer-types ul, div#visualizer-types form p {
+	vertical-align: middle;
+	margin: 0;
 }

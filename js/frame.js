@@ -121,6 +121,11 @@
 
         init_type_vs_library();
 
+        $('.viz-abort').on('click', function(e){
+            e.preventDefault();
+            window.parent.postMessage('visualizer:mediaframe:close', '*');
+        });
+
     }
 
     function init_type_vs_library() {
@@ -390,7 +395,7 @@
                         $('#json-root-form').fadeIn('medium');
                         json_accordion_activate(1, true);
                     }else{
-                        alert(visualizer.l10n.json_error);
+                        alert(data.data.msg);
                     }
                 },
                 complete: function(){
@@ -435,7 +440,7 @@
                         json_accordion_activate(2, false);
                         $table.columns.adjust().draw();
                     }else{
-                        alert(visualizer.l10n.json_error);
+                        alert(data.data.msg);
                     }
                 },
                 complete: function(){
@@ -515,8 +520,7 @@
             } );
         }
 
-        $.extend( $.fn.dataTable.defaults, settings );
-        var $table = $(element + ' .viz-editor-table').DataTable();
+        var $table = $(element + ' .viz-editor-table').DataTable(settings);
         return $table;
     }
 

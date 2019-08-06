@@ -31,7 +31,7 @@ The plugin uses Google Visualization API and DataTables.net to add responsive & 
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
 
-### 9 Chart types + 3 more in the pro version ###
+### 9 Chart types + 6 more in the pro version ###
 This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is table chart, line chart, area chart, bar chart, column chart, pie chart, geo chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. The premium version can act as a interactive WordPress Table plugin, with sorting capabilities.
 
 ### Flexible and customizable ###

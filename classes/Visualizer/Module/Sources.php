@@ -141,13 +141,13 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			$return = '<div class="only-pro-content">';
 			$return .= '	<div class="only-pro-container">';
 			$return .= '		<div class="only-pro-inner">';
-			$return .= '			<p>' . sprintf( __( 'Enable this feature in %s version!', 'visualizer' ), $plan ) . '</p>';
+			$return .= '			<p>' . sprintf( __( 'Activate your %s version to use this feature!', 'visualizer' ), $plan ) . '</p>';
 			$return .= '            <a target="_blank" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
 			$return .= ' 		</div>';
 			$return .= ' 	</div>';
 			$return .= '</div>';
 		}
-		if ( empty( $feature ) && VISUALIZER_PRO ) {
+		if ( empty( $feature ) && Visualizer_Module::is_pro() ) {
 			remove_filter( 'visualizer_pro_upsell', 'addProUpsell', 10, 1 );
 			$return = '';
 		}

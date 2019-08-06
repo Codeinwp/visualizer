@@ -494,7 +494,7 @@ class Visualizer_Module {
 			$class  = new $name;
 		}
 
-		if ( is_null( $class ) && VISUALIZER_PRO ) {
+		if ( is_null( $class ) && Visualizer_Module::is_pro() ) {
 			// lets see if this type exists in pro. New Lite(3.1.0+) & old Pro(1.8.0-).
 			$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 			$class  = apply_filters( 'visualizer_pro_chart_type_sidebar', null, array( 'id' => $chart_id, 'type' => $type, 'settings' => get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ) ) );
@@ -544,7 +544,7 @@ class Visualizer_Module {
 				$attributes[]   = $this->handle_css_property( $property, $value );
 			}
 			$class_name = $id . $name;
-			$properties = implode( '; ', array_filter( $attributes ) );
+			$properties = implode( ' !important; ', array_filter( $attributes ) );
 			if ( ! empty( $properties ) ) {
 				$css    .= '.' . $class_name . ' {' . $properties . ' !important;}';
 				$classes[ $name ] = $class_name;
@@ -598,6 +598,41 @@ class Visualizer_Module {
 
 		$q = new WP_Query( $args );
 		return $q->found_posts > 0;
+	}
+
+	/**
+	 * Determines how many charts have been created.
+	 */
+	protected static function numberOfCharts() {
+		$args = array(
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+			'fields'        => 'ids',
+			'post_status'   => 'publish',
+			'posts_per_page'    => 300,
+		);
+
+		$q = new WP_Query( $args );
+		return $q->found_posts;
+	}
+
+	/**
+	 * Checks if the PRO version is active.
+	 *
+	 * @since 3.3.0
+	 */
+	public static function is_pro() {
+		// versions of pro before 1.9.0 will use the constant VISUALIZER_PRO
+		// versions of pro 1.9.0 onwards will use the filter
+		return apply_filters( 'visualizer_is_pro', VISUALIZER_PRO );
+	}
+
+	/**
+	 * Checks if the PRO version is older than a particular version.
+	 *
+	 * @since 3.3.0
+	 */
+	public static function is_pro_older_than( $version ) {
+		return version_compare( VISUALIZER_PRO_VERSION, $version, '<' );
 	}
 
 }
