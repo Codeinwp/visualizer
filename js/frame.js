@@ -67,6 +67,8 @@
 
             return false;
         });
+
+        // collapse other open sections of this group
         $('.viz-group-title').click(function () {
             var parent = $(this).parent();
 
@@ -76,7 +78,23 @@
                 parent.parent().find('.viz-group.open').removeClass('open');
                 parent.addClass('open');
             }
+
+            // if the user wanted to perform an action
+            // and the chart is no longer showing because that particular screen is showing
+            // e.g. create parameters
+            // and then the user decided to click on another action
+            // let's invoke the show chart of the previous action so that the chart shows 
+            // and the user does not get confused
+            $('input[type="button"][data-current!="chart"].show-chart-toggle').trigger('click');
         });
+
+        // collapse other open subsections of this section
+        $('.viz-section-title').click(function () {
+            var grandparent = $(this).parent().parent();
+            grandparent.find('.viz-section-title.open ~ .viz-section-items').hide();
+            grandparent.find('.viz-section-title.open').removeClass('open');
+        });
+
         $('#view-remote-file').click(function () {
             var url = $(this).parent().find('#remote-data').val();
 
@@ -330,8 +348,13 @@
         } );
 
         $( '#db-chart-save-button' ).on( 'click', function(){
-            $('#viz-db-wizard-params').val($('#db-query-form').serialize());
-            $('#vz-db-wizard').submit();
+            // submit only if a query has been provided.
+            if($('#db-query-form .visualizer-db-query').val().length > 0){
+                $('#viz-db-wizard-params').val($('#db-query-form').serialize());
+                $('#vz-db-wizard').submit();
+            }else{
+                $('#canvas').unlock();
+            }
         });
     }
 
