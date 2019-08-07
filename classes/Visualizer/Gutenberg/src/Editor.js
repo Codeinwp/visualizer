@@ -31,8 +31,7 @@ const {
 	ButtonGroup,
 	Dashicon,
 	Placeholder,
-	Spinner,
-	Notice
+	Spinner
 } = wp.components;
 
 class Editor extends Component {
@@ -354,14 +353,6 @@ class Editor extends Component {
 
 				{ 'home' === this.state.route && (
 					<div className="visualizer-settings__content">
-
-						<Notice
-							status="warning"
-							isDismissible={ false }
-						>
-							{ __( 'ChartsJS charts are currently not a avialable to select form the block. You can find them on Visualizer admin page.' ) }
-						</Notice>
-
 						<div className="visualizer-settings__content-description">
 							{ __( 'Make a new chart or display an existing one?' ) }
 						</div>

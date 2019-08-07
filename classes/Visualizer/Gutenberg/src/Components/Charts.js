@@ -24,6 +24,8 @@ const {
 const {
 	Button,
 	Dashicon,
+	ExternalLink,
+	Notice,
 	Placeholder,
 	Spinner
 } = wp.components;
@@ -73,6 +75,16 @@ class Charts extends Component {
 
 		return (
 			<div className="visualizer-settings__charts">
+				<Notice
+					status="warning"
+					isDismissible={ false }
+				>
+					{ __( 'ChartJS charts are currently not available for selection here, you must visit the library, get the shortcode, and add the chart here in a shortcode tag.' ) }
+
+					<ExternalLink href={ visualizerLocalize.adminPage }>
+						{ __( 'Click here to visit Visualizer Charts Library.' ) }
+					</ExternalLink>
+				</Notice>
 
 				{
 					( null !== charts ) ?
