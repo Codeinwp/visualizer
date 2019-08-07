@@ -88,6 +88,13 @@
             $('input[type="button"][data-current!="chart"].show-chart-toggle').trigger('click');
         });
 
+        // collapse other open subsections of this section
+        $('.viz-section-title').click(function () {
+            var grandparent = $(this).parent().parent();
+            grandparent.find('.viz-section-title.open ~ .viz-section-items').hide();
+            grandparent.find('.viz-section-title.open').removeClass('open');
+        });
+
         $('#view-remote-file').click(function () {
             var url = $(this).parent().find('#remote-data').val();
 
