@@ -95,7 +95,7 @@ class Visualizer_Gutenberg_Block {
 			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
 			'absurl'    => VISUALIZER_ABSURL,
 			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
-			'adminPage' => menu_page_url( 'visualizer', false )
+			'adminPage' => menu_page_url( 'visualizer', false ),
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
