@@ -221,7 +221,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													?>
 											</div>
 
-											<input type="button" id="json-chart-button" class="button button-secondary "
+											<input type="button" id="json-chart-button" class="button button-secondary show-chart-toggle"
 											value="<?php echo $bttn_label; ?>" data-current="chart"
 											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 											data-t-chart="<?php echo $bttn_label; ?>">
@@ -334,7 +334,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										?>
 										</select>
 
-										<input type="button" id="filter-chart-button" class="button button-secondary" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
+										<input type="button" id="filter-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
 										<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
 									</form>
@@ -384,7 +384,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</select>
 								<input type="hidden" name="params" id="viz-db-wizard-params">
 
-								<input type="button" id="db-chart-button" class="button button-secondary" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
+								<input type="button" id="db-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
 								<input type="button" id="db-chart-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 								<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
 							</form>
