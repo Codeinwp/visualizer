@@ -243,7 +243,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( ! Visualizer_Module::is_pro() ) {
 			echo '<div id="visualizer-sidebar">';
 			echo '<div class="visualizer-sidebar-box">';
-			echo '<h3>' . __( 'Gain more editing power', 'visualizer' ) . '</h3><ul>';
+			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
 			echo '<li>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Use database query to create charts', 'visualizer' ) . '</li>';
@@ -253,6 +253,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
 			echo '<li>' . __( '6 more chart types', 'visualizer' ) . '</li></ul>';
 			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
+			echo '<p style="background-color: #0073aac7; color: #ffffff; padding: 2px; font-weight: bold;">' . __( 'We offer a 30-day no-questions-asked money back guarantee!', 'visualizer' ) . '</p>';
 			echo '<p><a href="' . VISUALIZER_SURVEY . '" target="_blank" class="">' . __( 'Don\'t see the features you need? Help us improve!', 'visualizer' ) . '</a></p>';
 			echo '</div>';
 			echo '</div>';
