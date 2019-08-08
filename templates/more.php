@@ -1,3 +1,6 @@
+<?php
+if ( ! Visualizer_Module::is_pro() ) {
+	?>
 	<div class="pro-feature">
 		<div class="pro-feature-inner">
 			<div class="pro-feature-features">
@@ -37,6 +40,11 @@
 	</div>
 	<div class="clear"></div>
 
+	<?php
+}
+if ( ! apply_filters( 'visualizer_is_business', false ) ) {
+	?>
+
 	<div class="pro-feature">
 		<div class="pro-feature-inner">
 		<div class="pro-feature-features">
@@ -48,3 +56,7 @@
 		<div class="clear"></div>
 		</div>
 	</div>
+
+	<?php
+}
+?>
