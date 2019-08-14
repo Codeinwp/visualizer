@@ -6,8 +6,16 @@
     // so that we know which charts belong to our library.
     var rendered_charts = [];
 
+    // save the settings corresponding to cssClassNames so that when a table is being edited, they stripes etc. don't get reset
+    var cssClassNames;
+
     function renderChart(id, v) {
-        renderSpecificChart(id, all_charts[id], v);
+        var chart = all_charts[id];
+        if(chart.library !== 'datatables'){
+            return;
+        }
+        cssClassNames = null;
+        renderSpecificChart(id, chart, v);
     }
 
     function renderSpecificChart(id, chart, v) {
@@ -29,7 +37,6 @@
         if($('#' + id).find('table.visualizer-data-table').length > 0){
             $('#' + id).empty();
         }
-        $('#' + id).append($('<table class="dataTable visualizer-data-table table table-striped"></table>'));
 
         settings = {
             destroy: true,
@@ -48,22 +55,39 @@
             dom: 'Bfrtip',
         };
 
+        var $classes = 'dataTable visualizer-data-table table table-striped';
+
         if(typeof v.page_type !== 'undefined'){
             switch(v.page_type){
                 case 'post':
+                    // fall-through.
                 case 'library':
+                    // remove scrollY if its greater than what will fit in the box (along with the legend).
+                    if(parseInt(chart.settings['scrollY_int']) > 180){
+                        chart.settings['scrollY_int'];
+                    }
+                    delete chart.settings['scrollX'];
                     $.extend( settings, { 
                             scrollX: 150,
                             scrollY: 180,
-                            scrollCollapse: true
                     } );
                     break;
-                case 'frontend':
                 case 'chart':
+                    delete chart.settings['scrollX']; // jshint ignore:line
+                    // fall-through.
+                case 'frontend':
                     // empty.
                     break;
             }
         }
+
+        if(typeof chart.settings['scrollX'] !== 'undefined'){
+            if(chart.settings['scrollX'] == 'true'){ // jshint ignore:line
+                $classes = $classes + ' nowrap';
+            }
+        }
+
+        $('#' + id).append($('<table class="' + $classes + '"></table>'));
 
         var select = {
             info: false
@@ -73,8 +97,13 @@
 
         var stripe = ['', ''];
 
+        if(cssClassNames !== null){
+            chart.settings['cssClassNames'] = cssClassNames;
+        }
+
         // in preview mode, cssClassNames will not exist when a color is changed.
         if(typeof chart.settings['cssClassNames'] !== 'undefined'){
+            cssClassNames = chart.settings['cssClassNames'];
             if(typeof chart.settings['cssClassNames']['oddTableRow'] !== 'undefined'){
                 stripe[0] = chart.settings['cssClassNames']['oddTableRow'];
             }
@@ -90,6 +119,10 @@
             }
         }
 
+        // remove this so that the eval does not fail.
+        delete chart.settings['internal_title'];
+
+        var additional = [];
         for (i in chart.settings) {
             var valoo = chart.settings[i];
 
@@ -114,11 +147,16 @@
             if(array.length === 2){
                 i = eval( array[0] ); // jshint ignore:line
                 i[ array[1] ] = valoo;
+                additional[ array[0] ] = i;
+                if(array[0] === 'select' && array[1] === 'info' ){
+                    // enable main info or the selection info will not show.
+                    $.extend( settings, {info: true} );
+                }
+            } else {
+                settings[i] = valoo;
             }
-            settings[i] = valoo;
         }
-
-        $.extend( $.fn.dataTable.defaults, settings );
+        $.extend( settings, additional );
 
         cols = [];
         for (j = 0; j < series.length; j++) {
@@ -153,15 +191,25 @@
             rows.push(row);
         }
 
-        // allow user to extend the settings.
-        $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
-
-        table = $('#' + id + ' table.visualizer-data-table');
-        table.DataTable( {
+        $.extend( settings, {
             data: rows,
             columns: cols,
             stripeClasses: stripe,
         } );
+
+        // allow user to extend the settings.
+        $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
+
+        table = $('#' + id + ' table.visualizer-data-table');
+        table.DataTable( settings );
+
+        // header row is handled here as the class is added dynamically to it (after the table is rendered).
+        if(typeof chart.settings['cssClassNames'] !== 'undefined'){
+            if(typeof chart.settings['cssClassNames']['headerRow'] !== 'undefined'){
+                $('#' + id + ' table thead tr').addClass( chart.settings['cssClassNames']['headerRow'] );
+            }
+        }
+
         $('.loader').remove();
     }
 
@@ -215,7 +263,7 @@
     if(typeof visualizer !== 'undefined'){
         // called while updating the chart.
         visualizer.update = function(){
-            renderChart('canvas', visualizer);
+            renderSpecificChart('canvas', all_charts['canvas'], visualizer);
         };
     }
 

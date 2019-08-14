@@ -58,6 +58,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
+		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
@@ -218,7 +219,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// Load all the assets for the different libraries we support.
 			$deps   = array(
 				Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) ),
-				Visualizer_Render_Sidebar_Type_DataTable::enqueue_assets( array( 'media-editor' ) ),
+				Visualizer_Render_Sidebar_Type_DataTable_DataTable::enqueue_assets( array( 'media-editor' ) ),
 			);
 
 			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', $deps, Visualizer_Plugin::VERSION, true );
@@ -297,57 +298,81 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$additional,
 			array(
 				'dataTable' => array(
-					'name'    => esc_html__( 'Table (New)', 'visualizer' ),
+					'name'    => esc_html__( 'Table', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'DataTable' ),
 				),
 				'pie'         => array(
-					'name'    => esc_html__( 'Pie', 'visualizer' ),
+					'name'    => esc_html__( 'Pie/Donut', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'area'        => array(
 					'name'    => esc_html__( 'Area', 'visualizer' ),
 					'enabled' => true,
+					// in ChartJS, the fill option is used to make Line chart an area: https://www.chartjs.org/docs/latest/charts/area.html
+					'supports'  => array( 'Google Charts' ),
 				),
 				'geo'         => array(
 					'name'    => esc_html__( 'Geo', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts' ),
 				),
 				'bar'         => array(
 					'name'    => esc_html__( 'Bar', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'column'      => array(
 					'name'    => esc_html__( 'Column', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts' ),
 				),
 				'gauge'       => array(
 					'name'    => esc_html__( 'Gauge', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts' ),
 				),
 				'candlestick' => array(
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 					'enabled' => true,
+					'supports'  => array( 'Google Charts' ),
 				),
 				// pro types
 				'table'       => array(
 					'name'    => esc_html__( 'Table (Deprecated)', 'visualizer' ),
 					'enabled' => false,
+					'supports'  => array( 'Google Charts' ),
 				),
 				'timeline'    => array(
 					'name'    => esc_html__( 'Timeline', 'visualizer' ),
 					'enabled' => false,
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'combo'       => array(
 					'name'    => esc_html__( 'Combo', 'visualizer' ),
 					'enabled' => false,
+					'supports'  => array( 'Google Charts' ),
+				),
+				'polarArea'       => array(
+					'name'    => esc_html__( 'Polar Area', 'visualizer' ),
+					'enabled' => false,
+					'supports' => array( 'ChartJS' ),
+				),
+				'radar'       => array(
+					'name'    => esc_html__( 'Radar/Spider', 'visualizer' ),
+					'enabled' => false,
+					'supports' => array( 'ChartJS' ),
 				),
 			)
 		);
@@ -358,6 +383,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				if ( ! is_array( $array ) ) {
 					// support for old pro
 					$array  = array( 'enabled' => true, 'name' => $array );
+				}
+				// backward compatibility for PRO before v1.9.0
+				if ( ! array_key_exists( 'supports', $array ) ) {
+					$array['supports'] = array( 'Google Charts' );
 				}
 				if ( ! $array['enabled'] ) {
 					continue;
@@ -372,6 +401,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				if ( ! is_array( $array ) ) {
 					// support for old pro
 					$array  = array( 'enabled' => true, 'name' => $array );
+				}
+				// backward compatibility for PRO before v1.9.0
+				if ( ! array_key_exists( 'supports', $array ) ) {
+					$array['supports'] = array( 'Google Charts' );
 				}
 				$doubleD[ $type ] = $array['name'];
 			}
@@ -388,6 +421,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$deprecated = array();
 
 		switch ( $where ) {
+			case 'types':
+				// fall-through
 			case 'library':
 				// if the user has a Google Table chart, show it as deprecated otherwise remove the option from the library.
 				if ( ! self::hasChartType( 'table' ) ) {
@@ -400,7 +435,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				}
 
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
-				if ( ! VISUALIZER_PRO ) {
+				if ( ! Visualizer_Module::is_pro() ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
 						if ( $get2Darray ) {
 							$deprecated[]   = 'gauge';
@@ -429,7 +464,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				}
 
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
-				if ( ! VISUALIZER_PRO ) {
+				if ( ! Visualizer_Module::is_pro() ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
 						if ( $get2Darray ) {
 							$deprecated[]   = 'gauge';
@@ -546,9 +581,33 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access public
 	 */
 	public function registerAdminMenu() {
-		$title              = esc_html__( 'Visualizer Library', 'visualizer' );
-		$callback           = array( $this, 'renderLibraryPage' );
-		$this->_libraryPage = add_submenu_page( 'upload.php', $title, $title, 'edit_posts', Visualizer_Plugin::NAME, $callback );
+		$svg_base64_icon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzdweCIgaGVpZ2h0PSI3N3B4IiB2aWV3Qm94PSIwIDAgNzcgNzciIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUyLjYgKDY3NDkxKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5Db21iaW5lZCBTaGFwZTwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxnIGlkPSJQcm9kdWN0LVBhZ2UiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJXb3JkUHJlc3MtcGx1Z2lucyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTE5MC4wMDAwMDAsIC00MzUuMDAwMDAwKSIgZmlsbD0iIzM5QzNEMiI+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMjguNSw1MTIgQzIwNy4yMzcwMzcsNTEyIDE5MCw0OTQuNzYyOTYzIDE5MCw0NzMuNSBDMTkwLDQ1Mi4yMzcwMzcgMjA3LjIzNzAzNyw0MzUgMjI4LjUsNDM1IEMyNDkuNzYyOTYzLDQzNSAyNjcsNDUyLjIzNzAzNyAyNjcsNDczLjUgQzI2Nyw0OTQuNzYyOTYzIDI0OS43NjI5NjMsNTEyIDIyOC41LDUxMiBaIE0yNDYuODQzNzUsNDgzLjU5MjA1OSBMMjE1LjYyNSw0ODMuNTkyMDU5IEwyMTUuNjI1LDQ2MC44MjY1NDQgQzIxNS42MjUsNDYwLjE2NDU0NyAyMTUuMTA3NTc4LDQ1OS42MjgzNTkgMjE0LjQ2ODc1LDQ1OS42MjgzNTkgTDIxMi4xNTYyNSw0NTkuNjI4MzU5IEMyMTEuNTE3NDIyLDQ1OS42MjgzNTkgMjExLDQ2MC4xNjQ1NDcgMjExLDQ2MC44MjY1NDQgTDIxMSw0ODUuOTg4NDI5IEMyMTEsNDg3LjMxMTY3NCAyMTIuMDM1NTY2LDQ4OC4zODQ3OTggMjEzLjMxMjUsNDg4LjM4NDc5OCBMMjQ2Ljg0Mzc1LDQ4OC4zODQ3OTggQzI0Ny40ODI1NzgsNDg4LjM4NDc5OCAyNDgsNDg3Ljg0ODYxMSAyNDgsNDg3LjE4NjYxMyBMMjQ4LDQ4NC43OTAyNDQgQzI0OCw0ODQuMTI4MjQ2IDI0Ny40ODI1NzgsNDgzLjU5MjA1OSAyNDYuODQzNzUsNDgzLjU5MjA1OSBaIE0yNDQuNTMxMjUsNDYyLjAyNDcyOSBMMjM1Ljk5OTU3LDQ2Mi4wMjQ3MjkgQzIzNC40NTQ1MzEsNDYyLjAyNDcyOSAyMzMuNjgwNTY2LDQ2My45NjA1NDcgMjM0Ljc3MzIyMyw0NjUuMDkyODMyIEwyMzcuMTE0NjI5LDQ2Ny41MTkxNTYgTDIzMS44MTI1LDQ3My4wMTQzMzIgTDIyNi41MTAzNzEsNDY3LjUxOTkwNSBDMjI1LjYwNzA1MSw0NjYuNTgzODIzIDIyNC4xNDI5NDksNDY2LjU4MzgyMyAyMjMuMjQwMzUyLDQ2Ny41MTk5MDUgTDIxOC4yNzY0MjYsNDcyLjY2Mzg2MyBDMjE3LjgyNDc2Niw0NzMuMTMxOTA0IDIxNy44MjQ3NjYsNDczLjg5MDUwNSAyMTguMjc2NDI2LDQ3NC4zNTg1NDYgTDIxOS45MTEwNzQsNDc2LjA1MjQ4IEMyMjAuMzYyNzM0LDQ3Ni41MjA1MjEgMjIxLjA5NDc4NSw0NzYuNTIwNTIxIDIyMS41NDY0NDUsNDc2LjA1MjQ4IEwyMjQuODc1LDQ3Mi42MDI0NTYgTDIzMC4xNzcxMjksNDc4LjA5Njg4MyBDMjMxLjA4MDQ0OSw0NzkuMDMyOTY1IDIzMi41NDQ1NTEsNDc5LjAzMjk2NSAyMzMuNDQ3MTQ4LDQ3OC4wOTY4ODMgTDI0MC4zODQ2NDgsNDcwLjkwNzc3MyBMMjQyLjcyNjA1NSw0NzMuMzM0MDk4IEMyNDMuODE4NzExLDQ3NC40NjYzODIgMjQ1LjY4Njc3Nyw0NzMuNjY0MzQ3IDI0NS42ODY3NzcsNDcyLjA2MzI3MyBMMjQ1LjY4Njc3Nyw0NjMuMjIyOTE0IEMyNDUuNjg3NSw0NjIuNTYwOTE3IDI0NS4xNzAwNzgsNDYyLjAyNDcyOSAyNDQuNTMxMjUsNDYyLjAyNDcyOSBaIiBpZD0iQ29tYmluZWQtU2hhcGUiPjwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==';
+
+		$this->_libraryPage = add_menu_page( __( 'Visualizer', 'visualizer' ), __( 'Visualizer', 'visualizer' ), 'edit_posts', Visualizer_Plugin::NAME, array( $this, 'renderLibraryPage' ), $svg_base64_icon, 99.7666 );
+
+		add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'Chart Library', 'visualizer' ),
+			__( 'Chart Library', 'visualizer' ),
+			'edit_posts',
+			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME )
+		);
+		add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'Add New Chart', 'visualizer' ),
+			__( 'Add New Chart', 'visualizer' ),
+			'edit_posts',
+			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew' )
+		);
+		add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'Support', 'visualizer' ),
+			__( 'Support', 'visualizer' ) . '<span class="dashicons dashicons-editor-help more-features-icon" style="width: 17px; height: 17px; margin-left: 4px; color: #ffca54; font-size: 17px; vertical-align: -3px;"></span>',
+			'edit_posts',
+			'viz-support',
+			array( $this, 'renderSupportPage' )
+		);
+		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
 	}
 
 	/**
@@ -608,6 +667,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
+	 * Renders support page.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @access public
+	 */
+	public function renderSupportPage() {
+		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
+		include_once VISUALIZER_ABSPATH . '/templates/support.php';
+	}
+
+	/**
 	 * Renders visualizer library page.
 	 *
 	 * @since 1.0.0
@@ -655,7 +726,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
 			}
 
-			unset( $settings['height'], $settings['width'] );
+			unset( $settings['height'], $settings['width'], $settings['chartArea'] );
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
 
@@ -688,12 +759,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'map_api_key' => get_option( 'visualizer-map-api-key' ),
 				'charts' => $charts,
 				'urls'   => array(
-					'base'   => add_query_arg( 'vpage', false ),
+					'base'   => add_query_arg( array( 'vpage' => false, 'vaction' => false ) ),
 					'create' => add_query_arg(
 						array(
 							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
 							'library' => 'yes',
 							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
+							'chart-library'      => isset( $_GET['chart-library'] ) ? $_GET['chart-library'] : '',
+							'vaction' => false,
 						),
 						$ajaxurl
 					),
@@ -701,6 +774,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						array(
 							'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
 							'library' => 'yes',
+							'vaction' => false,
 						),
 						$ajaxurl
 					),
@@ -717,7 +791,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
-				'base'    => add_query_arg( 'vpage', '%#%' ),
+				'base'    => add_query_arg( array( 'vpage' => '%#%', 'vaction' => false ) ),
 				'format'  => '',
 				'current' => $page,
 				'total'   => $query->max_num_pages,
@@ -745,7 +819,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				$links,
 				sprintf(
 					'<a href="%s">%s</a>',
-					admin_url( 'upload.php?page=' . Visualizer_Plugin::NAME ),
+					admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME ),
 					esc_html__( 'Library', 'visualizer' )
 				)
 			);
@@ -770,12 +844,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
-				'<a href="https://github.com/codeinwp/visualizer/wiki" target="_blank">%s</a>',
-				esc_html__( 'Knowledge Base', 'visualizer' )
+				'<a href="' . VISUALIZER_MAIN_DOC . '" target="_blank">%s</a>',
+				esc_html__( 'Docs', 'visualizer' )
 			);
 			// flattr link
 			$plugin_meta[] = sprintf(
-				'<a style="color:red" href="https://themeisle.com/plugins/visualizer-charts-and-graphs-pro-addon/" target="_blank">%s</a>',
+				'<a style="color:red" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank">%s</a>',
 				esc_html__( 'Pro Addon', 'visualizer' )
 			);
 		}

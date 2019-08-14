@@ -59,6 +59,12 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			return false;
 		}
 
+		// only select queries allowed.
+		if ( preg_match( '/^\s*(insert|delete|update|replace|create|alter|drop|truncate)\s/i', $this->_query ) ) {
+			$this->_error = __( 'Only SELECT queries are allowed', 'visualizer' );
+			return false;
+		}
+
 		// impose a limit if no limit clause is provided.
 		if ( strpos( strtolower( $this->_query ), ' limit ' ) === false ) {
 			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 1000 );

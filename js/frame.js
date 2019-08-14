@@ -13,6 +13,10 @@
     });
 
     $(document).ready(function () {
+        onReady();
+    });
+
+    function onReady() {
         // open the correct source tab/sub-tab.
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
@@ -63,6 +67,8 @@
 
             return false;
         });
+
+        // collapse other open sections of this group
         $('.viz-group-title').click(function () {
             var parent = $(this).parent();
 
@@ -72,7 +78,23 @@
                 parent.parent().find('.viz-group.open').removeClass('open');
                 parent.addClass('open');
             }
+
+            // if the user wanted to perform an action
+            // and the chart is no longer showing because that particular screen is showing
+            // e.g. create parameters
+            // and then the user decided to click on another action
+            // let's invoke the show chart of the previous action so that the chart shows 
+            // and the user does not get confused
+            $('input[type="button"][data-current!="chart"].show-chart-toggle').trigger('click');
         });
+
+        // collapse other open subsections of this section
+        $('.viz-section-title').click(function () {
+            var grandparent = $(this).parent().parent();
+            grandparent.find('.viz-section-title.open ~ .viz-section-items').hide();
+            grandparent.find('.viz-section-title.open').removeClass('open');
+        });
+
         $('#view-remote-file').click(function () {
             var url = $(this).parent().find('#remote-data').val();
 
@@ -115,7 +137,37 @@
             $('#cancel-form').submit();
         });
 
-    });
+        init_type_vs_library();
+
+        $('.viz-abort').on('click', function(e){
+            e.preventDefault();
+            window.parent.postMessage('visualizer:mediaframe:close', '*');
+        });
+
+    }
+
+    function init_type_vs_library() {
+        var $data = $('select.viz-select-library').attr('data-type-vs-library');
+        if(typeof $data === 'undefined' || $data.length === 0){
+            return;
+        }
+        var $typeVsLibrary = JSON.parse( $('select.viz-select-library').attr('data-type-vs-library') );
+        // disable all unsupported libraries for the chart type.
+        $('input.type-radio').on('click', function(){
+            enable_libraries_for($(this).val(), $typeVsLibrary);
+        });
+
+        enable_libraries_for($('input.type-radio:checked').val(), $typeVsLibrary);
+    }
+
+    function enable_libraries_for($type, $typeVsLibrary) {
+        $('select.viz-select-library option').addClass('disabled').attr('disabled', 'disabled');
+        var $libs = $typeVsLibrary[$type];
+        $.each($libs, function( i, $lib ) {
+            $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
+        });
+        $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
+    }
 
     function init_permissions(){
         $('#vz-chart-permissions h2').click(function () {
@@ -296,12 +348,21 @@
         } );
 
         $( '#db-chart-save-button' ).on( 'click', function(){
-            $('#viz-db-wizard-params').val($('#db-query-form').serialize());
-            $('#vz-db-wizard').submit();
+            // submit only if a query has been provided.
+            if($('#db-query-form .visualizer-db-query').val().length > 0){
+                $('#viz-db-wizard-params').val($('#db-query-form').serialize());
+                $('#vz-db-wizard').submit();
+            }else{
+                $('#canvas').unlock();
+            }
         });
     }
 
     function init_json_import(){
+        if(typeof visualizer === 'undefined'){
+            return;
+        }
+
         var regex = new RegExp(visualizer.json_tag_separator, 'g');
 
         $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
@@ -357,7 +418,7 @@
                         $('#json-root-form').fadeIn('medium');
                         json_accordion_activate(1, true);
                     }else{
-                        alert(visualizer.l10n.json_error);
+                        alert(data.data.msg);
                     }
                 },
                 complete: function(){
@@ -402,7 +463,7 @@
                         json_accordion_activate(2, false);
                         $table.columns.adjust().draw();
                     }else{
-                        alert(visualizer.l10n.json_error);
+                        alert(data.data.msg);
                     }
                 },
                 complete: function(){
@@ -482,8 +543,7 @@
             } );
         }
 
-        $.extend( $.fn.dataTable.defaults, settings );
-        var $table = $(element + ' .viz-editor-table').DataTable();
+        var $table = $(element + ' .viz-editor-table').DataTable(settings);
         return $table;
     }
 

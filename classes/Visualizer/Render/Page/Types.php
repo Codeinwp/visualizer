@@ -38,7 +38,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _toHTML() {
-		echo '<form method="post">';
+		echo '<form method="post" id="viz-types-form">';
 			echo '<input type="hidden" name="nonce" value="', wp_create_nonce(), '">';
 			parent::_toHTML();
 		echo '</form>';
@@ -83,6 +83,15 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	protected function _renderSidebar() {}
 
 	/**
+	 * Removes all spaces from the name of the library.
+	 *
+	 * @access public
+	 */
+	public function _removeSpaceFromLibrary( $value ) {
+		return str_replace( ' ', '', $value );
+	}
+
+	/**
 	 * Renders toolbar content.
 	 *
 	 * @since 1.0.0
@@ -90,9 +99,37 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		if ( VISUALIZER_PRO ) {
-				global $Visualizer_Pro;
+		$chart_types = Visualizer_Module_Admin::_getChartTypesLocalized( true, false, false, 'types' );
+		$type_vs_library = array();
+
+		$libraries = array();
+		foreach ( $chart_types as $type => $atts ) {
+			if ( empty( $atts['supports'] ) ) {
+				continue;
+			}
+			$libraries = array_merge( $libraries, $atts['supports'] );
+			$type_vs_library[ trim( $type ) ] = array_map( array( $this, '_removeSpaceFromLibrary' ), $atts['supports'] );
 		}
-			echo '<input type="submit" class="button button-primary button-large push-right" value="', esc_attr__( 'Next', 'visualizer' ), '">';
+
+		$libraries = array_unique( $libraries );
+
+		if ( ! empty( $libraries ) ) {
+			?>
+		<select name="chart-library" class="viz-select-library" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) ); ?>">
+			<option value=""><?php esc_html_e( 'Use Library', 'visualizer' ); ?></option>
+			<?php
+			foreach ( $libraries as $library ) {
+				?>
+			<option value="<?php echo $this->_removeSpaceFromLibrary( $library ); ?>"><?php echo $library; ?></option>
+				<?php
+			}
+			?>
+		</select>
+			<?php
+		}
+		?>
+		<input type="submit" class="button button-primary button-large push-right" value="<?php esc_attr_e( 'Next', 'visualizer' ); ?>">
+		<input type="button" class="button button-secondary button-large push-left viz-abort" value="<?php esc_attr_e( 'Cancel', 'visualizer' ); ?>">
+		<?php
 	}
 }

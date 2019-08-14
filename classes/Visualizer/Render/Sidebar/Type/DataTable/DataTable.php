@@ -24,24 +24,8 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Render_Sidebar {
 
-
-	/**
-	 * The URL for the JavaScript file.
-	 *
-	 * @access private
-	 * @var string
-	 */
-	private static $_js     = '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.4/b-print-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.js';
-
-	/**
-	 * The URL for the CSS file.
-	 *
-	 * @access private
-	 * @var string
-	 */
-	private static $_css    = '//cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.4/b-print-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/sl-1.2.6/datatables.min.css';
 
 	/**
 	 * Constructor.
@@ -75,12 +59,10 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * @access public
 	 */
 	function load_assets( $deps, $is_frontend ) {
-		if ( ! wp_script_is( 'moment', 'registered' ) ) {
-			wp_register_script( 'moment', '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js', array(), Visualizer_Plugin::VERSION );
-		}
+		$this->load_dependent_assets( array( 'moment' ) );
 
-		wp_register_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
-		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );
+		wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
 
 		wp_register_script(
 			'visualizer-render-datatables-lib',
@@ -102,8 +84,8 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	 * Enqueue assets.
 	 */
 	public static function enqueue_assets( $deps = array() ) {
-		wp_enqueue_style( 'visualizer-datatables', self::$_css, array(), Visualizer_Plugin::VERSION );
-		wp_enqueue_script( 'visualizer-datatables', self::$_js, array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_enqueue_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
 		wp_enqueue_script( 'visualizer-render-datatables-lib', VISUALIZER_ABSURL . 'js/render-datatables.js', array_merge( $deps, array( 'jquery-ui-core', 'visualizer-datatables' ) ), Visualizer_Plugin::VERSION, true );
 		return 'visualizer-render-datatables-lib';
 	}
@@ -131,7 +113,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 	protected function _renderAdvancedSettings() {
 		self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure frontend actions here.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'Configure frontend actions that need to be shown.', 'visualizer' ) );
 			self::_renderSectionEnd();
 
 			$this->_renderActionSettings();
@@ -208,12 +190,24 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
+				self::_renderTextItem(
+					esc_html__( 'Table Height', 'visualizer' ),
+					'scrollY_int',
+					isset( $this->scrollY_int ) ? $this->scrollY_int : '',
+					esc_html__( 'Height of the table in pixels (the table will show a scrollbar).', 'visualizer' ),
+					'',
+					'number',
+					array(
+						'min' => 0,
+					)
+				);
+
 				self::_renderCheckboxItem(
-					esc_html__( 'Scroll Collapse', 'visualizer' ),
-					'scrollCollapse_bool',
-					$this->scrollCollapse_bool,
+					esc_html__( 'Enable Horizontal Scrolling', 'visualizer' ),
+					'scrollX',
+					$this->scrollX,
 					'true',
-					esc_html__( 'Allow the table to reduce in height when a limited number of rows are shown', 'visualizer' )
+					esc_html__( 'To disable wrapping of columns and enabling horizontal scrolling.', 'visualizer' )
 				);
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
@@ -253,9 +247,41 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 
 		self::_renderGroupStart( esc_html__( 'Row/Cell Settings', 'visualizer' ) );
 
+			self::_renderSectionStart( esc_html__( 'Header Row', 'visualizer' ) );
+
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Background Color', 'visualizer' ),
+					'customcss[headerRow][background-color]',
+					isset( $this->customcss['headerRow']['background-color'] ) ? $this->customcss['headerRow']['background-color'] : null,
+					null
+				);
+
+				self::_renderColorPickerItem(
+					esc_html__( 'Color', 'visualizer' ),
+					'customcss[headerRow][color]',
+					isset( $this->customcss['headerRow']['color'] ) ? $this->customcss['headerRow']['color'] : null,
+					null
+				);
+
+				self::_renderTextItem(
+					esc_html__( 'Text Orientation', 'visualizer' ),
+					'customcss[headerRow][transform]',
+					isset( $this->customcss['headerRow']['transform'] ) ? $this->customcss['headerRow']['transform'] : null,
+					esc_html__( 'In degrees.', 'visualizer' ),
+					'',
+					'number',
+					array(
+						'min' => -180,
+						'max' => 180,
+					)
+				);
+			self::_renderSectionEnd();
+
 			self::_renderSectionStart( esc_html__( 'Odd Table Row', 'visualizer' ) );
 
-				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
@@ -287,7 +313,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 
 			self::_renderSectionStart( esc_html__( 'Even Table Row', 'visualizer' ) );
 
-				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
@@ -319,7 +345,7 @@ class Visualizer_Render_Sidebar_Type_DataTable extends Visualizer_Render_Sidebar
 
 			self::_renderSectionStart( esc_html__( 'Table Cell', 'visualizer' ) );
 
-				self::_renderSectionDescription( esc_html__( 'These values will be applied once you save the chart.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),

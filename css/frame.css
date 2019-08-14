@@ -89,6 +89,10 @@
 	transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
 }
 
+.viz-title-small {
+	font-size: smaller;
+}
+
 .viz-group-wrapper .viz-group .viz-group:hover .viz-group-title,
 .viz-group-wrapper .viz-group .viz-group.open .viz-group-title {
 	border-left-color: #0073aa;
@@ -441,14 +445,14 @@ div.viz-group-content .viz-group-description {
 	padding: 15px;
 	border: 1px solid #e0e0e0;
 	background-color: white;
-	background-image: url(../images/chart_types_g.png);
+	background-image: url(../images/chart_types_june2019_g.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 }
 
 .type-label-selected,
 .type-box > .type-label:hover {
-	background-image: url(../images/chart_types.png);
+	background-image: url(../images/chart_types_june2019.png);
 }
 
 .type-box-area .type-label {
@@ -501,6 +505,14 @@ div.viz-group-content .viz-group-description {
 
 .type-box-combo .type-label {
 	background-position: -597px -670px;
+}
+
+.type-box-polarArea .type-label {
+	background-position: -2px -912px;
+}
+
+.type-box-radar .type-label {
+	background-position: -301px -899px;
 }
 
 /******************************************************************************/
@@ -760,6 +772,14 @@ button#editor-chart-button {
 
 .hidden-setting {
 	display: none;
+}
+
+.viz-select-library {
+	color: #0085ba;
+}
+
+.viz-select-library option:first-child {
+	font-weight: bold;
 }
 
 /* ====== RESPONSIVE ======  */
@@ -1344,6 +1364,10 @@ span.viz-section-error {
 	display: none !important;
 }
 
+.dt-button.buttons-print {
+	display: none;
+}
+
 /******************************************************************************/
 /********************************  json table *********************************/
 /******************************************************************************/
@@ -1431,4 +1455,12 @@ button#visualizer-save-html-table {
 button#viz-text-editor-button {
 	display: inline-block;
 	vertical-align: middle;
+}
+
+/******************************************************************************/
+/********************************  chartjs ***********************************/
+/******************************************************************************/
+
+canvas.chartjs-render-monitor {
+	height: 500px !important;
 }

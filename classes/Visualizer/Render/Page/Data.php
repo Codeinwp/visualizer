@@ -38,11 +38,15 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 */
 	protected function _renderContent() {
 		// Added by Ash/Upwork
-		if ( VISUALIZER_PRO ) {
-			global $Visualizer_Pro;
-			$Visualizer_Pro->_addEditor( $this->chart->ID );
-			if ( method_exists( $Visualizer_Pro, '_addFilterWizard' ) ) {
-				$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
+		if ( Visualizer_Module::is_pro() ) {
+			do_action( 'visualizer_add_editor_etc', $this->chart->ID );
+
+			if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
+				global $Visualizer_Pro;
+				$Visualizer_Pro->_addEditor( $this->chart->ID );
+				if ( method_exists( $Visualizer_Pro, '_addFilterWizard' ) ) {
+					$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
+				}
 			}
 		} else {
 			Visualizer_Render_Layout::show( 'simple-editor-screen', $this->chart->ID );
@@ -83,8 +87,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			$source_of_chart .= '_wp';
 		}
 		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$lib               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		?>
-		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>" data-chart-type="<?php echo $type; ?>"></span>
+		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>" data-chart-type="<?php echo $type; ?>" data-chart-lib="<?php echo $lib; ?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
 		<ul class="viz-group-wrapper full-height">
 			<li class="viz-group viz-group-category open" id="vz-chart-source">
@@ -97,7 +102,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?></h2>
 							<div class="viz-group-content">
 								<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
-								<p class="viz-group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
+								<p class="viz-group-description"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 								<form id="vz-csv-file-form" action="<?php echo $upload_link; ?>" method="post"
 									  target="thehole" enctype="multipart/form-data">
 									<input type="hidden" id="remote-data" name="remote_data">
@@ -117,7 +122,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php _e( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?> </p>
-										<p class="viz-group-description"><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></p>
+										<p class="viz-group-description"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you have using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 										<p class="viz-group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
@@ -181,15 +186,15 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</li>
 
 								<li class="viz-subsection">
-								<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON/REST', 'visualizer' ); ?>
+								<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?>
 									<span class="dashicons dashicons-lock"></span></span>
 									<div class="viz-section-items section-items">
-										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON/REST source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 										<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 													<?php
 													$bttn_label = 'visualizer_source_json' === $source_of_chart ? __( 'Modify Parameters', 'visualizer' ) : __( 'Create Parameters', 'visualizer' );
-													if ( VISUALIZER_PRO ) {
+													if ( Visualizer_Module::is_pro() ) {
 														?>
 												<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
 												<select name="vz-json-time" id="vz-json-time" class="visualizer-select" data-chart="<?php echo $this->chart->ID; ?>">
@@ -216,12 +221,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													?>
 											</div>
 
-											<input type="button" id="json-chart-button" class="button button-secondary "
+											<input type="button" id="json-chart-button" class="button button-secondary show-chart-toggle"
 											value="<?php echo $bttn_label; ?>" data-current="chart"
 											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 											data-t-chart="<?php echo $bttn_label; ?>">
 											<?php
-											if ( VISUALIZER_PRO ) {
+											if ( Visualizer_Module::is_pro() ) {
 												?>
 											<input type="button" id="json-chart-save-button" class="button button-primary "
 											value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
@@ -245,7 +250,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											<?php
 											$fetch_link        = add_query_arg(
 												array(
-													'action' => ( VISUALIZER_PRO ) ? Visualizer_Pro::ACTION_FETCH_DATA : '',
+													'action' => Visualizer_Module::is_pro() ? Visualizer_Pro::ACTION_FETCH_DATA : '',
 													'nonce'  => wp_create_nonce(),
 												),
 												admin_url( 'admin-ajax.php' )
@@ -260,8 +265,21 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											while ( $query->have_posts() ) {
 												$chart    = $query->next_post();
 												$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+
+												$title       = '#' . $chart->ID;
+												if ( ! empty( $settings['title'] ) ) {
+													$title  = $settings['title'];
+												}
+												// for ChartJS, title is an array.
+												if ( is_array( $title ) && isset( $title['text'] ) ) {
+													$title = $title['text'];
+												}
+												if ( empty( $title ) ) {
+													$title  = '#' . $chart->ID;
+												}
+
 												?>
-												<option value="<?php echo $chart->ID; ?>"><?php echo empty( $settings['title'] ) ? '#' . $chart->ID : $settings['title']; ?></option>
+												<option value="<?php echo $chart->ID; ?>"><?php echo $title; ?></option>
 												<?php
 											}
 											?>
@@ -316,7 +334,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										?>
 										</select>
 
-										<input type="button" id="filter-chart-button" class="button button-secondary" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
+										<input type="button" id="filter-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
 										<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
 									</form>
@@ -366,7 +384,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</select>
 								<input type="hidden" name="params" id="viz-db-wizard-params">
 
-								<input type="button" id="db-chart-button" class="button button-secondary" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
+								<input type="button" id="db-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
 								<input type="button" id="db-chart-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 								<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
 							</form>
@@ -388,8 +406,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 							<div class="viz-group-content edit-data-content">
 								<div>
-									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), VISUALIZER_PRO ? 'spreadsheet like' : 'simple' ); ?></p>
-									<?php if ( ! VISUALIZER_PRO ) { ?>
+									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), Visualizer_Module::is_pro() ? 'spreadsheet like' : 'simple' ); ?></p>
+									<?php if ( ! Visualizer_Module::is_pro() ) { ?>
 										<p class="viz-group-description simple-editor-type"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
 									<?php } ?>
 									<input type="button" id="editor-chart-button" class="button button-primary "
@@ -407,6 +425,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				<div class="viz-group-header">
 					<button class="customize-section-back" tabindex="0"></button>
 					<h3 class="viz-group-title viz-main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>
+					<h4 class="viz-group-title viz-title-small"><?php _e( 'If you have just updated/modified the chart data, you may need to save it before the new data reflects in the settings.', 'visualizer' ); ?></h4>
 				</div>
 				<ul class="viz-group-content">
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
@@ -421,7 +440,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			</li>
 
 			<li class="viz-group viz-group-category bottom-fixed sidebar-footer-link" id="vz-chart-docs">
-				<h2><span class="dashicons dashicons-editor-help"></span><a href="https://docs.themeisle.com/category/657-visualizer" target="_blank"><?php _e( 'Docs', 'visualizer' ); ?></a></h2>
+				<h2><span class="dashicons dashicons-editor-help"></span><a href="<?php echo VISUALIZER_MAIN_DOC; ?>" target="_blank"><?php _e( 'Docs', 'visualizer' ); ?></a></h2>
 			</li>
 
 			<?php $this->getPermissionsLink( $this->chart->ID ); ?>

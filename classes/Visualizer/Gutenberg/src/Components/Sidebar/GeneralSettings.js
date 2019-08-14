@@ -57,7 +57,7 @@ class GeneralSettings extends Component {
 						} }
 					/>
 
-					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 						<SelectControl
 							label={ __( 'Chart Title Position' ) }
 							help={ __( 'Where to place the chart title, compared to the chart area.' ) }
@@ -74,7 +74,7 @@ class GeneralSettings extends Component {
 						/>
 					) }
 
-					{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 						<BaseControl
 							label={ __( 'Chart Title Color' ) }
 						>
@@ -88,7 +88,7 @@ class GeneralSettings extends Component {
 						</BaseControl>
 					) }
 
-					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 						<SelectControl
 							label={ __( 'Axes Titles Position' ) }
 							help={ __( 'Determines where to place the axis titles, compared to the chart area.' ) }
@@ -107,7 +107,7 @@ class GeneralSettings extends Component {
 
 				</PanelBody>
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Font Styles' ) }
 						className="visualizer-inner-sections"
@@ -167,7 +167,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Legend' ) }
 						className="visualizer-inner-sections"
@@ -230,7 +230,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'dataTable' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Tooltip' ) }
 						className="visualizer-inner-sections"
@@ -282,7 +282,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Animation' ) }
 						className="visualizer-inner-sections"

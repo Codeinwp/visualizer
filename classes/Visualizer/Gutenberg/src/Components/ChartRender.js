@@ -3,6 +3,8 @@
  */
 import { Chart } from 'react-google-charts';
 
+import DataTable from './DataTable.js';
+
 import merge from 'merge';
 
 import { compact, formatDate, isValidJSON } from '../utils.js';
@@ -34,13 +36,16 @@ class ChartRender extends Component {
 	}
 
 	render() {
-
 		let chart;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
 
-		if ( 0 <= [ 'gauge', 'table', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
-			chart = startCase( this.props.chart['visualizer-chart-type']);
+		if ( 0 <= [ 'gauge', 'table', 'timeline', 'dataTable' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+			if ( 'dataTable' === data['visualizer-chart-type']) {
+				chart = data['visualizer-chart-type'];
+			} else {
+				chart = startCase( this.props.chart['visualizer-chart-type']);
+			}
 		} else {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
 		}
@@ -66,17 +71,26 @@ class ChartRender extends Component {
 							</Toolbar>
 						</BlockControls>
 
-						<Chart
-							chartType={ chart }
-							rows={ data['visualizer-data'] }
-							columns={ data['visualizer-series'] }
-							options={
-								isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
-									merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
-									compact( this.props.chart['visualizer-settings'])
-							}
-							height="500px"
-						/>
+						{ ( 'dataTable' === chart ) ? (
+							<DataTable
+								id={ this.props.id }
+								rows={ data['visualizer-data'] }
+								columns={ data['visualizer-series'] }
+								options={ data['visualizer-settings'] }
+							/>
+						) : (
+							<Chart
+								chartType={ chart }
+								rows={ data['visualizer-data'] }
+								columns={ data['visualizer-series'] }
+								options={
+									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
+										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
+										compact( this.props.chart['visualizer-settings'])
+								}
+								height="500px"
+							/>
+						) }
 
 					</Fragment>
 				}
