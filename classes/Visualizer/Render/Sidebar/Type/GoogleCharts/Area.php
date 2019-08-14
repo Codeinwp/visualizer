@@ -28,7 +28,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Area extends Visualizer_Render_Sidebar_Linear {
+class Visualizer_Render_Sidebar_Type_GoogleCharts_Area extends Visualizer_Render_Sidebar_Linear {
 
 	/**
 	 * Constructor.

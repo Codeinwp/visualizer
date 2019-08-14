@@ -28,7 +28,7 @@
  *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_Bar extends Visualizer_Render_Sidebar_Columnar {
+class Visualizer_Render_Sidebar_Type_GoogleCharts_Bar extends Visualizer_Render_Sidebar_Columnar {
 
 	/**
 	 * Constructor.

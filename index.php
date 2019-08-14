@@ -4,7 +4,7 @@
 	Plugin Name: Visualizer: Tables and Charts Manager for WordPress
 	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
 	Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-	Version: 3.2.1
+	Version: 3.3.0
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( 'Visualizer_Plugin', false ) ) {
 	return;
 }
+
+// support for pro versions before 3.3.0
 if ( class_exists( 'Visualizer_Pro', false ) ) {
 	define( 'VISUALIZER_PRO', true );
 } else {
@@ -87,6 +89,7 @@ function visualizer_launch() {
 
 	// the link to pre-build queries.
 	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
+	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
 
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
@@ -100,6 +103,7 @@ function visualizer_launch() {
 	);
 
 	// set general modules
+	$plugin->setModule( Visualizer_Module_Utility::NAME );
 	$plugin->setModule( Visualizer_Module_Setup::NAME );
 	$plugin->setModule( Visualizer_Module_Sources::NAME );
 	$plugin->setModule( Visualizer_Module_Chart::NAME );
@@ -120,6 +124,9 @@ function visualizer_launch() {
 	}
 	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
 	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
+
+	define( 'VISUALIZER_SURVEY', Visualizer_Module::is_pro() ? 'https://forms.gle/7Zo7FuZbvQ8DTvRi6' : 'https://forms.gle/muMtbcyvHn1aTvmJ7' );
+
 }
 
 /**

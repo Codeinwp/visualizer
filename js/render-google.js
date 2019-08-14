@@ -228,6 +228,8 @@ var __visualizer_chart_images   = [];
             }
         });
 
+        $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
+
         render.draw(table, settings);
 	}
 
@@ -350,6 +352,8 @@ var __visualizer_chart_images   = [];
                         $type = 'geochart';
                         break;
                     case 'dataTable':
+                    case 'polarArea':
+                    case 'radar':
                         $type = null;
                         break;
                 }

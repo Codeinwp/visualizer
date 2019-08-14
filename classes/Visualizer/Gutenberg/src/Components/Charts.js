@@ -3,6 +3,8 @@
  */
 import { Chart } from 'react-google-charts';
 
+import DataTable from './DataTable.js';
+
 import { formatDate, filterCharts } from '../utils.js';
 
 /**
@@ -22,6 +24,8 @@ const {
 const {
 	Button,
 	Dashicon,
+	ExternalLink,
+	Notice,
 	Placeholder,
 	Spinner
 } = wp.components;
@@ -71,6 +75,16 @@ class Charts extends Component {
 
 		return (
 			<div className="visualizer-settings__charts">
+				<Notice
+					status="warning"
+					isDismissible={ false }
+				>
+					{ __( 'ChartJS charts are currently not available for selection here, you must visit the library, get the shortcode, and add the chart here in a shortcode tag.' ) }
+
+					<ExternalLink href={ visualizerLocalize.adminPage }>
+						{ __( 'Click here to visit Visualizer Charts Library.' ) }
+					</ExternalLink>
+				</Notice>
 
 				{
 					( null !== charts ) ?
@@ -80,7 +94,6 @@ class Charts extends Component {
 								<div className="visualizer-settings__charts-grid">
 
 									{ ( Object.keys( charts ) ).map( i => {
-
 										const data = formatDate( charts[i]['chart_data']);
 
 										let title, chart;
@@ -101,8 +114,10 @@ class Charts extends Component {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
 										}
 
-										if ( 'dataTable' === chart ) {
-											return;
+										if ( data['visualizer-chart-library']) {
+											if ( 'ChartJS' === data['visualizer-chart-library']) {
+												return;
+											}
 										}
 
 										return (
@@ -112,12 +127,22 @@ class Charts extends Component {
 													{ title }
 												</div>
 
-												<Chart
-													chartType={ chart }
-													rows={ data['visualizer-data'] }
-													columns={ data['visualizer-series'] }
-													options={ filterCharts( data['visualizer-settings']) }
-												/>
+												{ ( 'dataTable' === chart ) ? (
+													<DataTable
+														id={ charts[i].id }
+														rows={ data['visualizer-data'] }
+														columns={ data['visualizer-series'] }
+														chartsScreen={ true }
+														options={ filterCharts( data['visualizer-settings']) }
+													/>
+												) : (
+													<Chart
+														chartType={ chart }
+														rows={ data['visualizer-data'] }
+														columns={ data['visualizer-series'] }
+														options={ filterCharts( data['visualizer-settings']) }
+													/>
+												) }
 
 												<div
 													className="visualizer-settings__charts-controls"
@@ -132,7 +157,7 @@ class Charts extends Component {
 									}) }
 								</div>
 
-								{ ! chartsLoaded && (
+								{ ! chartsLoaded && 5 < charts.length && (
 									<Button
 										isPrimary
 										isLarge

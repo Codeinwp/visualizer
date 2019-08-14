@@ -193,7 +193,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 								?>
 								</select>
 								<?php
-								if ( ! VISUALIZER_PRO ) {
+								if ( ! Visualizer_Module::is_pro() ) {
 									?>
 								<br/>
 								<br/>

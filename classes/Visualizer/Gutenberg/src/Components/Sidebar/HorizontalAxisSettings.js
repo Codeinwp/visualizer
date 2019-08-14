@@ -150,8 +150,12 @@ class HorizontalAxisSettings extends Component {
 							<TextControl
 								label={ __( 'Count' ) }
 								help={ __( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.' ) }
-								value={ settings.hAxis.gridlines.count }
+								value={ settings.hAxis.gridlines ? settings.hAxis.gridlines.count : '' }
 								onChange={ e => {
+									if ( ! settings.hAxis.gridlines ) {
+										settings.hAxis.gridlines = {};
+									}
+
 									settings.hAxis.gridlines.count = e;
 									this.props.edit( settings );
 								} }
@@ -161,8 +165,12 @@ class HorizontalAxisSettings extends Component {
 								label={ __( 'Color' ) }
 							>
 								<ColorPalette
-									value={ settings.hAxis.gridlines.color }
+									value={ settings.hAxis.gridlines ? settings.hAxis.gridlines.color : '' }
 									onChange={ e => {
+										if ( ! settings.hAxis.gridlines ) {
+											settings.hAxis.gridlines = {};
+										}
+
 										settings.hAxis.gridlines.color = e;
 										this.props.edit( settings );
 									} }

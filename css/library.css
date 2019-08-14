@@ -151,13 +151,16 @@
 }
 
 #visualizer-sidebar {
-	display: table-cell;
-	width: 250px;
+	clear: both;
+	margin: 20px 0px;
+	width: 96%;
 }
 
 .visualizer-sidebar-box ul li {
 	margin: 4px 0;
 	color: #23282d;
+	float: left;
+	width: 25%;
 }
 
 .visualizer-sidebar-box ul {
@@ -168,13 +171,10 @@
 
 .visualizer-sidebar-box {
 	display: block;
-	width: 95%;
-	margin: 0;
-	margin-top: 20px;
-	margin-left: 2.5%;
 	padding-top: 10px;
 	padding-bottom: 15px;
 	border-top: 5px solid #0073aa;
+	border-bottom: 5px solid #0073aa;
 	color: #0073aa;
 	background: white;
 	text-align: center;
@@ -292,16 +292,22 @@ button.media-modal-close {
 	display: none !important;
 }
 
-.dataTables_scrollBody {
-	overflow: hidden !important;
-}
-
 .dataTables_wrapper {
-    height: 300px;
+    max-height: 300px;
     overflow: hidden !important;
 }
 
 /* datatables */
 .dt-button {
 	display: none !important;
+}
+
+/* chartjs */
+#visualizer-library canvas.chartjs-render-monitor {
+	height: 100% !important;
+}
+
+div#visualizer-types ul, div#visualizer-types form p {
+	vertical-align: middle;
+	margin: 0;
 }

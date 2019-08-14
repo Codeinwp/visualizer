@@ -64,9 +64,32 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 	}
 
 	/**
-	 * Loads the alterview view of the chart.
+	 * Loads the alternate view of the chart.
 	 */
 	public function get_chart( $chart, $data, $series, $settings ) {
+		// let's check if there is a view parameter in the GET request.
+		$view   = isset( $_GET['view'] ) ? $_GET['view'] : null;
+
+		if ( ! empty( $view ) ) {
+			// attachmend id?
+			if ( is_numeric( $view ) ) {
+				$view = wp_get_attachment_url( $view );
+			}
+
+			$attributes = wp_check_filetype( $view );
+			if ( $attributes && false !== strpos( $attributes['type'], 'image/' ) ) {
+				// absolute url or relative?
+				if ( 0 !== strpos( $view, 'http' ) ) {
+					$view = site_url( $view );
+				}
+				$view = '<img src="' . $view . '">';
+			}
+
+			if ( ! empty( $view ) ) {
+				return $view;
+			}
+		}
+
 		$view = apply_filters( 'visualizer_amp_view', null, $chart, $data, $series, $settings );
 		if ( ! is_null( $view ) ) {
 			return $view;

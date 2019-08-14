@@ -61,12 +61,23 @@
             }
         });
 
-        $('.add-new-h2').click(function () {
+        $('.add-new-chart').click(function () {
             var wnd = window,
                 view = new vmv.Chart({action: vu.create});
 
+            window.parent.addEventListener('message', function(event){
+                switch(event.data) {
+                    case 'visualizer:mediaframe:close':
+                        view.close();
+                        break;
+                }
+            }, false);
+
+            // remove the 'type' while refreshing the library page on creation of a new chart.
+            // this is to avoid cases where users have filtered for chart type A and end up creating chart type B
+            // remove 'vaction' as well so that additional actions are removed
             wnd.send_to_editor = function () {
-                wnd.location.href = vu.base;
+                wnd.location.href = vu.base.replace(/type=[a-zA-Z]*/, '').replace(/vaction/, '');
             };
             view.open();
 
@@ -78,7 +89,7 @@
                 view = new vmv.Chart({action: vu.edit + '&chart=' + $(this).attr('data-chart')});
 
             wnd.send_to_editor = function () {
-                wnd.location.reload();
+                wnd.location.href = wnd.location.href.replace(/vaction/, '');
             };
 
             view.open();
@@ -106,6 +117,12 @@
             });
             return false;
         });
+
+        // if vaction=addnew is found as a GET request parameter, show the modal.
+        if(location.href.indexOf('vaction=addnew') !== -1){
+            $('.add-new-chart').trigger('click');
+        }
+
         $(window).resize(function () {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function () {

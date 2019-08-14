@@ -79,11 +79,11 @@ class Visualizer_Gutenberg_Block {
 
 		// Enqueue the bundled block JS file
 		wp_enqueue_script( 'handsontable', $handsontableJS );
-		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable' ), $version, true );
+		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment' ), $version, true );
 
 		$type = 'community';
 
-		if ( VISUALIZER_PRO ) {
+		if ( Visualizer_Module::is_pro() ) {
 			$type = 'pro';
 			if ( apply_filters( 'visualizer_is_business', false ) ) {
 				$type = 'developer';
@@ -94,12 +94,14 @@ class Visualizer_Gutenberg_Block {
 			'isPro'     => $type,
 			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
 			'absurl'    => VISUALIZER_ABSURL,
+			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
+			'adminPage' => menu_page_url( 'visualizer', false ),
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
 		// Enqueue frontend and editor block styles
 		wp_enqueue_style( 'handsontable', $handsontableCSS );
-		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, '', $version );
+		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $version );
 	}
 	/**
 	 * Hook server side rendering into render callback
@@ -194,6 +196,8 @@ class Visualizer_Gutenberg_Block {
 
 		$data['visualizer-chart-type'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 
+		$data['visualizer-chart-library'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+
 		$data['visualizer-source'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SOURCE, true );
 
 		$data['visualizer-default-data'] = get_post_meta( $post_id, Visualizer_Plugin::CF_DEFAULT_DATA, true );
@@ -219,7 +223,7 @@ class Visualizer_Gutenberg_Block {
 			$data['visualizer-chart-schedule'] = $schedule;
 		}
 
-		if ( VISUALIZER_PRO ) {
+		if ( Visualizer_Module::is_pro() ) {
 			$permissions = get_post_meta( $post_id, Visualizer_PRO::CF_PERMISSIONS, true );
 
 			if ( ! empty( $permissions ) ) {
@@ -250,7 +254,7 @@ class Visualizer_Gutenberg_Block {
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
 			}
 
-			if ( VISUALIZER_PRO ) {
+			if ( Visualizer_Module::is_pro() ) {
 				update_post_meta( $data['id'], Visualizer_PRO::CF_PERMISSIONS, $data['visualizer-permissions'] );
 			}
 
