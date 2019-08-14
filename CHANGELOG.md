@@ -1,4 +1,15 @@
 
+ ### v3.3.0 - 2019-08-14 
+ **Changes:** 
+ * Add support for ChartJS
+* Add alpha color picker for supported charts
+* Fix issue with some options of DataTable
+* Include DataTable charts in block editor
+* Fix issue with import from JSON not working with some sources
+* Add menu and onboarding page
+* Fix issue with frontend action checkboxes
+* Improve UX in advanced settings
+ 
  ### v3.2.1 - 2019-05-05 
  **Changes:** 
  * Fix issue with async loading of scripts

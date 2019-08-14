@@ -153,6 +153,18 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.3.0 - 2019-08-14  = 
+
+* Add support for ChartJS
+* Add alpha color picker for supported charts
+* Fix issue with some options of DataTable
+* Include DataTable charts in block editor
+* Fix issue with import from JSON not working with some sources
+* Add menu and onboarding page
+* Fix issue with frontend action checkboxes
+* Improve UX in advanced settings
+
+
 = 3.2.1 - 2019-05-05  = 
 
 * Fix issue with async loading of scripts
