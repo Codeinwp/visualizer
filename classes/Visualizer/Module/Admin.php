@@ -68,7 +68,63 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( '_wp_put_post_revision', 'addRevision', null, 10, 1 );
 		$this->_addAction( 'wp_restore_post_revision', 'restoreRevision', null, 10, 2 );
 
+		$this->_addAction( 'visualizer_chart_schedules_spl', 'addSplChartSchedules', null, 10, 3 );
+
 		$this->_addAction( 'admin_init', 'init' );
+	}
+
+
+	/**
+	 * Add disabled `optgroup` schedules to the drop downs.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 *
+	 * @param string $feature The feature for which to add schedules.
+	 * @param int    $chart_id The chart ID.
+	 * @param int    $plan The plan number.
+	 */
+	public function addSplChartSchedules( $feature, $chart_id, $plan ) {
+		if ( apply_filters( 'visualizer_is_business', false ) ) {
+			return;
+		}
+
+		$license = __( 'PRO', 'visualizer' );
+		switch ( $plan ) {
+			case 2:
+				$license = __( 'Developer', 'visualizer' );
+				break;
+		}
+
+		$hours = array(
+			'0' => __( 'Live', 'visualizer' ),
+			'1'  => __( 'Each hour', 'visualizer' ),
+			'12' => __( 'Each 12 hours', 'visualizer' ),
+			'24' => __( 'Each day', 'visualizer' ),
+			'72' => __( 'Each 3 days', 'visualizer' ),
+		);
+
+		switch ( $feature ) {
+			case 'json':
+				// no more schedules if pro is already active.
+				if ( Visualizer_Module::is_pro() ) {
+					return;
+				}
+				break;
+			case 'wp':
+				// fall-through.
+			case 'db':
+				break;
+			default:
+				return;
+		}
+
+		echo '<optgroup disabled label="' . sprintf( __( 'More in the %s version', 'visualizer' ), $license ) . '">';
+		foreach ( $hours as $hour => $desc ) {
+			echo '<option disabled>' . $desc . '</option>';
+		}
+		echo '</optgroup>';
 	}
 
 	/**
