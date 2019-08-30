@@ -1053,6 +1053,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 			if ( $new_chart_id && ! is_wp_error( $new_chart_id ) ) {
 				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_CHART_TYPE, get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true ) );
+				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true ) );
 				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, get_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, true ) );
 				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SOURCE, get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true ) );
 				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SERIES, get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true ) );
