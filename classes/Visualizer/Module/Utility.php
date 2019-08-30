@@ -214,12 +214,8 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'bar':
 				for ( $i = 0; $i < $max; $i++ ) {
-					if ( isset( $settings[ $name ][ $i ]['backgroundColor'] ) && ! empty( $settings[ $name ][ $i ]['backgroundColor'] ) ) {
-						$attributes[] = array( 'backgroundColor' => $settings[ $name ][ $i ]['backgroundColor'], 'hoverBackgroundColor' => $settings[ $name ][ $i ]['hoverBackgroundColor'] );
-					} else {
-						$colors = self::get_random_color();
-						$attributes[] = array( 'backgroundColor' => $colors[0], 'hoverBackgroundColor' => $colors[1] );
-					}
+					$colors = self::get_random_color();
+					$attributes[] = array( 'backgroundColor' => $colors[0], 'hoverBackgroundColor' => $colors[1] );
 				}
 				break;
 			case 'radar':
@@ -228,12 +224,8 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'area':
 				for ( $i = 0; $i < $max; $i++ ) {
-					if ( isset( $settings[ $name ][ $i ]['borderColor'] ) && ! empty( $settings[ $name ][ $i ]['borderColor'] ) ) {
-						$attributes[] = array( 'borderColor' => $settings[ $name ][ $i ]['borderColor'] );
-					} else {
-						$colors = self::get_random_color();
-						$attributes[] = array( 'borderColor' => $colors[0] );
-					}
+					$colors = self::get_random_color();
+					$attributes[] = array( 'borderColor' => $colors[0] );
 				}
 				break;
 		}
