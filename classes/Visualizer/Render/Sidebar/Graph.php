@@ -369,6 +369,10 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 	 */
 	protected function _renderSeriesSettings() {
 		self::_renderGroupStart( esc_html__( 'Series Settings', 'visualizer' ) );
+			self::_renderSectionStart();
+				self::_renderSectionDescription( esc_html__( 'If you have just updated/modified the chart data, you may need to save it before the new data reflects in the settings.', 'visualizer' ) );
+			self::_renderSectionEnd();
+
 		for ( $i = 1, $cnt = count( $this->__series ); $i < $cnt; $i++ ) {
 			if ( ! empty( $this->__series[ $i ]['label'] ) ) {
 				self::_renderSectionStart( esc_html( $this->__series[ $i ]['label'] ), false );
