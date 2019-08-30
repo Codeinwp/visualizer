@@ -414,6 +414,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
 										   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 										   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>">
+
+									<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 								</div>
 							</div>
 						</li>
