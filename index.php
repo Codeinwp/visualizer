@@ -125,7 +125,7 @@ function visualizer_launch() {
 	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
 	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
 
-	define( 'VISUALIZER_SURVEY', Visualizer_Module::is_pro() ? 'https://docs.google.com/forms/d/1WYZTHLnL7Nb6MpdjaOSo07iEjlDvolVB2wFDxUL9YnQ/' : 'https://docs.google.com/forms/d/10JiVg_XAFHOy9Vh7TFZuFybd4U_IOlldXXf1Z8Kkf7I' );
+	define( 'VISUALIZER_SURVEY', Visualizer_Module::is_pro() ? 'https://forms.gle/7Zo7FuZbvQ8DTvRi6' : 'https://forms.gle/muMtbcyvHn1aTvmJ7' );
 
 }
 

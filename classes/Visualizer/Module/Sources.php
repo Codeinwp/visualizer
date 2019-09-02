@@ -134,14 +134,14 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 		$return  = '';
 		$feature = strval( $feature );
 		if ( empty( $feature ) || ( in_array( $feature, $biz_features, true ) && ! apply_filters( 'visualizer_is_business', false ) ) ) {
-			$plan = 'PRO';
-			if ( in_array( $feature, $biz_features, true ) ) {
-				$plan = 'DEVELOPER';
+			$msg = sprintf( __( 'Upgrade to %s to activate this feature!', 'visualizer' ), 'PRO' );
+			if ( Visualizer_Module::is_pro() && in_array( $feature, $biz_features, true ) ) {
+				$msg = sprintf( __( 'Upgrade your license to at least the %s version to activate this feature!', 'visualizer' ), 'DEVELOPER' );
 			}
 			$return = '<div class="only-pro-content">';
 			$return .= '	<div class="only-pro-container">';
 			$return .= '		<div class="only-pro-inner">';
-			$return .= '			<p>' . sprintf( __( 'Activate your %s version to use this feature!', 'visualizer' ), $plan ) . '</p>';
+			$return .= '			<p>' . $msg . '</p>';
 			$return .= '            <a target="_blank" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
 			$return .= ' 		</div>';
 			$return .= ' 	</div>';

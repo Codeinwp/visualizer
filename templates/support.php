@@ -2,7 +2,7 @@
 
 	<?php
 	$active_tab  = isset( $_REQUEST['tab'] ) ? sanitize_text_field( $_REQUEST['tab'] ) : 'help';
-	$show_more = ! Visualizer_Module::is_pro();
+	$show_more = ! apply_filters( 'visualizer_is_business', false );
 	?>
 
 	<div class="pro-features-header">
@@ -12,7 +12,7 @@
 		<div class="header-btns">
 			<?php if ( $show_more ) { ?>
 			<a target="_blank" href="<?php echo Visualizer_Plugin::PRO_TEASER_URL; ?>" class="buy-now"><span
-					class="dashicons dashicons-cart"></span> More features</a>
+					class="dashicons dashicons-cart"></span>More features</a>
 			<?php } ?>
 		</div>
 		<div class="clear"></div>
@@ -22,8 +22,6 @@
 	<h2 class="nav-tab-wrapper">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=help' ) ); ?>"
 		   class="nav-tab <?php echo $active_tab === 'help' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Support', 'visualizer' ); ?></a>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=improve' ) ); ?>"
-		   class="nav-tab <?php echo $active_tab === 'improve' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Help us improve!', 'visualizer' ); ?></a>
 		<?php
 		if ( $show_more ) {
 			?>
@@ -32,6 +30,8 @@
 			<?php
 		}
 		?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=improve' ) ); ?>"
+		   class="nav-tab <?php echo $active_tab === 'improve' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Help us improve!', 'visualizer' ); ?></a>
 	</h2>
 
 	<div class="viz-features-content">
@@ -43,7 +43,7 @@
 							include_once VISUALIZER_ABSPATH . '/templates/docs.php';
 							break;
 						case 'more':
-							include_once VISUALIZER_ABSPATH . '/templates/upsell.php';
+							include_once VISUALIZER_ABSPATH . '/templates/more.php';
 							break;
 						case 'improve':
 							include_once VISUALIZER_ABSPATH . '/templates/improve.php';
