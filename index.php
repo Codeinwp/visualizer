@@ -92,7 +92,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
 
 	// to redirect all themeisle_log_event to error log.
-	define( 'VISUALIZER_LOCAL_DEBUG', true );
+	define( 'VISUALIZER_LOCAL_DEBUG', false );
 
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
