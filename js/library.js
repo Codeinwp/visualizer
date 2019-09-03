@@ -1,4 +1,6 @@
 /* global visualizer */
+/* global alert */
+
 (function (wpmv) {
     var vm, vmv;
 
