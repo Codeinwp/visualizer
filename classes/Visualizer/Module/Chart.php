@@ -955,6 +955,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING );
 
+		// delete last error
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
+
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
 		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
@@ -972,6 +975,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} else {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'CSV file with chart data was not uploaded for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' ) );
 		}
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploaded data for chart %d with source %s', $chart_id, print_r( $source, true ) ), 'debug', __FILE__, __LINE__ );
@@ -986,6 +990,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					// if we populate the data even if it is empty, the chart will show "Table has no columns".
 					if ( array_key_exists( 'source', $json ) && ! empty( $json['source'] ) && ( ! array_key_exists( 'data', $json ) || empty( $json['data'] ) ) ) {
 						do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Not populating chart data as source exists (%s) but data is empty!', $json['source'] ), 'warn', __FILE__, __LINE__ );
+						update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, sprintf( 'Not populating chart data as source exists (%s) but data is empty!', $json['source'] ) );
 						$populate   = false;
 					}
 				}
@@ -1010,9 +1015,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			} else {
 				$error = $source->get_error();
 				if ( empty( $error ) ) {
-					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'CSV file is broken or invalid (%s) for chart %d.', $error, $chart_id ), 'error', __FILE__, __LINE__ );
-					$render->message = sprintf( esc_html__( 'CSV file is broken or invalid (%s). Please try again.', 'visualizer' ), $error );
+					$error = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
 				}
+				$render->message = $error;
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( '%s for chart %d.', $error, $chart_id ), 'error', __FILE__, __LINE__ );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, $error );
 			}
 		} else {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unknown internal error for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );

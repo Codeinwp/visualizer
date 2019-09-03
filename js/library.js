@@ -129,5 +129,9 @@
                 $('.visualizer-chart-canvas').adjust();
             }, 100);
         });
+
+        $('.visualizer-error i.error').on('click', function(){
+            alert( $(this).attr('data-viz-error') );
+        });
     });
 })(jQuery, visualizer.media.view, visualizer.urls);
