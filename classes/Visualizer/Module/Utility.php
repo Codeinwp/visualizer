@@ -187,13 +187,17 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	}
 
 	/**
-	 * Sets some defaults in the chart for ChartJS charts.
+	 * Sets some defaults in the chart for ChartJS charts. Only during first creation.
 	 *
 	 * @since 3.3.0
 	 *
 	 * @access private
 	 */
 	private static function set_defaults_chartjs( $chart, $post_status ) {
+		if ( $post_status !== 'auto-draft' ) {
+			return;
+		}
+
 		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );

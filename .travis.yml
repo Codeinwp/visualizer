@@ -8,17 +8,12 @@ matrix:
     - php: 7.1
     - php: 7.0
     - php: '5.6'
+    - name: Wraith
+      php: '5.6'
       install: true
       before_script: chmod +x bin/wraith.sh
       env: TEST_SUITE=Wraith_Visual_Regression_Testing WRAITH_FAIL=5
       script: "./bin/wraith.sh"
-    - php: 5.5
-      env: WP_VERSION=5.1
-    - php: 5.4
-      env: WP_VERSION=5.1
-    - php: 5.3
-      env: WP_VERSION=5.1
-      dist: precise
   allow_failures:
     - env: TEST_SUITE=Wraith_Visual_Regression_Testing WRAITH_FAIL=5
 branches:
