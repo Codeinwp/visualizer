@@ -1043,7 +1043,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'post_content' => $chart->post_content,
 				)
 			);
-			if ( $new_chart_id && ! is_wp_error( $new_chart_id ) ) {
+			if ( is_wp_error( $new_chart_id ) ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while cloning chart %d = %s', $chart_id, print_r( $new_chart_id, true ) ), 'error', __FILE__, __LINE__ );
+			} else {
 				$post_meta = get_post_meta( $chart_id );
 				foreach ( $post_meta as $key => $value ) {
 					if ( strpos( $key, 'visualizer-' ) !== false ) {
