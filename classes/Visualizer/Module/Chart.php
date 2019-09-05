@@ -1043,13 +1043,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'post_content' => $chart->post_content,
 				)
 			);
-			if ( $new_chart_id && ! is_wp_error( $new_chart_id ) ) {
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_CHART_TYPE, get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, get_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SOURCE, get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SERIES, get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SETTINGS, get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ) );
+			if ( is_wp_error( $new_chart_id ) ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while cloning chart %d = %s', $chart_id, print_r( $new_chart_id, true ) ), 'error', __FILE__, __LINE__ );
+			} else {
+				$post_meta = get_post_meta( $chart_id );
+				foreach ( $post_meta as $key => $value ) {
+					if ( strpos( $key, 'visualizer-' ) !== false ) {
+						add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+					}
+				}
 				$redirect = add_query_arg(
 					array(
 						'page' => 'visualizer',
