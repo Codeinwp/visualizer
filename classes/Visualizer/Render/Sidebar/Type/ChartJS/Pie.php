@@ -115,7 +115,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Pie extends Visualizer_Render_Sideb
 
 		self::_renderGroupStart( esc_html__( 'Slices Settings', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'If you have just updated/modified the chart data, you may need to save it before the new data reflects in the settings.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'If you have just updated/modified the chart data, you may need to save it before the new data reflects in the settings.', 'visualizer' ), 'viz-info-msg' );
 			self::_renderSectionEnd();
 
 		for ( $i = 0, $cnt = count( $this->__data ); $i < $cnt; $i++ ) {
