@@ -118,69 +118,39 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' ); ?></h2>
 							<ul class="viz-group-content">
 								<li class="viz-subsection">
-									<span class="viz-section-title"><?php _e( 'One time import', 'visualizer' ); ?></span>
-
+									<span class="viz-section-title"><?php _e( 'Import from CSV', 'visualizer' ); ?></span>
 									<div class="viz-section-items section-items">
-										<p class="viz-group-description"><?php _e( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?> </p>
-										<p class="viz-group-description"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you have using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
-										<p class="viz-group-description"> <?php _e( 'You can also import data from Google Spreadsheet, for more info check <a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+										<p class="viz-group-description"><?php echo sprintf( __( 'You can use this to import data from a remote CSV file or %sGoogle Spreadsheet%s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >', '</a>' ); ?> </p>
+										<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you have using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
-												<input type="url" id="remote-data" name="remote_data"
-													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
-													   class="visualizer-input">
-
+												<input type="url" id="remote-data" name="remote_data" value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
 											</div>
-											<input type="button" id="view-remote-file" class="button button-primary"
-												   value="<?php _e( 'Import', 'visualizer' ); ?>">
-										</form>
-									</div>
-								</li>
-								<li class="viz-subsection <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'schedule-chart' ); ?>">
-								<span class="viz-section-title visualizer-import-url-schedule"><?php _e( 'Schedule Import', 'visualizer' ); ?>
-									<span
-											class="dashicons dashicons-lock"></span></span>
-									<div class="viz-section-items section-items">
-										<p class="viz-group-description"><?php _e( 'You can choose here to synchronize your chart data with a remote CSV file.', 'visualizer' ); ?> </p>
-										<p class="viz-group-description"> <?php _e( 'You can also synchronize with your Google Spreadsheet file, for more info check <a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
-										<p class="viz-group-description"> <?php _e( 'We will update the chart data based on your time interval preference by overwriting the current data with the one from the URL.', 'visualizer' ); ?></p>
-										<form id="vz-schedule-import" action="<?php echo $upload_link; ?>" method="post"
-											  target="thehole" enctype="multipart/form-data">
-											<div class="remote-file-section">
-												<input type="url" id="vz-schedule-url" name="remote_data"
-													   value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ); ?>"
-													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
-													   class="visualizer-input visualizer-remote-url">
-												<p class="viz-group-description"><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>
-												<select name="vz-import-time" id="vz-import-time"
-														class="visualizer-select">
+
+											<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
+											<?php
+											$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
+											$schedules = apply_filters(
+												'visualizer_chart_schedules', array(
+													'-1' => __( 'One-time', 'visualizer' ),
+												),
+												'csv',
+												$this->chart->ID
+											);
+											foreach ( $schedules as $num => $name ) {
+												// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+												$extra = $num == $hours ? 'selected' : '';
+												?>
+												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 													<?php
-													$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
-													$schedules = apply_filters(
-														'visualizer_chart_schedules', array(
-															'1'  => __( 'Each hour', 'visualizer' ),
-															'12' => __( 'Each 12 hours', 'visualizer' ),
-															'24' => __( 'Each day', 'visualizer' ),
-															'72' => __( 'Each 3 days', 'visualizer' ),
-														),
-														'csv',
-														$this->chart->ID
-													);
-													foreach ( $schedules as $num => $name ) {
-														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-														$extra = $num == $hours ? 'selected' : '';
-														?>
-														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
-														<?php
-													}
-													?>
-												</select>
-											</div>
-											<input type="button" id="vz-save-schedule" class="button button-primary"
-												   value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
+											}
+											do_action( 'visualizer_chart_schedules_spl', 'csv', $this->chart->ID, 0 );
+											?>
+											</select>
 
-											<?php echo apply_filters( 'visualizer_pro_upsell', '', 'schedule-chart' ); ?>
+											<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' ); ?>">
+											<input type="button" id="vz-save-schedule" class="button button-secondary" value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
 										</form>
 									</div>
 								</li>
