@@ -238,7 +238,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</li>
 							</ul>
 						</li>
-						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
+						<li class="viz-group viz-import-from-other <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="viz-group-title viz-sub-group"
 								data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
