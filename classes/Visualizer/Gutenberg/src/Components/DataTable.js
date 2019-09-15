@@ -144,24 +144,30 @@ class DataTables extends Component {
 			<Fragment>
 				{ settings.customcss && (
 					<style>
-						{ `#dataTable-instances-${ this.props.id } tr.odd {
-							${ settings.customcss.oddTableRow.color ?  `color: ${ settings.customcss.oddTableRow.color } !important;` : '' }
-							${ settings.customcss.oddTableRow['background-color'] ?  `background-color: ${ settings.customcss.oddTableRow['background-color'] } !important;` : '' }
-							${ settings.customcss.oddTableRow.transform ?  `transform: rotate( ${ settings.customcss.oddTableRow.transform }deg ) !important;` : '' }
-						}
+						{ settings.customcss.oddTableRow && (
+							`#dataTable-instances-${ this.props.id } tr.odd {
+								${ settings.customcss.oddTableRow.color ?  `color: ${ settings.customcss.oddTableRow.color } !important;` : '' }
+								${ settings.customcss.oddTableRow['background-color'] ?  `background-color: ${ settings.customcss.oddTableRow['background-color'] } !important;` : '' }
+								${ settings.customcss.oddTableRow.transform ?  `transform: rotate( ${ settings.customcss.oddTableRow.transform }deg ) !important;` : '' }
+							}`
+						)}
 
-						#dataTable-instances-${ this.props.id } tr.even {
-							${ settings.customcss.evenTableRow.color ?  `color: ${ settings.customcss.evenTableRow.color } !important;` : '' }
-							${ settings.customcss.evenTableRow['background-color'] ?  `background-color: ${ settings.customcss.evenTableRow['background-color'] } !important;` : '' }
-							${ settings.customcss.evenTableRow.transform ?  `transform: rotate( ${ settings.customcss.evenTableRow.transform }deg ) !important;` : '' }
-						}
+						{ settings.customcss.evenTableRow && (
+							`#dataTable-instances-${ this.props.id } tr.even {
+								${ settings.customcss.evenTableRow.color ?  `color: ${ settings.customcss.evenTableRow.color } !important;` : '' }
+								${ settings.customcss.evenTableRow['background-color'] ?  `background-color: ${ settings.customcss.evenTableRow['background-color'] } !important;` : '' }
+								${ settings.customcss.evenTableRow.transform ?  `transform: rotate( ${ settings.customcss.evenTableRow.transform }deg ) !important;` : '' }
+							}`
+						)}
 
-						#dataTable-instances-${ this.props.id } tr td,
-						#dataTable-instances-${ this.props.id }_wrapper tr th {
-							${ settings.customcss.tableCell.color ?  `color: ${ settings.customcss.tableCell.color } !important;` : '' }
-							${ settings.customcss.tableCell['background-color'] ?  `background-color: ${ settings.customcss.tableCell['background-color'] } !important;` : '' }
-							${ settings.customcss.tableCell.transform ?  `transform: rotate( ${ settings.customcss.tableCell.transform }deg ) !important;` : '' }
-						}` }
+						{ settings.customcss.tableCell && (
+							`#dataTable-instances-${ this.props.id } tr td,
+							#dataTable-instances-${ this.props.id }_wrapper tr th {
+								${ settings.customcss.tableCell.color ?  `color: ${ settings.customcss.tableCell.color } !important;` : '' }
+								${ settings.customcss.tableCell['background-color'] ?  `background-color: ${ settings.customcss.tableCell['background-color'] } !important;` : '' }
+								${ settings.customcss.tableCell.transform ?  `transform: rotate( ${ settings.customcss.tableCell.transform }deg ) !important;` : '' }
+							}`
+						)}
 					</style>
 				) }
 
