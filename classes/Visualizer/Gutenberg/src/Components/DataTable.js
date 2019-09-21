@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import uuidv4 from 'uuid';
+
+/**
  * WordPress dependencies
  */
 const {
@@ -14,6 +19,7 @@ class DataTables extends Component {
 		this.dataRenderer = this.dataRenderer.bind( this );
 
 		this.table;
+		this.uniqueId = uuidv4();
 	}
 
 	componentDidMount() {
@@ -28,12 +34,12 @@ class DataTables extends Component {
 		if ( this.props !== prevProps ) {
 			if ( this.props.options.responsive_bool !== prevProps.options.responsive_bool ) {
 				if ( 'true' === prevProps.options.responsive_bool ) {
-					document.getElementById( `dataTable-instances-${ this.props.id }` ).classList.remove( 'collapsed' );
+					document.getElementById( `dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).classList.remove( 'collapsed' );
 				}
 			}
 
 			this.table.destroy();
-			document.getElementById( `dataTable-instances-${ this.props.id }` ).innerHTML = '';
+			document.getElementById( `dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).innerHTML = '';
 			this.initDataTable( this.props.columns, this.props.rows );
 		}
 	}
@@ -73,7 +79,7 @@ class DataTables extends Component {
 			return row;
 		});
 
-		this.table = jQuery( `#dataTable-instances-${ this.props.id }` ).DataTable({
+		this.table = jQuery( `#dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).DataTable({
 			destroy: true,
 			data: data,
 			columns: columns,
@@ -145,7 +151,7 @@ class DataTables extends Component {
 				{ settings.customcss && (
 					<style>
 						{ settings.customcss.oddTableRow && (
-							`#dataTable-instances-${ this.props.id } tr.odd {
+							`#dataTable-instances-${ this.props.id }-${ this.uniqueId } tr.odd {
 								${ settings.customcss.oddTableRow.color ?  `color: ${ settings.customcss.oddTableRow.color } !important;` : '' }
 								${ settings.customcss.oddTableRow['background-color'] ?  `background-color: ${ settings.customcss.oddTableRow['background-color'] } !important;` : '' }
 								${ settings.customcss.oddTableRow.transform ?  `transform: rotate( ${ settings.customcss.oddTableRow.transform }deg ) !important;` : '' }
@@ -153,7 +159,7 @@ class DataTables extends Component {
 						)}
 
 						{ settings.customcss.evenTableRow && (
-							`#dataTable-instances-${ this.props.id } tr.even {
+							`#dataTable-instances-${ this.props.id }-${ this.uniqueId } tr.even {
 								${ settings.customcss.evenTableRow.color ?  `color: ${ settings.customcss.evenTableRow.color } !important;` : '' }
 								${ settings.customcss.evenTableRow['background-color'] ?  `background-color: ${ settings.customcss.evenTableRow['background-color'] } !important;` : '' }
 								${ settings.customcss.evenTableRow.transform ?  `transform: rotate( ${ settings.customcss.evenTableRow.transform }deg ) !important;` : '' }
@@ -161,8 +167,8 @@ class DataTables extends Component {
 						)}
 
 						{ settings.customcss.tableCell && (
-							`#dataTable-instances-${ this.props.id } tr td,
-							#dataTable-instances-${ this.props.id }_wrapper tr th {
+							`#dataTable-instances-${ this.props.id }-${ this.uniqueId } tr td,
+							#dataTable-instances-${ this.props.id }-${ this.uniqueId }_wrapper tr th {
 								${ settings.customcss.tableCell.color ?  `color: ${ settings.customcss.tableCell.color } !important;` : '' }
 								${ settings.customcss.tableCell['background-color'] ?  `background-color: ${ settings.customcss.tableCell['background-color'] } !important;` : '' }
 								${ settings.customcss.tableCell.transform ?  `transform: rotate( ${ settings.customcss.tableCell.transform }deg ) !important;` : '' }
@@ -171,7 +177,7 @@ class DataTables extends Component {
 					</style>
 				) }
 
-				<table id={ `dataTable-instances-${ this.props.id }` }></table>
+				<table id={ `dataTable-instances-${ this.props.id }-${ this.uniqueId }` }></table>
 			</Fragment>
 		);
 	}
