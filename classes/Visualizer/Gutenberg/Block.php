@@ -418,9 +418,9 @@ class Visualizer_Gutenberg_Block {
 	 * Filter Rest Query
 	 */
 	public function add_rest_query_vars( $args, \WP_REST_Request $request ) {
-		if( isset( $request[ 'meta_key' ] ) && isset( $request['meta_value'] ) ) {
-			$args['meta_key'] = $request->get_param('meta_key');
-			$args['meta_value'] = $request->get_param('meta_value');
+		if ( isset( $request['meta_key'] ) && isset( $request['meta_value'] ) ) {
+			$args['meta_key'] = $request->get_param( 'meta_key' );
+			$args['meta_value'] = $request->get_param( 'meta_value' );
 			$args['meta_compare'] = '!=';
 		}
 		return $args;
