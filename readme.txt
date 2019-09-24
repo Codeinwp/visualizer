@@ -1,6 +1,6 @@
 === Visualizer: Tables and Charts Manager for WordPress # ===
 Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle,contactashish13
-Tags: chart, charts, charting, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, canvas, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables, chartjs
+Tags: chart, charts, charting, table, tables, tabling, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables, chartjs
 Requires at least: 3.5
 Tested up to: 5.2
 Requires PHP: 5.6
@@ -12,7 +12,7 @@ A simple and quite powerful WordPress chart plugin to create and embed interacti
 
 == Description ==
  
-<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress (Lite) plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts & tables into your WordPress posts and pages.
+<a href="http://themeisle.com/plugins/visualizer-charts-and-graphs-lite/" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress plugin</a> is a simple, easy to use and quite powerful tool to create, manage and embed interactive charts & tables into your WordPress posts and pages.
 
 The plugin uses Google Visualization API, DataTables.net and ChartJS to add responsive & animated charts/diagrams, which support cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases. Is the best Excel to WordPress solution who let's you insert charts to your wp site using a simple chart builder.
 
@@ -32,7 +32,7 @@ The plugin uses Google Visualization API, DataTables.net and ChartJS to add resp
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
 
-### 9 Chart types + 6 more in the pro version ###
+### 8 Chart types + 6 more in the pro version ###
 This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. It is table chart, line chart, area chart, bar chart, column chart, pie chart, geo chart and scatter chart. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. The premium version can act as a interactive WordPress Table plugin, with sorting capabilities.
 
 ### Flexible and customizable ###
@@ -60,7 +60,10 @@ The plugins works perfectly with the all <a href="http://justfreethemes.com" rel
 * [Create combo chart](https://demo.themeisle.com/visualizer/combo-chart/)
 * [Create scatter chart](https://demo.themeisle.com/visualizer/scatter-chart/)
 * [Create timeline chart](https://demo.themeisle.com/visualizer/timeline-chart/)
-* [Chart using frontend action links](https://demo.themeisle.com/visualizer/frontend-action-links/)
+* [Create radar/spider chart](https://demo.themeisle.com/visualizer/radar-spider-chart/)
+* [Create polar area chart](https://demo.themeisle.com/visualizer/polar-area-chart/)
+
+
 
 
 == Installation ==
