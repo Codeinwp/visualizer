@@ -60,6 +60,7 @@ class Visualizer_Gutenberg_Block {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_gutenberg_scripts' ) );
 		add_action( 'init', array( $this, 'register_block_type' ) );
 		add_action( 'rest_api_init', array( $this, 'register_rest_endpoints' ) );
+		add_filter( 'rest_visualizer_query', array( $this, 'add_rest_query_vars' ), 9, 2 );
 	}
 
 	/**
@@ -413,4 +414,15 @@ class Visualizer_Gutenberg_Block {
 		return $options;
 	}
 
+	/**
+	 * Filter Rest Query
+	 */
+	public function add_rest_query_vars( $args, \WP_REST_Request $request ) {
+		if ( isset( $request['meta_key'] ) && isset( $request['meta_value'] ) ) {
+			$args['meta_key'] = $request->get_param( 'meta_key' );
+			$args['meta_value'] = $request->get_param( 'meta_value' );
+			$args['meta_compare'] = '!=';
+		}
+		return $args;
+	}
 }
