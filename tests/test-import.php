@@ -22,6 +22,60 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	private $chart;
 
 	/**
+	 * Testing cloing of chart.
+	 *
+	 * @access public
+	 */
+	public function test_clone_chart() {
+		$this->create_chart();
+		$this->_setRole( 'administrator' );
+		$_GET  = array(
+			'nonce' => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
+			'chart' => $this->chart,
+		);
+		// swallow the output
+		ob_start();
+		try {
+			$this->_handleAjax( 'visualizer-clone-chart' );
+		} catch ( WPAjaxDieContinueException  $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee ) {
+			// We expected this, do nothing.
+		}
+		ob_end_clean();
+
+		$query       = new WP_Query(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'auto-draft',
+				'numberposts' => 1,
+				'fields'      => 'ids',
+				'post__not_in' => array( $this->chart ),
+			)
+		);
+
+		$new_id = $query->posts[0];
+
+		// all post meta existing in old chart should exist in new chart.
+		$old_meta = $new_meta = array();
+		$post_meta = get_post_meta( $this->chart );
+		foreach ( $post_meta as $key => $value ) {
+			if ( strpos( $key, 'visualizer-' ) !== false ) {
+				$old_meta [ $key ] = $value;
+			}
+		}
+
+		$post_meta = get_post_meta( $new_id );
+		foreach ( $post_meta as $key => $value ) {
+			if ( strpos( $key, 'visualizer-' ) !== false ) {
+				$new_meta [ $key ] = $value;
+			}
+		}
+
+		$this->assertEquals( $old_meta, $new_meta );
+	}
+
+	/**
 	 * Testing url import feature.
 	 *
 	 * @access public

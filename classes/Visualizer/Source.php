@@ -329,6 +329,7 @@ abstract class Visualizer_Source {
 	 */
 	private static final function determine_date_format( $value, $type ) {
 		if ( version_compare( phpversion(), '5.3.0', '<' ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'PHP version %s not supported', phpversion() ), 'error', __FILE__, __LINE__ );
 			return null;
 		}
 

@@ -372,6 +372,10 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		?>
 				</tr>
 		<?php
+		// for remote sources, the data exists inside 'data'.
+		if ( array_key_exists( 'data', $data ) ) {
+			$data = $data['data'];
+		}
 		foreach ( $data as $row ) {
 			echo '<tr>';
 			echo '<th>' . __( 'Value', 'visualizer' ) . '</th>';
