@@ -414,6 +414,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
 										   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 										   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>">
+
+									<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 								</div>
 							</div>
 						</li>
@@ -425,7 +427,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				<div class="viz-group-header">
 					<button class="customize-section-back" tabindex="0"></button>
 					<h3 class="viz-group-title viz-main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>
-					<h4 class="viz-group-title viz-title-small"><?php _e( 'If you have just updated/modified the chart data, you may need to save it before the new data reflects in the settings.', 'visualizer' ); ?></h4>
 				</div>
 				<ul class="viz-group-content">
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
