@@ -718,9 +718,9 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access public
 	 * @param string $description The description text.
 	 */
-	public static function _renderSectionDescription( $description ) {
+	public static function _renderSectionDescription( $description, $classes = '' ) {
 		echo '<div class="viz-section-item">';
-			echo '<div class="viz-section-description">', $description, '</div>';
+			echo '<div class="viz-section-description ' . $classes . '">', $description, '</div>';
 		echo '</div>';
 	}
 

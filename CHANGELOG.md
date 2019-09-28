@@ -1,4 +1,13 @@
 
+ ### v3.3.1 - 2019-09-28 
+ **Changes:** 
+ * Increase minimum requirement to PHP 5.6
+* Fixed issue with loading customization.js on multisites
+* Fixed issue with manually editing a remotely loaded chart
+* Fixed issues with cloning
+* Fixed issues with ChartJS assigning default colors
+* Fix security issues in block editor
+ 
  ### v3.3.0 - 2019-08-14 
  **Changes:** 
  * Add support for ChartJS

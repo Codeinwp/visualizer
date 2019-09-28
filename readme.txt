@@ -157,6 +157,16 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.3.1 - 2019-09-28  = 
+
+* Increase minimum requirement to PHP 5.6
+* Fixed issue with loading customization.js on multisites
+* Fixed issue with manually editing a remotely loaded chart
+* Fixed issues with cloning
+* Fixed issues with ChartJS assigning default colors
+* Fix security issues in block editor
+
+
 = 3.3.0 - 2019-08-14  = 
 
 * Add support for ChartJS
