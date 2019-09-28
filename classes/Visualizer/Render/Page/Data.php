@@ -89,7 +89,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$lib               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		?>
-		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo $source_of_chart; ?>" data-chart-type="<?php echo $type; ?>" data-chart-lib="<?php echo $lib; ?>"></span>
+		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo esc_attr( $source_of_chart ); ?>" data-chart-type="<?php echo esc_attr( $type ); ?>" data-chart-lib="<?php echo esc_attr( $lib ); ?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
 		<ul class="viz-group-wrapper full-height">
 			<li class="viz-group viz-group-category open" id="vz-chart-source">
@@ -149,7 +149,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 												<input type="url" id="vz-schedule-url" name="remote_data"
-													   value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ); ?>"
+													   value="<?php echo esc_url( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ) ); ?>"
 													   placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>"
 													   class="visualizer-input visualizer-remote-url">
 												<p class="viz-group-description"><?php _e( 'How often do you want to check the url', 'visualizer' ); ?></p>
