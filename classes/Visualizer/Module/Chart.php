@@ -443,6 +443,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				add_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+				add_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, '' );
 				add_post_meta(
 					$chart_id,
 					Visualizer_Plugin::CF_SETTINGS,
@@ -1022,19 +1023,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function cloneChart() {
 		$chart_id = $success = false;
-		$nonce    = wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ), Visualizer_Plugin::ACTION_CLONE_CHART );
+		$nonce    = isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'], Visualizer_Plugin::ACTION_CLONE_CHART );
 		$capable  = current_user_can( 'edit_posts' );
 		if ( $nonce && $capable ) {
-			$chart_id = filter_input(
-				INPUT_GET,
-				'chart',
-				FILTER_VALIDATE_INT,
-				array(
-					'options' => array(
-						'min_range' => 1,
-					),
-				)
-			);
+			$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
 			if ( $chart_id ) {
 				$chart   = get_post( $chart_id );
 				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
@@ -1051,12 +1043,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'post_content' => $chart->post_content,
 				)
 			);
-			if ( $new_chart_id && ! is_wp_error( $new_chart_id ) ) {
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_CHART_TYPE, get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, get_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SOURCE, get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SERIES, get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true ) );
-				add_post_meta( $new_chart_id, Visualizer_Plugin::CF_SETTINGS, get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ) );
+			if ( is_wp_error( $new_chart_id ) ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while cloning chart %d = %s', $chart_id, print_r( $new_chart_id, true ) ), 'error', __FILE__, __LINE__ );
+			} else {
+				$post_meta = get_post_meta( $chart_id );
+				foreach ( $post_meta as $key => $value ) {
+					if ( strpos( $key, 'visualizer-' ) !== false ) {
+						add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+					}
+				}
 				$redirect = add_query_arg(
 					array(
 						'page' => 'visualizer',
@@ -1067,6 +1062,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				);
 			}
 		}
+
+		if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+			wp_die();
+		}
+
 		wp_redirect( $redirect );
 		exit;
 	}

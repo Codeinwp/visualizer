@@ -60,6 +60,7 @@ class Visualizer_Gutenberg_Block {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_gutenberg_scripts' ) );
 		add_action( 'init', array( $this, 'register_block_type' ) );
 		add_action( 'rest_api_init', array( $this, 'register_rest_endpoints' ) );
+		add_filter( 'rest_visualizer_query', array( $this, 'add_rest_query_vars' ), 9, 2 );
 	}
 
 	/**
@@ -191,6 +192,10 @@ class Visualizer_Gutenberg_Block {
 	 * Get Post Meta Fields
 	 */
 	public function get_visualizer_data( $post ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		$data = array();
 		$post_id = $post['id'];
 
@@ -238,6 +243,10 @@ class Visualizer_Gutenberg_Block {
 	 * Rest Callback Method
 	 */
 	public function update_chart_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		if ( $data['id'] && ! is_wp_error( $data['id'] ) ) {
 
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $data['visualizer-chart-type'] );
@@ -351,6 +360,10 @@ class Visualizer_Gutenberg_Block {
 	 * Handle remote CSV data
 	 */
 	public function upload_csv_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		if ( $data['url'] && ! is_wp_error( $data['url'] ) && filter_var( $data['url'], FILTER_VALIDATE_URL ) ) {
 			$source = new Visualizer_Source_Csv_Remote( $data['url'] );
 			if ( $source->fetch() ) {
@@ -374,6 +387,10 @@ class Visualizer_Gutenberg_Block {
 	 * Get permission data
 	 */
 	public function get_permission_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		$options = array();
 		switch ( $data['type'] ) {
 			case 'users':
@@ -413,4 +430,15 @@ class Visualizer_Gutenberg_Block {
 		return $options;
 	}
 
+	/**
+	 * Filter Rest Query
+	 */
+	public function add_rest_query_vars( $args, \WP_REST_Request $request ) {
+		if ( isset( $request['meta_key'] ) && isset( $request['meta_value'] ) ) {
+			$args['meta_key'] = $request->get_param( 'meta_key' );
+			$args['meta_value'] = $request->get_param( 'meta_value' );
+			$args['meta_compare'] = '!=';
+		}
+		return $args;
+	}
 }

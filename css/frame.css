@@ -263,6 +263,17 @@ div.viz-group-content .viz-group-description {
 	text-decoration: none;
 }
 
+.viz-info-msg {
+	font-weight: bold !important;
+	font-style: italic;
+}
+
+.viz-info-msg::before {
+	font-family: dashicons;
+	content: "\f488";
+	margin-right: 5px;
+}
+
 .viz-section-description {
 	margin: 0;
 	/*display: none;*/
