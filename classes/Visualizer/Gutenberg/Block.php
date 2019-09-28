@@ -192,6 +192,10 @@ class Visualizer_Gutenberg_Block {
 	 * Get Post Meta Fields
 	 */
 	public function get_visualizer_data( $post ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		$data = array();
 		$post_id = $post['id'];
 
@@ -239,6 +243,10 @@ class Visualizer_Gutenberg_Block {
 	 * Rest Callback Method
 	 */
 	public function update_chart_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		if ( $data['id'] && ! is_wp_error( $data['id'] ) ) {
 
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $data['visualizer-chart-type'] );
@@ -352,6 +360,10 @@ class Visualizer_Gutenberg_Block {
 	 * Handle remote CSV data
 	 */
 	public function upload_csv_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		if ( $data['url'] && ! is_wp_error( $data['url'] ) && filter_var( $data['url'], FILTER_VALIDATE_URL ) ) {
 			$source = new Visualizer_Source_Csv_Remote( $data['url'] );
 			if ( $source->fetch() ) {
@@ -375,6 +387,10 @@ class Visualizer_Gutenberg_Block {
 	 * Get permission data
 	 */
 	public function get_permission_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
 		$options = array();
 		switch ( $data['type'] ) {
 			case 'users':
