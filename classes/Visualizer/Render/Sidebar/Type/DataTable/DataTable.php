@@ -249,7 +249,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 
 			self::_renderSectionStart( esc_html__( 'Header Row', 'visualizer' ) );
 
-				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ), 'viz-info-msg' );
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
@@ -281,7 +281,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 
 			self::_renderSectionStart( esc_html__( 'Odd Table Row', 'visualizer' ) );
 
-				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ), 'viz-info-msg' );
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
@@ -313,7 +313,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 
 			self::_renderSectionStart( esc_html__( 'Even Table Row', 'visualizer' ) );
 
-				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ), 'viz-info-msg' );
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
@@ -345,7 +345,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 
 			self::_renderSectionStart( esc_html__( 'Table Cell', 'visualizer' ) );
 
-				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'These values may not reflect on preview and will be applied once you save and reload the chart. ', 'visualizer' ), 'viz-info-msg' );
 
 				self::_renderColorPickerItem(
 					esc_html__( 'Background Color', 'visualizer' ),
