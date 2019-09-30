@@ -1,8 +1,6 @@
 /**
  * External dependencies
  */
-import CreateCharts from './Components/CreateCharts.js';
-
 import Charts from './Components/Charts.js';
 
 import ChartSelect from './Components/ChartSelect.js';
@@ -56,7 +54,6 @@ class Editor extends Component {
 			 * Block Route Status
 			 *
 			 * home - Initial screen.
-			 * createChart - Option to create new charts.
 			 * showCharts - Display list of charts to pick.
 			 * chartSelect - Chart selected.
 			 * renderChart - Chart render.
@@ -402,8 +399,6 @@ class Editor extends Component {
 					</Placeholder>
 				) }
 
-				{ ( 'createChart' === this.state.route && false === this.state.isLoading ) && <CreateCharts/> }
-
 				{ ( 'showCharts' === this.state.route && false === this.state.isLoading ) && <Charts getChart={ this.getChart }/> }
 
 				{ ( 'chartSelect' === this.state.route && null !== this.state.chart ) &&
@@ -425,7 +420,7 @@ class Editor extends Component {
 
 				<div className="visualizer-settings__controls">
 
-					{ ( 'createChart' === this.state.route || 'showCharts' === this.state.route || 'chartSelect' === this.state.route ) &&
+					{ ( 'showCharts' === this.state.route || 'chartSelect' === this.state.route ) &&
 						<ButtonGroup>
 
 							<Button
@@ -433,7 +428,7 @@ class Editor extends Component {
 								isLarge
 								onClick={ () => {
 									let route;
-									if ( 'createChart' === this.state.route || 'showCharts' === this.state.route ) {
+									if ( 'showCharts' === this.state.route ) {
 										route = 'home';
 									} else if ( 'chartSelect' === this.state.route ) {
 										route = 'showCharts';

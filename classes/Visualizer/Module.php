@@ -451,8 +451,13 @@ class Visualizer_Module {
 		WP_Filesystem();
 		global $wp_filesystem;
 
-		$dir    = $wp_filesystem->wp_content_dir() . 'uploads/visualizer';
-		$file   = $wp_filesystem->wp_content_dir() . 'uploads/visualizer/customization.js';
+		$multisite_arg = '/';
+		if ( is_multisite() && ! is_main_site() ) {
+			$multisite_arg = '/sites/' . get_current_blog_id() . '/';
+		}
+
+		$dir    = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer';
+		$file   = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer/customization.js';
 
 		if ( $wp_filesystem->is_readable( $file ) ) {
 			return $specific;

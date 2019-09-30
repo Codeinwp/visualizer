@@ -89,7 +89,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$lib               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		?>
-		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo esc_attr( $source_of_chart) ; ?>" data-chart-type="<?php echo esc_attr( $type ); ?>" data-chart-lib="<?php echo esc_attr( $lib ); ?>"></span>
+		<span id="visualizer-chart-id" data-id="<?php echo $this->chart->ID; ?>" data-chart-source="<?php echo esc_attr( $source_of_chart ); ?>" data-chart-type="<?php echo esc_attr( $type ); ?>" data-chart-lib="<?php echo esc_attr( $lib ); ?>"></span>
 		<iframe id="thehole" name="thehole"></iframe>
 		<ul class="viz-group-wrapper full-height">
 			<li class="viz-group viz-group-category open" id="vz-chart-source">
@@ -124,13 +124,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<span class="viz-section-title"><?php _e( 'Import from CSV', 'visualizer' ); ?></span>
 									<div class="viz-section-items section-items">
 										<p class="viz-group-description"><?php echo sprintf( __( 'You can use this to import data from a remote CSV file or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >', '</a>' ); ?> </p>
-										<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you have using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
+										<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
 												<input type="url" id="vz-schedule-url" name="remote_data" value="<?php echo esc_attr( get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ) ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
 											</div>
-
 											<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
 											<?php
 											$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
@@ -146,19 +145,19 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 												$extra = $num == $hours ? 'selected' : '';
 												?>
 												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
-													<?php
-											}
-											do_action( 'visualizer_chart_schedules_spl', 'csv', $this->chart->ID, 0 );
-											?>
+												<?php
+												}
+												do_action( 'visualizer_chart_schedules_spl', 'csv', $this->chart->ID, 1 );
+												?>
 											</select>
 
-											<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? 'button-secondary' : 'button-primary'; ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
+											<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? "button-secondary" : "button-primary" ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
 											<?php
-											if ( Visualizer_Module::is_pro() ) {
-												?>
+												if( Visualizer_Module::is_pro() ){
+											?>
 											<input type="button" id="vz-save-schedule" class="button button-primary" value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
-												<?php
-											}
+											<?php
+												}
 											?>
 										</form>
 									</div>
@@ -219,7 +218,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							</ul>
 						</li>
 						<!-- import from chart -->
-						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
+						<li class="viz-group viz-import-from-other <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
+						<li class="viz-group viz-import-from-other <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="viz-group-title viz-sub-group"
 								data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
@@ -396,6 +396,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
 										   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 										   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>">
+
+									<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 								</div>
 							</div>
 						</li>
@@ -407,7 +409,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				<div class="viz-group-header">
 					<button class="customize-section-back" tabindex="0"></button>
 					<h3 class="viz-group-title viz-main-group"><?php _e( 'Chart Settings', 'visualizer' ); ?></h3>
-					<h4 class="viz-group-title viz-title-small"><?php _e( 'If you have just updated/modified the chart data, you may need to save it before the new data reflects in the settings.', 'visualizer' ); ?></h4>
 				</div>
 				<ul class="viz-group-content">
 					<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>"
@@ -486,7 +487,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			esc_html__( 'Who can see this chart?', 'visualizer' ) . '<span
 										class="dashicons dashicons-lock"></span>',
 			'',
-			apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
+			'viz-chart-perm-view ' . apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
 		);
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can view the chart on the front-end.', 'visualizer' ) );
@@ -530,7 +531,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			esc_html__( 'Who can edit this chart?', 'visualizer' ) . '<span
 										class="dashicons dashicons-lock"></span>',
 			'',
-			apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
+			'viz-chart-perm-edit ' . apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' )
 		);
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Select who can edit the chart on the front-end.', 'visualizer' ) );

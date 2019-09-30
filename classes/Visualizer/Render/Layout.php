@@ -154,7 +154,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							type="url"
 							id="vz-import-json-url"
 							name="url"
-							value="<?php echo $url; ?>"
+							value="<?php echo esc_url( $url ); ?>"
 							placeholder="<?php esc_html_e( 'Please enter the URL', 'visualizer' ); ?>"
 							class="visualizer-input">
 						<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch Endpoint', 'visualizer' ); ?></button>
@@ -168,7 +168,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						<?php
 						if ( ! empty( $root ) ) {
 							?>
-							<option value="<?php echo $root; ?>"><?php echo str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $root ); ?></option>
+							<option value="<?php echo esc_attr( $root ); ?>"><?php echo str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $root ); ?></option>
 							<?php
 						}
 						?>
@@ -187,7 +187,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 								<?php
 								if ( ! empty( $paging ) ) {
 									?>
-									<option value="<?php echo $paging; ?>"><?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
+									<option value="<?php echo esc_attr( $paging ); ?>"><?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
 									<?php
 								}
 								?>
@@ -372,6 +372,10 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		?>
 				</tr>
 		<?php
+		// for remote sources, the data exists inside 'data'.
+		if ( array_key_exists( 'data', $data ) ) {
+			$data = $data['data'];
+		}
 		foreach ( $data as $row ) {
 			echo '<tr>';
 			echo '<th>' . __( 'Value', 'visualizer' ) . '</th>';

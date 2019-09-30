@@ -46,7 +46,7 @@ class Charts extends Component {
 	async componentDidMount() {
 
 		// Fetch review again if block loaded after saving.
-		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=6' });
+		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=6&meta_key=visualizer-chart-library&meta_value=ChartJS' });
 		this.setState({ charts: result });
 	}
 
@@ -56,7 +56,7 @@ class Charts extends Component {
 
 		this.setState({ isBusy: true });
 
-		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=6&offset=${ offset }` });
+		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=6&meta_key=visualizer-chart-library&meta_value=ChartJS&offset=${ offset }` });
 
 		if ( 6 > result.length ) {
 			chartsLoaded = true;
