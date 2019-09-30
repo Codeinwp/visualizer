@@ -146,18 +146,18 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 												?>
 												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 												<?php
-												}
+											}
 												do_action( 'visualizer_chart_schedules_spl', 'csv', $this->chart->ID, 1 );
-												?>
+											?>
 											</select>
 
-											<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? "button-secondary" : "button-primary" ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
+											<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? 'button-secondary' : 'button-primary'; ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
 											<?php
-												if( Visualizer_Module::is_pro() ){
-											?>
+											if ( Visualizer_Module::is_pro() ) {
+												?>
 											<input type="button" id="vz-save-schedule" class="button button-primary" value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
-											<?php
-												}
+												<?php
+											}
 											?>
 										</form>
 									</div>
