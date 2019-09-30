@@ -123,7 +123,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								<li class="viz-subsection">
 									<span class="viz-section-title"><?php _e( 'Import from CSV', 'visualizer' ); ?></span>
 									<div class="viz-section-items section-items">
-										<p class="viz-group-description"><?php echo sprintf( __( 'You can use this to import data from a remote CSV file or %sGoogle Spreadsheet%s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >', '</a>' ); ?> </p>
+										<p class="viz-group-description"><?php echo sprintf( __( 'You can use this to import data from a remote CSV file or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >', '</a>' ); ?> </p>
 										<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you have using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
@@ -152,13 +152,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											?>
 											</select>
 
-											<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? "button-secondary" : "button-primary" ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
+											<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? 'button-secondary' : 'button-primary'; ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
 											<?php
-												if( Visualizer_Module::is_pro() ){
-											?>
+											if ( Visualizer_Module::is_pro() ) {
+												?>
 											<input type="button" id="vz-save-schedule" class="button button-primary" value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
-											<?php
-												}
+												<?php
+											}
 											?>
 										</form>
 									</div>
