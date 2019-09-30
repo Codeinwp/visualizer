@@ -103,7 +103,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 							<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?></h2>
 							<div class="viz-group-content">
 								<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
-								<p class="viz-group-description"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
+								<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $this->type . '.csv" target="_blank">', $this->type, '.csv</a>' ); ?></b></p>
 								<form id="vz-csv-file-form" action="<?php echo $upload_link; ?>" method="post"
 									  target="thehole" enctype="multipart/form-data">
 									<input type="hidden" id="remote-data" name="remote_data">
