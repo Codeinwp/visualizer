@@ -98,6 +98,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				</div>
 				<ul class="viz-group-content">
 					<ul class="viz-group-wrapper">
+						<!-- import from file -->
 						<li class="viz-group visualizer_source_csv">
 							<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?></h2>
 							<div class="viz-group-content">
@@ -114,9 +115,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</form>
 							</div>
 						</li>
+						<!-- import from url -->
 						<li class="viz-group visualizer-import-url visualizer_source_csv_remote visualizer_source_json">
 							<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' ); ?></h2>
 							<ul class="viz-group-content">
+								<!-- import from csv url -->
 								<li class="viz-subsection">
 									<span class="viz-section-title"><?php _e( 'Import from CSV', 'visualizer' ); ?></span>
 									<div class="viz-section-items section-items">
@@ -154,7 +157,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										</form>
 									</div>
 								</li>
-
+								<!-- import from json url -->
 								<li class="viz-subsection">
 								<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?>
 									<span class="dashicons dashicons-lock"></span></span>
@@ -209,6 +212,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								</li>
 							</ul>
 						</li>
+						<!-- import from chart -->
 						<li class="viz-group <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<h2 class="viz-group-title viz-sub-group"
 								data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
@@ -274,6 +278,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								), admin_url( 'admin-ajax.php' )
 							);
 						?>
+						<!-- import from WordPress -->
 						<li class="viz-group visualizer_source_query_wp <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-wp' ); ?> ">
 							<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from WordPress', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
@@ -322,6 +327,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								), admin_url( 'admin-ajax.php' )
 							);
 						?>
+						<!-- import from db -->
 						<li class="viz-group visualizer_source_query <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ); ?>">
 						<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from database', 'visualizer' ); ?><span
 							class="dashicons dashicons-lock"></span></h2>
@@ -364,6 +370,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						<?php
 							// we will auto-open the manual data feature only when source is empty.
 						?>
+						<!-- manual -->
 						<li class="viz-group <?php echo empty( $source_of_chart ) ? 'open' : ''; ?> ">
 							<h2 class="viz-group-title viz-sub-group visualizer-editor-tab"
 								data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?><span
