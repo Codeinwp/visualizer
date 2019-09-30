@@ -156,6 +156,9 @@ class Visualizer_Gutenberg_Block {
 						'sanitize_callback' => 'absint',
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				}
 			)
 		);
 
@@ -170,6 +173,9 @@ class Visualizer_Gutenberg_Block {
 						'sanitize_callback' => 'esc_url_raw',
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				}
 			)
 		);
 
@@ -184,6 +190,9 @@ class Visualizer_Gutenberg_Block {
 						'sanitize_callback' => 'sanitize_text_field',
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				}
 			)
 		);
 	}
