@@ -128,7 +128,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 											  target="thehole" enctype="multipart/form-data">
 											<div class="remote-file-section">
-												<input type="url" id="remote-data" name="remote_data" value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
+												<input type="url" id="vz-schedule-url" name="remote_data" value="<?php echo get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_URL, true ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
 											</div>
 
 											<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
@@ -152,7 +152,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											?>
 											</select>
 
-											<input type="button" id="view-remote-file" class="button button-secondary" value="<?php _e( 'Import', 'visualizer' ); ?>">
+											<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? "button-secondary" : "button-primary" ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
 											<?php
 												if( Visualizer_Module::is_pro() ){
 											?>
