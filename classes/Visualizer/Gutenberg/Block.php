@@ -158,7 +158,7 @@ class Visualizer_Gutenberg_Block {
 				),
 				'permission_callback' => function () {
 					return current_user_can( 'edit_posts' );
-				}
+				},
 			)
 		);
 
@@ -175,7 +175,7 @@ class Visualizer_Gutenberg_Block {
 				),
 				'permission_callback' => function () {
 					return current_user_can( 'edit_posts' );
-				}
+				},
 			)
 		);
 
@@ -192,7 +192,7 @@ class Visualizer_Gutenberg_Block {
 				),
 				'permission_callback' => function () {
 					return current_user_can( 'edit_posts' );
-				}
+				},
 			)
 		);
 	}
