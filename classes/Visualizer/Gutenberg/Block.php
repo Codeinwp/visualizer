@@ -268,9 +268,10 @@ class Visualizer_Gutenberg_Block {
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $data['visualizer-settings'] );
 
 			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] ) {
-				$chart_url = esc_url( $data['visualizer-chart-url'] );
+				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
+				$chart_schedule = intval( $data['visualizer-chart-schedule'] );
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $chart_url );
-				apply_filters( 'visualizer_pro_chart_schedule', $data['id'], $chart_url, $data['visualizer-chart-schedule'] );
+				apply_filters( 'visualizer_pro_chart_schedule', $data['id'], $chart_url, $chart_schedule );
 			} else {
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
