@@ -87,7 +87,7 @@ class Visualizer_Gutenberg_Block {
 		if ( Visualizer_Module::is_pro() ) {
 			$type = 'pro';
 			if ( apply_filters( 'visualizer_is_business', false ) ) {
-				$type = 'developer';
+				$type = 'business';
 			}
 		}
 
@@ -282,7 +282,7 @@ class Visualizer_Gutenberg_Block {
 			}
 
 			if ( $data['visualizer-chart-url'] ) {
-				$chart_url = esc_url( $data['visualizer-chart-url'] );
+				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
 				$content['source'] = $chart_url;
 				$content['data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
 			} else {
