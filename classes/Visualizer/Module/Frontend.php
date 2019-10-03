@@ -373,6 +373,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$desc  = $settings['description'];
 		}
 		$desc = apply_filters( 'visualizer_schema_description', $desc, $id );
+		// descriptions below 50 chars are not allowed.
 		if ( empty( $desc ) || strlen( $desc ) < 50 ) {
 			return '';
 		}
