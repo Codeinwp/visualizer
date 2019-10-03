@@ -214,6 +214,12 @@ var __visualizer_chart_images   = [];
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
             format_data(id, table, 'number', settings.format, 1);
         }
+
+
+        if(settings.hAxis) {
+       	    format_data(id, table, series[0].type, settings.hAxis.format, 0);
+        }
+
         override(settings);
 
         gv.events.addListener(render, 'ready', function () {
