@@ -344,6 +344,55 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// return placeholder div
-		return $actions_div . '<div id="' . $id . '"' . $class . '></div>';
+		return $actions_div . '<div id="' . $id . '"' . $class . '></div>' . $this->addSchema( $chart->ID );
+	}
+
+	/**
+	 * Adds the schema corresponding to the dataset.
+	 *
+	 * @since 3.3.2
+	 *
+	 * @access private
+	 */
+	private function addSchema( $id ) {
+		$settings = get_post_meta( $id, Visualizer_Plugin::CF_SETTINGS, true );
+		$title = '';
+		if ( isset( $settings['title'] ) && ! empty( $settings['title'] ) ) {
+			$title  = $settings['title'];
+			if ( is_array( $title ) ) {
+				$title  = $settings['title']['text'];
+			}
+		}
+		$title = apply_filters( 'visualizer_schema_name', $title, $id );
+		if ( empty( $title ) ) {
+			return '';
+		}
+
+		$desc = '';
+		if ( isset( $settings['description'] ) && ! empty( $settings['description'] ) ) {
+			$desc  = $settings['description'];
+		}
+		$desc = apply_filters( 'visualizer_schema_description', $desc, $id );
+		// descriptions below 50 chars are not allowed.
+		if ( empty( $desc ) || strlen( $desc ) < 50 ) {
+			return '';
+		}
+
+		$schema = apply_filters(
+			'visualizer_schema',
+			'{
+			  "@context":"https://schema.org/",
+			  "@type":"Dataset",
+			  "name":"' . esc_html( $title ) . '",
+			  "description":"' . esc_html( $desc ) . '"
+			}',
+			$id
+		);
+
+		if ( empty( $schema ) ) {
+			return '';
+		}
+
+		return '<script type="application/ld+json">' . $schema . '</script>';
 	}
 }

@@ -161,6 +161,15 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			'#000'
 		);
 
+		echo '<div class="viz-section-delimiter"></div>';
+
+		self::_renderTextAreaItem(
+			esc_html__( 'Chart Description', 'visualizer' ),
+			'description',
+			$this->description,
+			sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+		);
+
 	}
 
 	/**
