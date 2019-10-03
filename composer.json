@@ -23,7 +23,7 @@
   "require": {
     "codeinwp/themeisle-sdk": "master",
     "xrstf/composer-php52": "^1.0.20",
-    "phpoffice/phpspreadsheet": "^1.6.0",
+    "phpoffice/phpspreadsheet": "1.8.2",
     "neitanod/forceutf8": "~2.0"
   },
   "autoload": {
