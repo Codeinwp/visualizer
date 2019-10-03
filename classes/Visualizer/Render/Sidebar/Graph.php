@@ -122,6 +122,16 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			$this->_positions,
 			esc_html__( 'Determines where to place the axis titles, compared to the chart area.', 'visualizer' )
 		);
+
+		echo '<div class="viz-section-delimiter"></div>';
+
+		self::_renderTextAreaItem(
+			esc_html__( 'Chart Description', 'visualizer' ),
+			'description',
+			$this->description,
+			sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+		);
+
 	}
 
 	/**

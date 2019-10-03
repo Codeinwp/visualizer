@@ -136,6 +136,16 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					$this->title,
 					esc_html__( 'Text to display in the back-end admin area.', 'visualizer' )
 				);
+
+				echo '<div class="viz-section-delimiter"></div>';
+
+				self::_renderTextAreaItem(
+					esc_html__( 'Chart Description', 'visualizer' ),
+					'description',
+					$this->description,
+					sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+				);
+
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}
