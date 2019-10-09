@@ -91,6 +91,9 @@ function visualizer_launch() {
 	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
 	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
 
+	// to redirect all themeisle_log_event to error log.
+	define( 'VISUALIZER_LOCAL_DEBUG', false );
+
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
 
@@ -153,3 +156,17 @@ function visualizer_register_parrot( $plugins ) {
 spl_autoload_register( 'visualizer_autoloader' );
 // launch the plugin
 visualizer_launch();
+
+
+if ( VISUALIZER_LOCAL_DEBUG ) {
+	add_action( 'themeisle_log_event', 'visualizer_themeisle_log_event', 10, 5 );
+
+	/**
+	 * Redirect themeisle_log_event to error log.
+	 */
+	function visualizer_themeisle_log_event( $name, $msg, $type, $file, $line ) {
+		if ( $name === Visualizer_Plugin::NAME ) {
+			error_log( sprintf( '%s (%s:%d): %s', $type, $file, $line, $msg ) );
+		}
+	}
+}

@@ -249,6 +249,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			);
 
 			$chart = get_post( $chart_id );
+		} else {
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, sprintf( 'Error while updating chart: %s', $error ) );
 		}
 
 		return $chart;
