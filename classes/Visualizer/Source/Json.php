@@ -171,7 +171,13 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		$paging = array();
 		foreach ( $leaf as $key => $value ) {
 			// the paging element's value will most probably contain the url of the feed.
-			if ( is_string( $value ) && 0 === stripos( $value, $this->_url ) ) {
+			if ( ! is_string( $value ) ) {
+				continue;
+			}
+
+			// strip the url off the request parameters e.g. format=json as sometimes the pagination urls may not contain them.
+			$url = wp_parse_url( $value );
+			if ( 0 === stripos( $value, $this->_url ) || false !== stripos( $this->_url, $url['path'] ) ) {
 				$paging[] = $key;
 			}
 		}
