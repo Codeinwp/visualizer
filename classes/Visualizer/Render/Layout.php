@@ -237,12 +237,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<form id="json-conclude-form-helper">
 						<div class="<?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<div class="json-pagination">
-								<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
-									<option value="0" class="static"><?php _e( 'Get first page only', 'visualizer' ); ?></option>
+								<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get results from the first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
+									<option value="0" class="static"><?php _e( 'Get results from the first page only', 'visualizer' ); ?></option>
 								<?php
 								if ( ! empty( $paging ) ) {
 									?>
-									<option value="<?php echo esc_attr( $paging ); ?>"><?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
+									<option value="<?php echo esc_attr( $paging ); ?>"><?php echo sprintf( 'Get results from the first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
 									<?php
 								}
 								?>
