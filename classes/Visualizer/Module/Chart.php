@@ -1199,6 +1199,22 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
+		$hours = filter_input(
+			INPUT_POST,
+			'refresh',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+					'max_range' => apply_filters( 'visualizer_is_business', false ) ? PHP_INT_MAX : -1,
+				),
+			)
+		);
+
+		if ( ! $hours ) {
+			$hours = -1;
+		}
+
 		$render = new Visualizer_Render_Page_Update();
 		if ( $chart_id ) {
 			$params     = wp_parse_args( $_POST['params'] );
@@ -1206,7 +1222,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$source->fetch( false );
 			$error      = $source->get_error();
 			if ( empty( $error ) ) {
-				$hours = $_POST['refresh'];
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, stripslashes( $params['query'] ) );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
@@ -1255,7 +1270,21 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		$hours = $_POST['refresh'];
+		$hours = filter_input(
+			INPUT_POST,
+			'refresh',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+					'max_range' => apply_filters( 'visualizer_is_business', false ) ? PHP_INT_MAX : -1,
+				),
+			)
+		);
+
+		if ( ! $hours ) {
+			$hours = -1;
+		}
 
 		do_action( 'visualizer_save_filter', $chart_id, $hours );
 

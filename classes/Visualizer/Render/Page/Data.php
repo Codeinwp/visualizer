@@ -214,6 +214,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 															<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 															<?php
 														}
+														do_action( 'visualizer_chart_schedules_spl', 'json', $this->chart->ID, 1 );
 														?>
 													</select>
 														<?php
@@ -303,7 +304,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								), admin_url( 'admin-ajax.php' )
 							);
 						?>
-						<li class="viz-group visualizer_source_query_wp <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'schedule-chart' ); ?> ">
+						<li class="viz-group visualizer_source_query_wp <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-wp' ); ?> ">
 							<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from WordPress', 'visualizer' ); ?><span
 										class="dashicons dashicons-lock"></span></h2>
 							<div class="viz-group-content edit-data-content">
@@ -316,13 +317,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										$bttn_label = 'visualizer_source_query_wp' === $source_of_chart ? __( 'Modify Filter', 'visualizer' ) : __( 'Create Filter', 'visualizer' );
 										$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
 										$schedules = apply_filters(
-											'visualizer_schedules', array(
-												'0'  => __( 'Live', 'visualizer' ),
-												'1'  => __( 'Each hour', 'visualizer' ),
-												'12' => __( 'Each 12 hours', 'visualizer' ),
-												'24' => __( 'Each day', 'visualizer' ),
-												'72' => __( 'Each 3 days', 'visualizer' ),
-											)
+											'visualizer_chart_schedules', array(
+												'-1' => __( 'One-time', 'visualizer' ),
+											),
+											'wp',
+											$this->chart->ID
 										);
 										foreach ( $schedules as $num => $name ) {
 											// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
@@ -331,6 +330,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 												<?php
 										}
+										do_action( 'visualizer_chart_schedules_spl', 'wp', $this->chart->ID, 2 );
 										?>
 										</select>
 
@@ -338,7 +338,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 										<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
 									</form>
-									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'schedule-chart' ); ?>
+									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wp' ); ?>
 								</div>
 							</div>
 						</li>
@@ -365,13 +365,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 								$bttn_label = 'visualizer_source_query' === $source_of_chart ? __( 'Modify Query', 'visualizer' ) : __( 'Create Query', 'visualizer' );
 								$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_SCHEDULE, true );
 								$schedules = apply_filters(
-									'visualizer_schedules', array(
-										'0'  => __( 'Live', 'visualizer' ),
-										'1'  => __( 'Each hour', 'visualizer' ),
-										'12' => __( 'Each 12 hours', 'visualizer' ),
-										'24' => __( 'Each day', 'visualizer' ),
-										'72' => __( 'Each 3 days', 'visualizer' ),
-									)
+									'visualizer_chart_schedules', array(
+										'-1' => __( 'One-time', 'visualizer' ),
+									),
+									'db',
+									$this->chart->ID
 								);
 								foreach ( $schedules as $num => $name ) {
 									// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
@@ -380,6 +378,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 										<?php
 								}
+								do_action( 'visualizer_chart_schedules_spl', 'db', $this->chart->ID, 2 );
 								?>
 								</select>
 								<input type="hidden" name="params" id="viz-db-wizard-params">

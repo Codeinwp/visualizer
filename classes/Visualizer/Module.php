@@ -640,4 +640,16 @@ class Visualizer_Module {
 		return version_compare( VISUALIZER_PRO_VERSION, $version, '<' );
 	}
 
+	/**
+	 * Gets the features for the provided license type.
+	 */
+	public static final function get_features_for_license( $plan ) {
+		switch ( $plan ) {
+			case 1:
+				return array( 'import-wp', 'db-query' );
+			case 2:
+				return array( 'schedule-chart', 'chart-permissions' );
+		}
+	}
+
 }
