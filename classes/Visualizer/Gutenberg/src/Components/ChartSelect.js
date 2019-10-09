@@ -35,7 +35,7 @@ const {
 	Fragment
 } = wp.element;
 
-const { InspectorControls } = wp.editor;
+const { InspectorControls } = wp.blockEditor || wp.editor;
 
 class ChartSelect extends Component {
 	constructor() {

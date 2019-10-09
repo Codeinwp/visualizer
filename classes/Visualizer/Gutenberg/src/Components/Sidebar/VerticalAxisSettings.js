@@ -8,7 +8,7 @@ const {
 	Fragment
 } = wp.element;
 
-const { ColorPalette } = wp.editor;
+const { ColorPalette } = wp.blockEditor || wp.editor;
 
 const {
 	BaseControl,

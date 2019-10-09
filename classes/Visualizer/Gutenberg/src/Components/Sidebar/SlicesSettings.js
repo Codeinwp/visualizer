@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 
 const { Component } = wp.element;
 
-const { ColorPalette } = wp.editor;
+const { ColorPalette } = wp.blockEditor || wp.editor;
 
 const {
 	BaseControl,
