@@ -238,7 +238,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						<div class="<?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<div class="json-pagination">
 								<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
-									<option value="0" class="static"><?php _e( 'Don\'t use pagination', 'visualizer' ); ?></option>
+									<option value="0" class="static"><?php _e( 'Get first page only', 'visualizer' ); ?></option>
 								<?php
 								if ( ! empty( $paging ) ) {
 									?>
