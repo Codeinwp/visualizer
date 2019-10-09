@@ -392,7 +392,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			$args = array( 'method' => strtoupper( $this->_headers['method'] ) );
 			if ( array_key_exists( 'auth', $this->_headers ) ) {
 				$args['headers'] = array( 'Authorization' => $this->_headers['auth'] );
-			} elseif ( array_key_exists( 'username', $this->_headers ) && array_key_exists( 'password', $this->_headers ) ) {
+			} elseif ( array_key_exists( 'username', $this->_headers ) && array_key_exists( 'password', $this->_headers ) && ! empty( $this->_headers['username'] ) && ! empty( $this->_headers['password'] ) ) {
 				$args['headers'] = array( 'Authorization' => 'Basic ' . base64_encode( $this->_headers['username'] . ':' . $this->_headers['password'] ) );
 			}
 		}
