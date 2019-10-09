@@ -60,6 +60,16 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	protected $_paging;
 
 	/**
+	 * The headers.
+	 *
+	 * @since ?
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_headers;
+
+	/**
 	 * The array that contains the definition of the data.
 	 *
 	 * @since 1.0.0
@@ -91,7 +101,14 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( isset( $this->_args['paging'] ) ) {
 			$this->_paging = trim( $this->_args['paging'] );
 		}
-
+		if ( isset( $this->_args['auth'] ) && ! empty( $this->_args['auth'] ) ) {
+			$this->_headers = array( 'auth' => $this->_args['auth'] );
+		} elseif ( isset( $this->_args['username'] ) && isset( $this->_args['password'] ) ) {
+			$this->_headers = array( 'username' => $this->_args['username'], 'password' => $this->_args['password'] );
+		}
+		if ( isset( $this->_args['method'] ) ) {
+			$this->_headers['method'] = $this->_args['method'];
+		}
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Constructor called for params = %s', print_r( $params, true ) ), 'debug', __FILE__, __LINE__ );
 	}
 
@@ -348,8 +365,8 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( is_null( $url ) ) {
 			$url = $this->_url;
 		}
-		// allow hooks to use any other args such as method=POST.
-		$response = wp_remote_request( $url, apply_filters( 'visualizer_json_args', array( 'method' => 'GET' ), $url ) );
+
+		$response = $this->connect( $url );
 		if ( is_wp_error( $response ) ) {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = ', $url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
 			return null;
@@ -362,6 +379,29 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		return $array;
 	}
 
+	/**
+	 * Sets the authentication/authorization headers and connects to the endpoint.
+	 *
+	 * @since ?
+	 *
+	 * @access private
+	 */
+	private function connect( $url ) {
+		$args = array( 'method' => 'GET' );
+		if ( ! empty( $this->_headers ) ) {
+			$args = array( 'method' => strtoupper( $this->_headers['method'] ) );
+			if ( array_key_exists( 'auth', $this->_headers ) ) {
+				$args['headers'] = array( 'Authorization' => $this->_headers['auth'] );
+			} elseif ( array_key_exists( 'username', $this->_headers ) && array_key_exists( 'password', $this->_headers ) ) {
+				$args['headers'] = array( 'Authorization' => 'Basic ' . base64_encode( $this->_headers['username'] . ':' . $this->_headers['password'] ) );
+			}
+		}
+
+		$args = apply_filters( 'visualizer_json_args', $args, $url );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Connecting to %s with args = %s ', $url, print_r( $args, true ) ), 'debug', __FILE__, __LINE__ );
+
+		return wp_remote_request( $url, $args );
+	}
 
 	/**
 	 * Fetches series information. This is fetched only through the UI and not while refreshing the chart data.

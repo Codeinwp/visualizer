@@ -196,6 +196,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
+
+		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS );
+		$headers = array( 'method' => $params['method'] );
+		if ( ! empty( $params['auth'] ) ) {
+			$headers['auth'] = $params['auth'];
+		} elseif ( ! empty( $params['username'] ) && ! empty( $params['password'] ) ) {
+			$headers['auth'] = array( 'username' => $params['username'], 'password' => $params['password'] );
+		}
+
+		add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS, $headers );
+
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING );
 		if ( ! empty( $params['paging'] ) ) {
 			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
@@ -955,6 +966,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS );
 
 		// delete last error
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
