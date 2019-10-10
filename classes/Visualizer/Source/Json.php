@@ -125,7 +125,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			return $roots;
 		}
 		$roots = $this->getRootElements( 'root', '', array(), $this->getJSON() );
-		if ( empty( $roots ) ) {
+		if ( is_null( $roots ) ) {
 			$this->_error = esc_html__( 'This does not appear to be a valid JSON feed. Please try again.', 'visualizer' );
 			return false;
 		}
@@ -207,8 +207,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 
 			$root   = explode( self::TAG_SEPARATOR, $this->_root );
-			// get rid of the first element as that is the faux root element indicator
-			array_shift( $root );
+			if ( count( $root ) > 1 ) {
+				// get rid of the first element as that is the faux root element indicator
+				array_shift( $root );
+			}
 			$leaf   = $array;
 			foreach ( $root as $tag ) {
 				if ( array_key_exists( $tag, $leaf ) ) {
@@ -225,6 +227,11 @@ class Visualizer_Source_Json extends Visualizer_Source {
 					}
 					$leaf = $temp;
 				}
+			}
+
+			// JSONs that do not have a root element may fall into this condition e.g. /wp-json/wp/v2/posts
+			if ( empty( $leaf ) ) {
+				$leaf = $array;
 			}
 
 			// now that we have got the final array we need to operate on, we will use this as the collection of series.
@@ -261,7 +268,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			$url    = $this->getNextPage( $array );
 		}
 
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with rooot %s is %s = ', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with root %s is %s', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
 
 		return $data;
 	}
@@ -289,6 +296,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 
 		$rows = array();
 		foreach ( $data as $datum ) {
+			$row = array();
 			foreach ( $datum as $key => $value ) {
 				if ( in_array( $key, $keys, true ) ) {
 					$row[ $key ] = $value;
@@ -341,9 +349,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 */
 	private function getRootElements( $parent, $now, $root, $array ) {
 		if ( is_null( $array ) ) {
-			return array();
+			return null;
 		}
 
+		$root[] = $parent;
 		foreach ( $array as $key => $value ) {
 			if ( is_array( $value ) && ! empty( $value ) ) {
 				if ( ! is_numeric( $key ) ) {
@@ -355,8 +364,8 @@ class Visualizer_Source_Json extends Visualizer_Source {
 				$root = $this->getRootElements( $now, $key, $root, $value );
 			}
 		}
-		$roots = array_filter( array_unique( $root ) );
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Roots found for %s = ', $this->_url, print_r( $roots, true ) ), 'debug', __FILE__, __LINE__ );
+		$roots = array_unique( $root );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Roots found for %s = %s', $this->_url, print_r( $roots, true ) ), 'debug', __FILE__, __LINE__ );
 		return $roots;
 	}
 
@@ -373,8 +382,8 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		}
 
 		$response = $this->connect( $url );
-		if ( is_wp_error( $response ) ) {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = ', $url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
+		if ( is_wp_error( $response ) || ! in_array( intval( $response['response']['code'] ), array( 200, 201 ), true ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = %s', $url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
 			return null;
 		}
 
@@ -432,7 +441,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 		}
 
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Series found for %s = ', $this->_url, print_r( $this->_series, true ) ), 'debug', __FILE__, __LINE__ );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Series found for %s = %s', $this->_url, print_r( $this->_series, true ) ), 'debug', __FILE__, __LINE__ );
 
 		return true;
 	}
@@ -460,7 +469,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			$this->_data[] = $this->_normalizeData( $data_row );
 		}
 
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Data found for %s = ', $this->_url, print_r( $this->_data, true ) ), 'debug', __FILE__, __LINE__ );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Data found for %s = %s', $this->_url, print_r( $this->_data, true ) ), 'debug', __FILE__, __LINE__ );
 
 		return true;
 	}
