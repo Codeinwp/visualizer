@@ -54,8 +54,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getUsage', 10, 2 );
 
 		// only for testing
-		//$this->_addAction( 'admin_init', 'getUsage' );
-
+		// $this->_addAction( 'admin_init', 'getUsage' );
 	}
 	/**
 	 * Fetches the SDK logger data.
@@ -115,6 +114,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				$charts['manual_config']    = $charts['manual_config'] + 1;
 			}
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
 			if ( in_array( $chart_id, $scheduled, false ) ) {
 				$charts['scheduled']    = $charts['scheduled'] + 1;
 			}
