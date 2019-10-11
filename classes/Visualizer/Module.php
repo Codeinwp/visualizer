@@ -67,7 +67,22 @@ class Visualizer_Module {
 		$this->_addFilter( Visualizer_Plugin::FILTER_UNDO_REVISIONS, 'undoRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, 'getDataAs', 10, 3 );
+		register_shutdown_function( array($this, 'onShutdown') );
 
+	}
+
+	/**
+	 * Register a shutdown hook to catch fatal errors.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function onShutdown() {
+		$error = error_get_last();
+		if ( $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Critical error %s', print_r( $error, true ) ), 'error', __FILE__, __LINE__ );
+		}
 	}
 
 	/**
