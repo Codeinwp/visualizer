@@ -427,10 +427,15 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		if ( array_key_exists( 'data', $data ) ) {
 			$data = $data['data'];
 		}
+
 		foreach ( $data as $row ) {
 			echo '<tr>';
 			echo '<th>' . __( 'Value', 'visualizer' ) . '</th>';
 			$index = 0;
+			if ( empty( $row ) ) {
+				echo '<td></td>';
+				continue;
+			}
 			foreach ( array_values( $row ) as $value ) {
 				if ( $editable_data ) {
 					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( $value ) . '"></td>';
