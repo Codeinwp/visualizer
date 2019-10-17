@@ -1114,7 +1114,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render        = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
 		$render->type  = $data['type'];
-		unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+
+		if ( $data && $data['settings'] ) {
+			unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+		}
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
