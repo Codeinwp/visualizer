@@ -690,6 +690,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
+					'select_columns'    => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,

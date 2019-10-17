@@ -385,6 +385,7 @@
                 $(this).attr( 'data-current', 'filter' );
                 $( '.visualizer-editor-lhs' ).hide();
                 $( '#visualizer-json-screen' ).css("z-index", "9999").show();
+                $('.json-chart-msg').show();
                 $( '#canvas' ).hide();
             }else{
                 var filter_button = $(this);
@@ -393,6 +394,7 @@
                 filter_button.val( filter_button.attr( 'data-t-chart' ) );
                 filter_button.html( filter_button.attr( 'data-t-chart' ) );
                 filter_button.attr( 'data-current', 'chart' );
+                $('.json-chart-msg').hide();
                 $( '#canvas' ).css("z-index", "1").show();
                 $('#canvas').unlock();
             }
@@ -476,6 +478,17 @@
 
         // when the data is set and the chart is updated, toggle the screen so that the chart is shown
         $('#json-conclude-form').on( 'submit', function(e){
+            // at least one column has to be selected as non-excluded.
+            var count_selected = 0;
+            $('select.viz-select-data-type').each(function(i, element){
+                if($(element).prop('selectedIndex') > 0){
+                    count_selected++;
+                }
+            });
+            if(count_selected === 0){
+                alert(visualizer.l10n.select_columns);
+                return false;
+            }
             // populate the form elements that are in the other tabs.
             $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element').each(function(x, y){
                 $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');

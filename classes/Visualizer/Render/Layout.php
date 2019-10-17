@@ -408,7 +408,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				echo '<select name="type[]">';
 			} else {
 				echo '<input name="header[]" type="hidden" value="' . $header . '">';
-				echo '<select name="type[' . $header . ']">';
+				echo '<select name="type[' . $header . ']"  class="viz-select-data-type">';
 			}
 			echo '<option value="" title="' . __( 'Exclude from chart', 'visualizer' ) . '">' . __( 'Exclude', 'visualizer' ) . '</option>';
 			echo '<option value="0" disabled title="' . __( 'Include in chart and select data type', 'visualizer' ) . '">--' . __( 'OR', 'visualizer' ) . '--</option>';
