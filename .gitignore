@@ -5,5 +5,8 @@ dist
 artifact
 vendor
 composer.lock
-bin/
 package-lock.json
+cypress/integration/examples
+cypress/integration/localhost*
+cypress/plugins
+cypress.env.json
