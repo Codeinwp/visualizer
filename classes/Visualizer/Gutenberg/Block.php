@@ -67,6 +67,8 @@ class Visualizer_Gutenberg_Block {
 	 * Enqueue front end and editor JavaScript and CSS
 	 */
 	public function enqueue_gutenberg_scripts() {
+		global $wp_version;
+
 		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
 		$handsontableJS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js';
 		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css';
@@ -91,18 +93,39 @@ class Visualizer_Gutenberg_Block {
 			}
 		}
 
+		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping();
+
 		$translation_array = array(
 			'isPro'     => $type,
 			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
 			'absurl'    => VISUALIZER_ABSURL,
 			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
 			'adminPage' => menu_page_url( 'visualizer', false ),
+			'sqlTable'  => $table_col_mapping,
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
 		// Enqueue frontend and editor block styles
 		wp_enqueue_style( 'handsontable', $handsontableCSS );
 		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $version );
+
+		if ( version_compare( $wp_version, '4.9.0', '>' ) ) {
+
+			wp_enqueue_code_editor(
+				array(
+					'type' => 'sql',
+					'codemirror' => array(
+						'autofocus'         => true,
+						'lineWrapping'      => true,
+						'dragDrop'          => false,
+						'matchBrackets'     => true,
+						'autoCloseBrackets' => true,
+						'extraKeys'         => array( 'Ctrl-Space' => 'autocomplete' ),
+						'hintOptions'       => array( 'tables' => $table_col_mapping ),
+					),
+				)
+			);
+		}
 	}
 	/**
 	 * Hook server side rendering into render callback
@@ -142,6 +165,18 @@ class Visualizer_Gutenberg_Block {
 			'chart_data',
 			array(
 				'get_callback' => array( $this, 'get_visualizer_data' ),
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/get-query-data',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_query_data' ),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
 			)
 		);
 
@@ -232,9 +267,18 @@ class Visualizer_Gutenberg_Block {
 
 		$schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
 
+		$db_schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+
+		$db_query = get_post_meta( $post_id, Visualizer_Plugin::CF_DB_QUERY, true );
+
 		if ( ! empty( $import ) && ! empty( $schedule ) ) {
 			$data['visualizer-chart-url'] = $import;
 			$data['visualizer-chart-schedule'] = $schedule;
+		}
+
+		if ( isset( $db_schedule ) && isset( $db_query ) ) {
+			$data['visualizer-db-schedule'] = $db_schedule;
+			$data['visualizer-db-query'] = $db_query;
 		}
 
 		if ( Visualizer_Module::is_pro() ) {
@@ -249,6 +293,30 @@ class Visualizer_Gutenberg_Block {
 	}
 
 	/**
+	 * Returns the data for the query.
+	 *
+	 * @access public
+	 */
+	public function get_query_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$source = new Visualizer_Source_Query( stripslashes( $data['query'] ) );
+		$html = $source->fetch( true );
+		$source->fetch( false );
+		$name = $source->getSourceName();
+		$series = $source->getSeries();
+		$data = $source->getRawData();
+		$error = '';
+		if ( empty( $html ) ) {
+			$error = $source->get_error();
+			wp_send_json_error( array( 'msg' => $error ) );
+		}
+		wp_send_json_success( array( 'table' => $html, 'name' => $name, 'series' => $series, 'data' => $data ) );
+	}
+
+	/**
 	 * Rest Callback Method
 	 */
 	public function update_chart_data( $data ) {
@@ -260,6 +328,7 @@ class Visualizer_Gutenberg_Block {
 
 			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
 			$source_type = sanitize_text_field( $data['visualizer-source'] );
+			;
 
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $source_type );
@@ -275,6 +344,16 @@ class Visualizer_Gutenberg_Block {
 			} else {
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
+			}
+
+			if ( $source_type === 'Visualizer_Source_Query' ) {
+				$db_schedule = intval( $data['visualizer-db-schedule'] );
+				$db_query = $data['visualizer-db-query'];
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
+			} else {
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
 			}
 
 			if ( Visualizer_Module::is_pro() ) {

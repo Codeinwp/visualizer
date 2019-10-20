@@ -236,14 +236,84 @@
 	}
 }
 
+.visualizer-db-query-modal {
+	.CodeMirror-scroll {
+		overflow: hidden !important;
+		height: 50%;
+		margin: 0;
+		padding: 0;
+	}
+
+	.CodeMirror-wrap {
+		height: 200px;
+		padding: 15px;
+		color: #fff;
+		background: #282923;
+		font-size: 15px;
+		margin-bottom: 20px;
+
+		.CodeMirror-cursor {
+			border-left: 1px solid #fff !important;
+		}
+
+		.CodeMirror-placeholder {
+			color: #fff;
+		}
+
+		pre {
+			color: #fff !important;
+		}
+
+		.cm-keyword {
+			color: #f92472 !important;
+		}
+
+		.cm-comment {
+			color: #74705d !important;
+		}
+
+		.cm-number {
+			color: #fff !important;
+		}
+
+		.cm-string {
+			color: #fff !important;
+		}
+	}
+
+	ul {
+		list-style: disc;
+		margin-left: 10px;
+	}
+
+	.db-wizard-error {
+		color: #f00;
+	}
+
+	.visualizer-db-query-actions {
+		.components-button {
+			&:first-child {
+				margin-right: 10px;
+			}
+		}
+	}
+}
+
 .htContextMenu {
 	&:not( .htGhostTable ) {
 		z-index: 999999;
 	}
 }
 
-.htDatepickerHolder {
+.htDatepickerHolder,
+.CodeMirror-hints {
 	z-index: 999999 !important;
+}
+
+@media ( min-width: 768px ) {
+	.visualizer-db-query-modal .CodeMirror-wrap {
+		min-width: 550px;
+	}
 }
 
 @media ( max-width: 768px ) {

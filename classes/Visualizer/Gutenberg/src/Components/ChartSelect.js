@@ -11,6 +11,8 @@ import RemoteImport from './Import/RemoteImport.js';
 
 import ChartImport from './Import/ChartImport.js';
 
+import DataImport from './Import/DataImport.js';
+
 import ManualData from './Import/ManualData.js';
 
 import Sidebar from './Sidebar.js';
@@ -88,6 +90,12 @@ class ChartSelect extends Component {
 						/>
 
 						<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
+
+						<DataImport
+							chart={ this.props.chart }
+							editSchedule={ this.props.editDatabaseSchedule }
+							databaseImportData={ this.props.databaseImportData }
+						/>
 
 						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
 
