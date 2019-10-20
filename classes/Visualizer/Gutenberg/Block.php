@@ -328,7 +328,6 @@ class Visualizer_Gutenberg_Block {
 
 			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
 			$source_type = sanitize_text_field( $data['visualizer-source'] );
-			;
 
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $source_type );
