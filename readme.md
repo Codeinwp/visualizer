@@ -2,7 +2,7 @@
 **Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [contactashish13](https://profiles.wordpress.org/contactashish13)  
 **Tags:** chart, charts, charting, table, tables, tabling, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables, chartjs  
 **Requires at least:** 3.5  
-**Tested up to:** 5.2  
+**Tested up to:** 5.3  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GPL v2.0 or later  
