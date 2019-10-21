@@ -195,7 +195,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 *
 	 * @access public
 	 */
-	public function parse() {
+	public function fetch() {
 		$url    = $this->_url;
 		$data   = array();
 		$page   = 1;
@@ -203,7 +203,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		while ( ! is_null( $url ) && $page++ < apply_filters( 'visualizer_json_fetch_pages', 5, $this->_url ) ) {
 			$array  = $this->getJSON( $url );
 			if ( is_null( $array ) ) {
-				return $data;
+				break;
 			}
 
 			$root   = explode( self::TAG_SEPARATOR, $this->_root );
@@ -268,9 +268,11 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			$url    = $this->getNextPage( $array );
 		}
 
+		$this->_data = $data;
+
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with root %s is %s', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
 
-		return $data;
+		return true;
 	}
 
 	/**
@@ -419,76 +421,6 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	}
 
 	/**
-	 * Fetches series information. This is fetched only through the UI and not while refreshing the chart data.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access private
-	 */
-	private function _fetchSeries() {
-		$params = $this->_args;
-		$headers = array_filter( $params['header'] );
-		$types = array_filter( $params['type'] );
-		$header_row = $type_row = array();
-		if ( $headers ) {
-			foreach ( $headers as $header ) {
-				if ( ! empty( $types[ $header ] ) ) {
-					$this->_series[] = array(
-						'label' => $header,
-						'type'  => $types[ $header ],
-					);
-				}
-			}
-		}
-
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Series found for %s = %s', $this->_url, print_r( $this->_series, true ) ), 'debug', __FILE__, __LINE__ );
-
-		return true;
-	}
-
-	/**
-	 * Fetches data information.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access private
-	 */
-	private function _fetchData() {
-		$params = $this->_args;
-
-		$headers    = wp_list_pluck( $this->_series, 'label' );
-		$data       = $this->parse();
-		foreach ( $data as $line ) {
-			$data_row = array();
-			foreach ( $line as $header => $value ) {
-				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-				if ( in_array( $header, $headers ) ) {
-					$data_row[] = $value;
-				}
-			}
-			$this->_data[] = $this->_normalizeData( $data_row );
-		}
-
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Data found for %s = %s', $this->_url, print_r( $this->_data, true ) ), 'debug', __FILE__, __LINE__ );
-
-		return true;
-	}
-
-	/**
-	 * Fetches information from source, parses it and builds series and data arrays.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
-	 * @return boolean TRUE on success, otherwise FALSE.
-	 */
-	public function fetch() {
-		$this->_fetchSeries();
-		$this->_fetchData();
-		return true;
-	}
-
-	/**
 	 * Refresh the data for the provided series.
 	 *
 	 * @since ?
@@ -497,7 +429,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 */
 	public function refresh( $series ) {
 		$this->_series = $series;
-		$this->_fetchData();
+		$this->fetch();
 		return true;
 	}
 

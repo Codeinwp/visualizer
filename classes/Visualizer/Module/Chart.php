@@ -156,8 +156,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$source = new Visualizer_Source_Json( $params );
+		$source->fetch();
+		$data   = $source->getRawData();
 
-		$data   = $source->parse();
 		if ( empty( $data ) ) {
 			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
@@ -186,7 +187,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$chart  = get_post( $chart_id );
 
 		$source = new Visualizer_Source_Json( $params );
-		$source->fetch();
+		$source->fetchFromEditableTable();
 
 		$content    = $source->getData();
 		$chart->post_content = $content;
