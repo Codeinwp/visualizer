@@ -157,6 +157,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.3.2 - 2019-10-03  = 
+
+* Add support for Dataset schema
+* Horizontal Axis formatting should apply to tooltips
+
+
 = 3.3.1 - 2019-09-28  = 
 
 * Increase minimum requirement to PHP 5.6

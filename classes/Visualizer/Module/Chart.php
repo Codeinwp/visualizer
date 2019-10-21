@@ -934,6 +934,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			exit;
 		}
 
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploading data for chart %d with POST = %s and GET = %s', $chart_id, print_r( $_POST, true ), print_r( $_GET, true ) ), 'debug', __FILE__, __LINE__ );
+
 		if ( ! isset( $_POST['vz-import-time'] ) ) {
 			apply_filters( 'visualizer_pro_remove_schedule', $chart_id );
 		}
@@ -954,6 +956,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING );
 
+		// delete last error
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
+
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
 		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
@@ -969,8 +974,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_POST['table_data'] ) && 'yes' === $_POST['table_data'] ) {
 			$source = $this->handleTabularData();
 		} else {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'CSV file with chart data was not uploaded for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' ) );
 		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploaded data for chart %d with source %s', $chart_id, print_r( $source, true ) ), 'debug', __FILE__, __LINE__ );
+
 		if ( $source ) {
 			if ( $source->fetch() ) {
 				$content    = $source->getData();
@@ -981,6 +991,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					// if we populate the data even if it is empty, the chart will show "Table has no columns".
 					if ( array_key_exists( 'source', $json ) && ! empty( $json['source'] ) && ( ! array_key_exists( 'data', $json ) || empty( $json['data'] ) ) ) {
 						do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Not populating chart data as source exists (%s) but data is empty!', $json['source'] ), 'warn', __FILE__, __LINE__ );
+						update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, sprintf( 'Not populating chart data as source exists (%s) but data is empty!', $json['source'] ) );
 						$populate   = false;
 					}
 				}
@@ -992,6 +1003,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Updated post for chart %d', $chart_id ), 'debug', __FILE__, __LINE__ );
+
 				Visualizer_Module_Utility::set_defaults( $chart, null );
 
 				$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
@@ -1001,11 +1014,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$render->series = json_encode( $source->getSeries() );
 				$render->settings = json_encode( $settings );
 			} else {
-				$render->message = $source->get_error();
-				if ( empty( $render->message ) ) {
-					$render->message = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
+				$error = $source->get_error();
+				if ( empty( $error ) ) {
+					$error = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
 				}
+				$render->message = $error;
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( '%s for chart %d.', $error, $chart_id ), 'error', __FILE__, __LINE__ );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, $error );
 			}
+		} else {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unknown internal error for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
 		}
 		$render->render();
 		if ( ! $can_die ) {
@@ -1114,7 +1132,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render        = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
 		$render->type  = $data['type'];
-		unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+
+		if ( $data && $data['settings'] ) {
+			unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+		}
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(

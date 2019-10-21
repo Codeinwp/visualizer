@@ -87,7 +87,7 @@ class Visualizer_Gutenberg_Block {
 		if ( Visualizer_Module::is_pro() ) {
 			$type = 'pro';
 			if ( apply_filters( 'visualizer_is_business', false ) ) {
-				$type = 'developer';
+				$type = 'business';
 			}
 		}
 
@@ -156,6 +156,9 @@ class Visualizer_Gutenberg_Block {
 						'sanitize_callback' => 'absint',
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
 			)
 		);
 
@@ -170,6 +173,9 @@ class Visualizer_Gutenberg_Block {
 						'sanitize_callback' => 'esc_url_raw',
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
 			)
 		);
 
@@ -184,6 +190,9 @@ class Visualizer_Gutenberg_Block {
 						'sanitize_callback' => 'sanitize_text_field',
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
 			)
 		);
 	}
@@ -249,15 +258,20 @@ class Visualizer_Gutenberg_Block {
 
 		if ( $data['id'] && ! is_wp_error( $data['id'] ) ) {
 
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $data['visualizer-chart-type'] );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $data['visualizer-source'] );
+			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
+			$source_type = sanitize_text_field( $data['visualizer-source'] );
+
+			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
+			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $source_type );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_DEFAULT_DATA, $data['visualizer-default-data'] );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SERIES, $data['visualizer-series'] );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $data['visualizer-settings'] );
 
 			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] ) {
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $data['visualizer-chart-url'] );
-				apply_filters( 'visualizer_pro_chart_schedule', $data['id'], $data['visualizer-chart-url'], $data['visualizer-chart-schedule'] );
+				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
+				$chart_schedule = intval( $data['visualizer-chart-schedule'] );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $chart_url );
+				apply_filters( 'visualizer_pro_chart_schedule', $data['id'], $chart_url, $chart_schedule );
 			} else {
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
@@ -268,7 +282,8 @@ class Visualizer_Gutenberg_Block {
 			}
 
 			if ( $data['visualizer-chart-url'] ) {
-				$content['source'] = $data['visualizer-chart-url'];
+				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
+				$content['source'] = $chart_url;
 				$content['data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
 			} else {
 				$content = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
