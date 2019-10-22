@@ -115,6 +115,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			case 'wp':
 				// fall-through.
 			case 'db':
+				// fall-through.
+			case 'csv':
 				break;
 			default:
 				return;
