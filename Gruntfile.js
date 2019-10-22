@@ -7,6 +7,7 @@ module.exports = function (grunt) {
 	var loader = require( 'load-project-config' ),
 		config = require( 'grunt-plugin-fleet' );
 	config = config();
+	config.files.js.push( '!cypress/**/*.js' );
 	// jshint ignore: start
 	config.taskMap['faq_builder'] = 'grunt-helpscout-faq';
 	// jshint ignore: end

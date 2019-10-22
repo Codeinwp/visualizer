@@ -688,7 +688,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
+					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
 					'select_columns'    => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
@@ -1146,7 +1146,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render        = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
 		$render->type  = $data['type'];
-		unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+
+		if ( $data && $data['settings'] ) {
+			unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+		}
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
@@ -1154,7 +1157,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
+					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 				),
 				'charts' => array(
