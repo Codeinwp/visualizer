@@ -156,8 +156,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$source = new Visualizer_Source_Json( $params );
+		$source->fetch();
+		$data   = $source->getRawData();
 
-		$data   = $source->parse();
 		if ( empty( $data ) ) {
 			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
@@ -186,7 +187,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$chart  = get_post( $chart_id );
 
 		$source = new Visualizer_Source_Json( $params );
-		$source->fetch();
+		$source->fetchFromEditableTable();
 
 		$content    = $source->getData();
 		$chart->post_content = $content;
@@ -196,6 +197,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
+
+		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS );
+		$headers = array( 'method' => $params['method'] );
+		if ( ! empty( $params['auth'] ) ) {
+			$headers['auth'] = $params['auth'];
+		} elseif ( ! empty( $params['username'] ) && ! empty( $params['password'] ) ) {
+			$headers['auth'] = array( 'username' => $params['username'], 'password' => $params['password'] );
+		}
+
+		add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS, $headers );
+
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING );
 		if ( ! empty( $params['paging'] ) ) {
 			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
@@ -679,6 +691,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
+					'select_columns'    => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -955,6 +968,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS );
 
 		// delete last error
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
