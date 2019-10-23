@@ -82,11 +82,17 @@ class ChartSelect extends Component {
 						/>
 
 						<RemoteImport
+							id={ this.props.id }
 							chart={ this.props.chart }
 							editURL={ this.props.editURL }
 							isLoading={ this.props.isLoading }
 							uploadData={ this.props.uploadData }
 							editSchedule={ this.props.editSchedule }
+							editJSONSchedule={ this.props.editJSONSchedule }
+							editJSONURL={ this.props.editJSONURL }
+							editJSONRoot={ this.props.editJSONRoot }
+							editJSONPaging={ this.props.editJSONPaging }
+							JSONImportData={ this.props.JSONImportData }
 						/>
 
 						<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />

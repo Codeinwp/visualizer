@@ -13,6 +13,11 @@ const {
 	TextControl
 } = wp.components;
 
+/**
+ * Internal dependencies
+ */
+import JSONImport from './JSONImport.js';
+
 class RemoteImport extends Component {
 	constructor() {
 		super( ...arguments );
@@ -106,7 +111,7 @@ class RemoteImport extends Component {
 						initialOpen={ false }
 					>
 
-						<p>{ __( 'Enable this feature in BUSINESS version!' ) }</p>
+						<p>{ __( 'Upgrade your license to at least the DEVELOPER version to activate this feature!' ) }</p>
 
 						<Button
 							isPrimary
@@ -118,6 +123,16 @@ class RemoteImport extends Component {
 
 					</PanelBody>
 				}
+
+				<JSONImport
+					id={ this.props.id }
+					chart={ this.props.chart }
+					editSchedule={ this.props.editJSONSchedule }
+					editJSONURL={ this.props.editJSONURL }
+					editJSONRoot={ this.props.editJSONRoot }
+					editJSONPaging={ this.props.editJSONPaging }
+					JSONImportData={ this.props.JSONImportData }
+				/>
 
 			</PanelBody>
 		);

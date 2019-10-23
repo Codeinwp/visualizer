@@ -236,6 +236,52 @@
 	}
 }
 
+.visualizer-json-query-modal {
+	.components-modal__content {
+		padding-left: 0;
+		padding-right: 0;
+
+		.components-modal__header {
+			margin: 0;
+		}
+	}
+
+	.viz-editor-table {
+		tbody {
+			tr {
+				&:first-child {
+					background-color: #ececec !important;
+				}
+			}
+		}
+
+		tr {
+			th {
+				background-color: #cccccc;
+			}
+		}
+
+		thead {
+			tr {
+				th {
+					&:nth-child(n+1) {
+						cursor: move !important;
+					}
+				}
+			}
+		}
+	}
+
+	#visualizer-json-query-table {
+		margin-bottom: 10px;
+	}
+
+	ul {
+		list-style: disc;
+		margin-left: 10px;
+	}
+}
+
 .visualizer-db-query-modal {
 	.CodeMirror-scroll {
 		overflow: hidden !important;
@@ -306,11 +352,17 @@
 }
 
 .htDatepickerHolder,
-.CodeMirror-hints {
+.CodeMirror-hints,
+.DTCR_clonedTable,
+.DTCR_pointer {
 	z-index: 999999 !important;
 }
 
 @media ( min-width: 768px ) {
+	.visualizer-json-query-modal {
+		width: 668px;
+	}
+
 	.visualizer-db-query-modal .CodeMirror-wrap {
 		min-width: 550px;
 	}

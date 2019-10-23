@@ -182,6 +182,60 @@ class Visualizer_Gutenberg_Block {
 
 		register_rest_route(
 			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/get-json-root',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_json_root_data' ),
+				'args'     => array(
+					'url' => array(
+						'sanitize_callback' => 'esc_url_raw',
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/get-json-data',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_json_data' ),
+				'args'     => array(
+					'url' => array(
+						'sanitize_callback' => 'esc_url_raw',
+					),
+					'chart' => array(
+						'sanitize_callback' => 'absint',
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/set-json-data',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'set_json_data' ),
+				'args'     => array(
+					'url' => array(
+						'sanitize_callback' => 'esc_url_raw',
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/update-chart',
 			array(
 				'methods'  => 'POST',
@@ -271,14 +325,32 @@ class Visualizer_Gutenberg_Block {
 
 		$db_query = get_post_meta( $post_id, Visualizer_Plugin::CF_DB_QUERY, true );
 
+		$json_url = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_URL, true );
+
+		$json_schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
+
+		$json_root = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_ROOT, true );
+
+		$json_paging = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_PAGING, true );
+
 		if ( ! empty( $import ) && ! empty( $schedule ) ) {
 			$data['visualizer-chart-url'] = $import;
 			$data['visualizer-chart-schedule'] = $schedule;
 		}
 
-		if ( isset( $db_schedule ) && isset( $db_query ) ) {
+		if ( ! empty( $db_schedule ) && ! empty( $db_query ) ) {
 			$data['visualizer-db-schedule'] = $db_schedule;
 			$data['visualizer-db-query'] = $db_query;
+		}
+
+		if ( ! empty( $json_url ) ) {
+			$data['visualizer-json-schedule'] = $json_schedule;
+			$data['visualizer-json-url'] = $json_url;
+			$data['visualizer-json-root'] = $json_root;
+
+			if ( Visualizer_Module::is_pro() && ! empty( $json_paging ) ) {
+				$data['visualizer-json-paging'] = $json_paging;
+			}
 		}
 
 		if ( Visualizer_Module::is_pro() ) {
@@ -314,6 +386,77 @@ class Visualizer_Gutenberg_Block {
 			wp_send_json_error( array( 'msg' => $error ) );
 		}
 		wp_send_json_success( array( 'table' => $html, 'name' => $name, 'series' => $series, 'data' => $data ) );
+	}
+
+	/**
+	 * Returns the JSON root.
+	 *
+	 * @access public
+	 */
+	public function get_json_root_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$source = new Visualizer_Source_Json( $data );
+
+		$roots = $source->fetchRoots();
+		if ( empty( $roots ) ) {
+			wp_send_json_error( array( 'msg' => $source->get_error() ) );
+		}
+
+		wp_send_json_success( array( 'url' => $data['url'], 'roots' => $roots ) );
+	}
+
+	/**
+	 * Returns the JSON data.
+	 *
+	 * @access public
+	 */
+	public function get_json_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$chart_id = $data['chart'];
+
+		if ( empty( $chart_id ) ) {
+			wp_die();
+		}
+
+		$source = new Visualizer_Source_Json( $data );
+
+		$table = $source->parse();
+		if ( empty( $table ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
+		}
+
+		$table = Visualizer_Render_Layout::show( 'editor-table', $table, $chart_id, 'viz-json-table', false, false );
+		wp_send_json_success( array( 'table' => $table, 'root' => $data['root'], 'url' => $data['url'], 'paging' => $source->getPaginationElements() ) );
+	}
+
+	/**
+	 * Set the JSON data.
+	 *
+	 * @access public
+	 */
+	public function set_json_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$source = new Visualizer_Source_Json( $data );
+
+		$table = $source->parse();
+		if ( empty( $table ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
+		}
+
+		$source->fetch();
+		$name = $source->getSourceName();
+		$series = $source->getSeries();
+		$data = $source->getRawData();
+		wp_send_json_success( array( 'name' => $name, 'series' => $series, 'data' => $data ) );
 	}
 
 	/**
@@ -353,6 +496,28 @@ class Visualizer_Gutenberg_Block {
 			} else {
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
+			}
+
+			if ( $source_type === 'Visualizer_Source_Json' ) {
+				$json_schedule = intval( $data['visualizer-json-schedule'] );
+				$json_url = esc_url_raw( $data['visualizer-json-url'] );
+				$json_root = $data['visualizer-json-root'];
+				$json_paging = $data['visualizer-json-paging'];
+
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE, $json_schedule );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL, $json_url );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT, $json_root );
+
+				if ( ! empty( $json_paging ) ) {
+					update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING, $json_paging );
+				} else {
+					delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
+				}
+			} else {
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
 			}
 
 			if ( Visualizer_Module::is_pro() ) {

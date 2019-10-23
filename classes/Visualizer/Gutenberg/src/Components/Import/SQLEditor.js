@@ -79,7 +79,7 @@ class SQLEditor extends Component {
 
 		if ( this.state.success ) {
 			jQuery( '#results' ).DataTable({
-				'paging': false
+				paging: false
 			});
 		}
 	}

@@ -33,6 +33,28 @@ class DataImport extends Component {
 	}
 
 	render() {
+		if ( ( 'business' !== visualizerLocalize.isPro ) ) {
+			return (
+				<PanelBody
+					title={ __( 'Import data from database' ) }
+					icon="lock"
+					initialOpen={ false }
+				>
+
+					<p>{ __( 'Upgrade your license to at least the DEVELOPER version to activate this feature!' ) }</p>
+
+					<Button
+						isPrimary
+						href={ visualizerLocalize.proTeaser }
+						target="_blank"
+					>
+						{ __( 'Buy Now' ) }
+					</Button>
+
+				</PanelBody>
+			);
+		}
+
 		return (
 			<PanelBody
 				title={ __( 'Import data from database' ) }
@@ -57,7 +79,8 @@ class DataImport extends Component {
 				/>
 
 				<Button
-					isDefault
+					isPrimary
+					isLarge
 					onClick={ () => this.setState({ isOpen: true }) }
 				>
 					{ __( 'Create Query' ) }
