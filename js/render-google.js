@@ -207,6 +207,9 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1]) {
                             continue;
                         }
+                        if(typeof settings.series[i].role !== 'undefined' && settings.series[i].role !== ''){
+                            table.setColumnProperty(i + 1, 'role', settings.series[i].role);
+                        }
                         format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
                     }
                     break;
