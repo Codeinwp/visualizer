@@ -60,6 +60,8 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<div class="visualizer-db-query-form">
 				<div>
 					<form id='db-query-form'>
+						<input type="hidden" name="chart_id" value="<?php echo $args[2]; ?>">
+						<?php do_action( 'visualizer_db_query_add_layout', $args ); ?>
 						<textarea name='query' class='visualizer-db-query' placeholder="<?php _e( 'Your query goes here', 'visualizer' ); ?>"><?php echo $query; ?></textarea>
 					</form>
 					<div class='db-wizard-error'></div>
@@ -72,6 +74,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<ul>
 					<li><?php echo sprintf( __( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
 					<li><?php echo sprintf( __( 'Use %1$sControl+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
+					<?php do_action( 'visualizer_db_query_add_hints', $args ); ?>
 				</ul>
 			</div>
 			<div class='db-wizard-results'></div>

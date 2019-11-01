@@ -41,6 +41,7 @@ class Visualizer_Plugin {
 	const CF_SETTINGS = 'visualizer-settings';
 	const CF_CHART_LIBRARY = 'visualizer-chart-library';
 	const CF_ERROR = 'visualizer-error';
+	const CF_REMOTE_DB_PARAMS = 'visualizer-remote-db-params';
 
 	const CF_SOURCE_FILTER = 'visualizer-source-filter';
 	const CF_FILTER_CONFIG = 'visualizer-filter-config';
@@ -93,6 +94,12 @@ class Visualizer_Plugin {
 	// Added by Ash/Upwork
 	const PRO_TEASER_URL = 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing';
 	const PRO_TEASER_TITLE = 'Check PRO version ';
+
+	/**
+	 * Name of the option for wordpress DB.
+	 */
+	const WP_DB_NAME = 'Wordpress DB';
+
 	// Added by Ash/Upwork
 	/**
 	 * Singletone instance of the plugin.
