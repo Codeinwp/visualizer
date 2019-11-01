@@ -787,6 +787,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			if ( $settings ) {
 				unset( $settings['height'], $settings['width'], $settings['chartArea'] );
 			}
+
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
 

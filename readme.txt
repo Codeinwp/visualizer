@@ -2,7 +2,7 @@
 Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle,contactashish13
 Tags: chart, charts, charting, table, tables, tabling, graph, graphs, graphing, visualisation, visualise data, visualization, visualize data, HTML5, pie chart, line chart, bar chart, column chart, gauge chart, area chart, scatter chart, candlestick chart, geo chart, google visualization api, data tables, chartjs
 Requires at least: 3.5
-Tested up to: 5.2
+Tested up to: 5.3
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPL v2.0 or later

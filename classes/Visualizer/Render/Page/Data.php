@@ -200,6 +200,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													?>
 											</div>
 
+											<p class="viz-group-description viz-info-msg json-chart-msg" style="display: none"><?php echo sprintf( __( 'Please make sure you click \'Save & Show Chart\' on the left before you click \'Show Chart\' below.', 'visualizer' ) ); ?></p>
 											<input type="button" id="json-chart-button" class="button button-secondary show-chart-toggle"
 											value="<?php echo $bttn_label; ?>" data-current="chart"
 											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
