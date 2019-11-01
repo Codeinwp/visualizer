@@ -1188,7 +1188,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		check_ajax_referer( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION, 'security' );
 
 		$params     = wp_parse_args( $_POST['params'] );
-		$chart_id	= filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
+		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
 
 		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
 		$html       = $source->fetch( true );
@@ -1248,7 +1248,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 				if ( isset( $params['db_type'] ) && $params['db_type'] !== Visualizer_Plugin::WP_DB_NAME ) {
-					$remote_db_params	= $params;
+					$remote_db_params   = $params;
 					unset( $remote_db_params['query'] );
 					unset( $remote_db_params['chart_id'] );
 					update_post_meta( $chart_id, Visualizer_Plugin::CF_REMOTE_DB_PARAMS, $remote_db_params );

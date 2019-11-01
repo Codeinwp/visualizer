@@ -97,9 +97,9 @@ class Visualizer_Plugin {
 	const PRO_TEASER_TITLE = 'Check PRO version ';
 
 	/**
-	 * Name of the option for wordpress DB.
+	 * Name of the option for WordPress DB.
 	 */
-	const WP_DB_NAME = 'Wordpress DB';
+	const WP_DB_NAME = 'WordPress DB';
 
 	// Added by Ash/Upwork
 	/**

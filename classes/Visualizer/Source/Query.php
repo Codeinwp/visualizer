@@ -56,8 +56,8 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 *
 	 * @access public
 	 * @param string $query The query.
-	 * @param int $chart_id The chart id.
-	 * @param array $params Any additional parameters (e.g. for connecting to a remote db).
+	 * @param int    $chart_id The chart id.
+	 * @param array  $params Any additional parameters (e.g. for connecting to a remote db).
 	 */
 	public function __construct( $query = null, $chart_id = null, $params = null ) {
 		$this->_query = $query;
