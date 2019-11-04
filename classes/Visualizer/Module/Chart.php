@@ -1192,9 +1192,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
 		$html       = $source->fetch( true );
-		$error      = '';
-		if ( empty( $html ) ) {
-			$error  = $source->get_error();
+		$error      = $source->get_error();
+		if ( ! empty( $error ) ) {
 			wp_send_json_error( array( 'msg' => $error ) );
 		}
 		wp_send_json_success( array( 'table' => $html ) );
