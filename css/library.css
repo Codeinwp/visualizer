@@ -311,3 +311,21 @@ div#visualizer-types ul, div#visualizer-types form p {
 	vertical-align: middle;
 	margin: 0;
 }
+
+.visualizer-chart-status {
+	padding: 3px 0;
+	color: #aaa;
+	text-shadow: 0 1px 0 #fff;
+}
+
+.visualizer-chart-status span.visualizer-error {
+	float: right;
+}
+
+.visualizer-error i {
+	color: green;
+}
+.visualizer-error i.error {
+	color: red;
+	cursor: pointer;
+}

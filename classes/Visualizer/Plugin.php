@@ -40,6 +40,7 @@ class Visualizer_Plugin {
 	const CF_DEFAULT_DATA = 'visualizer-default-data';
 	const CF_SETTINGS = 'visualizer-settings';
 	const CF_CHART_LIBRARY = 'visualizer-chart-library';
+	const CF_ERROR = 'visualizer-error';
 
 	const CF_SOURCE_FILTER = 'visualizer-source-filter';
 	const CF_FILTER_CONFIG = 'visualizer-filter-config';
@@ -72,6 +73,7 @@ class Visualizer_Plugin {
 	const CF_JSON_ROOT = 'visualizer-json-root';
 	const CF_JSON_SCHEDULE = 'visualizer-json-schedule';
 	const CF_JSON_PAGING = 'visualizer-json-paging';
+	const CF_JSON_HEADERS = 'visualizer-json-headers';
 
 	const ACTION_SAVE_FILTER_QUERY = 'visualizer-save-filter-query';
 

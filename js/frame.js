@@ -96,10 +96,10 @@
         });
 
         $('#view-remote-file').click(function () {
-            var url = $(this).parent().find('#remote-data').val();
+            var url = $(this).parent().find('#vz-schedule-url').val();
 
             if (url !== '') {
-                if (/^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)) {
+                if (url.indexOf('localhost') !== -1 || /^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)) {
                     if (url.substr(url.length - 8) === '/pubhtml') {
                         url = url.substring(0, url.length - 8) + '/export?format=csv';
                     }
@@ -370,6 +370,11 @@
             heightStyle: 'content',
             active: 0
         });
+        $('.visualizer-json-subform').accordion({
+            heightStyle: 'content',
+            active: false,
+            collapsible: true
+        });
 
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
@@ -380,6 +385,7 @@
                 $(this).attr( 'data-current', 'filter' );
                 $( '.visualizer-editor-lhs' ).hide();
                 $( '#visualizer-json-screen' ).css("z-index", "9999").show();
+                $('.json-chart-msg').show();
                 $( '#canvas' ).hide();
             }else{
                 var filter_button = $(this);
@@ -388,6 +394,7 @@
                 filter_button.val( filter_button.attr( 'data-t-chart' ) );
                 filter_button.html( filter_button.attr( 'data-t-chart' ) );
                 filter_button.attr( 'data-current', 'chart' );
+                $('.json-chart-msg').hide();
                 $( '#canvas' ).css("z-index", "1").show();
                 $('#canvas').unlock();
             }
@@ -410,7 +417,6 @@
                 },
                 success : function(data){
                     if(data.success){
-                        $('#json-root-form [name="url"]').val(data.data.url);
                         $('#vz-import-json-root').empty();
                         $.each(data.data.roots, function(i, name){
                             $('#vz-import-json-root').append('<option value="' + name + '">' + name.replace(regex, visualizer.json_tag_separator_view) + '</option>');
@@ -439,7 +445,7 @@
                 data    : {
                     'action'    : visualizer.ajax['actions']['json_get_data'],
                     'security'  : visualizer.ajax['nonces']['json_get_data'],
-                    'params'    : $('#json-root-form').serialize()
+                    'params'    : $('#json-root-form, #json-endpoint-form').serialize()
                 },
                 success : function(data){
                     if(data.success){
@@ -453,8 +459,6 @@
                             });
                             $('.json-pagination').show();
                         }
-                        $('#json-conclude-form [name="url"]').val(data.data.url);
-                        $('#json-conclude-form [name="root"]').val(data.data.root);
                         $('#json-conclude-form .json-table').html(data.data.table);
 
                         var $table = create_editor_table( '#json-conclude-form' );
@@ -474,8 +478,19 @@
 
         // when the data is set and the chart is updated, toggle the screen so that the chart is shown
         $('#json-conclude-form').on( 'submit', function(e){
-            // populate the form elements that are in the misc tab.
-            $('#json-conclude-form-helper .json-form-element').each(function(x, y){
+            // at least one column has to be selected as non-excluded.
+            var count_selected = 0;
+            $('select.viz-select-data-type').each(function(i, element){
+                if($(element).prop('selectedIndex') > 0){
+                    count_selected++;
+                }
+            });
+            if(count_selected === 0){
+                alert(visualizer.l10n.select_columns);
+                return false;
+            }
+            // populate the form elements that are in the other tabs.
+            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element').each(function(x, y){
                 $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
             });
             $( '#json-chart-button' ).trigger('click');

@@ -67,7 +67,22 @@ class Visualizer_Module {
 		$this->_addFilter( Visualizer_Plugin::FILTER_UNDO_REVISIONS, 'undoRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, 'getDataAs', 10, 3 );
+		register_shutdown_function( array($this, 'onShutdown') );
 
+	}
+
+	/**
+	 * Register a shutdown hook to catch fatal errors.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function onShutdown() {
+		$error = error_get_last();
+		if ( $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Critical error %s', print_r( $error, true ) ), 'error', __FILE__, __LINE__ );
+		}
 	}
 
 	/**
@@ -638,6 +653,18 @@ class Visualizer_Module {
 	 */
 	public static function is_pro_older_than( $version ) {
 		return version_compare( VISUALIZER_PRO_VERSION, $version, '<' );
+	}
+
+	/**
+	 * Gets the features for the provided license type.
+	 */
+	public static final function get_features_for_license( $plan ) {
+		switch ( $plan ) {
+			case 1:
+				return array( 'import-wp', 'db-query' );
+			case 2:
+				return array( 'schedule-chart', 'chart-permissions' );
+		}
 	}
 
 }
