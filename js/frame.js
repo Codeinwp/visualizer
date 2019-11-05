@@ -380,23 +380,24 @@
         $( '#json-chart-button' ).on( 'click', function(){
             $('#content').css('width', 'calc(100% - 300px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
+                // toggle from chart to LHS form
                 $(this).val( $(this).attr( 'data-t-filter' ) );
                 $(this).html( $(this).attr( 'data-t-filter' ) );
                 $(this).attr( 'data-current', 'filter' );
                 $( '.visualizer-editor-lhs' ).hide();
                 $( '#visualizer-json-screen' ).css("z-index", "9999").show();
-                $('.json-chart-msg').show();
                 $( '#canvas' ).hide();
             }else{
+                // toggle from LHS form to chart
+                $( '#json-conclude-form' ).trigger('submit');
                 var filter_button = $(this);
                 $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
                 $('#canvas').lock();
                 filter_button.val( filter_button.attr( 'data-t-chart' ) );
                 filter_button.html( filter_button.attr( 'data-t-chart' ) );
                 filter_button.attr( 'data-current', 'chart' );
-                $('.json-chart-msg').hide();
+                end_ajax( $( '#visualizer-json-screen' ) );
                 $( '#canvas' ).css("z-index", "1").show();
-                $('#canvas').unlock();
             }
         } );
 
@@ -490,11 +491,11 @@
                 return false;
             }
             // populate the form elements that are in the other tabs.
-            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element').each(function(x, y){
+            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element, #vz-import-json .json-form-element').each(function(x, y){
                 $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
             });
-            $( '#json-chart-button' ).trigger('click');
-            $('#canvas').lock();
+
+            start_ajax( $( '#visualizer-json-screen' ) );
         });
 
         // update the schedule

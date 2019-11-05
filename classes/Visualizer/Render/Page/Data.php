@@ -175,7 +175,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													if ( Visualizer_Module::is_pro() ) {
 														?>
 												<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
-												<select name="vz-json-time" id="vz-json-time" class="visualizer-select" data-chart="<?php echo $this->chart->ID; ?>">
+												<select name="time" id="vz-json-time" class="visualizer-select json-form-element" data-chart="<?php echo $this->chart->ID; ?>">
 														<?php
 														$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
 														$schedules = apply_filters(
@@ -200,7 +200,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													?>
 											</div>
 
-											<p class="viz-group-description viz-info-msg json-chart-msg" style="display: none"><?php echo sprintf( __( 'Please make sure you click \'Save & Show Chart\' on the left before you click \'Show Chart\' below.', 'visualizer' ) ); ?></p>
 											<input type="button" id="json-chart-button" class="button button-secondary show-chart-toggle"
 											value="<?php echo $bttn_label; ?>" data-current="chart"
 											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"

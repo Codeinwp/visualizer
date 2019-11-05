@@ -213,6 +213,29 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
 		}
 
+		$time = filter_input(
+			INPUT_POST,
+			'time',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+				),
+			)
+		);
+
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE );
+
+		if ( -1 < $time ) {
+			add_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, $time );
+		}
+
+		// delete other source specific parameters.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_URL );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_SCHEDULE );
+
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
 		$render->data   = json_encode( $source->getRawData() );
