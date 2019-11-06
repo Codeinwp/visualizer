@@ -1386,11 +1386,14 @@ span.viz-section-error {
 	min-width: 10px !important;
 }
 
-#json-conclude-form .json-table,
+#json-conclude-form .json-table {
+	width: 85%;
+}
+
 #vz-import-json-url,
 #vz-import-json-root,
 #vz-import-json-paging {
-	width: 85%;
+	width: 75%;
 }
 
 #json-conclude-form .json-table,

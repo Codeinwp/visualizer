@@ -379,7 +379,7 @@
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
             var $bttn = $(this);
-            $('#content').css('width', 'calc(100% - 300px)');
+            $('#content').css('width', 'calc(100% - 100px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 // toggle from chart to LHS form
                 $(this).val( $(this).attr( 'data-t-filter' ) );
