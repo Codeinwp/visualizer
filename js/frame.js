@@ -493,6 +493,7 @@
                 alert(visualizer.l10n.select_columns);
                 return false;
             }
+
             // populate the form elements that are in the other tabs.
             $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element, #vz-import-json .json-form-element').each(function(x, y){
                 $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
