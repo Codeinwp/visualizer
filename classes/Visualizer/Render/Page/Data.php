@@ -393,7 +393,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<?php if ( ! Visualizer_Module::is_pro() ) { ?>
 										<p class="viz-group-description simple-editor-type"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
 									<?php } else { ?>
-									<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' );?>">
+									<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
 									<?php } ?>
 									<input type="button" id="editor-chart-button" class="button button-primary "
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
