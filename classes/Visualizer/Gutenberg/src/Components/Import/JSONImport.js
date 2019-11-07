@@ -13,6 +13,7 @@ const { Component } = wp.element;
 const {
 	Button,
 	ExternalLink,
+	IconButton,
 	Modal,
 	PanelBody,
 	SelectControl,
@@ -26,6 +27,7 @@ class JSONImport extends Component {
 		this.openModal = this.openModal.bind( this );
 		this.initTable = this.initTable.bind( this );
 		this.onToggle = this.onToggle.bind( this );
+		this.toggleHeaders = this.toggleHeaders.bind( this );
 		this.getJSONRoot = this.getJSONRoot.bind( this );
 		this.getJSONData = this.getJSONData.bind( this );
 		this.getTableData = this.getTableData.bind( this );
@@ -37,9 +39,16 @@ class JSONImport extends Component {
 			isSecondStepOpen: false,
 			isThirdStepOpen: false,
 			isFourthStepOpen: false,
+			isHeaderPanelOpen: false,
 			endpointRoots: [],
 			endpointPaging: [],
-			table: null
+			table: null,
+			requestHeaders: {
+				method: 'GET',
+				username: '',
+				password: '',
+				auth: ''
+			}
 		};
 	}
 
@@ -106,6 +115,10 @@ class JSONImport extends Component {
 		}
 	}
 
+	toggleHeaders() {
+		this.setState({ isHeaderPanelOpen: ! this.state.isHeaderPanelOpen });
+	}
+
 	async getJSONRoot() {
 		this.setState({
 			isLoading: true,
@@ -114,13 +127,40 @@ class JSONImport extends Component {
 			table: null
 		});
 
-		let response = await apiFetch({ path: `/visualizer/v1/get-json-root?url=${ this.props.chart['visualizer-json-url'] }` });
+		let response = await apiRequest({
+			path: `/visualizer/v1/get-json-root?url=${ this.props.chart['visualizer-json-url'] }`,
+			data: {
+				method: this.props.chart['visualizer-json-headers'] ? this.props.chart['visualizer-json-headers'].method : this.state.requestHeaders.method,
+				username: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth.username :
+							this.state.requestHeaders.username
+					) :
+					this.state.requestHeaders.username,
+				password: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth.password :
+							this.state.requestHeaders.password
+					) :
+					this.state.requestHeaders.password,
+				auth: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' !== typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth :
+							this.state.requestHeaders.auth
+					) :
+					this.state.requestHeaders.auth
+			},
+			method: 'GET'
+		});
 
 		if ( response.success ) {
-			const roots = response.data.roots.map( root => {
+			const roots = Object.keys( response.data.roots ).map( i => {
 				return {
-					label: root.replace( />/g, ' ➤ ' ),
-					value: root
+					label: response.data.roots[i].replace( />/g, ' ➤ ' ),
+					value: response.data.roots[i]
 				};
 			});
 
@@ -142,7 +182,29 @@ class JSONImport extends Component {
 		let response = await apiRequest({
 			path: `/visualizer/v1/get-json-data?url=${ this.props.chart['visualizer-json-url'] }&chart=${ this.props.id }`,
 			data: {
-				root: this.props.chart['visualizer-json-root'] || this.state.endpointRoots[0].value
+				root: this.props.chart['visualizer-json-root'] || this.state.endpointRoots[0].value,
+				method: this.props.chart['visualizer-json-headers'] ? this.props.chart['visualizer-json-headers'].method : this.state.requestHeaders.method,
+				username: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth.username :
+							this.state.requestHeaders.username
+					) :
+					this.state.requestHeaders.username,
+				password: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth.password :
+							this.state.requestHeaders.password
+					) :
+					this.state.requestHeaders.password,
+				auth: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' !== typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth :
+							this.state.requestHeaders.auth
+					) :
+					this.state.requestHeaders.auth
 			},
 			method: 'GET'
 		});
@@ -197,6 +259,28 @@ class JSONImport extends Component {
 			path: '/visualizer/v1/set-json-data',
 			data: {
 				url: this.props.chart['visualizer-json-url'],
+				method: this.props.chart['visualizer-json-headers'] ? this.props.chart['visualizer-json-headers'].method : this.state.requestHeaders.method,
+				username: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth.username :
+							this.state.requestHeaders.username
+					) :
+					this.state.requestHeaders.username,
+				password: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth.password :
+							this.state.requestHeaders.password
+					) :
+					this.state.requestHeaders.password,
+				auth: this.props.chart['visualizer-json-headers'] ?
+					(
+						'object' !== typeof this.props.chart['visualizer-json-headers'].auth ?
+							this.props.chart['visualizer-json-headers'].auth :
+							this.state.requestHeaders.auth
+					) :
+					this.state.requestHeaders.auth,
 				root: this.props.chart['visualizer-json-root'] || this.state.endpointRoots[0].value,
 				paging: this.props.chart['visualizer-json-paging'] || 0,
 				header,
@@ -206,7 +290,7 @@ class JSONImport extends Component {
 		});
 
 		if ( response.success ) {
-			this.props.JSONImportData( response.data.name, response.data.series, response.data.data );
+			this.props.JSONImportData( response.data.name, JSON.parse( response.data.series ), JSON.parse( response.data.data ) );
 
 			this.setState({
 				isOpen: false,
@@ -287,6 +371,146 @@ class JSONImport extends Component {
 								onChange={ this.props.editJSONURL }
 							/>
 
+							<IconButton
+								icon="arrow-right-alt2"
+								label={ __( 'Add Headers' ) }
+								onClick={ this.toggleHeaders }
+							>
+								{ __( 'Add Headers' ) }
+							</IconButton>
+
+							{ this.state.isHeaderPanelOpen && (
+								<div className="visualizer-json-query-modal-headers-panel">
+									<SelectControl
+										label={ __( 'Request Type' ) }
+										value={ this.props.chart['visualizer-json-headers'] ? this.props.chart['visualizer-json-headers'].method : this.state.requestHeaders.method }
+										options={ [
+											{
+												value: 'GET',
+												label: __( 'GET' )
+											},
+											{
+												value: 'POST',
+												label: __( 'POST' )
+											}
+										] }
+										onChange={ e => {
+											let headers = { ...this.state.requestHeaders };
+											let headersState = this.state.requestHeaders;
+											headers.method = e;
+											headersState = {
+												...headersState,
+												method: e
+											};
+											this.setState({ requestHeaders: headersState });
+											this.props.editJSONHeaders( headers );
+										} }
+									/>
+
+									<p>{ __( 'Credentials' ) }</p>
+
+									<TextControl
+										label={ __( 'Username' ) }
+										placeholder={ __( 'Username/Access Key' ) }
+										value={
+											this.props.chart['visualizer-json-headers'] ?
+												(
+													'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+														this.props.chart['visualizer-json-headers'].auth.username :
+														this.state.requestHeaders.username
+												) :
+												this.state.requestHeaders.username
+										}
+										onChange={ e => {
+											let headers = { ...this.state.requestHeaders };
+											let headersState = this.state.requestHeaders;
+											headers.auth = {
+												username: e,
+												password: this.props.chart['visualizer-json-headers'] ?
+													(
+														'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+															this.props.chart['visualizer-json-headers'].auth.password :
+															this.state.requestHeaders.password
+													) :
+													this.state.requestHeaders.password
+											};
+											headersState = {
+												...headersState,
+												username: e,
+												password: headers.password
+											};
+											this.setState({ requestHeaders: headersState });
+											this.props.editJSONHeaders( headers );
+										} }
+									/>
+
+									<span className="visualizer-json-query-modal-field-separator" >{ __( '&' ) }</span>
+
+									<TextControl
+										label={ __( 'Password' ) }
+										placeholder={ __( 'Password/Secret Key' ) }
+										type="password"
+										value={
+											this.props.chart['visualizer-json-headers'] ?
+												(
+													'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+														this.props.chart['visualizer-json-headers'].auth.password :
+														this.state.requestHeaders.password
+												) :
+												this.state.requestHeaders.password
+										}
+										onChange={ e => {
+											let headers = { ...this.state.requestHeaders };
+											let headersState = this.state.requestHeaders;
+											headers.auth = {
+												username: this.props.chart['visualizer-json-headers'] ?
+													(
+														'object' === typeof this.props.chart['visualizer-json-headers'].auth ?
+															this.props.chart['visualizer-json-headers'].auth.username :
+															this.state.requestHeaders.username
+													) :
+													this.state.requestHeaders.username,
+												password: e
+											};
+											headersState = {
+												...headersState,
+												username: headers.username,
+												password: e
+											};
+											this.setState({ requestHeaders: headersState });
+											this.props.editJSONHeaders( headers );
+										} }
+									/>
+
+									<p>{ __( 'OR' ) }</p>
+
+									<TextControl
+										label={ __( 'Authorization' ) }
+										placeholder={ __( 'e.g. SharedKey <AccountName>:<Signature>' ) }
+										value={
+											this.props.chart['visualizer-json-headers'] ?
+												(
+													'object' !== typeof this.props.chart['visualizer-json-headers'].auth ?
+														this.props.chart['visualizer-json-headers'].auth :
+														this.state.requestHeaders.auth
+												) :
+												this.state.requestHeaders.auth
+										}
+										onChange={ e => {
+											let headers = { ...this.state.requestHeaders };
+											let headersState = this.state.requestHeaders;
+											headers.auth = e;
+											headersState = {
+												...headersState,
+												auth: e
+											};
+											this.setState({ requestHeaders: headersState });
+											this.props.editJSONHeaders( headers );
+										} }
+									/>
+								</div>
+							) }
+
 							<Button
 								isPrimary
 								isLarge
@@ -304,6 +528,9 @@ class JSONImport extends Component {
 							opened={ this.state.isSecondStepOpen }
 							onToggle={ () => this.onToggle( 'isSecondStepOpen' ) }
 						>
+
+							<p>{ __( 'If you see Invalid Data, you may have selected the wrong root to fetch data from. Please select an alternative.' ) }</p>
+
 							<SelectControl
 								value={ this.props.chart['visualizer-json-root'] }
 								options={ this.state.endpointRoots }

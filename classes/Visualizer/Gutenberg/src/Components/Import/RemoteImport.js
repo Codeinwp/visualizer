@@ -129,6 +129,7 @@ class RemoteImport extends Component {
 					chart={ this.props.chart }
 					editSchedule={ this.props.editJSONSchedule }
 					editJSONURL={ this.props.editJSONURL }
+					editJSONHeaders={ this.props.editJSONHeaders }
 					editJSONRoot={ this.props.editJSONRoot }
 					editJSONPaging={ this.props.editJSONPaging }
 					JSONImportData={ this.props.JSONImportData }

@@ -327,6 +327,8 @@ class Visualizer_Gutenberg_Block {
 
 		$json_url = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_URL, true );
 
+		$json_headers = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+
 		$json_schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
 
 		$json_root = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_ROOT, true );
@@ -346,6 +348,7 @@ class Visualizer_Gutenberg_Block {
 		if ( ! empty( $json_url ) ) {
 			$data['visualizer-json-schedule'] = $json_schedule;
 			$data['visualizer-json-url'] = $json_url;
+			$data['visualizer-json-headers'] = $json_headers;
 			$data['visualizer-json-root'] = $json_root;
 
 			if ( Visualizer_Module::is_pro() && ! empty( $json_paging ) ) {
@@ -425,8 +428,9 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		$source = new Visualizer_Source_Json( $data );
+		$source->fetch();
+		$table = $source->getRawData();
 
-		$table = $source->parse();
 		if ( empty( $table ) ) {
 			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
@@ -447,15 +451,15 @@ class Visualizer_Gutenberg_Block {
 
 		$source = new Visualizer_Source_Json( $data );
 
-		$table = $source->parse();
+		$table = $source->fetch();
 		if ( empty( $table ) ) {
 			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
 
-		$source->fetch();
+		$source->fetchFromEditableTable();
 		$name = $source->getSourceName();
-		$series = $source->getSeries();
-		$data = $source->getRawData();
+		$series = json_encode( $source->getSeries() );
+		$data = json_encode( $source->getRawData() );
 		wp_send_json_success( array( 'name' => $name, 'series' => $series, 'data' => $data ) );
 	}
 
@@ -501,11 +505,13 @@ class Visualizer_Gutenberg_Block {
 			if ( $source_type === 'Visualizer_Source_Json' ) {
 				$json_schedule = intval( $data['visualizer-json-schedule'] );
 				$json_url = esc_url_raw( $data['visualizer-json-url'] );
+				$json_headers = esc_url_raw( $data['visualizer-json-headers'] );
 				$json_root = $data['visualizer-json-root'];
 				$json_paging = $data['visualizer-json-paging'];
 
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE, $json_schedule );
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL, $json_url );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS, $json_headers );
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT, $json_root );
 
 				if ( ! empty( $json_paging ) ) {
@@ -516,6 +522,7 @@ class Visualizer_Gutenberg_Block {
 			} else {
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE );
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS );
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT );
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
 			}

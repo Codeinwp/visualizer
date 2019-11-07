@@ -45,6 +45,7 @@ class Editor extends Component {
 		this.editSchedule = this.editSchedule.bind( this );
 		this.editJSONSchedule = this.editJSONSchedule.bind( this );
 		this.editJSONURL = this.editJSONURL.bind( this );
+		this.editJSONHeaders = this.editJSONHeaders.bind( this );
 		this.editJSONRoot = this.editJSONRoot.bind( this );
 		this.editJSONPaging = this.editJSONPaging.bind( this );
 		this.JSONImportData = this.JSONImportData.bind( this );
@@ -164,6 +165,14 @@ class Editor extends Component {
 	editJSONURL( url ) {
 		let chart = { ...this.state.chart };
 		chart['visualizer-json-url'] = url;
+		this.setState({ chart });
+	}
+
+	editJSONHeaders( headers ) {
+		let chart = { ...this.state.chart };
+		delete headers.username;
+		delete headers.password;
+		chart['visualizer-json-headers'] = headers;
 		this.setState({ chart });
 	}
 
@@ -482,6 +491,7 @@ class Editor extends Component {
 						editURL={ this.editURL }
 						editSchedule={ this.editSchedule }
 						editJSONURL={ this.editJSONURL }
+						editJSONHeaders={ this.editJSONHeaders }
 						editJSONSchedule={ this.editJSONSchedule }
 						editJSONRoot={ this.editJSONRoot }
 						editJSONPaging={ this.editJSONPaging }

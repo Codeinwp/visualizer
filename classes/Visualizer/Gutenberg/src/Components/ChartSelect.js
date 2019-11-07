@@ -90,6 +90,7 @@ class ChartSelect extends Component {
 							editSchedule={ this.props.editSchedule }
 							editJSONSchedule={ this.props.editJSONSchedule }
 							editJSONURL={ this.props.editJSONURL }
+							editJSONHeaders={ this.props.editJSONHeaders }
 							editJSONRoot={ this.props.editJSONRoot }
 							editJSONPaging={ this.props.editJSONPaging }
 							JSONImportData={ this.props.JSONImportData }

@@ -246,6 +246,22 @@
 		}
 	}
 
+	.components-icon-button {
+		margin: 10px 0;
+	}
+
+	.visualizer-json-query-modal-headers-panel {
+		padding: 0 0 1em 2.2em;
+
+		.components-base-control {
+			display: inline-block;
+		}
+
+		.visualizer-json-query-modal-field-separator {
+			padding: 0 10px;
+		}
+	}
+
 	.viz-editor-table {
 		tbody {
 			tr {
