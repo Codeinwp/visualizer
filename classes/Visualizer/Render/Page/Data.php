@@ -596,7 +596,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		}
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 		if ( isset( $this->cancel_button ) ) {
-			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-left" value="', $this->cancel_button, '">';
+			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-right" value="', $this->cancel_button, '">';
 		}
 	}
 
