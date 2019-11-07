@@ -378,6 +378,7 @@ div.viz-group-content .viz-group-description {
 
 #toolbar .push-right {
 	float: right;
+	margin-right: 10px;
 }
 
 #toolbar .push-left {
