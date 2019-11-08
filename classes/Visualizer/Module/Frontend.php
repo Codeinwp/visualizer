@@ -236,7 +236,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$chart = apply_filters( 'visualizer_schedule_refresh_chart', $chart, $chart->ID, false );
 
 		// fetch and update settings
-		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+        $settings = array( get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true ) );
 		if ( empty( $settings['height'] ) ) {
 			$settings['height'] = '400';
 		}
