@@ -258,7 +258,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				}
 
 				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, true );
-				$source     = new Visualizer_Source_Query( $params );
+				$source     = new Visualizer_Source_Query( $params, $chart_id );
 				$source->fetch( false );
 				$load_series = true;
 				break;
@@ -298,6 +298,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			);
 
 			$chart = get_post( $chart_id );
+			delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
 		} else {
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, sprintf( 'Error while updating chart: %s', $error ) );
 		}

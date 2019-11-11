@@ -11,6 +11,8 @@ import RemoteImport from './Import/RemoteImport.js';
 
 import ChartImport from './Import/ChartImport.js';
 
+import DataImport from './Import/DataImport.js';
+
 import ManualData from './Import/ManualData.js';
 
 import Sidebar from './Sidebar.js';
@@ -35,7 +37,7 @@ const {
 	Fragment
 } = wp.element;
 
-const { InspectorControls } = wp.editor;
+const { InspectorControls } = wp.blockEditor || wp.editor;
 
 class ChartSelect extends Component {
 	constructor() {
@@ -80,14 +82,27 @@ class ChartSelect extends Component {
 						/>
 
 						<RemoteImport
+							id={ this.props.id }
 							chart={ this.props.chart }
 							editURL={ this.props.editURL }
 							isLoading={ this.props.isLoading }
 							uploadData={ this.props.uploadData }
 							editSchedule={ this.props.editSchedule }
+							editJSONSchedule={ this.props.editJSONSchedule }
+							editJSONURL={ this.props.editJSONURL }
+							editJSONHeaders={ this.props.editJSONHeaders }
+							editJSONRoot={ this.props.editJSONRoot }
+							editJSONPaging={ this.props.editJSONPaging }
+							JSONImportData={ this.props.JSONImportData }
 						/>
 
 						<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
+
+						<DataImport
+							chart={ this.props.chart }
+							editSchedule={ this.props.editDatabaseSchedule }
+							databaseImportData={ this.props.databaseImportData }
+						/>
 
 						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
 

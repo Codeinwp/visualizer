@@ -278,6 +278,18 @@
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
         });
+        
+        // clear the editor.
+        $('body').on('visualizer:db:query:setvalue', function(event, data){
+            cm.setValue(data.value);
+            cm.clearHistory();
+            cm.refresh();
+        });
+
+        // set an option at runtime?
+        $('body').on('visualizer:db:query:changeoption', function(event, data){
+            cm.setOption(data.name, data.value);
+        });
     }
 
     function init_filter_import() {
@@ -378,25 +390,29 @@
 
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
-            $('#content').css('width', 'calc(100% - 300px)');
+            var $bttn = $(this);
+            $('#content').css('width', 'calc(100% - 100px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
+                // toggle from chart to LHS form
                 $(this).val( $(this).attr( 'data-t-filter' ) );
                 $(this).html( $(this).attr( 'data-t-filter' ) );
                 $(this).attr( 'data-current', 'filter' );
                 $( '.visualizer-editor-lhs' ).hide();
                 $( '#visualizer-json-screen' ).css("z-index", "9999").show();
-                $('.json-chart-msg').show();
                 $( '#canvas' ).hide();
             }else{
-                var filter_button = $(this);
-                $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
-                $('#canvas').lock();
-                filter_button.val( filter_button.attr( 'data-t-chart' ) );
-                filter_button.html( filter_button.attr( 'data-t-chart' ) );
-                filter_button.attr( 'data-current', 'chart' );
-                $('.json-chart-msg').hide();
-                $( '#canvas' ).css("z-index", "1").show();
-                $('#canvas').unlock();
+                // toggle from LHS form to chart
+                $( '#json-conclude-form' ).trigger('submit');
+                $('body').on('visualizer:json:form:submit', function() {
+                    var filter_button = $bttn;
+                    $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+                    $('#canvas').lock();
+                    filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                    filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                    filter_button.attr( 'data-current', 'chart' );
+                    end_ajax( $( '#visualizer-json-screen' ) );
+                    $( '#canvas' ).css("z-index", "1").show();
+                });
             }
         } );
 
@@ -489,12 +505,13 @@
                 alert(visualizer.l10n.select_columns);
                 return false;
             }
+
             // populate the form elements that are in the other tabs.
-            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element').each(function(x, y){
+            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element, #vz-import-json .json-form-element').each(function(x, y){
                 $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
             });
-            $( '#json-chart-button' ).trigger('click');
-            $('#canvas').lock();
+
+            $('body').trigger('visualizer:json:form:submit');
         });
 
         // update the schedule

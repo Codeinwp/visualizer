@@ -213,6 +213,29 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
 		}
 
+		$time = filter_input(
+			INPUT_POST,
+			'time',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+				),
+			)
+		);
+
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE );
+
+		if ( -1 < $time ) {
+			add_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, $time );
+		}
+
+		// delete other source specific parameters.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_URL );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_SCHEDULE );
+
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
 		$render->data   = json_encode( $source->getRawData() );
@@ -549,7 +572,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	/**
 	 * Load code editor assets.
 	 */
-	private function loadCodeEditorAssets() {
+	private function loadCodeEditorAssets( $chart_id ) {
 		global $wp_version;
 
 		$wp_scripts = wp_scripts();
@@ -565,7 +588,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return;
 		}
 
-		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping();
+		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping( $chart_id );
 
 		if ( version_compare( $wp_version, '4.9.0', '<' ) ) {
 			// code mirror assets.
@@ -681,7 +704,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 		}
 
-		$table_col_mapping  = $this->loadCodeEditorAssets();
+		$table_col_mapping  = $this->loadCodeEditorAssets( $this->_chart->ID );
 
 		wp_localize_script(
 			'visualizer-render',
@@ -743,11 +766,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
 
-		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
+		do_action( 'visualizer_enqueue_scripts_and_styles', $data, $this->_chart->ID );
 
 		if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
-			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
+			$Visualizer_Pro->_enqueueScriptsAndStyles( $data, $this->_chart->ID );
 		}
 
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
@@ -962,6 +985,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			// delete "import from db" specific parameters.
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY );
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
+			delete_post_meta( $chart_id, Visualizer_Plugin::CF_REMOTE_DB_PARAMS );
 		}
 
 		// delete json related data.
@@ -1166,11 +1190,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
+		do_action( 'visualizer_enqueue_scripts_and_styles', $data, $this->_chart->ID );
 
 		if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
-			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
+			$Visualizer_Pro->_enqueueScriptsAndStyles( $data, $this->_chart->ID );
 		}
 
 		// Added by Ash/Upwork
@@ -1187,11 +1211,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		check_ajax_referer( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION, 'security' );
 
 		$params     = wp_parse_args( $_POST['params'] );
-		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ) );
+		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
+
+		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
 		$html       = $source->fetch( true );
-		$error      = '';
-		if ( empty( $html ) ) {
-			$error  = $source->get_error();
+		$error      = $source->get_error();
+		if ( ! empty( $error ) ) {
 			wp_send_json_error( array( 'msg' => $error ) );
 		}
 		wp_send_json_success( array( 'table' => $html ) );
@@ -1228,14 +1253,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		if ( ! $hours ) {
+		if ( ! is_int( $hours ) ) {
 			$hours = -1;
 		}
 
 		$render = new Visualizer_Render_Page_Update();
 		if ( $chart_id ) {
 			$params     = wp_parse_args( $_POST['params'] );
-			$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ) );
+			$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
 			$source->fetch( false );
 			$error      = $source->get_error();
 			if ( empty( $error ) ) {
@@ -1244,6 +1269,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+				if ( isset( $params['db_type'] ) && $params['db_type'] !== Visualizer_Plugin::WP_DB_NAME ) {
+					$remote_db_params   = $params;
+					unset( $remote_db_params['query'] );
+					unset( $remote_db_params['chart_id'] );
+					update_post_meta( $chart_id, Visualizer_Plugin::CF_REMOTE_DB_PARAMS, $remote_db_params );
+				}
 
 				$schedules              = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
 				$schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;

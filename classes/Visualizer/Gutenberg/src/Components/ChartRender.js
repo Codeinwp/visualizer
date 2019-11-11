@@ -28,7 +28,7 @@ const {
 	Tooltip
 } = wp.components;
 
-const { BlockControls } = wp.editor;
+const { BlockControls } = wp.blockEditor || wp.editor;
 
 class ChartRender extends Component {
 	constructor() {

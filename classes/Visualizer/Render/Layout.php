@@ -60,6 +60,8 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<div class="visualizer-db-query-form">
 				<div>
 					<form id='db-query-form'>
+						<input type="hidden" name="chart_id" value="<?php echo $args[2]; ?>">
+						<?php do_action( 'visualizer_db_query_add_layout', $args ); ?>
 						<textarea name='query' class='visualizer-db-query' placeholder="<?php _e( 'Your query goes here', 'visualizer' ); ?>"><?php echo $query; ?></textarea>
 					</form>
 					<div class='db-wizard-error'></div>
@@ -72,6 +74,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<ul>
 					<li><?php echo sprintf( __( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
 					<li><?php echo sprintf( __( 'Use %1$sControl+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
+					<?php do_action( 'visualizer_db_query_add_hints', $args ); ?>
 				</ul>
 			</div>
 			<div class='db-wizard-results'></div>
@@ -267,14 +270,16 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<form id="json-conclude-form" action="<?php echo $action; ?>" method="post" target="thehole">
 						<div class="json-wizard-hints html-table-editor-hints">
 							<ul class="info">
+								<li><?php _e( 'If you see Invalid Data in the table, you may have selected the wrong root to fetch data from. Please select an alternative from the JSON root dropdown.', 'visualizer' ); ?></li>
 								<li><?php _e( 'Select whether to include the data in the chart. Each column selected will form one series.', 'visualizer' ); ?></li>
 								<li><?php _e( 'If a column is selected to be included, specify its data type.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can use drag/drop to reorder the columns but this column position is not saved. So when you reload the table, you may have to reorder again.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can select any number of columns but the chart type selected will determine how many will display in the chart.', 'visualizer' ); ?></li>
+								<li><?php _e( 'Once you have made your selection, click \'Show Chart\' on the right to view the chart.', 'visualizer' ); ?></li>
 							</ul>
 						</div>
 						<div class="json-table"></div>
-						<button class="button button-primary" id="visualizer-json-conclude"><?php esc_html_e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
+						<button class="button button-primary" style="display: none" id="visualizer-json-conclude"></button>
 					</form>
 				</div>
 			</div>
@@ -440,7 +445,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				if ( $editable_data ) {
 					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( $value ) . '"></td>';
 				} else {
-					echo '<td>' . $value . '</td>';
+					echo '<td>' . ( is_array( $value ) ? __( 'Invalid Data', 'visualizer' ) : $value ) . '</td>';
 				}
 			}
 

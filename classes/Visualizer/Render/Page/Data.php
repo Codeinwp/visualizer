@@ -175,7 +175,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													if ( Visualizer_Module::is_pro() ) {
 														?>
 												<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
-												<select name="vz-json-time" id="vz-json-time" class="visualizer-select" data-chart="<?php echo $this->chart->ID; ?>">
+												<select name="time" id="vz-json-time" class="visualizer-select json-form-element" data-chart="<?php echo $this->chart->ID; ?>">
 														<?php
 														$hours     = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
 														$schedules = apply_filters(
@@ -200,7 +200,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 													?>
 											</div>
 
-											<p class="viz-group-description viz-info-msg json-chart-msg" style="display: none"><?php echo sprintf( __( 'Please make sure you click \'Save & Show Chart\' on the left before you click \'Show Chart\' below.', 'visualizer' ) ); ?></p>
 											<input type="button" id="json-chart-button" class="button button-secondary show-chart-toggle"
 											value="<?php echo $bttn_label; ?>" data-current="chart"
 											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
@@ -392,6 +391,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), Visualizer_Module::is_pro() ? 'spreadsheet like' : 'simple' ); ?></p>
 									<?php if ( ! Visualizer_Module::is_pro() ) { ?>
 										<p class="viz-group-description simple-editor-type"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
+									<?php } else { ?>
+									<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
 									<?php } ?>
 									<input type="button" id="editor-chart-button" class="button button-primary "
 										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
@@ -594,7 +595,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		}
 		echo '<input type="submit" id="settings-button" class="button button-primary button-large push-right" value="', $this->button, '">';
 		if ( isset( $this->cancel_button ) ) {
-			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-left" value="', $this->cancel_button, '">';
+			echo '<input type="submit" id="cancel-button" class="button button-secondary button-large push-right" value="', $this->cancel_button, '">';
 		}
 	}
 
@@ -609,7 +610,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		if ( 'visualizer_source_query' === $source ) {
 			$query = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_QUERY, true );
 		}
-		Visualizer_Render_Layout::show( 'db-query', $query );
+		Visualizer_Render_Layout::show( 'db-query', $query, $this->chart->ID );
 		Visualizer_Render_Layout::show( 'json-screen', $this->chart->ID );
 	}
 
