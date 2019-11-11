@@ -337,13 +337,16 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 	 * @access public
 	 * @return array
 	 */
-	public static function get_all_db_tables_column_mapping() {
+	public static function get_all_db_tables_column_mapping( $chart_id, $use_filter = true ) {
 		$mapping    = array();
 		$tables     = self::get_db_tables();
 		foreach ( $tables as $table ) {
 			$cols   = self::get_db_table_columns( $table, true );
 			$names  = wp_list_pluck( $cols, 'name' );
 			$mapping[ $table ] = $names;
+		}
+		if ( $use_filter ) {
+			return apply_filters( 'visualizer_db_tables_column_mapping', $mapping, $chart_id );
 		}
 		return $mapping;
 	}

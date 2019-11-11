@@ -611,7 +611,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		if ( 'visualizer_source_query' === $source ) {
 			$query = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_DB_QUERY, true );
 		}
-		Visualizer_Render_Layout::show( 'db-query', $query );
+		Visualizer_Render_Layout::show( 'db-query', $query, $this->chart->ID );
 		Visualizer_Render_Layout::show( 'json-screen', $this->chart->ID );
 	}
 

@@ -278,6 +278,18 @@
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
         });
+        
+        // clear the editor.
+        $('body').on('visualizer:db:query:setvalue', function(event, data){
+            cm.setValue(data.value);
+            cm.clearHistory();
+            cm.refresh();
+        });
+
+        // set an option at runtime?
+        $('body').on('visualizer:db:query:changeoption', function(event, data){
+            cm.setOption(data.name, data.value);
+        });
     }
 
     function init_filter_import() {
