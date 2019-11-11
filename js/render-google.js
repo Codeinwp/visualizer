@@ -58,9 +58,9 @@ var __visualizer_chart_images   = [];
         // mark roles for series that have specified a role
         // and then remove them from future processing
         // and also adjust the indices of the series array so that
-        // the ones with a role are deleted
+        // the ones with a role are ignored
         // e.g. if there are 6 columns (0-5) out of which 1, 3 and 5 are annotations
-        // the final series will only include 0, 1, 2
+        // the final series will only include 0, 2, 4 (reindexed as 0, 1, 2)
         if (settings.series) {
             var adjusted_series = [];
             for (i = 0; i < settings.series.length; i++) {
@@ -76,7 +76,6 @@ var __visualizer_chart_images   = [];
             }
             settings.series = adjusted_series;
         }
-        if(id.indexOf('1568') !== -1) console.log(series.length);
 
 		switch (chart.type) {
 			case 'pie':
