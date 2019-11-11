@@ -270,14 +270,16 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<form id="json-conclude-form" action="<?php echo $action; ?>" method="post" target="thehole">
 						<div class="json-wizard-hints html-table-editor-hints">
 							<ul class="info">
+								<li><?php _e( 'If you see Invalid Data in the table, you may have selected the wrong root to fetch data from. Please select an alternative from the JSON root dropdown.', 'visualizer' ); ?></li>
 								<li><?php _e( 'Select whether to include the data in the chart. Each column selected will form one series.', 'visualizer' ); ?></li>
 								<li><?php _e( 'If a column is selected to be included, specify its data type.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can use drag/drop to reorder the columns but this column position is not saved. So when you reload the table, you may have to reorder again.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can select any number of columns but the chart type selected will determine how many will display in the chart.', 'visualizer' ); ?></li>
+								<li><?php _e( 'Once you have made your selection, click \'Show Chart\' on the right to view the chart.', 'visualizer' ); ?></li>
 							</ul>
 						</div>
 						<div class="json-table"></div>
-						<button class="button button-primary" id="visualizer-json-conclude"><?php esc_html_e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
+						<button class="button button-primary" style="display: none" id="visualizer-json-conclude"></button>
 					</form>
 				</div>
 			</div>
@@ -443,7 +445,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				if ( $editable_data ) {
 					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( $value ) . '"></td>';
 				} else {
-					echo '<td>' . $value . '</td>';
+					echo '<td>' . ( is_array( $value ) ? __( 'Invalid Data', 'visualizer' ) : $value ) . '</td>';
 				}
 			}
 
