@@ -55,6 +55,23 @@ var __visualizer_chart_images   = [];
             settings['animation']['duration'] = parseInt(settings['animation']['duration']);
         }
 
+        if ( settings['explorer_enabled'] && settings['explorer_enabled'] == true ) {
+            var $explorer = [];
+            $explorer['keepInBounds'] = true;
+
+            if ( settings['explorer_actions'] ) {
+                //settings['explorer']['actions'] = settings['explorer_actions'];
+                delete settings['explorer_actions'];
+            }
+            $explorer['actions'] = ['dragToZoom', 'rightClickToReset'];
+            console.log($explorer);
+            console.log(JSON.stringify($explorer));
+            var options = JSON.parse(JSON.stringify($explorer));
+            console.log(options);
+            //$.extend(settings, options);
+        }
+        if(id.indexOf('1579')!== -1) console.log(settings['explorer']);
+
 		switch (chart.type) {
 			case 'pie':
 				if (settings.slices) {
