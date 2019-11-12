@@ -391,6 +391,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'enabled' => true,
 					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
+				'bubble'         => array(
+					'name'    => esc_html__( 'Bubble', 'visualizer' ),
+					'enabled' => true,
+					// chartjs' bubble is ugly looking (and it won't work off the default bubble.csv) so it is being excluded for the time being.
+					'supports'  => array( 'Google Charts' ),
+				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
 					'enabled' => true,

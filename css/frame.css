@@ -457,14 +457,14 @@ div.viz-group-content .viz-group-description {
 	padding: 15px;
 	border: 1px solid #e0e0e0;
 	background-color: white;
-	background-image: url(../images/chart_types_june2019_g.png);
+	background-image: url(../images/chart_types_v340_g.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 }
 
 .type-label-selected,
 .type-box > .type-label:hover {
-	background-image: url(../images/chart_types_june2019.png);
+	background-image: url(../images/chart_types_v340.png);
 }
 
 .type-box-area .type-label {
@@ -497,6 +497,10 @@ div.viz-group-content .viz-group-description {
 
 .type-box-bar .type-label {
 	background-position: -300px -225px;
+}
+
+.type-box-bubble .type-label {
+	background-position: -600px -225px;
 }
 
 .type-box-column .type-label {

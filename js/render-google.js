@@ -97,6 +97,9 @@ var __visualizer_chart_images   = [];
 				break;
 			case 'gauge':
 				break;
+			case 'bubble':
+                settings.sortBubblesBySize = settings.sortBubblesBySize ? settings.sortBubblesBySize == 1 : false; // jshint ignore:line
+				break;
 			case 'timeline':
                 settings['timeline'] = [];
                 settings['timeline']['groupByRowLabel'] = settings['groupByRowLabel'] ? true : false;
@@ -352,6 +355,7 @@ var __visualizer_chart_images   = [];
                     case 'candlestick':
                     case 'histogram':
                     case 'scatter':
+                    case 'bubble':
                         $type = 'corechart';
                         break;
                     case 'geo':
