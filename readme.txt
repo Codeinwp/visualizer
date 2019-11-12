@@ -157,6 +157,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.3.3 - 2019-11-12  = 
+
+* Tested upto WordPress 5.3
+
+
 = 3.3.2 - 2019-10-03  = 
 
 * Add support for Dataset schema
