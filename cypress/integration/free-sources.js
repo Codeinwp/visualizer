@@ -21,7 +21,7 @@ describe('Test Free - sources', function() {
         });
 
         // edit the created chart
-        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click();
+        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click({force:true});
 
         cy.wait( Cypress.env('wait') );
 
@@ -31,7 +31,7 @@ describe('Test Free - sources', function() {
 
             cy.wrap($body).find('.viz-group-title.visualizer-src-tab').first().click();
 
-            const fileName = 'area.csv';
+            const fileName = 'pie.csv';
             // select file to upload
             cy.fixture(fileName).then(fileContent => {
                 cy.wrap($body).find('#csv-file').upload({ fileContent, fileName, mimeType: 'text/csv' });
@@ -69,8 +69,8 @@ describe('Test Free - sources', function() {
                 cy.wrap($body).find('.viz-section-title').first().click();
             });
 
-            const fileName = Cypress.env('urls').samples + 'pie.csv';
-            cy.wrap($body).find('input[type="url"]#remote-data').clear().type( fileName, {force:true} );
+            const fileName = Cypress.env('urls').samples + 'area.csv';
+            cy.wrap($body).find('input[type="url"]#vz-schedule-url').clear().type( fileName, {force:true} );
             cy.wrap($body).find('#view-remote-file').click().then(() => {
                 cy.wait( Cypress.env('wait') );
                 cy.wrap($body).find('#settings-button').click();

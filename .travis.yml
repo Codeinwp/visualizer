@@ -17,7 +17,6 @@ matrix:
       env: TEST_SUITE=Wraith_Visual_Regression_Testing WRAITH_FAIL=5
       script: "./bin/wraith.sh"
     - name: Cypress
-      if: branch = development
       language: node_js
       node_js:
         - 10.8
