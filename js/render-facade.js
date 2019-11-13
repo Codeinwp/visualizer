@@ -81,14 +81,16 @@
     }
 
     $(document).ready(function(){
-        // facade loads twice in the admin area, so all charts are also loaded twice
+        // facade loads twice in the library, so all charts are also loaded twice
         // this will ensure that even if it loaded twice, it initializes all charts only once.
         // fixed as part of the issue to add annotations.
-        if(localStorage.getItem( 'viz-facade-loaded' ) === '1'){
-            localStorage.removeItem( 'viz-facade-loaded' );
-            return;
+        if(visualizer.page_type === 'library'){
+            if(localStorage.getItem( 'viz-facade-loaded' ) === '1'){
+                localStorage.removeItem( 'viz-facade-loaded' );
+                return;
+            }
+            localStorage.setItem( 'viz-facade-loaded', '1');
         }
-        localStorage.setItem( 'viz-facade-loaded', '1');
         $('body').trigger('visualizer:render:chart:start', visualizer);
         initActionsButtons(visualizer);
         registerDefaultActions();
