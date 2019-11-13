@@ -21,7 +21,7 @@ describe('Test Free - sources', function() {
         });
 
         // edit the created chart
-        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click();
+        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click({force:true});
 
         cy.wait( Cypress.env('wait') );
 
@@ -31,7 +31,7 @@ describe('Test Free - sources', function() {
 
             cy.wrap($body).find('.viz-group-title.visualizer-src-tab').first().click();
 
-            const fileName = 'area.csv';
+            const fileName = 'pie.csv';
             // select file to upload
             cy.fixture(fileName).then(fileContent => {
                 cy.wrap($body).find('#csv-file').upload({ fileContent, fileName, mimeType: 'text/csv' });
