@@ -70,7 +70,7 @@ describe('Test Free - sources', function() {
             });
 
             const fileName = Cypress.env('urls').samples + 'pie.csv';
-            cy.wrap($body).find('input[type="url"]#remote-data').clear().type( fileName, {force:true} );
+            cy.wrap($body).find('input[type="url"]#vz-schedule-url').clear().type( fileName, {force:true} );
             cy.wrap($body).find('#view-remote-file').click().then(() => {
                 cy.wait( Cypress.env('wait') );
                 cy.wrap($body).find('#settings-button').click();
