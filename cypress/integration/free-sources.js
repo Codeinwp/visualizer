@@ -69,7 +69,7 @@ describe('Test Free - sources', function() {
                 cy.wrap($body).find('.viz-section-title').first().click();
             });
 
-            const fileName = Cypress.env('urls').samples + 'pie.csv';
+            const fileName = Cypress.env('urls').samples + 'area.csv';
             cy.wrap($body).find('input[type="url"]#vz-schedule-url').clear().type( fileName, {force:true} );
             cy.wrap($body).find('#view-remote-file').click().then(() => {
                 cy.wait( Cypress.env('wait') );
