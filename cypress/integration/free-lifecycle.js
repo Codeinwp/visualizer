@@ -40,7 +40,7 @@ describe('Test Free - lifecycle', function() {
             const $body = $iframe.contents().find('body');
 
             // chart selection screen - types
-            cy.wrap($body).find('.type-box').should( "have.length", Cypress.env('chart_types').free ) + parseInt( Cypress.env('chart_types').pro ) );
+            cy.wrap($body).find('.type-box').should( "have.length", Cypress.env('chart_types').free + parseInt( Cypress.env('chart_types').pro ) );
 
             // chart selection screen - pro types
             cy.wrap($body).find('.type-box span.visualizder-pro-label').should( "have.length", Cypress.env('chart_types').pro );
