@@ -18,10 +18,6 @@ set -e
 
 export CYPRESS_HOST=$wp_host
 
-# test free - lifecycle
-export CYPRESS_SPEC_TO_RUN="free-lifecycle.js"
-npm run cypress:run
-
 # test free - sources
 export CYPRESS_SPEC_TO_RUN="free-sources.js"
 npm run cypress:run
