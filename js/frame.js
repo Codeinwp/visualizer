@@ -403,18 +403,20 @@
             }else{
                 // toggle from LHS form to chart
                 $( '#json-conclude-form' ).trigger('submit');
-                $('body').on('visualizer:json:form:submit', function() {
-                    var filter_button = $bttn;
-                    $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
-                    $('#canvas').lock();
-                    filter_button.val( filter_button.attr( 'data-t-chart' ) );
-                    filter_button.html( filter_button.attr( 'data-t-chart' ) );
-                    filter_button.attr( 'data-current', 'chart' );
-                    end_ajax( $( '#visualizer-json-screen' ) );
-                    $( '#canvas' ).css("z-index", "1").show();
-                });
             }
         } );
+
+        $('body').on('visualizer:json:form:submit', function() {
+            var filter_button = $( '#json-chart-button' );
+            $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+            $('#canvas').lock();
+            filter_button.val( filter_button.attr( 'data-t-chart' ) );
+            filter_button.html( filter_button.attr( 'data-t-chart' ) );
+            filter_button.attr( 'data-current', 'chart' );
+            end_ajax( $( '#visualizer-json-screen' ) );
+            $( '#canvas' ).css("z-index", "1").show();
+        });
+
 
         // fetch the roots for the provided endpoint
         $( '#visualizer-json-fetch' ).on( 'click', function(e){
