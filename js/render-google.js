@@ -55,6 +55,16 @@ var __visualizer_chart_images   = [];
             settings['animation']['duration'] = parseInt(settings['animation']['duration']);
         }
 
+        if ( settings['explorer_enabled'] && settings['explorer_enabled'] == 'true' ) { // jshint ignore:line
+            var $explorer = {};
+            $explorer['keepInBounds'] = true;
+
+            if ( settings['explorer_actions'] ) {
+                $explorer['actions'] = settings['explorer_actions'];
+            }
+            settings['explorer'] = $explorer;
+        }
+
 		switch (chart.type) {
 			case 'pie':
 				if (settings.slices) {
