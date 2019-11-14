@@ -55,6 +55,27 @@ var __visualizer_chart_images   = [];
             settings['animation']['duration'] = parseInt(settings['animation']['duration']);
         }
 
+        // mark roles for series that have specified a role
+        // and then remove them from future processing
+        // and also adjust the indices of the series array so that
+        // the ones with a role are ignored
+        // e.g. if there are 6 columns (0-5) out of which 1, 3 and 5 are annotations
+        // the final series will only include 0, 2, 4 (reindexed as 0, 1, 2)
+        if (settings.series) {
+            var adjusted_series = [];
+            for (i = 0; i < settings.series.length; i++) {
+                if (!series[i + 1] || typeof settings.series[i] === 'undefined') {
+                    continue;
+                }
+                if(typeof settings.series[i].role !== 'undefined'){
+                    table.setColumnProperty(i + 1, 'role', settings.series[i].role);
+                    if(settings.series[i].role === '') {
+                        adjusted_series.push(settings.series[i]);
+                    }
+                }
+            }
+            settings.series = adjusted_series;
+        }
         if ( settings['explorer_enabled'] && settings['explorer_enabled'] == 'true' ) { // jshint ignore:line
             var $explorer = {};
             $explorer['keepInBounds'] = true;
@@ -217,7 +238,7 @@ var __visualizer_chart_images   = [];
                     break;
                 default:
                     for (i = 0; i < settings.series.length; i++) {
-                        if (!series[i + 1]) {
+                        if (!series[i + 1] || typeof settings.series[i] === 'undefined') {
                             continue;
                         }
                         format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
@@ -227,7 +248,6 @@ var __visualizer_chart_images   = [];
 		} else if (chart.type === 'pie' && settings.format && settings.format !== '') {
             format_data(id, table, 'number', settings.format, 1);
         }
-
 
         if(settings.hAxis) {
        	    format_data(id, table, series[0].type, settings.hAxis.format, 0);
