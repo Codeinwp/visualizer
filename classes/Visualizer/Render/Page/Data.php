@@ -430,7 +430,12 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 
 			<?php $this->getPermissionsLink( $this->chart->ID ); ?>
 
-			<li class="viz-group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; <?php echo date( 'Y', current_time( 'timestamp' ) ); ?></li>
+			<li class="viz-group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; 
+			<?php
+				// phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
+				echo date( 'Y', current_time( 'timestamp' ) );
+			?>
+			</li>
 		</ul>
 		<?php
 		// changed by Ash/Upwork

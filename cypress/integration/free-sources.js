@@ -21,7 +21,7 @@ describe('Test Free - sources', function() {
         });
 
         // edit the created chart
-        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click();
+        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click({force:true});
 
         cy.wait( Cypress.env('wait') );
 
@@ -31,7 +31,7 @@ describe('Test Free - sources', function() {
 
             cy.wrap($body).find('.viz-group-title.visualizer-src-tab').first().click();
 
-            const fileName = 'area.csv';
+            const fileName = 'pie.csv';
             // select file to upload
             cy.fixture(fileName).then(fileContent => {
                 cy.wrap($body).find('#csv-file').upload({ fileContent, fileName, mimeType: 'text/csv' });
@@ -69,8 +69,8 @@ describe('Test Free - sources', function() {
                 cy.wrap($body).find('.viz-section-title').first().click();
             });
 
-            const fileName = Cypress.env('urls').samples + 'pie.csv';
-            cy.wrap($body).find('input[type="url"]#remote-data').clear().type( fileName, {force:true} );
+            const fileName = Cypress.env('urls').samples + 'area.csv';
+            cy.wrap($body).find('input[type="url"]#vz-schedule-url').clear().type( fileName, {force:true} );
             cy.wrap($body).find('#view-remote-file').click().then(() => {
                 cy.wait( Cypress.env('wait') );
                 cy.wrap($body).find('#settings-button').click();
@@ -95,7 +95,7 @@ describe('Test Free - sources', function() {
             first_chart_content = Cypress.$('#' + id).html();
         });
 
-        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click();
+        cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click({force:true});
 
         cy.wait( Cypress.env('wait') );
 
@@ -114,17 +114,30 @@ describe('Test Free - sources', function() {
                 cy.wrap($body).find('#json-chart-button').click();
 
                 cy.wrap($body).find('input[type="url"]#vz-import-json-url').clear().type( fileName, {force:true} );
-                cy.wrap($body).find('#visualizer-json-fetch').click().then( () => {
+                cy.wrap($body).find('#visualizer-json-fetch').click({force:true}).then( () => {
                     cy.wait( Cypress.env('wait') );
                     cy.wrap($body).find('#visualizer-json-parse').should('be.visible');
                     cy.wrap($body).find('#vz-import-json-root').should('be.visible');
-                    cy.wrap($body).find('#vz-import-json-root option').should('have.length', 1);
+                    cy.wrap($body).find('#vz-import-json-root option').should('have.length', 2);
+                    cy.wrap($body).find('#vz-import-json-root').invoke('prop', 'selectedIndex', 1);
                 });
 
-                cy.wrap($body).find('#visualizer-json-parse').click().then( () => {
+                cy.wrap($body).find('#visualizer-json-parse').click({force:true}).then( () => {
                     cy.wait( Cypress.env('wait') );
                     cy.wrap($body).find('#json-conclude-form').should('be.visible');
                     cy.wrap($body).find('.json-table tr').should('have.length', 15);
+
+                    /*
+                    // TODO: Alert does not get auto accepted
+                    // check alert, if no columns are selected.
+                    const stub = cy.stub();
+                    cy.on('window:alert', stub);
+
+                    cy.wrap($body).find('#json-chart-button').click().then( () => {
+                        expect(stub.getCall(0)).to.be.calledWith('Please select a few columns to include in the chart.');
+                    });
+                    */
+
                     cy.wrap($body).find('.json-table tbody tr td select').each( function( el, index ) {
                         if(index === 0){
                             cy.wrap(el).select('date');
@@ -132,7 +145,7 @@ describe('Test Free - sources', function() {
                             cy.wrap(el).select('number');
                         }
                     });
-                    cy.wrap($body).find('#visualizer-json-conclude').click().then( () => {
+                    cy.wrap($body).find('#json-chart-button').click().then( () => {
                         cy.wait( Cypress.env('wait') );
                         cy.wrap($body).find('#settings-button').click();
                     });

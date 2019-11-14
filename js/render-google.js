@@ -76,6 +76,15 @@ var __visualizer_chart_images   = [];
             }
             settings.series = adjusted_series;
         }
+        if ( settings['explorer_enabled'] && settings['explorer_enabled'] == 'true' ) { // jshint ignore:line
+            var $explorer = {};
+            $explorer['keepInBounds'] = true;
+
+            if ( settings['explorer_actions'] ) {
+                $explorer['actions'] = settings['explorer_actions'];
+            }
+            settings['explorer'] = $explorer;
+        }
 
 		switch (chart.type) {
 			case 'pie':
@@ -118,6 +127,9 @@ var __visualizer_chart_images   = [];
                 }
 				break;
 			case 'gauge':
+				break;
+			case 'bubble':
+                settings.sortBubblesBySize = settings.sortBubblesBySize ? settings.sortBubblesBySize == 1 : false; // jshint ignore:line
 				break;
 			case 'timeline':
                 settings['timeline'] = [];
@@ -373,6 +385,7 @@ var __visualizer_chart_images   = [];
                     case 'candlestick':
                     case 'histogram':
                     case 'scatter':
+                    case 'bubble':
                         $type = 'corechart';
                         break;
                     case 'geo':

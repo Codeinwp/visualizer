@@ -13,7 +13,7 @@ describe('Test Free - lifecycle', function() {
         cy.visit(Cypress.env('urls').library );
 
         // chart types
-        cy.get('li.visualizer-list-item').should( "have.length", parseInt( Cypress.env('chart_types').free ) + parseInt( Cypress.env('chart_types').pro ) );
+        cy.get('li.visualizer-list-item').should( "have.length", parseInt( Cypress.env('chart_types').free ) + parseInt( Cypress.env('chart_types').pro ) + 1 );
 
         // pro chart types
         cy.get('li.visualizer-list-item a.visualizer-pro-only').should( "have.length", parseInt( Cypress.env('chart_types').pro ) );
@@ -40,10 +40,10 @@ describe('Test Free - lifecycle', function() {
             const $body = $iframe.contents().find('body');
 
             // chart selection screen - types
-            cy.wrap($body).find('.type-box').should( "have.length", 14 );
+            cy.wrap($body).find('.type-box').should( "have.length", Cypress.env('chart_types').free + parseInt( Cypress.env('chart_types').pro ) );
 
             // chart selection screen - pro types
-            cy.wrap($body).find('.type-box span.visualizder-pro-label').should( "have.length", 6 );
+            cy.wrap($body).find('.type-box span.visualizder-pro-label').should( "have.length", Cypress.env('chart_types').pro );
 
             // toolbar
             // cancel button
