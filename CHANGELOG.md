@@ -1,4 +1,8 @@
 
+ ### v3.3.4 - 2019-11-15 
+ **Changes:** 
+ * Fix issue with table chart not loading in the block editor
+ 
  ### v3.3.3 - 2019-11-12 
  **Changes:** 
  * Tested upto WordPress 5.3
