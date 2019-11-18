@@ -74,8 +74,11 @@ var __visualizer_chart_images   = [];
                     }
                 }
             }
-            settings.series = adjusted_series;
+            if(adjusted_series.length > 0){
+                settings.series = adjusted_series;
+            }
         }
+
         if ( settings['explorer_enabled'] && settings['explorer_enabled'] == 'true' ) { // jshint ignore:line
             var $explorer = {};
             $explorer['keepInBounds'] = true;
