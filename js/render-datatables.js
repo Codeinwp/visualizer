@@ -140,6 +140,9 @@
                     if(parseInt(valoo) > 0){
                         valoo = parseInt(valoo);
                     }
+                    if(i === 'pageLength' && (valoo === '' || parseInt(valoo) < 0)){
+                        valoo = 1;
+                    }
             }
 
             // if the setting name has an '_' this means it is a sub-setting e.g. select_items means { select: { items: ... } }.

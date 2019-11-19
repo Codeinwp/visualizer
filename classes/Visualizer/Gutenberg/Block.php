@@ -93,7 +93,7 @@ class Visualizer_Gutenberg_Block {
 			}
 		}
 
-		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping();
+		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping( null, false );
 
 		$translation_array = array(
 			'isPro'     => $type,
