@@ -229,7 +229,7 @@ var __visualizer_chart_images   = [];
         }
 
 
-        if(settings.hAxis) {
+        if(settings.hAxis && series[0]) {
        	    format_data(id, table, series[0].type, settings.hAxis.format, 0);
         }
 

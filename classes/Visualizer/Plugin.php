@@ -75,6 +75,7 @@ class Visualizer_Plugin {
 	const CF_JSON_SCHEDULE = 'visualizer-json-schedule';
 	const CF_JSON_PAGING = 'visualizer-json-paging';
 	const CF_JSON_HEADERS = 'visualizer-json-headers';
+	const CF_EDITOR = 'visualizer-editor';
 
 	const ACTION_SAVE_FILTER_QUERY = 'visualizer-save-filter-query';
 

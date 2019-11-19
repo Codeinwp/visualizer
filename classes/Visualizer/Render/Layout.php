@@ -318,7 +318,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							<?php Visualizer_Render_Layout::show( 'editor-table', null, $chart_id, 'viz-html-table', true, true ); ?>
 						</div>
 						<input type="hidden" name="table_data" value="yes">
-						<button class="button button-primary" id="visualizer-save-html-table"><?php esc_html_e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
+						<input type="hidden" name="editor-type" value="table">
 					</form>
 				</div>
 
@@ -344,7 +344,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		?>
 		<div class="viz-simple-editor-type viz-text-editor">
 			<textarea id="edited_text"><?php echo $data; ?></textarea>
-			<button id="viz-text-editor-button" class="button button-primary"><?php _e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
 		</div>
 		<?php
 	}

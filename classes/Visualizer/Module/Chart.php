@@ -687,7 +687,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
 
-		if ( ! Visualizer_Module::is_pro() ) {
+		if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) {
 			wp_enqueue_script( 'visualizer-editor-simple' );
 			wp_localize_script(
 				'visualizer-editor-simple',
@@ -843,28 +843,31 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @since 3.2.0
 	 */
-	private function handleCSVasString( $data ) {
+	private function handleCSVasString( $data, $editor_type ) {
 		$source = null;
 
-		// @issue https://github.com/Codeinwp/visualizer/issues/412
-		if ( has_filter( 'visualizer_pro_handle_chart_data' ) ) {
-			$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
-		} else {
-			// data coming in from the text editor.
-			$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );
-			$handle  = fopen( $tmpfile, 'w' );
-			$values = preg_split( '/[\n\r]+/', stripslashes( trim( $data ) ) );
-			if ( $values ) {
-				foreach ( $values as $row ) {
-					if ( empty( $row ) ) {
-						continue;
+		switch ( $editor_type ) {
+			case 'text':
+				// data coming in from the text editor.
+				$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );
+				$handle  = fopen( $tmpfile, 'w' );
+				$values = preg_split( '/[\n\r]+/', stripslashes( trim( $data ) ) );
+				if ( $values ) {
+					foreach ( $values as $row ) {
+						if ( empty( $row ) ) {
+							continue;
+						}
+						$columns = explode( ',', $row );
+						fputcsv( $handle, $columns );
 					}
-					$columns = explode( ',', $row );
-					fputcsv( $handle, $columns );
 				}
-			}
-			$source = new Visualizer_Source_Csv( $tmpfile );
-			fclose( $handle );
+				$source = new Visualizer_Source_Csv( $tmpfile );
+				fclose( $handle );
+				break;
+			case 'excel':
+				// data coming in from the excel editor.
+				$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
+				break;
 		}
 		return $source;
 	}
@@ -997,6 +1000,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// delete last error
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
 
+		// delete editor related data.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR );
+
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
 		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
@@ -1008,9 +1014,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			$source = $this->handleCSVasString( $_POST['chart_data'] );
+			$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
 		} elseif ( isset( $_POST['table_data'] ) && 'yes' === $_POST['table_data'] ) {
 			$source = $this->handleTabularData();
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
 		} else {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'CSV file with chart data was not uploaded for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' );
