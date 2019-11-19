@@ -417,9 +417,9 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<?php } else { ?>
 										<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
 										<input type="button" id="editor-chart-button" class="button button-primary "
-											   value="<?php _e( 'Edit Data', 'visualizer' ); ?>" data-current="chart"
+											   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
 											   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-											   data-t-chart="<?php _e( 'Edit Data', 'visualizer' ); ?>"
+											   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>"
 										>
 										<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 									<?php } ?>
