@@ -14,7 +14,11 @@
         "plan2": 0
     },
     "query": "SELECT post_type, count(*) from wp_posts GROUP by post_type",
-    "wait": 10000
+    "wait": 10000,
+    "editors": {
+        "free": 2,
+        "selected" : "table"
+    }
   },
   "videoUploadOnPasses": false,
   "projectId": "yhx2jj"
