@@ -656,6 +656,21 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Should we show some specific feature on the basis of the version?
+	 *
+	 * @since 3.4.0
+	 */
+	public static function can_show_feature( $feature ) {
+		switch ( $feature ) {
+			case 'simple-editor':
+				// if user has pro but an older version, then don't load the simple editor functionality
+				// as the select box will not behave as expected because the pro editor's functionality will supercede.
+				return ! Visualizer_Module::is_pro() || ! Visualizer_Module::is_pro_older_than( '1.9.2' );
+		}
+		return false;
+	}
+
+	/**
 	 * Gets the features for the provided license type.
 	 */
 	public static final function get_features_for_license( $plan ) {

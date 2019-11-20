@@ -542,14 +542,14 @@
 
     function init_editor_table() {
         $('body').on('visualizer:db:editor:table:init', function(event, data){
-            var $table = create_editor_table('.viz-table-editor');
+            var $table = create_editor_table('.viz-table-editor', data.config);
             $('body').on('visualizer:db:editor:table:redraw', function(event, data){
                 $table.draw();
             });
         });
     }
 
-    function create_editor_table(element) {
+    function create_editor_table(element, config) {
         var settings = {
             paging: false,
             searching: false,
@@ -575,6 +575,9 @@
                     }
                 ]
             } );
+        }
+        if(config){
+            $.extend( settings, config );
         }
 
         var $table = $(element + ' .viz-editor-table').DataTable(settings);

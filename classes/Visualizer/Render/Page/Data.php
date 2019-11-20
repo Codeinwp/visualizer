@@ -38,6 +38,10 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 */
 	protected function _renderContent() {
 		// Added by Ash/Upwork
+		if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) {
+			Visualizer_Render_Layout::show( 'simple-editor-screen', $this->chart->ID );
+		}
+
 		if ( Visualizer_Module::is_pro() ) {
 			do_action( 'visualizer_add_editor_etc', $this->chart->ID );
 
@@ -48,8 +52,6 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 					$Visualizer_Pro->_addFilterWizard( $this->chart->ID );
 				}
 			}
-		} else {
-			Visualizer_Render_Layout::show( 'simple-editor-screen', $this->chart->ID );
 		}
 
 		$this->add_additional_content();
@@ -86,6 +88,11 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		if ( ! empty( $filter_config ) ) {
 			$source_of_chart .= '_wp';
 		}
+		$editor_type    = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_EDITOR, true );
+		if ( $editor_type ) {
+			$source_of_chart = 'visualizer_source_manual';
+		}
+
 		$type               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$lib               = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		?>
@@ -373,34 +380,50 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 						</div>
 						</li>
 
-						<?php
-							// we will auto-open the manual data feature only when source is empty.
-						?>
 						<!-- manual -->
-						<li class="viz-group <?php echo empty( $source_of_chart ) ? 'open' : ''; ?> ">
-							<h2 class="viz-group-title viz-sub-group visualizer-editor-tab"
-								data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?><span
-										class="dashicons dashicons-lock"></span></h2>
-							<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
-								<input type="hidden" id="chart-data" name="chart_data">
-								<input type="hidden" id="chart-data-src" name="chart_data_src">
-							</form>
-
+						<li class="viz-group visualizer_source_manual">
+							<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?>
+								<span class="dashicons dashicons-lock"></span>
+							</h2>
 							<div class="viz-group-content edit-data-content">
-								<div>
-									<p class="viz-group-description"><?php echo sprintf( __( 'You can manually edit the chart data using the %s editor.', 'visualizer' ), Visualizer_Module::is_pro() ? 'spreadsheet like' : 'simple' ); ?></p>
-									<?php if ( ! Visualizer_Module::is_pro() ) { ?>
-										<p class="viz-group-description simple-editor-type"><input type="checkbox" id="simple-editor-type" value="textarea"><label for="simple-editor-type"><?php _e( 'Use text area editor instead', 'visualizer' ); ?></label></p>
-									<?php } else { ?>
-									<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
-									<?php } ?>
-									<input type="button" id="editor-chart-button" class="button button-primary "
-										   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
-										   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-										   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>">
+								<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
+									<input type="hidden" id="chart-data" name="chart_data">
+									<input type="hidden" id="chart-data-src" name="chart_data_src">
 
-									<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
-								</div>
+									<?php if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) { ?>
+									<div>
+										<p class="viz-group-description viz-editor-selection">
+											<?php _e( 'Use the', 'visualizer' ); ?>
+											<select name="editor-type" id="viz-editor-type">
+												<?php
+												if ( empty( $editor_type ) ) {
+													$editor_type = Visualizer_Module::is_pro() ? 'excel' : 'text';
+												}
+												foreach ( apply_filters( 'visualizer_editors', array( 'text' => __( 'Text', 'visualizer' ), 'table' => __( 'Simple', 'visualizer' ) ) ) as $e_type => $e_label ) {
+													?>
+												<option value="<?php echo $e_type; ?>" <?php selected( $editor_type, $e_type ); ?> ><?php echo $e_label; ?></option>
+												<?php } ?>
+											</select>
+											<?php _e( 'editor to manually edit the chart data.', 'visualizer' ); ?>
+										</p>
+										<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
+										<input type="button" id="editor-button" class="button button-primary "
+											   value="<?php _e( 'Edit Data', 'visualizer' ); ?>" data-current="chart"
+											   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+											   data-t-chart="<?php _e( 'Edit Data', 'visualizer' ); ?>"
+										>
+										<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
+									</div>
+									<?php } else { ?>
+										<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
+										<input type="button" id="editor-chart-button" class="button button-primary "
+											   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
+											   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+											   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>"
+										>
+										<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
+									<?php } ?>
+								</form>
 							</div>
 						</li>
 					</ul>
