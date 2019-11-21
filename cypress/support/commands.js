@@ -262,8 +262,8 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
 // create the first N charts available
 Cypress.Commands.add( 'create_available_charts', ($num) => {
     var charts = [];
-    for(var i = 0; i < parseInt($num); i++){
-        charts.push(i + 1);
+    for(var i = 1; i < parseInt($num); i++){
+        charts.push(i);
     }
 
     // iterate through the first N charts in the types screen and create each one.
