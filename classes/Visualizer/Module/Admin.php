@@ -71,8 +71,28 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'visualizer_chart_schedules_spl', 'addSplChartSchedules', null, 10, 3 );
 
 		$this->_addAction( 'admin_init', 'init' );
+
+		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
+			$this->load_cypress_hooks();
+		}
+
 	}
 
+	/**
+	 * Define the hooks that are needed for cypress.
+	 *
+	 * @since   3.4.0
+	 * @access  private
+	 */
+	private function load_cypress_hooks() {
+		// all charts should load on the same page without pagination.
+		add_filter(
+			'visualizer_query_args', function( $args ) {
+				$args['posts_per_page'] = 20;
+				return $args;
+			}, 10, 1
+		);
+	}
 
 	/**
 	 * Add disabled `optgroup` schedules to the drop downs.
@@ -726,7 +746,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$meta[]                   = $query;
 			$query_args['meta_query'] = $meta;
 		}
-		$q = new WP_Query( $query_args );
+		$q = new WP_Query( apply_filters( 'visualizer_query_args', $query_args ) );
 		return $q;
 	}
 

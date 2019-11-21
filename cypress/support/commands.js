@@ -298,8 +298,6 @@ Cypress.Commands.add( 'create_available_charts', ($num) => {
 
     // verify that all charts have been created
     cy.visit(Cypress.env('urls').library ).then(() => {
-        // but because only 6 are shown per page we will check that there are n pages
-        cy.get('#visualizer-library .visualizer-chart').should('have.length', 6);
-        cy.get('.page-numbers').should('have.length', 1 + Math.ceil(parseInt($num)/6));
+        cy.get('#visualizer-library .visualizer-chart').should('have.length', $num);
     });
 });
