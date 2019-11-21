@@ -24,6 +24,8 @@ docker exec $args visualizer_wordpress wp --quiet plugin deactivate classic-edit
 export CYPRESS_SPEC_TO_RUN="free-gutenberg.js"
 npm run cypress:run
 
+docker exec $args visualizer_wordpress wp --quiet plugin activate classic-editor
+
 # test free - lifecycle
 export CYPRESS_SPEC_TO_RUN="free-lifecycle.js"
 npm run cypress:run
