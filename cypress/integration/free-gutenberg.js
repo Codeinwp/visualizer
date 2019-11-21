@@ -42,7 +42,7 @@ describe('Test Free - gutenberg', function() {
         cy.wrap($pages).each((page, i, array) => {
             var charts = [];
             cy.wrap(charts).then( () => {
-                for(var i = page * 6; i < (page * 6) + 6; i++){
+                for(var i = page * 6; i < ( ( (page * 6) + 6 ) > Cypress.env('chart_types').free ? Cypress.env('chart_types').free : ( (page * 6) + 6 ) ); i++){
                     charts.push(i + 1);
                 }
             });
