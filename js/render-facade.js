@@ -90,6 +90,10 @@
                 return;
             }
             localStorage.setItem( 'viz-facade-loaded', '1');
+            // remove the flag so that repeated loading of the library does not cause problems.
+            setTimeout( function(){
+                localStorage.removeItem( 'viz-facade-loaded' );
+            }, 2000);
         }
         $('body').trigger('visualizer:render:chart:start', visualizer);
         initActionsButtons(visualizer);

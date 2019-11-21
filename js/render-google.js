@@ -252,7 +252,7 @@ var __visualizer_chart_images   = [];
             format_data(id, table, 'number', settings.format, 1);
         }
 
-        if(settings.hAxis) {
+        if(settings.hAxis && series[0]) {
        	    format_data(id, table, series[0].type, settings.hAxis.format, 0);
         }
 
