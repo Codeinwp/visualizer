@@ -258,3 +258,48 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
         });
     });
 });
+
+// create the first N charts available
+Cypress.Commands.add( 'create_available_charts', ($num) => {
+    var charts = [];
+    for(var i = 0; i < parseInt($num); i++){
+        charts.push(i + 1);
+    }
+
+    // iterate through the first N charts in the types screen and create each one.
+    cy.wrap(charts).each((chart, i, array) => {
+        cy.visit(Cypress.env('urls').library ).then(() => {
+            cy.get('.add-new-h2.add-new-chart').first().click();
+        });
+
+        cy.wait( Cypress.env('wait') );
+
+        cy.get('iframe')
+        .then(function ($iframe) {
+            const $body = $iframe.contents().find('body');
+
+            // select the chart.
+            cy.wrap($body).find('#type-picker .type-box:nth-child(' + chart + ') .type-radio').check();
+            // create the chart.
+            cy.wrap($body).find('#toolbar input[type="submit"]').click();
+        });
+
+        cy.wait( Cypress.env('wait') );
+
+        cy.get('iframe')
+        .then(function ($iframe) {
+            const $body = $iframe.contents().find('body');
+            // create the chart.
+            cy.wrap($body).find('#toolbar input#settings-button').click();
+        });
+
+        cy.wait( Cypress.env('wait') );
+    });
+
+    // verify that all charts have been created
+    cy.visit(Cypress.env('urls').library ).then(() => {
+        // but because only 6 are shown per page we will check that there are n pages
+        cy.get('#visualizer-library .visualizer-chart').should('have.length', 6);
+        cy.get('.page-numbers').should('have.length', 1 + Math.ceil(parseInt($num)/6));
+    });
+});
