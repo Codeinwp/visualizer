@@ -262,15 +262,13 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
 // create the first N charts available
 Cypress.Commands.add( 'create_available_charts', ($num) => {
     var charts = [];
-    for(var i = 1; i < parseInt($num); i++){
+    for(var i = 1; i <= parseInt($num); i++){
         charts.push(i);
     }
 
     // iterate through the first N charts in the types screen and create each one.
     cy.wrap(charts).each((chart, i, array) => {
         cy.visit(Cypress.env('urls').library ).then(() => {
-            // verify that the chart was created and the count increased by 1
-            cy.get('#visualizer-library .visualizer-chart').should('have.length', chart === 1 ? 1 : chart - 1);
             cy.get('.add-new-h2.add-new-chart').first().click();
         });
 
@@ -296,6 +294,12 @@ Cypress.Commands.add( 'create_available_charts', ($num) => {
         });
 
         cy.wait( Cypress.env('wait') );
+
+        // verify that the chart was created and the count increased by 1
+        cy.visit(Cypress.env('urls').library ).then(() => {
+            cy.get('#visualizer-library .visualizer-chart').should('have.length', chart);
+        });
+
     });
 
     // verify that all charts have been created
