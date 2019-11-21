@@ -270,7 +270,7 @@ Cypress.Commands.add( 'create_available_charts', ($num) => {
     cy.wrap(charts).each((chart, i, array) => {
         cy.visit(Cypress.env('urls').library ).then(() => {
             // verify that the chart was created and the count increased by 1
-            cy.get('#visualizer-library .visualizer-chart').should('have.length', chart - 1);
+            cy.get('#visualizer-library .visualizer-chart').should('have.length', chart === 1 ? 1 : chart - 1);
             cy.get('.add-new-h2.add-new-chart').first().click();
         });
 
