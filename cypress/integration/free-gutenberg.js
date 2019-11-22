@@ -112,22 +112,15 @@ charts = [1];
         charts.push(1);
 
         cy.wrap(charts).each((num, i, array) => {
-            cy.get('.visualizer-settings').then( ($div1) => {
-                // insert the chart.
-                cy.wrap($div1).find('.visualizer-settings__charts-single:nth-child(' + num + ')').then( ($chart) => {
-                    cy.wrap($chart).find('.visualizer-settings__charts-controls').click();
-                    cy.wait( Cypress.env('wait') );
-                    cy.get('.visualizer-settings').then( ($div) => {
-                        // check if inserted
-                        cy.wrap($div).find('.visualizer-settings__chart').should('have.length', 1);
-                        cy.wrap($div).find('.visualizer-settings__chart > div').should('have.length', 1);
-                        cy.wrap($div).find('.components-button-group button').should('have.length', 2);
-
-                        // go back to insert another one.
-                        cy.wrap($div).find('.components-button-group button').first().click();
-                        cy.wait( Cypress.env('wait') );
-                    });
-                });
+            cy.get('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + num + ')').then( ($chart) => {
+                cy.wrap($chart).find('.visualizer-settings__charts-controls').click();
+                cy.wait( Cypress.env('wait') );
+                cy.get('.visualizer-settings .visualizer-settings__chart').should('have.length', 1);
+                cy.get('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 1);
+                cy.get('.visualizer-settings .components-button-group button').should('have.length', 2);
+                // go back to insert another one.
+                cy.get('.visualizer-settings  .components-button-group button').first().click();
+                cy.wait( Cypress.env('wait') );
             });
         });
     });
