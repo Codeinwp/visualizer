@@ -10,10 +10,11 @@ describe('Test Free - gutenberg', function() {
     });
 
     it('Create all charts', function() {
-        cy.create_available_charts(Cypress.env('chart_types').free);
+        //cy.create_available_charts(Cypress.env('chart_types').free);
+        cy.create_available_charts(1);
     });
 
-    it.skip('Verify insertion of charts', function() {
+    it('Verify insertion of charts', function() {
         cy.visit('/post-new.php');
 
         // get rid of that irritating popup
@@ -39,16 +40,16 @@ describe('Test Free - gutenberg', function() {
         for(var i = 0; i < Math.ceil(parseInt(Cypress.env('chart_types').free)/6); i++){
             $pages.push(i);
         }
+        $pages = [0];
         cy.wrap($pages).each((page, i, array) => {
             var charts = [];
             cy.wrap(page).then( () => {
                 for(var i = page * 6; i < ( ( (page * 6) + 6 ) > Cypress.env('chart_types').free ? Cypress.env('chart_types').free : ( (page * 6) + 6 ) ); i++){
                     charts.push(i + 1);
                 }
-                console.log(page + " added " + charts);
+                charts = [1];
             }).then( () => {
                 cy.wrap(charts).each((num, i, array) => {
-                    console.log("loading " + num + " on " + page);
                     if(page > 0){
                         // click load more for every page except the first.
                         cy.get('.visualizer-settings').then( ($div) => {
@@ -78,8 +79,9 @@ describe('Test Free - gutenberg', function() {
                     });
                 });
             });
+        }).then( () => {
+            cy.visit('/post-new.php');
         });
-
     });
 
 })
