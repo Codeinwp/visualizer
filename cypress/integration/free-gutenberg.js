@@ -79,8 +79,6 @@ describe('Test Free - gutenberg', function() {
                     });
                 });
             });
-        }).then( () => {
-            cy.visit('/post-new.php');
         });
     });
 
