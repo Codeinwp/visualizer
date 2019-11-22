@@ -41,44 +41,43 @@ describe('Test Free - gutenberg', function() {
         }
         cy.wrap($pages).each((page, i, array) => {
             var charts = [];
-            cy.wrap(charts).then( () => {
+            cy.wrap(page).then( () => {
                 for(var i = page * 6; i < ( ( (page * 6) + 6 ) > Cypress.env('chart_types').free ? Cypress.env('chart_types').free : ( (page * 6) + 6 ) ); i++){
                     charts.push(i + 1);
                 }
-            });
-
-            cy.wrap(charts).each((num, i, array) => {
-                if(page > 0){
-                    // click load more for every page except the first.
-                    cy.get('.visualizer-settings').then( ($div) => {
-                        cy.wrap($div).find('.visualizer-settings__charts .components-button').click();
-                    });
-                    cy.wait( Cypress.env('wait') );
-                }
-
-                cy.get('.visualizer-settings').then( ($div) => {
-                    // insert the chart.
-                    cy.wrap($div).find('.visualizer-settings__charts-single:nth-child(' + num + ')').then( ($chart) => {
-                        cy.wrap($chart).find('.visualizer-settings__charts-controls').click();
-                    });
-                })
-                .then( () => {
-                    cy.wait( Cypress.env('wait') );
-                    cy.get('.visualizer-settings').then( ($div) => {
-                        // check if inserted
-                        cy.wrap($div).find('.visualizer-settings__chart').should('have.length', 1);
-                        cy.wrap($div).find('.visualizer-settings__chart > div').should('have.length', 1);
-                        cy.wrap($div).find('.components-button-group button').should('have.length', 2);
-
-                        // go back to insert another one.
-                        cy.wrap($div).find('.components-button-group button').first().click();
+            }).then( () => {
+                cy.wrap(charts).each((num, i, array) => {
+                    if(page > 0){
+                        // click load more for every page except the first.
+                        cy.get('.visualizer-settings').then( ($div) => {
+                            cy.wrap($div).find('.visualizer-settings__charts .components-button').click();
+                        });
                         cy.wait( Cypress.env('wait') );
+                    }
+
+                    cy.get('.visualizer-settings').then( ($div) => {
+                        // insert the chart.
+                        cy.wrap($div).find('.visualizer-settings__charts-single:nth-child(' + num + ')').then( ($chart) => {
+                            cy.wrap($chart).find('.visualizer-settings__charts-controls').click();
+                        });
+                    })
+                    .then( () => {
+                        cy.wait( Cypress.env('wait') );
+                        cy.get('.visualizer-settings').then( ($div) => {
+                            // check if inserted
+                            cy.wrap($div).find('.visualizer-settings__chart').should('have.length', 1);
+                            cy.wrap($div).find('.visualizer-settings__chart > div').should('have.length', 1);
+                            cy.wrap($div).find('.components-button-group button').should('have.length', 2);
+
+                            // go back to insert another one.
+                            cy.wrap($div).find('.components-button-group button').first().click();
+                            cy.wait( Cypress.env('wait') );
+                        });
                     });
                 });
             });
         });
 
-        expect(1).to.equal(1);
     });
 
 })
