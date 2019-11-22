@@ -13,7 +13,7 @@ describe('Test Free - gutenberg', function() {
         cy.create_available_charts(Cypress.env('chart_types').free);
     });
 
-    it('Verify insertion of charts', function() {
+    it.skip('Verify insertion of charts', function() {
         cy.visit('/post-new.php');
 
         // get rid of that irritating popup
@@ -45,8 +45,10 @@ describe('Test Free - gutenberg', function() {
                 for(var i = page * 6; i < ( ( (page * 6) + 6 ) > Cypress.env('chart_types').free ? Cypress.env('chart_types').free : ( (page * 6) + 6 ) ); i++){
                     charts.push(i + 1);
                 }
+                console.log(page + " added " + charts);
             }).then( () => {
                 cy.wrap(charts).each((num, i, array) => {
+                    console.log("loading " + num + " on " + page);
                     if(page > 0){
                         // click load more for every page except the first.
                         cy.get('.visualizer-settings').then( ($div) => {
