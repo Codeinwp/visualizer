@@ -81,12 +81,12 @@
     }
 
     $(document).ready(function(){
-        // facade loads twice in the library, so all charts are also loaded twice
-        // this will ensure that even if it loaded twice, it initializes all charts only once.
+        // facade loads N times in the library (where N = the number of different chart libraries supported)
+        // so all charts are also loaded N times
+        // this will ensure that no matter how many times facade is loaded, it initializes all charts only once.
         // fixed as part of the issue to add annotations.
         if(visualizer.page_type === 'library'){
             if(localStorage.getItem( 'viz-facade-loaded' ) === '1'){
-                localStorage.removeItem( 'viz-facade-loaded' );
                 return;
             }
             localStorage.setItem( 'viz-facade-loaded', '1');
