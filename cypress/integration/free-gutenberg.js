@@ -10,8 +10,8 @@ describe('Test Free - gutenberg', function() {
     });
 
     it('Create all charts', function() {
-        //cy.create_available_charts(Cypress.env('chart_types').free);
-cy.create_available_charts(1);
+        cy.create_available_charts(Cypress.env('chart_types').free);
+//cy.create_available_charts(1);
     });
 
     it.skip('Verify insertion of charts - using load more', function() {
@@ -107,9 +107,9 @@ charts = [1];
 
         var charts = [];
         for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
-            //charts.push(i);
+            charts.push(i);
         }
-        charts.push(1);
+        //charts.push(1);
 
         cy.wrap(charts).each((num, i, array) => {
             cy.get('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + num + ')').then( ($chart) => {
