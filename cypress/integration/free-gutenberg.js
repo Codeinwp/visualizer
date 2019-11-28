@@ -52,6 +52,7 @@ describe('Test Free - gutenberg', function() {
                 // go back to insert another one.
                 cy.get('.visualizer-settings  .components-button-group button').first().click();
                 cy.wait( Cypress.env('wait') );
+                if(num === array.length) return false;
             });
         });
     });
