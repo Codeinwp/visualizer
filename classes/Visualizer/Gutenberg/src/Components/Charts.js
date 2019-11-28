@@ -39,7 +39,8 @@ class Charts extends Component {
 		this.state = {
 			charts: null,
 			isBusy: false,
-			chartsLoaded: false
+			chartsLoaded: false,
+            perPage: visualizerLocalize.chartsPerPage
 		};
 	}
 
@@ -54,7 +55,7 @@ class Charts extends Component {
 	async loadMoreCharts() {
 		const offset = ( this.state.charts ).length;
 		let chartsLoaded = this.state.chartsLoaded;
-        const perPage = visualizerLocalize.chartsPerPage;
+        const perPage = this.state.perPage;
 
 		this.setState({ isBusy: true });
 
@@ -73,7 +74,7 @@ class Charts extends Component {
 
 	render() {
 
-		const { charts, isBusy, chartsLoaded } = this.state;
+		const { charts, isBusy, chartsLoaded, perPage } = this.state;
 
 		return (
 			<div className="visualizer-settings__charts">
@@ -159,7 +160,7 @@ class Charts extends Component {
 									}) }
 								</div>
 
-								{ ! chartsLoaded && 5 < charts.length && (
+								{ ! chartsLoaded && perPage - 1 < charts.length && (
 									<Button
 										isPrimary
 										isLarge
