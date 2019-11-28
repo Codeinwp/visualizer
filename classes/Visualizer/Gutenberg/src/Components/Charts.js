@@ -44,21 +44,23 @@ class Charts extends Component {
 	}
 
 	async componentDidMount() {
+        const perPage = visualizerLocalize.chartsPerPage;
 
 		// Fetch review again if block loaded after saving.
-		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=6&meta_key=visualizer-chart-library&meta_value=ChartJS' });
+		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=' + perPage + '&meta_key=visualizer-chart-library&meta_value=ChartJS' });
 		this.setState({ charts: result });
 	}
 
 	async loadMoreCharts() {
 		const offset = ( this.state.charts ).length;
 		let chartsLoaded = this.state.chartsLoaded;
+        const perPage = visualizerLocalize.chartsPerPage;
 
 		this.setState({ isBusy: true });
 
-		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=6&meta_key=visualizer-chart-library&meta_value=ChartJS&offset=${ offset }` });
+		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=${ perPage }&meta_key=visualizer-chart-library&meta_value=ChartJS&offset=${ offset }` });
 
-		if ( 6 > result.length ) {
+		if ( perPage > result.length ) {
 			chartsLoaded = true;
 		}
 
