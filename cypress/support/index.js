@@ -23,3 +23,12 @@ import './commands'
 Cypress.Cookies.defaults({
     whitelist: /wordpress_.*/
 })
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // ignore crossorigin errors - happens when a chart is inserted in Gutenberg.
+  expect(err.message).to.include('crossorigin');
+
+  // returning false here prevents Cypress from
+  // failing the test
+  return false
+})
