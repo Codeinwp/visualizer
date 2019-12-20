@@ -75,7 +75,7 @@ class Visualizer_Gutenberg_Block {
 		$handsontableCSS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css';
 
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
-			$version = filemtime( VISUALIZER_ABSPATH . 'classes/Visualizer/Gutenberg/build/block.js' );
+			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
 		} else {
 			$version = $this->version;
 		}
