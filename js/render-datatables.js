@@ -62,15 +62,26 @@
                 case 'post':
                     // fall-through.
                 case 'library':
-                    // remove scrollY if its greater than what will fit in the box (along with the legend).
-                    if(parseInt(chart.settings['scrollY_int']) > 180){
-                        chart.settings['scrollY_int'];
-                    }
-                    delete chart.settings['scrollX'];
-                    $.extend( settings, { 
+                    // for smaller screens...
+                    if(screen.width < 1300){
+                        delete chart.settings['scrollX'];
+                        delete chart.settings['scrollY'];
+                        delete chart.settings['scrollY_int'];
+                        $.extend( settings, {
+                            scrollX: 150,
+                            scrollY: (0.5 * parseInt($(container).css('height').replace('px',''))),
+                            scrollCollapse: true,
+                        } );
+                    }else{
+                        if(parseInt(chart.settings['scrollY_int']) > 180){
+                            chart.settings['scrollY_int'];
+                        }
+                        delete chart.settings['scrollX'];
+                        $.extend( settings, {
                             scrollX: 150,
                             scrollY: 180,
-                    } );
+                        } );
+                    }
                     break;
                 case 'chart':
                     delete chart.settings['scrollX']; // jshint ignore:line
