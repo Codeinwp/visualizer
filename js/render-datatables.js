@@ -263,13 +263,6 @@
         }
     }
 
-    if(typeof visualizer !== 'undefined'){
-        // called while updating the chart.
-        visualizer.update = function(){
-            renderSpecificChart('canvas', all_charts['canvas'], visualizer);
-        };
-    }
-
     $('body').on('visualizer:render:chart:start', function(event, v){
         all_charts = v.charts;
         render(v);
@@ -277,6 +270,10 @@
 
     $('body').on('visualizer:render:specificchart:start', function(event, v){
         renderSpecificChart(v.id, v.chart, v.v);
+    });
+
+    $('body').on('visualizer:render:currentchart:update', function(event, v){
+        renderSpecificChart('canvas', all_charts['canvas'], v.visualizer);
     });
 
     // front end actions

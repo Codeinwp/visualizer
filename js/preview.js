@@ -17,7 +17,7 @@
 				delete settings['height'];
 
 				v.charts.canvas.settings = settings;
-				v.update();
+                $('body').trigger('visualizer:render:currentchart:update', {visualizer: v});
 			}, 1000);
 		}
 
