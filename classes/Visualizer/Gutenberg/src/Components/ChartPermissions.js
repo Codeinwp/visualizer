@@ -115,7 +115,7 @@ class ChartPermissions extends Component {
 						initialOpen={ false }
 					>
 
-						<p>{ __( 'Enable this feature in BUSINESS version!' ) }</p>
+						<p>{ __( 'Upgrade your license to at least the DEVELOPER version to activate this feature!' ) }</p>
 
 						<Button
 							isPrimary
@@ -170,7 +170,7 @@ class ChartPermissions extends Component {
 						initialOpen={ false }
 					>
 
-						<p>{ __( 'Enable this feature in BUSINESS version!' ) }</p>
+						<p>{ __( 'Upgrade your license to at least the DEVELOPER version to activate this feature!' ) }</p>
 
 						<Button
 							isPrimary

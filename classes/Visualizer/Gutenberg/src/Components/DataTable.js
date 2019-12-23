@@ -108,10 +108,10 @@ class DataTables extends Component {
 
 		if ( 'date' === type || 'datetime' === type || 'timeofday' === type ) {
 			if ( settings.series[index].format && settings.series[index].format.from && settings.series[index].format.to ) {
-				return $.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
+				return jQuery.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
 			}
 
-			return $.fn.dataTable.render.moment( 'MM-DD-YYYY' );
+			return jQuery.fn.dataTable.render.moment( 'MM-DD-YYYY' );
 		}
 
 		if ( 'num' === type ) {
@@ -137,7 +137,7 @@ class DataTables extends Component {
 				parts[4] = settings.series[index].format.suffix;
 			}
 
-			return $.fn.dataTable.render.number( ...parts );
+			return jQuery.fn.dataTable.render.number( ...parts );
 		}
 
 		return data;
