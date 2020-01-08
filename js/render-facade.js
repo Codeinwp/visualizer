@@ -87,6 +87,10 @@
         // fixed as part of the issue to add annotations.
         if(visualizer.page_type === 'library'){
             if(localStorage.getItem( 'viz-facade-loaded' ) === '1'){
+                // prevent library from hanging.
+                setTimeout( function(){
+                    localStorage.removeItem( 'viz-facade-loaded' );
+                }, 2000);
                 return;
             }
             localStorage.setItem( 'viz-facade-loaded', '1');
