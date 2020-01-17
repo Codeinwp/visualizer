@@ -200,6 +200,10 @@
             row = [];
             for (j = 0; j < series.length; j++) {
                 var datum = data[i][j];
+                // datum could be undefined for dynamic data (e.g. through json).
+                if(typeof datum === 'undefined'){
+                    datum = data[i][series[j].label];
+                }
                 row[ series[j].label ] = datum;
             }
             rows.push(row);
