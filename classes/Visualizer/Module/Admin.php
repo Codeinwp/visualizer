@@ -92,7 +92,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$license = __( 'PRO', 'visualizer' );
 		switch ( $plan ) {
-			case 2:
+			case 1:
 				$license = __( 'Developer', 'visualizer' );
 				break;
 		}
@@ -116,7 +116,11 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				// fall-through.
 			case 'db':
 				// fall-through.
+				break;
 			case 'csv':
+				$hours = array(
+					'0' => __( 'Live', 'visualizer' ),
+				);
 				break;
 			default:
 				return;
