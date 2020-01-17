@@ -120,11 +120,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				// fall-through.
 				break;
 			case 'csv':
-				if ( Visualizer_Module::is_pro() ) {
-					$hours = array(
-						'0' => __( 'Live', 'visualizer' ),
-					);
-				}
+				// no support for live.
+				unset( $hours['0'] );
 				break;
 			default:
 				return;
