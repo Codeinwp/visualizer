@@ -299,7 +299,8 @@ class Visualizer_Gutenberg_Block {
 
 		$data['visualizer-chart-type'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 
-		$data['visualizer-chart-library'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		$library = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		$data['visualizer-chart-library'] = $library;
 
 		$data['visualizer-source'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SOURCE, true );
 
@@ -316,6 +317,55 @@ class Visualizer_Gutenberg_Block {
 
 		// handle data filter hooks
 		$data['visualizer-data'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( get_the_content( $post_id ) ) ), $post_id, $data['visualizer-chart-type'] );
+
+		$data['visualizer-data-exploded'] = '';
+		// handle annotations for google charts
+		if ( 'GoogleCharts' === $library ) {
+			// this will contain the data of both axis.
+			$settings = $data['visualizer-settings'];
+			// this will contain data only of Y axis.
+			$series = $data['visualizer-series'];
+			$annotations = array();
+			if ( isset( $settings['series'] ) ) {
+				foreach ( $settings['series'] as $index => $serie ) {
+					// skip X axis data.
+					if( $index === 0) {
+						continue;
+					}
+					if ( ! empty( $serie['role'] ) ) {
+						// this series is some kind of annotation, so let's collect its index.
+						$annotations[] = $index;
+					}
+				}
+			}
+			if ( ! empty( $annotations ) ) {
+				$exploded_data = array();
+				error_log(print_r($settings['series'],true));
+				error_log(print_r($series,true));
+				error_log(print_r($data['visualizer-data'],true));
+				$series_names = array();
+				foreach ( $series as $index => $serie ) {
+					// skip X axis data.
+					if( $index === 0) {
+						continue;
+					}
+					if ( in_array( $index, $annotations, true ) ) {
+						$series_names[] = (object) array( 'role' => $serie['type'] );
+					} else {
+						$series_names[] = $serie['label'];
+					}
+				}
+				$exploded_data[] = $series_names;
+
+				foreach( $data['visualizer-data'] as $datum ) {
+					// skip X axis data.
+					unset( $datum[0] );
+					$exploded_data[] = $datum;
+				}
+				error_log("finally " . print_r($exploded_data,true));
+				$data['visualizer-data-exploded'] = $exploded_data;
+			}
+		}
 
 		$import = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_URL, true );
 
