@@ -334,7 +334,8 @@ class Visualizer_Gutenberg_Block {
 					}
 					if ( ! empty( $serie['role'] ) ) {
 						// this series is some kind of annotation, so let's collect its index.
-						$annotations[] = $index;
+						// the index will be +1 because the X axis value is index 0, which is being ignored.
+						$annotations['role' . ( intval( $index ) + 1 )] = $serie['role'];
 					}
 				}
 			}
@@ -349,8 +350,8 @@ class Visualizer_Gutenberg_Block {
 					if( $index === 0) {
 						continue;
 					}
-					if ( in_array( $index, $annotations, true ) ) {
-						$series_names[] = (object) array( 'role' => $serie['type'] );
+					if ( array_key_exists( 'role' . $index, $annotations ) ) {
+						$series_names[] = (object) array( 'role' => $annotations['role' . $index], 'type' => $serie['type'] );
 					} else {
 						$series_names[] = $serie['label'];
 					}
@@ -360,10 +361,10 @@ class Visualizer_Gutenberg_Block {
 				foreach( $data['visualizer-data'] as $datum ) {
 					// skip X axis data.
 					unset( $datum[0] );
-					$exploded_data[] = $datum;
+					$exploded_data[] = array(1,2,3);//$datum;
 				}
 				error_log("finally " . print_r($exploded_data,true));
-				$data['visualizer-data-exploded'] = $exploded_data;
+				$data['visualizer-data-exploded'] = array( $exploded_data );
 			}
 		}
 

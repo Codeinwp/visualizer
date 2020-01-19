@@ -135,6 +135,12 @@ class Charts extends Component {
 														chartsScreen={ true }
 														options={ filterCharts( data['visualizer-settings']) }
 													/>
+												) : ( '' !== data['visualizer-data-exploded'] ? (
+													<Chart
+														chartType={ chart }
+                                                        data={ data['visualizer-data-exploded'] }
+														options={ filterCharts( data['visualizer-settings']) }
+													/>
 												) : (
 													<Chart
 														chartType={ chart }
@@ -142,7 +148,7 @@ class Charts extends Component {
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
 													/>
-												) }
+												) ) }
 
 												<div
 													className="visualizer-settings__charts-controls"
