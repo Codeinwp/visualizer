@@ -75,7 +75,7 @@ class Visualizer_Gutenberg_Block {
 		$handsontableCSS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css';
 
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
-			$version = filemtime( VISUALIZER_ABSPATH . 'classes/Visualizer/Gutenberg/build/block.js' );
+			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
 		} else {
 			$version = $this->version;
 		}
@@ -341,9 +341,6 @@ class Visualizer_Gutenberg_Block {
 			}
 			if ( ! empty( $annotations ) ) {
 				$exploded_data = array();
-				error_log(print_r($settings['series'],true));
-				error_log(print_r($series,true));
-				error_log(print_r($data['visualizer-data'],true));
 				$series_names = array();
 				foreach ( $series as $index => $serie ) {
 					// skip X axis data.
@@ -361,9 +358,8 @@ class Visualizer_Gutenberg_Block {
 				foreach( $data['visualizer-data'] as $datum ) {
 					// skip X axis data.
 					unset( $datum[0] );
-					$exploded_data[] = array(1,2,3);//$datum;
+					$exploded_data[] = $datum;
 				}
-				error_log("finally " . print_r($exploded_data,true));
 				$data['visualizer-data-exploded'] = array( $exploded_data );
 			}
 		}

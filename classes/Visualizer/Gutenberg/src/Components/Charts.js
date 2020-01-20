@@ -96,7 +96,7 @@ class Charts extends Component {
 									{ ( Object.keys( charts ) ).map( i => {
 										const data = formatDate( charts[i]['chart_data']);
 
-										let title, chart;
+										let title, chart, footer;
 
 										if ( data['visualizer-settings'].title ) {
 											title = data['visualizer-settings'].title;
@@ -120,6 +120,10 @@ class Charts extends Component {
 											}
 										}
 
+										if ( data['visualizer-data-exploded']) {
+                                            footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
+                                        }
+
 										return (
 											<div className="visualizer-settings__charts-single">
 
@@ -138,7 +142,8 @@ class Charts extends Component {
 												) : ( '' !== data['visualizer-data-exploded'] ? (
 													<Chart
 														chartType={ chart }
-                                                        data={ data['visualizer-data-exploded'] }
+														rows={ data['visualizer-data'] }
+														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
 													/>
 												) : (
@@ -149,6 +154,10 @@ class Charts extends Component {
 														options={ filterCharts( data['visualizer-settings']) }
 													/>
 												) ) }
+
+                                                 <div className="visualizer-settings__charts-footer"><sub>
+                                                    { footer }
+                                                 </sub></div>
 
 												<div
 													className="visualizer-settings__charts-controls"
