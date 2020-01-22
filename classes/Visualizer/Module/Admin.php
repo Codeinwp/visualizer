@@ -111,10 +111,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		$license = __( 'PRO', 'visualizer' );
-		switch ( $plan ) {
-			case 2:
-				$license = __( 'Developer', 'visualizer' );
-				break;
+		if ( Visualizer_Module::is_pro() ) {
+			switch ( $plan ) {
+				case 1:
+					$license = __( 'Developer', 'visualizer' );
+					break;
+			}
 		}
 
 		$hours = array(
@@ -136,7 +138,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				// fall-through.
 			case 'db':
 				// fall-through.
+				break;
 			case 'csv':
+				// no support for live.
+				unset( $hours['0'] );
 				break;
 			default:
 				return;

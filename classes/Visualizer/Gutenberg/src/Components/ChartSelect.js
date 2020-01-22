@@ -57,7 +57,7 @@ class ChartSelect extends Component {
 
 	render() {
 
-		let chart;
+		let chart, footer;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
 
@@ -70,6 +70,10 @@ class ChartSelect extends Component {
 		} else {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
 		}
+
+        if ( data['visualizer-data-exploded']) {
+            footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
+        }
 
 		return (
 			<Fragment>
@@ -149,7 +153,19 @@ class ChartSelect extends Component {
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
 							/>
-						) : (
+						) : ( '' !== data['visualizer-data-exploded'] ? (
+							<Chart
+								chartType={ chart }
+								rows={ data['visualizer-data'] }
+								columns={ data['visualizer-series'] }
+								options={
+									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
+										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
+										compact( this.props.chart['visualizer-settings'])
+								}
+								height="500px"
+							/>
+                        ) : (
 							<Chart
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
@@ -162,7 +178,11 @@ class ChartSelect extends Component {
 								height="500px"
 							/>
 						)
-					}
+					) }
+
+                     <div className="visualizer-settings__charts-footer"><sub>
+                        { footer }
+                     </sub></div>
 
 				</div>
 			</Fragment>
