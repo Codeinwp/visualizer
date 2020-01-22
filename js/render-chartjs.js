@@ -385,6 +385,13 @@
         }
     }
 
+    if(typeof visualizer !== 'undefined'){
+        // called while updating the chart.
+        visualizer.update = function(){
+            renderChart('canvas', visualizer);
+        };
+    }
+
     $('body').on('visualizer:render:chart:start', function(event, v){
         all_charts = v.charts;
         render(v);

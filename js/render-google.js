@@ -319,6 +319,13 @@ var __visualizer_chart_images   = [];
 		}
 	}
 
+    if(typeof visualizer !== 'undefined'){
+        // called while updating the chart.
+        visualizer.update = function(){
+            renderChart('canvas');
+        };
+    }
+
     var resizeTimeout;
 
 	$(document).ready(function() {
