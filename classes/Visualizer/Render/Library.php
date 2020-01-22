@@ -118,12 +118,13 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo ' | </li>';
 		}
 		echo '</ul>';
+
 		echo '<form action="" method="get"><p id="visualizer-search" class="search-box">
                 <input type="search" placeholder="' . __( 'Enter title', 'visualizer' ) . '" name="s" value="' . $filterBy . '">
                 <input type="hidden" name="page" value="visualizer">
                 <button type="submit" id="search-submit" title="' . __( 'Search', 'visualizer' ) . '"><i class="dashicons dashicons-search"></i></button>
-                <button type="button" class="add-new-chart" title="' . __( 'Add New', 'visualizer' ) . '"><i class="dashicons dashicons-plus-alt"></i></button>
            </p> </form>';
+
 		echo '</div>';
 		echo '<div id="visualizer-content-wrapper">';
 		if ( ! empty( $this->charts ) ) {

@@ -25,6 +25,9 @@ On top of our responsive charts and graphs, you can also add our responsive tabl
 ### Flexible and customizable ###
 Make the charts your own. Configure an extensive set of options to perfectly match the look and feel of your website. You can use Google Chart Tools with their default setting - all customization is optional and the basic setup is launch-ready. However, charts and graphs can be easily customizable in case your webpage adopts a style which is at odds with provided defaults. Every chart exposes a number of options that customize its look and feel.
 
+### Gutenberg support ###
+Whether you like Gutenberg or not, it doesn't matter, you can add your charts using our easy-to-use gutenberg interface, or simply paste your chart code on the old editor.
+
 ### Responsive Charts in HTML5/SVG ###
 Charts are rendered using HTML5/SVG technology to provide cross-browser compatibility (including VML for older IE versions) and cross platform portability to iPhones, iPads and Android. Your users will never have to mess with extra plugins or any software. If they have a web browser, they can see your charts.
 

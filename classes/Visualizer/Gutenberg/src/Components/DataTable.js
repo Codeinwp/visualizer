@@ -73,7 +73,13 @@ class DataTables extends Component {
 			const row = {};
 
 			columns.forEach( ( j, n ) => {
-				row[j.data] = i[n];
+                var datum = i[n];
+
+                // datum could be undefined for dynamic data (e.g. through json).
+                if ( 'undefined' === typeof datum ) {
+                    datum = i[j.data];
+                }
+				row[j.data] = datum;
 			});
 
 			return row;

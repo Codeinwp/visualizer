@@ -318,7 +318,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 											<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 												<?php
 										}
-										do_action( 'visualizer_chart_schedules_spl', 'wp', $this->chart->ID, 2 );
+										do_action( 'visualizer_chart_schedules_spl', 'wp', $this->chart->ID, 1 );
 										?>
 										</select>
 
@@ -367,7 +367,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 									<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 										<?php
 								}
-								do_action( 'visualizer_chart_schedules_spl', 'db', $this->chart->ID, 2 );
+								do_action( 'visualizer_chart_schedules_spl', 'db', $this->chart->ID, 1 );
 								?>
 								</select>
 								<input type="hidden" name="params" id="viz-db-wizard-params">
