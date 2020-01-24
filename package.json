@@ -26,11 +26,11 @@
     "lasttranslator": "Themeisle Translate Team <friends@themeisle.com>"
   },
   "devDependencies": {
-    "cypress-file-upload": "^3.3.4",
-    "cypress": "^3.4.1",
+    "cypress": "^3.8.2",
+    "cypress-file-upload": "^3.5.3",
+    "grunt-helpscout-faq": "~0.1.0",
     "grunt-plugin-fleet": "github:codeinwp/grunt-plugin-fleet",
-    "load-project-config": "~0.2.0",
-    "grunt-helpscout-faq": "~0.1.0"
+    "load-project-config": "~0.2.0"
   },
   "wraithSlug": [
     "visualizer"

@@ -9,7 +9,7 @@ describe('Test Free - gutenberg', function() {
         cy.get('#wp-submit').click();
     });
 
-    it.skip('Create all charts', function() {
+    it('Create all charts', function() {
         //cy.create_available_charts(Cypress.env('chart_types').free);
         cy.create_available_charts(1);
     });
@@ -20,8 +20,13 @@ describe('Test Free - gutenberg', function() {
         // get rid of that irritating popup
         cy.get('.nux-dot-tip__disable').click();
 
-        var limit = 1;//parseInt(Cypress.env('chart_types').free)
-        for(var i = 1; i <= limit; i++){
+        var charts = [];
+        for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
+            //charts.push(i);
+        }
+        charts.push(1);
+
+        cy.wrap(charts).each((value, i, array) => {
             // insert a visualizer block
             cy.get('div.edit-post-header-toolbar .block-editor-inserter button').click();
             cy.get('.components-popover__content').then(function ($popup) {
@@ -31,20 +36,18 @@ describe('Test Free - gutenberg', function() {
             });
 
             // see the block has the correct elements.
-            cy.get('div[data-type="visualizer/chart"]').should('have.length', limit);
-            cy.get('div[data-type="visualizer/chart"]:nth-child(' + limit + ')').then( ($block) => {
+            cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 1));
+
+            cy.get('div[data-type="visualizer/chart"]:nth-child(' + (i + 1) + ')').then( ($block) => {
                 cy.wrap($block).find('.visualizer-settings__content-option').should('have.length', 2);
+                cy.wrap($block).find('.visualizer-settings__content-option').last().click({force:true});
 
-                cy.wrap($block).find('.visualizer-settings__content-option').last().click();
-                cy.wait( Cypress.env('wait') );
-
-                cy.wrap($block).find('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + limit + ') .visualizer-settings__charts-controls').click();
-                cy.wait( Cypress.env('wait') );
+                cy.wrap($block).find('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + (i + 1) + ') .visualizer-settings__charts-controls').click();
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').should('have.length', 1);
-                cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 1);
+                cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 2);
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
             });
-        }
+        });
     });
 
 })
