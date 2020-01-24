@@ -26,7 +26,6 @@ describe('Test Free - gutenberg', function() {
         }
         charts.push(1);
 
-/*
         cy.wrap(charts).each((value, i, array) => {
             // insert a visualizer block
             cy.get('div.edit-post-header-toolbar .block-editor-inserter button').click();
@@ -48,8 +47,11 @@ describe('Test Free - gutenberg', function() {
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 2);
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
             });
+            expect(true).to.equal(true);
         });
-*/
+
+        expect(true).to.equal(true);
+
     });
 
     it('Test', function() {
