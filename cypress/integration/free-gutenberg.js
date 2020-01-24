@@ -11,7 +11,6 @@ describe('Test Free - gutenberg', function() {
 
     it('Create all charts', function() {
         cy.create_available_charts(Cypress.env('chart_types').free);
-        //cy.create_available_charts(1);
     });
 
     it('Verify insertion of charts', function() {
@@ -24,7 +23,6 @@ describe('Test Free - gutenberg', function() {
         for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
             charts.push(i);
         }
-        //charts.push(1);
 
         cy.wrap(charts).each((value, i, array) => {
             // insert a visualizer block
