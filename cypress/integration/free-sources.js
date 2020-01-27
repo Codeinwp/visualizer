@@ -140,9 +140,9 @@ describe('Test Free - sources', function() {
 
                     cy.wrap($body).find('.json-table tbody tr td select').each( function( el, index ) {
                         if(index === 0){
-                            cy.wrap(el).select('date');
+                            cy.wrap(el).select('date', {force: true});
                         }else{
-                            cy.wrap(el).select('number');
+                            cy.wrap(el).select('number', {force: true});
                         }
                     });
                     cy.wrap($body).find('#json-chart-button').click().then( () => {
