@@ -385,13 +385,6 @@
         }
     }
 
-    if(typeof visualizer !== 'undefined'){
-        // called while updating the chart.
-        visualizer.update = function(){
-            renderChart('canvas', visualizer);
-        };
-    }
-
     $('body').on('visualizer:render:chart:start', function(event, v){
         all_charts = v.charts;
         render(v);
@@ -408,7 +401,8 @@
     });
 
     $('body').on('visualizer:render:currentchart:update', function(event, v){
-        renderChart('canvas', v.visualizer);
+        var data = v || event.detail;
+        renderChart('canvas', data.visualizer);
     });
 
     // front end actions

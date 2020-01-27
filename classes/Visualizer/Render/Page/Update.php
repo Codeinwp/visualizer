@@ -51,7 +51,7 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			if ( $this->settings ) {
 				echo 'win.visualizer.charts.canvas.settings = ', $this->settings, ';';
 			}
-			echo 'win.visualizer.update();';
+			echo 'win.updateChartPreview();';
 			echo '}';
 
 			do_action( 'visualizer_add_update_hook', $this->series, $this->data );
