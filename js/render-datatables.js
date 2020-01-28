@@ -63,14 +63,14 @@
                     // fall-through.
                 case 'library':
                     // for smaller screens...
-                    if(screen.width < 1300){
+                    if(window.innerWidth < 1500){
                         delete chart.settings['scrollX'];
                         delete chart.settings['scrollY'];
                         delete chart.settings['scrollY_int'];
                         $.extend( settings, {
                             scrollX: 150,
-                            scrollY: (0.5 * parseInt($(container).css('height').replace('px',''))),
-                            scrollCollapse: true,
+                            scrollY: (( chart.settings['responsive_bool'] === 'true' ? 0.8 : 0.5 ) * parseInt($(container).css('height').replace('px',''))),
+                            scrollCollapse: true
                         } );
                     }else{
                         if(parseInt(chart.settings['scrollY_int']) > 180){
@@ -200,6 +200,10 @@
             row = [];
             for (j = 0; j < series.length; j++) {
                 var datum = data[i][j];
+                // datum could be undefined for dynamic data (e.g. through json).
+                if(typeof datum === 'undefined'){
+                    datum = data[i][series[j].label];
+                }
                 row[ series[j].label ] = datum;
             }
             rows.push(row);
