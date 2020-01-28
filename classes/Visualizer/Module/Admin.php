@@ -109,6 +109,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		switch ( $feature ) {
 			case 'json':
+			case 'csv':
 				// no more schedules if pro is already active.
 				if ( Visualizer_Module::is_pro() ) {
 					return;
@@ -117,11 +118,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			case 'wp':
 				// fall-through.
 			case 'db':
-				// fall-through.
-				break;
-			case 'csv':
-				// no support for live.
-				unset( $hours['0'] );
 				break;
 			default:
 				return;
