@@ -69,7 +69,7 @@
         });
 
         // collapse other open sections of this group
-        $('.viz-group-title').click(function () {
+        $(document).on('click', '.viz-group-title', function () {
             var parent = $(this).parent();
 
             if (parent.hasClass('open')) {
@@ -89,7 +89,7 @@
         });
 
         // collapse other open subsections of this section
-        $('.viz-section-title').click(function () {
+        $(document).on('click', '.viz-section-title', function () {
             var grandparent = $(this).parent().parent();
             grandparent.find('.viz-section-title.open ~ .viz-section-items').hide();
             grandparent.find('.viz-section-title.open').removeClass('open');
@@ -124,11 +124,11 @@
             $('#canvas').unlock();
         });
 
-        $('.viz-section-title').click(function () {
+        $(document).on('click', '.viz-section-title', function () {
             $(this).toggleClass('open').parent().find('.viz-section-items').toggle();
         });
 
-        $('.more-info').click(function () {
+        $(document).on('click', '.more-info', function () {
             $(this).parent().find('.viz-section-description:first').toggle();
             return false;
         });

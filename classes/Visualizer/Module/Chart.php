@@ -69,6 +69,34 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 
+		$this->_addFilter( 'visualizer_get_sidebar', 'getSidebar', 10, 2 );
+
+	}
+
+	/**
+	 * Generates the HTML of the sidebar for the chart.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function getSidebar( $sidebar, $chart_id ) {
+		$chart      = get_post( $chart_id );
+		$data          = $this->_getChartArray( $chart );
+		$sidebar       = '';
+		$sidebar_class = $this->load_chart_class_name( $chart_id );
+		if ( class_exists( $sidebar_class, true ) ) {
+			$sidebar           = new $sidebar_class( $data['settings'] );
+			$sidebar->__series = $data['series'];
+			$sidebar->__data   = $data['data'];
+		} else {
+			$sidebar = apply_filters( 'visualizer_pro_chart_type_sidebar', '', $data );
+			if ( $sidebar !== '' ) {
+				$sidebar->__series = $data['series'];
+				$sidebar->__data   = $data['data'];
+			}
+		}
+		return str_replace( "'", '"', $sidebar->__toString() );
 	}
 
 	/**
