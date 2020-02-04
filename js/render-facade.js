@@ -81,6 +81,13 @@
     }
 
     $(document).ready(function(){
+
+        // for updating the currently displayed chart (preview mode)
+        window.updateChartPreview = function(){
+            var event = new CustomEvent('visualizer:render:currentchart:update', {detail: {visualizer: visualizer}});
+            document.body.dispatchEvent(event);
+        };
+
         // facade loads N times in the library (where N = the number of different chart libraries supported)
         // so all charts are also loaded N times
         // this will ensure that no matter how many times facade is loaded, it initializes all charts only once.
