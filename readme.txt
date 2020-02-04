@@ -161,8 +161,18 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 12. Bar settings, Series settings
 13. Bar chart
 
-## Changelog ##
-### 3.3.2 - 2019-10-03  ###
+== Changelog ==
+= 3.3.4 - 2019-11-15  = 
+
+* Fix issue with table chart not loading in the block editor
+
+
+= 3.3.3 - 2019-11-12  = 
+
+* Tested upto WordPress 5.3
+
+
+= 3.3.2 - 2019-10-03  = 
 
 * Add support for Dataset schema
 * Horizontal Axis formatting should apply to tooltips
