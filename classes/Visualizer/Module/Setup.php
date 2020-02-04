@@ -279,6 +279,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				$source     = new Visualizer_Source_Json( array( 'url' => $url, 'root' => $root, 'paging' => $paging ) );
 				$source->refresh( $series );
 				break;
+			case 'Visualizer_Source_Csv_Remote':
+				// check if its a live-data chart or a cached-data chart.
+				if ( ! $force ) {
+					$hours = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
+					if ( ! empty( $hours ) ) {
+						// cached, bail!
+						return $chart;
+					}
+				}
+				do_action( 'visualizer_schedule_import' );
+				return get_post( $chart_id );
 			default:
 				return $chart;
 		}
