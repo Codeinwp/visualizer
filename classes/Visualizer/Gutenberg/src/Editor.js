@@ -43,6 +43,14 @@ class Editor extends Component {
 		this.readUploadedFile = this.readUploadedFile.bind( this );
 		this.editURL = this.editURL.bind( this );
 		this.editSchedule = this.editSchedule.bind( this );
+		this.editJSONSchedule = this.editJSONSchedule.bind( this );
+		this.editJSONURL = this.editJSONURL.bind( this );
+		this.editJSONHeaders = this.editJSONHeaders.bind( this );
+		this.editJSONRoot = this.editJSONRoot.bind( this );
+		this.editJSONPaging = this.editJSONPaging.bind( this );
+		this.JSONImportData = this.JSONImportData.bind( this );
+		this.editDatabaseSchedule = this.editDatabaseSchedule.bind( this );
+		this.databaseImportData = this.databaseImportData.bind( this );
 		this.uploadData = this.uploadData.bind( this );
 		this.getChartData = this.getChartData.bind( this );
 		this.editChartData = this.editChartData.bind( this );
@@ -139,7 +147,79 @@ class Editor extends Component {
 	editSchedule( schedule ) {
 		let chart = { ...this.state.chart };
 		chart['visualizer-chart-schedule'] = schedule;
+		this.setState({
+			chart,
+			isModified: true
+		});
+	}
+
+	editJSONSchedule( schedule ) {
+		let chart = { ...this.state.chart };
+		chart['visualizer-json-schedule'] = schedule;
+		this.setState({
+			chart,
+			isModified: true
+		});
+	}
+
+	editJSONURL( url ) {
+		let chart = { ...this.state.chart };
+		chart['visualizer-json-url'] = url;
 		this.setState({ chart });
+	}
+
+	editJSONHeaders( headers ) {
+		let chart = { ...this.state.chart };
+		delete headers.username;
+		delete headers.password;
+		chart['visualizer-json-headers'] = headers;
+		this.setState({ chart });
+	}
+
+	editJSONRoot( root ) {
+		let chart = { ...this.state.chart };
+		chart['visualizer-json-root'] = root;
+		this.setState({ chart });
+	}
+
+	editJSONPaging( root ) {
+		let chart = { ...this.state.chart };
+		chart['visualizer-json-paging'] = root;
+		this.setState({ chart });
+	}
+
+	JSONImportData( name, series, data ) {
+		let chart = { ...this.state.chart };
+		chart['visualizer-source'] = name;
+		chart['visualizer-default-data'] = 0;
+		chart['visualizer-series'] = series;
+		chart['visualizer-data'] = data;
+		this.setState({
+			chart,
+			isModified: true
+		});
+	}
+
+	editDatabaseSchedule( schedule ) {
+		let chart = { ...this.state.chart };
+		chart['visualizer-db-schedule'] = schedule;
+		this.setState({
+			chart,
+			isModified: true
+		});
+	}
+
+	databaseImportData( query, name, series, data ) {
+		let chart = { ...this.state.chart };
+		chart['visualizer-source'] = name;
+		chart['visualizer-default-data'] = 0;
+		chart['visualizer-series'] = series;
+		chart['visualizer-data'] = data;
+		chart['visualizer-db-query'] = query;
+		this.setState({
+			chart,
+			isModified: true
+		});
 	}
 
 	uploadData( scheduled = false ) {
@@ -235,7 +315,6 @@ class Editor extends Component {
 		let chart = { ...this.state.chart };
 		let series = [];
 		let settings = { ...chart['visualizer-settings'] };
-
 		chartData[0].map( ( i, index ) => {
 			series[index] = {
 				label: i,
@@ -310,7 +389,7 @@ class Editor extends Component {
 			}
 			);
 
-		apiRequest({ path: `/visualizer/v1/update-chart?id=${this.props.attributes.id}`, method: 'POST', data: data }).then(
+		apiRequest({ path: `/visualizer/v1/update-chart?id=${ this.props.attributes.id }`, method: 'POST', data: data }).then(
 			( data ) => {
 
 				this.setState({
@@ -411,6 +490,14 @@ class Editor extends Component {
 						readUploadedFile={ this.readUploadedFile }
 						editURL={ this.editURL }
 						editSchedule={ this.editSchedule }
+						editJSONURL={ this.editJSONURL }
+						editJSONHeaders={ this.editJSONHeaders }
+						editJSONSchedule={ this.editJSONSchedule }
+						editJSONRoot={ this.editJSONRoot }
+						editJSONPaging={ this.editJSONPaging }
+						JSONImportData={ this.JSONImportData }
+						editDatabaseSchedule={ this.editDatabaseSchedule }
+						databaseImportData={ this.databaseImportData }
 						uploadData={ this.uploadData }
 						getChartData={ this.getChartData }
 						editChartData={ this.editChartData }

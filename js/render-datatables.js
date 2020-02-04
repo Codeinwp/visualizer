@@ -62,15 +62,26 @@
                 case 'post':
                     // fall-through.
                 case 'library':
-                    // remove scrollY if its greater than what will fit in the box (along with the legend).
-                    if(parseInt(chart.settings['scrollY_int']) > 180){
-                        chart.settings['scrollY_int'];
-                    }
-                    delete chart.settings['scrollX'];
-                    $.extend( settings, { 
+                    // for smaller screens...
+                    if(window.innerWidth < 1500){
+                        delete chart.settings['scrollX'];
+                        delete chart.settings['scrollY'];
+                        delete chart.settings['scrollY_int'];
+                        $.extend( settings, {
+                            scrollX: 150,
+                            scrollY: (( chart.settings['responsive_bool'] === 'true' ? 0.8 : 0.5 ) * parseInt($(container).css('height').replace('px',''))),
+                            scrollCollapse: true
+                        } );
+                    }else{
+                        if(parseInt(chart.settings['scrollY_int']) > 180){
+                            chart.settings['scrollY_int'];
+                        }
+                        delete chart.settings['scrollX'];
+                        $.extend( settings, {
                             scrollX: 150,
                             scrollY: 180,
-                    } );
+                        } );
+                    }
                     break;
                 case 'chart':
                     delete chart.settings['scrollX']; // jshint ignore:line
@@ -140,6 +151,9 @@
                     if(parseInt(valoo) > 0){
                         valoo = parseInt(valoo);
                     }
+                    if(i === 'pageLength' && (valoo === '' || parseInt(valoo) < 0)){
+                        valoo = 1;
+                    }
             }
 
             // if the setting name has an '_' this means it is a sub-setting e.g. select_items means { select: { items: ... } }.
@@ -186,6 +200,10 @@
             row = [];
             for (j = 0; j < series.length; j++) {
                 var datum = data[i][j];
+                // datum could be undefined for dynamic data (e.g. through json).
+                if(typeof datum === 'undefined'){
+                    datum = data[i][series[j].label];
+                }
                 row[ series[j].label ] = datum;
             }
             rows.push(row);

@@ -71,6 +71,7 @@ class ChartImport extends Component {
 
 							<Button
 								isPrimary
+								isLarge
 								isBusy={ 'getChartData' === this.props.isLoading }
 								onClick={ () => this.props.getChartData( this.state.id ) }
 							>

@@ -386,5 +386,83 @@ abstract class Visualizer_Source {
 		return $this->_error;
 	}
 
+	/**
+	 * Fetches information from the editable table and parses it to build series and data arrays.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 * @return boolean TRUE on success, otherwise FALSE.
+	 */
+	public function fetchFromEditableTable() {
+		if ( empty( $this->_args ) ) {
+			return false;
+		}
+
+		$this->_fetchSeriesFromEditableTable();
+		$this->_fetchDataFromEditableTable();
+		return true;
+	}
+
+	/**
+	 * Fetches series information from the editable table. This is fetched only through the UI and not while refreshing the chart data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 */
+	private function _fetchSeriesFromEditableTable() {
+		$params = $this->_args;
+		$headers = array_filter( $params['header'] );
+		$types = array_filter( $params['type'] );
+		$header_row = $type_row = array();
+		if ( $headers ) {
+			foreach ( $headers as $header ) {
+				if ( ! empty( $types[ $header ] ) ) {
+					$this->_series[] = array(
+						'label' => $header,
+						'type'  => $types[ $header ],
+					);
+				}
+			}
+		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Series found for %s = %s', print_r( $this->_args, true ), print_r( $this->_series, true ) ), 'debug', __FILE__, __LINE__ );
+
+		return true;
+	}
+
+
+	/**
+	 * Fetches data information from the editable table.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 */
+	private function _fetchDataFromEditableTable() {
+		$params = $this->_args;
+		$headers    = wp_list_pluck( $this->_series, 'label' );
+		$this->fetch();
+
+		$data = $this->_data;
+		$this->_data = array();
+
+		foreach ( $data as $line ) {
+			$data_row = array();
+			foreach ( $line as $header => $value ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+				if ( in_array( $header, $headers ) ) {
+					$data_row[] = $value;
+				}
+			}
+			$this->_data[] = $this->_normalizeData( $data_row );
+		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Data found for %s = %s', print_r( $this->_args, true ), print_r( $this->_data, true ) ), 'debug', __FILE__, __LINE__ );
+
+		return true;
+	}
+
 
 }

@@ -67,13 +67,15 @@ class Visualizer_Gutenberg_Block {
 	 * Enqueue front end and editor JavaScript and CSS
 	 */
 	public function enqueue_gutenberg_scripts() {
+		global $wp_version;
+
 		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
 		$handsontableJS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js';
 		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css';
 		$handsontableCSS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css';
 
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
-			$version = filemtime( VISUALIZER_ABSPATH . 'classes/Visualizer/Gutenberg/build/block.js' );
+			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
 		} else {
 			$version = $this->version;
 		}
@@ -91,18 +93,39 @@ class Visualizer_Gutenberg_Block {
 			}
 		}
 
+		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping( null, false );
+
 		$translation_array = array(
 			'isPro'     => $type,
 			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
 			'absurl'    => VISUALIZER_ABSURL,
 			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
 			'adminPage' => menu_page_url( 'visualizer', false ),
+			'sqlTable'  => $table_col_mapping,
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
 		// Enqueue frontend and editor block styles
 		wp_enqueue_style( 'handsontable', $handsontableCSS );
 		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $version );
+
+		if ( version_compare( $wp_version, '4.9.0', '>' ) ) {
+
+			wp_enqueue_code_editor(
+				array(
+					'type' => 'sql',
+					'codemirror' => array(
+						'autofocus'         => true,
+						'lineWrapping'      => true,
+						'dragDrop'          => false,
+						'matchBrackets'     => true,
+						'autoCloseBrackets' => true,
+						'extraKeys'         => array( 'Ctrl-Space' => 'autocomplete' ),
+						'hintOptions'       => array( 'tables' => $table_col_mapping ),
+					),
+				)
+			);
+		}
 	}
 	/**
 	 * Hook server side rendering into render callback
@@ -142,6 +165,72 @@ class Visualizer_Gutenberg_Block {
 			'chart_data',
 			array(
 				'get_callback' => array( $this, 'get_visualizer_data' ),
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/get-query-data',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_query_data' ),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/get-json-root',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_json_root_data' ),
+				'args'     => array(
+					'url' => array(
+						'sanitize_callback' => 'esc_url_raw',
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/get-json-data',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_json_data' ),
+				'args'     => array(
+					'url' => array(
+						'sanitize_callback' => 'esc_url_raw',
+					),
+					'chart' => array(
+						'sanitize_callback' => 'absint',
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+
+		register_rest_route(
+			'visualizer/v' . VISUALIZER_REST_VERSION,
+			'/set-json-data',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'set_json_data' ),
+				'args'     => array(
+					'url' => array(
+						'sanitize_callback' => 'esc_url_raw',
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
 			)
 		);
 
@@ -210,7 +299,8 @@ class Visualizer_Gutenberg_Block {
 
 		$data['visualizer-chart-type'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 
-		$data['visualizer-chart-library'] = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		$library = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		$data['visualizer-chart-library'] = $library;
 
 		$data['visualizer-source'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SOURCE, true );
 
@@ -228,13 +318,89 @@ class Visualizer_Gutenberg_Block {
 		// handle data filter hooks
 		$data['visualizer-data'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( get_the_content( $post_id ) ) ), $post_id, $data['visualizer-chart-type'] );
 
+		$data['visualizer-data-exploded'] = '';
+		// handle annotations for google charts
+		if ( 'GoogleCharts' === $library ) {
+			// this will contain the data of both axis.
+			$settings = $data['visualizer-settings'];
+			// this will contain data only of Y axis.
+			$series = $data['visualizer-series'];
+			$annotations = array();
+			if ( isset( $settings['series'] ) ) {
+				foreach ( $settings['series'] as $index => $serie ) {
+					// skip X axis data.
+					if ( $index === 0 ) {
+						continue;
+					}
+					if ( ! empty( $serie['role'] ) ) {
+						// this series is some kind of annotation, so let's collect its index.
+						// the index will be +1 because the X axis value is index 0, which is being ignored.
+						$annotations[ 'role' . ( intval( $index ) + 1 ) ] = $serie['role'];
+					}
+				}
+			}
+			if ( ! empty( $annotations ) ) {
+				$exploded_data = array();
+				$series_names = array();
+				foreach ( $series as $index => $serie ) {
+					// skip X axis data.
+					if ( $index === 0 ) {
+						continue;
+					}
+					if ( array_key_exists( 'role' . $index, $annotations ) ) {
+						$series_names[] = (object) array( 'role' => $annotations[ 'role' . $index ], 'type' => $serie['type'] );
+					} else {
+						$series_names[] = $serie['label'];
+					}
+				}
+				$exploded_data[] = $series_names;
+
+				foreach ( $data['visualizer-data'] as $datum ) {
+					// skip X axis data.
+					unset( $datum[0] );
+					$exploded_data[] = $datum;
+				}
+				$data['visualizer-data-exploded'] = array( $exploded_data );
+			}
+		}
+
 		$import = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_URL, true );
 
 		$schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
 
+		$db_schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+
+		$db_query = get_post_meta( $post_id, Visualizer_Plugin::CF_DB_QUERY, true );
+
+		$json_url = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_URL, true );
+
+		$json_headers = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+
+		$json_schedule = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
+
+		$json_root = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_ROOT, true );
+
+		$json_paging = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_PAGING, true );
+
 		if ( ! empty( $import ) && ! empty( $schedule ) ) {
 			$data['visualizer-chart-url'] = $import;
 			$data['visualizer-chart-schedule'] = $schedule;
+		}
+
+		if ( ! empty( $db_schedule ) && ! empty( $db_query ) ) {
+			$data['visualizer-db-schedule'] = $db_schedule;
+			$data['visualizer-db-query'] = $db_query;
+		}
+
+		if ( ! empty( $json_url ) ) {
+			$data['visualizer-json-schedule'] = $json_schedule;
+			$data['visualizer-json-url'] = $json_url;
+			$data['visualizer-json-headers'] = $json_headers;
+			$data['visualizer-json-root'] = $json_root;
+
+			if ( Visualizer_Module::is_pro() && ! empty( $json_paging ) ) {
+				$data['visualizer-json-paging'] = $json_paging;
+			}
 		}
 
 		if ( Visualizer_Module::is_pro() ) {
@@ -246,6 +412,102 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Returns the data for the query.
+	 *
+	 * @access public
+	 */
+	public function get_query_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$source = new Visualizer_Source_Query( stripslashes( $data['query'] ) );
+		$html = $source->fetch( true );
+		$source->fetch( false );
+		$name = $source->getSourceName();
+		$series = $source->getSeries();
+		$data = $source->getRawData();
+		$error = '';
+		if ( empty( $html ) ) {
+			$error = $source->get_error();
+			wp_send_json_error( array( 'msg' => $error ) );
+		}
+		wp_send_json_success( array( 'table' => $html, 'name' => $name, 'series' => $series, 'data' => $data ) );
+	}
+
+	/**
+	 * Returns the JSON root.
+	 *
+	 * @access public
+	 */
+	public function get_json_root_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$source = new Visualizer_Source_Json( $data );
+
+		$roots = $source->fetchRoots();
+		if ( empty( $roots ) ) {
+			wp_send_json_error( array( 'msg' => $source->get_error() ) );
+		}
+
+		wp_send_json_success( array( 'url' => $data['url'], 'roots' => $roots ) );
+	}
+
+	/**
+	 * Returns the JSON data.
+	 *
+	 * @access public
+	 */
+	public function get_json_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$chart_id = $data['chart'];
+
+		if ( empty( $chart_id ) ) {
+			wp_die();
+		}
+
+		$source = new Visualizer_Source_Json( $data );
+		$source->fetch();
+		$table = $source->getRawData();
+
+		if ( empty( $table ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
+		}
+
+		$table = Visualizer_Render_Layout::show( 'editor-table', $table, $chart_id, 'viz-json-table', false, false );
+		wp_send_json_success( array( 'table' => $table, 'root' => $data['root'], 'url' => $data['url'], 'paging' => $source->getPaginationElements() ) );
+	}
+
+	/**
+	 * Set the JSON data.
+	 *
+	 * @access public
+	 */
+	public function set_json_data( $data ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$source = new Visualizer_Source_Json( $data );
+
+		$table = $source->fetch();
+		if ( empty( $table ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
+		}
+
+		$source->fetchFromEditableTable();
+		$name = $source->getSourceName();
+		$series = json_encode( $source->getSeries() );
+		$data = json_encode( $source->getRawData() );
+		wp_send_json_success( array( 'name' => $name, 'series' => $series, 'data' => $data ) );
 	}
 
 	/**
@@ -275,6 +537,41 @@ class Visualizer_Gutenberg_Block {
 			} else {
 				delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
+			}
+
+			if ( $source_type === 'Visualizer_Source_Query' ) {
+				$db_schedule = intval( $data['visualizer-db-schedule'] );
+				$db_query = $data['visualizer-db-query'];
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
+			} else {
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
+			}
+
+			if ( $source_type === 'Visualizer_Source_Json' ) {
+				$json_schedule = intval( $data['visualizer-json-schedule'] );
+				$json_url = esc_url_raw( $data['visualizer-json-url'] );
+				$json_headers = esc_url_raw( $data['visualizer-json-headers'] );
+				$json_root = $data['visualizer-json-root'];
+				$json_paging = $data['visualizer-json-paging'];
+
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE, $json_schedule );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL, $json_url );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS, $json_headers );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT, $json_root );
+
+				if ( ! empty( $json_paging ) ) {
+					update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING, $json_paging );
+				} else {
+					delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
+				}
+			} else {
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
 			}
 
 			if ( Visualizer_Module::is_pro() ) {
@@ -450,9 +747,19 @@ class Visualizer_Gutenberg_Block {
 	 */
 	public function add_rest_query_vars( $args, \WP_REST_Request $request ) {
 		if ( isset( $request['meta_key'] ) && isset( $request['meta_value'] ) ) {
-			$args['meta_key'] = $request->get_param( 'meta_key' );
-			$args['meta_value'] = $request->get_param( 'meta_value' );
-			$args['meta_compare'] = '!=';
+			$args['meta_query'] = array(
+				'relation'  => 'OR',
+				array(
+					'key'       => $request->get_param( 'meta_key' ),
+					'value'     => $request->get_param( 'meta_value' ),
+					'compare'   => '!=',
+				),
+				array(
+					'key'       => $request->get_param( 'meta_key' ),
+					'value'     => $request->get_param( 'meta_value' ),
+					'compare'   => 'NOT EXISTS',
+				),
+			);
 		}
 		return $args;
 	}

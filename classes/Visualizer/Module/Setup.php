@@ -51,8 +51,10 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
-		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
+		$this->_addFilter( 'visualizer_get_chart_counts', 'getUsage', 10, 2 );
 
+		// only for testing
+		// $this->_addAction( 'admin_init', 'getUsage' );
 	}
 	/**
 	 * Fetches the SDK logger data.
@@ -62,34 +64,80 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * @access public
 	 */
 	public function getLoggerData( $data ) {
-		return $this->getChartCountsByTypeAndMeta();
+		return $this->getUsage( $data );
 	}
 
 	/**
-	 * Fetches the types of charts created and their counts.
+	 * Fetches the usage of charts.
 	 *
+	 * @param array $data The default data that needs to be sent.
 	 * @param array $meta_keys An array of name vs. meta keys - to return how many charts have these keys.
-	 * @access private
+	 *
+	 * @access public
 	 */
-	public function getChartCountsByTypeAndMeta( $meta_keys = array() ) {
-		$charts                 = array();
-		$charts['chart_types']  = array();
-		// the initial query arguments to fetch charts
+	public function getUsage( $data, $meta_keys = array() ) {
+		$charts                 = array( 'types' => array(), 'sources' => array(), 'library' => array(), 'permissions' => 0, 'manual_config' => 0, 'scheduled' => 0 );
 		$query_args = array(
 			'post_type'         => Visualizer_Plugin::CPT_VISUALIZER,
 			'posts_per_page'    => 300,
+			'post_status'       => 'publish',
 			'fields'            => 'ids',
 			'no_rows_found'     => false,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
-
 		);
 
+		// default permissions.
+		$default_perms = array(
+			'read'          => 'all',
+			'read-specific' => null,
+			'edit'          => 'roles',
+			'edit-specific' => array( 'administrator' ),
+		);
+
+		// collect all schedules chart ids.
+		$scheduled      = array_merge(
+			array_keys( get_option( Visualizer_Plugin::CF_CHART_SCHEDULE, array() ) ),
+			array_keys( get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() ) )
+		);
 		$query  = new WP_Query( $query_args );
 		while ( $query->have_posts() ) {
 			$chart_id   = $query->next_post();
 			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-			$charts['chart_types'][ $type ]    = isset( $charts['chart_types'][ $type ] ) ? $charts['chart_types'][ $type ] + 1 : 1;
+			$charts['types'][ $type ]    = isset( $charts['types'][ $type ] ) ? $charts['types'][ $type ] + 1 : 1;
+			$source     = get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true );
+			$charts['sources'][ $source ]    = isset( $charts['sources'][ $source ] ) ? $charts['sources'][ $source ] + 1 : 1;
+			$lib     = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+			$charts['library'][ $lib ]    = isset( $charts['library'][ $lib ] ) ? $charts['library'][ $lib ] + 1 : 1;
+			$settings       = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+			if ( array_key_exists( 'manual', $settings ) && ! empty( $settings['manual'] ) ) {
+				$charts['manual_config']    = $charts['manual_config'] + 1;
+			}
+
+			// phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
+			if ( in_array( $chart_id, $scheduled, false ) ) {
+				$charts['scheduled']    = $charts['scheduled'] + 1;
+			}
+
+			if ( Visualizer_Module::is_pro() ) {
+				$permissions = get_post_meta( $chart_id, Visualizer_PRO::CF_PERMISSIONS, true );
+				if ( empty( $permissions ) ) {
+					continue;
+				}
+				$permissions = $permissions['permissions'];
+				$customized = false;
+				foreach ( $default_perms as $key => $val ) {
+					if ( ! is_array( $val ) && ! is_null( $val ) && isset( $permissions[ $key ] ) && $permissions[ $key ] !== $val ) {
+						$customized = true;
+					} elseif ( is_array( $val ) && ! is_null( $val ) && isset( $permissions[ $key ] ) && count( $permissions[ $key ] ) !== count( $val ) ) {
+						$customized = true;
+					}
+				}
+				if ( $customized ) {
+					$charts['permissions'] = $charts['permissions'] + 1;
+				}
+			}
+
 			if ( ! empty( $meta_keys ) ) {
 				foreach ( $meta_keys as $name => $key ) {
 					$data   = get_post_meta( $chart_id, $key, true );
@@ -101,6 +149,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				}
 			}
 		}
+
 		return $charts;
 	}
 
@@ -209,7 +258,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				}
 
 				$params     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, true );
-				$source     = new Visualizer_Source_Query( $params );
+				$source     = new Visualizer_Source_Query( $params, $chart_id );
 				$source->fetch( false );
 				$load_series = true;
 				break;
@@ -249,6 +298,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			);
 
 			$chart = get_post( $chart_id );
+			delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
+		} else {
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, sprintf( 'Error while updating chart: %s', $error ) );
 		}
 
 		return $chart;

@@ -176,7 +176,9 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					'pageLength_int',
 					$this->pageLength_int,
 					esc_html__( 'The number of rows in each page, when paging is enabled.', 'visualizer' ),
-					'10'
+					10,
+					'number',
+					array( 'min' => 1 )
 				);
 
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
