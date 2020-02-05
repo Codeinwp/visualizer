@@ -611,6 +611,64 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
+	 * Adds the display filters to be used in the meta_query while displaying the charts.
+	 */
+	private function getDisplayFilters( &$query_args ) {
+		$query  = array();
+
+		// add chart type filter to the query arguments
+		$type = filter_input( INPUT_GET, 'type' );
+		if ( $type && in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
+			$query[] = array(
+				'key'     => Visualizer_Plugin::CF_CHART_TYPE,
+				'value'   => $type,
+				'compare' => '=',
+			);
+		}
+
+		// add chart library filter to the query arguments
+		$library = filter_input( INPUT_GET, 'library' );
+		if ( $library ) {
+			$query[] = array(
+				'key'     => Visualizer_Plugin::CF_CHART_LIBRARY,
+				'value'   => $library,
+				'compare' => '=',
+			);
+		}
+
+		// add date filter to the query arguments
+		$date = filter_input( INPUT_GET, 'date' );
+		$possible = array_keys( Visualizer_Plugin::getSupportedDateFilter() );
+		if ( $date && in_array( $date, $possible, true ) ) {
+			$query_args['date_query'] = array(
+				'after' => "$date -1 day",
+				'inclusive' => true,
+			);
+		}
+
+		// add source filter to the query arguments
+		$source = filter_input( INPUT_GET, 'source' );
+		if ( $source ) {
+			$source = ucwords( $source );
+			$source = "Visualizer_Source_{$source}";
+			$query[] = array(
+				'key'     => Visualizer_Plugin::CF_SOURCE,
+				'value'   => $source,
+				'compare' => '=',
+			);
+		}
+
+		$query_args['meta_query'] = $query;
+
+		$orderby = filter_input( INPUT_GET, 'orderby' );
+		$order = filter_input( INPUT_GET, 'order' );
+		if ( $orderby ) {
+			$query_args['order_by'] = $orderby;
+		}
+		$query_args['order'] = empty( $order ) ? 'desc' : $order;
+	}
+
+	/**
 	 * Get the instance of WP_Query that fetches the charts as per the given criteria.
 	 */
 	private function getQuery() {
@@ -637,19 +695,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'posts_per_page' => 6,
 			'paged'          => $page,
 		);
-		// add chart type filter to the query arguments
-		$filter = filter_input( INPUT_GET, 'type' );
-		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes(), true ) ) {
-			$query_args['meta_query'] = array(
-				array(
-					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
-					'value'   => $filter,
-					'compare' => '=',
-				),
-			);
-		} else {
-			$filter = 'all';
-		}
+
+		$this->getDisplayFilters( $query_args );
+
 		// Added by Ash/Upwork
 		$filterByMeta = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
 		if ( $filterByMeta ) {
@@ -662,7 +710,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$meta[]                   = $query;
 			$query_args['meta_query'] = $meta;
 		}
-		$q = new WP_Query( $query_args );
+		$q = new WP_Query( apply_filters( 'visualizer_pre_query', $query_args ) );
 		return $q;
 	}
 

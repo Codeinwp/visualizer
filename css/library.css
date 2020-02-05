@@ -288,6 +288,10 @@ input:checked + .visualizer-slider:before {
 	text-align: center;
 }
 
+div.visualizer-library-form .viz-filter {
+	vertical-align: middle;
+}
+
 button.media-modal-close {
 	display: none !important;
 }

@@ -68,6 +68,146 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	}
 
 	/**
+	 * Displays the search form.
+	 */
+	private function getDisplayForm() {
+		echo '<div class="visualizer-library-form">
+		<form action="' . admin_url( 'admin.php' ) . '">
+			<input type="hidden" name="page" value="' . Visualizer_Plugin::NAME . '"/>
+				<select class="viz-filter" name="type">
+		';
+
+		echo '<option value="" selected>' . __( 'All types', 'visualizer' ) . '</option>';
+
+		$type = isset( $_GET['type'] ) ? $_GET['type'] : '';
+		$enabled = array();
+		$disabled = array();
+		foreach ( $this->types as $id => $array ) {
+			if ( ! is_array( $array ) ) {
+				// support for old pro
+				$array = array( 'enabled' => true, 'name' => $array );
+			}
+			if ( ! $array['enabled'] ) {
+				$disabled[ $id ] = $array['name'];
+				continue;
+			}
+			$enabled[ $id ] = $array['name'];
+		}
+
+		asort( $enabled );
+		asort( $disabled );
+
+		foreach ( $enabled as $id => $name ) {
+			echo '<option value="' . esc_attr( $id ) . '" ' . selected( $type, $id ) . '>' . $name . '</option>';
+		}
+
+		if ( $disabled ) {
+			echo '<optgroup label="' . __( 'Not available', 'visualizer' ) . '">';
+			foreach ( $disabled as $id => $name ) {
+				echo '<option value="' . esc_attr( $id ) . '" ' . selected( $type, $id ) . ' disabled>' . $name . '</option>';
+			}
+			echo '</optgroup>';
+		}
+
+		echo '
+				</select>
+				<select class="viz-filter" name="library">
+		';
+
+		$libraries = array( '', 'ChartJS', 'DataTable', 'GoogleCharts' );
+		$library = isset( $_GET['library'] ) ? $_GET['library'] : '';
+		foreach ( $libraries as $lib ) {
+			echo '<option value="' . esc_attr( $lib ) . '" ' . selected( $library, $lib ) . '>' . ( $lib === '' ? __( 'All libraries', 'visualizer' ) : $lib ) . '</option>';
+		}
+
+		echo '
+				</select>
+				<select class="viz-filter" name="date">
+		';
+
+		$dates = Visualizer_Plugin::getSupportedDateFilter();
+		$date = isset( $_GET['date'] ) ? $_GET['date'] : '';
+		foreach ( Visualizer_Plugin::getSupportedDateFilter() as $dt => $label ) {
+			echo '<option value="' . esc_attr( $dt ) . '" ' . selected( $date, $dt ) . '>' . $label . '</option>';
+		}
+
+		echo '
+				</select>
+				<select class="viz-filter" name="source">
+		';
+
+		$disabled = array();
+		$sources = array( 'json' => __( 'JSON', 'visualizer' ), 'csv' => __( 'Local CSV', 'visualizer' ), 'csv_remote' => __( 'Remote CSV', 'visualizer' ), 'query' => __( 'Database', 'visualizer' ), 'query_wp' => __( 'WordPress', 'visualizer' ) );
+		if ( ! Visualizer_Module::is_pro() ) {
+			$disabled['query'] = $sources['query'];
+			unset( $sources['query'] );
+		}
+		if ( ! apply_filters( 'visualizer_is_business', false ) ) {
+			$disabled['query_wp'] = $sources['query_wp'];
+			unset( $sources['query_wp'] );
+		}
+		$sources = array_filter( $sources );
+		uasort(
+			$sources, function( $a, $b ) {
+				if ( $a == $b ) {
+					return 0;
+				}
+				return ( $a < $b ) ? -1 : 1;
+			}
+		);
+
+		$source = isset( $_GET['source'] ) ? $_GET['source'] : '';
+		echo '<option value="">' . __( 'All sources', 'visualizer' ) . '</option>';
+		foreach ( $sources as $field => $label ) {
+			echo '<option value="' . esc_attr( $field ) . '" ' . selected( $source, $field ) . '>' . $label . '</option>';
+		}
+
+		if ( $disabled ) {
+			echo '<optgroup label="' . __( 'Not available', 'visualizer' ) . '">';
+			foreach ( $disabled as $id => $name ) {
+				echo '<option value="' . esc_attr( $id ) . '" ' . selected( $type, $id ) . ' disabled>' . $name . '</option>';
+			}
+			echo '</optgroup>';
+		}
+
+		$name = isset( $_GET['s'] ) ? $_GET['s'] : '';
+		echo '
+				</select>
+				<input class="viz-filter"  type="text" name="s" placeholder="' . __( 'Enter title', 'visualizer' ) . '" value="' . esc_attr( $name ) . '">
+		';
+
+		echo '
+				<span class="viz-filter">|</span>
+				<select class="viz-filter" name="orderby">
+		';
+
+		$order_by_fields = apply_filters( 'visualizer_filter_order_by', array( 'date' => __( 'Date', 'visualizer' ), 's' => __( 'Title', 'visualizer' ) ) );
+		$order_by = isset( $_GET['orderby'] ) ? $_GET['orderby'] : '';
+		echo '<option value="">' . __( 'Order By', 'visualizer' ) . '</option>';
+		foreach ( $order_by_fields as $field => $label ) {
+			echo '<option value="' . esc_attr( $field ) . '" ' . selected( $order_by, $field ) . '>' . $label . '</option>';
+		}
+
+		echo '
+				</select>
+				<select class="viz-filter" name="order">
+		';
+
+		$order_type = array( 'desc' => __( 'Descending', 'visualizer' ), 'asc' => __( 'Ascending', 'visualizer' ) );
+		$order = isset( $_GET['order'] ) ? $_GET['order'] : 'desc';
+		foreach ( $order_type as $field => $label ) {
+			echo '<option value="' . esc_attr( $field ) . '" ' . selected( $order, $field ) . '>' . $label . '</option>';
+		}
+
+		echo '
+				</select>
+				<input type="submit" class="viz-filter button button-secondary" value="' . __( 'Apply Filters', 'visualizer' ) . '">
+				<input type="button" id="viz-lib-reset" class="viz-filter button button-secondary" value="' . __( 'Clear Filters', 'visualizer' ) . '">
+		</form>
+		</div>';
+	}
+
+	/**
 	 * Renders library content.
 	 *
 	 * @since 1.0.0
@@ -83,47 +223,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		// Added by Ash/Upwork
 		echo $this->custom_css;
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
-		echo '<ul class="subsubsub">';
-		// All tab.
-		echo '<li class="visualizer-list-item all"><a class="' . ( ! isset( $_GET['type'] ) || empty( $_GET['type'] ) ? 'current' : '' ) . '" href="', esc_url( add_query_arg( array( 'vpage' => false, 'type' => false, 'vaction' => false, 's' => false ) ) ), '">' . __( 'All', 'visualizer' ) . '</a> | </li>';
-		foreach ( $this->types as $type => $array ) {
-			if ( ! is_array( $array ) ) {
-				// support for old pro
-				$array = array( 'enabled' => true, 'name' => $array );
-			}
-			$label = $array['name'];
-			$link  = '<a class=" " href="' . esc_url(
-				add_query_arg(
-					array(
-						'type'  => $type,
-						'vpage' => false,
-						'vaction' => false,
-						's' => false,
-					)
-				)
-			) . '">';
-			if ( ! $array['enabled'] ) {
-				$link = "<a class=' visualizer-pro-only' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
-			}
-			echo '<li class="visualizer-list-item ' . esc_attr( $this->type ) . '">';
-			if ( $type === $this->type ) {
-				echo '<a class="current" href="', esc_url( add_query_arg( 'vpage', false ) ), '">';
-				echo $label;
-				echo '</a>';
-			} else {
-				echo $link;
-				echo $label;
-				echo '</a>';
-			}
-			echo ' | </li>';
-		}
-		echo '</ul>';
-		echo '<form action="" method="get"><p id="visualizer-search" class="search-box">
-                <input type="search" placeholder="' . __( 'Enter title', 'visualizer' ) . '" name="s" value="' . $filterBy . '">
-                <input type="hidden" name="page" value="visualizer">
-                <button type="submit" id="search-submit" title="' . __( 'Search', 'visualizer' ) . '"><i class="dashicons dashicons-search"></i></button>
-                <button type="button" class="add-new-chart" title="' . __( 'Add New', 'visualizer' ) . '"><i class="dashicons dashicons-plus-alt"></i></button>
-           </p> </form>';
+		$this->getDisplayForm();
 		echo '</div>';
 		echo '<div id="visualizer-content-wrapper">';
 		if ( ! empty( $this->charts ) ) {

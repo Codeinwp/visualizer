@@ -45,6 +45,25 @@
     $(document).ready(function () {
         $('.visualizer-chart, .visualizer-library-pagination').fadeIn(500);
 
+        // clears the filters in the library form and submits.
+        $('#viz-lib-reset').on('click', function(e){
+            e.preventDefault();
+            $(this).parent('form')[0].reset();
+            $(this).parent('form').find('.viz-filter').each(function(index, el){
+                var tag = $(el).prop('tagName').toLowerCase() + (typeof $(el).attr('type') !== 'undefined' ? $(el).attr('type').toLowerCase() : '');
+                switch(tag){
+                    case 'select':
+                        $(el).prop('selectedIndex', 0);
+                        break;
+                    case 'inputtext':
+                        $(el).val('');
+                        break;
+                }
+
+            });
+            $(this).parent('form').submit();
+        });
+
         $('.visualizer-chart-shortcode').click(function (e) {
             var range, selection;
 

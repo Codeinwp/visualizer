@@ -114,6 +114,13 @@ class Visualizer_Plugin {
 	private $_modules = array();
 
 	/**
+	 * Returns the date queries supported in the library date filter.
+	 */
+	public static function getSupportedDateFilter() {
+		return apply_filters( 'visualizer_filter_by_date', array( '' => __( 'All dates', 'visualizer' ), 'yesterday' => __( 'Yesterday', 'visualizer' ), 'last week' => __( 'Last Week', 'visualizer' ), 'last month' => __( 'Last Month', 'visualizer' ), 'last year' => __( 'Last Year', 'visualizer' ) ) );
+	}
+
+	/**
 	 * Private constructor.
 	 *
 	 * @since 1.0.0
