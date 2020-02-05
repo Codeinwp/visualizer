@@ -378,6 +378,7 @@ div.viz-group-content .viz-group-description {
 
 #toolbar .push-right {
 	float: right;
+	margin-right: 10px;
 }
 
 #toolbar .push-left {
@@ -456,14 +457,14 @@ div.viz-group-content .viz-group-description {
 	padding: 15px;
 	border: 1px solid #e0e0e0;
 	background-color: white;
-	background-image: url(../images/chart_types_june2019_g.png);
+	background-image: url(../images/chart_types_v340_g.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 }
 
 .type-label-selected,
 .type-box > .type-label:hover {
-	background-image: url(../images/chart_types_june2019.png);
+	background-image: url(../images/chart_types_v340.png);
 }
 
 .type-box-area .type-label {
@@ -496,6 +497,10 @@ div.viz-group-content .viz-group-description {
 
 .type-box-bar .type-label {
 	background-position: -300px -225px;
+}
+
+.type-box-bubble .type-label {
+	background-position: -600px -906px;
 }
 
 .type-box-column .type-label {
@@ -1386,11 +1391,14 @@ span.viz-section-error {
 	min-width: 10px !important;
 }
 
-#json-conclude-form .json-table,
+#json-conclude-form .json-table {
+	width: 85%;
+}
+
 #vz-import-json-url,
 #vz-import-json-root,
 #vz-import-json-paging {
-	width: 85%;
+	width: 75%;
 }
 
 #json-conclude-form .json-table,
@@ -1420,6 +1428,35 @@ span.viz-section-error {
 	border-color: #0085BA !important;
 	background: #0085BA !important;
 	color: #ffffff;
+}
+
+.viz-substep {
+	outline: 0 !important;
+	border: 0 !important;
+	background: none !important;
+	text-transform: uppercase;
+}
+
+.viz-substep.ui-state-active {
+}
+
+.viz-substep ~ .ui-accordion-content {
+	outline: 0 !important;
+	border: 0 !important;
+	font-size: smaller;
+}
+
+.viz-substep ~ div {
+	display: table;
+}
+
+.viz-substep ~ div > div {
+	display: table-row;
+}
+
+.viz-substep ~ div > div div {
+	display: table-cell;
+	padding: 5px;
 }
 
 /******************************************************************************/

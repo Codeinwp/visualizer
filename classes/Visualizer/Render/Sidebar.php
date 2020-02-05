@@ -360,6 +360,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 			$this->_renderAnimationSettings();
 
+			do_action( 'visualizer_chart_settings', get_class( $this ), $this->_data, 'general', array( 'generic' => true ) );
+
 		self::_renderGroupEnd();
 	}
 

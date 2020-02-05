@@ -60,6 +60,16 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	protected $_paging;
 
 	/**
+	 * The headers.
+	 *
+	 * @since ?
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_headers;
+
+	/**
 	 * The array that contains the definition of the data.
 	 *
 	 * @since 1.0.0
@@ -91,7 +101,14 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( isset( $this->_args['paging'] ) ) {
 			$this->_paging = trim( $this->_args['paging'] );
 		}
-
+		if ( isset( $this->_args['auth'] ) && ! empty( $this->_args['auth'] ) ) {
+			$this->_headers = array( 'auth' => $this->_args['auth'] );
+		} elseif ( isset( $this->_args['username'] ) && isset( $this->_args['password'] ) ) {
+			$this->_headers = array( 'username' => $this->_args['username'], 'password' => $this->_args['password'] );
+		}
+		if ( isset( $this->_args['method'] ) ) {
+			$this->_headers['method'] = $this->_args['method'];
+		}
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Constructor called for params = %s', print_r( $params, true ) ), 'debug', __FILE__, __LINE__ );
 	}
 
@@ -108,7 +125,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			return $roots;
 		}
 		$roots = $this->getRootElements( 'root', '', array(), $this->getJSON() );
-		if ( empty( $roots ) ) {
+		if ( is_null( $roots ) ) {
 			$this->_error = esc_html__( 'This does not appear to be a valid JSON feed. Please try again.', 'visualizer' );
 			return false;
 		}
@@ -154,7 +171,13 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		$paging = array();
 		foreach ( $leaf as $key => $value ) {
 			// the paging element's value will most probably contain the url of the feed.
-			if ( is_string( $value ) && 0 === stripos( $value, $this->_url ) ) {
+			if ( ! is_string( $value ) ) {
+				continue;
+			}
+
+			// strip the url off the request parameters e.g. format=json as sometimes the pagination urls may not contain them.
+			$url = wp_parse_url( $value );
+			if ( 0 === stripos( $value, $this->_url ) || false !== stripos( $this->_url, $url['path'] ) ) {
 				$paging[] = $key;
 			}
 		}
@@ -172,7 +195,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 *
 	 * @access public
 	 */
-	public function parse() {
+	public function fetch() {
 		$url    = $this->_url;
 		$data   = array();
 		$page   = 1;
@@ -180,12 +203,14 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		while ( ! is_null( $url ) && $page++ < apply_filters( 'visualizer_json_fetch_pages', 5, $this->_url ) ) {
 			$array  = $this->getJSON( $url );
 			if ( is_null( $array ) ) {
-				return $data;
+				break;
 			}
 
 			$root   = explode( self::TAG_SEPARATOR, $this->_root );
-			// get rid of the first element as that is the faux root element indicator
-			array_shift( $root );
+			if ( count( $root ) > 1 ) {
+				// get rid of the first element as that is the faux root element indicator
+				array_shift( $root );
+			}
 			$leaf   = $array;
 			foreach ( $root as $tag ) {
 				if ( array_key_exists( $tag, $leaf ) ) {
@@ -202,6 +227,11 @@ class Visualizer_Source_Json extends Visualizer_Source {
 					}
 					$leaf = $temp;
 				}
+			}
+
+			// JSONs that do not have a root element may fall into this condition e.g. /wp-json/wp/v2/posts
+			if ( empty( $leaf ) ) {
+				$leaf = $array;
 			}
 
 			// now that we have got the final array we need to operate on, we will use this as the collection of series.
@@ -238,9 +268,11 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			$url    = $this->getNextPage( $array );
 		}
 
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with rooot %s is %s = ', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
+		$this->_data = $data;
 
-		return $data;
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Parsed data endpoint %s with root %s is %s', $this->_url, $this->_root, print_r( $data, true ) ), 'debug', __FILE__, __LINE__ );
+
+		return true;
 	}
 
 	/**
@@ -266,6 +298,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 
 		$rows = array();
 		foreach ( $data as $datum ) {
+			$row = array();
 			foreach ( $datum as $key => $value ) {
 				if ( in_array( $key, $keys, true ) ) {
 					$row[ $key ] = $value;
@@ -318,9 +351,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 */
 	private function getRootElements( $parent, $now, $root, $array ) {
 		if ( is_null( $array ) ) {
-			return array();
+			return null;
 		}
 
+		$root[] = $parent;
 		foreach ( $array as $key => $value ) {
 			if ( is_array( $value ) && ! empty( $value ) ) {
 				if ( ! is_numeric( $key ) ) {
@@ -332,8 +366,8 @@ class Visualizer_Source_Json extends Visualizer_Source {
 				$root = $this->getRootElements( $now, $key, $root, $value );
 			}
 		}
-		$roots = array_filter( array_unique( $root ) );
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Roots found for %s = ', $this->_url, print_r( $roots, true ) ), 'debug', __FILE__, __LINE__ );
+		$roots = array_unique( $root );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Roots found for %s = %s', $this->_url, print_r( $roots, true ) ), 'debug', __FILE__, __LINE__ );
 		return $roots;
 	}
 
@@ -348,10 +382,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( is_null( $url ) ) {
 			$url = $this->_url;
 		}
-		// allow hooks to use any other args such as method=POST.
-		$response = wp_remote_request( $url, apply_filters( 'visualizer_json_args', array( 'method' => 'GET' ), $url ) );
-		if ( is_wp_error( $response ) ) {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = ', $url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
+
+		$response = $this->connect( $url );
+		if ( is_wp_error( $response ) || ! in_array( intval( $response['response']['code'] ), array( 200, 201 ), true ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint %s = %s', $url, print_r( $response, true ) ), 'error', __FILE__, __LINE__ );
 			return null;
 		}
 
@@ -362,75 +396,28 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		return $array;
 	}
 
-
 	/**
-	 * Fetches series information. This is fetched only through the UI and not while refreshing the chart data.
+	 * Sets the authentication/authorization headers and connects to the endpoint.
 	 *
-	 * @since 1.0.0
+	 * @since ?
 	 *
 	 * @access private
 	 */
-	private function _fetchSeries() {
-		$params = $this->_args;
-		$headers = array_filter( $params['header'] );
-		$types = array_filter( $params['type'] );
-		$header_row = $type_row = array();
-		if ( $headers ) {
-			foreach ( $headers as $header ) {
-				if ( ! empty( $types[ $header ] ) ) {
-					$this->_series[] = array(
-						'label' => $header,
-						'type'  => $types[ $header ],
-					);
-				}
+	private function connect( $url ) {
+		$args = array( 'method' => 'GET' );
+		if ( ! empty( $this->_headers ) ) {
+			$args = array( 'method' => strtoupper( $this->_headers['method'] ) );
+			if ( array_key_exists( 'auth', $this->_headers ) ) {
+				$args['headers'] = array( 'Authorization' => $this->_headers['auth'] );
+			} elseif ( array_key_exists( 'username', $this->_headers ) && array_key_exists( 'password', $this->_headers ) && ! empty( $this->_headers['username'] ) && ! empty( $this->_headers['password'] ) ) {
+				$args['headers'] = array( 'Authorization' => 'Basic ' . base64_encode( $this->_headers['username'] . ':' . $this->_headers['password'] ) );
 			}
 		}
 
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Series found for %s = ', $this->_url, print_r( $this->_series, true ) ), 'debug', __FILE__, __LINE__ );
+		$args = apply_filters( 'visualizer_json_args', $args, $url );
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Connecting to %s with args = %s ', $url, print_r( $args, true ) ), 'debug', __FILE__, __LINE__ );
 
-		return true;
-	}
-
-	/**
-	 * Fetches data information.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access private
-	 */
-	private function _fetchData() {
-		$params = $this->_args;
-
-		$headers    = wp_list_pluck( $this->_series, 'label' );
-		$data       = $this->parse();
-		foreach ( $data as $line ) {
-			$data_row = array();
-			foreach ( $line as $header => $value ) {
-				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-				if ( in_array( $header, $headers ) ) {
-					$data_row[] = $value;
-				}
-			}
-			$this->_data[] = $this->_normalizeData( $data_row );
-		}
-
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Data found for %s = ', $this->_url, print_r( $this->_data, true ) ), 'debug', __FILE__, __LINE__ );
-
-		return true;
-	}
-
-	/**
-	 * Fetches information from source, parses it and builds series and data arrays.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @access public
-	 * @return boolean TRUE on success, otherwise FALSE.
-	 */
-	public function fetch() {
-		$this->_fetchSeries();
-		$this->_fetchData();
-		return true;
+		return wp_remote_request( $url, $args );
 	}
 
 	/**
@@ -442,7 +429,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 */
 	public function refresh( $series ) {
 		$this->_series = $series;
-		$this->_fetchData();
+		$this->fetch();
 		return true;
 	}
 
