@@ -687,7 +687,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$screen = get_current_screen();
 
 		// bail if it's some other page.
-		if ( ! is_object( $screen ) || $screen->id != $this->_libraryPage ) {
+		if ( ! is_object( $screen ) || $screen->id !== $this->_libraryPage ) {
 			return;
 		}
 
