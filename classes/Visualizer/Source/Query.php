@@ -36,13 +36,33 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	protected $_query;
 
 	/**
+	 * The chart id.
+	 *
+	 * @access protected
+	 * @var int
+	 */
+	protected $_chart_id;
+
+	/**
+	 * Any additional parameters (e.g. for connecting to a remote db).
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_params;
+
+	/**
 	 * Constructor.
 	 *
 	 * @access public
 	 * @param string $query The query.
+	 * @param int    $chart_id The chart id.
+	 * @param array  $params Any additional parameters (e.g. for connecting to a remote db).
 	 */
-	public function __construct( $query = null ) {
+	public function __construct( $query = null, $chart_id = null, $params = null ) {
 		$this->_query = $query;
+		$this->_chart_id = $chart_id;
+		$this->_params = $params;
 	}
 
 	/**
@@ -67,48 +87,67 @@ class Visualizer_Source_Query extends Visualizer_Source {
 
 		// impose a limit if no limit clause is provided.
 		if ( strpos( strtolower( $this->_query ), ' limit ' ) === false ) {
-			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 1000 );
+			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 1000, $this->_chart_id );
 		}
 
-		global $wpdb;
-		$wpdb->hide_errors();
-		// @codingStandardsIgnoreStart
-		$rows       = $wpdb->get_results( $this->_query, $results_as_numeric_array ? ARRAY_N : ARRAY_A );
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Firing query %s to get results %s with error %s', $this->_query, print_r( $rows, true ), print_r( $wpdb->last_error, true ) ), 'debug', __FILE__, __LINE__ );
-		// @codingStandardsIgnoreEnd
-		$wpdb->show_errors();
+		$results    = array();
+		$headers    = array();
 
-		if ( $raw_results ) {
-			return $rows;
+		// short circuit results for remote dbs.
+		if ( false !== ( $remote_results = apply_filters( 'visualizer_db_query_execute', false, $this->_query, $as_html, $results_as_numeric_array, $raw_results, $this->_chart_id, $this->_params ) ) ) {
+			$error = $remote_results['error'];
+			if ( empty( $error ) ) {
+				$results = $remote_results['results'];
+				$headers = $remote_results['headers'];
+			}
+
+			$this->_error = $error;
+
+			if ( $raw_results ) {
+				return $results;
+			}
 		}
 
-		if ( $rows ) {
-			$results    = array();
-			$headers    = array();
+		if ( ! ( $results && $headers ) ) {
+			global $wpdb;
+			$wpdb->hide_errors();
+			// @codingStandardsIgnoreStart
+			$rows       = $wpdb->get_results( $this->_query, $results_as_numeric_array ? ARRAY_N : ARRAY_A );
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Firing query %s to get results %s with error %s', $this->_query, print_r( $rows, true ), print_r( $wpdb->last_error, true ) ), 'debug', __FILE__, __LINE__ );
+			// @codingStandardsIgnoreEnd
+			$wpdb->show_errors();
+
+			if ( $raw_results ) {
+				return $rows;
+			}
+
 			if ( $rows ) {
-				$row_num    = 0;
-				foreach ( $rows as $row ) {
-					$result     = array();
-					$col_num    = 0;
-					foreach ( $row as $k => $v ) {
-						$result[]   = $v;
-						if ( 0 === $row_num ) {
-							$headers[]  = array( 'type' => $this->get_col_type( $col_num++ ), 'label' => $k );
+				$results    = array();
+				$headers    = array();
+				if ( $rows ) {
+					$row_num    = 0;
+					foreach ( $rows as $row ) {
+						$result     = array();
+						$col_num    = 0;
+						foreach ( $row as $k => $v ) {
+							$result[]   = $v;
+							if ( 0 === $row_num ) {
+								$headers[]  = array( 'type' => $this->get_col_type( $col_num++ ), 'label' => $k );
+							}
 						}
+						$results[] = $result;
+						$row_num++;
 					}
-					$results[] = $result;
-					$row_num++;
 				}
-			}
 
-			if ( $as_html ) {
-				return $this->html( $headers, $results );
+				$this->_error = $wpdb->last_error;
 			}
-			return $this->object( $headers, $results );
 		}
 
-		$this->_error = $wpdb->last_error;
-		return null;
+		if ( $as_html ) {
+			return $this->html( $headers, $results );
+		}
+		return $this->object( $headers, $results );
 	}
 
 	/**

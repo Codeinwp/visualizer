@@ -422,6 +422,9 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			isset( $this->series[ $index ]['color'] ) ? $this->series[ $index ]['color'] : null,
 			null
 		);
+
+		$this->_renderRoleField( $index );
+
 	}
 
 	/**

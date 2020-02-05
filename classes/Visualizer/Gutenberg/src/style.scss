@@ -95,6 +95,10 @@
 					font-weight: bold;
 					text-align: center;
 				}
+
+    .visualizer-settings__charts-footer {
+        font-size: small;
+    }
 		
 				.visualizer-settings__charts-controls {
 					width: 100%;
@@ -236,14 +240,152 @@
 	}
 }
 
+.visualizer-json-query-modal {
+	.components-modal__content {
+		padding-left: 0;
+		padding-right: 0;
+
+		.components-modal__header {
+			margin: 0;
+		}
+	}
+
+	.components-icon-button {
+		margin: 10px 0;
+	}
+
+	.visualizer-json-query-modal-headers-panel {
+		padding: 0 0 1em 2.2em;
+
+		.components-base-control {
+			display: inline-block;
+		}
+
+		.visualizer-json-query-modal-field-separator {
+			padding: 0 10px;
+		}
+	}
+
+	.viz-editor-table {
+		tbody {
+			tr {
+				&:first-child {
+					background-color: #ececec !important;
+				}
+			}
+		}
+
+		tr {
+			th {
+				background-color: #cccccc;
+			}
+		}
+
+		thead {
+			tr {
+				th {
+					&:nth-child(n+1) {
+						cursor: move !important;
+					}
+				}
+			}
+		}
+	}
+
+	#visualizer-json-query-table {
+		margin-bottom: 10px;
+	}
+
+	ul {
+		list-style: disc;
+		margin-left: 10px;
+	}
+}
+
+.visualizer-db-query-modal {
+	.CodeMirror-scroll {
+		overflow: hidden !important;
+		height: 50%;
+		margin: 0;
+		padding: 0;
+	}
+
+	.CodeMirror-wrap {
+		height: 200px;
+		padding: 15px;
+		color: #fff;
+		background: #282923;
+		font-size: 15px;
+		margin-bottom: 20px;
+
+		.CodeMirror-cursor {
+			border-left: 1px solid #fff !important;
+		}
+
+		.CodeMirror-placeholder {
+			color: #fff;
+		}
+
+		pre {
+			color: #fff !important;
+		}
+
+		.cm-keyword {
+			color: #f92472 !important;
+		}
+
+		.cm-comment {
+			color: #74705d !important;
+		}
+
+		.cm-number {
+			color: #fff !important;
+		}
+
+		.cm-string {
+			color: #fff !important;
+		}
+	}
+
+	ul {
+		list-style: disc;
+		margin-left: 10px;
+	}
+
+	.db-wizard-error {
+		color: #f00;
+	}
+
+	.visualizer-db-query-actions {
+		.components-button {
+			&:first-child {
+				margin-right: 10px;
+			}
+		}
+	}
+}
+
 .htContextMenu {
 	&:not( .htGhostTable ) {
 		z-index: 999999;
 	}
 }
 
-.htDatepickerHolder {
+.htDatepickerHolder,
+.CodeMirror-hints,
+.DTCR_clonedTable,
+.DTCR_pointer {
 	z-index: 999999 !important;
+}
+
+@media ( min-width: 768px ) {
+	.visualizer-json-query-modal {
+		width: 668px;
+	}
+
+	.visualizer-db-query-modal .CodeMirror-wrap {
+		min-width: 550px;
+	}
 }
 
 @media ( max-width: 768px ) {

@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.3.2';
+	const VERSION = '3.4.0';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -40,6 +40,8 @@ class Visualizer_Plugin {
 	const CF_DEFAULT_DATA = 'visualizer-default-data';
 	const CF_SETTINGS = 'visualizer-settings';
 	const CF_CHART_LIBRARY = 'visualizer-chart-library';
+	const CF_ERROR = 'visualizer-error';
+	const CF_REMOTE_DB_PARAMS = 'visualizer-remote-db-params';
 
 	const CF_SOURCE_FILTER = 'visualizer-source-filter';
 	const CF_FILTER_CONFIG = 'visualizer-filter-config';
@@ -72,6 +74,8 @@ class Visualizer_Plugin {
 	const CF_JSON_ROOT = 'visualizer-json-root';
 	const CF_JSON_SCHEDULE = 'visualizer-json-schedule';
 	const CF_JSON_PAGING = 'visualizer-json-paging';
+	const CF_JSON_HEADERS = 'visualizer-json-headers';
+	const CF_EDITOR = 'visualizer-editor';
 
 	const ACTION_SAVE_FILTER_QUERY = 'visualizer-save-filter-query';
 
@@ -92,6 +96,12 @@ class Visualizer_Plugin {
 	// Added by Ash/Upwork
 	const PRO_TEASER_URL = 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing';
 	const PRO_TEASER_TITLE = 'Check PRO version ';
+
+	/**
+	 * Name of the option for WordPress DB.
+	 */
+	const WP_DB_NAME = 'WordPress DB';
+
 	// Added by Ash/Upwork
 	/**
 	 * Singletone instance of the plugin.

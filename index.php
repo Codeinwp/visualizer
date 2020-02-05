@@ -1,10 +1,10 @@
 <?php
 
 /*
-	Plugin Name: Visualizer: Tables and Charts Manager for WordPress
+	Plugin Name: Visualizer: Tables and Charts for WordPress
 	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
 	Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-	Version: 3.3.2
+	Version: 3.4.0
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	License: GPL v2.0 or later
@@ -70,6 +70,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
 	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
+	// this is also used in Block.php
 	define( 'VISUALIZER_TEST_JS_CUSTOMIZATION', false );
 
 	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
@@ -90,6 +91,9 @@ function visualizer_launch() {
 	// the link to pre-build queries.
 	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
 	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
+
+	// to redirect all themeisle_log_event to error log.
+	define( 'VISUALIZER_LOCAL_DEBUG', false );
 
 	// instantiate the plugin
 	$plugin = Visualizer_Plugin::instance();
@@ -153,3 +157,17 @@ function visualizer_register_parrot( $plugins ) {
 spl_autoload_register( 'visualizer_autoloader' );
 // launch the plugin
 visualizer_launch();
+
+
+if ( VISUALIZER_LOCAL_DEBUG ) {
+	add_action( 'themeisle_log_event', 'visualizer_themeisle_log_event', 10, 5 );
+
+	/**
+	 * Redirect themeisle_log_event to error log.
+	 */
+	function visualizer_themeisle_log_event( $name, $msg, $type, $file, $line ) {
+		if ( $name === Visualizer_Plugin::NAME ) {
+			error_log( sprintf( '%s (%s:%d): %s', $type, $file, $line, $msg ) );
+		}
+	}
+}

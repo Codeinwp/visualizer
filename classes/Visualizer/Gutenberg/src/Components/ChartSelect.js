@@ -11,6 +11,8 @@ import RemoteImport from './Import/RemoteImport.js';
 
 import ChartImport from './Import/ChartImport.js';
 
+import DataImport from './Import/DataImport.js';
+
 import ManualData from './Import/ManualData.js';
 
 import Sidebar from './Sidebar.js';
@@ -35,7 +37,7 @@ const {
 	Fragment
 } = wp.element;
 
-const { InspectorControls } = wp.editor;
+const { InspectorControls } = wp.blockEditor || wp.editor;
 
 class ChartSelect extends Component {
 	constructor() {
@@ -55,7 +57,7 @@ class ChartSelect extends Component {
 
 	render() {
 
-		let chart;
+		let chart, footer;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
 
@@ -69,6 +71,10 @@ class ChartSelect extends Component {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
 		}
 
+        if ( data['visualizer-data-exploded']) {
+            footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
+        }
+
 		return (
 			<Fragment>
 				{ 'home' === this.state.route &&
@@ -80,14 +86,27 @@ class ChartSelect extends Component {
 						/>
 
 						<RemoteImport
+							id={ this.props.id }
 							chart={ this.props.chart }
 							editURL={ this.props.editURL }
 							isLoading={ this.props.isLoading }
 							uploadData={ this.props.uploadData }
 							editSchedule={ this.props.editSchedule }
+							editJSONSchedule={ this.props.editJSONSchedule }
+							editJSONURL={ this.props.editJSONURL }
+							editJSONHeaders={ this.props.editJSONHeaders }
+							editJSONRoot={ this.props.editJSONRoot }
+							editJSONPaging={ this.props.editJSONPaging }
+							JSONImportData={ this.props.JSONImportData }
 						/>
 
 						<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
+
+						<DataImport
+							chart={ this.props.chart }
+							editSchedule={ this.props.editDatabaseSchedule }
+							databaseImportData={ this.props.databaseImportData }
+						/>
 
 						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
 
@@ -134,7 +153,19 @@ class ChartSelect extends Component {
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
 							/>
-						) : (
+						) : ( '' !== data['visualizer-data-exploded'] ? (
+							<Chart
+								chartType={ chart }
+								rows={ data['visualizer-data'] }
+								columns={ data['visualizer-series'] }
+								options={
+									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
+										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
+										compact( this.props.chart['visualizer-settings'])
+								}
+								height="500px"
+							/>
+                        ) : (
 							<Chart
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
@@ -147,7 +178,11 @@ class ChartSelect extends Component {
 								height="500px"
 							/>
 						)
-					}
+					) }
+
+                     <div className="visualizer-settings__charts-footer"><sub>
+                        { footer }
+                     </sub></div>
 
 				</div>
 			</Fragment>
