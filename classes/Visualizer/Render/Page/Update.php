@@ -87,7 +87,7 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 
 		$sidebar = apply_filters( 'visualizer_get_sidebar', '', $this->id );
 
-		return 'win.updateHTML(\'' . json_encode( $editor ) . '\', \'' . json_encode( $sidebar ) . '\');';
+		return 'win.updateHTML(' . json_encode( array( 'html' => $editor ) ) . ', ' . json_encode( array( 'html' => $sidebar ) ) . ');';
 	}
 
 }
