@@ -220,6 +220,11 @@ var __visualizer_chart_images   = [];
                             data[i][j] = null;
                         }
                         break;
+                    case 'boolean':
+                        if (typeof data[i][j] === 'string'){
+                            data[i][j] = data[i][j] === 'true';
+                        }
+                        break;
                     case 'date':
                         // fall-through.
                     case 'datetime':
