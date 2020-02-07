@@ -216,7 +216,7 @@ abstract class Visualizer_Source {
 					break;
 				case 'boolean':
 					$datum = trim( strval( $data[ $i ] ) );
-					$data[ $i ] = in_array( $datum, array( 'true', 'yes', '1' ) ) ? 'true' : 'false';
+					$data[ $i ] = in_array( $datum, array( 'true', 'yes', '1' ), true ) ? 'true' : 'false';
 					break;
 				case 'timeofday':
 					$date = new DateTime( '1984-03-16T' . $data[ $i ] );
