@@ -214,14 +214,23 @@ var __visualizer_chart_images   = [];
         for (i = 0; i < data.length; i++) {
 			row = [];
 			for (j = 0; j < series.length; j++) {
-				if (series[j].type === 'date' || series[j].type === 'datetime') {                  
-					date = new Date(data[i][j]);
-					data[i][j] = null;
-					if (Object.prototype.toString.call(date) === "[object Date]") {
-						if (!isNaN(date.getTime())) {
-							data[i][j] = date;
-						}
-					}
+                switch(series[j].type) {
+                    case 'string':
+                        if(data[i][j] === ''){
+                            data[i][j] = null;
+                        }
+                        break;
+                    case 'date':
+                        // fall-through.
+                    case 'datetime':
+                        date = new Date(data[i][j]);
+                        data[i][j] = null;
+                        if (Object.prototype.toString.call(date) === "[object Date]") {
+                            if (!isNaN(date.getTime())) {
+                                data[i][j] = date;
+                            }
+                        }
+                        break;
 				}
 				row.push(data[i][j]);
 			}
