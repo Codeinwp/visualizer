@@ -5,11 +5,12 @@
 
 	$(document).ready(function() {
         // when data is impported using csv/url, update the hidden data and the advanced settings sidebar.
+        // editor and sidebar are both JSON objects
         window.updateHTML = function( editor, sidebar ) {
             $('.viz-simple-editor').remove();
-            $('#content').append(editor);
+            $('#content').append(editor.html);
             $('#settings-form .viz-group').remove();
-            $('#settings-form').append(sidebar);
+            $('#settings-form').append(sidebar.html);
 
             $('#settings-form .control-text').change(updateChart).keyup(updateChart);
             $('#settings-form .control-select, #settings-form .control-checkbox, #settings-form .control-check').change(updateChart);
