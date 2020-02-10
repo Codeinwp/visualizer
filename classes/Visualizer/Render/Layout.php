@@ -336,7 +336,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 */
 	public static function _renderTextEditor( $args ) {
 		$chart_id = $args[1];
-		$csv = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, array(), $chart_id, 'csv' );
+		$csv = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, array(), $chart_id, 'csv-display' );
 		$data = '';
 		if ( ! empty( $csv ) && isset( $csv['string'] ) ) {
 			$data = str_replace( PHP_EOL, "\n", $csv['string'] );
@@ -368,7 +368,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			}
 			$chart      = get_post( $chart_id );
 			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-			$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $type );
+			$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( str_replace( "'", "\'", html_entity_decode( $chart->post_content ) ) ), $type );
 		} else {
 			$headers    = array_keys( $data[0] );
 		}
@@ -442,7 +442,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			}
 			foreach ( array_values( $row ) as $value ) {
 				if ( $editable_data ) {
-					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( $value ) . '"></td>';
+					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( stripslashes( $value ) ) . '"></td>';
 				} else {
 					echo '<td>' . ( is_array( $value ) ? __( 'Invalid Data', 'visualizer' ) : $value ) . '</td>';
 				}
