@@ -430,6 +430,20 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	public function refresh( $series ) {
 		$this->_series = $series;
 		$this->fetch();
+
+		$headers    = wp_list_pluck( $this->_series, 'label' );
+		$data = array();
+		foreach ( $this->_data as $line ) {
+			$data_row = array();
+			foreach ( $line as $header => $value ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+				if ( in_array( $header, $headers ) ) {
+					$data_row[] = $value;
+				}
+			}
+			$data[] = $this->_normalizeData( $data_row );
+		}
+		$this->_data = $data;
 		return true;
 	}
 
