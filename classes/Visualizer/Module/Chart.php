@@ -885,8 +885,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						if ( empty( $row ) ) {
 							continue;
 						}
-						$columns = explode( ',', $row );
-						fputcsv( $handle, $columns );
+						// don't use fpucsv here because we need to just dump the data
+						// minus the empty rows
+						// and if any row contains ' or ", fputcsv will mess it up
+						// because fputcsv needs to tokenize
+						// and let's standardize the CSV enclosure
+						$row = str_replace( "'", VISUALIZER_CSV_ENCLOSURE, $row );
+						fwrite( $handle, $row );
+						fwrite( $handle, PHP_EOL );
 					}
 				}
 				$source = new Visualizer_Source_Csv( $tmpfile );
@@ -946,7 +952,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		for ( $j = 0; $j < count( $columns[0] ); $j++ ) {
 			$row = array();
 			for ( $i = 0; $i < count( $headers ); $i++ ) {
-				$row[] = $columns[ $i ][ $j ];
+				$row[] = sanitize_text_field( $columns[ $i ][ $j ] );
 			}
 			$csv[]  = $row;
 		}
