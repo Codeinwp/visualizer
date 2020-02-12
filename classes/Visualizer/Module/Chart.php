@@ -1330,6 +1330,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				);
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
+				$render->id = $chart_id;
 			} else {
 				$render->message = $error;
 			}
