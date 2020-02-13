@@ -1,5 +1,5 @@
-# Visualizer: Tables and Charts for WordPress # #
-**Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [contactashish13](https://profiles.wordpress.org/contactashish13)  
+# Visualizer: Tables and Charts for WordPress #
+**Contributors:** [[codeinwp](https://profiles.wordpress.org/codeinwp)](https://profiles.wordpress.org/[codeinwp](https://profiles.wordpress.org/codeinwp)), [[marius2012](https://profiles.wordpress.org/marius2012)](https://profiles.wordpress.org/[marius2012](https://profiles.wordpress.org/marius2012)), [[marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp)](https://profiles.wordpress.org/[marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp)), [[hardeepasrani](https://profiles.wordpress.org/hardeepasrani)](https://profiles.wordpress.org/[hardeepasrani](https://profiles.wordpress.org/hardeepasrani)), [[themeisle](https://profiles.wordpress.org/themeisle)](https://profiles.wordpress.org/[themeisle](https://profiles.wordpress.org/themeisle)), [[Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle)](https://profiles.wordpress.org/[Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle)), [[contactashish13](https://profiles.wordpress.org/contactashish13)](https://profiles.wordpress.org/[contactashish13](https://profiles.wordpress.org/contactashish13))  
 **Tags:** tables, charts, pie, visualization, graphs
 **Requires at least:** 3.5  
 **Tested up to:** 5.3  
@@ -16,14 +16,17 @@ A simple and powerful WordPress chart plugin to create responsive charts & table
 
 The plugin uses Google Visualization API, DataTables.net and ChartJS to add responsive & animated charts, graphs and tables, which support cross-browser compatibility and display perfectly on mobile devices. You can greatly customize all aspects of the charts and tables, and import the data from Excel, CSV, Google Sheets and more!
 
-### 7 Chart types + 6 more in the pro version ###
-This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, area charts, bar charts, column charts, pie charts, geo charts and scatter charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. 
+### 9 Chart types + 6 more in the pro version ###
+This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, area charts, bar charts, column charts, pie charts, geo charts, table charts, bubble charts, scatter charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. 
 
 ### One of the best table plugin for wordpress ###
 On top of our responsive charts and graphs, you can also add our responsive tables to your posts and pages, and customize them however you like. Not only can you customize the design of the tables, you can add sorting capabilities, pagination, search and more. You can view a few examples of what can be done <a href="https://demo.themeisle.com/visualizer/table-chart/">here</a>, but many more things can be done, including pricing tables and product tables.
 
 ### Flexible and customizable ###
 Make the charts your own. Configure an extensive set of options to perfectly match the look and feel of your website. You can use Google Chart Tools with their default setting - all customization is optional and the basic setup is launch-ready. However, charts and graphs can be easily customizable in case your webpage adopts a style which is at odds with provided defaults. Every chart exposes a number of options that customize its look and feel.
+
+### Gutenberg support ###
+Whether you like Gutenberg or not, it doesn't matter, you can add your charts using our easy-to-use gutenberg interface, or simply paste your chart code on the old editor.
 
 ### Responsive Charts in HTML5/SVG ###
 Charts are rendered using HTML5/SVG technology to provide cross-browser compatibility (including VML for older IE versions) and cross platform portability to iPhones, iPads and Android. Your users will never have to mess with extra plugins or any software. If they have a web browser, they can see your charts.
@@ -159,6 +162,21 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 ## Changelog ##
+### 3.4.0 - 2020-02-13  ###
+
+* [Feat] Support for authentication for JSON import
+* [Feat] New chart type: Bubble
+* [Feat] Combine one-time import and schedule import into a single control for an online .csv file import
+* [Feat] Add support for annotations and other roles
+* [Feat] For every chart show the last updated date and any error that exists
+* [Feat] Tested up to WP 5.3
+* [Fix] When new data is imported using csv/url, the manual editor still show old data
+* [Fix] Having SCRIPT_DEBUG on causes issues in real time update of charts
+* [Fix] Table chart: Error appears when trying to import from JSON
+* [Fix] PHP Fatal error: Uncaught Error: Cannot unset string offsets
+* [Fix] Long responsive table can overflow on smaller screens
+
+
 ### 3.3.4 - 2019-11-15  ###
 
 * Fix issue with table chart not loading in the block editor

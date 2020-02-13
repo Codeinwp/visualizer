@@ -162,6 +162,21 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.4.0 - 2020-02-13  = 
+
+* [Feat] Support for authentication for JSON import
+* [Feat] New chart type: Bubble
+* [Feat] Combine one-time import and schedule import into a single control for an online .csv file import
+* [Feat] Add support for annotations and other roles
+* [Feat] For every chart show the last updated date and any error that exists
+* [Feat] Tested up to WP 5.3
+* [Fix] When new data is imported using csv/url, the manual editor still show old data
+* [Fix] Having SCRIPT_DEBUG on causes issues in real time update of charts
+* [Fix] Table chart: Error appears when trying to import from JSON
+* [Fix] PHP Fatal error: Uncaught Error: Cannot unset string offsets
+* [Fix] Long responsive table can overflow on smaller screens
+
+
 = 3.3.4 - 2019-11-15  = 
 
 * Fix issue with table chart not loading in the block editor
