@@ -1,23 +1,23 @@
-# Visualizer: Tables and Charts for WordPress #
-**Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [contactashish13](https://profiles.wordpress.org/contactashish13)  
-**Tags:** tables, charts, pie, visualization, graphs
-**Requires at least:** 3.5  
-**Tested up to:** 5.3  
-**Requires PHP:** 5.6  
-**Stable tag:** trunk  
-**License:** GPL v2.0 or later  
-**License URI:** http://www.opensource.org/licenses/gpl-license.php  
+=== Visualizer: Tables and Charts Manager for WordPress # ===
+Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle,contactashish13
+Tags: tables, charts, pie, visualization, graphs
+Requires at least: 3.5
+Tested up to: 5.3
+Requires PHP: 5.6
+Stable tag: trunk
+License: GPL v2.0 or later
+License URI: http://www.opensource.org/licenses/gpl-license.php
 
 A simple and powerful WordPress chart plugin to create responsive charts & tables and embed them into your site.
 
 ## Description ##
- 
+
 <p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/" rel="nofollow">Visualizer: Tables and Charts for WordPress plugin</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
 
 The plugin uses Google Visualization API, DataTables.net and ChartJS to add responsive & animated charts, graphs and tables, which support cross-browser compatibility and display perfectly on mobile devices. You can greatly customize all aspects of the charts and tables, and import the data from Excel, CSV, Google Sheets and more!
 
 ### 9 Chart types + 6 more in the pro version ###
-This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, area charts, bar charts, column charts, pie charts, geo charts, table charts, bubble charts, scatter charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps. 
+This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, area charts, bar charts, column charts, pie charts, geo charts, table charts, bubble charts, scatter charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
 
 ### One of the best table plugin for wordpress ###
 On top of our responsive charts and graphs, you can also add our responsive tables to your posts and pages, and customize them however you like. Not only can you customize the design of the tables, you can add sorting capabilities, pagination, search and more. You can view a few examples of what can be done <a href="https://demo.themeisle.com/visualizer/table-chart/">here</a>, but many more things can be done, including pricing tables and product tables.
@@ -162,7 +162,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
-= 3.4.0 - 2020-02-13  = 
+= 3.4.0 - 2020-02-13  =
 
 * [Feat] Support for authentication for JSON import
 * [Feat] New chart type: Bubble
@@ -177,17 +177,17 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * [Fix] Long responsive table can overflow on smaller screens
 
 
-= 3.3.4 - 2019-11-15  = 
+= 3.3.4 - 2019-11-15  =
 
 * Fix issue with table chart not loading in the block editor
 
 
-= 3.3.3 - 2019-11-12  = 
+= 3.3.3 - 2019-11-12  =
 
 * Tested upto WordPress 5.3
 
 
-= 3.3.2 - 2019-10-03  = 
+= 3.3.2 - 2019-10-03  =
 
 * Add support for Dataset schema
 * Horizontal Axis formatting should apply to tooltips
@@ -302,15 +302,15 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 * Adds insert button in chart library.
 * Remove frontend assets where they are not needed.
-* Improve non-English charts compatibility. 
+* Improve non-English charts compatibility.
 * Adds a filter to change charts locale.
 
 
 ### 3.0.6 - 2018-02-27  ###
 
-* Fix UTF-8 support while saving the data. 
-* Improve editing experience.  
-* Improves compatibility with Premium version. 
+* Fix UTF-8 support while saving the data.
+* Improve editing experience.
+* Improves compatibility with Premium version.
 * Adds chart button into TinyMCE editor.
 
 
@@ -360,7 +360,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 ### 2.1.8 - 2017-07-03  ###
 
-* Added chart title into library. 
+* Added chart title into library.
 * Fixed SDK issues with dashboard widget.
 
 
