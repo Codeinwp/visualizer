@@ -55,6 +55,40 @@ var __visualizer_chart_images   = [];
             settings['animation']['duration'] = parseInt(settings['animation']['duration']);
         }
 
+        // mark roles for series that have specified a role
+        // and then remove them from future processing
+        // and also adjust the indices of the series array so that
+        // the ones with a role are ignored
+        // e.g. if there are 6 columns (0-5) out of which 1, 3 and 5 are annotations
+        // the final series will only include 0, 2, 4 (reindexed as 0, 1, 2)
+        if (settings.series) {
+            var adjusted_series = [];
+            for (i = 0; i < settings.series.length; i++) {
+                if (!series[i + 1] || typeof settings.series[i] === 'undefined') {
+                    continue;
+                }
+                if(typeof settings.series[i].role !== 'undefined'){
+                    table.setColumnProperty(i + 1, 'role', settings.series[i].role);
+                    if(settings.series[i].role === '') {
+                        adjusted_series.push(settings.series[i]);
+                    }
+                }
+            }
+            if(adjusted_series.length > 0){
+                settings.series = adjusted_series;
+            }
+        }
+
+        if ( settings['explorer_enabled'] && settings['explorer_enabled'] == 'true' ) { // jshint ignore:line
+            var $explorer = {};
+            $explorer['keepInBounds'] = true;
+
+            if ( settings['explorer_actions'] ) {
+                $explorer['actions'] = settings['explorer_actions'];
+            }
+            settings['explorer'] = $explorer;
+        }
+
 		switch (chart.type) {
 			case 'pie':
 				if (settings.slices) {
@@ -96,6 +130,9 @@ var __visualizer_chart_images   = [];
                 }
 				break;
 			case 'gauge':
+				break;
+			case 'bubble':
+                settings.sortBubblesBySize = settings.sortBubblesBySize ? settings.sortBubblesBySize == 1 : false; // jshint ignore:line
 				break;
 			case 'timeline':
                 settings['timeline'] = [];
@@ -177,14 +214,28 @@ var __visualizer_chart_images   = [];
         for (i = 0; i < data.length; i++) {
 			row = [];
 			for (j = 0; j < series.length; j++) {
-				if (series[j].type === 'date' || series[j].type === 'datetime') {                  
-					date = new Date(data[i][j]);
-					data[i][j] = null;
-					if (Object.prototype.toString.call(date) === "[object Date]") {
-						if (!isNaN(date.getTime())) {
-							data[i][j] = date;
-						}
-					}
+                switch(series[j].type) {
+                    case 'string':
+                        if(data[i][j] === ''){
+                            data[i][j] = null;
+                        }
+                        break;
+                    case 'boolean':
+                        if (typeof data[i][j] === 'string'){
+                            data[i][j] = data[i][j] === 'true';
+                        }
+                        break;
+                    case 'date':
+                        // fall-through.
+                    case 'datetime':
+                        date = new Date(data[i][j]);
+                        data[i][j] = null;
+                        if (Object.prototype.toString.call(date) === "[object Date]") {
+                            if (!isNaN(date.getTime())) {
+                                data[i][j] = date;
+                            }
+                        }
+                        break;
 				}
 				row.push(data[i][j]);
 			}
@@ -204,7 +255,7 @@ var __visualizer_chart_images   = [];
                     break;
                 default:
                     for (i = 0; i < settings.series.length; i++) {
-                        if (!series[i + 1]) {
+                        if (!series[i + 1] || typeof settings.series[i] === 'undefined') {
                             continue;
                         }
                         format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
@@ -215,8 +266,7 @@ var __visualizer_chart_images   = [];
             format_data(id, table, 'number', settings.format, 1);
         }
 
-
-        if(settings.hAxis) {
+        if(settings.hAxis && series[0]) {
        	    format_data(id, table, series[0].type, settings.hAxis.format, 0);
         }
 
@@ -283,14 +333,6 @@ var __visualizer_chart_images   = [];
 		}
 	}
 
-    if(typeof visualizer !== 'undefined'){
-        // called while updating the chart.
-        visualizer.update = function(){
-            renderChart('canvas');
-        };
-    }
-
-
     var resizeTimeout;
 
 	$(document).ready(function() {
@@ -352,6 +394,7 @@ var __visualizer_chart_images   = [];
                     case 'candlestick':
                     case 'histogram':
                     case 'scatter':
+                    case 'bubble':
                         $type = 'corechart';
                         break;
                     case 'geo':
@@ -382,6 +425,10 @@ var __visualizer_chart_images   = [];
         objects = {};
         gv = google.visualization;
         renderSpecificChart(v.id, v.chart);
+    });
+
+    $('body').on('visualizer:render:currentchart:update', function(event, v){
+        renderChart('canvas');
     });
 
     // front end actions

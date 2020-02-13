@@ -4,6 +4,23 @@
 	var timeout;
 
 	$(document).ready(function() {
+        // when data is impported using csv/url, update the hidden data and the advanced settings sidebar.
+        // editor and sidebar are both JSON objects
+        window.updateHTML = function( editor, sidebar ) {
+            $('.viz-simple-editor').remove();
+            $('#content').append(editor.html);
+            $('#settings-form .viz-group').remove();
+            $('#settings-form').append(sidebar.html);
+
+            $('#settings-form .control-text').change(updateChart).keyup(updateChart);
+            $('#settings-form .control-select, #settings-form .control-checkbox, #settings-form .control-check').change(updateChart);
+            $('#settings-form .color-picker-hex').wpColorPicker({
+                change: updateChart,
+                clear: updateChart
+            });
+            $('#settings-form textarea[name="manual"]').change(validateJSON).keyup(validateJSON);
+        };
+
         $('#settings-button').click(function() {
 			$('#settings-form').submit();
 		});
@@ -17,7 +34,7 @@
 				delete settings['height'];
 
 				v.charts.canvas.settings = settings;
-				v.update();
+                $('body').trigger('visualizer:render:currentchart:update', {visualizer: v});
 			}, 1000);
 		}
 

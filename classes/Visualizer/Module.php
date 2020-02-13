@@ -67,7 +67,22 @@ class Visualizer_Module {
 		$this->_addFilter( Visualizer_Plugin::FILTER_UNDO_REVISIONS, 'undoRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, 'getDataAs', 10, 3 );
+		register_shutdown_function( array($this, 'onShutdown') );
 
+	}
+
+	/**
+	 * Register a shutdown hook to catch fatal errors.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function onShutdown() {
+		$error = error_get_last();
+		if ( $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Critical error %s', print_r( $error, true ) ), 'error', __FILE__, __LINE__ );
+		}
 	}
 
 	/**
@@ -222,7 +237,10 @@ class Visualizer_Module {
 
 			switch ( $type ) {
 				case 'csv':
-					$final   = $this->_getCSV( $rows, $filename );
+					$final   = $this->_getCSV( $rows, $filename, false );
+					break;
+				case 'csv-display':
+					$final   = $this->_getCSV( $rows, $filename, true );
 					break;
 				case 'xls':
 					$final   = $this->_getExcel( $rows, $filename );
@@ -241,8 +259,9 @@ class Visualizer_Module {
 	 * @access private
 	 * @param array  $rows The array of data.
 	 * @param string $filename The name of the file to use.
+	 * @param bool   $enclose Enclose strings that have commas in them in double quotes.
 	 */
-	private function _getCSV( $rows, $filename ) {
+	private function _getCSV( $rows, $filename, $enclose ) {
 		$filename .= '.csv';
 
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
@@ -258,6 +277,18 @@ class Visualizer_Module {
 		while ( ( $array = fgetcsv( $fp ) ) !== false ) {
 			if ( strlen( $csv ) > 0 ) {
 				$csv .= PHP_EOL;
+			}
+			// if enclosure is required, check every item of this line
+			// if a comma exists in the item, add enclosure.
+			if ( $enclose ) {
+				$temp_array = array();
+				foreach ( $array as $item ) {
+					if ( strpos( $item, ',' ) !== false ) {
+						$item = VISUALIZER_CSV_ENCLOSURE . $item . VISUALIZER_CSV_ENCLOSURE;
+					}
+					$temp_array[] = $item;
+				}
+				$array = $temp_array;
 			}
 			$csv .= implode( ',', $array );
 		}
@@ -638,6 +669,33 @@ class Visualizer_Module {
 	 */
 	public static function is_pro_older_than( $version ) {
 		return version_compare( VISUALIZER_PRO_VERSION, $version, '<' );
+	}
+
+	/**
+	 * Should we show some specific feature on the basis of the version?
+	 *
+	 * @since 3.4.0
+	 */
+	public static function can_show_feature( $feature ) {
+		switch ( $feature ) {
+			case 'simple-editor':
+				// if user has pro but an older version, then don't load the simple editor functionality
+				// as the select box will not behave as expected because the pro editor's functionality will supercede.
+				return ! Visualizer_Module::is_pro() || ! Visualizer_Module::is_pro_older_than( '1.9.2' );
+		}
+		return false;
+	}
+
+	/**
+	 * Gets the features for the provided license type.
+	 */
+	public static final function get_features_for_license( $plan ) {
+		switch ( $plan ) {
+			case 1:
+				return array( 'import-wp', 'db-query' );
+			case 2:
+				return array( 'schedule-chart', 'chart-permissions' );
+		}
 	}
 
 }

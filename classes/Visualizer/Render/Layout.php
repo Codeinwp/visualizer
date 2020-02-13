@@ -60,6 +60,8 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<div class="visualizer-db-query-form">
 				<div>
 					<form id='db-query-form'>
+						<input type="hidden" name="chart_id" value="<?php echo $args[2]; ?>">
+						<?php do_action( 'visualizer_db_query_add_layout', $args ); ?>
 						<textarea name='query' class='visualizer-db-query' placeholder="<?php _e( 'Your query goes here', 'visualizer' ); ?>"><?php echo $query; ?></textarea>
 					</form>
 					<div class='db-wizard-error'></div>
@@ -72,6 +74,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<ul>
 					<li><?php echo sprintf( __( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
 					<li><?php echo sprintf( __( 'Use %1$sControl+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
+					<?php do_action( 'visualizer_db_query_add_hints', $args ); ?>
 				</ul>
 			</div>
 			<div class='db-wizard-results'></div>
@@ -137,7 +140,11 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$url = get_post_meta( $id, Visualizer_Plugin::CF_JSON_URL, true );
 		$root = get_post_meta( $id, Visualizer_Plugin::CF_JSON_ROOT, true );
 		$paging = get_post_meta( $id, Visualizer_Plugin::CF_JSON_PAGING, true );
-
+		$headers = get_post_meta( $id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		if ( empty( $headers['method'] ) ) {
+			$headers['method'] = 'get';
+		}
+		$methods = apply_filters( 'visualizer_json_request_methods', array( 'GET', 'POST' ) );
 		?>
 		<div id="visualizer-json-screen" style="display: none">
 			<div class="visualizer-json-form">
@@ -146,7 +153,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<form id="json-endpoint-form">
 						<div class="json-wizard-hints">
 							<ul class="info">
-								<li><?php echo sprintf( __( 'If you want to add authentication, add headers to the endpoint or change the request in any way, please refer to our document %1$shere%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/1043-visualizer-how-to-extend-rest-endpoints-with-json-response" target="_blank">', '</a>' ); ?></li>
+								<li><?php echo sprintf( __( 'If you want to add authentication or headers to the endpoint or change the request in any way, please refer to our document %1$shere%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/1043-visualizer-how-to-extend-rest-endpoints-with-json-response" target="_blank">', '</a>' ); ?></li>
 							</ul>
 						</div>
 
@@ -156,15 +163,67 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							name="url"
 							value="<?php echo esc_url( $url ); ?>"
 							placeholder="<?php esc_html_e( 'Please enter the URL', 'visualizer' ); ?>"
-							class="visualizer-input">
+							class="visualizer-input json-form-element">
 						<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch Endpoint', 'visualizer' ); ?></button>
+						
+						<div class="visualizer-json-subform">
+							<h3 class="viz-substep"><?php _e( 'Headers', 'visualizer' ); ?></h3>
+							<div class="json-wizard-headers">
+								<div class="json-wizard-header">
+									<div><?php _e( 'Request Type', 'visualizer' ); ?></div>
+									<div>
+										<select name="method" class="json-form-element">
+										<?php foreach ( $methods as $method ) { ?>
+											<option value="<?php echo $method; ?>" <?php selected( $headers['method'], $method ); ?>><?php echo $method; ?></option>
+										<?php } ?>
+										</select>
+									</div>
+								</div>
+								<div class="json-wizard-header">
+									<div><?php _e( 'Credentials', 'visualizer' ); ?></div>
+									<div>
+										<input
+											type="text"
+											id="vz-import-json-username"
+											name="username"
+											value="<?php echo ( array_key_exists( 'auth', $headers ) && array_key_exists( 'username', $headers['auth'] ) ? $headers['auth']['username'] : '' ); ?>"
+											placeholder="<?php esc_html_e( 'Username/Access Key', 'visualizer' ); ?>"
+											class="json-form-element">								
+										&
+										<input
+											type="password"
+											id="vz-import-json-password"
+											name="password"
+											value="<?php echo ( array_key_exists( 'auth', $headers ) && array_key_exists( 'password', $headers['auth'] ) ? $headers['auth']['password'] : '' ); ?>"
+											placeholder="<?php esc_html_e( 'Password/Secret Key', 'visualizer' ); ?>"
+											class="json-form-element">	
+									</div>
+								</div>
+								<div class="json-wizard-header">
+									<div></div>
+									<div><?php esc_html_e( 'OR', 'visualizer' ); ?></div>
+								</div>
+								<div class="json-wizard-header">
+									<div><?php esc_html_e( 'Authorization', 'visualizer' ); ?></div>
+									<div>
+										<input
+											type="text"
+											id="vz-import-json-auth"
+											name="auth"
+											value="<?php echo ( ! empty( $headers ) && array_key_exists( 'auth', $headers ) ? $headers['auth']['auth'] : '' ); ?>"
+											placeholder="<?php esc_html_e( 'e.g. SharedKey <AccountName>:<Signature>', 'visualizer' ); ?>"
+											class="visualizer-input json-form-element">
+									</div>
+								</div>
+							</div>
+						</div>
 					</form>
 				</div>
 				<h3 class="viz-step step2 <?php echo empty( $url ) ? 'ui-state-disabled' : ''; ?> json-root-form"><?php _e( 'STEP 2: Choose the JSON root', 'visualizer' ); ?></h3>
 				<div>
 					<form id="json-root-form">
 						<input type="hidden" name="chart" value="<?php echo $id; ?>">
-						<select name="root" id="vz-import-json-root">
+						<select name="root" id="vz-import-json-root" class="json-form-element">
 						<?php
 						if ( ! empty( $root ) ) {
 							?>
@@ -173,7 +232,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						}
 						?>
 						</select>
-						<input type="hidden" name="url" value="<?php echo $url; ?>">
 						<button class="button button-secondary button-small" id="visualizer-json-parse"><?php esc_html_e( 'Parse Endpoint', 'visualizer' ); ?></button>
 					</form>
 				</div>
@@ -182,12 +240,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<form id="json-conclude-form-helper">
 						<div class="<?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<div class="json-pagination">
-								<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
-									<option value="0" class="static"><?php _e( 'Don\'t use pagination', 'visualizer' ); ?></option>
+								<select name="paging" id="vz-import-json-paging" class="json-form-element" data-template='<?php echo sprintf( 'Get results from the first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), '?' ); ?>'>
+									<option value="0" class="static"><?php _e( 'Get results from the first page only', 'visualizer' ); ?></option>
 								<?php
 								if ( ! empty( $paging ) ) {
 									?>
-									<option value="<?php echo esc_attr( $paging ); ?>"><?php echo sprintf( 'Get first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
+									<option value="<?php echo esc_attr( $paging ); ?>"><?php echo sprintf( 'Get results from the first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
 									<?php
 								}
 								?>
@@ -210,20 +268,18 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<h3 class="viz-step step4 ui-state-disabled"><?php _e( 'STEP 4: Select the data to display in the chart', 'visualizer' ); ?></h3>
 				<div>
 					<form id="json-conclude-form" action="<?php echo $action; ?>" method="post" target="thehole">
-						<input type="hidden" name="url">
-						<input type="hidden" name="root">
-						<input type="hidden" name="chart" value="<?php echo $id; ?>">
-
 						<div class="json-wizard-hints html-table-editor-hints">
 							<ul class="info">
+								<li><?php _e( 'If you see Invalid Data in the table, you may have selected the wrong root to fetch data from. Please select an alternative from the JSON root dropdown.', 'visualizer' ); ?></li>
 								<li><?php _e( 'Select whether to include the data in the chart. Each column selected will form one series.', 'visualizer' ); ?></li>
 								<li><?php _e( 'If a column is selected to be included, specify its data type.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can use drag/drop to reorder the columns but this column position is not saved. So when you reload the table, you may have to reorder again.', 'visualizer' ); ?></li>
 								<li><?php _e( 'You can select any number of columns but the chart type selected will determine how many will display in the chart.', 'visualizer' ); ?></li>
+								<li><?php _e( 'Once you have made your selection, click \'Show Chart\' on the right to view the chart.', 'visualizer' ); ?></li>
 							</ul>
 						</div>
 						<div class="json-table"></div>
-						<button class="button button-primary" id="visualizer-json-conclude"><?php esc_html_e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
+						<button class="button button-primary" style="display: none" id="visualizer-json-conclude"></button>
 					</form>
 				</div>
 			</div>
@@ -262,7 +318,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							<?php Visualizer_Render_Layout::show( 'editor-table', null, $chart_id, 'viz-html-table', true, true ); ?>
 						</div>
 						<input type="hidden" name="table_data" value="yes">
-						<button class="button button-primary" id="visualizer-save-html-table"><?php esc_html_e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
+						<input type="hidden" name="editor-type" value="table">
 					</form>
 				</div>
 
@@ -280,7 +336,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 */
 	public static function _renderTextEditor( $args ) {
 		$chart_id = $args[1];
-		$csv = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, array(), $chart_id, 'csv' );
+		$csv = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, array(), $chart_id, 'csv-display' );
 		$data = '';
 		if ( ! empty( $csv ) && isset( $csv['string'] ) ) {
 			$data = str_replace( PHP_EOL, "\n", $csv['string'] );
@@ -288,7 +344,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		?>
 		<div class="viz-simple-editor-type viz-text-editor">
 			<textarea id="edited_text"><?php echo $data; ?></textarea>
-			<button id="viz-text-editor-button" class="button button-primary"><?php _e( 'Save &amp; Show Chart', 'visualizer' ); ?></button>
 		</div>
 		<?php
 	}
@@ -313,7 +368,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			}
 			$chart      = get_post( $chart_id );
 			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-			$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $type );
+			$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( str_replace( "'", "\'", html_entity_decode( $chart->post_content ) ) ), $type );
 		} else {
 			$headers    = array_keys( $data[0] );
 		}
@@ -357,7 +412,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				echo '<select name="type[]">';
 			} else {
 				echo '<input name="header[]" type="hidden" value="' . $header . '">';
-				echo '<select name="type[' . $header . ']">';
+				echo '<select name="type[' . $header . ']"  class="viz-select-data-type">';
 			}
 			echo '<option value="" title="' . __( 'Exclude from chart', 'visualizer' ) . '">' . __( 'Exclude', 'visualizer' ) . '</option>';
 			echo '<option value="0" disabled title="' . __( 'Include in chart and select data type', 'visualizer' ) . '">--' . __( 'OR', 'visualizer' ) . '--</option>';
@@ -376,15 +431,20 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		if ( array_key_exists( 'data', $data ) ) {
 			$data = $data['data'];
 		}
+
 		foreach ( $data as $row ) {
 			echo '<tr>';
 			echo '<th>' . __( 'Value', 'visualizer' ) . '</th>';
 			$index = 0;
+			if ( empty( $row ) ) {
+				echo '<td></td>';
+				continue;
+			}
 			foreach ( array_values( $row ) as $value ) {
 				if ( $editable_data ) {
-					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( $value ) . '"></td>';
+					echo '<td><input type="text" name="data' . $index++ . '[]" value="' . esc_attr( stripslashes( $value ) ) . '"></td>';
 				} else {
-					echo '<td>' . $value . '</td>';
+					echo '<td>' . ( is_array( $value ) ? __( 'Invalid Data', 'visualizer' ) : $value ) . '</td>';
 				}
 			}
 

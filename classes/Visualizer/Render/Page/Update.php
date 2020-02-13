@@ -51,7 +51,10 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			if ( $this->settings ) {
 				echo 'win.visualizer.charts.canvas.settings = ', $this->settings, ';';
 			}
-			echo 'win.visualizer.update();';
+			echo 'win.updateChartPreview();';
+
+			echo $this->updateEditorAndSettings();
+
 			echo '}';
 
 			do_action( 'visualizer_add_update_hook', $this->series, $this->data );
@@ -68,6 +71,23 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			echo '</head>';
 			echo '<body></body>';
 		echo '</html>';
+	}
+
+
+	/**
+	 * Update the hidden content in the LHS and the advanced settings
+	 */
+	private function updateEditorAndSettings() {
+		$editor = '';
+		if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) {
+			ob_start();
+			Visualizer_Render_Layout::show( 'simple-editor-screen', $this->id );
+			$editor = ob_get_clean();
+		}
+
+		$sidebar = apply_filters( 'visualizer_get_sidebar', '', $this->id );
+
+		return 'win.updateHTML(' . json_encode( array( 'html' => $editor ) ) . ', ' . json_encode( array( 'html' => $sidebar ) ) . ');';
 	}
 
 }

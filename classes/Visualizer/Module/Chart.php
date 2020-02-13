@@ -69,6 +69,34 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 
+		$this->_addFilter( 'visualizer_get_sidebar', 'getSidebar', 10, 2 );
+
+	}
+
+	/**
+	 * Generates the HTML of the sidebar for the chart.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 */
+	public function getSidebar( $sidebar, $chart_id ) {
+		$chart      = get_post( $chart_id );
+		$data          = $this->_getChartArray( $chart );
+		$sidebar       = '';
+		$sidebar_class = $this->load_chart_class_name( $chart_id );
+		if ( class_exists( $sidebar_class, true ) ) {
+			$sidebar           = new $sidebar_class( $data['settings'] );
+			$sidebar->__series = $data['series'];
+			$sidebar->__data   = $data['data'];
+		} else {
+			$sidebar = apply_filters( 'visualizer_pro_chart_type_sidebar', '', $data );
+			if ( $sidebar !== '' ) {
+				$sidebar->__series = $data['series'];
+				$sidebar->__data   = $data['data'];
+			}
+		}
+		return str_replace( "'", '"', $sidebar->__toString() );
 	}
 
 	/**
@@ -156,8 +184,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$source = new Visualizer_Source_Json( $params );
+		$source->fetch();
+		$data   = $source->getRawData();
 
-		$data   = $source->parse();
 		if ( empty( $data ) ) {
 			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
@@ -186,7 +215,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$chart  = get_post( $chart_id );
 
 		$source = new Visualizer_Source_Json( $params );
-		$source->fetch();
+		$source->fetchFromEditableTable();
 
 		$content    = $source->getData();
 		$chart->post_content = $content;
@@ -196,10 +225,44 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
+
+		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS );
+		$headers = array( 'method' => $params['method'] );
+		if ( ! empty( $params['auth'] ) ) {
+			$headers['auth'] = $params['auth'];
+		} elseif ( ! empty( $params['username'] ) && ! empty( $params['password'] ) ) {
+			$headers['auth'] = array( 'username' => $params['username'], 'password' => $params['password'] );
+		}
+
+		add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS, $headers );
+
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING );
 		if ( ! empty( $params['paging'] ) ) {
 			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
 		}
+
+		$time = filter_input(
+			INPUT_POST,
+			'time',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+				),
+			)
+		);
+
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE );
+
+		if ( -1 < $time ) {
+			add_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, $time );
+		}
+
+		// delete other source specific parameters.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_URL );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_SCHEDULE );
 
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
@@ -537,7 +600,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	/**
 	 * Load code editor assets.
 	 */
-	private function loadCodeEditorAssets() {
+	private function loadCodeEditorAssets( $chart_id ) {
 		global $wp_version;
 
 		$wp_scripts = wp_scripts();
@@ -553,7 +616,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return;
 		}
 
-		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping();
+		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping( $chart_id );
 
 		if ( version_compare( $wp_version, '4.9.0', '<' ) ) {
 			// code mirror assets.
@@ -652,7 +715,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
 
-		if ( ! Visualizer_Module::is_pro() ) {
+		if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) {
 			wp_enqueue_script( 'visualizer-editor-simple' );
 			wp_localize_script(
 				'visualizer-editor-simple',
@@ -669,16 +732,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 		}
 
-		$table_col_mapping  = $this->loadCodeEditorAssets();
+		$table_col_mapping  = $this->loadCodeEditorAssets( $this->_chart->ID );
 
 		wp_localize_script(
 			'visualizer-render',
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
+					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
+					'select_columns'    => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -730,11 +794,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
 
-		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
+		do_action( 'visualizer_enqueue_scripts_and_styles', $data, $this->_chart->ID );
 
 		if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
-			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
+			$Visualizer_Pro->_enqueueScriptsAndStyles( $data, $this->_chart->ID );
 		}
 
 		$this->_addAction( 'admin_head', 'renderFlattrScript' );
@@ -807,28 +871,37 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @since 3.2.0
 	 */
-	private function handleCSVasString( $data ) {
+	private function handleCSVasString( $data, $editor_type ) {
 		$source = null;
 
-		// @issue https://github.com/Codeinwp/visualizer/issues/412
-		if ( has_filter( 'visualizer_pro_handle_chart_data' ) ) {
-			$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
-		} else {
-			// data coming in from the text editor.
-			$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );
-			$handle  = fopen( $tmpfile, 'w' );
-			$values = preg_split( '/[\n\r]+/', stripslashes( trim( $data ) ) );
-			if ( $values ) {
-				foreach ( $values as $row ) {
-					if ( empty( $row ) ) {
-						continue;
+		switch ( $editor_type ) {
+			case 'text':
+				// data coming in from the text editor.
+				$tmpfile = tempnam( get_temp_dir(), Visualizer_Plugin::NAME );
+				$handle  = fopen( $tmpfile, 'w' );
+				$values = preg_split( '/[\n\r]+/', stripslashes( trim( $data ) ) );
+				if ( $values ) {
+					foreach ( $values as $row ) {
+						if ( empty( $row ) ) {
+							continue;
+						}
+						// don't use fpucsv here because we need to just dump the data
+						// minus the empty rows
+						// and if any row contains ' or ", fputcsv will mess it up
+						// because fputcsv needs to tokenize
+						// and let's standardize the CSV enclosure
+						$row = str_replace( "'", VISUALIZER_CSV_ENCLOSURE, $row );
+						fwrite( $handle, $row );
+						fwrite( $handle, PHP_EOL );
 					}
-					$columns = explode( ',', $row );
-					fputcsv( $handle, $columns );
 				}
-			}
-			$source = new Visualizer_Source_Csv( $tmpfile );
-			fclose( $handle );
+				$source = new Visualizer_Source_Csv( $tmpfile );
+				fclose( $handle );
+				break;
+			case 'excel':
+				// data coming in from the excel editor.
+				$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
+				break;
 		}
 		return $source;
 	}
@@ -879,7 +952,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		for ( $j = 0; $j < count( $columns[0] ); $j++ ) {
 			$row = array();
 			for ( $i = 0; $i < count( $headers ); $i++ ) {
-				$row[] = $columns[ $i ][ $j ];
+				$row[] = sanitize_text_field( $columns[ $i ][ $j ] );
 			}
 			$csv[]  = $row;
 		}
@@ -934,6 +1007,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			exit;
 		}
 
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploading data for chart %d with POST = %s and GET = %s', $chart_id, print_r( $_POST, true ), print_r( $_GET, true ) ), 'debug', __FILE__, __LINE__ );
+
 		if ( ! isset( $_POST['vz-import-time'] ) ) {
 			apply_filters( 'visualizer_pro_remove_schedule', $chart_id );
 		}
@@ -947,12 +1022,20 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			// delete "import from db" specific parameters.
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY );
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE );
+			delete_post_meta( $chart_id, Visualizer_Plugin::CF_REMOTE_DB_PARAMS );
 		}
 
 		// delete json related data.
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT );
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_PAGING );
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS );
+
+		// delete last error
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
+
+		// delete editor related data.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR );
 
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
@@ -965,12 +1048,19 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			$source = $this->handleCSVasString( $_POST['chart_data'] );
+			$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
 		} elseif ( isset( $_POST['table_data'] ) && 'yes' === $_POST['table_data'] ) {
 			$source = $this->handleTabularData();
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
 		} else {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'CSV file with chart data was not uploaded for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
 			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' ) );
 		}
+
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploaded data for chart %d with source %s', $chart_id, print_r( $source, true ) ), 'debug', __FILE__, __LINE__ );
+
 		if ( $source ) {
 			if ( $source->fetch() ) {
 				$content    = $source->getData();
@@ -981,6 +1071,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					// if we populate the data even if it is empty, the chart will show "Table has no columns".
 					if ( array_key_exists( 'source', $json ) && ! empty( $json['source'] ) && ( ! array_key_exists( 'data', $json ) || empty( $json['data'] ) ) ) {
 						do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Not populating chart data as source exists (%s) but data is empty!', $json['source'] ), 'warn', __FILE__, __LINE__ );
+						update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, sprintf( 'Not populating chart data as source exists (%s) but data is empty!', $json['source'] ) );
 						$populate   = false;
 					}
 				}
@@ -992,6 +1083,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Updated post for chart %d', $chart_id ), 'debug', __FILE__, __LINE__ );
+
 				Visualizer_Module_Utility::set_defaults( $chart, null );
 
 				$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
@@ -1001,11 +1094,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$render->series = json_encode( $source->getSeries() );
 				$render->settings = json_encode( $settings );
 			} else {
-				$render->message = $source->get_error();
-				if ( empty( $render->message ) ) {
-					$render->message = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
+				$error = $source->get_error();
+				if ( empty( $error ) ) {
+					$error = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
 				}
+				$render->message = $error;
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( '%s for chart %d.', $error, $chart_id ), 'error', __FILE__, __LINE__ );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, $error );
 			}
+		} else {
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unknown internal error for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
 		}
 		$render->render();
 		if ( ! $can_die ) {
@@ -1114,7 +1212,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render        = new Visualizer_Render_Page_Data();
 		$render->chart = $this->_chart;
 		$render->type  = $data['type'];
-		unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+
+		if ( $data && $data['settings'] ) {
+			unset( $data['settings']['width'], $data['settings']['height'], $data['settings']['chartArea'] );
+		}
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-render' );
 		wp_localize_script(
@@ -1122,7 +1223,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered invalid URL. Please, insert proper URL.', 'visualizer' ),
+					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 				),
 				'charts' => array(
@@ -1131,11 +1232,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		do_action( 'visualizer_enqueue_scripts_and_styles', $data );
+		do_action( 'visualizer_enqueue_scripts_and_styles', $data, $this->_chart->ID );
 
 		if ( Visualizer_Module::is_pro() && Visualizer_Module::is_pro_older_than( '1.9.0' ) ) {
 			global $Visualizer_Pro;
-			$Visualizer_Pro->_enqueueScriptsAndStyles( $data );
+			$Visualizer_Pro->_enqueueScriptsAndStyles( $data, $this->_chart->ID );
 		}
 
 		// Added by Ash/Upwork
@@ -1152,11 +1253,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		check_ajax_referer( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION, 'security' );
 
 		$params     = wp_parse_args( $_POST['params'] );
-		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ) );
+		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
+
+		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
 		$html       = $source->fetch( true );
-		$error      = '';
-		if ( empty( $html ) ) {
-			$error  = $source->get_error();
+		$error      = $source->get_error();
+		if ( ! empty( $error ) ) {
 			wp_send_json_error( array( 'msg' => $error ) );
 		}
 		wp_send_json_success( array( 'table' => $html ) );
@@ -1181,19 +1283,40 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
+		$hours = filter_input(
+			INPUT_POST,
+			'refresh',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+					'max_range' => apply_filters( 'visualizer_is_business', false ) ? PHP_INT_MAX : -1,
+				),
+			)
+		);
+
+		if ( ! is_int( $hours ) ) {
+			$hours = -1;
+		}
+
 		$render = new Visualizer_Render_Page_Update();
 		if ( $chart_id ) {
 			$params     = wp_parse_args( $_POST['params'] );
-			$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ) );
+			$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
 			$source->fetch( false );
 			$error      = $source->get_error();
 			if ( empty( $error ) ) {
-				$hours = $_POST['refresh'];
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, stripslashes( $params['query'] ) );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
+				if ( isset( $params['db_type'] ) && $params['db_type'] !== Visualizer_Plugin::WP_DB_NAME ) {
+					$remote_db_params   = $params;
+					unset( $remote_db_params['query'] );
+					unset( $remote_db_params['chart_id'] );
+					update_post_meta( $chart_id, Visualizer_Plugin::CF_REMOTE_DB_PARAMS, $remote_db_params );
+				}
 
 				$schedules              = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
 				$schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
@@ -1207,6 +1330,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				);
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
+				$render->id = $chart_id;
 			} else {
 				$render->message = $error;
 			}
@@ -1237,7 +1361,21 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		$hours = $_POST['refresh'];
+		$hours = filter_input(
+			INPUT_POST,
+			'refresh',
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => -1,
+					'max_range' => apply_filters( 'visualizer_is_business', false ) ? PHP_INT_MAX : -1,
+				),
+			)
+		);
+
+		if ( ! $hours ) {
+			$hours = -1;
+		}
 
 		do_action( 'visualizer_save_filter', $chart_id, $hours );
 

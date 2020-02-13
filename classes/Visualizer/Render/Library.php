@@ -118,12 +118,13 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo ' | </li>';
 		}
 		echo '</ul>';
+
 		echo '<form action="" method="get"><p id="visualizer-search" class="search-box">
                 <input type="search" placeholder="' . __( 'Enter title', 'visualizer' ) . '" name="s" value="' . $filterBy . '">
                 <input type="hidden" name="page" value="visualizer">
                 <button type="submit" id="search-submit" title="' . __( 'Search', 'visualizer' ) . '"><i class="dashicons dashicons-search"></i></button>
-                <button type="button" class="add-new-chart" title="' . __( 'Add New', 'visualizer' ) . '"><i class="dashicons dashicons-plus-alt"></i></button>
            </p> </form>';
+
 		echo '</div>';
 		echo '<div id="visualizer-content-wrapper">';
 		if ( ! empty( $this->charts ) ) {
@@ -220,6 +221,13 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			),
 			admin_url( 'admin-ajax.php' )
 		);
+
+		$chart_status   = array( 'date' => get_the_modified_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $chart_id ), 'error' => get_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, true ), 'icon' => 'dashicons-yes-alt', 'title' => '' );
+		if ( ! empty( $chart_status['error'] ) ) {
+			$chart_status['icon'] = 'error dashicons-dismiss';
+			$chart_status['title'] = __( 'Click to view the error', 'visualizer' );
+		}
+
 		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
@@ -232,6 +240,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">';
 		echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
 		echo '</span>';
+		echo '<hr><div class="visualizer-chart-status"><span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
 		echo '</div>';
 		echo '</div>';
 	}

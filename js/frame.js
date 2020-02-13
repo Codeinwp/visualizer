@@ -69,7 +69,7 @@
         });
 
         // collapse other open sections of this group
-        $('.viz-group-title').click(function () {
+        $(document).on('click', '.viz-group-title', function () {
             var parent = $(this).parent();
 
             if (parent.hasClass('open')) {
@@ -89,17 +89,17 @@
         });
 
         // collapse other open subsections of this section
-        $('.viz-section-title').click(function () {
+        $(document).on('click', '.viz-section-title', function () {
             var grandparent = $(this).parent().parent();
             grandparent.find('.viz-section-title.open ~ .viz-section-items').hide();
             grandparent.find('.viz-section-title.open').removeClass('open');
         });
 
         $('#view-remote-file').click(function () {
-            var url = $(this).parent().find('#remote-data').val();
+            var url = $(this).parent().find('#vz-schedule-url').val();
 
             if (url !== '') {
-                if (/^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)) {
+                if (url.indexOf('localhost') !== -1 || /^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url)) {
                     if (url.substr(url.length - 8) === '/pubhtml') {
                         url = url.substring(0, url.length - 8) + '/export?format=csv';
                     }
@@ -124,11 +124,11 @@
             $('#canvas').unlock();
         });
 
-        $('.viz-section-title').click(function () {
+        $(document).on('click', '.viz-section-title', function () {
             $(this).toggleClass('open').parent().find('.viz-section-items').toggle();
         });
 
-        $('.more-info').click(function () {
+        $(document).on('click', '.more-info', function () {
             $(this).parent().find('.viz-section-description:first').toggle();
             return false;
         });
@@ -278,6 +278,18 @@
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
         });
+        
+        // clear the editor.
+        $('body').on('visualizer:db:query:setvalue', function(event, data){
+            cm.setValue(data.value);
+            cm.clearHistory();
+            cm.refresh();
+        });
+
+        // set an option at runtime?
+        $('body').on('visualizer:db:query:changeoption', function(event, data){
+            cm.setOption(data.name, data.value);
+        });
     }
 
     function init_filter_import() {
@@ -370,11 +382,18 @@
             heightStyle: 'content',
             active: 0
         });
+        $('.visualizer-json-subform').accordion({
+            heightStyle: 'content',
+            active: false,
+            collapsible: true
+        });
 
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
-            $('#content').css('width', 'calc(100% - 300px)');
+            var $bttn = $(this);
+            $('#content').css('width', 'calc(100% - 100px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
+                // toggle from chart to LHS form
                 $(this).val( $(this).attr( 'data-t-filter' ) );
                 $(this).html( $(this).attr( 'data-t-filter' ) );
                 $(this).attr( 'data-current', 'filter' );
@@ -382,16 +401,22 @@
                 $( '#visualizer-json-screen' ).css("z-index", "9999").show();
                 $( '#canvas' ).hide();
             }else{
-                var filter_button = $(this);
-                $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
-                $('#canvas').lock();
-                filter_button.val( filter_button.attr( 'data-t-chart' ) );
-                filter_button.html( filter_button.attr( 'data-t-chart' ) );
-                filter_button.attr( 'data-current', 'chart' );
-                $( '#canvas' ).css("z-index", "1").show();
-                $('#canvas').unlock();
+                // toggle from LHS form to chart
+                $( '#json-conclude-form' ).trigger('submit');
             }
         } );
+
+        $('body').on('visualizer:json:form:submit', function() {
+            var filter_button = $( '#json-chart-button' );
+            $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+            $('#canvas').lock();
+            filter_button.val( filter_button.attr( 'data-t-chart' ) );
+            filter_button.html( filter_button.attr( 'data-t-chart' ) );
+            filter_button.attr( 'data-current', 'chart' );
+            end_ajax( $( '#visualizer-json-screen' ) );
+            $( '#canvas' ).css("z-index", "1").show();
+        });
+
 
         // fetch the roots for the provided endpoint
         $( '#visualizer-json-fetch' ).on( 'click', function(e){
@@ -410,7 +435,6 @@
                 },
                 success : function(data){
                     if(data.success){
-                        $('#json-root-form [name="url"]').val(data.data.url);
                         $('#vz-import-json-root').empty();
                         $.each(data.data.roots, function(i, name){
                             $('#vz-import-json-root').append('<option value="' + name + '">' + name.replace(regex, visualizer.json_tag_separator_view) + '</option>');
@@ -439,7 +463,7 @@
                 data    : {
                     'action'    : visualizer.ajax['actions']['json_get_data'],
                     'security'  : visualizer.ajax['nonces']['json_get_data'],
-                    'params'    : $('#json-root-form').serialize()
+                    'params'    : $('#json-root-form, #json-endpoint-form').serialize()
                 },
                 success : function(data){
                     if(data.success){
@@ -453,8 +477,6 @@
                             });
                             $('.json-pagination').show();
                         }
-                        $('#json-conclude-form [name="url"]').val(data.data.url);
-                        $('#json-conclude-form [name="root"]').val(data.data.root);
                         $('#json-conclude-form .json-table').html(data.data.table);
 
                         var $table = create_editor_table( '#json-conclude-form' );
@@ -474,12 +496,24 @@
 
         // when the data is set and the chart is updated, toggle the screen so that the chart is shown
         $('#json-conclude-form').on( 'submit', function(e){
-            // populate the form elements that are in the misc tab.
-            $('#json-conclude-form-helper .json-form-element').each(function(x, y){
+            // at least one column has to be selected as non-excluded.
+            var count_selected = 0;
+            $('select.viz-select-data-type').each(function(i, element){
+                if($(element).prop('selectedIndex') > 0){
+                    count_selected++;
+                }
+            });
+            if(count_selected === 0){
+                alert(visualizer.l10n.select_columns);
+                return false;
+            }
+
+            // populate the form elements that are in the other tabs.
+            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element, #vz-import-json .json-form-element').each(function(x, y){
                 $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
             });
-            $( '#json-chart-button' ).trigger('click');
-            $('#canvas').lock();
+
+            $('body').trigger('visualizer:json:form:submit');
         });
 
         // update the schedule
@@ -508,14 +542,14 @@
 
     function init_editor_table() {
         $('body').on('visualizer:db:editor:table:init', function(event, data){
-            var $table = create_editor_table('.viz-table-editor');
+            var $table = create_editor_table('.viz-table-editor', data.config);
             $('body').on('visualizer:db:editor:table:redraw', function(event, data){
                 $table.draw();
             });
         });
     }
 
-    function create_editor_table(element) {
+    function create_editor_table(element, config) {
         var settings = {
             paging: false,
             searching: false,
@@ -541,6 +575,9 @@
                     }
                 ]
             } );
+        }
+        if(config){
+            $.extend( settings, config );
         }
 
         var $table = $(element + ' .viz-editor-table').DataTable(settings);

@@ -1,6 +1,6 @@
 {
   "name": "visualizer",
-  "version": "3.3.4",
+  "version": "3.4.0",
   "description": "Visualizer Lite",
   "repository": {
     "type": "git",
@@ -16,12 +16,18 @@
   "bugs": {
     "url": "https://github.com/Codeinwp/visualizer/issues"
   },
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cd cypress && docker-compose up --exit-code-from cypress"
+  },
   "pot": {
     "reportmsgidbugsto": "https://github.com/Codeinwp/visualizer/issues",
     "languageteam": "Themeisle Translate <friends@themeisle.com>",
     "lasttranslator": "Themeisle Translate Team <friends@themeisle.com>"
   },
   "devDependencies": {
+    "cypress-file-upload": "^3.3.4",
+    "cypress": "^3.4.1",
     "grunt-plugin-fleet": "github:codeinwp/grunt-plugin-fleet",
     "load-project-config": "~0.2.0",
     "grunt-helpscout-faq": "~0.1.0"

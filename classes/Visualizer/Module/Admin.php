@@ -68,7 +68,66 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( '_wp_put_post_revision', 'addRevision', null, 10, 1 );
 		$this->_addAction( 'wp_restore_post_revision', 'restoreRevision', null, 10, 2 );
 
+		$this->_addAction( 'visualizer_chart_schedules_spl', 'addSplChartSchedules', null, 10, 3 );
+
 		$this->_addAction( 'admin_init', 'init' );
+	}
+
+
+	/**
+	 * Add disabled `optgroup` schedules to the drop downs.
+	 *
+	 * @since ?
+	 *
+	 * @access public
+	 *
+	 * @param string $feature The feature for which to add schedules.
+	 * @param int    $chart_id The chart ID.
+	 * @param int    $plan The plan number.
+	 */
+	public function addSplChartSchedules( $feature, $chart_id, $plan ) {
+		if ( apply_filters( 'visualizer_is_business', false ) ) {
+			return;
+		}
+
+		$license = __( 'PRO', 'visualizer' );
+		if ( Visualizer_Module::is_pro() ) {
+			switch ( $plan ) {
+				case 1:
+					$license = __( 'Developer', 'visualizer' );
+					break;
+			}
+		}
+
+		$hours = array(
+			'0' => __( 'Live', 'visualizer' ),
+			'1'  => __( 'Each hour', 'visualizer' ),
+			'12' => __( 'Each 12 hours', 'visualizer' ),
+			'24' => __( 'Each day', 'visualizer' ),
+			'72' => __( 'Each 3 days', 'visualizer' ),
+		);
+
+		switch ( $feature ) {
+			case 'json':
+			case 'csv':
+				// no more schedules if pro is already active.
+				if ( Visualizer_Module::is_pro() ) {
+					return;
+				}
+				break;
+			case 'wp':
+				// fall-through.
+			case 'db':
+				break;
+			default:
+				return;
+		}
+
+		echo '<optgroup disabled label="' . sprintf( __( 'More in the %s version', 'visualizer' ), $license ) . '">';
+		foreach ( $hours as $hour => $desc ) {
+			echo '<option disabled>' . $desc . '</option>';
+		}
+		echo '</optgroup>';
 	}
 
 	/**
@@ -332,6 +391,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'name'    => esc_html__( 'Column', 'visualizer' ),
 					'enabled' => true,
 					'supports'  => array( 'Google Charts', 'ChartJS' ),
+				),
+				'bubble'         => array(
+					'name'    => esc_html__( 'Bubble', 'visualizer' ),
+					'enabled' => true,
+					// chartjs' bubble is ugly looking (and it won't work off the default bubble.csv) so it is being excluded for the time being.
+					'supports'  => array( 'Google Charts' ),
 				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
@@ -726,7 +791,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
 			}
 
-			unset( $settings['height'], $settings['width'], $settings['chartArea'] );
+			if ( $settings ) {
+				unset( $settings['height'], $settings['width'], $settings['chartArea'] );
+			}
+
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
 
