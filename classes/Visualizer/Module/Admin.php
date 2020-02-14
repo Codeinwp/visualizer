@@ -198,7 +198,21 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$this->_addFilter( 'mce_external_languages', 'add_tinymce_lang', 10, 1 );
 			$this->_addFilter( 'mce_external_plugins', 'tinymce_plugin', 10, 1 );
 			$this->_addFilter( 'mce_buttons', 'register_mce_button', 10, 1 );
+			$this->_addFilter( 'tiny_mce_before_init', 'get_strings_for_block', 10, 1 );
 		}
+	}
+
+	/**
+	 * Add the strings required for the TinyMCE buttons for the classic block (not the classic editor).
+	 *
+	 * @since   ?
+	 * @access  friendly
+	 */
+	function get_strings_for_block( $settings ) {
+		$class = new Visualizer_Module_Language();
+		$strings         = $class->get_strings();
+		$array = array( 'visualizer_tinymce_plugin' => json_encode( $strings ) );
+		return array_merge( $settings, $array );
 	}
 
 	/**
