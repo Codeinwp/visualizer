@@ -1,4 +1,9 @@
 
+ ### v3.4.1 - 2020-02-14 
+ **Changes:** 
+ * [Fix] Insert chart button in the classic block
+* [Fix for Pro version] Import from chart did not work
+ 
  ### v3.4.0 - 2020-02-13 
  **Changes:** 
  * [Feat] Support for authentication for JSON import
