@@ -68,6 +68,18 @@ class Visualizer_Module_Language extends Visualizer_Module {
 		return $translated;
 	}
 
+	/**
+	 *
+	 * The method that returns the strings array
+	 *
+	 * @since    ?
+	 * @access   public
+	 * @return array
+	 */
+	public function get_strings() {
+		return $this->strings;
+	}
+
 }
 
 $visualizerLangClass = new Visualizer_Module_Language();
