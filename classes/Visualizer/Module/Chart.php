@@ -898,6 +898,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$source = new Visualizer_Source_Csv( $tmpfile );
 				fclose( $handle );
 				break;
+			case 'table':
+				// Import from Chart
+				// fall-through.
 			case 'excel':
 				// data coming in from the excel editor.
 				$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
