@@ -18,11 +18,6 @@ set -e
 
 export CYPRESS_HOST=$wp_host
 
-# test free - lifecycle
-export CYPRESS_SPEC_TO_RUN="free-lifecycle.js"
+docker exec $args visualizer_wordpress wp --quiet plugin deactivate classic-editor
+export CYPRESS_SPEC_TO_RUN="free-gutenberg.js"
 npm run cypress:run
-
-# test free - sources
-export CYPRESS_SPEC_TO_RUN="free-sources.js"
-npm run cypress:run
-
