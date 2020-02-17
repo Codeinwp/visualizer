@@ -23,3 +23,12 @@ import './commands'
 Cypress.Cookies.defaults({
     whitelist: /wordpress_.*/
 })
+
+// ignore JS errors.
+Cypress.on('uncaught:exception', (err, runnable) => {
+    expect(err.message).to.include('Google Charts loader.js can only be loaded once');
+    done();
+    return false;
+});
+
+

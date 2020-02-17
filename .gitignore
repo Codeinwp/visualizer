@@ -11,3 +11,4 @@ cypress/integration/examples
 cypress/integration/localhost*
 cypress/plugins
 cypress.env.json
+grunt
