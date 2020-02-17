@@ -162,6 +162,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 ## Changelog ##
+### 3.4.2 - 2020-02-17  ###
+
+* New Cypress tests for the Gutenberg block
+
+
 ### 3.4.1 - 2020-02-14  ###
 
 * [Fix] Insert chart button in the classic block

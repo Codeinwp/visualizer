@@ -1,4 +1,8 @@
 
+ ### v3.4.2 - 2020-02-17 
+ **Changes:** 
+ * New Cypress tests for the Gutenberg block
+ 
  ### v3.4.1 - 2020-02-14 
  **Changes:** 
  * [Fix] Insert chart button in the classic block
