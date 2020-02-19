@@ -153,7 +153,7 @@ abstract class Visualizer_Render {
 
 	/**
 	 * Checks if the request is from Gutenberg.
-	 * 
+	 *
 	 * This happens when the chart is being added to a gutenberg block by inserting a visualizer block.
 	 *
 	 * @since ?
