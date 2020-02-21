@@ -141,7 +141,10 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$root = get_post_meta( $id, Visualizer_Plugin::CF_JSON_ROOT, true );
 		$paging = get_post_meta( $id, Visualizer_Plugin::CF_JSON_PAGING, true );
 		$headers = get_post_meta( $id, Visualizer_Plugin::CF_JSON_HEADERS, true );
-		if ( empty( $headers['method'] ) ) {
+		if ( empty( $headers ) ) {
+			$headers = array();
+		}
+		if ( $headers && empty( $headers['method'] ) ) {
 			$headers['method'] = 'get';
 		}
 		$methods = apply_filters( 'visualizer_json_request_methods', array( 'GET', 'POST' ) );
@@ -174,7 +177,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 									<div>
 										<select name="method" class="json-form-element">
 										<?php foreach ( $methods as $method ) { ?>
-											<option value="<?php echo $method; ?>" <?php selected( $headers['method'], $method ); ?>><?php echo $method; ?></option>
+											<option value="<?php echo $method; ?>" <?php $headers && selected( $headers['method'], $method ); ?>><?php echo $method; ?></option>
 										<?php } ?>
 										</select>
 									</div>
@@ -339,7 +342,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$csv = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, array(), $chart_id, 'csv-display' );
 		$data = '';
 		if ( ! empty( $csv ) && isset( $csv['string'] ) ) {
-			$data = str_replace( PHP_EOL, "\n", $csv['string'] );
+			$data = str_replace( PHP_EOL, "\n", stripslashes( $csv['string'] ) );
 		}
 		?>
 		<div class="viz-simple-editor-type viz-text-editor">
@@ -368,7 +371,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			}
 			$chart      = get_post( $chart_id );
 			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-			$data       = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( str_replace( "'", "\'", html_entity_decode( $chart->post_content ) ) ), $type );
+			$data       = Visualizer_Module::get_chart_data( $chart, $type );
 		} else {
 			$headers    = array_keys( $data[0] );
 		}

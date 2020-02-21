@@ -190,7 +190,7 @@ class Visualizer_Module {
 			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
 			$rows   = array();
 			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-			$data   = unserialize( $chart->post_content );
+			$data = self::get_chart_data( $chart, $type, false );
 			if ( ! empty( $series ) ) {
 				$row = array();
 				foreach ( $series as $array ) {
@@ -698,4 +698,30 @@ class Visualizer_Module {
 		}
 	}
 
+	/**
+	 * Gets the chart content after common manipulations.
+	 */
+	public static function get_chart_data( $chart, $type, $run_filter = true ) {
+		// change HTML entities
+		$data = unserialize( html_entity_decode( $chart->post_content ) );
+		$altered = array();
+		foreach ( $data as $index => $array ) {
+			if ( ! is_array( $index ) ) {
+				foreach ( $array as &$datum ) {
+					if ( is_string( $datum ) ) {
+						$datum = stripslashes( $datum );
+					}
+				}
+				$altered[ $index ] = $array;
+			}
+		}
+		// if something goes wrong and the end result is empty, be safe and use the original data
+		if ( empty( $altered ) ) {
+			$altered = $data;
+		}
+		if ( $run_filter ) {
+			return apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
+		}
+		return $altered;
+	}
 }
