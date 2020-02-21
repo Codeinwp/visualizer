@@ -63,6 +63,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
 
+		// screen pagination
+		$this->_addFilter( 'set-screen-option', 'setScreenOptions', 10, 3 );
+
 		// revision support.
 		$this->_addFilter( 'wp_revisions_to_keep', 'limitRevisions', null, 10, 2 );
 		$this->_addAction( '_wp_put_post_revision', 'addRevision', null, 10, 1 );
@@ -707,6 +710,36 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			array( $this, 'renderSupportPage' )
 		);
 		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
+
+		add_action( "load-{$this->_libraryPage}", array( $this, 'addScreenOptions' ) );
+	}
+
+	/**
+	 * Adds the screen options for pagination.
+	 */
+	function addScreenOptions() {
+		$screen = get_current_screen();
+
+		// bail if it's some other page.
+		if ( ! is_object( $screen ) || $screen->id !== $this->_libraryPage ) {
+			return;
+		}
+
+		$args = array(
+			'label' => __( 'Number of charts per page:', 'visualizer' ),
+			'default' => 6,
+			'option' => 'visualizer_per_page_library',
+		);
+		add_screen_option( 'per_page', $args );
+	}
+
+	/**
+	 * Returns the screen option for pagination.
+	 */
+	function setScreenOptions( $status, $option, $value ) {
+		if ( 'visualizer_per_page_library' === $option ) {
+			return $value;
+		}
 	}
 
 	/**
@@ -730,10 +763,25 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 			)
 		);
+
+		$per_page = 6;
+		$screen = get_current_screen();
+		if ( $screen ) {
+			// retrieve the per_page option
+			$screen_option = $screen->get_option( 'per_page', 'option' );
+			// retrieve the value stored for the current user
+			$user = get_current_user_id();
+			$per_page = get_user_meta( $user, $screen_option, true );
+			if ( empty( $per_page ) || $per_page < 1 ) {
+				// nothing set, get the default value
+				$per_page = $screen->get_option( 'per_page', 'default' );
+			}
+		}
+
 		// the initial query arguments to fetch charts
 		$query_args = array(
 			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
-			'posts_per_page' => 6,
+			'posts_per_page' => $per_page,
 			'paged'          => $page,
 		);
 		// add chart type filter to the query arguments
