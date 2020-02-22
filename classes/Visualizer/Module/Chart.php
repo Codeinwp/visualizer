@@ -358,7 +358,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-		$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
+		$data   = self::get_chart_data( $chart, $type );
 		$library = $this->load_chart_type( $chart->ID );
 
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
@@ -885,13 +885,23 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						if ( empty( $row ) ) {
 							continue;
 						}
-						$columns = explode( ',', $row );
-						fputcsv( $handle, $columns );
+						// don't use fpucsv here because we need to just dump the data
+						// minus the empty rows
+						// because fputcsv needs to tokenize
+						// we can standardize the CSV enclosure here and replace all ' with "
+						// we can assume that if there are an even number of ' they should be changed to "
+						// but that will screw up words like fo'c'sle
+						// so here let's just assume ' will NOT be used for enclosures
+						fwrite( $handle, $row );
+						fwrite( $handle, PHP_EOL );
 					}
 				}
 				$source = new Visualizer_Source_Csv( $tmpfile );
 				fclose( $handle );
 				break;
+			case 'table':
+				// Import from Chart
+				// fall-through.
 			case 'excel':
 				// data coming in from the excel editor.
 				$source = apply_filters( 'visualizer_pro_handle_chart_data', $data, '' );
@@ -946,7 +956,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		for ( $j = 0; $j < count( $columns[0] ); $j++ ) {
 			$row = array();
 			for ( $i = 0; $i < count( $headers ); $i++ ) {
-				$row[] = $columns[ $i ][ $j ];
+				$row[] = sanitize_text_field( $columns[ $i ][ $j ] );
 			}
 			$csv[]  = $row;
 		}
@@ -1324,6 +1334,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				);
 				$render->data   = json_encode( $source->getRawData() );
 				$render->series = json_encode( $source->getSeries() );
+				$render->id = $chart_id;
 			} else {
 				$render->message = $error;
 			}

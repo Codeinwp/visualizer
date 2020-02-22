@@ -190,7 +190,7 @@ class Visualizer_Module {
 			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
 			$rows   = array();
 			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-			$data   = unserialize( $chart->post_content );
+			$data = self::get_chart_data( $chart, $type, false );
 			if ( ! empty( $series ) ) {
 				$row = array();
 				foreach ( $series as $array ) {
@@ -237,7 +237,10 @@ class Visualizer_Module {
 
 			switch ( $type ) {
 				case 'csv':
-					$final   = $this->_getCSV( $rows, $filename );
+					$final   = $this->_getCSV( $rows, $filename, false );
+					break;
+				case 'csv-display':
+					$final   = $this->_getCSV( $rows, $filename, true );
 					break;
 				case 'xls':
 					$final   = $this->_getExcel( $rows, $filename );
@@ -256,8 +259,9 @@ class Visualizer_Module {
 	 * @access private
 	 * @param array  $rows The array of data.
 	 * @param string $filename The name of the file to use.
+	 * @param bool   $enclose Enclose strings that have commas in them in double quotes.
 	 */
-	private function _getCSV( $rows, $filename ) {
+	private function _getCSV( $rows, $filename, $enclose ) {
 		$filename .= '.csv';
 
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
@@ -273,6 +277,18 @@ class Visualizer_Module {
 		while ( ( $array = fgetcsv( $fp ) ) !== false ) {
 			if ( strlen( $csv ) > 0 ) {
 				$csv .= PHP_EOL;
+			}
+			// if enclosure is required, check every item of this line
+			// if a comma exists in the item, add enclosure.
+			if ( $enclose ) {
+				$temp_array = array();
+				foreach ( $array as $item ) {
+					if ( strpos( $item, ',' ) !== false ) {
+						$item = VISUALIZER_CSV_ENCLOSURE . $item . VISUALIZER_CSV_ENCLOSURE;
+					}
+					$temp_array[] = $item;
+				}
+				$array = $temp_array;
 			}
 			$csv .= implode( ',', $array );
 		}
@@ -682,4 +698,30 @@ class Visualizer_Module {
 		}
 	}
 
+	/**
+	 * Gets the chart content after common manipulations.
+	 */
+	public static function get_chart_data( $chart, $type, $run_filter = true ) {
+		// change HTML entities
+		$data = unserialize( html_entity_decode( $chart->post_content ) );
+		$altered = array();
+		foreach ( $data as $index => $array ) {
+			if ( ! is_array( $index ) ) {
+				foreach ( $array as &$datum ) {
+					if ( is_string( $datum ) ) {
+						$datum = stripslashes( $datum );
+					}
+				}
+				$altered[ $index ] = $array;
+			}
+		}
+		// if something goes wrong and the end result is empty, be safe and use the original data
+		if ( empty( $altered ) ) {
+			$altered = $data;
+		}
+		if ( $run_filter ) {
+			return apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
+		}
+		return $altered;
+	}
 }

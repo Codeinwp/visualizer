@@ -63,6 +63,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
 
+		// screen pagination
+		$this->_addFilter( 'set-screen-option', 'setScreenOptions', 10, 3 );
+
 		// revision support.
 		$this->_addFilter( 'wp_revisions_to_keep', 'limitRevisions', null, 10, 2 );
 		$this->_addAction( '_wp_put_post_revision', 'addRevision', null, 10, 1 );
@@ -71,8 +74,28 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'visualizer_chart_schedules_spl', 'addSplChartSchedules', null, 10, 3 );
 
 		$this->_addAction( 'admin_init', 'init' );
+
+		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
+			$this->load_cypress_hooks();
+		}
+
 	}
 
+	/**
+	 * Define the hooks that are needed for cypress.
+	 *
+	 * @since   3.4.0
+	 * @access  private
+	 */
+	private function load_cypress_hooks() {
+		// all charts should load on the same page without pagination.
+		add_filter(
+			'visualizer_query_args', function( $args ) {
+				$args['posts_per_page'] = 20;
+				return $args;
+			}, 10, 1
+		);
+	}
 
 	/**
 	 * Add disabled `optgroup` schedules to the drop downs.
@@ -198,7 +221,21 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$this->_addFilter( 'mce_external_languages', 'add_tinymce_lang', 10, 1 );
 			$this->_addFilter( 'mce_external_plugins', 'tinymce_plugin', 10, 1 );
 			$this->_addFilter( 'mce_buttons', 'register_mce_button', 10, 1 );
+			$this->_addFilter( 'tiny_mce_before_init', 'get_strings_for_block', 10, 1 );
 		}
+	}
+
+	/**
+	 * Add the strings required for the TinyMCE buttons for the classic block (not the classic editor).
+	 *
+	 * @since   ?
+	 * @access  friendly
+	 */
+	function get_strings_for_block( $settings ) {
+		$class = new Visualizer_Module_Language();
+		$strings         = $class->get_strings();
+		$array = array( 'visualizer_tinymce_plugin' => json_encode( $strings ) );
+		return array_merge( $settings, $array );
 	}
 
 	/**
@@ -673,6 +710,36 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			array( $this, 'renderSupportPage' )
 		);
 		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
+
+		add_action( "load-{$this->_libraryPage}", array( $this, 'addScreenOptions' ) );
+	}
+
+	/**
+	 * Adds the screen options for pagination.
+	 */
+	function addScreenOptions() {
+		$screen = get_current_screen();
+
+		// bail if it's some other page.
+		if ( ! is_object( $screen ) || $screen->id !== $this->_libraryPage ) {
+			return;
+		}
+
+		$args = array(
+			'label' => __( 'Number of charts per page:', 'visualizer' ),
+			'default' => 6,
+			'option' => 'visualizer_per_page_library',
+		);
+		add_screen_option( 'per_page', $args );
+	}
+
+	/**
+	 * Returns the screen option for pagination.
+	 */
+	function setScreenOptions( $status, $option, $value ) {
+		if ( 'visualizer_per_page_library' === $option ) {
+			return $value;
+		}
 	}
 
 	/**
@@ -754,10 +821,25 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 			)
 		);
+
+		$per_page = 6;
+		$screen = get_current_screen();
+		if ( $screen ) {
+			// retrieve the per_page option
+			$screen_option = $screen->get_option( 'per_page', 'option' );
+			// retrieve the value stored for the current user
+			$user = get_current_user_id();
+			$per_page = get_user_meta( $user, $screen_option, true );
+			if ( empty( $per_page ) || $per_page < 1 ) {
+				// nothing set, get the default value
+				$per_page = $screen->get_option( 'per_page', 'default' );
+			}
+		}
+
 		// the initial query arguments to fetch charts
 		$query_args = array(
 			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
-			'posts_per_page' => 6,
+			'posts_per_page' => $per_page,
 			'paged'          => $page,
 		);
 
@@ -775,7 +857,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$meta[]                   = $query;
 			$query_args['meta_query'] = $meta;
 		}
-		$q = new WP_Query( apply_filters( 'visualizer_pre_query', $query_args ) );
+		$q = new WP_Query( apply_filters( 'visualizer_query_args', $query_args ) );
 		return $q;
 	}
 
@@ -844,7 +926,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			}
 
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
+			$data   = self::get_chart_data( $chart, $type );
 
 			$library = $this->load_chart_type( $chart->ID );
 

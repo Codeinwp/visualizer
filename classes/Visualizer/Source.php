@@ -215,7 +215,8 @@ abstract class Visualizer_Source {
 					$data[ $i ] = ( is_numeric( $data[ $i ] ) ) ? floatval( $data[ $i ] ) : ( is_numeric( str_replace( ',', '', $data[ $i ] ) ) ? floatval( str_replace( ',', '', $data[ $i ] ) ) : null );
 					break;
 				case 'boolean':
-					$data[ $i ] = ! empty( $data[ $i ] ) ? filter_var( $data[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
+					$datum = trim( strval( $data[ $i ] ) );
+					$data[ $i ] = in_array( $datum, array( 'true', 'yes', '1' ), true ) ? 'true' : 'false';
 					break;
 				case 'timeofday':
 					$date = new DateTime( '1984-03-16T' . $data[ $i ] );
@@ -236,7 +237,8 @@ abstract class Visualizer_Source {
 					}
 					break;
 				case 'string':
-					$data[ $i ] = $this->toUTF8( $data[ $i ] );
+					// if a ' is provided, strip the backslash
+					$data[ $i ] = stripslashes( $this->toUTF8( $data[ $i ] ) );
 					break;
 			}
 		}

@@ -1,23 +1,23 @@
 {
   "env": {
-    "urls" : {
-        "library": "/admin.php?page=visualizer",
-        "samples": "https://s3.amazonaws.com/downloads.themeisle.com/samples-visualizer/"
+    "urls": {
+      "library": "/admin.php?page=visualizer",
+      "samples": "https://s3.amazonaws.com/downloads.themeisle.com/samples-visualizer/"
     },
     "chart_types": {
-        "free": 9,
-        "pro": 6
+      "free": 9,
+      "pro": 6
     },
     "features_locked": {
-        "free": 7,
-        "plan1": 5,
-        "plan2": 0
+      "free": 7,
+      "plan1": 5,
+      "plan2": 0
     },
     "query": "SELECT post_type, count(*) from wp_posts GROUP by post_type",
     "wait": 10000,
     "editors": {
-        "free": 2,
-        "selected" : "table"
+      "free": 2,
+      "selected": "table"
     }
   },
   "videoUploadOnPasses": false,
