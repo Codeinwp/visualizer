@@ -223,7 +223,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	protected function _renderActionSettings() {
 		global $wp_version;
 		$disable_actions    = version_compare( $wp_version, '4.7.0', '<' );
-		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), false );
+		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), true );
 			self::_renderCheckboxItem(
 				esc_html__( 'Print', 'visualizer' ),
 				'actions[]',
