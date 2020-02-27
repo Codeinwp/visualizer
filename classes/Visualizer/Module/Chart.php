@@ -358,7 +358,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-		$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
+		$data   = self::get_chart_data( $chart, $type );
 		$library = $this->load_chart_type( $chart->ID );
 
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
@@ -905,10 +905,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						}
 						// don't use fpucsv here because we need to just dump the data
 						// minus the empty rows
-						// and if any row contains ' or ", fputcsv will mess it up
 						// because fputcsv needs to tokenize
-						// and let's standardize the CSV enclosure
-						$row = str_replace( "'", VISUALIZER_CSV_ENCLOSURE, $row );
+						// we can standardize the CSV enclosure here and replace all ' with "
+						// we can assume that if there are an even number of ' they should be changed to "
+						// but that will screw up words like fo'c'sle
+						// so here let's just assume ' will NOT be used for enclosures
 						fwrite( $handle, $row );
 						fwrite( $handle, PHP_EOL );
 					}

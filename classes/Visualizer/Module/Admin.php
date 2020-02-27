@@ -63,6 +63,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
 
+		// screen pagination
+		$this->_addFilter( 'set-screen-option', 'setScreenOptions', 10, 3 );
+
 		// revision support.
 		$this->_addFilter( 'wp_revisions_to_keep', 'limitRevisions', null, 10, 2 );
 		$this->_addAction( '_wp_put_post_revision', 'addRevision', null, 10, 1 );
@@ -707,6 +710,94 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			array( $this, 'renderSupportPage' )
 		);
 		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
+
+		add_action( "load-{$this->_libraryPage}", array( $this, 'addScreenOptions' ) );
+	}
+
+	/**
+	 * Adds the screen options for pagination.
+	 */
+	function addScreenOptions() {
+		$screen = get_current_screen();
+
+		// bail if it's some other page.
+		if ( ! is_object( $screen ) || $screen->id !== $this->_libraryPage ) {
+			return;
+		}
+
+		$args = array(
+			'label' => __( 'Number of charts per page:', 'visualizer' ),
+			'default' => 6,
+			'option' => 'visualizer_per_page_library',
+		);
+		add_screen_option( 'per_page', $args );
+	}
+
+	/**
+	 * Returns the screen option for pagination.
+	 */
+	function setScreenOptions( $status, $option, $value ) {
+		if ( 'visualizer_per_page_library' === $option ) {
+			return $value;
+		}
+	}
+
+	/**
+	 * Adds the display filters to be used in the meta_query while displaying the charts.
+	 */
+	private function getDisplayFilters( &$query_args ) {
+		$query  = array();
+
+		// add chart type filter to the query arguments
+		$type = filter_input( INPUT_GET, 'type' );
+		if ( $type && in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
+			$query[] = array(
+				'key'     => Visualizer_Plugin::CF_CHART_TYPE,
+				'value'   => $type,
+				'compare' => '=',
+			);
+		}
+
+		// add chart library filter to the query arguments
+		$library = filter_input( INPUT_GET, 'library' );
+		if ( $library ) {
+			$query[] = array(
+				'key'     => Visualizer_Plugin::CF_CHART_LIBRARY,
+				'value'   => $library,
+				'compare' => '=',
+			);
+		}
+
+		// add date filter to the query arguments
+		$date = filter_input( INPUT_GET, 'date' );
+		$possible = array_keys( Visualizer_Plugin::getSupportedDateFilter() );
+		if ( $date && in_array( $date, $possible, true ) ) {
+			$query_args['date_query'] = array(
+				'after' => "$date -1 day",
+				'inclusive' => true,
+			);
+		}
+
+		// add source filter to the query arguments
+		$source = filter_input( INPUT_GET, 'source' );
+		if ( $source ) {
+			$source = ucwords( $source );
+			$source = "Visualizer_Source_{$source}";
+			$query[] = array(
+				'key'     => Visualizer_Plugin::CF_SOURCE,
+				'value'   => $source,
+				'compare' => '=',
+			);
+		}
+
+		$query_args['meta_query'] = $query;
+
+		$orderby = filter_input( INPUT_GET, 'orderby' );
+		$order = filter_input( INPUT_GET, 'order' );
+		if ( $orderby ) {
+			$query_args['order_by'] = $orderby;
+		}
+		$query_args['order'] = empty( $order ) ? 'desc' : $order;
 	}
 
 	/**
@@ -730,25 +821,30 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 			)
 		);
+
+		$per_page = 6;
+		$screen = get_current_screen();
+		if ( $screen ) {
+			// retrieve the per_page option
+			$screen_option = $screen->get_option( 'per_page', 'option' );
+			// retrieve the value stored for the current user
+			$user = get_current_user_id();
+			$per_page = get_user_meta( $user, $screen_option, true );
+			if ( empty( $per_page ) || $per_page < 1 ) {
+				// nothing set, get the default value
+				$per_page = $screen->get_option( 'per_page', 'default' );
+			}
+		}
+
 		// the initial query arguments to fetch charts
 		$query_args = array(
 			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
-			'posts_per_page' => 6,
+			'posts_per_page' => $per_page,
 			'paged'          => $page,
 		);
-		// add chart type filter to the query arguments
-		$filter = filter_input( INPUT_GET, 'type' );
-		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes(), true ) ) {
-			$query_args['meta_query'] = array(
-				array(
-					'key'     => Visualizer_Plugin::CF_CHART_TYPE,
-					'value'   => $filter,
-					'compare' => '=',
-				),
-			);
-		} else {
-			$filter = 'all';
-		}
+
+		$this->getDisplayFilters( $query_args );
+
 		// Added by Ash/Upwork
 		$filterByMeta = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
 		if ( $filterByMeta ) {
@@ -830,7 +926,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			}
 
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-			$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
+			$data   = self::get_chart_data( $chart, $type );
 
 			$library = $this->load_chart_type( $chart->ID );
 

@@ -13,10 +13,10 @@ describe('Test Free - lifecycle', function() {
         cy.visit(Cypress.env('urls').library );
 
         // chart types
-        cy.get('li.visualizer-list-item').should( "have.length", parseInt( Cypress.env('chart_types').free ) + parseInt( Cypress.env('chart_types').pro ) + 1 );
+        //cy.get('li.visualizer-list-item').should( "have.length", parseInt( Cypress.env('chart_types').free ) + parseInt( Cypress.env('chart_types').pro ) + 1 );
 
         // pro chart types
-        cy.get('li.visualizer-list-item a.visualizer-pro-only').should( "have.length", parseInt( Cypress.env('chart_types').pro ) );
+        //cy.get('li.visualizer-list-item a.visualizer-pro-only').should( "have.length", parseInt( Cypress.env('chart_types').pro ) );
 
         // upsell
         cy.get('.visualizer-sidebar-box').should( "have.length", 1 );
