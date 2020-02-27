@@ -79,13 +79,15 @@
                 parent.addClass('open');
             }
 
-            // if the user wanted to perform an action
-            // and the chart is no longer showing because that particular screen is showing
-            // e.g. create parameters
-            // and then the user decided to click on another action
-            // let's invoke the show chart of the previous action so that the chart shows 
-            // and the user does not get confused
-            $('input[type="button"][data-current!="chart"].show-chart-toggle').trigger('click');
+            /*
+             * if the user wants to perform an action and click that tab to change the source
+             * and the chart is no longer showing because that particular LHS screen is showing
+             * e.g. create parameters, import json, db query box etc.
+             * we need to make sure we cancel the current process WITHOUT saving
+             * and then show the chart as it was
+             * let's close the LHS window and show the chart that is hidden
+             */
+            $('body').trigger('visualizer:change:action');
         });
 
         // collapse other open subsections of this section
@@ -338,6 +340,16 @@
         });
 
         $( '#db-chart-button' ).on( 'click', function(){
+
+            $('body').off('visualizer:change:action').on('visualizer:change:action', function(e){
+                var filter_button = $( '#db-chart-button' );
+                $( '#visualizer-db-query' ).css("z-index", "-1").hide();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+            });
+
             $('#content').css('width', 'calc(100% - 300px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 $(this).val( $(this).attr( 'data-t-filter' ) );
@@ -390,7 +402,16 @@
 
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
-            var $bttn = $(this);
+
+            $('body').off('visualizer:change:action').on('visualizer:change:action', function(e){
+                var filter_button = $( '#json-chart-button' );
+                $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+            });
+
             $('#content').css('width', 'calc(100% - 100px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 // toggle from chart to LHS form
