@@ -973,6 +973,7 @@ button#editor-chart-button {
 #vz-csv-file-form,
 #vz-one-time-import,
 #vz-schedule-import,
+#vz-permissions .only-pro-content,
 .edit-data-content {
 	text-align: center;
 }

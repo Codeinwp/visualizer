@@ -74,13 +74,13 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		?>
 		<div id="viz-tabs">
 			<ul>
-				<li><a href="#viz-tab-basic"><?php _e( 'Source', 'visualizer' ); ?></a></li>
-				<li><a href="#viz-tab-advanced"><?php _e( 'Settings', 'visualizer' ); ?></a></li>
-				<li><a href="#viz-tab-docs"><?php _e( 'Docs', 'visualizer' ); ?></a></li>
+				<li><a href="#viz-tab-basic-content" id="viz-tab-basic"><?php _e( 'Source', 'visualizer' ); ?></a></li>
+				<li><a href="#viz-tab-advanced-content" id="viz-tab-advanced"><?php _e( 'Settings', 'visualizer' ); ?></a></li>
+				<li><a href="#viz-tab-docs-content" id="viz-tab-docs"><?php _e( 'Docs', 'visualizer' ); ?></a></li>
 			</ul>
-			<div id="viz-tab-basic"><?php Visualizer_Render_Layout::show( 'tab-basic', $this->chart->ID ); ?></div>
-			<div id="viz-tab-advanced"><?php Visualizer_Render_Layout::show( 'tab-advanced', $this->chart->ID, $this->sidebar ); ?></div>
-			<div id="viz-tab-docs"><?php Visualizer_Render_Layout::show( 'tab-docs', $this->chart->ID ); ?></div>
+			<div id="viz-tab-basic-content"><?php Visualizer_Render_Layout::show( 'tab-basic', $this->chart->ID ); ?></div>
+			<div id="viz-tab-advanced-content"><?php Visualizer_Render_Layout::show( 'tab-advanced', $this->chart->ID, $this->sidebar ); ?></div>
+			<div id="viz-tab-docs-content"><?php Visualizer_Render_Layout::show( 'tab-docs', $this->chart->ID ); ?></div>
 		</div>
 
 		<li class="viz-group bottom-fixed" id="vz-chart-copyright">Visualizer &copy; 

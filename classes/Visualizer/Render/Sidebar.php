@@ -655,8 +655,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $html Any additional HTML.
 	 * @param string $class Any additional classes.
 	 */
-	public static function _renderGroupStart( $title, $html = '', $class = '' ) {
-		echo '<li class="viz-group ' . $class . '">';
+	public static function _renderGroupStart( $title, $html = '', $class = '', $id = '' ) {
+		echo '<li id="'. $id . '" class="viz-group ' . $class . '">';
 			echo '<h3 class="viz-group-title">', $title, '</h3>';
 			echo $html;
 			echo '<ul class="viz-group-content">';

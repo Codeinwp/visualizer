@@ -489,7 +489,8 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			$permissions['edit-specific'] = 'administrator';
 		}
 
-		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Permissions', 'visualizer' ), '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' ) );
+		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Permissions', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' ), "vz-permissions" );
+			echo '<div style="position: relative">';
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Configure permissions for the chart.', 'visualizer' ) );
 			Visualizer_Render_Sidebar::_renderSectionEnd();
@@ -554,7 +555,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					true,
 					array( 'visualizer-permission', 'visualizer-permission-specific', 'visualizer-permission-edit-specific' )
 				);
-			Visualizer_Render_Sidebar::_renderSectionEnd( apply_filters( 'visualizer_pro_upsell', 'only-pro-feature', 'chart-permissions' ) );
+			Visualizer_Render_Sidebar::_renderSectionEnd();
+			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+			echo '</div>';
 		Visualizer_Render_Sidebar::_renderGroupEnd();
 	}
 
@@ -711,8 +714,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 									</li>
 									<!-- import from json url -->
 									<li class="viz-subsection">
-									<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?>
-										<span class="dashicons dashicons-lock"></span></span>
+									<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?></span>
 										<div class="viz-section-items section-items">
 											<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
 											<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
@@ -765,7 +767,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 								</ul>
 							</li>
 							<!-- import from chart -->
-							<li class="viz-group viz-import-from-other <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 							<li class="viz-group viz-import-from-other <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 								<h2 class="viz-group-title viz-sub-group"
 									data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span

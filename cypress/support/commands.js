@@ -189,9 +189,8 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
     .then(function ($iframe) {
         const $body = $iframe.contents().find('body');
 
-        // collapse sources.
-        cy.wrap($body).find('.viz-group-title.visualizer-src-tab').first().click();
-        cy.wrap($body).find('#vz-chart-settings').click();
+        // click the settings tab
+        cy.wrap($body).find('#viz-tab-advanced').click();
 
         // cycle through each accordion and sub-accordion and set values in each input element.
         cy.wrap($body).find('#settings-form').within( ($form) => {
@@ -236,9 +235,8 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
     .then(function ($iframe) {
         const $body = $iframe.contents().find('body');
 
-        // collapse sources.
-        cy.wrap($body).find('.viz-group-title.visualizer-src-tab').first().click();
-        cy.wrap($body).find('#vz-chart-settings').click();
+        // click the settings tab
+        cy.wrap($body).find('#viz-tab-advanced').click();
 
         // cycle through each accordion and sub-accordion and set values in each input element.
         cy.wrap($body).find('#settings-form').within( ($form) => {
