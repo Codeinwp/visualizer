@@ -91,6 +91,7 @@ function visualizer_launch() {
 	// the link to pre-build queries.
 	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
 	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
+	define( 'VISUALIZER_DOC_COLLECTION', 'https://docs.themeisle.com/search?collectionId=561ec249c69791452ed4bceb&query=#+visualizer' );
 
 	// to redirect all themeisle_log_event to error log.
 	define( 'VISUALIZER_LOCAL_DEBUG', false );

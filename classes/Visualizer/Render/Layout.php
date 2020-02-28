@@ -489,7 +489,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			$permissions['edit-specific'] = 'administrator';
 		}
 
-		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Permissions', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' ), "vz-permissions" );
+		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Permissions', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-permissions' ), 'vz-permissions' );
 			echo '<div style="position: relative">';
 			Visualizer_Render_Sidebar::_renderSectionStart();
 				Visualizer_Render_Sidebar::_renderSectionDescription( esc_html__( 'Configure permissions for the chart.', 'visualizer' ) );
@@ -592,16 +592,24 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 *
 	 * @access public
 	 */
-	public static function _renderTabDocs( $args ) {
+	public static function _renderTabHelp( $args ) {
+		$chart_id = $args[1];
+		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		if ( $type === 'dataTable' ) {
+			$type = 'table';
+		}
 		?>
 			<ul class="viz-group-wrapper full-height">
-				<li class="viz-group open" id="vz-chart-documents">
+				<li class="viz-group open" id="vz-chart-help">
 					<ul class="viz-group-wrapper">
 		<?php
-		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'General', 'visualizer' ) );
+		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Documentation', 'visualizer' ) );
+			Visualizer_Render_Sidebar::_renderSectionStart( esc_html__( 'General', 'visualizer' ), false );
 		?>
-				<h2><a href="<?php echo VISUALIZER_MAIN_DOC; ?>" target="_blank"><?php _e( 'Index of all documents', 'visualizer' ); ?></a></h2>
+				<h4><span class="dashicons dashicons-editor-help"></span><a href="<?php echo VISUALIZER_MAIN_DOC; ?>" target="_blank"><?php _e( 'Main documentation page', 'visualizer' ); ?></a></h4>
+				<h4><span class="dashicons dashicons-search"></span><a href="<?php echo str_replace( '#', $type, VISUALIZER_DOC_COLLECTION ); ?>" target="_blank"><?php echo sprintf( __( 'Articles containing "%s"', 'visualizer' ), $type ); ?></a></h4>
 		<?php
+			Visualizer_Render_Sidebar::_renderSectionEnd();
 		Visualizer_Render_Sidebar::_renderGroupEnd();
 		?>
 					</ul>
