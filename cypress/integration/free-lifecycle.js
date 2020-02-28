@@ -29,7 +29,7 @@ describe('Test Free - lifecycle', function() {
     var first_chart_exists = '';
     var first_chart_created = '';
 
-    it.skip('Create default chart', function() {
+    it('Create default chart', function() {
         cy.visit(Cypress.env('urls').library ).then(() => {
             first_chart_exists = Cypress.$('div.visualizer-chart div.visualizer-chart-canvas').first().attr('id');
         });
@@ -78,7 +78,7 @@ describe('Test Free - lifecycle', function() {
         });
     });
 
-    it.skip('Clone chart', function() {
+    it('Clone chart', function() {
         cy.visit(Cypress.env('urls').library );
 
         cy.get('.visualizer-chart-action.visualizer-chart-clone').first().click({force:true});
@@ -96,7 +96,7 @@ describe('Test Free - lifecycle', function() {
         // Note: In google charts some parts are different for identical charts.
     });
 
-    it.skip('Delete chart', function() {
+    it('Delete chart', function() {
         cy.visit(Cypress.env('urls').library );
 
         cy.get('.visualizer-chart-action.visualizer-chart-delete').first().click({force:true}).then(() => {
