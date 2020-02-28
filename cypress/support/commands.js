@@ -194,7 +194,8 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
 
         // cycle through each accordion and sub-accordion and set values in each input element.
         cy.wrap($body).find('#settings-form').within( ($form) => {
-            cy.get('.viz-group-title').each( ($section) => {
+            // click non disabled sections
+            cy.get('.viz-group:not(.only-pro-feature) .viz-group-title').each( ($section) => {
                 cy.wrap($section).click().then( () => {
                     cy.wrap($section).siblings('.viz-group-content').first().then( ($tab) => {
                         if($tab.find('li.viz-subsection').length > 0){
@@ -240,7 +241,7 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
 
         // cycle through each accordion and sub-accordion and set values in each input element.
         cy.wrap($body).find('#settings-form').within( ($form) => {
-            cy.get('.viz-group-title').each( ($section) => {
+            cy.get('.viz-group:not(.only-pro-feature) .viz-group-title').each( ($section) => {
                 cy.wrap($section).click().then( () => {
                     cy.wrap($section).siblings('.viz-group-content').first().then( ($tab) => {
                         if($tab.find('li.viz-subsection').length > 0){
