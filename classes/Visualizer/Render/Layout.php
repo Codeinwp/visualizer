@@ -725,11 +725,14 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 												?>
 												</select>
 
-												<input type="button" id="view-remote-file" class="button <?php echo Visualizer_Module::is_pro() ? 'button-secondary' : 'button-primary'; ?>" value="<?php _e( 'Import', 'visualizer' ); ?>">
 												<?php
-												if ( Visualizer_Module::is_pro() ) {
+												if ( ! Visualizer_Module::is_pro() ) {
 													?>
-												<input type="button" id="vz-save-schedule" class="button button-primary" value="<?php _e( 'Save schedule', 'visualizer' ); ?>">
+													<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' ); ?>">
+													<?php
+												} else {
+													?>
+												<input type="button" id="vz-save-schedule" class="button button-primary" value="<?php _e( 'Import & Save schedule', 'visualizer' ); ?>">
 													<?php
 												}
 												?>
