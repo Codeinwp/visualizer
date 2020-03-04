@@ -706,7 +706,7 @@ class Visualizer_Module {
 		$data = unserialize( html_entity_decode( $chart->post_content ) );
 		$altered = array();
 		foreach ( $data as $index => $array ) {
-			if ( ! is_array( $index ) ) {
+			if ( ! is_array( $index ) && is_array( $array ) ) {
 				foreach ( $array as &$datum ) {
 					if ( is_string( $datum ) ) {
 						$datum = stripslashes( $datum );
