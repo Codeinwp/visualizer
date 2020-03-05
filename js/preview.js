@@ -1,5 +1,8 @@
 /* global visualizer */
 /* global console */
+/* global vizSettingsHaveChanged */
+/* global vizHaveSettingsChanged */
+
 (function($, v) {
 	var timeout;
 
@@ -19,11 +22,24 @@
                 clear: updateChart
             });
             $('#settings-form textarea[name="manual"]').change(validateJSON).keyup(validateJSON);
+            vizSettingsHaveChanged(false);
         };
 
         $('#settings-button').click(function() {
 			$('#settings-form').submit();
 		});
+
+        // this portion captures if the settings have changed so that tabs can handle that information.
+        var viz_settings_have_changed = false;
+
+        window.vizHaveSettingsChanged = function(){
+            return viz_settings_have_changed;
+        };
+
+        window.vizSettingsHaveChanged = function(value){
+            viz_settings_have_changed = value;
+        };
+        // this portion captures if the settings have changed so that tabs can handle that information.
 
 		function updateChart() {
 			clearTimeout(timeout);
@@ -35,6 +51,7 @@
 
 				v.charts.canvas.settings = settings;
                 $('body').trigger('visualizer:render:currentchart:update', {visualizer: v});
+                vizSettingsHaveChanged(true);
 			}, 1000);
 		}
 
