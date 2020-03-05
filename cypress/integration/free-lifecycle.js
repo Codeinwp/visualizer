@@ -12,11 +12,14 @@ describe('Test Free - lifecycle', function() {
     it('Verify library', function() {
         cy.visit(Cypress.env('urls').library );
 
-        // chart types
-        //cy.get('li.visualizer-list-item').should( "have.length", parseInt( Cypress.env('chart_types').free ) + parseInt( Cypress.env('chart_types').pro ) + 1 );
+        // all filter elements
+        cy.get('.viz-filter').should('have.length', 10);
 
-        // pro chart types
-        //cy.get('li.visualizer-list-item a.visualizer-pro-only').should( "have.length", parseInt( Cypress.env('chart_types').pro ) );
+        // chart types
+        cy.get('select.viz-filter[name="type"] option').should('have.length', parseInt( Cypress.env('chart_types').free ) + parseInt( Cypress.env('chart_types').pro ) + 1 );
+
+        // chart types pro
+        cy.get('select.viz-filter[name="type"] optgroup option').should('have.length', parseInt( Cypress.env('chart_types').pro ) );
 
         // upsell
         cy.get('.visualizer-sidebar-box').should( "have.length", 1 );

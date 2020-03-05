@@ -1,8 +1,10 @@
 /* global prompt */
 /* global visualizer */
 /* global alert */
+/* global confirm */
 /* global ajaxurl */
 /* global CodeMirror */
+/* global vizHaveSettingsChanged */
 
 (function ($) {
     $(window).on('load', function(){
@@ -16,7 +18,25 @@
         onReady();
     });
 
+    function initTabs(){
+        $( "#sidebar" ).lock();
+        $( "#viz-tabs" ).tabs({
+            create: function( event, ui ) {
+                $(this).addClass('done');
+                $( "#sidebar" ).unlock();
+            },
+            beforeActivate: function( event, ui ) {
+                // if settings have changed in tab #2 and tab #1 is being activated, warn the user.
+                if(vizHaveSettingsChanged() && $(ui.newTab.context).attr('id').includes('viz-tab-basic')){
+                    return confirm(visualizer.l10n.save_settings);
+                }
+            }
+        });
+    }
+
     function onReady() {
+        initTabs();
+
         // open the correct source tab/sub-tab.
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
@@ -52,20 +72,6 @@
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');
             $(this).parent().addClass('type-label-selected');
-        });
-
-        $('#vz-chart-settings h2').click(function () {
-            $("#vz-chart-source").hide();
-            $("#vz-chart-permissions").removeClass('open').addClass('bottom-fixed');
-            $(this).parent().removeClass('bottom-fixed').addClass('open');
-	        $("#vz-chart-permissions .viz-group-header").hide();
-            return false;
-        });
-        $('#vz-chart-settings .customize-section-back').click(function () {
-            $("#vz-chart-source").show();
-            $(this).parent().parent().removeClass('open').addClass('bottom-fixed');
-
-            return false;
         });
 
         // collapse other open sections of this group
@@ -172,35 +178,6 @@
     }
 
     function init_permissions(){
-        $('#vz-chart-permissions h2').click(function () {
-            $("#vz-chart-source").hide();
-            $("#vz-chart-permissions .viz-group-header").show();
-            $("#vz-chart-settings").removeClass('open').addClass('bottom-fixed');
-
-            $('#settings-button').click(function(e) {
-                e.preventDefault();
-                $('#permissions-form').submit();
-                $('#settings-form').submit();
-            });
-
-            $(this).parent().removeClass('bottom-fixed').addClass('open');
-
-            return false;
-        });
-        $('#vz-chart-permissions .customize-section-back').click(function () {
-            $("#vz-chart-source").show();
-
-            $("#vz-chart-permissions .viz-group-header").hide();
-            $('#settings-button').click(function(e) {
-                e.preventDefault();
-                $('#settings-form').submit();
-            });
-
-            $(this).parent().parent().removeClass('open').addClass('bottom-fixed');
-
-            return false;
-        });
-
         $('.visualizer-permission').chosen({
             width               : '50%',
             search_contains     : true
