@@ -230,7 +230,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			self::_renderSectionEnd();
 		}
 
-		if ( $this->_verticalGridLines ) {
+		if ( $this->_horizontalGridLines ) {
 			self::_renderSectionStart( esc_html__( 'View Window', 'visualizer' ), false );
 			self::_renderTextItem(
 				esc_html__( 'Maximum Value', 'visualizer' ),
@@ -346,7 +346,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			self::_renderSectionEnd();
 		}
 
-		if ( $this->_horizontalGridLines ) {
+		if ( $this->_verticalGridLines ) {
 			self::_renderSectionStart( esc_html__( 'View Window', 'visualizer' ), false );
 			self::_renderTextItem(
 				esc_html__( 'Maximum Value', 'visualizer' ),
