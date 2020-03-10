@@ -197,7 +197,9 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				'hAxis[gridlines][count]',
 				isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
 				esc_html__( 'The approximate number of horizontal gridlines inside the chart area. You can specify a value of 1 to only draw one gridline, 0 to draw no gridlines or -1 to automatically compute the number of gridlines. Any other number will be used to compute the minSpacing between gridlines.', 'visualizer' ),
-				5
+				5,
+				'number',
+				array( 'min' => -1, 'max' => 1000, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -311,7 +313,9 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				'vAxis[gridlines][count]',
 				isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
 				esc_html__( 'The approximate number of vertical gridlines inside the chart area. You can specify a value of 1 to only draw one gridline, 0 to draw no gridlines or -1 to automatically compute the number of gridlines. Any other number will be used to compute the minSpacing between gridlines.', 'visualizer' ),
-				5
+				5,
+				'number',
+				array( 'min' => -1, 'max' => 1000, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
