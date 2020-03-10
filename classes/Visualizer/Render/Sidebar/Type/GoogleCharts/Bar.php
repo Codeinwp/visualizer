@@ -42,7 +42,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Bar extends Visualizer_Render_
 		parent::__construct( $data );
 
 		// disable horizontal gridlines settings
-		$this->_horizontalGridLines = false;
+		$this->_verticalGridLines = false;
 	}
 
 	/**

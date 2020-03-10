@@ -42,7 +42,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Column extends Visualizer_Rend
 		parent::__construct( $data );
 
 		// disable vertical gridlines settings
-		$this->_verticalGridLines = false;
+		$this->_horizontalGridLines = false;
 	}
 
 	/**
