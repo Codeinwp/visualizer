@@ -213,8 +213,10 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Count', 'visualizer' ),
 				'vAxis[minorGridlines][count]',
 				isset( $this->vAxis['minorGridlines']['count'] ) ? $this->vAxis['minorGridlines']['count'] : '',
-				esc_html__( 'The number of horizontal minor gridlines between two regular gridlines.', 'visualizer' ),
-				0
+				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
+				0,
+				'number',
+				array( 'min' => 0, 'max' => 1, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -325,8 +327,10 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Count', 'visualizer' ),
 				'hAxis[minorGridlines][count]',
 				isset( $this->hAxis['minorGridlines']['count'] ) ? $this->hAxis['minorGridlines']['count'] : '',
-				esc_html__( 'The number of vertical minor gridlines between two regular gridlines.', 'visualizer' ),
-				0
+				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
+				0,
+				'number',
+				array( 'min' => 0, 'max' => 1, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
