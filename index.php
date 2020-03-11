@@ -71,7 +71,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_REST_VERSION', 1 );
 	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
 	// this is also used in Block.php
-	define( 'VISUALIZER_TEST_JS_CUSTOMIZATION', false );
+	define( 'VISUALIZER_TEST_JS_CUSTOMIZATION', true );
 
 	if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 		define( 'VISUALIZER_CSV_DELIMITER', ',' );

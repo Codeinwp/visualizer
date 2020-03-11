@@ -4,6 +4,7 @@
 import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
+import ChartJS from './ChartJS.js';
 
 import { formatDate, filterCharts } from '../utils.js';
 
@@ -48,7 +49,7 @@ class Charts extends Component {
         const perPage = visualizerLocalize.chartsPerPage;
 
 		// Fetch review again if block loaded after saving.
-		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=' + perPage + '&meta_key=visualizer-chart-library&meta_value=ChartJS' });
+		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=' + perPage });
 		this.setState({ charts: result });
 	}
 
@@ -59,7 +60,7 @@ class Charts extends Component {
 
 		this.setState({ isBusy: true });
 
-		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=${ perPage }&meta_key=visualizer-chart-library&meta_value=ChartJS&offset=${ offset }` });
+		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=${ perPage }&offset=${ offset }` });
 
 		if ( perPage > result.length ) {
 			chartsLoaded = true;
@@ -78,17 +79,6 @@ class Charts extends Component {
 
 		return (
 			<div className="visualizer-settings__charts">
-				<Notice
-					status="warning"
-					isDismissible={ false }
-				>
-					{ __( 'ChartJS charts are currently not available for selection here, you must visit the library, get the shortcode, and add the chart here in a shortcode tag.' ) }
-
-					<ExternalLink href={ visualizerLocalize.adminPage }>
-						{ __( 'Click here to visit Visualizer Charts Library.' ) }
-					</ExternalLink>
-				</Notice>
-
 				{
 					( null !== charts ) ?
 						( 1 <= charts.length ) ?
@@ -117,12 +107,6 @@ class Charts extends Component {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
 										}
 
-										if ( data['visualizer-chart-library']) {
-											if ( 'ChartJS' === data['visualizer-chart-library']) {
-												return;
-											}
-										}
-
 										if ( data['visualizer-data-exploded']) {
                                             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
                                         }
@@ -142,6 +126,14 @@ class Charts extends Component {
 														chartsScreen={ true }
 														options={ filterCharts( data['visualizer-settings']) }
 													/>
+												) : ( 'chartJS' === chart ? (
+                                                    <ChartJS
+														id={ charts[i].id }
+														data={ data['visualizer-data'] }
+														series={ data['visualizer-series'] }
+														chartsScreen={ true }
+														options={ filterCharts( data['visualizer-settings']) }
+                                                    />
 												) : ( '' !== data['visualizer-data-exploded'] ? (
 													<Chart
 														chartType={ chart }
