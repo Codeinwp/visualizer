@@ -15,12 +15,14 @@
         "react"
     ],
     "rules": {
+        "dot-notation": "off",
+        "lines-around-comment": "off",
         "indent": [
-            "warn",
+            "off",
             "tab"
         ],
         "linebreak-style": [
-            "warn",
+            "off",
             "unix"
         ],
         "quotes": [
