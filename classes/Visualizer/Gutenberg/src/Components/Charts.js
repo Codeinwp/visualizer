@@ -118,7 +118,7 @@ class Charts extends Component {
 													{ title }
 												</div>
 
-												{ ( 'dataTable' === chart ) ? (
+												{ 'dataTable' === chart ? (
 													<DataTable
 														id={ charts[i].id }
 														rows={ data['visualizer-data'] }
@@ -126,8 +126,9 @@ class Charts extends Component {
 														chartsScreen={ true }
 														options={ filterCharts( data['visualizer-settings']) }
 													/>
-												) : ( 'chartJS' === chart ? (
+												) : ( 'ChartJS' === data['visualizer-chart-library'] ? (
                                                     <ChartJS
+														chartType={ data['visualizer-chart-type'] }
 														id={ charts[i].id }
 														data={ data['visualizer-data'] }
 														series={ data['visualizer-series'] }
@@ -148,7 +149,7 @@ class Charts extends Component {
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
 													/>
-												) ) }
+												) ) ) }
 
                                                  <div className="visualizer-settings__charts-footer"><sub>
                                                     { footer }

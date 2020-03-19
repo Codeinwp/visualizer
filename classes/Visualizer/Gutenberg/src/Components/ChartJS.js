@@ -1,9 +1,21 @@
+/*
+I need your help. Steps:
+1. Create a Pie chart using ChartJS.
+2. In gutenberg, try to get the listing of the charts. It throws an error.
+3. I am using hardcoded data for a pie chart as in https://github.com/jerairrest/react-chartjs-2/blob/master/example/src/components/pie.js.
+4. I am loading a hardcoded Pie chart (not using CustomTag)
+
+There seems to be a problem that I cannot trace.
+*/
+
 /**
  * External dependencies
  */
 import uuidv4 from 'uuid';
 
-import { Scatter, Bubble, Polar, Radar, HorizontalBar, Bar, Line, Pie, Doughnut } from 'react-chartjs-2';
+import {merge} from 'lodash';
+
+import { defaults, Scatter, Bubble, Polar, Radar, HorizontalBar, Bar, Line, Pie, Doughnut } from 'react-chartjs-2';
 
 /**
  * WordPress dependencies
@@ -17,15 +29,22 @@ class ChartJS extends Component {
 	constructor() {
 		super( ...arguments );
 
-		this.initDataTable = this.initDataTable.bind( this );
+/*
+		this.initChart = this.initChart.bind( this );
+		this.formatDatum = this.formatDatum.bind( this );
+		this.formatData = this.formatData.bind( this );
+		this.handleSettings = this.handleSettings.bind( this );
 		this.dataRenderer = this.dataRenderer.bind( this );
-
+		this.handleAxes = this.handleAxes.bind( this );
+		this.configureAxes = this.configureAxes.bind( this );
+		this.handlePieSeriesSettings = this.handlePieSeriesSettings.bind( this );
+		this.handleSeriesSettings = this.handleSeriesSettings.bind( this );
+*/
 		this.chart;
 		this.uniqueId = uuidv4();
 	}
 
 	componentDidMount() {
-		this.initDataTable( this.props.columns, this.props.rows );
 	};
 
 	componentWillUnmount() {
@@ -33,162 +52,350 @@ class ChartJS extends Component {
 	}
 
 	componentDidUpdate( prevProps ) {
-		if ( this.props !== prevProps ) {
-			if ( this.props.options.responsive_bool !== prevProps.options.responsive_bool ) {
-				if ( 'true' === prevProps.options.responsive_bool ) {
-					document.getElementById( `dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).classList.remove( 'collapsed' );
-				}
-			}
-
-			this.table.destroy();
-			document.getElementById( `dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).innerHTML = '';
-			this.initDataTable( this.props.columns, this.props.rows );
-		}
 	}
 
-	initDataTable( tableColumns, tableRow ) {
-		const settings = this.props.options;
-
-		const columns = tableColumns.map( ( i, index ) => {
-			let type = i.type;
-
-			switch ( i.type ) {
-			case 'number':
-				type = 'num';
-				break;
-			case 'date':
-			case 'datetime':
-			case 'timeofday':
-				type = 'date';
-				break;
-			}
-
-			return {
-				title: i.label,
-				data: i.label,
-				type: type,
-				render: this.dataRenderer( data, type, index )
-			};
-		});
-
-		const data = tableRow.map( i => {
-			const row = {};
-
-			columns.forEach( ( j, n ) => {
-                var datum = i[n];
-
-                // datum could be undefined for dynamic data (e.g. through json).
-                if ( 'undefined' === typeof datum ) {
-                    datum = i[j.data];
-                }
-				row[j.data] = datum;
-			});
-
-			return row;
-		});
-
-		this.table = jQuery( `#dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).DataTable({
-			destroy: true,
-			data: data,
-			columns: columns,
-			paging: 'true' === settings.paging_bool ? true : false,
-			pageLength: settings.pageLength_int || 10,
-			pagingType: settings.pagingType,
-			ordering: 'false' === settings.ordering_bool ? false : true,
-			fixedHeader: 'true' === settings.fixedHeader_bool ? true : false,
-			scrollCollapse: this.props.chartsScreen && true || 'true' === settings.scrollCollapse_bool ? true : false,
-			scrollY: this.props.chartsScreen && 180 || ( 'true' === settings.scrollCollapse_bool && Number( settings.scrollY_int ) || false ),
-			responsive: this.props.chartsScreen && true || 'true' === settings.responsive_bool ? true : false,
-			searching: false,
-			select: false,
-			lengthChange: false,
-			bFilter: false,
-			bInfo: false
-		});
-	}
-
-	dataRenderer( data, type, index ) {
-		const settings = this.props.options;
-
-		if ( undefined === settings.series[index]) {
-			return data;
-		}
-
-		if ( 'date' === type || 'datetime' === type || 'timeofday' === type ) {
-			if ( settings.series[index].format && settings.series[index].format.from && settings.series[index].format.to ) {
-				return jQuery.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
-			}
-
-			return jQuery.fn.dataTable.render.moment( 'MM-DD-YYYY' );
-		}
-
-		if ( 'num' === type ) {
-			const parts = [ '', '', '', '', '' ];
-
-			if ( settings.series[index].format.thousands ) {
-				parts[0] = settings.series[index].format.thousands;
-			}
-
-			if ( settings.series[index].format.decimal ) {
-				parts[1] = settings.series[index].format.decimal;
-			}
-
-			if ( settings.series[index].format.precision ) {
-				parts[2] = settings.series[index].format.precision;
-			}
-
-			if ( settings.series[index].format.prefix ) {
-				parts[3] = settings.series[index].format.prefix;
-			}
-
-			if ( settings.series[index].format.suffix ) {
-				parts[4] = settings.series[index].format.suffix;
-			}
-
-			return jQuery.fn.dataTable.render.number( ...parts );
-		}
-
-		return data;
+	initChart() {
 	}
 
 	render() {
 		const settings = this.props.options;
+        let type = this.props.chartType;
+        switch ( this.props.chartType ) {
+            case 'column':
+                type = 'bar';
+                break;
+            case 'bar':
+                type = 'horizontalBar';
+                break;
+            case 'pie':
+                // donut is not a setting but a separate chart type.
+                if ( 'undefined' !== typeof settings['custom'] && 'true' === settings['custom']['donut']) {
+                    type = 'doughnut';
+                }
+                break;
+        }
+        type = type.substr( 0, 1 ).toUpperCase() + type.substr( 1 );
+
+        const CustomTag = `${type}`;
+
+        //const data = this.dataRenderer();
+
+        const data = {
+            labels: [
+                'Red',
+                'Blue',
+                'Yellow'
+            ],
+            datasets: [ {
+                data: [ 300, 50, 100 ],
+                backgroundColor: [
+		'#FF6384',
+		'#36A2EB',
+		'#FFCE56'
+		],
+		hoverBackgroundColor: [
+		'#FF6384',
+		'#36A2EB',
+		'#FFCE56'
+		]
+            } ]
+        };
+
+        console.log( data );
 
 		return (
 			<Fragment>
-				{ settings.customcss && (
-					<style>
-						{ settings.customcss.oddTableRow && (
-							`#dataTable-instances-${ this.props.id }-${ this.uniqueId } tr.odd {
-								${ settings.customcss.oddTableRow.color ?  `color: ${ settings.customcss.oddTableRow.color } !important;` : '' }
-								${ settings.customcss.oddTableRow['background-color'] ?  `background-color: ${ settings.customcss.oddTableRow['background-color'] } !important;` : '' }
-								${ settings.customcss.oddTableRow.transform ?  `transform: rotate( ${ settings.customcss.oddTableRow.transform }deg ) !important;` : '' }
-							}`
-						)}
-
-						{ settings.customcss.evenTableRow && (
-							`#dataTable-instances-${ this.props.id }-${ this.uniqueId } tr.even {
-								${ settings.customcss.evenTableRow.color ?  `color: ${ settings.customcss.evenTableRow.color } !important;` : '' }
-								${ settings.customcss.evenTableRow['background-color'] ?  `background-color: ${ settings.customcss.evenTableRow['background-color'] } !important;` : '' }
-								${ settings.customcss.evenTableRow.transform ?  `transform: rotate( ${ settings.customcss.evenTableRow.transform }deg ) !important;` : '' }
-							}`
-						)}
-
-						{ settings.customcss.tableCell && (
-							`#dataTable-instances-${ this.props.id }-${ this.uniqueId } tr td,
-							#dataTable-instances-${ this.props.id }-${ this.uniqueId }_wrapper tr th {
-								${ settings.customcss.tableCell.color ?  `color: ${ settings.customcss.tableCell.color } !important;` : '' }
-								${ settings.customcss.tableCell['background-color'] ?  `background-color: ${ settings.customcss.tableCell['background-color'] } !important;` : '' }
-								${ settings.customcss.tableCell.transform ?  `transform: rotate( ${ settings.customcss.tableCell.transform }deg ) !important;` : '' }
-							}`
-						)}
-					</style>
-				) }
-
-				<table id={ `dataTable-instances-${ this.props.id }-${ this.uniqueId }` }></table>
+				<Pie data={ data } id={ `chartjs-${ this.props.id }-${ this.uniqueId }` } />
 			</Fragment>
 		);
 	}
+
+    /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint ********************
+    dataRenderer() {
+        let rows = [];
+        let datasets = [];
+        let labels = [];
+
+        for ( let i = 0; i < this.props.data.length; i++ ) {
+			let row = [];
+			for ( let j = 0; j < this.props.series.length; j++ ) {
+                let data = this.props.data;
+				if ( 'date' === this.props.series[j].type || 'datetime' === this.props.series[j].type ) {
+					date = new Date( this.props.data[i][j]);
+					data[i][j] = null;
+					if ( '[object Date]' === Object.prototype.toString.call( date ) ) {
+						if ( ! isNaN( date.getTime() ) ) {
+							data[i][j] = date;
+						}
+					}
+				}
+                row.push( this.formatData( data[i][j], j, this.props.options, this.props.series ) );
+			}
+            rows.push( row );
+        }
+
+        // transpose
+        for ( let j = 0; j < this.props.series.length; j++ ) {
+            let row = [];
+            for ( let i = 0; i < rows.length; i++ ) {
+                if ( 0 === j ) {
+                    labels.push( rows[i][j]);
+                } else {
+                    row.push( rows[i][j]);
+                }
+            }
+            if ( 0 < row.length ) {
+                let $attributes = {label: this.props.series[j].label, data: row};
+                switch ( this.props.chartType ) {
+                    case 'pie':
+                    case 'polarArea':
+                        merge( $attributes, {label: labels});
+                        this.handlePieSeriesSettings( $attributes, rows, this.props.options );
+                        break;
+                    default:
+                        this.handleSeriesSettings( $attributes, j - 1, this.props.options );
+                }
+                datasets.push( $attributes );
+            }
+        }
+
+        this.handleSettings( this.props.options );
+
+        return {
+                labels: labels,
+                datasets: datasets
+            };
+    }
+
+    formatDatum( datum, format, type ) {
+        if ( '' === format || null === format || 'undefined' === typeof format ) {
+            return datum;
+        }
+        // if there is no type, this is probably coming from the axes formatting.
+        let removeDollar = true;
+        if ( 'undefined' === typeof type || null === type ) {
+            // we will determine type on the basis of the presence or absence of #.
+            type = 'date';
+            if ( -1 !== format.indexOf( '#' ) ) {
+                type = 'number';
+            }
+            removeDollar = false;
+        }
+
+        switch ( type ) {
+            case 'number':
+                // numeral.js works on 0 instead of # so we just replace that in the ICU pattern set.
+                format = format.replace( /#/g, '0' );
+                // we also replace all instance of '$' as that is more relevant for ticks.
+                if ( removeDollar ) {
+                    format = format.replace( /\$/g, '' );
+                }
+                datum = numeral( datum ).format( format );
+                break;
+            case 'date':
+            case 'datetime':
+            case 'timeofday':
+                datum = moment( datum ).format( format );
+                break;
+        }
+        return datum;
+    }
+
+    formatData( datum, j, settings, series ) {
+        j = j - 1;
+        let format = 'undefined' !== typeof settings.series  && 'undefined' !== typeof settings.series[j] ? settings.series[j].format : '';
+        return this.formatDatum( datum, format, series[j + 1].type );
+    }
+
+    handleSettings( settings ) {
+        if ( 'undefined' === typeof settings ) {
+            return;
+        }
+
+        // handle some defaults/idiosyncrasies.
+        if ( 'undefined' !== typeof settings['animation'] && 0 === parseInt( settings['animation']['duration']) ) {
+            settings['animation']['duration'] = 1000;
+        }
+
+        if ( 'undefined' !== typeof settings['title'] && '' !== settings['title']['text']) {
+            settings['title']['display'] = true;
+        }
+
+        if ( 'undefined' !== typeof settings['tooltip'] && 'undefined' !== typeof settings['tooltip']['intersect']) {
+            // jshint ignore:line
+            settings['tooltip']['intersect'] = true == settings['tooltip']['intersect'] || 1 === parseInt( settings['tooltip']['intersect']);  // jshint ignore:line
+        }
+
+        if ( 'undefined' !== typeof settings['fontName'] && '' !== settings['fontName']) {
+            defaults.global.defaultFontFamily = settings['fontName'];
+            delete settings['fontName'];
+        }
+
+        if ( 'undefined' !== typeof settings['fontSize'] && '' !== settings['fontSize']) {
+            defaults.global.defaultFontSize = settings['fontSize'];
+            delete settings['fontSize'];
+        }
+
+        // handle legend defaults.
+        if ( 'undefined' !== typeof settings['legend'] &&  'undefined' !== typeof settings['legend']['labels']) {
+            for ( let i in settings['legend']['labels']) {
+                if ( 'undefined' !== settings['legend']['labels'][i] && '' === settings['legend']['labels'][i]) {
+                    delete settings['legend']['labels'][i];
+                }
+            }
+        }
+
+        this.handleAxes( settings );
+    }
+
+    handleAxes( settings ) {
+        if ( 'undefined' !== typeof settings['yAxes'] &&  'undefined' !== typeof settings['xAxes']) {
+            // stacking has to be defined on both axes.
+            if ( 'undefined' !== typeof settings['yAxes']['stacked_bool']) {
+                settings['xAxes']['stacked_bool'] = 'true';
+            }
+            if ( 'undefined' !== typeof settings['xAxes']['stacked_bool']) {
+                settings['yAxes']['stacked_bool'] = 'true';
+            }
+        }
+        this.configureAxes( settings, 'yAxes' );
+        this.configureAxes( settings, 'xAxes' );
+    }
+
+    configureAxes( settings, axis ) {
+        if ( 'undefined' !== typeof settings[axis]) {
+            let $features = {};
+            for ( let i in settings[axis]) {
+                let $o = {};
+                if ( Array.isArray( settings[axis][i]) || 'object' === typeof settings[axis][i]) {
+                    for ( let j in settings[axis][i]) {
+                        let $val = '';
+                        if ( 'labelString' === j ) {
+                            $o['display'] = true;
+                            $val = settings[axis][i][j];
+                        } else if ( 'ticks' === i ) {
+                            // number values under ticks need to be converted to numbers or the library throws a JS error.
+                            $val = parseFloat( settings[axis][i][j]);
+                            if ( isNaN( $val ) ) {
+                                $val = '';
+                            }
+                        } else {
+                            $val = settings[axis][i][j];
+                        }
+                        if ( '' !== $val ) {
+                            $o[j] = $val;
+                        }
+                    }
+                } else {
+                    // usually for attributes that have primitive values.
+                    let array = i.split( '_' );
+                    let dataType = 'string';
+                    let dataValue = settings[axis][i];
+                    if ( 2 === array.length ) {
+                        dataType = array[1];
+                    }
+
+                    if ( '' === settings[axis][i]) {
+                        continue;
+                    }
+                    switch ( dataType ) {
+                        case 'bool':
+                            dataValue = 'true' === dataValue ? true : false;
+                            break;
+                        case 'int':
+                            dataValue = parseFloat( dataValue );
+                            break;
+                    }
+                    $o = dataValue;
+                    // remove the type suffix to get the name of the setting.
+                    i = i.replace( /_bool/g, '' ).replace( /_int/g, '' );
+                }
+                $features[i] = $o;
+            }
+            let $scales = {};
+            $scales['scales'] = {};
+            $scales['scales'][axis] = [];
+            if ( 'undefined' !== typeof settings['scales'] && 'undefined' === typeof settings[axis + 'set']) {
+                $scales['scales'] = settings['scales'];
+                if ( 'undefined' !== typeof settings['scales'][axis]) {
+                    $scales['scales'][axis] = settings['scales'][axis];
+                }
+            }
+            if ( 'undefined' === typeof $scales['scales'][axis]) {
+                $scales['scales'][axis] = [];
+            }
+            let $axis = $scales['scales'][axis];
+
+            $axis.push( $features );
+            merge( settings, $scales );
+
+            // to prevent duplication, indicates that the axis has been set.
+            let $custom = {};
+            $custom[axis + 'set'] = 'yes';
+            merge( settings, $custom );
+        }
+
+        // format the axes labels.
+        if ( 'undefined' !== typeof settings[axis + '_format'] && '' !== settings[axis + '_format']) {
+            let format = settings[axis + '_format'];
+            switch ( axis ) {
+                case 'xAxes':
+                    settings.scales.xAxes[0].ticks.callback = function( value, index, values ) {
+                        return this.formatDatum( value, format );
+                    };
+                    break;
+                case 'yAxes':
+                    settings.scales.yAxes[0].ticks.callback = function( value, index, values ) {
+                        return this.formatDatum( value, format );
+                    };
+                    break;
+            }
+            delete settings[axis + '_format'];
+        }
+        delete settings[axis];
+    }
+
+    handlePieSeriesSettings( $attributes, rows, settings ) {
+        if ( 'undefined' === typeof settings.slices ) {
+            return;
+        }
+
+        let atts = [];
+
+        // collect all the types of attributes
+        for ( let j in settings.slices[0]) {
+            // weight screws up the rendering for some reason, so we will ignore it.
+            if ( 'weight' === j ) {
+                continue;
+            }
+            atts.push( j );
+        }
+
+        for ( let j = 0; j < atts.length; j++ ) {
+            let values = [];
+            for ( let i = 0; i < rows.length; i++ ) {
+                if ( 'undefined' !== typeof settings.slices[i] && 'undefined' !== typeof settings.slices[i][atts[j]]) {
+                    values.push( settings.slices[i][atts[j]]);
+                }
+            }
+            let object = {};
+            object[ atts[ j ] ] = values;
+            merge( $attributes, object );
+        }
+    }
+
+    handleSeriesSettings( $attributes, j, settings ) {
+        if ( 'undefined' === typeof settings.series || 'undefined' === typeof settings.series[j]) {
+            return;
+        }
+        for ( let i in settings.series[j]) {
+            let $attribute = {};
+            $attribute[i] = settings.series[j][i];
+            merge( $attributes, $attribute );
+        }
+    }
+
+*/
 }
 
 export default ChartJS;
