@@ -106,7 +106,7 @@ class VerticalAxisSettings extends Component {
 						/>
 					</BaseControl>
 
-					{ ( -1 >= [ 'column' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'bar' ].indexOf( type ) ) && (
 						<Fragment>
 
 							<TextControl
@@ -151,7 +151,7 @@ class VerticalAxisSettings extends Component {
 
 							<TextControl
 								label={ __( 'Count' ) }
-								help={ __( 'The number of Vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.' ) }
+								help={ __( 'The approximate number of vertical gridlines inside the chart area. You can specify a value of -1 to automatically compute the number of gridlines, 0 or 1 to draw no gridlines, or 2 or more to only draw gridline. Any number greater than 2 will be used to compute the minSpacing between gridlines.' ) }
 								value={ settings.vAxis.gridlines ? settings.vAxis.gridlines.count : '' }
 								onChange={ e => {
 									if ( ! settings.vAxis.gridlines ) {
@@ -189,9 +189,12 @@ class VerticalAxisSettings extends Component {
 
 							<TextControl
 								label={ __( 'Count' ) }
-								help={ __( 'The number of Vertical minor gridlines between two regular gridlines.' ) }
-								value={ settings.vAxis.minorGridlines.count }
+								help={ __( 'Specify 0 to disable the minor gridlines.' ) }
+								value={ settings.vAxis.minorGridlines ? settings.vAxis.minorGridlines.count : '' }
 								onChange={ e => {
+                                    if ( ! settings.vAxis.minorGridlines ) {
+                                        settings.vAxis.minorGridlines = {};
+                                    }
 									settings.vAxis.minorGridlines.count = e;
 									this.props.edit( settings );
 								} }
@@ -201,8 +204,11 @@ class VerticalAxisSettings extends Component {
 								label={ __( 'Color' ) }
 							>
 								<ColorPalette
-									value={ settings.vAxis.minorGridlines.color }
+                                    value={ settings.vAxis.minorGridlines ? settings.vAxis.minorGridlines.color : '' }
 									onChange={ e => {
+                                        if ( ! settings.vAxis.minorGridlines ) {
+                                            settings.vAxis.minorGridlines = {};
+                                        }
 										settings.vAxis.minorGridlines.color = e;
 										this.props.edit( settings );
 									} }
@@ -220,8 +226,11 @@ class VerticalAxisSettings extends Component {
 							<TextControl
 								label={ __( 'Maximun Value' ) }
 								help={ __( 'The maximum vertical data value to render.' ) }
-								value={ settings.vAxis.viewWindow.max }
+								value={ settings.vAxis.viewWindow ? settings.vAxis.viewWindow.max : '' }
 								onChange={ e => {
+                                    if ( ! settings.vAxis.viewWindow ) {
+                                        settings.vAxis.viewWindow = {};
+                                    }
 									settings.vAxis.viewWindow.max = e;
 									this.props.edit( settings );
 								} }
@@ -230,8 +239,11 @@ class VerticalAxisSettings extends Component {
 							<TextControl
 								label={ __( 'Minimum Value' ) }
 								help={ __( 'The minimum vertical data value to render.' ) }
-								value={ settings.vAxis.viewWindow.min }
+								value={ settings.vAxis.viewWindow ? settings.vAxis.viewWindow.min : '' }
 								onChange={ e => {
+                                    if ( ! settings.vAxis.viewWindow ) {
+                                        settings.vAxis.viewWindow = {};
+                                    }
 									settings.vAxis.viewWindow.min = e;
 									this.props.edit( settings );
 								} }
