@@ -19,6 +19,7 @@ class ChartJS extends Component {
 	constructor() {
 		super( ...arguments );
 
+/*
 		this.initChart = this.initChart.bind( this );
 		this.formatDatum = this.formatDatum.bind( this );
 		this.formatData = this.formatData.bind( this );
@@ -28,8 +29,8 @@ class ChartJS extends Component {
 		this.configureAxes = this.configureAxes.bind( this );
 		this.handlePieSeriesSettings = this.handlePieSeriesSettings.bind( this );
 		this.handleSeriesSettings = this.handleSeriesSettings.bind( this );
-
-        this.chart;
+*/
+		this.chart;
 		this.uniqueId = uuidv4();
 	}
 
@@ -99,7 +100,7 @@ class ChartJS extends Component {
 		);
 	}
 
-    /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint ********************/
+    /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint ********************
     dataRenderer() {
         let rows = [];
         let datasets = [];
@@ -384,7 +385,7 @@ class ChartJS extends Component {
         }
     }
 
-/**/
+*/
 }
 
 export default ChartJS;
