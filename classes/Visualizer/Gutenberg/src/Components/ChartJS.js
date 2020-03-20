@@ -1,13 +1,3 @@
-/*
-I need your help. Steps:
-1. Create a Pie chart using ChartJS.
-2. In gutenberg, try to get the listing of the charts. It throws an error.
-3. I am using hardcoded data for a pie chart as in https://github.com/jerairrest/react-chartjs-2/blob/master/example/src/components/pie.js.
-4. I am loading a hardcoded Pie chart (not using CustomTag)
-
-There seems to be a problem that I cannot trace.
-*/
-
 /**
  * External dependencies
  */
@@ -29,7 +19,6 @@ class ChartJS extends Component {
 	constructor() {
 		super( ...arguments );
 
-/*
 		this.initChart = this.initChart.bind( this );
 		this.formatDatum = this.formatDatum.bind( this );
 		this.formatData = this.formatData.bind( this );
@@ -39,8 +28,8 @@ class ChartJS extends Component {
 		this.configureAxes = this.configureAxes.bind( this );
 		this.handlePieSeriesSettings = this.handlePieSeriesSettings.bind( this );
 		this.handleSeriesSettings = this.handleSeriesSettings.bind( this );
-*/
-		this.chart;
+
+        this.chart;
 		this.uniqueId = uuidv4();
 	}
 
@@ -110,7 +99,7 @@ class ChartJS extends Component {
 		);
 	}
 
-    /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint ********************
+    /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint ********************/
     dataRenderer() {
         let rows = [];
         let datasets = [];
@@ -395,7 +384,7 @@ class ChartJS extends Component {
         }
     }
 
-*/
+/**/
 }
 
 export default ChartJS;
