@@ -19,8 +19,8 @@ class ChartJS extends Component {
 	constructor() {
 		super( ...arguments );
 
-/*
 		this.initChart = this.initChart.bind( this );
+		this.renderChart = this.renderChart.bind( this );
 		this.formatDatum = this.formatDatum.bind( this );
 		this.formatData = this.formatData.bind( this );
 		this.handleSettings = this.handleSettings.bind( this );
@@ -29,7 +29,7 @@ class ChartJS extends Component {
 		this.configureAxes = this.configureAxes.bind( this );
 		this.handlePieSeriesSettings = this.handlePieSeriesSettings.bind( this );
 		this.handleSeriesSettings = this.handleSeriesSettings.bind( this );
-*/
+
 		this.chart;
 		this.uniqueId = uuidv4();
 	}
@@ -38,7 +38,6 @@ class ChartJS extends Component {
 	};
 
 	componentWillUnmount() {
-		this.chart.destroy();
 	}
 
 	componentDidUpdate( prevProps ) {
@@ -48,59 +47,45 @@ class ChartJS extends Component {
 	}
 
 	render() {
+        this.chart = this.renderChart();
+		return (
+			<Fragment>
+        { this.chart }
+			</Fragment>
+		);
+    }
+
+	renderChart() {
+        const data = this.dataRenderer();
+
 		const settings = this.props.options;
-        let type = this.props.chartType;
+        let id = `chartjs-${ this.props.id }-${ this.uniqueId }`;
         switch ( this.props.chartType ) {
+            case 'line':
+                return <Line data={ data } id={ id } />;
+            case 'scatter':
+                return <Scatter data={ data } id={ id } />;
+            case 'radar':
+                return <Radar data={ data } id={ id } />;
+            case 'polar':
+                return <Polar data={ data } id={ id } />;
+            case 'bubble':
+                return <Bubble data={ data } id={ id } />;
             case 'column':
-                type = 'bar';
-                break;
+                return <Bar data={ data } id={ id } />;
             case 'bar':
-                type = 'horizontalBar';
-                break;
+                return <HorizontalBar data={ data } id={ id  } />;
             case 'pie':
                 // donut is not a setting but a separate chart type.
                 if ( 'undefined' !== typeof settings['custom'] && 'true' === settings['custom']['donut']) {
-                    type = 'doughnut';
+                    return <Doughnut data={ data } id={ id } />;
                 }
-                break;
+                return <Pie data={ data } id={ id } />;
         }
-        type = type.substr( 0, 1 ).toUpperCase() + type.substr( 1 );
-
-        const CustomTag = `${type}`;
-
-        //const data = this.dataRenderer();
-
-        const data = {
-            labels: [
-                'Red',
-                'Blue',
-                'Yellow'
-            ],
-            datasets: [ {
-                data: [ 300, 50, 100 ],
-                backgroundColor: [
-		'#FF6384',
-		'#36A2EB',
-		'#FFCE56'
-		],
-		hoverBackgroundColor: [
-		'#FF6384',
-		'#36A2EB',
-		'#FFCE56'
-		]
-            } ]
-        };
-
-        console.log( data );
-
-		return (
-			<Fragment>
-				<Pie data={ data } id={ `chartjs-${ this.props.id }-${ this.uniqueId }` } />
-			</Fragment>
-		);
+		return null;
 	}
 
-    /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint ********************
+    /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint *********************/
     dataRenderer() {
         let rows = [];
         let datasets = [];
@@ -385,7 +370,7 @@ class ChartJS extends Component {
         }
     }
 
-*/
+/**/
 }
 
 export default ChartJS;

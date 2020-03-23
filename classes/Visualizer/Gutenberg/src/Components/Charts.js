@@ -91,8 +91,9 @@ class Charts extends Component {
 
 										let title, chart, footer;
 
-										if ( data['visualizer-settings'].title ) {
-											title = data['visualizer-settings'].title;
+										if ( data['visualizer-settings'].title  ) {
+                                            // chartjs titles are objects.
+											title = 'object' === typeof data['visualizer-settings'].title ? data['visualizer-settings'].title.text : data['visualizer-settings'].title;
 										} else {
 											title = `#${charts[i].id}`;
 										}
