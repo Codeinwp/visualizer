@@ -4,6 +4,7 @@
 import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
+import ChartJS from './ChartJS.js';
 
 import merge from 'merge';
 
@@ -75,14 +76,28 @@ class ChartRender extends Component {
 							</Toolbar>
 						</BlockControls>
 
-						{ ( 'dataTable' === chart ) ? (
+
+                        { 'dataTable' === chart ? (
 							<DataTable
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
 							/>
-						) : ( '' !== data['visualizer-data-exploded'] ? (
+                        ) : ( 'ChartJS' === this.props.chart['visualizer-chart-library'] ? (
+                            <ChartJS
+                                chartType={ this.props.chart['visualizer-chart-type'] }
+								id={ this.props.id }
+                                data={ this.props.chart['visualizer-data'] }
+                                series={ this.props.chart['visualizer-series'] }
+								options={
+									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
+										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
+										compact( this.props.chart['visualizer-settings'])
+								}
+								height="500px"
+                            />
+                        ) : ( '' !== data['visualizer-data-exploded'] ? (
 							<Chart
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
@@ -106,7 +121,8 @@ class ChartRender extends Component {
 								}
 								height="500px"
 							/>
-						) ) }
+                        ) ) ) }
+
 
                          <div className="visualizer-settings__charts-footer"><sub>
                             { footer }

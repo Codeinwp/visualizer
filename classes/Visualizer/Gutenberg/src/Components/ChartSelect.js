@@ -4,6 +4,7 @@
 import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
+import ChartJS from './ChartJS.js';
 
 import FileImport from './Import/FileImport.js';
 
@@ -15,7 +16,8 @@ import DataImport from './Import/DataImport.js';
 
 import ManualData from './Import/ManualData.js';
 
-import Sidebar from './Sidebar.js';
+import { ChartJS as SidebarChartJS } from './Sidebar/ChartJS.js';
+import { GoogleCharts as SidebarGoogleCharts } from './Sidebar/GoogleCharts.js';
 
 import ChartPermissions from './ChartPermissions.js';
 
@@ -75,6 +77,11 @@ class ChartSelect extends Component {
             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
         }
 
+        const library = this.props.chart['visualizer-chart-library'];
+
+        const SidebarCustom = `Sidebar${library}`;
+        console.log( SidebarCustom );
+
 		return (
 			<Fragment>
 				{ 'home' === this.state.route &&
@@ -133,7 +140,7 @@ class ChartSelect extends Component {
 						/>
 
 						{ 'showAdvanced' === this.state.route &&
-							<Sidebar chart={ this.props.chart } edit={ this.props.editSettings } />
+							<SidebarCustom chart={ this.props.chart } edit={ this.props.editSettings } />
 						}
 
 						{ 'showPermissions' === this.state.route &&
@@ -145,15 +152,27 @@ class ChartSelect extends Component {
 				<div className="visualizer-settings__chart">
 
 					{ ( null !== this.props.chart ) &&
-
-						( 'dataTable' === chart ) ? (
+                        ( 'dataTable' === chart ? (
 							<DataTable
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
 							/>
-						) : ( '' !== data['visualizer-data-exploded'] ? (
+                        ) : ( 'ChartJS' === this.props.chart['visualizer-chart-library'] ? (
+                            <ChartJS
+                                chartType={ this.props.chart['visualizer-chart-type'] }
+								id={ this.props.id }
+                                data={ data['visualizer-data'] }
+                                series={ data['visualizer-series'] }
+								options={
+									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
+										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
+										compact( this.props.chart['visualizer-settings'])
+								}
+								height="500px"
+                            />
+                        ) : ( '' !== data['visualizer-data-exploded'] ? (
 							<Chart
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
@@ -177,8 +196,9 @@ class ChartSelect extends Component {
 								}
 								height="500px"
 							/>
-						)
-					) }
+                        ) ) ) )
+                    }
+
 
                      <div className="visualizer-settings__charts-footer"><sub>
                         { footer }
