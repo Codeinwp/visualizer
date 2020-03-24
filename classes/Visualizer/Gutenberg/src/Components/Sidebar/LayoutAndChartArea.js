@@ -29,6 +29,8 @@ class LayoutAndChartArea extends Component {
 
 		const settings = this.props.chart['visualizer-settings'];
 
+        const lib = this.props.chart['visualizer-chart-library'];
+
 		return (
 			<PanelBody
 				title={ __( 'Layout And Chart Area' ) }
@@ -80,7 +82,7 @@ class LayoutAndChartArea extends Component {
 
 					) }
 
-					{ ( -1 >= [ 'gauge' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'gauge' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 
 						<Fragment>
 
@@ -133,7 +135,7 @@ class LayoutAndChartArea extends Component {
 
 				</PanelBody>
 
-				{ ( -1 >= [ 'geo', 'gauge' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'geo', 'gauge' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) &&  (
 
 					<PanelBody
 						title={ __( 'Chart Area' ) }

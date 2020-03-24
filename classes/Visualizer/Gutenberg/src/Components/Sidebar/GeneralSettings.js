@@ -26,6 +26,10 @@ class GeneralSettings extends Component {
 
 		const settings = this.props.chart['visualizer-settings'];
 
+        const lib = this.props.chart['visualizer-chart-library'];
+
+        console.log( settings );
+
 		const tooltipTriggers = [ { label: __( 'The tooltip will be displayed when the user hovers over an element' ), value: 'focus' } ];
 
 		if ( -1 >= [ 'timeline' ].indexOf( type ) ) {
@@ -33,6 +37,20 @@ class GeneralSettings extends Component {
 		}
 
 		tooltipTriggers[2] = { label: __( 'The tooltip will not be displayed' ), value: 'none' };
+
+        // elements that are named differently in different libraries.
+        let titleColorElement, legendColorElement;
+
+        switch ( lib ) {
+            case 'ChartJS':
+                titleColorElement = settings.title.fontColor;
+                legendColorElement = settings.legend.labels.fontColor;
+                break;
+            case 'GoogleCharts':
+                titleColorElement = settings.titleTextStyle.color;
+                legendColorElement = settings.legend.textStyle.color;
+                break;
+        }
 
 		return (
 			<PanelBody
@@ -79,9 +97,9 @@ class GeneralSettings extends Component {
 							label={ __( 'Chart Title Color' ) }
 						>
 							<ColorPalette
-								value={ settings.titleTextStyle.color }
+								value={ titleColorElement }
 								onChange={ e => {
-									settings.titleTextStyle.color = e;
+									titleColorElement = e;
 									this.props.edit( settings );
 								} }
 							/>
@@ -219,9 +237,9 @@ class GeneralSettings extends Component {
 							label={ __( 'Font Color' ) }
 						>
 							<ColorPalette
-								value={ settings.legend.textStyle.color }
+								value={ legendColorElement }
 								onChange={ e => {
-									settings.legend.textStyle.color = e;
+									legendColorElement = e;
 									this.props.edit( settings );
 								} }
 							/>
@@ -230,7 +248,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'dataTable' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 					<PanelBody
 						title={ __( 'Tooltip' ) }
 						className="visualizer-inner-sections"
