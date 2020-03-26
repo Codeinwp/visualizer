@@ -60,6 +60,8 @@ class ChartJS extends Component {
 
 		const settings = this.props.options;
         let id = `chartjs-${ this.props.id }-${ this.uniqueId }`;
+        let type = this.props.chartType;
+/*
         switch ( this.props.chartType ) {
             case 'line':
                 return <Line data={ data } id={ id } />;
@@ -82,7 +84,23 @@ class ChartJS extends Component {
                 }
                 return <Pie data={ data } id={ id } />;
         }
-		return null;
+*/
+
+        switch ( this.props.chartType ) {
+            case 'column':
+                type = 'bar';
+            case 'bar':
+                type = 'horizontalBar';
+            case 'pie':
+                // donut is not a setting but a separate chart type.
+                if ( 'undefined' !== typeof settings['custom'] && 'true' === settings['custom']['donut']) {
+                    type = 'doughnut';
+                }
+        }
+
+        const CustomChart = type.substring( 0, 1 ).toUpperCase() + type.substring( 1 );
+
+		return <CustomChart data={ data } id={ id } />;
 	}
 
     /**************** the below functions are taken from js/render-chartjs.js and formatted as per react and eslint *********************/
