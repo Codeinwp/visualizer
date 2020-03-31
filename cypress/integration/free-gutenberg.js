@@ -40,7 +40,9 @@ describe('Test Free - gutenberg', function() {
                 cy.wrap($block).find('.visualizer-settings__content-option').should('have.length', 2);
                 cy.wrap($block).find('.visualizer-settings__content-option').last().click({force:true});
 
+                cy.wait( Cypress.env('wait') );
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + (i + 1) + ') .visualizer-settings__charts-controls').click();
+                cy.wait( Cypress.env('wait') );
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').should('have.length', 1);
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 2);
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
