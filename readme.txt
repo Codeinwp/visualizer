@@ -67,7 +67,7 @@ The plugins works perfectly with the all <a href="http://justfreethemes.com" rel
 * [Create timeline chart](https://demo.themeisle.com/visualizer/timeline-chart/)
 * [Create radar/spider chart](https://demo.themeisle.com/visualizer/radar-spider-chart/)
 * [Create polar area chart](https://demo.themeisle.com/visualizer/polar-area-chart/)
-
+* [Create bubble chart](https://demo.themeisle.com/visualizer/bubble-chart/)
 
 
 

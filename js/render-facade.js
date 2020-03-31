@@ -83,7 +83,7 @@
     $(document).ready(function(){
 
         // for updating the currently displayed chart (preview mode)
-        window.updateChartPreview = function(){
+        window.vizUpdateChartPreview = function(){
             var event = new CustomEvent('visualizer:render:currentchart:update', {detail: {visualizer: visualizer}});
             document.body.dispatchEvent(event);
         };

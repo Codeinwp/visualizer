@@ -1,8 +1,10 @@
 /* global prompt */
 /* global visualizer */
 /* global alert */
+/* global confirm */
 /* global ajaxurl */
 /* global CodeMirror */
+/* global vizHaveSettingsChanged */
 
 (function ($) {
     $(window).on('load', function(){
@@ -16,7 +18,25 @@
         onReady();
     });
 
+    function initTabs(){
+        $( "#sidebar" ).lock();
+        $( "#viz-tabs" ).tabs({
+            create: function( event, ui ) {
+                $(this).addClass('done');
+                $( "#sidebar" ).unlock();
+            },
+            beforeActivate: function( event, ui ) {
+                // if settings have changed in tab #2 and tab #1 is being activated, warn the user.
+                if(vizHaveSettingsChanged() && $(ui.newTab.context).attr('id').includes('viz-tab-basic')){
+                    return confirm(visualizer.l10n.save_settings);
+                }
+            }
+        });
+    }
+
     function onReady() {
+        initTabs();
+
         // open the correct source tab/sub-tab.
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
@@ -54,20 +74,6 @@
             $(this).parent().addClass('type-label-selected');
         });
 
-        $('#vz-chart-settings h2').click(function () {
-            $("#vz-chart-source").hide();
-            $("#vz-chart-permissions").removeClass('open').addClass('bottom-fixed');
-            $(this).parent().removeClass('bottom-fixed').addClass('open');
-	        $("#vz-chart-permissions .viz-group-header").hide();
-            return false;
-        });
-        $('#vz-chart-settings .customize-section-back').click(function () {
-            $("#vz-chart-source").show();
-            $(this).parent().parent().removeClass('open').addClass('bottom-fixed');
-
-            return false;
-        });
-
         // collapse other open sections of this group
         $(document).on('click', '.viz-group-title', function () {
             var parent = $(this).parent();
@@ -79,13 +85,15 @@
                 parent.addClass('open');
             }
 
-            // if the user wanted to perform an action
-            // and the chart is no longer showing because that particular screen is showing
-            // e.g. create parameters
-            // and then the user decided to click on another action
-            // let's invoke the show chart of the previous action so that the chart shows 
-            // and the user does not get confused
-            $('input[type="button"][data-current!="chart"].show-chart-toggle').trigger('click');
+            /*
+             * if the user wants to perform an action and click that tab to change the source
+             * and the chart is no longer showing because that particular LHS screen is showing
+             * e.g. create parameters, import json, db query box etc.
+             * we need to make sure we cancel the current process WITHOUT saving
+             * and then show the chart as it was
+             * let's close the LHS window and show the chart that is hidden
+             */
+            $('body').trigger('visualizer:change:action');
         });
 
         // collapse other open subsections of this section
@@ -170,35 +178,6 @@
     }
 
     function init_permissions(){
-        $('#vz-chart-permissions h2').click(function () {
-            $("#vz-chart-source").hide();
-            $("#vz-chart-permissions .viz-group-header").show();
-            $("#vz-chart-settings").removeClass('open').addClass('bottom-fixed');
-
-            $('#settings-button').click(function(e) {
-                e.preventDefault();
-                $('#permissions-form').submit();
-                $('#settings-form').submit();
-            });
-
-            $(this).parent().removeClass('bottom-fixed').addClass('open');
-
-            return false;
-        });
-        $('#vz-chart-permissions .customize-section-back').click(function () {
-            $("#vz-chart-source").show();
-
-            $("#vz-chart-permissions .viz-group-header").hide();
-            $('#settings-button').click(function(e) {
-                e.preventDefault();
-                $('#settings-form').submit();
-            });
-
-            $(this).parent().parent().removeClass('open').addClass('bottom-fixed');
-
-            return false;
-        });
-
         $('.visualizer-permission').chosen({
             width               : '50%',
             search_contains     : true
@@ -338,6 +317,16 @@
         });
 
         $( '#db-chart-button' ).on( 'click', function(){
+
+            $('body').off('visualizer:change:action').on('visualizer:change:action', function(e){
+                var filter_button = $( '#db-chart-button' );
+                $( '#visualizer-db-query' ).css("z-index", "-1").hide();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+            });
+
             $('#content').css('width', 'calc(100% - 300px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 $(this).val( $(this).attr( 'data-t-filter' ) );
@@ -390,7 +379,16 @@
 
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
-            var $bttn = $(this);
+
+            $('body').off('visualizer:change:action').on('visualizer:change:action', function(e){
+                var filter_button = $( '#json-chart-button' );
+                $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
+                filter_button.val( filter_button.attr( 'data-t-chart' ) );
+                filter_button.html( filter_button.attr( 'data-t-chart' ) );
+                filter_button.attr( 'data-current', 'chart' );
+                $( '#canvas' ).css("z-index", "1").show();
+            });
+
             $('#content').css('width', 'calc(100% - 100px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 // toggle from chart to LHS form

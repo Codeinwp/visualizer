@@ -196,8 +196,10 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Count', 'visualizer' ),
 				'hAxis[gridlines][count]',
 				isset( $this->hAxis['gridlines']['count'] ) ? $this->hAxis['gridlines']['count'] : '',
-				esc_html__( 'The number of vertical gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
-				5
+				esc_html__( 'The approximate number of horizontal gridlines inside the chart area. You can specify a value of -1 to automatically compute the number of gridlines, 0 or 1 to draw no gridlines, or 2 or more to only draw gridline. Any number greater than 2 will be used to compute the minSpacing between gridlines.', 'visualizer' ),
+				5,
+				'number',
+				array( 'min' => -1, 'max' => 1000, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -213,8 +215,10 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Count', 'visualizer' ),
 				'vAxis[minorGridlines][count]',
 				isset( $this->vAxis['minorGridlines']['count'] ) ? $this->vAxis['minorGridlines']['count'] : '',
-				esc_html__( 'The number of horizontal minor gridlines between two regular gridlines.', 'visualizer' ),
-				0
+				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
+				0,
+				'number',
+				array( 'min' => 0, 'max' => 1, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -226,7 +230,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			self::_renderSectionEnd();
 		}
 
-		if ( $this->_verticalGridLines ) {
+		if ( $this->_horizontalGridLines ) {
 			self::_renderSectionStart( esc_html__( 'View Window', 'visualizer' ), false );
 			self::_renderTextItem(
 				esc_html__( 'Maximum Value', 'visualizer' ),
@@ -308,8 +312,10 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Count', 'visualizer' ),
 				'vAxis[gridlines][count]',
 				isset( $this->vAxis['gridlines']['count'] ) ? $this->vAxis['gridlines']['count'] : '',
-				esc_html__( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.', 'visualizer' ),
-				5
+				esc_html__( 'The approximate number of vertical gridlines inside the chart area. You can specify a value of -1 to automatically compute the number of gridlines, 0 or 1 to draw no gridlines, or 2 or more to only draw gridline. Any number greater than 2 will be used to compute the minSpacing between gridlines.', 'visualizer' ),
+				5,
+				'number',
+				array( 'min' => -1, 'max' => 1000, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -325,8 +331,10 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Count', 'visualizer' ),
 				'hAxis[minorGridlines][count]',
 				isset( $this->hAxis['minorGridlines']['count'] ) ? $this->hAxis['minorGridlines']['count'] : '',
-				esc_html__( 'The number of vertical minor gridlines between two regular gridlines.', 'visualizer' ),
-				0
+				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
+				0,
+				'number',
+				array( 'min' => 0, 'max' => 1, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -338,7 +346,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			self::_renderSectionEnd();
 		}
 
-		if ( $this->_horizontalGridLines ) {
+		if ( $this->_verticalGridLines ) {
 			self::_renderSectionStart( esc_html__( 'View Window', 'visualizer' ), false );
 			self::_renderTextItem(
 				esc_html__( 'Maximum Value', 'visualizer' ),

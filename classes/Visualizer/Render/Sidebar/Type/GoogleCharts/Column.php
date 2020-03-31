@@ -41,8 +41,8 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Column extends Visualizer_Rend
 	public function __construct( $data = array() ) {
 		parent::__construct( $data );
 
-		// disable vertical gridlines settings
-		$this->_verticalGridLines = false;
+		// disable horizontal gridlines settings
+		$this->_horizontalGridLines = false;
 	}
 
 	/**

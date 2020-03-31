@@ -189,13 +189,13 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
     .then(function ($iframe) {
         const $body = $iframe.contents().find('body');
 
-        // collapse sources.
-        cy.wrap($body).find('.viz-group-title.visualizer-src-tab').first().click();
-        cy.wrap($body).find('#vz-chart-settings').click();
+        // click the settings tab
+        cy.wrap($body).find('#viz-tab-advanced').click();
 
         // cycle through each accordion and sub-accordion and set values in each input element.
         cy.wrap($body).find('#settings-form').within( ($form) => {
-            cy.get('.viz-group-title').each( ($section) => {
+            // click non disabled sections
+            cy.get('.viz-group:not(.only-pro-feature) .viz-group-title').each( ($section) => {
                 cy.wrap($section).click().then( () => {
                     cy.wrap($section).siblings('.viz-group-content').first().then( ($tab) => {
                         if($tab.find('li.viz-subsection').length > 0){
@@ -236,13 +236,12 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
     .then(function ($iframe) {
         const $body = $iframe.contents().find('body');
 
-        // collapse sources.
-        cy.wrap($body).find('.viz-group-title.visualizer-src-tab').first().click();
-        cy.wrap($body).find('#vz-chart-settings').click();
+        // click the settings tab
+        cy.wrap($body).find('#viz-tab-advanced').click();
 
         // cycle through each accordion and sub-accordion and set values in each input element.
         cy.wrap($body).find('#settings-form').within( ($form) => {
-            cy.get('.viz-group-title').each( ($section) => {
+            cy.get('.viz-group:not(.only-pro-feature) .viz-group-title').each( ($section) => {
                 cy.wrap($section).click().then( () => {
                     cy.wrap($section).siblings('.viz-group-content').first().then( ($tab) => {
                         if($tab.find('li.viz-subsection').length > 0){
