@@ -38,6 +38,9 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _toHTML() {
+		if ( $this->is_request_from_gutenberg() ) {
+			return;
+		}
 		echo '<!DOCTYPE html>';
 		echo '<html>';
 			echo '<head>';
