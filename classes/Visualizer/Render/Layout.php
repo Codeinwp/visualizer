@@ -613,7 +613,8 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<li class="viz-group open" id="vz-chart-help">
 					<ul class="viz-group-wrapper">
 		<?php
-		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Documentation', 'visualizer' ) );
+		// open this tab by default.
+		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Documentation', 'visualizer' ), '', 'open' );
 			Visualizer_Render_Sidebar::_renderSectionStart( esc_html__( 'General', 'visualizer' ), false );
 		?>
 				<h4><span class="dashicons dashicons-editor-help"></span><a href="<?php echo VISUALIZER_MAIN_DOC; ?>" target="_blank"><?php _e( 'Main documentation page', 'visualizer' ); ?></a></h4>
