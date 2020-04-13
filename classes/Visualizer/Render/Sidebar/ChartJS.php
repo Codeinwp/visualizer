@@ -224,6 +224,16 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Legend', 'visualizer' ), false );
+				/* this does not work despite the documentation
+				self::_renderCheckboxItem(
+					esc_html__( 'Hide legend', 'visualizer' ),
+					'legend[display]',
+					isset( $this->legend['display'] ) ? $this->legend['display'] : false,
+					'false',
+					esc_html__( 'Show legend or not.', 'visualizer' )
+				);
+				*/
+
 				self::_renderSelectItem(
 					esc_html__( 'Position', 'visualizer' ),
 					'legend[position]',
@@ -231,6 +241,14 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					isset( $this->legend['position'] ) ? $this->legend['position'] : 'top',
 					$this->_legendPositions,
 					esc_html__( 'Determines where to place the legend, compared to the chart area.', 'visualizer' )
+				);
+
+				self::_renderSelectItem(
+					esc_html__( 'Alignment', 'visualizer' ),
+					'legend[alignment]',
+					$this->legend['alignment'],
+					$this->_alignments,
+					esc_html__( 'Determines the alignment of the legend.', 'visualizer' )
 				);
 
 				self::_renderCheckboxItem(
