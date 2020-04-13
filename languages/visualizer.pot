@@ -2,251 +2,260 @@
 # This file is distributed under the GPL v2.0 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Tables and Charts for WordPress 3.4.0\n"
+"Project-Id-Version: Visualizer: Tables and Charts for WordPress 3.4.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2020-01-22 06:46:07+00:00\n"
+"POT-Creation-Date: 2020-04-13 05:24:19+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Themeisle Translate Team <friends@themeisle.com>\n"
 "Language-Team: Themeisle Translate <friends@themeisle.com>\n"
-"X-Generator: grunt-wp-i18n 0.5.4\n"
-"X-Poedit-KeywordsList: "
-"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
-"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: United States\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: classes/Visualizer/Gutenberg/Block.php:482
-#: classes/Visualizer/Gutenberg/Block.php:503
-#: classes/Visualizer/Module/Chart.php:163
+#: classes/Visualizer/Gutenberg/Block.php:483
+#: classes/Visualizer/Gutenberg/Block.php:504
+#: classes/Visualizer/Module/Chart.php:191
 msgid "Unable to fetch data from the endpoint. Please try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:93
+#: classes/Visualizer/Module/Admin.php:116
 msgid "PRO"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:97
+#: classes/Visualizer/Module/Admin.php:120
 msgid "Developer"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:103
+#: classes/Visualizer/Module/Admin.php:126
 msgid "Live"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:104
+#: classes/Visualizer/Module/Admin.php:127
 msgid "Each hour"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:105
+#: classes/Visualizer/Module/Admin.php:128
 msgid "Each 12 hours"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:106
+#: classes/Visualizer/Module/Admin.php:129
 msgid "Each day"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:107
+#: classes/Visualizer/Module/Admin.php:130
 msgid "Each 3 days"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:130
+#: classes/Visualizer/Module/Admin.php:149
 msgid "More in the %s version"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:297
+#: classes/Visualizer/Module/Admin.php:330
 msgid "Insert"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:325
+#: classes/Visualizer/Module/Admin.php:358
 msgid "Visualizations"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:328
+#: classes/Visualizer/Module/Admin.php:361
 msgid "From Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:329
+#: classes/Visualizer/Module/Admin.php:362
 msgid "Create New"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:355
-#: classes/Visualizer/Render/Library.php:88
+#: classes/Visualizer/Module/Admin.php:388
 msgid "All"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:364
-#: classes/Visualizer/Module/Admin.php:500
-#: classes/Visualizer/Module/Admin.php:502
-#: classes/Visualizer/Module/Admin.php:530
-#: classes/Visualizer/Module/Admin.php:532
+#: classes/Visualizer/Module/Admin.php:397
+#: classes/Visualizer/Module/Admin.php:533
+#: classes/Visualizer/Module/Admin.php:535
+#: classes/Visualizer/Module/Admin.php:563
+#: classes/Visualizer/Module/Admin.php:565
 msgid "Table"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:369
+#: classes/Visualizer/Module/Admin.php:402
 msgid "Pie/Donut"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:374
+#: classes/Visualizer/Module/Admin.php:407
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Line.php:24
 msgid "Line"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:379
+#: classes/Visualizer/Module/Admin.php:412
 msgid "Area"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:385
+#: classes/Visualizer/Module/Admin.php:418
 msgid "Geo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:390
+#: classes/Visualizer/Module/Admin.php:423
 msgid "Bar"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:395
+#: classes/Visualizer/Module/Admin.php:428
 msgid "Column"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:400
+#: classes/Visualizer/Module/Admin.php:433
 msgid "Bubble"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:406
+#: classes/Visualizer/Module/Admin.php:439
 msgid "Scatter"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:411
+#: classes/Visualizer/Module/Admin.php:444
 msgid "Gauge"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:416
+#: classes/Visualizer/Module/Admin.php:449
 msgid "Candlestick"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:422
+#: classes/Visualizer/Module/Admin.php:455
 msgid "Table (Deprecated)"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:427
+#: classes/Visualizer/Module/Admin.php:460
 msgid "Timeline"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:432
+#: classes/Visualizer/Module/Admin.php:465
 msgid "Combo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:437
+#: classes/Visualizer/Module/Admin.php:470
 msgid "Polar Area"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:442
+#: classes/Visualizer/Module/Admin.php:475
 msgid "Radar/Spider"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:655
+#: classes/Visualizer/Module/Admin.php:688
 msgid "Visualizer"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:659
-#: classes/Visualizer/Module/Admin.php:660
+#: classes/Visualizer/Module/Admin.php:692
+#: classes/Visualizer/Module/Admin.php:693
 msgid "Chart Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:666
-#: classes/Visualizer/Module/Admin.php:667
+#: classes/Visualizer/Module/Admin.php:699
+#: classes/Visualizer/Module/Admin.php:700
 msgid "Add New Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:673
-#: classes/Visualizer/Module/Admin.php:674 templates/support.php:24
+#: classes/Visualizer/Module/Admin.php:706
+#: classes/Visualizer/Module/Admin.php:707 templates/support.php:24
 msgid "Support"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:895
+#: classes/Visualizer/Module/Admin.php:729
+msgid "Number of charts per page:"
+msgstr ""
+
+#: classes/Visualizer/Module/Admin.php:1021
 msgid "Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:920
-#: classes/Visualizer/Render/Page/Data.php:451
+#: classes/Visualizer/Module/Admin.php:1046
 msgid "Docs"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:925
+#: classes/Visualizer/Module/Admin.php:1051
 msgid "Pro Addon"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:714
-#: classes/Visualizer/Module/Chart.php:1192
+#: classes/Visualizer/Module/Chart.php:760
+#: classes/Visualizer/Module/Chart.php:1249
 msgid "You have entered an invalid URL. Please provide a valid URL."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:715
-#: classes/Visualizer/Module/Chart.php:1193
+#: classes/Visualizer/Module/Chart.php:761
+#: classes/Visualizer/Module/Chart.php:1250
 msgid "Loading..."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:716
+#: classes/Visualizer/Module/Chart.php:762
 msgid "An error occured in fetching data."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:717
+#: classes/Visualizer/Module/Chart.php:763
 msgid "Please select a few columns to include in the chart."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:760
+#: classes/Visualizer/Module/Chart.php:764
+msgid ""
+"You have modified the chart's settings. To modify the source/data again, "
+"you must save this chart and reopen it for editing. If you continue without "
+"saving the chart, you may lose your changes."
+msgstr ""
+
+#: classes/Visualizer/Module/Chart.php:807
 msgid "Save Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:761
+#: classes/Visualizer/Module/Chart.php:808
 msgid "Create Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:763
+#: classes/Visualizer/Module/Chart.php:810
 #: classes/Visualizer/Render/Page/Types.php:132
 msgid "Cancel"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:766
+#: classes/Visualizer/Module/Chart.php:813
 #: classes/Visualizer/Module/Language.php:51
 #: classes/Visualizer/Module/Language.php:52
 msgid "Insert Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:1024
-#: classes/Visualizer/Module/Chart.php:1025
+#: classes/Visualizer/Module/Chart.php:1081
+#: classes/Visualizer/Module/Chart.php:1082
 msgid "CSV file with chart data was not uploaded. Please try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Chart.php:1065
+#: classes/Visualizer/Module/Chart.php:1122
 msgid "CSV file is broken or invalid. Please try again."
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:126
-#: classes/Visualizer/Render/Sidebar.php:228
+#: classes/Visualizer/Render/Sidebar.php:230
 msgid "Print"
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:127
-#: classes/Visualizer/Render/Sidebar.php:236
+#: classes/Visualizer/Render/Sidebar.php:238
 msgid "CSV"
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:128
-#: classes/Visualizer/Render/Sidebar.php:246
+#: classes/Visualizer/Render/Sidebar.php:248
 msgid "Excel"
 msgstr ""
 
 #: classes/Visualizer/Module/Frontend.php:129
-#: classes/Visualizer/Render/Sidebar.php:254
+#: classes/Visualizer/Render/Sidebar.php:256
 msgid "Copy"
 msgstr ""
 
@@ -274,6 +283,26 @@ msgstr ""
 msgid "Buy now"
 msgstr ""
 
+#: classes/Visualizer/Plugin.php:130
+msgid "All dates"
+msgstr ""
+
+#: classes/Visualizer/Plugin.php:130
+msgid "Yesterday"
+msgstr ""
+
+#: classes/Visualizer/Plugin.php:130
+msgid "Last Week"
+msgstr ""
+
+#: classes/Visualizer/Plugin.php:130
+msgid "Last Month"
+msgstr ""
+
+#: classes/Visualizer/Plugin.php:130
+msgid "Last Year"
+msgstr ""
+
 #: classes/Visualizer/Render/Layout.php:65
 msgid "Your query goes here"
 msgstr ""
@@ -292,142 +321,387 @@ msgstr ""
 msgid "Use %1$sControl+Space%2$s for autocompleting keywords or table names."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:151
+#: classes/Visualizer/Render/Layout.php:154
 msgid "STEP 1: Specify the JSON endpoint/URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:156
+#: classes/Visualizer/Render/Layout.php:159
 msgid ""
 "If you want to add authentication or headers to the endpoint or change the "
 "request in any way, please refer to our document %1$shere%2$s."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:165
+#: classes/Visualizer/Render/Layout.php:168
 msgid "Please enter the URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:167
+#: classes/Visualizer/Render/Layout.php:170
 msgid "Fetch Endpoint"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:170
+#: classes/Visualizer/Render/Layout.php:173
 msgid "Headers"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:173
+#: classes/Visualizer/Render/Layout.php:176
 msgid "Request Type"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:183
+#: classes/Visualizer/Render/Layout.php:186
 msgid "Credentials"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:190
+#: classes/Visualizer/Render/Layout.php:193
 msgid "Username/Access Key"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:198
+#: classes/Visualizer/Render/Layout.php:201
 msgid "Password/Secret Key"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:204
-#: classes/Visualizer/Render/Layout.php:418
+#: classes/Visualizer/Render/Layout.php:207
+#: classes/Visualizer/Render/Layout.php:421
 msgid "OR"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:207
+#: classes/Visualizer/Render/Layout.php:210
 msgid "Authorization"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:214
+#: classes/Visualizer/Render/Layout.php:217
 msgid "e.g. SharedKey <AccountName>:<Signature>"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:222
+#: classes/Visualizer/Render/Layout.php:225
 msgid "STEP 2: Choose the JSON root"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:235
+#: classes/Visualizer/Render/Layout.php:238
 msgid "Parse Endpoint"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:238
+#: classes/Visualizer/Render/Layout.php:241
 msgid "STEP 3: Specify miscellaneous parameters"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:244
+#: classes/Visualizer/Render/Layout.php:247
 msgid "Get results from the first page only"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:268
+#: classes/Visualizer/Render/Layout.php:271
 msgid "STEP 4: Select the data to display in the chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:273
+#: classes/Visualizer/Render/Layout.php:276
 msgid ""
 "If you see Invalid Data in the table, you may have selected the wrong root "
 "to fetch data from. Please select an alternative from the JSON root "
 "dropdown."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:274
-#: classes/Visualizer/Render/Layout.php:311
+#: classes/Visualizer/Render/Layout.php:277
+#: classes/Visualizer/Render/Layout.php:314
 msgid ""
 "Select whether to include the data in the chart. Each column selected will "
 "form one series."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:275
-#: classes/Visualizer/Render/Layout.php:312
+#: classes/Visualizer/Render/Layout.php:278
+#: classes/Visualizer/Render/Layout.php:315
 msgid "If a column is selected to be included, specify its data type."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:276
-#: classes/Visualizer/Render/Layout.php:313
+#: classes/Visualizer/Render/Layout.php:279
+#: classes/Visualizer/Render/Layout.php:316
 msgid ""
 "You can use drag/drop to reorder the columns but this column position is "
 "not saved. So when you reload the table, you may have to reorder again."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:277
-#: classes/Visualizer/Render/Layout.php:314
+#: classes/Visualizer/Render/Layout.php:280
+#: classes/Visualizer/Render/Layout.php:317
 msgid ""
 "You can select any number of columns but the chart type selected will "
 "determine how many will display in the chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:278
+#: classes/Visualizer/Render/Layout.php:281
 msgid ""
 "Once you have made your selection, click 'Show Chart' on the right to view "
 "the chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:392
+#: classes/Visualizer/Render/Layout.php:395
 msgid "Label"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:406
+#: classes/Visualizer/Render/Layout.php:409
 msgid "Data Type"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:417
+#: classes/Visualizer/Render/Layout.php:420
 msgid "Exclude from chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:417
+#: classes/Visualizer/Render/Layout.php:420
 msgid "Exclude"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:418
+#: classes/Visualizer/Render/Layout.php:421
 msgid "Include in chart and select data type"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:437
+#: classes/Visualizer/Render/Layout.php:440
 msgid "Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:447
+#: classes/Visualizer/Render/Layout.php:450
 msgid "Invalid Data"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:492
+msgid "Permissions"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:495
+msgid "Configure permissions for the chart."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:498
+msgid "Who can see this chart?"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:504
+#: classes/Visualizer/Render/Layout.php:535
+msgid "All Users"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:505
+#: classes/Visualizer/Render/Layout.php:536
+msgid "Select Users"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:506
+#: classes/Visualizer/Render/Layout.php:537
+msgid "Select Roles"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:529
+msgid "Who can edit this chart?"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:617
+msgid "Documentation"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:618
+#: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php:73
+#: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php:102
+msgid "General"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:620
+msgid "Main documentation page"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:621
+msgid "Custom code snippets"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:624
+msgid "%s chart"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:626
+msgid "View demo"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:627
+msgid "Articles containing \"%s\""
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:678
+msgid "Import data from file"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:680
+msgid ""
+"Select and upload your data CSV file here. The first row of the CSV file "
+"should contain the column headings. The second one should contain series "
+"type (string, number, boolean, date, datetime, timeofday)."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:681
+#: classes/Visualizer/Render/Layout.php:702
+msgid ""
+"If you are unsure about how to format your data CSV then please take a look "
+"at this sample: %1$s %2$s%3$s. If you are using non-English characters, "
+"please make sure you save the file in UTF-8 encoding."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:689
+#: classes/Visualizer/Render/Layout.php:732
+msgid "Import"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:695
+msgid "Import data from URL"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:699
+msgid "Import from CSV"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:701
+msgid ""
+"You can use this to import data from a remote CSV file or %1$sGoogle "
+"Spreadsheet%2$s."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:706
+msgid "Please enter the URL of CSV file"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:713
+#: classes/Visualizer/Render/Layout.php:760
+#: classes/Visualizer/Render/Layout.php:878
+#: classes/Visualizer/Render/Layout.php:927
+msgid "One-time"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:736
+msgid "Import & Save schedule"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:745
+msgid "Import from JSON"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:747
+msgid ""
+"You can choose here to import/synchronize your chart data with a remote "
+"JSON source. For more info check <a "
+"href=\"https://docs.themeisle.com/article/1052-how-to-generate-charts-from-"
+"json-data-rest-endpoints\" target=\"_blank\" >this</a> tutorial"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:751
+msgid "Modify Parameters"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:751
+msgid "Create Parameters"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:754
+msgid "How often do you want to check the URL"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:782
+#: classes/Visualizer/Render/Layout.php:894
+#: classes/Visualizer/Render/Layout.php:944
+#: classes/Visualizer/Render/Layout.php:981
+#: classes/Visualizer/Render/Layout.php:990
+msgid "Show Chart"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:788
+#: classes/Visualizer/Render/Layout.php:895
+#: classes/Visualizer/Render/Layout.php:945
+msgid "Save Schedule"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:800
+msgid "Import from other chart"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:804
+msgid "You can import here data from your previously created charts"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:847
+msgid "Import Chart"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:865
+msgid "Import from WordPress"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:869
+msgid "You can import data from WordPress here."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:871
+msgid "How often do you want to refresh the data from WordPress."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:874
+msgid "Modify Filter"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:874
+msgid "Create Filter"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:914
+msgid "Import from database"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:918
+msgid "You can import data from the database here."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:920
+msgid "How often do you want to refresh the data from the database."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:923
+msgid "Modify Query"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:923
+msgid "Create Query"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:954
+msgid "Manual Data"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:965
+msgid "Use the"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:971
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:216
+msgid "Text"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:971
+msgid "Simple"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:976
+msgid "editor to manually edit the chart data."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:978
+#: classes/Visualizer/Render/Layout.php:987
+msgid "Undo Changes"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:980
+#: classes/Visualizer/Render/Layout.php:982
+msgid "Edit Data"
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:984
+#: classes/Visualizer/Render/Layout.php:993
+msgid "Please make sure you click 'Show Chart' before you save the chart."
+msgstr ""
+
+#: classes/Visualizer/Render/Layout.php:989
+#: classes/Visualizer/Render/Layout.php:991
+msgid "View Editor"
 msgstr ""
 
 #: classes/Visualizer/Render/Library.php:42
@@ -435,7 +709,7 @@ msgid "Visualizer Library"
 msgstr ""
 
 #: classes/Visualizer/Render/Library.php:43
-#: classes/Visualizer/Render/Library.php:149
+#: classes/Visualizer/Render/Library.php:248
 msgid "Add New"
 msgstr ""
 
@@ -449,329 +723,175 @@ msgid ""
 "its value to 1. This option increases the speed of remote CSV uploading."
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:123
+#: classes/Visualizer/Render/Library.php:80
+msgid "All types"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:105
+#: classes/Visualizer/Render/Library.php:166
+msgid "Not available"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:120
+msgid "All libraries"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:140
+msgid "JSON"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:140
+msgid "Local CSV"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:140
+msgid "Remote CSV"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:140
+msgid "Database"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:140
+msgid "WordPress"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:160
+msgid "All sources"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:176
 msgid "Enter title"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:125
-msgid "Search"
+#: classes/Visualizer/Render/Library.php:184
+msgid "Date"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:149
+#: classes/Visualizer/Render/Library.php:184
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:188
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:132
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:74
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:60
+#: classes/Visualizer/Render/Sidebar.php:296
+msgid "Title"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:186
+msgid "Order By"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:196
+msgid "Descending"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:196
+msgid "Ascending"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:204
+msgid "Apply Filters"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:205
+msgid "Clear Filters"
+msgstr ""
+
+#: classes/Visualizer/Render/Library.php:248
 #: classes/Visualizer/Render/Templates.php:82
 msgid "No charts found"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:228
+#: classes/Visualizer/Render/Library.php:327
 msgid "Click to view the error"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:236
+#: classes/Visualizer/Render/Library.php:335
 msgid "Delete"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:237
+#: classes/Visualizer/Render/Library.php:336
 msgid "Clone"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:238
+#: classes/Visualizer/Render/Library.php:337
 msgid "Edit"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:239
+#: classes/Visualizer/Render/Library.php:338
 msgid "Export"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:240
+#: classes/Visualizer/Render/Library.php:339
 #: classes/Visualizer/Render/Templates.php:68
 msgid "Click to select"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:243
+#: classes/Visualizer/Render/Library.php:342
 msgid "Last Updated"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:255
+#: classes/Visualizer/Render/Library.php:354
 msgid "Discover the power of PRO!"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:256
+#: classes/Visualizer/Render/Library.php:355
 msgid "Spreadsheet like editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:257
+#: classes/Visualizer/Render/Library.php:356
 msgid "Import from other charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:258
+#: classes/Visualizer/Render/Library.php:357
 msgid "Use database query to create charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:259
+#: classes/Visualizer/Render/Library.php:358
 msgid "Create charts from WordPress tables"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:260
+#: classes/Visualizer/Render/Library.php:359
 msgid "Frontend editor"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:261
+#: classes/Visualizer/Render/Library.php:360
 msgid "Private charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:262
+#: classes/Visualizer/Render/Library.php:361
 msgid "Auto-sync with online files"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:263
+#: classes/Visualizer/Render/Library.php:362
 msgid "6 more chart types"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:264
+#: classes/Visualizer/Render/Library.php:363
 msgid "View more features"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:265
+#: classes/Visualizer/Render/Library.php:364
 msgid "We offer a 30-day no-questions-asked money back guarantee!"
 msgstr ""
 
-#: classes/Visualizer/Render/Library.php:266
+#: classes/Visualizer/Render/Library.php:365
 msgid "Don't see the features you need? Help us improve!"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:104
-msgid "Chart Data"
+#: classes/Visualizer/Render/Page/Data.php:77
+msgid "Source"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:110
-msgid "Import data from file"
+#: classes/Visualizer/Render/Page/Data.php:78
+msgid "Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:112
-msgid ""
-"Select and upload your data CSV file here. The first row of the CSV file "
-"should contain the column headings. The second one should contain series "
-"type (string, number, boolean, date, datetime, timeofday)."
+#: classes/Visualizer/Render/Page/Data.php:79
+msgid "Help"
 msgstr ""
 
-#: classes/Visualizer/Render/Page/Data.php:113
-#: classes/Visualizer/Render/Page/Data.php:134
-msgid ""
-"If you are unsure about how to format your data CSV then please take a look "
-"at this sample: %1$s %2$s%3$s. If you are using non-English characters, "
-"please make sure you save the file in UTF-8 encoding."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:121
-#: classes/Visualizer/Render/Page/Data.php:161
-msgid "Import"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:127
-msgid "Import data from URL"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:131
-msgid "Import from CSV"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:133
-msgid ""
-"You can use this to import data from a remote CSV file or %1$sGoogle "
-"Spreadsheet%2$s."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:138
-msgid "Please enter the URL of CSV file"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:145
-#: classes/Visualizer/Render/Page/Data.php:190
-#: classes/Visualizer/Render/Page/Data.php:309
-#: classes/Visualizer/Render/Page/Data.php:358
-msgid "One-time"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:165
-msgid "Save schedule"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:174
-msgid "Import from JSON"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:177
-msgid ""
-"You can choose here to import/synchronize your chart data with a remote "
-"JSON source. For more info check <a "
-"href=\"https://docs.themeisle.com/article/1052-how-to-generate-charts-from-"
-"json-data-rest-endpoints\" target=\"_blank\" >this</a> tutorial"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:181
-msgid "Modify Parameters"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:181
-msgid "Create Parameters"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:184
-msgid "How often do you want to check the URL"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:212
-#: classes/Visualizer/Render/Page/Data.php:325
-#: classes/Visualizer/Render/Page/Data.php:375
-#: classes/Visualizer/Render/Page/Data.php:412
-#: classes/Visualizer/Render/Page/Data.php:421
-msgid "Show Chart"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:218
-#: classes/Visualizer/Render/Page/Data.php:326
-#: classes/Visualizer/Render/Page/Data.php:376
-msgid "Save Schedule"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:231
-msgid "Import from other chart"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:235
-msgid "You can import here data from your previously created charts"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:278
-msgid "Import Chart"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:296
-msgid "Import from WordPress"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:300
-msgid "You can import data from WordPress here."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:302
-msgid "How often do you want to refresh the data from WordPress."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:305
-msgid "Modify Filter"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:305
-msgid "Create Filter"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:345
-msgid "Import from database"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:349
-msgid "You can import data from the database here."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:351
-msgid "How often do you want to refresh the data from the database."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:354
-msgid "Modify Query"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:354
-msgid "Create Query"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:385
-msgid "Manual Data"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:396
-msgid "Use the"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:402
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:216
-msgid "Text"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:402
-msgid "Simple"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:407
-msgid "editor to manually edit the chart data."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:409
-#: classes/Visualizer/Render/Page/Data.php:418
-msgid "Undo Changes"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:411
-#: classes/Visualizer/Render/Page/Data.php:413
-msgid "Edit Data"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:415
-#: classes/Visualizer/Render/Page/Data.php:424
-msgid "Please make sure you click 'Show Chart' before you save the chart."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:420
-#: classes/Visualizer/Render/Page/Data.php:422
-msgid "View Editor"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:433
-msgid "Advanced"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:436
-#: classes/Visualizer/Render/Page/Data.php:485
-msgid "Chart Settings"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:482
-msgid "Permissions"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:517
-msgid "Who can see this chart?"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:523
-msgid "Select who can view the chart on the front-end."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:534
-#: classes/Visualizer/Render/Page/Data.php:579
-msgid "All Users"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:535
-#: classes/Visualizer/Render/Page/Data.php:580
-msgid "Select Users"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:536
-#: classes/Visualizer/Render/Page/Data.php:581
-msgid "Select Roles"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:561
-msgid "Who can edit this chart?"
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:567
-msgid "Select who can edit the chart on the front-end."
-msgstr ""
-
-#: classes/Visualizer/Render/Page/Data.php:620
+#: classes/Visualizer/Render/Page/Data.php:111
 #: classes/Visualizer/Render/Page/Settings.php:55
 msgid "Back"
 msgstr ""
@@ -809,12 +929,12 @@ msgid "Below the chart"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:97
-#: classes/Visualizer/Render/Sidebar/Graph.php:381
+#: classes/Visualizer/Render/Sidebar/Graph.php:389
 msgid "Series Settings"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:99
-#: classes/Visualizer/Render/Sidebar/Graph.php:383
+#: classes/Visualizer/Render/Sidebar/Graph.php:391
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php:118
 msgid ""
 "If you have just updated/modified the chart data, you may need to save it "
@@ -858,35 +978,27 @@ msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:183
 #: classes/Visualizer/Render/Sidebar/Graph.php:189
-#: classes/Visualizer/Render/Sidebar/Graph.php:301
+#: classes/Visualizer/Render/Sidebar/Graph.php:305
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:138
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:240
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:131
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:72
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:59
-#: classes/Visualizer/Render/Sidebar.php:289
+#: classes/Visualizer/Render/Sidebar.php:291
 msgid "General Settings"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:185
-#: classes/Visualizer/Render/Sidebar.php:291
+#: classes/Visualizer/Render/Sidebar.php:293
 msgid ""
 "Configure title, font styles, tooltip, legend and else settings for the "
 "chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:188
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:132
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:74
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:60
-#: classes/Visualizer/Render/Sidebar.php:294
-msgid "Title"
-msgstr ""
-
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:192
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:149
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:251
-#: classes/Visualizer/Render/Sidebar.php:298
+#: classes/Visualizer/Render/Sidebar.php:300
 msgid "Font Styles"
 msgstr ""
 
@@ -894,27 +1006,27 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:246
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:160
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:262
-#: classes/Visualizer/Render/Sidebar.php:301
+#: classes/Visualizer/Render/Sidebar.php:303
 msgid "Family And Size"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:221
-#: classes/Visualizer/Render/Sidebar.php:327
+#: classes/Visualizer/Render/Sidebar.php:329
 msgid "The default font family and size for all text in the chart."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:226
-#: classes/Visualizer/Render/Sidebar.php:332
+#: classes/Visualizer/Render/Sidebar.php:334
 msgid "Legend"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:228
-#: classes/Visualizer/Render/Sidebar.php:334
+#: classes/Visualizer/Render/Sidebar.php:336
 msgid "Position"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:233
-#: classes/Visualizer/Render/Sidebar.php:338
+#: classes/Visualizer/Render/Sidebar.php:340
 msgid "Determines where to place the legend, compared to the chart area."
 msgstr ""
 
@@ -929,39 +1041,39 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:272
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:152
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:254
-#: classes/Visualizer/Render/Sidebar.php:350
+#: classes/Visualizer/Render/Sidebar.php:352
 msgid "Font Color"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:282
 #: classes/Visualizer/Render/Sidebar/Google.php:106
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:165
-#: classes/Visualizer/Render/Sidebar.php:357
+#: classes/Visualizer/Render/Sidebar.php:359
 msgid "Tooltip"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:301
-#: classes/Visualizer/Render/Sidebar.php:378
+#: classes/Visualizer/Render/Sidebar.php:380
 msgid "Animation"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:304
-#: classes/Visualizer/Render/Sidebar.php:389
+#: classes/Visualizer/Render/Sidebar.php:391
 msgid "Duration"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:307
-#: classes/Visualizer/Render/Sidebar.php:392
+#: classes/Visualizer/Render/Sidebar.php:394
 msgid "The duration of the animation, in milliseconds"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:314
-#: classes/Visualizer/Render/Sidebar.php:398
+#: classes/Visualizer/Render/Sidebar.php:400
 msgid "Easing"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:318
-#: classes/Visualizer/Render/Sidebar.php:402
+#: classes/Visualizer/Render/Sidebar.php:404
 msgid "Constant speed"
 msgstr ""
 
@@ -1010,13 +1122,13 @@ msgid "easeOutQuint"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:331
-#: classes/Visualizer/Render/Sidebar.php:407
+#: classes/Visualizer/Render/Sidebar.php:409
 msgid "The easing function applied to the animation."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:347
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:180
-#: classes/Visualizer/Render/Sidebar.php:423
+#: classes/Visualizer/Render/Sidebar.php:425
 msgid "Trigger"
 msgstr ""
 
@@ -1041,7 +1153,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:383
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:259
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:363
-#: classes/Visualizer/Render/Sidebar.php:454
+#: classes/Visualizer/Render/Sidebar.php:456
 msgid ""
 "Configure the total size of the chart. Two formats are supported: a number, "
 "or a number followed by %. A simple number is a value in pixels; a number "
@@ -1051,14 +1163,14 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:387
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:263
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:367
-#: classes/Visualizer/Render/Sidebar.php:458
+#: classes/Visualizer/Render/Sidebar.php:460
 msgid "Width And Height Of Chart"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:401
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:277
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:381
-#: classes/Visualizer/Render/Sidebar.php:472
+#: classes/Visualizer/Render/Sidebar.php:474
 msgid ""
 "Determines the total width and height of the chart. This will only show in "
 "the front-end."
@@ -1189,7 +1301,7 @@ msgid "Determines where to place the axis titles, compared to the chart area."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:146
-#: classes/Visualizer/Render/Sidebar/Graph.php:258
+#: classes/Visualizer/Render/Sidebar/Graph.php:262
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:141
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:243
 msgid "Axis Title"
@@ -1200,7 +1312,7 @@ msgid "The title of the horizontal axis."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:153
-#: classes/Visualizer/Render/Sidebar/Graph.php:265
+#: classes/Visualizer/Render/Sidebar/Graph.php:269
 msgid "Text Position"
 msgstr ""
 
@@ -1209,17 +1321,17 @@ msgid "Position of the horizontal axis text, relative to the chart area."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:161
-#: classes/Visualizer/Render/Sidebar/Graph.php:273
+#: classes/Visualizer/Render/Sidebar/Graph.php:277
 msgid "Direction"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:166
-#: classes/Visualizer/Render/Sidebar/Graph.php:278
+#: classes/Visualizer/Render/Sidebar/Graph.php:282
 msgid "Identical Direction"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:167
-#: classes/Visualizer/Render/Sidebar/Graph.php:279
+#: classes/Visualizer/Render/Sidebar/Graph.php:283
 msgid "Reverse Direction"
 msgstr ""
 
@@ -1228,7 +1340,7 @@ msgid "The direction in which the values along the horizontal axis grow."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:173
-#: classes/Visualizer/Render/Sidebar/Graph.php:285
+#: classes/Visualizer/Render/Sidebar/Graph.php:289
 msgid "Base Line Color"
 msgstr ""
 
@@ -1238,28 +1350,30 @@ msgid "Horizontal Axis Settings"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:194
-#: classes/Visualizer/Render/Sidebar/Graph.php:306
+#: classes/Visualizer/Render/Sidebar/Graph.php:310
 msgid "Grid Lines"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:196
-#: classes/Visualizer/Render/Sidebar/Graph.php:213
-#: classes/Visualizer/Render/Sidebar/Graph.php:308
-#: classes/Visualizer/Render/Sidebar/Graph.php:325
+#: classes/Visualizer/Render/Sidebar/Graph.php:215
+#: classes/Visualizer/Render/Sidebar/Graph.php:312
+#: classes/Visualizer/Render/Sidebar/Graph.php:331
 msgid "Count"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:199
 msgid ""
-"The number of vertical gridlines inside the chart area. Minimum value is 2. "
-"Specify -1 to automatically compute the number of gridlines."
+"The approximate number of horizontal gridlines inside the chart area. You "
+"can specify a value of -1 to automatically compute the number of gridlines, "
+"0 or 1 to draw no gridlines, or 2 or more to only draw gridline. Any number "
+"greater than 2 will be used to compute the minSpacing between gridlines."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:204
-#: classes/Visualizer/Render/Sidebar/Graph.php:221
-#: classes/Visualizer/Render/Sidebar/Graph.php:316
-#: classes/Visualizer/Render/Sidebar/Graph.php:333
-#: classes/Visualizer/Render/Sidebar/Graph.php:420
+#: classes/Visualizer/Render/Sidebar/Graph.php:206
+#: classes/Visualizer/Render/Sidebar/Graph.php:225
+#: classes/Visualizer/Render/Sidebar/Graph.php:322
+#: classes/Visualizer/Render/Sidebar/Graph.php:341
+#: classes/Visualizer/Render/Sidebar/Graph.php:428
 #: classes/Visualizer/Render/Sidebar/Linear.php:287
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:274
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:306
@@ -1270,69 +1384,68 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:211
-#: classes/Visualizer/Render/Sidebar/Graph.php:323
+#: classes/Visualizer/Render/Sidebar/Graph.php:213
+#: classes/Visualizer/Render/Sidebar/Graph.php:329
 msgid "Minor Grid Lines"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:216
-msgid "The number of horizontal minor gridlines between two regular gridlines."
+#: classes/Visualizer/Render/Sidebar/Graph.php:218
+#: classes/Visualizer/Render/Sidebar/Graph.php:334
+msgid "Specify 0 to disable the minor gridlines."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:230
-#: classes/Visualizer/Render/Sidebar/Graph.php:342
+#: classes/Visualizer/Render/Sidebar/Graph.php:234
+#: classes/Visualizer/Render/Sidebar/Graph.php:350
 msgid "View Window"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:232
-#: classes/Visualizer/Render/Sidebar/Graph.php:344
+#: classes/Visualizer/Render/Sidebar/Graph.php:236
+#: classes/Visualizer/Render/Sidebar/Graph.php:352
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:239
 msgid "Maximum Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:239
-#: classes/Visualizer/Render/Sidebar/Graph.php:351
+#: classes/Visualizer/Render/Sidebar/Graph.php:243
+#: classes/Visualizer/Render/Sidebar/Graph.php:359
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:225
 msgid "Minimum Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:261
+#: classes/Visualizer/Render/Sidebar/Graph.php:265
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:144
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:246
 msgid "The title of the vertical axis."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:269
+#: classes/Visualizer/Render/Sidebar/Graph.php:273
 msgid "Position of the vertical axis text, relative to the chart area."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:281
+#: classes/Visualizer/Render/Sidebar/Graph.php:285
 msgid "The direction in which the values along the vertical axis grow."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:300
+#: classes/Visualizer/Render/Sidebar/Graph.php:304
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:225
 msgid "Vertical Axis Settings"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:311
+#: classes/Visualizer/Render/Sidebar/Graph.php:315
 msgid ""
-"The number of horizontal gridlines inside the chart area. Minimum value is "
-"2. Specify -1 to automatically compute the number of gridlines."
+"The approximate number of vertical gridlines inside the chart area. You can "
+"specify a value of -1 to automatically compute the number of gridlines, 0 "
+"or 1 to draw no gridlines, or 2 or more to only draw gridline. Any number "
+"greater than 2 will be used to compute the minSpacing between gridlines."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:328
-msgid "The number of vertical minor gridlines between two regular gridlines."
-msgstr ""
-
-#: classes/Visualizer/Render/Sidebar/Graph.php:406
+#: classes/Visualizer/Render/Sidebar/Graph.php:414
 #: classes/Visualizer/Render/Sidebar/Linear.php:241
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:101
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:160
 msgid "Visible In Legend"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:411
+#: classes/Visualizer/Render/Sidebar/Graph.php:419
 #: classes/Visualizer/Render/Sidebar/Linear.php:246
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:106
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:165
@@ -1340,7 +1453,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:412
+#: classes/Visualizer/Render/Sidebar/Graph.php:420
 #: classes/Visualizer/Render/Sidebar/Linear.php:247
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:107
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:166
@@ -1348,7 +1461,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:414
+#: classes/Visualizer/Render/Sidebar/Graph.php:422
 #: classes/Visualizer/Render/Sidebar/Linear.php:159
 #: classes/Visualizer/Render/Sidebar/Linear.php:249
 #: classes/Visualizer/Render/Sidebar/Linear.php:282
@@ -1357,22 +1470,22 @@ msgstr ""
 msgid "Determines whether the series has to be presented in the legend or not."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:439
-#: classes/Visualizer/Render/Sidebar/Graph.php:468
+#: classes/Visualizer/Render/Sidebar/Graph.php:447
+#: classes/Visualizer/Render/Sidebar/Graph.php:476
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:62
-#: classes/Visualizer/Render/Sidebar.php:741
+#: classes/Visualizer/Render/Sidebar.php:743
 msgid "Number Format"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:444
+#: classes/Visualizer/Render/Sidebar/Graph.php:452
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:200
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:302
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:67
 msgid "Enter custom format pattern to apply to horizontal axis labels."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:446
-#: classes/Visualizer/Render/Sidebar/Graph.php:475
+#: classes/Visualizer/Render/Sidebar/Graph.php:454
+#: classes/Visualizer/Render/Sidebar/Graph.php:483
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:202
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:304
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:69
@@ -1383,8 +1496,8 @@ msgid ""
 "then your values will be multiplied by 100."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:451
-#: classes/Visualizer/Render/Sidebar/Graph.php:480
+#: classes/Visualizer/Render/Sidebar/Graph.php:459
+#: classes/Visualizer/Render/Sidebar/Graph.php:488
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:207
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:309
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:74
@@ -1393,7 +1506,7 @@ msgid ""
 "and time format%2$s."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:473
+#: classes/Visualizer/Render/Sidebar/Graph.php:481
 msgid "Enter custom format pattern to apply to vertical axis labels."
 msgstr ""
 
@@ -1514,11 +1627,6 @@ msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php:71
 msgid "Bar Settings"
-msgstr ""
-
-#: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php:73
-#: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php:102
-msgid "General"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php:81
@@ -1825,7 +1933,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:331
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:363
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:414
-#: classes/Visualizer/Render/Sidebar.php:497
+#: classes/Visualizer/Render/Sidebar.php:499
 msgid "Background Color"
 msgstr ""
 
@@ -1939,7 +2047,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:110
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:134
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:407
-#: classes/Visualizer/Render/Sidebar.php:489
+#: classes/Visualizer/Render/Sidebar.php:491
 msgid "Stroke Color"
 msgstr ""
 
@@ -1985,7 +2093,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:102
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:126
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:399
-#: classes/Visualizer/Render/Sidebar.php:481
+#: classes/Visualizer/Render/Sidebar.php:483
 msgid "Stroke Width"
 msgstr ""
 
@@ -2189,17 +2297,17 @@ msgid "Markers"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:185
-#: classes/Visualizer/Render/Sidebar.php:428
+#: classes/Visualizer/Render/Sidebar.php:430
 msgid "The tooltip will be displayed when the user hovers over an element"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:186
-#: classes/Visualizer/Render/Sidebar.php:430
+#: classes/Visualizer/Render/Sidebar.php:432
 msgid "The tooltip will not be displayed"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:188
-#: classes/Visualizer/Render/Sidebar.php:432
+#: classes/Visualizer/Render/Sidebar.php:434
 msgid "Determines the user interaction that causes the tooltip to be displayed."
 msgstr ""
 
@@ -2312,14 +2420,14 @@ msgid ""
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:396
-#: classes/Visualizer/Render/Sidebar.php:478
+#: classes/Visualizer/Render/Sidebar.php:480
 msgid ""
 "Configure the background color for the main area of the chart and the chart "
 "border width and color."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:402
-#: classes/Visualizer/Render/Sidebar.php:484
+#: classes/Visualizer/Render/Sidebar.php:486
 msgid "The chart border width in pixels."
 msgstr ""
 
@@ -2504,96 +2612,96 @@ msgstr ""
 msgid "One per line in valid JSON (key:value) format e.g. %s"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:226
+#: classes/Visualizer/Render/Sidebar.php:228
 msgid "Actions"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:232
-#: classes/Visualizer/Render/Sidebar.php:240
-#: classes/Visualizer/Render/Sidebar.php:250
-#: classes/Visualizer/Render/Sidebar.php:258
+#: classes/Visualizer/Render/Sidebar.php:234
+#: classes/Visualizer/Render/Sidebar.php:242
+#: classes/Visualizer/Render/Sidebar.php:252
+#: classes/Visualizer/Render/Sidebar.php:260
 msgid "Upgrade to at least WordPress 4.7 to use this."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:232
+#: classes/Visualizer/Render/Sidebar.php:234
 msgid "To enable printing the chart/data."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:240
+#: classes/Visualizer/Render/Sidebar.php:242
 msgid "To enable downloading the data as a CSV."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:250
+#: classes/Visualizer/Render/Sidebar.php:252
 msgid "Enable the ZIP and XML extensions to use this setting."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:250
+#: classes/Visualizer/Render/Sidebar.php:252
 msgid "To enable downloading the data as an Excel spreadsheet."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:258
+#: classes/Visualizer/Render/Sidebar.php:260
 msgid "To enable copying the data to the clipboard."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:342
+#: classes/Visualizer/Render/Sidebar.php:344
 msgid "Alignment"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:346
+#: classes/Visualizer/Render/Sidebar.php:348
 msgid "Determines the alignment of the legend."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:381
+#: classes/Visualizer/Render/Sidebar.php:383
 msgid "Animate on startup"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:385
+#: classes/Visualizer/Render/Sidebar.php:387
 msgid "Determines if the chart will animate on the initial draw."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:403
+#: classes/Visualizer/Render/Sidebar.php:405
 msgid "Start slow and speed up"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:404
+#: classes/Visualizer/Render/Sidebar.php:406
 msgid "Start fast and slow down"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:405
+#: classes/Visualizer/Render/Sidebar.php:407
 msgid "Start slow, speed up, then slow down"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:429
+#: classes/Visualizer/Render/Sidebar.php:431
 msgid "The tooltip will be displayed when the user selects an element"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:436
+#: classes/Visualizer/Render/Sidebar.php:438
 msgid "Show Color Code"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:440
+#: classes/Visualizer/Render/Sidebar.php:442
 msgid ""
 "If set to yes, will show colored squares next to the slice information in "
 "the tooltip."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:452
+#: classes/Visualizer/Render/Sidebar.php:454
 msgid "Chart Size & Placement"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:453
+#: classes/Visualizer/Render/Sidebar.php:455
 msgid "Chart Size/Layout"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:506
+#: classes/Visualizer/Render/Sidebar.php:508
 msgid "Transparent background"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:511
+#: classes/Visualizer/Render/Sidebar.php:513
 msgid "Placement"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:512
+#: classes/Visualizer/Render/Sidebar.php:514
 msgid ""
 "Configure the placement and size of the chart area (where the chart itself "
 "is drawn, excluding axis and legends). Two formats are supported: a number, "
@@ -2601,27 +2709,27 @@ msgid ""
 "followed by % is a percentage."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:516
+#: classes/Visualizer/Render/Sidebar.php:518
 msgid "Left And Top Margins"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:530
+#: classes/Visualizer/Render/Sidebar.php:532
 msgid "Determines how far to draw the chart from the left and top borders."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:536
+#: classes/Visualizer/Render/Sidebar.php:538
 msgid "Width And Height Of Chart Area"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:550
+#: classes/Visualizer/Render/Sidebar.php:552
 msgid "Determines the width and hight of the chart area."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:612
+#: classes/Visualizer/Render/Sidebar.php:614
 msgid "Hex Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:744
+#: classes/Visualizer/Render/Sidebar.php:746
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, "
@@ -2629,11 +2737,11 @@ msgid ""
 "percentage format then your values will be multiplied by 100."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:752
+#: classes/Visualizer/Render/Sidebar.php:754
 msgid "Date Format"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:755
+#: classes/Visualizer/Render/Sidebar.php:757
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU date and time format%2$s."
