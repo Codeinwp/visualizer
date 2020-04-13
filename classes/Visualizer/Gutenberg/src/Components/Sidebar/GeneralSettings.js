@@ -18,7 +18,35 @@ const {
 class GeneralSettings extends Component {
 	constructor() {
 		super( ...arguments );
+
+		this.getLegendPositions = this.getLegendPositions.bind( this );
+
 	}
+
+    getLegendPositions() {
+        const lib = this.props.chart['visualizer-chart-library'];
+		const type = this.props.chart['visualizer-chart-type'];
+
+        let positions = [
+            { label: __( 'Left of the chart' ), value: 'left' },
+            { label: __( 'Right of the chart' ), value: 'right' },
+            { label: __( 'Above the chart' ), value: 'top' },
+            { label: __( 'Below the chart' ), value: 'bottom' }
+        ];
+
+        switch ( lib ) {
+            case 'ChartJS':
+                break;
+            case 'GoogleCharts':
+                if ( 'pie' !== type ) {
+                    positions.push({ label: __( 'Inside the chart' ), value: 'in' });
+                }
+                positions.push({ label: __( 'Omit the legend' ), value: 'none' });
+                break;
+        }
+
+        return positions;
+    }
 
 	render() {
 
@@ -27,8 +55,6 @@ class GeneralSettings extends Component {
 		const settings = this.props.chart['visualizer-settings'];
 
         const lib = this.props.chart['visualizer-chart-library'];
-
-        console.log( settings );
 
 		const tooltipTriggers = [ { label: __( 'The tooltip will be displayed when the user hovers over an element' ), value: 'focus' } ];
 
@@ -39,16 +65,20 @@ class GeneralSettings extends Component {
 		tooltipTriggers[2] = { label: __( 'The tooltip will not be displayed' ), value: 'none' };
 
         // elements that are named differently in different libraries.
-        let titleColorElement, legendColorElement;
+        let titleColorElement, legendColorElement, titleElement;
 
         switch ( lib ) {
             case 'ChartJS':
                 titleColorElement = settings.title.fontColor;
                 legendColorElement = settings.legend.labels.fontColor;
+                if ( settings.title.text ) {
+                    titleElement = settings.title.text;
+                }
                 break;
             case 'GoogleCharts':
                 titleColorElement = settings.titleTextStyle.color;
                 legendColorElement = settings.legend.textStyle.color;
+                titleElement = settings.title;
                 break;
         }
 
@@ -68,9 +98,18 @@ class GeneralSettings extends Component {
 					<TextControl
 						label={ __( 'Chart Title' ) }
 						help={ __( 'Text to display above the chart.' ) }
-						value={ settings.title }
+						value={ titleElement }
 						onChange={ e => {
-							settings.title = e;
+
+                            switch ( lib ) {
+                                case 'ChartJS':
+                                    settings.title.text = e;
+                                    break;
+                                case 'GoogleCharts':
+                                    settings.title = e;
+                                    break;
+                            }
+
 							this.props.edit( settings );
 						} }
 					/>
@@ -196,14 +235,7 @@ class GeneralSettings extends Component {
 							label={ __( 'Position' ) }
 							help={ __( 'Determines where to place the legend, compared to the chart area.' ) }
 							value={ settings.legend.position ? settings.legend.position : 'right' }
-							options={ [
-								{ label: __( 'Left of the chart' ), value: 'left' },
-								{ label: __( 'Right of the chart' ), value: 'right' },
-								{ label: __( 'Above the chart' ), value: 'top' },
-								{ label: __( 'Below the chart' ), value: 'bottom' },
-								{ label: __( 'Inside the chart' ), value: 'in' },
-								{ label: __( 'Omit the legend' ), value: 'none' }
-							] }
+							options={ this.getLegendPositions() }
 							onChange={ e => {
 								if ( 'pie' !== type ) {
 									let axis = 'left' === e ? 1 : 0;

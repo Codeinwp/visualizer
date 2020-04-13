@@ -76,8 +76,6 @@ class ChartSelect extends Component {
             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
         }
 
-console.log( this.state.route, Sidebar );
-
 		return (
 			<Fragment>
 				{ 'home' === this.state.route &&

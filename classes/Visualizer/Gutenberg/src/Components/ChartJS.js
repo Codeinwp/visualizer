@@ -71,25 +71,25 @@ class ChartJS extends Component {
 
         switch ( this.props.chartType ) {
             case 'line':
-                return <Line data={ data } id={ id } />;
+                return <Line data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
             case 'scatter':
-                return <Scatter data={ data } id={ id } />;
+                return <Scatter data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
             case 'radar':
-                return <Radar data={ data } id={ id } />;
+                return <Radar data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
             case 'polar':
-                return <Polar data={ data } id={ id } />;
+                return <Polar data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
             case 'bubble':
-                return <Bubble data={ data } id={ id } />;
+                return <Bubble data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
             case 'column':
-                return <Bar data={ data } id={ id } />;
+                return <Bar data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
             case 'bar':
-                return <HorizontalBar data={ data } id={ id  } />;
+                return <HorizontalBar data={ data } id={ id  } legend={ settings.legend } options={ settings }/>;
             case 'pie':
                 // donut is not a setting but a separate chart type.
                 if ( 'undefined' !== typeof settings['custom'] && 'true' === settings['custom']['donut']) {
-                    return <Doughnut data={ data } id={ id } />;
+                    return <Doughnut data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
                 }
-                return <Pie data={ data } id={ id } />;
+                return <Pie data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
         }
 
         return null;
