@@ -29,6 +29,8 @@
         series = chart.series;
         data = chart.data;
 
+        console.log(series);
+
         container = document.getElementById(id);
         if (container == null) {
             return;
@@ -173,6 +175,7 @@
         $.extend( settings, additional );
 
         cols = [];
+        console.log(series);
         for (j = 0; j < series.length; j++) {
             type = series[j].type;
             switch(type){
@@ -219,6 +222,7 @@
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
 
         table = $('#' + id + ' table.visualizer-data-table');
+        console.log("showing table");
         table.DataTable( settings );
 
         // header row is handled here as the class is added dynamically to it (after the table is rendered).
@@ -267,8 +271,16 @@
                     render = $.fn.dataTable.render.moment(series.format.from, series.format.to);
                 }
                 break;
+            default:
+console.log("yahan aaya");
+        render = $.fn.dataTable.render.extra = function ( from, to, locale ) {
+            console.log("andar aaya");
+            return from;
+        }
         }
         /* jshint ignore:end */
+
+
         return render;
     }
 

@@ -215,6 +215,7 @@ abstract class Visualizer_Source {
 					$data[ $i ] = ( is_numeric( $data[ $i ] ) ) ? floatval( $data[ $i ] ) : ( is_numeric( str_replace( ',', '', $data[ $i ] ) ) ? floatval( str_replace( ',', '', $data[ $i ] ) ) : null );
 					break;
 				case 'boolean':
+					error_log("aaya ");
 					$datum = trim( strval( $data[ $i ] ) );
 					$data[ $i ] = in_array( $datum, array( 'true', 'yes', '1' ), true ) ? 'true' : 'false';
 					break;
@@ -241,6 +242,8 @@ abstract class Visualizer_Source {
 					break;
 			}
 		}
+
+					error_log("gaya  " . print_r($data,true));
 
 		return apply_filters( 'visualizer_format_data', $data, $this->_series );
 	}
