@@ -259,41 +259,12 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					esc_html__( 'Legend will show datasets in reverse order.', 'visualizer' )
 				);
 
-				echo '<div class="viz-section-item">';
-					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
-
-					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
-						echo '<tr>';
-							echo '<td class="viz-section-table-column">';
-								echo '<select name="legend[labels][fontName]" class="control-select">';
-									echo '<option></option>';
-		foreach ( self::$_fontFamilies as $font => $label ) {
-			echo '<option value="', $font, '"', selected( $font, $this->legend['labels']['fontName'], false ), '>';
-			echo $label;
-			echo '</option>';
-		}
-								echo '</select>';
-							echo '</td>';
-							echo '<td class="viz-section-table-column">';
-								echo '<select name="legend[labels][fontSize]" class="control-select">';
-									echo '<option></option>';
-		for ( $i = 7; $i <= 20; $i++ ) {
-			echo '<option value="', $i, '"', selected( $i, $this->legend['labels']['fontSize'], false ), '>', $i, '</option>';
-		}
-								echo '</select>';
-							echo '</td>';
-						echo '</tr>';
-					echo '</table>';
-
-					self::_renderColorPickerItem(
-						esc_html__( 'Font Color', 'visualizer' ),
-						'legend[labels][fontColor]',
-						isset( $this->legend['labels']['fontColor'] ) ? $this->legend['labels']['fontColor'] : null,
-						'#000'
-					);
-
-				echo '</div>';
+				self::_renderColorPickerItem(
+					esc_html__( 'Font Color', 'visualizer' ),
+					'legend[labels][fontColor]',
+					isset( $this->legend['labels']['fontColor'] ) ? $this->legend['labels']['fontColor'] : null,
+					'#000'
+				);
 
 			self::_renderSectionEnd();
 
