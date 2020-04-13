@@ -16,8 +16,7 @@ import DataImport from './Import/DataImport.js';
 
 import ManualData from './Import/ManualData.js';
 
-import { ChartJS as SidebarChartJS } from './Sidebar/ChartJS.js';
-import { GoogleCharts as SidebarGoogleCharts } from './Sidebar/GoogleCharts.js';
+import Sidebar from './Sidebar.js';
 
 import ChartPermissions from './ChartPermissions.js';
 
@@ -77,10 +76,7 @@ class ChartSelect extends Component {
             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
         }
 
-        const library = this.props.chart['visualizer-chart-library'];
-
-        const SidebarCustom = `Sidebar${library}`;
-        console.log( SidebarCustom );
+console.log( this.state.route, Sidebar );
 
 		return (
 			<Fragment>
@@ -140,7 +136,7 @@ class ChartSelect extends Component {
 						/>
 
 						{ 'showAdvanced' === this.state.route &&
-							<SidebarCustom chart={ this.props.chart } edit={ this.props.editSettings } />
+							<Sidebar chart={ this.props.chart } edit={ this.props.editSettings } />
 						}
 
 						{ 'showPermissions' === this.state.route &&
