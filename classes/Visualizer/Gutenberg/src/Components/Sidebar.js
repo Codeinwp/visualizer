@@ -20,6 +20,7 @@ import RowCellSettings from './Sidebar/RowCellSettings.js';
 import ComboSettings from './Sidebar/ComboSettings.js';
 import SeriesSettings from './Sidebar/SeriesSettings.js';
 import SlicesSettings from './Sidebar/SlicesSettings.js';
+import SlicesSettingsChartJS from './Sidebar/ChartJS/SlicesSettings.js';
 import ColumnSettings from './Sidebar/ColumnSettings.js';
 import LayoutAndChartArea from './Sidebar/LayoutAndChartArea.js';
 import FrontendActions from './Sidebar/FrontendActions.js';
@@ -41,6 +42,7 @@ class Sidebar extends Component {
 	render() {
 
 		const type = this.props.chart['visualizer-chart-type'];
+        const lib = this.props.chart['visualizer-chart-library'];
 
 		return (
 			<Fragment>
@@ -55,7 +57,7 @@ class Sidebar extends Component {
 					<VerticalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && (
+				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 					<Fragment>
 
 						<PieSettings chart={ this.props.chart } edit={ this.props.edit } />
@@ -117,9 +119,14 @@ class Sidebar extends Component {
 					<SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && (
+				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 					<SlicesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
+
+				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && ( 0 <= [ 'ChartJS' ].indexOf( lib ) ) && (
+					<SlicesSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
+				) }
+
 
 				{ ( 0 <= [ 'dataTable' ].indexOf( type ) ) && (
 					<ColumnSettings chart={ this.props.chart } edit={ this.props.edit } />
