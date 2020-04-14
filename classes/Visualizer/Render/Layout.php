@@ -613,14 +613,15 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<li class="viz-group open" id="vz-chart-help">
 					<ul class="viz-group-wrapper">
 		<?php
-		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Documentation', 'visualizer' ) );
-			Visualizer_Render_Sidebar::_renderSectionStart( esc_html__( 'General', 'visualizer' ), false );
+		// open this tab by default.
+		Visualizer_Render_Sidebar::_renderGroupStart( esc_html__( 'Documentation', 'visualizer' ), '', 'open' );
+			Visualizer_Render_Sidebar::_renderSectionStart( esc_html__( 'General', 'visualizer' ), true );
 		?>
 				<h4><span class="dashicons dashicons-editor-help"></span><a href="<?php echo VISUALIZER_MAIN_DOC; ?>" target="_blank"><?php _e( 'Main documentation page', 'visualizer' ); ?></a></h4>
 				<h4><span class="dashicons dashicons-media-code"></span><a href="<?php echo VISUALIZER_CODE_SNIPPETS_URL; ?>" target="_blank"><?php _e( 'Custom code snippets', 'visualizer' ); ?></a></h4>
 		<?php
 			Visualizer_Render_Sidebar::_renderSectionEnd();
-			Visualizer_Render_Sidebar::_renderSectionStart( sprintf( __( '%s chart', 'visualizer' ), ucwords( $displayType ) ), false );
+			Visualizer_Render_Sidebar::_renderSectionStart( sprintf( __( '%s chart', 'visualizer' ), ucwords( $displayType ) ), true );
 		?>
 				<h4><span class="dashicons dashicons-video-alt2"></span>&nbsp;<a href="<?php echo str_replace( '#', "$type-chart", VISUALIZER_DEMO_URL ); ?>" target="_blank"><?php _e( 'View demo', 'visualizer' ); ?></a></h4>
 				<h4><span class="dashicons dashicons-search"></span><a href="<?php echo str_replace( '#', $type, VISUALIZER_DOC_COLLECTION ); ?>" target="_blank"><?php echo sprintf( __( 'Articles containing "%s"', 'visualizer' ), $displayType ); ?></a></h4>
