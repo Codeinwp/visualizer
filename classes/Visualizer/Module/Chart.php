@@ -761,7 +761,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
 					'select_columns'    => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
-					'save_settings'    => esc_html__( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
+					'save_settings'    => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
