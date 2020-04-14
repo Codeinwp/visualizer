@@ -20,8 +20,45 @@ class GeneralSettings extends Component {
 		super( ...arguments );
 
 		this.getLegendPositions = this.getLegendPositions.bind( this );
+		this.getAnimationEasings = this.getAnimationEasings.bind( this );
 
 	}
+
+    getAnimationEasings() {
+        const lib = this.props.chart['visualizer-chart-library'];
+		const type = this.props.chart['visualizer-chart-type'];
+
+        let easings = [];
+
+        switch ( lib ) {
+            case 'GoogleCharts':
+                easings = [
+								{ label: __( 'Constant speed' ), value: 'linear' },
+								{ label: __( 'Start slow and speed up' ), value: 'in' },
+								{ label: __( 'Start fast and slow down' ), value: 'out' },
+								{ label: __( 'Start slow, speed up, then slow down' ), value: 'inAndOut' }
+                ];
+                break;
+            case 'ChartJS':
+                easings = [
+								{ label: __( 'Constant speed' ), value: 'linear' },
+								{ label: __( 'easeInQuad' ), value: 'easeInQuad' },
+								{ label: __( 'easeOutQuad' ), value: 'easeOutQuad' },
+								{ label: __( 'easeInOutQuad' ), value: 'easeInOutQuad' },
+								{ label: __( 'easeInCubic' ), value: 'easeInCubic' },
+								{ label: __( 'easeOutCubic' ), value: 'easeOutCubic' },
+								{ label: __( 'easeInOutCubic' ), value: 'easeInOutCubic' },
+								{ label: __( 'easeInQuart' ), value: 'easeInQuart' },
+								{ label: __( 'easeOutQuart' ), value: 'easeOutQuart' },
+								{ label: __( 'easeInOutQuart' ), value: 'easeInOutQuart' },
+								{ label: __( 'easeInQuint' ), value: 'easeInQuint' },
+								{ label: __( 'easeOutQuint' ), value: 'easeOutQuint' }
+                ];
+                break;
+        }
+
+        return easings;
+    }
 
     getLegendPositions() {
         const lib = this.props.chart['visualizer-chart-library'];
@@ -114,7 +151,7 @@ class GeneralSettings extends Component {
 						} }
 					/>
 
-					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<SelectControl
 							label={ __( 'Chart Title Position' ) }
 							help={ __( 'Where to place the chart title, compared to the chart area.' ) }
@@ -131,7 +168,7 @@ class GeneralSettings extends Component {
 						/>
 					) }
 
-					{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<BaseControl
 							label={ __( 'Chart Title Color' ) }
 						>
@@ -145,7 +182,7 @@ class GeneralSettings extends Component {
 						</BaseControl>
 					) }
 
-					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<SelectControl
 							label={ __( 'Axes Titles Position' ) }
 							help={ __( 'Determines where to place the axis titles, compared to the chart area.' ) }
@@ -339,6 +376,7 @@ class GeneralSettings extends Component {
 						initialOpen={ false }
 					>
 
+                    { ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<CheckboxControl
 							label={ __( 'Animate on startup?' ) }
 							help={ __( 'Determines if the chart will animate on the initial draw.' ) }
@@ -348,6 +386,8 @@ class GeneralSettings extends Component {
 								this.props.edit( settings );
 							} }
 						/>
+
+                    ) }
 
 						<TextControl
 							label={ __( 'Duration' ) }
@@ -364,12 +404,7 @@ class GeneralSettings extends Component {
 							label={ __( 'Easing' ) }
 							help={ __( 'The easing function applied to the animation.' ) }
 							value={ settings.animation.easing ? settings.animation.easing : 'linear' }
-							options={ [
-								{ label: __( 'Constant speed' ), value: 'linear' },
-								{ label: __( 'Start slow and speed up' ), value: 'in' },
-								{ label: __( 'Start fast and slow down' ), value: 'out' },
-								{ label: __( 'Start slow, speed up, then slow down' ), value: 'inAndOut' }
-							] }
+							options={ this.getAnimationEasings() }
 							onChange={ e => {
 								settings.animation.easing = e;
 								this.props.edit( settings );

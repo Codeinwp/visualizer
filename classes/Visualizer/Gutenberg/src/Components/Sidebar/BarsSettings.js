@@ -22,7 +22,7 @@ class BarsSettings extends Component {
 
 		return (
 			<PanelBody
-				title={ __( 'Bars Settings' ) }
+				title={ __( 'Bar Settings' ) }
 				initialOpen={ false }
 				className="visualizer-advanced-panel"
 			>
