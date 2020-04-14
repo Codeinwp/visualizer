@@ -299,10 +299,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 
 			self::_renderSectionEnd();
 
-			self::_renderSectionStart( esc_html__( 'Tooltip', 'visualizer' ), false );
-				$this->_renderTooltipSettigns();
-			self::_renderSectionEnd();
-
 			$this->_renderAnimationSettings();
 
 		self::_renderGroupEnd();
