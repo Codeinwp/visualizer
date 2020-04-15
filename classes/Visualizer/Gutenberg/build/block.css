@@ -336,6 +336,10 @@
     z-index: 999999 !important;
 }
 
+.visualizer-settings .components-spinner {
+    margin: auto;
+}
+
 @media (min-width: 768px) {
     .visualizer-json-query-modal {
         width: 668px;
