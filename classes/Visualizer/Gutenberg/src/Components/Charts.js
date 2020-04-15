@@ -1,6 +1,9 @@
 /**
- * External dependencies
+ * This file renders the chart grid for selection.
  */
+
+ /* eslint-disable operator-linebreak */
+
 import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
@@ -74,7 +77,6 @@ class Charts extends Component {
 	}
 
 	render() {
-
 		const { charts, isBusy, chartsLoaded, perPage } = this.state;
 
 		return (
@@ -180,13 +182,23 @@ class Charts extends Component {
 									</Button>
 								) }
 
-							</Fragment>						:
+                                <div>
+                                { isBusy ?
+                                        <Spinner/>
+                                         :
+                                    <div/>
+                                }
+                                </div>
+
+							</Fragment>
+                        :
 							<p className="visualizer-no-charts">
 								{ __( 'No charts found.' ) }
-							</p>					:
-						<Placeholder>
-							<Spinner/>
-						</Placeholder>
+							</p>
+                    :
+                        <Placeholder>
+                            <Spinner/>
+                        </Placeholder>
 				}
 
 			</div>
