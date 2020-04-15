@@ -57,10 +57,13 @@ class ChartJS extends Component {
 
 	renderChart() {
         const data = this.dataRenderer();
-
 		const settings = this.props.options;
         let id = `chartjs-${ this.props.id }-${ this.uniqueId }`;
         let type = this.props.chartType;
+
+        settings.responsive = true;
+        const height = this.props.height;
+
 
         /*
         have to use this ancient and stupid method till react matures and supports dynamic jsx tags of the form
@@ -71,25 +74,25 @@ class ChartJS extends Component {
 
         switch ( this.props.chartType ) {
             case 'line':
-                return <Line data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                return <Line data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
             case 'scatter':
-                return <Scatter data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                return <Scatter data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
             case 'radar':
-                return <Radar data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                return <Radar data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
             case 'polar':
-                return <Polar data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                return <Polar data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
             case 'bubble':
-                return <Bubble data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                return <Bubble data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
             case 'column':
-                return <Bar data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                return <Bar data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
             case 'bar':
-                return <HorizontalBar data={ data } id={ id  } legend={ settings.legend } options={ settings }/>;
+                return <HorizontalBar data={ data } id={ id  } legend={ settings.legend } options={ settings } height={ height }/>;
             case 'pie':
                 // donut is not a setting but a separate chart type.
                 if ( 'undefined' !== typeof settings['custom'] && 'true' === settings['custom']['donut']) {
-                    return <Doughnut data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                    return <Doughnut data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
                 }
-                return <Pie data={ data } id={ id } legend={ settings.legend } options={ settings }/>;
+                return <Pie data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
         }
 
         return null;

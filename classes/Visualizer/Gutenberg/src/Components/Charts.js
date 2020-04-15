@@ -115,6 +115,8 @@ class Charts extends Component {
                                             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
                                         }
 
+                                        const canvasHeight = 255; // this height is also mentioned in css.
+
 										return (
 											<div className="visualizer-settings__charts-single" key={ `chart-${ charts[i].id }` }>
 
@@ -138,6 +140,7 @@ class Charts extends Component {
 														series={ data['visualizer-series'] }
 														chartsScreen={ true }
 														options={ filterCharts( data['visualizer-settings']) }
+                                                        height={ canvasHeight }
                                                     />
 												) : ( '' !== data['visualizer-data-exploded'] ? (
 													<Chart
@@ -145,6 +148,7 @@ class Charts extends Component {
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
+                                                        height={ canvasHeight }
 													/>
 												) : (
 													<Chart
@@ -152,6 +156,7 @@ class Charts extends Component {
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
+                                                        height={ canvasHeight }
 													/>
 												) ) ) }
 

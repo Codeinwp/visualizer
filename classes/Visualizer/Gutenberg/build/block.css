@@ -156,6 +156,11 @@
     margin-left: 15px;
 }
 
+.visualizer-settings__charts-single canvas.chartjs-render-monitor {
+	background: #ffffff;
+	height: 255px !important; /* this height is also mentioned in Charts.js */
+}
+
 .components-panel__body-button .components-panel__body-toggle.components-button .dashicons-admin-tools {
     margin: -2px 6px -2px 0;
 }
