@@ -25,11 +25,8 @@ import LayoutAndChartArea from './Sidebar/LayoutAndChartArea.js';
 import FrontendActions from './Sidebar/FrontendActions.js';
 import ManualConfiguration from './Sidebar/ManualConfiguration.js';
 
-import SlicesSettingsChartJS from './Sidebar/ChartJS/SlicesSettings.js';
-import HorizontalAxisSettingsChartJS from './Sidebar/ChartJS/HorizontalAxisSettings.js';
-import VerticalAxisSettingsChartJS from './Sidebar/ChartJS/VerticalAxisSettings.js';
-import SeriesSettingsChartJS from './Sidebar/ChartJS/SeriesSettings.js';
-import BarsSettingsChartJS from './Sidebar/ChartJS/BarsSettings.js';
+
+ /* eslint-disable operator-linebreak */
 
 /**
  * WordPress dependencies
@@ -54,45 +51,28 @@ class Sidebar extends Component {
 
 				<GeneralSettings chart={ this.props.chart } edit={ this.props.edit } />
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<HorizontalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'polarArea', 'radar', 'timeline', 'dataTable' ].indexOf( type ) ) && (
+                    <HorizontalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( 0 <= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<HorizontalAxisSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'polarArea', 'radar', 'timeline', 'dataTable' ].indexOf( type ) ) && (
+                    <VerticalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<VerticalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
-				) }
-
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( 0 <= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<VerticalAxisSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
-				) }
-
-
-				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
+				{ ( 0 <= [ 'pie' ].indexOf( type ) && 'ChartJS' !== lib ) && (
 					<Fragment>
-
 						<PieSettings chart={ this.props.chart } edit={ this.props.edit } />
-
 						<ResidueSettings chart={ this.props.chart } edit={ this.props.edit } />
-
 					</Fragment>
 				) }
 
-				{ ( 0 <= [ 'area', 'scatter', 'line' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
+				{ ( 0 <= [ 'area', 'scatter', 'line' ].indexOf( type ) && 'ChartJS' !== lib ) && (
 					<LinesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( 0 <= [ 'bar', 'column' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<BarsSettings chart={ this.props.chart } edit={ this.props.edit } />
+				{ ( 0 <= [ 'bar', 'column' ].indexOf( type ) ) && (
+                    <BarsSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
-
-				{ ( 0 <= [ 'bar', 'column' ].indexOf( type ) ) && ( 0 <= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<BarsSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
-				) }
-
 
 				{ ( 0 <= [ 'candlestick' ].indexOf( type ) ) && (
 					<CandlesSettings chart={ this.props.chart } edit={ this.props.edit } />
@@ -100,15 +80,10 @@ class Sidebar extends Component {
 
 				{ ( 0 <= [ 'geo' ].indexOf( type ) ) && (
 					<Fragment>
-
 						<MapSettings chart={ this.props.chart } edit={ this.props.edit } />
-
 						<ColorAxis chart={ this.props.chart } edit={ this.props.edit } />
-
 						<SizeAxis chart={ this.props.chart } edit={ this.props.edit } />
-
 						<MagnifyingGlass chart={ this.props.chart } edit={ this.props.edit } />
-
 					</Fragment>
 				) }
 
@@ -122,11 +97,8 @@ class Sidebar extends Component {
 
 				{ ( 0 <= [ 'table', 'dataTable' ].indexOf( type ) ) && (
 					<Fragment>
-
 						<TableSettings chart={ this.props.chart } edit={ this.props.edit } />
-
 						<RowCellSettings chart={ this.props.chart } edit={ this.props.edit } />
-
 					</Fragment>
 				) }
 
@@ -134,22 +106,13 @@ class Sidebar extends Component {
 					<ComboSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'timeline', 'gauge', 'geo', 'pie', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
+				{ ( -1 >= [ 'timeline', 'gauge', 'geo', 'pie', 'polarArea', 'dataTable' ].indexOf( type ) ) && (
+                    <SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'timeline', 'gauge', 'geo', 'pie', 'dataTable' ].indexOf( type ) ) && ( 0 <= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<SeriesSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
-				) }
-
-				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
+				{ ( 0 <= [ 'pie', 'polarArea' ].indexOf( type ) ) && (
 					<SlicesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
-
-				{ ( 0 <= [ 'pie' ].indexOf( type ) ) && ( 0 <= [ 'ChartJS' ].indexOf( lib ) ) && (
-					<SlicesSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
-				) }
-
 
 				{ ( 0 <= [ 'dataTable' ].indexOf( type ) ) && (
 					<ColumnSettings chart={ this.props.chart } edit={ this.props.edit } />

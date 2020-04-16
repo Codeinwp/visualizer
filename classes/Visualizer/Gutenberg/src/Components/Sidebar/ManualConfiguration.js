@@ -40,12 +40,21 @@ class ManualConfiguration extends Component {
 		let chart;
 
 		const settings = this.props.chart['visualizer-settings'];
+        const lib = this.props.chart['visualizer-chart-library'];
 
 		if ( 0 <= [ 'gauge', 'table', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
 			chart = this.props.chart['visualizer-chart-type'];
 		} else {
 			chart = `${ this.props.chart['visualizer-chart-type'] }chart`;
 		}
+
+        let apiLink = 'https://developers.google.com/chart/interactive/docs/gallery/${chart}#configuration-options';
+        let apiName = __( 'Google Visualization API' );
+
+        if ( 'ChartJS' === lib ) {
+            apiLink = 'https://www.chartjs.org/docs/latest/configuration/';
+            apiName = 'ChartJS API';
+        }
 
 		return (
 			<PanelBody
@@ -54,11 +63,10 @@ class ManualConfiguration extends Component {
 				className="visualizer-advanced-panel"
 			>
 
-				<p>{ __( 'Configure the graph by providing configuration variables right from the Google Visualization API.' ) }</p>
-
 				<p>
-					<ExternalLink href={ `https://developers.google.com/chart/interactive/docs/gallery/${chart}#configuration-options` }>
-						{ __( 'Google Visualization API' ) }
+                    { __( 'Configure the graph by providing configuration variables right from the' ) + ' ' }
+					<ExternalLink href={ apiLink }>
+                        { apiName }
 					</ExternalLink>
 				</p>
 

@@ -18,6 +18,8 @@ const {
 	TextControl
 } = wp.components;
 
+import SeriesSettingsChartJS from './ChartJS/SeriesSettings.js';
+
 class SeriesSettings extends Component {
 	constructor() {
 		super( ...arguments );
@@ -46,10 +48,15 @@ class SeriesSettings extends Component {
 	render() {
 
 		const type = this.props.chart['visualizer-chart-type'];
-
 		const settings = this.props.chart['visualizer-settings'];
-
 		const series = this.props.chart['visualizer-series'];
+        const lib = this.props.chart['visualizer-chart-library'];
+
+        if ( 'ChartJS' === lib ) {
+            return (
+                <SeriesSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
+            );
+        }
 
 		return (
 			<PanelBody
