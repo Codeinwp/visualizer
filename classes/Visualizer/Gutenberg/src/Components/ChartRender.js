@@ -1,5 +1,5 @@
 /**
- * External dependencies
+ * This file renders the chart when the Done button is clicked.
  */
 import { Chart } from 'react-google-charts';
 
@@ -95,7 +95,7 @@ class ChartRender extends Component {
 										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
 										compact( this.props.chart['visualizer-settings'])
 								}
-								height="500px"
+								height="250"
                             />
                         ) : ( '' !== data['visualizer-data-exploded'] ? (
 							<Chart

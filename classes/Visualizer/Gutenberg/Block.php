@@ -69,11 +69,6 @@ class Visualizer_Gutenberg_Block {
 	public function enqueue_gutenberg_scripts() {
 		global $wp_version;
 
-		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
-		$handsontableJS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js';
-		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css';
-		$handsontableCSS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css';
-
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
 			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
 		} else {
@@ -81,8 +76,8 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		// Enqueue the bundled block JS file
-		wp_enqueue_script( 'handsontable', $handsontableJS );
-		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment' ), $version, true );
+		wp_enqueue_script( 'handsontable', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js' );
+		wp_enqueue_script( 'visualizer-gutenberg-block', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js', array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment' ), $version, true );
 
 		$type = 'community';
 
@@ -100,15 +95,16 @@ class Visualizer_Gutenberg_Block {
 			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
 			'absurl'    => VISUALIZER_ABSURL,
 			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
-			'adminPage' => menu_page_url( 'visualizer', false ),
+			'adminPage' => add_query_arg( 'vaction', 'addnew', menu_page_url( 'visualizer', false ) ),
 			'sqlTable'  => $table_col_mapping,
 			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
 		// Enqueue frontend and editor block styles
-		wp_enqueue_style( 'handsontable', $handsontableCSS );
-		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $version );
+		wp_enqueue_style( 'handsontable', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css' );
+		wp_enqueue_style( 'visualizer-gutenberg-custom', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/custom.css' );
+		wp_enqueue_style( 'visualizer-gutenberg-block', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css', array( 'visualizer-datatables', 'visualizer-gutenberg-custom' ), $version );
 
 		if ( version_compare( $wp_version, '4.9.0', '>' ) ) {
 
