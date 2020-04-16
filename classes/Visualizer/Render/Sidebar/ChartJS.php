@@ -224,7 +224,8 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Legend', 'visualizer' ), false );
-				/* this does not work despite the documentation
+				/*
+				 this does not work despite the documentation
 				self::_renderCheckboxItem(
 					esc_html__( 'Hide legend', 'visualizer' ),
 					'legend[display]',
