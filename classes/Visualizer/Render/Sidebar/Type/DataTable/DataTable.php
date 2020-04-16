@@ -129,7 +129,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 	 */
 	protected function _renderGeneralSettings() {
 		self::_renderGroupStart( esc_html__( 'General Settings', 'visualizer' ) );
-			self::_renderSectionStart( esc_html__( 'Title', 'visualizer' ), false );
+			self::_renderSectionStart( esc_html__( 'Title', 'visualizer' ), true );
 				self::_renderTextItem(
 					esc_html__( 'Chart Title', 'visualizer' ),
 					'title',

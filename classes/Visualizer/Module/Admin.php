@@ -60,7 +60,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
-		$this->_addFilter( 'visualizer_get_chart_counts', 'getChartCountsByTypeAndMeta' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
 
 		// screen pagination
