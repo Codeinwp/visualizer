@@ -199,6 +199,11 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * On activation of the plugin
 	 */
 	public function onActivation( $plugin ) {
+		if ( isset( $_REQUEST['action2'] ) && 'activate-selected' === $_REQUEST['action2'] && isset( $_REQUEST['checked'] ) && is_array( $_REQUEST['checked'] ) && count( $_REQUEST['checked'] ) > 1 ) {
+			// bulk activation, bail!
+			return;
+		}
+
 		if ( defined( 'TI_UNIT_TESTING' ) ) {
 			return;
 		}
