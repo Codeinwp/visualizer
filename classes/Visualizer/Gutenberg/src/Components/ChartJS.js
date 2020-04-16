@@ -61,16 +61,7 @@ class ChartJS extends Component {
         let id = `chartjs-${ this.props.id }-${ this.uniqueId }`;
         let type = this.props.chartType;
 
-        settings.responsive = true;
-        const height = this.props.height;
-
-
-        /*
-        have to use this ancient and stupid method till react matures and supports dynamic jsx tags of the form
-
-        const CustomChart = type.substring( 0, 1 ).toUpperCase() + type.substring( 1 );
-		return <CustomChart data={ data } id={ id } />;
-        */
+        const height = parseInt( this.props.height );
 
         switch ( this.props.chartType ) {
             case 'line':
@@ -93,6 +84,10 @@ class ChartJS extends Component {
                     return <Doughnut data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
                 }
                 return <Pie data={ data } id={ id } legend={ settings.legend } options={ settings } height={ height }/>;
+            case 'polarArea':
+                return <Polar data={ data } id={ id  } legend={ settings.legend } options={ settings } height={ height }/>;
+            case 'radar':
+                return <Radar data={ data } id={ id  } legend={ settings.legend } options={ settings } height={ height }/>;
         }
 
         return null;

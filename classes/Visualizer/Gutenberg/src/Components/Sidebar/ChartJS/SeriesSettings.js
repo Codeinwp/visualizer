@@ -90,64 +90,120 @@ class SeriesSettingsChartJS extends Component {
 
                                 </Fragment>
 
+                            { ( 0 <= [ 'line', 'radar' ].indexOf( type ) ) && (
+                                <Fragment>
+                                    <BaseControl
+                                        label={ __( 'Point stroke Color' ) }
+                                    >
+                                        <ColorPalette
+                                            value={ settings.series[index].borderColor }
+                                            onChange={ e => {
+                                                settings.series[index].borderColor = e;
+                                                this.props.edit( settings );
+                                            } }
+                                        />
+                                    </BaseControl>
 
-                                <BaseControl
-                                    label={ __( 'Point stroke Color' ) }
-                                >
-                                    <ColorPalette
-                                        value={ settings.series[index].borderColor }
+                                    <BaseControl
+                                        label={ __( 'Point fill Color' ) }
+                                    >
+                                        <ColorPalette
+                                            value={ settings.series[index].backgroundColor }
+                                            onChange={ e => {
+                                                settings.series[index].backgroundColor = e;
+                                                this.props.edit( settings );
+                                            } }
+                                        />
+                                    </BaseControl>
+
+                                    <TextControl
+                                        label={ __( 'Point stroke width' ) }
+                                        value={ settings.series[index].borderWidth }
+                                        type="number"
+                                        min="0"
                                         onChange={ e => {
-                                            settings.series[index].borderColor = e;
+                                            settings.series[index].borderWidth = e;
                                             this.props.edit( settings );
                                         } }
                                     />
-                                </BaseControl>
 
-                                <BaseControl
-                                    label={ __( 'Point fill Color' ) }
-                                >
-                                    <ColorPalette
-                                        value={ settings.series[index].backgroundColor }
+                                    <SelectControl
+                                        label={ __( 'Point style' ) }
+                                        value={ settings.series[index].pointStyle }
+                                        options={ [
+                                            { label: __( 'Circle' ), value: 'circle' },
+                                            { label: __( 'Cross' ), value: 'cross' },
+                                            { label: __( 'Dash' ), value: 'dash' },
+                                            { label: __( 'Line' ), value: 'line' },
+                                            { label: __( 'Rectangle' ), value: 'rect' },
+                                            { label: __( 'Star' ), value: 'star' },
+                                            { label: __( 'Triangle' ), value: 'triangle' }
+                                        ] }
                                         onChange={ e => {
-                                            settings.series[index].backgroundColor = e;
+                                            settings.series[index].pointStyle = e;
                                             this.props.edit( settings );
                                         } }
                                     />
-                                </BaseControl>
+                                </Fragment>
+                            ) }
 
-                                <TextControl
-                                    label={ __( 'Point stroke width' ) }
-                                    value={ settings.series[index].borderWidth }
-                                    type="number"
-                                    onChange={ e => {
-                                        settings.series[index].borderWidth = e;
-                                        this.props.edit( settings );
-                                    } }
-                                />
 
-                                <SelectControl
-                                    label={ __( 'Point style' ) }
-                                    value={ settings.series[index].pointStyle }
-                                    options={ [
-                                        { label: __( 'Circle' ), value: 'circle' },
-                                        { label: __( 'Cross' ), value: 'cross' },
-                                        { label: __( 'Dash' ), value: 'dash' },
-                                        { label: __( 'Line' ), value: 'line' },
-                                        { label: __( 'Rectangle' ), value: 'rect' },
-                                        { label: __( 'Star' ), value: 'star' },
-                                        { label: __( 'Triangle' ), value: 'triangle' }
-                                    ] }
-                                    onChange={ e => {
-                                        settings.series[index].pointStyle = e;
-                                        this.props.edit( settings );
-                                    } }
-                                />
+                            { ( 0 <= [ 'column', 'bar' ].indexOf( type ) ) && (
+                                <Fragment>
+                                    <BaseControl
+                                        label={ __( 'Bar border color' ) }
+                                    >
+                                        <ColorPalette
+                                            value={ settings.series[index].borderColor }
+                                            onChange={ e => {
+                                                settings.series[index].borderColor = e;
+                                                this.props.edit( settings );
+                                            } }
+                                        />
+                                    </BaseControl>
+
+                                    <BaseControl
+                                        label={ __( 'Bar background color' ) }
+                                    >
+                                        <ColorPalette
+                                            value={ settings.series[index].backgroundColor }
+                                            onChange={ e => {
+                                                settings.series[index].backgroundColor = e;
+                                                this.props.edit( settings );
+                                            } }
+                                        />
+                                    </BaseControl>
+
+                                    <BaseControl
+                                        label={ __( 'Bar background hover color' ) }
+                                    >
+                                        <ColorPalette
+                                            value={ settings.series[index].hoverBackgroundColor }
+                                            onChange={ e => {
+                                                settings.series[index].hoverBackgroundColor = e;
+                                                this.props.edit( settings );
+                                            } }
+                                        />
+                                    </BaseControl>
+
+                                    <TextControl
+                                        label={ __( 'Bar border width' ) }
+                                        value={ settings.series[index].borderWidth }
+                                        type="number"
+                                        min="0"
+                                        onChange={ e => {
+                                            settings.series[index].borderWidth = e;
+                                            this.props.edit( settings );
+                                        } }
+                                    />
+                                </Fragment>
+                            ) }
 
 
 							</PanelBody>
 						);
 					}
-					) }
+                ) }
 
 			</PanelBody>
 		);
