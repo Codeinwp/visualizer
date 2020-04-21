@@ -17,7 +17,10 @@ describe('Test Free - gutenberg', function() {
         cy.visit('/post-new.php');
 
         // get rid of that irritating popup
-        cy.get('.edit-post-welcome-guide button').first().click();
+        // before WP 5.4
+        cy.get('.nux-dot-tip__disable').click();
+        // for WP 5.4+
+        //cy.get('.edit-post-welcome-guide button').first().click();
 
         var charts = [];
         for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
