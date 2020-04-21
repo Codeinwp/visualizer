@@ -17,7 +17,6 @@ describe('Test Free - gutenberg (chartjs)', function() {
         cy.visit('/post-new.php');
 
         // get rid of that irritating popup
-        // before WP 5.4
         cy.get('.nux-dot-tip__disable').click();
         // for WP 5.4+
         //cy.get('.edit-post-welcome-guide button').first().click();
@@ -37,7 +36,7 @@ describe('Test Free - gutenberg (chartjs)', function() {
             });
 
             // see the block has the correct elements.
-            cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 2));
+            cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 1)); // make + 1 to + 2 for WP 5.4
 
             cy.get('div[data-type="visualizer/chart"]:nth-child(' + (i + 1) + ')').then( ($block) => {
                 cy.wrap($block).find('.visualizer-settings__content-option').should('have.length', 2);
