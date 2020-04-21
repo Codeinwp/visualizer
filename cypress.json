@@ -5,6 +5,7 @@
       "samples": "https://s3.amazonaws.com/downloads.themeisle.com/samples-visualizer/"
     },
     "chart_types": {
+      "chartjs": 4,
       "free": 9,
       "pro": 6
     },

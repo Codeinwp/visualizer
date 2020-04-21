@@ -1,4 +1,4 @@
-describe('Test Free - gutenberg', function() {
+describe('Test Free - gutenberg (chartjs)', function() {
     before(function(){
         Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
@@ -10,7 +10,7 @@ describe('Test Free - gutenberg', function() {
     });
 
     it('Create all charts', function() {
-        cy.create_available_charts(Cypress.env('chart_types').free);
+        cy.create_available_charts(Cypress.env('chart_types').chartjs, 'ChartJS');
     });
 
     it('Verify insertion of charts', function() {
@@ -20,7 +20,7 @@ describe('Test Free - gutenberg', function() {
         cy.get('.edit-post-welcome-guide button').first().click();
 
         var charts = [];
-        for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
+        for(var i = 1; i <= parseInt(Cypress.env('chart_types').chartjs); i++){
             charts.push(i);
         }
 

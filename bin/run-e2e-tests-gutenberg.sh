@@ -21,3 +21,8 @@ export CYPRESS_HOST=$wp_host
 docker exec $args visualizer_wordpress wp --quiet plugin deactivate classic-editor
 export CYPRESS_SPEC_TO_RUN="free-gutenberg.js"
 npm run cypress:run
+
+docker exec $args visualizer_wordpress bash /var/www/html/ti-bin/clean.sh
+
+export CYPRESS_SPEC_TO_RUN="free-gutenberg-chartjs.js"
+npm run cypress:run
