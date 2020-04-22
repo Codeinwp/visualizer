@@ -58,12 +58,14 @@ class BarsSettingsChartJS extends Component {
                 <CheckboxControl
                     label={ __( 'Is Stacked' ) }
                     help={ __( 'If checked, series elements are stacked.' ) }
-                    checked={ 'true' === settings.yAxes.stacked_bool ? true : false }
+                    checked={ settings.yAxes.stacked_bool && 'true' === settings.yAxes.stacked_bool ? true : false }
                     onChange={ e => {
-                        // @TODO: unchecking the box is not working
                         settings.yAxes.stacked_bool = 'true';
                         if ( ! e ) {
-                            settings.yAxes.stacked_bool = 'false';
+                            // @TODO: unchecking the box is not working
+                            // settings.yAxes.stacked_bool is undefined when stacked = false
+                            // and 'true' (string) when stacked = true
+                            delete settings.yAxes.stacked_bool;
                         }
                         this.props.edit( settings );
                     } }
