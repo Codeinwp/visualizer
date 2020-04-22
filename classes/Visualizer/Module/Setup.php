@@ -47,7 +47,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
 		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
 
-		$this->_addAction( 'activated_plugin', 'onActivation' );
+		$this->_addAction( 'admin_init', 'adminInit' );
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
@@ -193,28 +193,24 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	public function activate() {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
 		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, 'hourly', 'visualizer_schedule_refresh_db' );
+		add_option( 'visualizer-activated', true );
 	}
 
 	/**
-	 * On activation of the plugin
+	 * Check if plugin has been activated and then redirect to the correct page.
 	 */
-	public function onActivation( $plugin ) {
-		if ( isset( $_REQUEST['action2'] ) && 'activate-selected' === $_REQUEST['action2'] && isset( $_REQUEST['checked'] ) && is_array( $_REQUEST['checked'] ) && count( $_REQUEST['checked'] ) > 1 ) {
-			// bulk activation, bail!
-			return;
-		}
-
+	public function adminInit() {
 		if ( defined( 'TI_UNIT_TESTING' ) ) {
 			return;
 		}
 
-		if ( $plugin === VISUALIZER_BASENAME ) {
-			if ( Visualizer_Module::numberOfCharts() > 0 ) {
-				wp_redirect( admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME ) );
-			} else {
-				wp_redirect( admin_url( 'admin.php?page=viz-support' ) );
+		if ( get_option( 'visualizer-activated' ) ) {
+			delete_option( 'visualizer-activated' );
+			if ( ! headers_sent() ) {
+				$page_name = Visualizer_Module::numberOfCharts() > 0 ? Visualizer_Plugin::NAME : 'viz-support';
+				wp_redirect( add_query_arg( 'page', $page_name, admin_url( 'admin.php' ) ) );
+				exit();
 			}
-			exit();
 		}
 	}
 
@@ -224,6 +220,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 */
 	public function deactivate() {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+		delete_option( 'visualizer-activated', true );
 	}
 
 	/**
