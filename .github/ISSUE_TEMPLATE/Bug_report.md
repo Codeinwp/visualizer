@@ -22,4 +22,4 @@ about: Report a bug so we can get to squashing it.
 
 ### Technical info
 * WordPress version: x.x.x
-* Theme version: x.x.x
+* Plugin version: x.x.x
