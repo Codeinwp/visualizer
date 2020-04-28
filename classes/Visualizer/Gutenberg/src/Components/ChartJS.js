@@ -233,15 +233,6 @@ class ChartJS extends Component {
     }
 
     handleAxes( settings ) {
-        if ( 'undefined' !== typeof settings['yAxes'] &&  'undefined' !== typeof settings['xAxes']) {
-            // stacking has to be defined on both axes.
-            if ( 'undefined' !== typeof settings['yAxes']['stacked_bool']) {
-                settings['xAxes']['stacked_bool'] = 'true';
-            }
-            if ( 'undefined' !== typeof settings['xAxes']['stacked_bool']) {
-                settings['yAxes']['stacked_bool'] = 'true';
-            }
-        }
         this.configureAxes( settings, 'yAxes' );
         this.configureAxes( settings, 'xAxes' );
     }

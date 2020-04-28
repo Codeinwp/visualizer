@@ -62,10 +62,7 @@ class BarsSettingsChartJS extends Component {
                     onChange={ e => {
                         settings.yAxes.stacked_bool = 'true';
                         if ( ! e ) {
-                            // @TODO: unchecking the box is not working
-                            // settings.yAxes.stacked_bool is undefined when stacked = false
-                            // and 'true' (string) when stacked = true
-                            delete settings.yAxes.stacked_bool;
+                            settings.yAxes.stacked_bool = 'false';
                         }
                         this.props.edit( settings );
                     } }
