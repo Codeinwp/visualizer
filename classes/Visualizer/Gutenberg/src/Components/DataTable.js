@@ -148,10 +148,10 @@ class DataTables extends Component {
             case 'boolean':
                 jQuery.fn.dataTable.render.extra = function( data, type, row ) {
                     if ( ( true === data || 'true' === data ) && 'undefined' !== typeof settings.series[index].format && '' !== settings.series[index].format.truthy ) {
-                        data = settings.series[index].format.truthy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
+                        return settings.series[index].format.truthy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
                     }
-                    if ( ( true === false || 'false' === data ) && 'undefined' !== typeof settings.series[index].format && '' !== settings.series[index].format.falsy ) {
-                        data = settings.series[index].format.falsy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
+                    if ( ( false === data || 'false' === data ) && 'undefined' !== typeof settings.series[index].format && '' !== settings.series[index].format.falsy ) {
+                        return settings.series[index].format.falsy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
                     }
                     return data;
                 };
