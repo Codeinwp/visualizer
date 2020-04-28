@@ -29,8 +29,6 @@
         series = chart.series;
         data = chart.data;
 
-        console.log(series);
-
         container = document.getElementById(id);
         if (container == null) {
             return;
@@ -175,7 +173,6 @@
         $.extend( settings, additional );
 
         cols = [];
-        console.log(series);
         for (j = 0; j < series.length; j++) {
             type = series[j].type;
             switch(type){
@@ -188,7 +185,6 @@
                     type = 'date';
                     break;
             }
-
             render = addRenderer(series[j].type, settings.series, j);
 
             var col = { title: series[j].label, data: series[j].label, type: type, render: render };
@@ -222,7 +218,6 @@
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings});
 
         table = $('#' + id + ' table.visualizer-data-table');
-        console.log("showing table");
         table.DataTable( settings );
 
         // header row is handled here as the class is added dynamically to it (after the table is rendered).
@@ -272,14 +267,17 @@
                 }
                 break;
             default:
-console.log("yahan aaya");
-        render = $.fn.dataTable.render.extra = function ( from, to, locale ) {
-            console.log("andar aaya");
-            return from;
-        }
+                render = $.fn.dataTable.render.extra = function ( data, type, row ) {
+                    if((data === true || data === 'true') && typeof series.format !== 'undefined' && series.format.truthy !== ''){
+                        data = series.format.truthy;
+                    }
+                    if((data === false || data === 'false') && typeof series.format !== 'undefined' && series.format.falsy !== ''){
+                        data = series.format.falsy;
+                    }
+                    return data;
+                }
         }
         /* jshint ignore:end */
-
 
         return render;
     }
