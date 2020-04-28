@@ -269,10 +269,10 @@
             default:
                 render = $.fn.dataTable.render.extra = function ( data, type, row ) {
                     if((data === true || data === 'true') && typeof series.format !== 'undefined' && series.format.truthy !== ''){
-                        data = series.format.truthy;
+                        data = series.format.truthy.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
                     }
                     if((data === false || data === 'false') && typeof series.format !== 'undefined' && series.format.falsy !== ''){
-                        data = series.format.falsy;
+                        data = series.format.falsy.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
                     }
                     return data;
                 }
