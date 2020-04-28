@@ -238,7 +238,8 @@ abstract class Visualizer_Source {
 					}
 					break;
 				case 'string':
-					$data[ $i ] = $this->toUTF8( $data[ $i ] );
+					// if a ' is provided, strip the backslash
+					$data[ $i ] = stripslashes( $this->toUTF8( $data[ $i ] ) );
 					break;
 			}
 		}

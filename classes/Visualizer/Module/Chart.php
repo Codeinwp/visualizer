@@ -358,7 +358,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		$type   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-		$data   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( $chart->post_content ), $chart->ID, $type );
+		$data   = self::get_chart_data( $chart, $type );
 		$library = $this->load_chart_type( $chart->ID );
 
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
@@ -534,7 +534,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_register_style( 'visualizer-chosen', VISUALIZER_ABSURL . 'css/lib/chosen.min.css', array(), Visualizer_Plugin::VERSION );
 
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
-		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen', 'jquery-ui-accordion' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen', 'jquery-ui-accordion', 'jquery-ui-tabs' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 		wp_register_script(
 			'visualizer-render',
@@ -575,6 +575,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			// if the cancel button is clicked.
 			$this->undoRevisions( $chart_id, true );
 		} elseif ( isset( $_POST['save'] ) && 1 === intval( $_POST['save'] ) ) {
+			$this->handlePermissions();
 			// if the save button is clicked.
 			$this->undoRevisions( $chart_id, false );
 		} else {
@@ -591,7 +592,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$this->_handleTypesPage();
 				break;
 			default:
-				do_action( 'visualizer_pro_handle_tab', $tab, $this->_chart );
+				// this should never happen.
 				break;
 		}
 		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
@@ -653,12 +654,30 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	}
 
 	/**
+	 * Handle permissions from the new conslidated settings sidebar.
+	 */
+	private function handlePermissions() {
+		if ( ! Visualizer_Module::is_pro() ) {
+			return;
+		}
+
+		// we will not support old free and new pro.
+		// handling new free and old pro.
+		if ( has_action( 'visualizer_pro_handle_tab' ) ) {
+			do_action( 'visualizer_pro_handle_tab', 'permissions', $this->_chart );
+		} else {
+			do_action( 'visualizer_handle_permissions', $this->_chart );
+		}
+	}
+
+	/**
 	 * Handle data and settings page
 	 */
 	private function _handleDataAndSettingsPage() {
 		if ( isset( $_POST['map_api_key'] ) ) {
 			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
 		}
+
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
 			if ( $this->_chart->post_status === 'auto-draft' ) {
 				$this->_chart->post_status = 'publish';
@@ -691,7 +710,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render       = new Visualizer_Render_Page_Send();
 			$render->text = sprintf( '[visualizer id="%d"]', $this->_chart->ID );
 			wp_iframe( array( $render, 'render' ) );
-
 			return;
 		}
 		$data          = $this->_getChartArray();
@@ -743,6 +761,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
 					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
 					'select_columns'    => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
+					'save_settings'    => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -887,10 +906,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						}
 						// don't use fpucsv here because we need to just dump the data
 						// minus the empty rows
-						// and if any row contains ' or ", fputcsv will mess it up
 						// because fputcsv needs to tokenize
-						// and let's standardize the CSV enclosure
-						$row = str_replace( "'", VISUALIZER_CSV_ENCLOSURE, $row );
+						// we can standardize the CSV enclosure here and replace all ' with "
+						// we can assume that if there are an even number of ' they should be changed to "
+						// but that will screw up words like fo'c'sle
+						// so here let's just assume ' will NOT be used for enclosures
 						fwrite( $handle, $row );
 						fwrite( $handle, PHP_EOL );
 					}

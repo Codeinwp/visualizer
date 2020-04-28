@@ -253,7 +253,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// handle data filter hooks
-		$data = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( $chart->post_content ) ), $chart->ID, $type );
+		$data   = self::get_chart_data( $chart, $type );
 		if ( ! empty( $atts['data'] ) ) {
 			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
 		}
