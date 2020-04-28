@@ -482,14 +482,14 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					esc_html__( 'Truthy value', 'visualizer' ),
 					'series[' . $index . '][format][truthy]',
 					isset( $this->series[ $index ]['format']['truthy'] ) ? $this->series[ $index ]['format']['truthy'] : '',
-					sprintf( esc_html__( 'Provide the ASCII/HTML entity code for the value the table should display when the value of the column is true. e.g. %1$s (Code: %2$s) instead of true', 'visualizer' ), '&#10004;', '&amp;#10004;' ),
+					sprintf( esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is true. e.g. %1$s (Code: %2$s) instead of true', 'visualizer' ), '&#10004;', '&amp;#10004;' ),
 					''
 				);
 				self::_renderTextItem(
 					esc_html__( 'Falsy value', 'visualizer' ),
 					'series[' . $index . '][format][falsy]',
 					isset( $this->series[ $index ]['format']['falsy'] ) ? $this->series[ $index ]['format']['falsy'] : '',
-					sprintf( esc_html__( 'Provide the ASCII/HTML entity code for the value the table should display when the value of the column is false. e.g. %1$s (Code: %2$s) instead of true', 'visualizer' ), '&#10006;', '&amp;#10006;' ),
+					sprintf( esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is false. e.g. %1$s (Code: %2$s) instead of false', 'visualizer' ), '&#10006;', '&amp;#10006;' ),
 					''
 				);
 				break;
