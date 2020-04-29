@@ -527,6 +527,9 @@ class Visualizer_Module {
 		$name   = $this->load_chart_class_name( $chart_id );
 		$class  = null;
 		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
+			if ( 'Visualizer_Render_Sidebar_Type_DataTable_DataTable' === $name ) {
+				$name = 'Visualizer_Render_Sidebar_Type_DataTable_Tabular';
+			}
 			$class  = new $name;
 		}
 
