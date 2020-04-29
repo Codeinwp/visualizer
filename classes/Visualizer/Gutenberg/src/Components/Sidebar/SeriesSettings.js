@@ -68,7 +68,7 @@ class SeriesSettings extends Component {
 								initialOpen={ false }
 							>
 
-								{ ( -1 >= [ 'table', 'pie' ].indexOf( type ) ) && (
+								{ ( -1 >= [ 'tabular', 'pie' ].indexOf( type ) ) && (
 									<SelectControl
 										label={ __( 'Visible In Legend' ) }
 										help={ __( 'Determines whether the series has to be presented in the legend or not.' ) }
@@ -84,7 +84,7 @@ class SeriesSettings extends Component {
 									/>
 								) }
 
-								{ ( -1 >= [ 'table', 'candlestick', 'combo', 'column', 'bar' ].indexOf( type ) ) && (
+								{ ( -1 >= [ 'tabular', 'candlestick', 'combo', 'column', 'bar' ].indexOf( type ) ) && (
 
 									<Fragment>
 
@@ -221,7 +221,7 @@ class SeriesSettings extends Component {
 
 								) }
 
-								{ ( -1 >= [ 'table'  ].indexOf( type ) ) && (
+								{ ( -1 >= [ 'tabular'  ].indexOf( type ) ) && (
 
 									<BaseControl
 										label={ __( 'Color' ) }
