@@ -12,6 +12,14 @@ describe('Test Free - gutenberg', function() {
     it('temp test', function() {
         cy.visit('/post-new.php');
         cy.clear_welcome();
+
+            // insert a visualizer block
+            cy.get('div.edit-post-header-toolbar .block-editor-inserter button').click();
+            cy.get('.components-popover__content').then(function ($popup) {
+                cy.wrap($popup).find('.block-editor-inserter__search').type('visua');
+                cy.wrap($popup).find('.block-editor-inserter__results ul.block-editor-block-types-list li').should('have.length', 1);
+                cy.wrap($popup).find('.block-editor-inserter__results ul.block-editor-block-types-list li button').click();
+            });
     });
 
     it.skip('Create all charts', function() {
