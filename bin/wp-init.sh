@@ -22,14 +22,12 @@ docker exec $args visualizer_wordpress wp --allow-root core install --url="http:
 
 # update core
 docker exec $args visualizer_wordpress chown -R www-data:www-data /var/www/html/
+docker exec $args visualizer_wordpress chmod 0777 -R /var/www/html/wp-content
 docker exec $args visualizer_wordpress wp --allow-root core update
 docker exec $args visualizer_wordpress wp --allow-root core update-db
 
 # install required external plugins
 docker exec $args visualizer_wordpress wp plugin install classic-editor --activate
-
-# so that debug.log is created
-docker exec $args visualizer_wordpress chmod 0777 -R /var/www/html/wp-content
 
 # install visualizer free
 docker exec $args visualizer_wordpress git clone https://github.com/Codeinwp/visualizer /var/www/html/wp-content/plugins/visualizer
