@@ -19,6 +19,7 @@ sleep $sleep_time
 
 # install WP
 docker exec $args visualizer_wordpress wp --quiet core install --url="http://$wp_host:8888/" --admin_user="wordpress" --admin_password="wordpress" --admin_email="test1@xx.com" --title="test" --skip-email
+docker exec $args visualizer_wordpress wp --quiet core update
 
 # install required external plugins
 docker exec $args visualizer_wordpress chown -R www-data:www-data /var/www/html/
