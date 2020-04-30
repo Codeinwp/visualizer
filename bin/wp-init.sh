@@ -18,9 +18,9 @@ echo "Sleeping for $sleep_time..."
 sleep $sleep_time
 
 # install WP
-docker exec $args visualizer_wordpress wp --quiet core install --url="http://$wp_host:8888/" --admin_user="wordpress" --admin_password="wordpress" --admin_email="test1@xx.com" --title="test" --skip-email
-docker exec $args visualizer_wordpress wp --quiet core update
-docker exec $args visualizer_wordpress wp --quiet core update-db
+docker exec $args visualizer_wordpress wp --allow-root core install --url="http://$wp_host:8888/" --admin_user="wordpress" --admin_password="wordpress" --admin_email="test1@xx.com" --title="test" --skip-email
+docker exec $args visualizer_wordpress wp --allow-root core update
+docker exec $args visualizer_wordpress wp --allow-root core update-db
 
 # install required external plugins
 docker exec $args visualizer_wordpress chown -R www-data:www-data /var/www/html/
@@ -33,16 +33,16 @@ docker exec $args visualizer_wordpress chmod 0777 -R /var/www/html/wp-content
 docker exec $args visualizer_wordpress git clone https://github.com/Codeinwp/visualizer /var/www/html/wp-content/plugins/visualizer
 
 # activate
-docker exec $args visualizer_wordpress wp --quiet plugin activate visualizer
+docker exec $args visualizer_wordpress wp --allow-root plugin activate visualizer
 
 # set this constant so that the license is not checked
-docker exec $args visualizer_wordpress wp --quiet config set TI_UNIT_TESTING true --raw
+docker exec $args visualizer_wordpress wp --allow-root config set TI_UNIT_TESTING true --raw
 
 # set this constant so that the specific hooks are loaded
-docker exec $args visualizer_wordpress wp --quiet config set TI_CYPRESS_TESTING true --raw
+docker exec $args visualizer_wordpress wp --allow-root config set TI_CYPRESS_TESTING true --raw
 
 # debugging
-docker exec $args visualizer_wordpress wp --quiet config set WP_DEBUG true --raw
-docker exec $args visualizer_wordpress wp --quiet config set WP_DEBUG_LOG true --raw
-docker exec $args visualizer_wordpress wp --quiet config set WP_DEBUG_DISPLAY false --raw
+docker exec $args visualizer_wordpress wp --allow-root config set WP_DEBUG true --raw
+docker exec $args visualizer_wordpress wp --allow-root config set WP_DEBUG_LOG true --raw
+docker exec $args visualizer_wordpress wp --allow-root config set WP_DEBUG_DISPLAY false --raw
 
