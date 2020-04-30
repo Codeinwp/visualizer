@@ -19,11 +19,13 @@ sleep $sleep_time
 
 # install WP
 docker exec $args visualizer_wordpress wp --allow-root core install --url="http://$wp_host:8888/" --admin_user="wordpress" --admin_password="wordpress" --admin_email="test1@xx.com" --title="test" --skip-email
+
+# update core
+docker exec $args visualizer_wordpress chown -R www-data:www-data /var/www/html/
 docker exec $args visualizer_wordpress wp --allow-root core update
 docker exec $args visualizer_wordpress wp --allow-root core update-db
 
 # install required external plugins
-docker exec $args visualizer_wordpress chown -R www-data:www-data /var/www/html/
 docker exec $args visualizer_wordpress wp plugin install classic-editor --activate
 
 # so that debug.log is created
