@@ -9,24 +9,16 @@ describe('Test Free - gutenberg', function() {
         cy.get('#wp-submit').click();
     });
 
-    it('temp test', function() {
+    it.skip('temp test', function() {
         cy.visit('/post-new.php');
         cy.clear_welcome();
-
-            // insert a visualizer block
-            cy.get('div.edit-post-header-toolbar .block-editor-inserter button').click();
-            cy.get('.components-popover__content').then(function ($popup) {
-                cy.wrap($popup).find('.block-editor-inserter__search').type('visua');
-                cy.wrap($popup).find('.block-editor-inserter__results ul.block-editor-block-types-list li').should('have.length', 1);
-                cy.wrap($popup).find('.block-editor-inserter__results ul.block-editor-block-types-list li button').click();
-            });
     });
 
-    it.skip('Create all charts', function() {
+    it('Create all charts', function() {
         cy.create_available_charts(Cypress.env('chart_types').free);
     });
 
-    it.skip('Verify insertion of charts', function() {
+    it('Verify insertion of charts', function() {
         cy.visit('/post-new.php');
 
         cy.clear_welcome();
