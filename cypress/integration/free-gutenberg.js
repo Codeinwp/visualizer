@@ -9,16 +9,16 @@ describe('Test Free - gutenberg', function() {
         cy.get('#wp-submit').click();
     });
 
-    it('temp test', function() {
+    it.skip('temp test', function() {
         cy.visit('/post-new.php');
         cy.clear_welcome();
     });
 
-    it.skip('Create all charts', function() {
+    it('Create all charts', function() {
         cy.create_available_charts(Cypress.env('chart_types').free);
     });
 
-    it.skip('Verify insertion of charts', function() {
+    it('Verify insertion of charts', function() {
         cy.visit('/post-new.php');
 
         cy.clear_welcome();
