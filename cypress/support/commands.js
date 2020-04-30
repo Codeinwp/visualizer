@@ -318,7 +318,7 @@ Cypress.Commands.add( 'clear_welcome', () => {
     cy.window().then(win => {
         win.wp
         && ( win.wp.data.select( "core/edit-post" ).isFeatureActive( "welcomeGuide" ) && win.wp.data.dispatch( "core/edit-post" ).toggleFeature( "welcomeGuide" ) )
-        && ( win.wp.data.select( "core/nux" ).isTipVisible() && win.wp.data.dispatch( "core/nux" ).dismissTip() )
+        && ( win.wp.data.select( "core/nux" ).isTipVisible( "core/editor.inserter" ) && win.wp.data.dispatch( "core/nux" ).dismissTip( "core/editor.inserter" ) )
         ;
     });
 });
