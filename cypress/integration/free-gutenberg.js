@@ -16,8 +16,7 @@ describe('Test Free - gutenberg', function() {
     it('Verify insertion of charts', function() {
         cy.visit('/post-new.php');
 
-        // get rid of that irritating popup
-        cy.get('.nux-dot-tip__disable').click();
+        wp.data.select( "core/edit-post" ).isFeatureActive( "welcomeGuide" ) && wp.data.dispatch( "core/edit-post" ).toggleFeature( "welcomeGuide" );
 
         var charts = [];
         for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
