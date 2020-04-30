@@ -29,7 +29,7 @@ describe('Test Free - gutenberg', function() {
             });
 
             // see the block has the correct elements.
-            cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 1));
+            cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 2));
 
             cy.get('div[data-type="visualizer/chart"]:nth-child(' + (i + 1) + ')').then( ($block) => {
                 cy.wrap($block).find('.visualizer-settings__content-option').should('have.length', 2);
