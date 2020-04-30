@@ -9,14 +9,19 @@ describe('Test Free - gutenberg', function() {
         cy.get('#wp-submit').click();
     });
 
-    it('Create all charts', function() {
+    it('temp test', function() {
+        cy.visit('/post-new.php');
+        cy.clear_welcome();
+    });
+
+    it.skip('Create all charts', function() {
         cy.create_available_charts(Cypress.env('chart_types').free);
     });
 
-    it('Verify insertion of charts', function() {
+    it.skip('Verify insertion of charts', function() {
         cy.visit('/post-new.php');
 
-        wp.data.select( "core/edit-post" ).isFeatureActive( "welcomeGuide" ) && wp.data.dispatch( "core/edit-post" ).toggleFeature( "welcomeGuide" );
+        cy.clear_welcome();
 
         var charts = [];
         for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
