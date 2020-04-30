@@ -16,10 +16,7 @@ describe('Test Free - gutenberg', function() {
     it('Verify insertion of charts', function() {
         cy.visit('/post-new.php');
 
-        // get rid of that irritating popup
-        cy.get('.nux-dot-tip__disable').click();
-        // for WP 5.4+
-        //cy.get('.edit-post-welcome-guide button').first().click();
+        cy.clear_welcome();
 
         var charts = [];
         for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
@@ -36,7 +33,7 @@ describe('Test Free - gutenberg', function() {
             });
 
             // see the block has the correct elements.
-            cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 1)); // make + 1 to + 2 for WP 5.4
+            cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 2));
 
             cy.get('div[data-type="visualizer/chart"]:nth-child(' + (i + 1) + ')').then( ($block) => {
                 cy.wrap($block).find('.visualizer-settings__content-option').should('have.length', 2);
