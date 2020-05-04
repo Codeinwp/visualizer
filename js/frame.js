@@ -376,6 +376,11 @@
             active: false,
             collapsible: true
         });
+        
+        // open the accordions by default if they are indicated with the 'open' class.
+        $('.visualizer-json-subform .viz-substep.open').each(function(i, e){
+            $('.visualizer-json-subform').accordion( "option", "active", i );
+        });
 
         // toggle between chart and create/modify parameters
         $( '#json-chart-button' ).on( 'click', function(){
