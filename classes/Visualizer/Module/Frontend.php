@@ -355,6 +355,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access private
 	 */
 	private function addSchema( $id ) {
+		// should we show informative errors as HTML comments?
+		$show_errors = apply_filters( 'visualizer_schema_show_errors', true, $id );
+
 		$settings = get_post_meta( $id, Visualizer_Plugin::CF_SETTINGS, true );
 		$title = '';
 		if ( isset( $settings['title'] ) && ! empty( $settings['title'] ) ) {
@@ -365,6 +368,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 		$title = apply_filters( 'visualizer_schema_name', $title, $id );
 		if ( empty( $title ) ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because title is empty -->";
+			}
 			return '';
 		}
 
@@ -373,8 +379,18 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$desc  = $settings['description'];
 		}
 		$desc = apply_filters( 'visualizer_schema_description', $desc, $id );
+		if ( empty( $desc ) ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because description is empty -->";
+			}
+			return '';
+		}
+
 		// descriptions below 50 chars are not allowed.
-		if ( empty( $desc ) || strlen( $desc ) < 50 ) {
+		if ( strlen( $desc ) < 50 ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because description is shorter than 50 characters -->";
+			}
 			return '';
 		}
 
