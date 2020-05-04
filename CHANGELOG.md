@@ -1,4 +1,14 @@
 
+ ### v3.4.3 - 2020-05-04 
+ **Changes:** 
+ * [Feat] Improved chart creation UX
+* [Feat] New option to control the number of charts per page in the Charts Library
+* [Feat] New option for filtering/ordering charts in the Charts Library
+* [Feat] Support for custom codes for the boolean data type in Table charts
+* [Fix] Support for displaying apostrophes in charts
+* [Fix] Visualizer button layout in the Classic block
+* [Fix] Bulk activation of plugin aborts activation of subsequent plugins
+ 
  ### v3.4.2 - 2020-02-17 
  **Changes:** 
  * New Cypress tests for the Gutenberg block
