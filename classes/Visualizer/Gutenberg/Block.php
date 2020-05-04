@@ -631,7 +631,7 @@ class Visualizer_Gutenberg_Block {
 
 			if ( $row['type'] === 'boolean' ) {
 				foreach ( $data as $o => $col ) {
-					$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_validate( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
+					$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_var( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
 				}
 			}
 
