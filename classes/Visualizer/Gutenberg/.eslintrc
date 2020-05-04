@@ -16,11 +16,11 @@
     ],
     "rules": {
         "indent": [
-            "warn",
+            "off",
             "tab"
         ],
         "linebreak-style": [
-            "warn",
+            "off",
             "unix"
         ],
         "quotes": [

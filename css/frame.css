@@ -37,7 +37,7 @@
 	top: 0;
 	right: 0;
 	bottom: 60px;
-	width: 299px;
+	width: 350px;
 	border-left: 1px solid #dfdfdf;
 	background: whitesmoke;
 
@@ -356,6 +356,18 @@ div.viz-group-content .viz-group-description {
 #flattr {
 	margin-top: 15px;
 	text-align: center;
+}
+
+#viz-tabs {
+	display: none;
+}
+
+#viz-tabs.done {
+	display: block;
+}
+
+#viz-tabs .ui-tabs-panel {
+	padding: 0;
 }
 
 /******************************************************************************/
@@ -961,6 +973,7 @@ button#editor-chart-button {
 #vz-csv-file-form,
 #vz-one-time-import,
 #vz-schedule-import,
+#vz-permissions .only-pro-content,
 .edit-data-content {
 	text-align: center;
 }
@@ -1363,15 +1376,6 @@ span.viz-section-error {
 	width: calc(100% - 17px);
 }
 
-#vz-chart-docs {
-	right: 85px;
-    bottom: 40px;
-    width: 35%;
-}
-
-#vz-chart-docs a {
-	text-decoration: none;
-}
 
 /******************************************************************************/
 /********************************  data tables  *******************************/

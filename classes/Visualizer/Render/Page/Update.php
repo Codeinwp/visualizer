@@ -38,6 +38,9 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _toHTML() {
+		if ( $this->is_request_from_gutenberg() ) {
+			return;
+		}
 		echo '<!DOCTYPE html>';
 		echo '<html>';
 			echo '<head>';
@@ -51,7 +54,7 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			if ( $this->settings ) {
 				echo 'win.visualizer.charts.canvas.settings = ', $this->settings, ';';
 			}
-			echo 'win.updateChartPreview();';
+			echo 'win.vizUpdateChartPreview();';
 
 			echo $this->updateEditorAndSettings();
 
@@ -87,7 +90,7 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 
 		$sidebar = apply_filters( 'visualizer_get_sidebar', '', $this->id );
 
-		return 'win.updateHTML(' . json_encode( array( 'html' => $editor ) ) . ', ' . json_encode( array( 'html' => $sidebar ) ) . ');';
+		return 'win.vizUpdateHTML(' . json_encode( array( 'html' => $editor ) ) . ', ' . json_encode( array( 'html' => $sidebar ) ) . ');';
 	}
 
 }

@@ -88,8 +88,8 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 		parent::_renderVerticalAxisGeneralSettings();
 		self::_renderColorPickerItem(
 			esc_html__( 'Axis Text Color', 'visualizer' ),
-			'hAxis[textStyle]',
-			isset( $this->hAxis['textStyle'] ) ? $this->hAxis['textStyle'] : null,
+			'vAxis[textStyle]',
+			isset( $this->vAxis['textStyle'] ) ? $this->vAxis['textStyle'] : null,
 			'#000'
 		);
 	}
@@ -105,8 +105,8 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 		parent::_renderHorizontalAxisGeneralSettings();
 		self::_renderColorPickerItem(
 			esc_html__( 'Axis Text Color', 'visualizer' ),
-			'vAxis[textStyle]',
-			isset( $this->vAxis['textStyle'] ) ? $this->vAxis['textStyle'] : null,
+			'hAxis[textStyle]',
+			isset( $this->hAxis['textStyle'] ) ? $this->hAxis['textStyle'] : null,
 			'#000'
 		);
 	}

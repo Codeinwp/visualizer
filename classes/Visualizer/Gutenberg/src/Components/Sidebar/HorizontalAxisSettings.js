@@ -149,7 +149,7 @@ class HorizontalAxisSettings extends Component {
 
 							<TextControl
 								label={ __( 'Count' ) }
-								help={ __( 'The number of horizontal gridlines inside the chart area. Minimum value is 2. Specify -1 to automatically compute the number of gridlines.' ) }
+								help={ __( 'The approximate number of horizontal gridlines inside the chart area. You can specify a value of -1 to automatically compute the number of gridlines, 0 or 1 to draw no gridlines, or 2 or more to only draw gridline. Any number greater than 2 will be used to compute the minSpacing between gridlines.' ) }
 								value={ settings.hAxis.gridlines ? settings.hAxis.gridlines.count : '' }
 								onChange={ e => {
 									if ( ! settings.hAxis.gridlines ) {
@@ -187,9 +187,12 @@ class HorizontalAxisSettings extends Component {
 
 							<TextControl
 								label={ __( 'Count' ) }
-								help={ __( 'The number of horizontal minor gridlines between two regular gridlines.' ) }
-								value={ settings.hAxis.minorGridlines.count }
+								help={ __( 'Specify 0 to disable the minor gridlines.' ) }
+								value={ settings.hAxis.minorGridlines ? settings.hAxis.minorGridlines.count : '' }
 								onChange={ e => {
+                                    if ( ! settings.hAxis.minorGridlines ) {
+                                        settings.hAxis.minorGridlines = {};
+                                    }
 									settings.hAxis.minorGridlines.count = e;
 									this.props.edit( settings );
 								} }
@@ -199,8 +202,11 @@ class HorizontalAxisSettings extends Component {
 								label={ __( 'Color' ) }
 							>
 								<ColorPalette
-									value={ settings.hAxis.minorGridlines.color }
+									value={ settings.hAxis.minorGridlines ? settings.hAxis.minorGridlines.color : '' }
 									onChange={ e => {
+                                        if ( ! settings.hAxis.minorGridlines ) {
+                                            settings.hAxis.minorGridlines = {};
+                                        }
 										settings.hAxis.minorGridlines.color = e;
 										this.props.edit( settings );
 									} }
@@ -218,8 +224,11 @@ class HorizontalAxisSettings extends Component {
 							<TextControl
 								label={ __( 'Maximun Value' ) }
 								help={ __( 'The maximum vertical data value to render.' ) }
-								value={ settings.hAxis.viewWindow.max }
+								value={ settings.hAxis.viewWindow ? settings.hAxis.viewWindow.max : '' }
 								onChange={ e => {
+                                    if ( ! settings.hAxis.viewWindow ) {
+                                        settings.hAxis.viewWindow = {};
+                                    }
 									settings.hAxis.viewWindow.max = e;
 									this.props.edit( settings );
 								} }
@@ -228,8 +237,11 @@ class HorizontalAxisSettings extends Component {
 							<TextControl
 								label={ __( 'Minimum Value' ) }
 								help={ __( 'The minimum vertical data value to render.' ) }
-								value={ settings.hAxis.viewWindow.min }
+								value={ settings.hAxis.viewWindow ? settings.hAxis.viewWindow.min : '' }
 								onChange={ e => {
+                                    if ( ! settings.hAxis.viewWindow ) {
+                                        settings.hAxis.viewWindow = {};
+                                    }
 									settings.hAxis.viewWindow.min = e;
 									this.props.edit( settings );
 								} }

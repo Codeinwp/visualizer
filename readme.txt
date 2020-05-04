@@ -2,7 +2,7 @@
 Contributors:  codeinwp,marius2012,marius_codeinwp,hardeepasrani,themeisle,Madalin_ThemeIsle,contactashish13
 Tags: tables, charts, pie, visualization, graphs
 Requires at least: 3.5
-Tested up to: 5.3
+Tested up to: 5.4
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPL v2.0 or later
@@ -67,7 +67,7 @@ The plugins works perfectly with the all <a href="http://justfreethemes.com" rel
 * [Create timeline chart](https://demo.themeisle.com/visualizer/timeline-chart/)
 * [Create radar/spider chart](https://demo.themeisle.com/visualizer/radar-spider-chart/)
 * [Create polar area chart](https://demo.themeisle.com/visualizer/polar-area-chart/)
-
+* [Create bubble chart](https://demo.themeisle.com/visualizer/bubble-chart/)
 
 
 

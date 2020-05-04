@@ -223,7 +223,9 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	protected function _renderActionSettings() {
 		global $wp_version;
 		$disable_actions    = version_compare( $wp_version, '4.7.0', '<' );
-		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), false );
+		// default open this section when not testing through cypress because cypress expects to click and open each section
+		// and may not like finding a section is already open.
+		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), ! defined( 'TI_CYPRESS_TESTING' ) );
 			self::_renderCheckboxItem(
 				esc_html__( 'Print', 'visualizer' ),
 				'actions[]',
@@ -655,8 +657,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $html Any additional HTML.
 	 * @param string $class Any additional classes.
 	 */
-	public static function _renderGroupStart( $title, $html = '', $class = '' ) {
-		echo '<li class="viz-group ' . $class . '">';
+	public static function _renderGroupStart( $title, $html = '', $class = '', $id = '' ) {
+		echo '<li id="' . $id . '" class="viz-group ' . $class . '">';
 			echo '<h3 class="viz-group-title">', $title, '</h3>';
 			echo $html;
 			echo '<ul class="viz-group-content">';

@@ -24,6 +24,17 @@
 
     function showTextEditor(button) {
         if( button.attr( 'data-current' ) === 'chart'){
+
+            $('body').off('visualizer:change:action').on('visualizer:change:action', function(e){
+                button.val( button.attr( 'data-t-chart' ) );
+                button.html( button.attr( 'data-t-chart' ) );
+                button.attr( 'data-current', 'chart' );
+                $('p.viz-editor-selection').show();
+                $('.viz-text-editor').hide();
+                $('.viz-simple-editor').hide();
+                $( '#canvas' ).css('z-index', '1').show();
+            });
+
             // showing the editor
             button.val( button.attr( 'data-t-editor' ) );
             button.html( button.attr( 'data-t-editor' ) );
@@ -57,6 +68,17 @@
 
     function showTableEditor(button) {
         if( button.attr( 'data-current' ) === 'chart'){
+
+            $('body').off('visualizer:change:action').on('visualizer:change:action', function(e){
+                button.val( button.attr( 'data-t-chart' ) );
+                button.html( button.attr( 'data-t-chart' ) );
+                button.attr( 'data-current', 'chart' );
+                $('p.viz-editor-selection').show();
+                $('.viz-table-editor').hide();
+                $('.viz-simple-editor').hide();
+                $( '#canvas' ).css('z-index', '1').show();
+            });
+
             // showing the editor
             button.val( button.attr( 'data-t-editor' ) );
             button.html( button.attr( 'data-t-editor' ) );
