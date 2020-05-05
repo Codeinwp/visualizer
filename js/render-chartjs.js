@@ -407,17 +407,30 @@
 
     // front end actions
     $('body').on('visualizer:action:specificchart', function(event, v){
+        var id = v.id;
+        if(typeof rendered_charts[id] === 'undefined'){
+            return;
+        }
+        var canvas = $('#' + id + ' canvas');
         switch(v.action){
             case 'print':
-                var id = v.id;
-                if(typeof rendered_charts[id] === 'undefined'){
-                    return;
-                }
-                var canvas = $('#' + id + ' canvas');
                 var win = window.open();
                 win.document.write("<br><img src='" + canvas[0].toDataURL() + "'/>");
                 win.document.close();
                 win.onload = function () { win.print(); setTimeout(win.close, 500); };
+                break;
+            case 'image':
+                var img = canvas[0].toDataURL();
+                if(img !== ''){
+                    var $a = $("<a>"); // jshint ignore:line
+                    $a.attr("href", img);
+                    $("body").append($a);
+                    $a.attr("download", v.dataObj.name);
+                    $a[0].click();
+                    $a.remove();
+                }else{
+                    console.warn("No image generated");
+                }
                 break;
         }
     });

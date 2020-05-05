@@ -433,20 +433,32 @@ var __visualizer_chart_images   = [];
 
     // front end actions
     $('body').on('visualizer:action:specificchart', function(event, v){
+        var id = v.id;
+        if(typeof rendered_charts[id] === 'undefined'){
+            return;
+        }
+        var arr = id.split('-');
+        var img = __visualizer_chart_images[ arr[0] + '-' + arr[1] ];
         switch(v.action){
             case 'print':
-                var id = v.id;
-                if(typeof rendered_charts[id] === 'undefined'){
-                    return;
-                }
-                var arr = id.split('-');
-                var img = __visualizer_chart_images[ arr[0] + '-' + arr[1] ];
                 // for charts that have no rendered image defined, we print the data instead.
                 var html = v.data;
                 if(img !== ''){
                     html = "<html><body><img src='" + img + "' /></body></html>";
                 }
                 $('body').trigger('visualizer:action:specificchart:defaultprint', {data: html});
+                break;
+            case 'image':
+                if(img !== ''){
+                    var $a = $("<a>"); // jshint ignore:line
+                    $a.attr("href", img);
+                    $("body").append($a);
+                    $a.attr("download", v.dataObj.name);
+                    $a[0].click();
+                    $a.remove();
+                }else{
+                    console.warn("No image generated");
+                }
                 break;
         }
     });

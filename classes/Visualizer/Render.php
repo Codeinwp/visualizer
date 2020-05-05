@@ -171,4 +171,23 @@ abstract class Visualizer_Render {
 		return false;
 	}
 
+	/**
+	 * Gets the type of chart that is being rendered.
+	 *
+	 * This is useful if some type-specific functionality needs to be added.
+	 *
+	 * @since ?
+	 *
+	 * @access protected
+	 * @return string
+	 */
+	protected function get_chart_type( $with_library = false ) {
+		$lib_type = str_replace( 'Visualizer_Render_Sidebar_Type_', '', get_class( $this ) );
+		if ( $with_library ) {
+			return $lib_type;
+		}
+
+		$array = explode( '_', $lib_type );
+		return end( $array );
+	}
 }

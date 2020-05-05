@@ -17,7 +17,6 @@
             var container   = $(this).attr( 'data-visualizer-container-id' );
             var lock    = $('.visualizer-front.visualizer-front-' + chart);
             var mime    = $(this).attr( 'data-visualizer-mime' );
-            console.log(mime);
             lock.lock();
             e.preventDefault();
             $.ajax({
@@ -56,7 +55,8 @@
                                 }
                                 break;
                             case 'print':
-                                $('body').trigger('visualizer:action:specificchart', {action: 'print', id: container, data: data.data.csv});
+                            case 'image':
+                                $('body').trigger('visualizer:action:specificchart', {action: type, id: container, data: data.data.csv, dataObj: data.data});
                                 break;
                             default:
                                 if(window.visualizer_perform_action) {
