@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Visualizer: Tables and Charts for WordPress 3.4.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2020-04-13 05:24:19+00:00\n"
+"POT-Creation-Date: 2020-05-05 12:42:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,159 +30,159 @@ msgstr ""
 msgid "Unable to fetch data from the endpoint. Please try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:116
+#: classes/Visualizer/Module/Admin.php:115
 msgid "PRO"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:120
+#: classes/Visualizer/Module/Admin.php:119
 msgid "Developer"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:126
+#: classes/Visualizer/Module/Admin.php:125
 msgid "Live"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:127
+#: classes/Visualizer/Module/Admin.php:126
 msgid "Each hour"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:128
+#: classes/Visualizer/Module/Admin.php:127
 msgid "Each 12 hours"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:129
+#: classes/Visualizer/Module/Admin.php:128
 msgid "Each day"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:130
+#: classes/Visualizer/Module/Admin.php:129
 msgid "Each 3 days"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:149
+#: classes/Visualizer/Module/Admin.php:148
 msgid "More in the %s version"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:330
+#: classes/Visualizer/Module/Admin.php:329
 msgid "Insert"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:358
+#: classes/Visualizer/Module/Admin.php:357
 msgid "Visualizations"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:361
+#: classes/Visualizer/Module/Admin.php:360
 msgid "From Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:362
+#: classes/Visualizer/Module/Admin.php:361
 msgid "Create New"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:388
+#: classes/Visualizer/Module/Admin.php:387
 msgid "All"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:397
-#: classes/Visualizer/Module/Admin.php:533
-#: classes/Visualizer/Module/Admin.php:535
-#: classes/Visualizer/Module/Admin.php:563
-#: classes/Visualizer/Module/Admin.php:565
+#: classes/Visualizer/Module/Admin.php:396
+#: classes/Visualizer/Module/Admin.php:532
+#: classes/Visualizer/Module/Admin.php:534
+#: classes/Visualizer/Module/Admin.php:562
+#: classes/Visualizer/Module/Admin.php:564
 msgid "Table"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:402
+#: classes/Visualizer/Module/Admin.php:401
 msgid "Pie/Donut"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:407
+#: classes/Visualizer/Module/Admin.php:406
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Line.php:24
 msgid "Line"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:412
+#: classes/Visualizer/Module/Admin.php:411
 msgid "Area"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:418
+#: classes/Visualizer/Module/Admin.php:417
 msgid "Geo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:423
+#: classes/Visualizer/Module/Admin.php:422
 msgid "Bar"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:428
+#: classes/Visualizer/Module/Admin.php:427
 msgid "Column"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:433
+#: classes/Visualizer/Module/Admin.php:432
 msgid "Bubble"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:439
+#: classes/Visualizer/Module/Admin.php:438
 msgid "Scatter"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:444
+#: classes/Visualizer/Module/Admin.php:443
 msgid "Gauge"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:449
+#: classes/Visualizer/Module/Admin.php:448
 msgid "Candlestick"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:455
+#: classes/Visualizer/Module/Admin.php:454
 msgid "Table (Deprecated)"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:460
+#: classes/Visualizer/Module/Admin.php:459
 msgid "Timeline"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:465
+#: classes/Visualizer/Module/Admin.php:464
 msgid "Combo"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:470
+#: classes/Visualizer/Module/Admin.php:469
 msgid "Polar Area"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:475
+#: classes/Visualizer/Module/Admin.php:474
 msgid "Radar/Spider"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:688
+#: classes/Visualizer/Module/Admin.php:687
 msgid "Visualizer"
 msgstr ""
 
+#: classes/Visualizer/Module/Admin.php:691
 #: classes/Visualizer/Module/Admin.php:692
-#: classes/Visualizer/Module/Admin.php:693
 msgid "Chart Library"
 msgstr ""
 
+#: classes/Visualizer/Module/Admin.php:698
 #: classes/Visualizer/Module/Admin.php:699
-#: classes/Visualizer/Module/Admin.php:700
 msgid "Add New Chart"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:706
-#: classes/Visualizer/Module/Admin.php:707 templates/support.php:24
+#: classes/Visualizer/Module/Admin.php:705
+#: classes/Visualizer/Module/Admin.php:706 templates/support.php:24
 msgid "Support"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:729
+#: classes/Visualizer/Module/Admin.php:728
 msgid "Number of charts per page:"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:1021
+#: classes/Visualizer/Module/Admin.php:1020
 msgid "Library"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:1046
+#: classes/Visualizer/Module/Admin.php:1045
 msgid "Docs"
 msgstr ""
 
-#: classes/Visualizer/Module/Admin.php:1051
+#: classes/Visualizer/Module/Admin.php:1050
 msgid "Pro Addon"
 msgstr ""
 
@@ -239,35 +239,68 @@ msgstr ""
 msgid "CSV file is broken or invalid. Please try again."
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:126
+#: classes/Visualizer/Module/Frontend.php:127
 #: classes/Visualizer/Render/Sidebar.php:230
 msgid "Print"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:127
+#: classes/Visualizer/Module/Frontend.php:128
+msgid "Print Chart"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:131
 #: classes/Visualizer/Render/Sidebar.php:238
 msgid "CSV"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:128
+#: classes/Visualizer/Module/Frontend.php:132
+msgid "Download as a CSV"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:135
 #: classes/Visualizer/Render/Sidebar.php:248
 msgid "Excel"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:129
+#: classes/Visualizer/Module/Frontend.php:136
+msgid "Download as a spreadsheet"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:139
 #: classes/Visualizer/Render/Sidebar.php:256
 msgid "Copy"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:147
+#: classes/Visualizer/Module/Frontend.php:140
+msgid "Copy data"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:143
+msgid "Download"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:144
+msgid "Download as an image"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:152
+#: classes/Visualizer/Render/Library.php:337
+msgid "Edit"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:153
+msgid "Edit data"
+msgstr ""
+
+#: classes/Visualizer/Module/Frontend.php:172
 msgid "Invalid chart ID"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:151
+#: classes/Visualizer/Module/Frontend.php:176
 msgid "Invalid action"
 msgstr ""
 
-#: classes/Visualizer/Module/Frontend.php:337
+#: classes/Visualizer/Module/Frontend.php:378
 msgid "Copied!"
 msgstr ""
 
@@ -321,263 +354,263 @@ msgstr ""
 msgid "Use %1$sControl+Space%2$s for autocompleting keywords or table names."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:154
+#: classes/Visualizer/Render/Layout.php:157
 msgid "STEP 1: Specify the JSON endpoint/URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:159
+#: classes/Visualizer/Render/Layout.php:162
 msgid ""
 "If you want to add authentication or headers to the endpoint or change the "
 "request in any way, please refer to our document %1$shere%2$s."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:168
+#: classes/Visualizer/Render/Layout.php:171
 msgid "Please enter the URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:170
+#: classes/Visualizer/Render/Layout.php:173
 msgid "Fetch Endpoint"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:173
+#: classes/Visualizer/Render/Layout.php:176
 msgid "Headers"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:176
+#: classes/Visualizer/Render/Layout.php:179
 msgid "Request Type"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:186
+#: classes/Visualizer/Render/Layout.php:189
 msgid "Credentials"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:193
+#: classes/Visualizer/Render/Layout.php:196
 msgid "Username/Access Key"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:201
+#: classes/Visualizer/Render/Layout.php:204
 msgid "Password/Secret Key"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:207
-#: classes/Visualizer/Render/Layout.php:421
+#: classes/Visualizer/Render/Layout.php:210
+#: classes/Visualizer/Render/Layout.php:424
 msgid "OR"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:210
+#: classes/Visualizer/Render/Layout.php:213
 msgid "Authorization"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:217
+#: classes/Visualizer/Render/Layout.php:220
 msgid "e.g. SharedKey <AccountName>:<Signature>"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:225
+#: classes/Visualizer/Render/Layout.php:228
 msgid "STEP 2: Choose the JSON root"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:238
+#: classes/Visualizer/Render/Layout.php:241
 msgid "Parse Endpoint"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:241
+#: classes/Visualizer/Render/Layout.php:244
 msgid "STEP 3: Specify miscellaneous parameters"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:247
+#: classes/Visualizer/Render/Layout.php:250
 msgid "Get results from the first page only"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:271
+#: classes/Visualizer/Render/Layout.php:274
 msgid "STEP 4: Select the data to display in the chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:276
+#: classes/Visualizer/Render/Layout.php:279
 msgid ""
 "If you see Invalid Data in the table, you may have selected the wrong root "
 "to fetch data from. Please select an alternative from the JSON root "
 "dropdown."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:277
-#: classes/Visualizer/Render/Layout.php:314
+#: classes/Visualizer/Render/Layout.php:280
+#: classes/Visualizer/Render/Layout.php:317
 msgid ""
 "Select whether to include the data in the chart. Each column selected will "
 "form one series."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:278
-#: classes/Visualizer/Render/Layout.php:315
+#: classes/Visualizer/Render/Layout.php:281
+#: classes/Visualizer/Render/Layout.php:318
 msgid "If a column is selected to be included, specify its data type."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:279
-#: classes/Visualizer/Render/Layout.php:316
+#: classes/Visualizer/Render/Layout.php:282
+#: classes/Visualizer/Render/Layout.php:319
 msgid ""
 "You can use drag/drop to reorder the columns but this column position is "
 "not saved. So when you reload the table, you may have to reorder again."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:280
-#: classes/Visualizer/Render/Layout.php:317
+#: classes/Visualizer/Render/Layout.php:283
+#: classes/Visualizer/Render/Layout.php:320
 msgid ""
 "You can select any number of columns but the chart type selected will "
 "determine how many will display in the chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:281
+#: classes/Visualizer/Render/Layout.php:284
 msgid ""
 "Once you have made your selection, click 'Show Chart' on the right to view "
 "the chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:395
+#: classes/Visualizer/Render/Layout.php:398
 msgid "Label"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:409
+#: classes/Visualizer/Render/Layout.php:412
 msgid "Data Type"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:420
+#: classes/Visualizer/Render/Layout.php:423
 msgid "Exclude from chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:420
+#: classes/Visualizer/Render/Layout.php:423
 msgid "Exclude"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:421
+#: classes/Visualizer/Render/Layout.php:424
 msgid "Include in chart and select data type"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:440
+#: classes/Visualizer/Render/Layout.php:443
 msgid "Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:450
+#: classes/Visualizer/Render/Layout.php:453
 msgid "Invalid Data"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:492
+#: classes/Visualizer/Render/Layout.php:495
 msgid "Permissions"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:495
+#: classes/Visualizer/Render/Layout.php:498
 msgid "Configure permissions for the chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:498
+#: classes/Visualizer/Render/Layout.php:501
 msgid "Who can see this chart?"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:504
-#: classes/Visualizer/Render/Layout.php:535
+#: classes/Visualizer/Render/Layout.php:507
+#: classes/Visualizer/Render/Layout.php:538
 msgid "All Users"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:505
-#: classes/Visualizer/Render/Layout.php:536
+#: classes/Visualizer/Render/Layout.php:508
+#: classes/Visualizer/Render/Layout.php:539
 msgid "Select Users"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:506
-#: classes/Visualizer/Render/Layout.php:537
+#: classes/Visualizer/Render/Layout.php:509
+#: classes/Visualizer/Render/Layout.php:540
 msgid "Select Roles"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:529
+#: classes/Visualizer/Render/Layout.php:532
 msgid "Who can edit this chart?"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:617
+#: classes/Visualizer/Render/Layout.php:620
 msgid "Documentation"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:618
+#: classes/Visualizer/Render/Layout.php:621
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php:73
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php:102
 msgid "General"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:620
+#: classes/Visualizer/Render/Layout.php:623
 msgid "Main documentation page"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:621
+#: classes/Visualizer/Render/Layout.php:624
 msgid "Custom code snippets"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:624
+#: classes/Visualizer/Render/Layout.php:627
 msgid "%s chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:626
+#: classes/Visualizer/Render/Layout.php:629
 msgid "View demo"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:627
+#: classes/Visualizer/Render/Layout.php:630
 msgid "Articles containing \"%s\""
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:678
+#: classes/Visualizer/Render/Layout.php:681
 msgid "Import data from file"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:680
+#: classes/Visualizer/Render/Layout.php:683
 msgid ""
 "Select and upload your data CSV file here. The first row of the CSV file "
 "should contain the column headings. The second one should contain series "
 "type (string, number, boolean, date, datetime, timeofday)."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:681
-#: classes/Visualizer/Render/Layout.php:702
+#: classes/Visualizer/Render/Layout.php:684
+#: classes/Visualizer/Render/Layout.php:705
 msgid ""
 "If you are unsure about how to format your data CSV then please take a look "
 "at this sample: %1$s %2$s%3$s. If you are using non-English characters, "
 "please make sure you save the file in UTF-8 encoding."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:689
-#: classes/Visualizer/Render/Layout.php:732
+#: classes/Visualizer/Render/Layout.php:692
+#: classes/Visualizer/Render/Layout.php:735
 msgid "Import"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:695
+#: classes/Visualizer/Render/Layout.php:698
 msgid "Import data from URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:699
+#: classes/Visualizer/Render/Layout.php:702
 msgid "Import from CSV"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:701
+#: classes/Visualizer/Render/Layout.php:704
 msgid ""
 "You can use this to import data from a remote CSV file or %1$sGoogle "
 "Spreadsheet%2$s."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:706
+#: classes/Visualizer/Render/Layout.php:709
 msgid "Please enter the URL of CSV file"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:713
-#: classes/Visualizer/Render/Layout.php:760
-#: classes/Visualizer/Render/Layout.php:878
-#: classes/Visualizer/Render/Layout.php:927
+#: classes/Visualizer/Render/Layout.php:716
+#: classes/Visualizer/Render/Layout.php:763
+#: classes/Visualizer/Render/Layout.php:881
+#: classes/Visualizer/Render/Layout.php:930
 msgid "One-time"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:736
+#: classes/Visualizer/Render/Layout.php:739
 msgid "Import & Save schedule"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:745
+#: classes/Visualizer/Render/Layout.php:748
 msgid "Import from JSON"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:747
+#: classes/Visualizer/Render/Layout.php:750
 msgid ""
 "You can choose here to import/synchronize your chart data with a remote "
 "JSON source. For more info check <a "
@@ -585,122 +618,122 @@ msgid ""
 "json-data-rest-endpoints\" target=\"_blank\" >this</a> tutorial"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:751
+#: classes/Visualizer/Render/Layout.php:754
 msgid "Modify Parameters"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:751
+#: classes/Visualizer/Render/Layout.php:754
 msgid "Create Parameters"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:754
+#: classes/Visualizer/Render/Layout.php:757
 msgid "How often do you want to check the URL"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:782
-#: classes/Visualizer/Render/Layout.php:894
-#: classes/Visualizer/Render/Layout.php:944
-#: classes/Visualizer/Render/Layout.php:981
-#: classes/Visualizer/Render/Layout.php:990
+#: classes/Visualizer/Render/Layout.php:785
+#: classes/Visualizer/Render/Layout.php:897
+#: classes/Visualizer/Render/Layout.php:947
+#: classes/Visualizer/Render/Layout.php:984
+#: classes/Visualizer/Render/Layout.php:993
 msgid "Show Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:788
-#: classes/Visualizer/Render/Layout.php:895
-#: classes/Visualizer/Render/Layout.php:945
+#: classes/Visualizer/Render/Layout.php:791
+#: classes/Visualizer/Render/Layout.php:898
+#: classes/Visualizer/Render/Layout.php:948
 msgid "Save Schedule"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:800
+#: classes/Visualizer/Render/Layout.php:803
 msgid "Import from other chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:804
+#: classes/Visualizer/Render/Layout.php:807
 msgid "You can import here data from your previously created charts"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:847
+#: classes/Visualizer/Render/Layout.php:850
 msgid "Import Chart"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:865
+#: classes/Visualizer/Render/Layout.php:868
 msgid "Import from WordPress"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:869
+#: classes/Visualizer/Render/Layout.php:872
 msgid "You can import data from WordPress here."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:871
+#: classes/Visualizer/Render/Layout.php:874
 msgid "How often do you want to refresh the data from WordPress."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:874
+#: classes/Visualizer/Render/Layout.php:877
 msgid "Modify Filter"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:874
+#: classes/Visualizer/Render/Layout.php:877
 msgid "Create Filter"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:914
+#: classes/Visualizer/Render/Layout.php:917
 msgid "Import from database"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:918
+#: classes/Visualizer/Render/Layout.php:921
 msgid "You can import data from the database here."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:920
+#: classes/Visualizer/Render/Layout.php:923
 msgid "How often do you want to refresh the data from the database."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:923
+#: classes/Visualizer/Render/Layout.php:926
 msgid "Modify Query"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:923
+#: classes/Visualizer/Render/Layout.php:926
 msgid "Create Query"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:954
+#: classes/Visualizer/Render/Layout.php:957
 msgid "Manual Data"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:965
+#: classes/Visualizer/Render/Layout.php:968
 msgid "Use the"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:971
+#: classes/Visualizer/Render/Layout.php:974
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:216
 msgid "Text"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:971
+#: classes/Visualizer/Render/Layout.php:974
 msgid "Simple"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:976
+#: classes/Visualizer/Render/Layout.php:979
 msgid "editor to manually edit the chart data."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:978
-#: classes/Visualizer/Render/Layout.php:987
+#: classes/Visualizer/Render/Layout.php:981
+#: classes/Visualizer/Render/Layout.php:990
 msgid "Undo Changes"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:980
-#: classes/Visualizer/Render/Layout.php:982
+#: classes/Visualizer/Render/Layout.php:983
+#: classes/Visualizer/Render/Layout.php:985
 msgid "Edit Data"
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:984
-#: classes/Visualizer/Render/Layout.php:993
+#: classes/Visualizer/Render/Layout.php:987
+#: classes/Visualizer/Render/Layout.php:996
 msgid "Please make sure you click 'Show Chart' before you save the chart."
 msgstr ""
 
-#: classes/Visualizer/Render/Layout.php:989
-#: classes/Visualizer/Render/Layout.php:991
+#: classes/Visualizer/Render/Layout.php:992
+#: classes/Visualizer/Render/Layout.php:994
 msgid "View Editor"
 msgstr ""
 
@@ -773,7 +806,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:132
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:74
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:60
-#: classes/Visualizer/Render/Sidebar.php:296
+#: classes/Visualizer/Render/Sidebar.php:308
 msgid "Title"
 msgstr ""
 
@@ -812,10 +845,6 @@ msgstr ""
 
 #: classes/Visualizer/Render/Library.php:336
 msgid "Clone"
-msgstr ""
-
-#: classes/Visualizer/Render/Library.php:337
-msgid "Edit"
 msgstr ""
 
 #: classes/Visualizer/Render/Library.php:338
@@ -984,12 +1013,12 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:131
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:72
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:59
-#: classes/Visualizer/Render/Sidebar.php:291
+#: classes/Visualizer/Render/Sidebar.php:303
 msgid "General Settings"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:185
-#: classes/Visualizer/Render/Sidebar.php:293
+#: classes/Visualizer/Render/Sidebar.php:305
 msgid ""
 "Configure title, font styles, tooltip, legend and else settings for the "
 "chart."
@@ -998,7 +1027,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:192
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:149
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:251
-#: classes/Visualizer/Render/Sidebar.php:300
+#: classes/Visualizer/Render/Sidebar.php:312
 msgid "Font Styles"
 msgstr ""
 
@@ -1006,27 +1035,27 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:246
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:160
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:262
-#: classes/Visualizer/Render/Sidebar.php:303
+#: classes/Visualizer/Render/Sidebar.php:315
 msgid "Family And Size"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:221
-#: classes/Visualizer/Render/Sidebar.php:329
+#: classes/Visualizer/Render/Sidebar.php:341
 msgid "The default font family and size for all text in the chart."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:226
-#: classes/Visualizer/Render/Sidebar.php:334
+#: classes/Visualizer/Render/Sidebar.php:346
 msgid "Legend"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:228
-#: classes/Visualizer/Render/Sidebar.php:336
+#: classes/Visualizer/Render/Sidebar.php:348
 msgid "Position"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:233
-#: classes/Visualizer/Render/Sidebar.php:340
+#: classes/Visualizer/Render/Sidebar.php:352
 msgid "Determines where to place the legend, compared to the chart area."
 msgstr ""
 
@@ -1041,39 +1070,39 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:272
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:152
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:254
-#: classes/Visualizer/Render/Sidebar.php:352
+#: classes/Visualizer/Render/Sidebar.php:364
 msgid "Font Color"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:282
 #: classes/Visualizer/Render/Sidebar/Google.php:106
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:165
-#: classes/Visualizer/Render/Sidebar.php:359
+#: classes/Visualizer/Render/Sidebar.php:371
 msgid "Tooltip"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:301
-#: classes/Visualizer/Render/Sidebar.php:380
+#: classes/Visualizer/Render/Sidebar.php:392
 msgid "Animation"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:304
-#: classes/Visualizer/Render/Sidebar.php:391
+#: classes/Visualizer/Render/Sidebar.php:403
 msgid "Duration"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:307
-#: classes/Visualizer/Render/Sidebar.php:394
+#: classes/Visualizer/Render/Sidebar.php:406
 msgid "The duration of the animation, in milliseconds"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:314
-#: classes/Visualizer/Render/Sidebar.php:400
+#: classes/Visualizer/Render/Sidebar.php:412
 msgid "Easing"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:318
-#: classes/Visualizer/Render/Sidebar.php:404
+#: classes/Visualizer/Render/Sidebar.php:416
 msgid "Constant speed"
 msgstr ""
 
@@ -1122,13 +1151,13 @@ msgid "easeOutQuint"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:331
-#: classes/Visualizer/Render/Sidebar.php:409
+#: classes/Visualizer/Render/Sidebar.php:421
 msgid "The easing function applied to the animation."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:347
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:180
-#: classes/Visualizer/Render/Sidebar.php:425
+#: classes/Visualizer/Render/Sidebar.php:437
 msgid "Trigger"
 msgstr ""
 
@@ -1153,7 +1182,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:383
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:259
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:363
-#: classes/Visualizer/Render/Sidebar.php:456
+#: classes/Visualizer/Render/Sidebar.php:468
 msgid ""
 "Configure the total size of the chart. Two formats are supported: a number, "
 "or a number followed by %. A simple number is a value in pixels; a number "
@@ -1163,14 +1192,14 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:387
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:263
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:367
-#: classes/Visualizer/Render/Sidebar.php:460
+#: classes/Visualizer/Render/Sidebar.php:472
 msgid "Width And Height Of Chart"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:401
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:277
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:381
-#: classes/Visualizer/Render/Sidebar.php:474
+#: classes/Visualizer/Render/Sidebar.php:486
 msgid ""
 "Determines the total width and height of the chart. This will only show in "
 "the front-end."
@@ -1473,7 +1502,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Graph.php:447
 #: classes/Visualizer/Render/Sidebar/Graph.php:476
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:62
-#: classes/Visualizer/Render/Sidebar.php:743
+#: classes/Visualizer/Render/Sidebar.php:755
 msgid "Number Format"
 msgstr ""
 
@@ -1933,7 +1962,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:331
 #: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:363
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:414
-#: classes/Visualizer/Render/Sidebar.php:499
+#: classes/Visualizer/Render/Sidebar.php:511
 msgid "Background Color"
 msgstr ""
 
@@ -2011,6 +2040,26 @@ msgid ""
 "here%2$s."
 msgstr ""
 
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:482
+msgid "Truthy value"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:485
+msgid ""
+"Provide the HTML entity code for the value the table should display when "
+"the value of the column is true. e.g. %1$s (Code: %2$s) instead of true"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:489
+msgid "Falsy value"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:492
+msgid ""
+"Provide the HTML entity code for the value the table should display when "
+"the value of the column is false. e.g. %1$s (Code: %2$s) instead of false"
+msgstr ""
+
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:73
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:137
 msgid "Area Opacity"
@@ -2047,7 +2096,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:110
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:134
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:407
-#: classes/Visualizer/Render/Sidebar.php:491
+#: classes/Visualizer/Render/Sidebar.php:503
 msgid "Stroke Color"
 msgstr ""
 
@@ -2093,7 +2142,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:102
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:126
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:399
-#: classes/Visualizer/Render/Sidebar.php:483
+#: classes/Visualizer/Render/Sidebar.php:495
 msgid "Stroke Width"
 msgstr ""
 
@@ -2297,17 +2346,17 @@ msgid "Markers"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:185
-#: classes/Visualizer/Render/Sidebar.php:430
+#: classes/Visualizer/Render/Sidebar.php:442
 msgid "The tooltip will be displayed when the user hovers over an element"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:186
-#: classes/Visualizer/Render/Sidebar.php:432
+#: classes/Visualizer/Render/Sidebar.php:444
 msgid "The tooltip will not be displayed"
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:188
-#: classes/Visualizer/Render/Sidebar.php:434
+#: classes/Visualizer/Render/Sidebar.php:446
 msgid "Determines the user interaction that causes the tooltip to be displayed."
 msgstr ""
 
@@ -2420,14 +2469,14 @@ msgid ""
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:396
-#: classes/Visualizer/Render/Sidebar.php:480
+#: classes/Visualizer/Render/Sidebar.php:492
 msgid ""
 "Configure the background color for the main area of the chart and the chart "
 "border width and color."
 msgstr ""
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:402
-#: classes/Visualizer/Render/Sidebar.php:486
+#: classes/Visualizer/Render/Sidebar.php:498
 msgid "The chart border width in pixels."
 msgstr ""
 
@@ -2620,6 +2669,7 @@ msgstr ""
 #: classes/Visualizer/Render/Sidebar.php:242
 #: classes/Visualizer/Render/Sidebar.php:252
 #: classes/Visualizer/Render/Sidebar.php:260
+#: classes/Visualizer/Render/Sidebar.php:272
 msgid "Upgrade to at least WordPress 4.7 to use this."
 msgstr ""
 
@@ -2643,65 +2693,77 @@ msgstr ""
 msgid "To enable copying the data to the clipboard."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:344
+#: classes/Visualizer/Render/Sidebar.php:268
+msgid "Download Image"
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:272
+msgid "Not supported for this chart type."
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:272
+msgid "To download the chart as an image."
+msgstr ""
+
+#: classes/Visualizer/Render/Sidebar.php:356
 msgid "Alignment"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:348
+#: classes/Visualizer/Render/Sidebar.php:360
 msgid "Determines the alignment of the legend."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:383
+#: classes/Visualizer/Render/Sidebar.php:395
 msgid "Animate on startup"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:387
+#: classes/Visualizer/Render/Sidebar.php:399
 msgid "Determines if the chart will animate on the initial draw."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:405
+#: classes/Visualizer/Render/Sidebar.php:417
 msgid "Start slow and speed up"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:406
+#: classes/Visualizer/Render/Sidebar.php:418
 msgid "Start fast and slow down"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:407
+#: classes/Visualizer/Render/Sidebar.php:419
 msgid "Start slow, speed up, then slow down"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:431
+#: classes/Visualizer/Render/Sidebar.php:443
 msgid "The tooltip will be displayed when the user selects an element"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:438
+#: classes/Visualizer/Render/Sidebar.php:450
 msgid "Show Color Code"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:442
+#: classes/Visualizer/Render/Sidebar.php:454
 msgid ""
 "If set to yes, will show colored squares next to the slice information in "
 "the tooltip."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:454
+#: classes/Visualizer/Render/Sidebar.php:466
 msgid "Chart Size & Placement"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:455
+#: classes/Visualizer/Render/Sidebar.php:467
 msgid "Chart Size/Layout"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:508
+#: classes/Visualizer/Render/Sidebar.php:520
 msgid "Transparent background"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:513
+#: classes/Visualizer/Render/Sidebar.php:525
 msgid "Placement"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:514
+#: classes/Visualizer/Render/Sidebar.php:526
 msgid ""
 "Configure the placement and size of the chart area (where the chart itself "
 "is drawn, excluding axis and legends). Two formats are supported: a number, "
@@ -2709,27 +2771,27 @@ msgid ""
 "followed by % is a percentage."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:518
+#: classes/Visualizer/Render/Sidebar.php:530
 msgid "Left And Top Margins"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:532
+#: classes/Visualizer/Render/Sidebar.php:544
 msgid "Determines how far to draw the chart from the left and top borders."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:538
+#: classes/Visualizer/Render/Sidebar.php:550
 msgid "Width And Height Of Chart Area"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:552
+#: classes/Visualizer/Render/Sidebar.php:564
 msgid "Determines the width and hight of the chart area."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:614
+#: classes/Visualizer/Render/Sidebar.php:626
 msgid "Hex Value"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:746
+#: classes/Visualizer/Render/Sidebar.php:758
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, "
@@ -2737,11 +2799,11 @@ msgid ""
 "percentage format then your values will be multiplied by 100."
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:754
+#: classes/Visualizer/Render/Sidebar.php:766
 msgid "Date Format"
 msgstr ""
 
-#: classes/Visualizer/Render/Sidebar.php:757
+#: classes/Visualizer/Render/Sidebar.php:769
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU date and time format%2$s."

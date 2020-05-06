@@ -31,6 +31,7 @@ class FrontendActions extends Component {
 	render() {
 
 		const settings = this.props.chart['visualizer-settings'];
+		const type = this.props.chart['visualizer-chart-type'];
 
 		return (
 			<PanelBody
@@ -110,6 +111,25 @@ class FrontendActions extends Component {
 								this.props.edit( settings );
 							} }
 						/>
+
+                    { ( -1 >= [ 'dataTable', 'tabular', 'gauge', 'table' ].indexOf( type ) ) && (
+						<CheckboxControl
+							label={ __( 'Download Image' ) }
+							help={ __( 'To download the chart as an image.' ) }
+							checked={ ( 0 <= settings.actions.indexOf( 'image' ) ) }
+							onChange={ e => {
+								if ( 0 <= settings.actions.indexOf( 'image' ) ) {
+									const index = settings.actions.indexOf( 'image' );
+									if ( -1 !== index ) {
+										settings.actions.splice( index, 1 );
+									}
+								} else {
+									settings.actions.push( 'image' );
+								}
+								this.props.edit( settings );
+							} }
+						/>
+                        ) }
 
 					</Fragment>
 
