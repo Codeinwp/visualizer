@@ -190,4 +190,31 @@ abstract class Visualizer_Render {
 		$array = explode( '_', $lib_type );
 		return end( $array );
 	}
+
+	/**
+	 * Determines if the type of chart can have a particular action.
+	 *
+	 * @since ?
+	 *
+	 * @access protected
+	 * @return bool
+	 */
+	protected function can_chart_have_action( $action, $chart_id = null ) {
+		$type = null;
+		if ( ! $chart_id ) {
+			$type = $this->get_chart_type( false );
+		} else {
+			$type = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+			$type = ucwords( $type );
+		}
+
+		switch ( $action ) {
+			case 'image':
+				return ! in_array( $type, array( 'Gauge', 'Tabular', 'DataTable', 'Table' ), true );
+		}
+
+		return true;
+	}
+
+
 }

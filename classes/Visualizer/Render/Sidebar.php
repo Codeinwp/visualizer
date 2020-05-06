@@ -262,8 +262,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			);
 
 			// not all charts support downloading as an image.
-			$class = $this->get_chart_type( false );
-			$disabled   = in_array( $class, array( 'Gauge', 'Tabular', 'DataTable', 'Table' ), true );
+			$disabled   = ! $this->can_chart_have_action( 'image' );
 			self::_renderCheckboxItem(
 				esc_html__( 'Download Image', 'visualizer' ),
 				'actions[]',

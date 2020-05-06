@@ -406,6 +406,7 @@
     });
 
     // front end actions
+    // 'image' is also called from the library
     $('body').on('visualizer:action:specificchart', function(event, v){
         var id = v.id;
         if(typeof rendered_charts[id] === 'undefined'){
