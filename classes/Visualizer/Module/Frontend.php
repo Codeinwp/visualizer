@@ -334,7 +334,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 					'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
 					'i10n'          => array(
-						'copied'        => __( 'Copied!', 'visualizer' ),
+						'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V in your spreadsheet editor to paste the data.', 'visualizer' ),
 					),
 					'page_type' => 'frontend',
 					'is_front'  => true,
