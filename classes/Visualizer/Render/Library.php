@@ -336,6 +336,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', 'visualizer' ), '"></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', 'visualizer' ), '" data-chart="', $chart_id, '"></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-export" href="javascript:;" title="', esc_attr__( 'Export', 'visualizer' ), '" data-chart="', $export_link, '"></a>';
+		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
+			echo '<a class="visualizer-chart-action visualizer-chart-image" href="javascript:;" title="', esc_attr__( 'Download as image', 'visualizer' ), '" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"></a>';
+		}
 		echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">';
 		echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
 		echo '</span>';
