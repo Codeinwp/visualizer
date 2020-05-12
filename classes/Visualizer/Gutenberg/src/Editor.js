@@ -379,15 +379,18 @@ class Editor extends Component {
 			fieldName = 'slices';
 		}
 
-		Object.keys( data['visualizer-settings'][fieldName])
-			.map( i => {
-				if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
-					if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
-						delete data['visualizer-settings'][fieldName][i].temp;
-					}
-				}
-			}
-			);
+        // no series for bubble and timeline charts.
+		if ( -1 >= [ 'bubble', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
+            Object.keys( data['visualizer-settings'][fieldName])
+                .map( i => {
+                    if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
+                        if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
+                            delete data['visualizer-settings'][fieldName][i].temp;
+                        }
+                    }
+                }
+            );
+        }
 
 		apiRequest({ path: `/visualizer/v1/update-chart?id=${ this.props.attributes.id }`, method: 'POST', data: data }).then(
 			( data ) => {
