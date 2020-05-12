@@ -537,6 +537,7 @@ class Editor extends Component {
 										<Button
 											isDefault
 											isLarge
+                                            className="visualizer-bttn-done"
 											onClick={ () => {
 												this.setState({ route: 'renderChart' });
 												this.props.setAttributes({ route: 'renderChart' });
@@ -547,6 +548,7 @@ class Editor extends Component {
 										<Button
 											isPrimary
 											isLarge
+                                            className="visualizer-bttn-save"
 											isBusy={ 'updateChart' === this.state.isLoading }
 											disabled={ 'updateChart' === this.state.isLoading }
 											onClick={ this.updateChart }
