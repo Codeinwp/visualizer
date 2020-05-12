@@ -29,6 +29,7 @@ const {
 	ButtonGroup,
 	Dashicon,
 	Placeholder,
+	Notice,
 	Spinner
 } = wp.components;
 
@@ -419,12 +420,13 @@ class Editor extends Component {
 	render() {
 		if ( 'error' === this.state.route ) {
 			return (
-                <div className="visualizer-settings visualizer-error">
-                    <div className="visualizer-settings__title">
+				<Notice
+					status="error"
+					isDismissible={ false }
+				>
                         <Dashicon icon="chart-pie" />
                         { __( 'This chart is not available; it might have been deleted. Please delete this block and resubmit your chart.' ) }
-                    </div>
-                </div>
+				</Notice>
 			);
 		}
 
