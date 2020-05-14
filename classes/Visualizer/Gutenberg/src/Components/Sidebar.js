@@ -48,11 +48,11 @@ class Sidebar extends Component {
 
 				<GeneralSettings chart={ this.props.chart } edit={ this.props.edit } />
 
-				{ ( -1 >= [ 'tabular', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
 					<HorizontalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'tabular', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
 					<VerticalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
@@ -100,7 +100,7 @@ class Sidebar extends Component {
 					<TimelineSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( 0 <= [ 'tabular' ].indexOf( type ) ) && (
+				{ ( 0 <= [ 'tabular', 'dataTable' ].indexOf( type ) ) && (
 					<Fragment>
 
 						<TableSettings chart={ this.props.chart } edit={ this.props.edit } />
