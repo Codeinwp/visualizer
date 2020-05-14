@@ -6,6 +6,9 @@
 
     function initActionsButtons(v) {
         if($('a.visualizer-action[data-visualizer-type=copy]').length > 0) {
+            $('a.visualizer-action[data-visualizer-type=copy]').on('click', function(e) {
+                e.preventDefault();
+            });
             var clipboard = new Clipboard('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
             clipboard.on('success', function(e) {
                 window.alert(v.i10n['copied']);
