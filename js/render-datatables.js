@@ -249,7 +249,7 @@
                 if(typeof series.format.decimal !== ''){
                     parts[1] = series.format.decimal;
                 }
-                if(typeof series.format.precision !== ''){
+                if(typeof series.format.precision !== '' && series.format.precision != '0'){
                     parts[2] = series.format.precision;
                 }
                 if(typeof series.format.prefix !== ''){

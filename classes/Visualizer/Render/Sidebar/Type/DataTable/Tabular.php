@@ -442,7 +442,9 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 					'series[' . $index . '][format][precision]',
 					isset( $this->series[ $index ]['format']['precision'] ) ? $this->series[ $index ]['format']['precision'] : '',
 					esc_html__( 'Round values to how many decimal places?', 'visualizer' ),
-					''
+					'',
+					'number',
+					array( 'min' => 0 )
 				);
 				self::_renderTextItem(
 					esc_html__( 'Prefix', 'visualizer' ),

@@ -129,6 +129,7 @@ class ColumnSettings extends Component {
 											help={ __( 'Round values to how many decimal places?' ) }
 											value={ settings.series[i].format ? settings.series[i].format.precision : '' }
 											type="number"
+                                            min="0"
 											onChange={ e => {
 												if ( 100 < e ) {
 													return;
