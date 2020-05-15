@@ -148,6 +148,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			$headers['method'] = 'get';
 		}
 		$methods = apply_filters( 'visualizer_json_request_methods', array( 'GET', 'POST' ) );
+
+		// open the headers by default?
+		$headers_open = $headers && array_key_exists( 'auth', $headers ) && ( array_key_exists( 'username', $headers['auth'] ) && ! empty( $headers['auth']['username'] ) ) || ( ! empty( $headers['auth'] ) && is_string( $headers['auth'] ) );
 		?>
 		<div id="visualizer-json-screen" style="display: none">
 			<div class="visualizer-json-form">
@@ -170,7 +173,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch Endpoint', 'visualizer' ); ?></button>
 						
 						<div class="visualizer-json-subform">
-							<h3 class="viz-substep"><?php _e( 'Headers', 'visualizer' ); ?></h3>
+							<h3 class="viz-substep <?php echo $headers_open ? 'open' : ''; ?>"><?php _e( 'Headers', 'visualizer' ); ?></h3>
 							<div class="json-wizard-headers">
 								<div class="json-wizard-header">
 									<div><?php _e( 'Request Type', 'visualizer' ); ?></div>
@@ -213,7 +216,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 											type="text"
 											id="vz-import-json-auth"
 											name="auth"
-											value="<?php echo ( ! empty( $headers ) && array_key_exists( 'auth', $headers ) ? $headers['auth']['auth'] : '' ); ?>"
+											value="<?php echo ( array_key_exists( 'auth', $headers ) && is_string( $headers['auth'] ) ? $headers['auth'] : '' ); ?>"
 											placeholder="<?php esc_html_e( 'e.g. SharedKey <AccountName>:<Signature>', 'visualizer' ); ?>"
 											class="visualizer-input json-form-element">
 									</div>

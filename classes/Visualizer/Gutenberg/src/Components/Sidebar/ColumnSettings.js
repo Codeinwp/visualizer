@@ -45,6 +45,8 @@ class ColumnSettings extends Component {
 
 		const series = this.props.chart['visualizer-series'];
 
+		const type = this.props.chart['visualizer-chart-type'];
+
 		return (
 			<PanelBody
 				title={ __( 'Column Settings' ) }
@@ -166,6 +168,36 @@ class ColumnSettings extends Component {
 												this.props.edit( settings );
 											} }
 										/>
+									</Fragment>
+								) }
+
+								{ ( 'boolean' === series[i].type ) && ( 'dataTable' === type ) && (
+									<Fragment>
+										<TextControl
+											label={ __( 'Truthy value' ) }
+                                            help= { __( 'Provide the HTML entity code for the value the table should display when the value of the column is true. e.g. tick mark (Code: &#10004;) instead of true' ) }
+											value={ settings.series[i].format ? settings.series[i].format.truthy : '' }
+											onChange={ e => {
+												if ( ! settings.series[i].truthy ) {
+													settings.series[i].truthy = {};
+												}
+												settings.series[i].format.truthy = e;
+												this.props.edit( settings );
+											} }
+										/>
+										<TextControl
+											label={ __( 'Falsy value' ) }
+                                            help= { __( 'Provide the HTML entity code for the value the table should display when the value of the column is false. e.g. cross mark (Code: &#10006;) instead of false' ) }
+											value={ settings.series[i].format ? settings.series[i].format.falsy : '' }
+											onChange={ e => {
+												if ( ! settings.series[i].falsy ) {
+													settings.series[i].falsy = {};
+												}
+												settings.series[i].format.falsy = e;
+												this.props.edit( settings );
+											} }
+										/>
+
 									</Fragment>
 								) }
 

@@ -120,15 +120,40 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access private
 	 */
 	private function get_actions() {
-		return apply_filters(
+		$actions = apply_filters(
 			'visualizer_action_buttons',
 			array(
-				'print'     => __( 'Print', 'visualizer' ),
-				'csv'       => __( 'CSV', 'visualizer' ),
-				'xls'       => __( 'Excel', 'visualizer' ),
-				'copy'      => __( 'Copy', 'visualizer' ),
+				'print'     => array(
+					'label' => esc_html__( 'Print', 'visualizer' ),
+					'title' => esc_html__( 'Print Chart', 'visualizer' ),
+				),
+				'csv'       => array(
+					'label' => esc_html__( 'CSV', 'visualizer' ),
+					'title' => esc_html__( 'Download as a CSV', 'visualizer' ),
+				),
+				'xls'       => array(
+					'label' => esc_html__( 'Excel', 'visualizer' ),
+					'title' => esc_html__( 'Download as a spreadsheet', 'visualizer' ),
+				),
+				'copy'      => array(
+					'label' => esc_html__( 'Copy', 'visualizer' ),
+					'title' => esc_html__( 'Copy data', 'visualizer' ),
+				),
+				'image'      => array(
+					'label' => esc_html__( 'Download', 'visualizer' ),
+					'title' => esc_html__( 'Download as an image', 'visualizer' ),
+				),
 			)
 		);
+
+		// backward compatibility before label and title attributes were introduced.
+		if ( isset( $actions['edit'] ) && is_string( $actions['edit'] ) ) {
+			$actions['edit'] = array(
+				'label' => esc_html__( 'Edit', 'visualizer' ),
+				'title' => esc_html__( 'Edit data', 'visualizer' ),
+			);
+		}
+		return $actions;
 	}
 
 	/**
@@ -160,6 +185,21 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				break;
 			case 'xls':
 				$data   = $this->_getDataAs( $chart_id, 'xls' );
+				break;
+			case 'image':
+				$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+				$title       = 'visualizer#' . $chart_id;
+				if ( ! empty( $settings['title'] ) ) {
+					$title  = $settings['title'];
+				}
+				// for ChartJS, title is an array.
+				if ( is_array( $title ) && isset( $title['text'] ) ) {
+					$title = $title['text'];
+				}
+				if ( empty( $title ) ) {
+					$title  = 'visualizer#' . $chart_id;
+				}
+				$data   = array( 'name' => $title );
 				break;
 			default:
 				$data   = apply_filters( 'visualizer_action_data', $data, $chart_id, $type, $params, $this );
@@ -296,8 +336,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					$key        = $array[0];
 					$mime       = end( $array );
 				}
-				$label          = $actions[ $key ];
-				$actions_div    .= '<a href="#" class="visualizer-action visualizer-action-' . $key . '" data-visualizer-type="' . $key . '" data-visualizer-chart-id="' . $atts['id'] . '" data-visualizer-container-id="' . $id . '" data-visualizer-mime="' . $mime . '" title="' . $label . '" ';
+				$label          = $actions[ $key ]['label'];
+				$title          = $actions[ $key ]['title'];
+				$actions_div    .= sprintf( '<a href="#" class="visualizer-action visualizer-action-%s" data-visualizer-type="%s" data-visualizer-chart-id="%s" data-visualizer-container-id="%s" data-visualizer-mime="%s" title="%s"', $key, $key, $atts['id'], $id, $mime, $title );
 
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );
@@ -355,6 +396,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access private
 	 */
 	private function addSchema( $id ) {
+		// should we show informative errors as HTML comments?
+		$show_errors = apply_filters( 'visualizer_schema_show_errors', true, $id );
+
 		$settings = get_post_meta( $id, Visualizer_Plugin::CF_SETTINGS, true );
 		$title = '';
 		if ( isset( $settings['title'] ) && ! empty( $settings['title'] ) ) {
@@ -365,6 +409,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 		$title = apply_filters( 'visualizer_schema_name', $title, $id );
 		if ( empty( $title ) ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because title is empty -->";
+			}
 			return '';
 		}
 
@@ -373,8 +420,18 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$desc  = $settings['description'];
 		}
 		$desc = apply_filters( 'visualizer_schema_description', $desc, $id );
+		if ( empty( $desc ) ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because description is empty -->";
+			}
+			return '';
+		}
+
 		// descriptions below 50 chars are not allowed.
-		if ( empty( $desc ) || strlen( $desc ) < 50 ) {
+		if ( strlen( $desc ) < 50 ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because description is shorter than 50 characters -->";
+			}
 			return '';
 		}
 

@@ -46,19 +46,18 @@ class DataTables extends Component {
 
 	initDataTable( tableColumns, tableRow ) {
 		const settings = this.props.options;
-
 		const columns = tableColumns.map( ( i, index ) => {
 			let type = i.type;
 
 			switch ( i.type ) {
-			case 'number':
-				type = 'num';
-				break;
-			case 'date':
-			case 'datetime':
-			case 'timeofday':
-				type = 'date';
-				break;
+                case 'number':
+                    type = 'num';
+                    break;
+                case 'date':
+                case 'datetime':
+                case 'timeofday':
+                    type = 'date';
+                    break;
 			}
 
 			return {
@@ -125,7 +124,6 @@ class DataTables extends Component {
                 break;
             case 'num':
                 const parts = [ '', '', '', '', '' ];
-
                 if ( settings.series[index].format.thousands ) {
                     parts[0] = settings.series[index].format.thousands;
                 }
@@ -143,7 +141,19 @@ class DataTables extends Component {
                 }
                 renderer = jQuery.fn.dataTable.render.number( ...parts );
                 break;
-        }
+            case 'boolean':
+                jQuery.fn.dataTable.render.extra = function( data, type, row ) {
+                    if ( ( true === data || 'true' === data ) && '' !== settings.series[index].format.truthy ) {
+                        return settings.series[index].format.truthy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
+                    }
+                    if ( ( false === data || 'false' === data ) && '' !== settings.series[index].format.falsy ) {
+                        return settings.series[index].format.falsy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
+                    }
+                    return data;
+                };
+                renderer = jQuery.fn.dataTable.render.extra;
+                break;
+		}
 
 		return renderer;
 	}

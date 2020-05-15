@@ -36,7 +36,7 @@
 
 	<div class="viz-features-content">
 		<div class="viz-feature">
-			<div id="feedzy_import_feeds" class="viz-feature-features">
+			<div class="viz-feature-features">
 					<?php
 					switch ( $active_tab ) {
 						case 'help':

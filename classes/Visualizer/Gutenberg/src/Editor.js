@@ -29,6 +29,7 @@ const {
 	ButtonGroup,
 	Dashicon,
 	Placeholder,
+	Notice,
 	Spinner
 } = wp.components;
 
@@ -78,11 +79,20 @@ class Editor extends Component {
 
 		// Fetch review again if block loaded after saving.
 		if ( this.props.attributes.id ) {
-			let result = await apiFetch({ path: `wp/v2/visualizer/${this.props.attributes.id}` });
+			let result = await apiFetch({ path: `wp/v2/visualizer/${this.props.attributes.id}` }).catch( function( error ) {
+            });
 
-			this.setState({
-				chart: result['chart_data']
-			});
+            if ( result ) {
+                this.setState({
+                    chart: result['chart_data']
+                });
+            } else {
+
+                // if the chart is not found.
+                this.setState({
+                    route: 'error'
+                });
+            }
 		}
 	}
 
@@ -92,6 +102,7 @@ class Editor extends Component {
 		});
 
 		let result = await apiFetch({ path: `wp/v2/visualizer/${id}` });
+        console.log( 'getChart', id, result );
 
 		this.setState({
 			route: 'chartSelect',
@@ -297,6 +308,7 @@ class Editor extends Component {
 		});
 
 		let result = await apiFetch({ path: `wp/v2/visualizer/${id}` });
+            console.log( 'getChartData', id, result );
 
 		let chart = { ...this.state.chart };
 
@@ -406,6 +418,18 @@ class Editor extends Component {
 	}
 
 	render() {
+		if ( 'error' === this.state.route ) {
+			return (
+				<Notice
+					status="error"
+					isDismissible={ false }
+				>
+                        <Dashicon icon="chart-pie" />
+                        { __( 'This chart is not available; it might have been deleted. Please delete this block and resubmit your chart.' ) }
+				</Notice>
+			);
+		}
+
 		if ( 'renderChart' === this.state.route && null !== this.state.chart ) {
 			return (
 				<ChartRender
