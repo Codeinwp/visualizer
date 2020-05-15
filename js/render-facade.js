@@ -6,6 +6,9 @@
 
     function initActionsButtons(v) {
         if($('a.visualizer-action[data-visualizer-type=copy]').length > 0) {
+            $('a.visualizer-action[data-visualizer-type=copy]').on('click', function(e) {
+                e.preventDefault();
+            });
             var clipboard = new Clipboard('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
             clipboard.on('success', function(e) {
                 window.alert(v.i10n['copied']);
@@ -88,24 +91,23 @@
             document.body.dispatchEvent(event);
         };
 
-        // facade loads N times in the library (where N = the number of different chart libraries supported)
+        // facade loads N times in the library and front end (where N = the number of different chart libraries supported)
         // so all charts are also loaded N times
         // this will ensure that no matter how many times facade is loaded, it initializes all charts only once.
         // fixed as part of the issue to add annotations.
-        if(visualizer.page_type === 'library'){
-            if(localStorage.getItem( 'viz-facade-loaded' ) === '1'){
-                // prevent library from hanging.
-                setTimeout( function(){
-                    localStorage.removeItem( 'viz-facade-loaded' );
-                }, 2000);
-                return;
-            }
-            localStorage.setItem( 'viz-facade-loaded', '1');
-            // remove the flag so that repeated loading of the library does not cause problems.
+        if(localStorage.getItem( 'viz-facade-loaded' ) === '1'){
+            // prevent library from hanging.
             setTimeout( function(){
                 localStorage.removeItem( 'viz-facade-loaded' );
             }, 2000);
+            return;
         }
+        localStorage.setItem( 'viz-facade-loaded', '1');
+        // remove the flag so that repeated loading of the library does not cause problems.
+        setTimeout( function(){
+            localStorage.removeItem( 'viz-facade-loaded' );
+        }, 2000);
+        
         $('body').trigger('visualizer:render:chart:start', visualizer);
         initActionsButtons(visualizer);
         registerDefaultActions();
