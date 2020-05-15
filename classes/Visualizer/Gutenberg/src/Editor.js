@@ -102,7 +102,6 @@ class Editor extends Component {
 		});
 
 		let result = await apiFetch({ path: `wp/v2/visualizer/${id}` });
-        console.log( 'getChart', id, result );
 
 		this.setState({
 			route: 'chartSelect',
@@ -308,7 +307,6 @@ class Editor extends Component {
 		});
 
 		let result = await apiFetch({ path: `wp/v2/visualizer/${id}` });
-            console.log( 'getChartData', id, result );
 
 		let chart = { ...this.state.chart };
 
@@ -323,10 +321,11 @@ class Editor extends Component {
 		});
 	}
 
-	editChartData( chartData, type ) {
+	editChartData( chartData, source ) {
 		let chart = { ...this.state.chart };
 		let series = [];
 		let settings = { ...chart['visualizer-settings'] };
+        let type = chart['visualizer-chart-type'];
 		chartData[0].map( ( i, index ) => {
 			series[index] = {
 				label: i,
@@ -339,17 +338,17 @@ class Editor extends Component {
 		let map = series;
 		let fieldName = 'series';
 
-		if ( 'pie' === chart['visualizer-chart-type']) {
+		if ( 'pie' === type ) {
 			map = chartData;
 			fieldName = 'slices';
 		}
 
 		map.map( ( i, index ) => {
-			if ( 'pie' !== chart['visualizer-chart-type'] && 0 === index ) {
+			if ( 'pie' !== type && 0 === index ) {
 				return;
 			}
 
-			const seriesIndex = 'pie' !== chart['visualizer-chart-type'] ? index - 1 : index;
+			const seriesIndex = 'pie' !== type ? index - 1 : index;
 
 			if ( settings[fieldName][seriesIndex] === undefined ) {
 				settings[fieldName][seriesIndex] = {};
@@ -358,11 +357,11 @@ class Editor extends Component {
 		});
 
 		settings[fieldName] = settings[fieldName].filter( ( i, index ) => {
-			const length = 'pie' !== chart['visualizer-chart-type'] ? map.length - 1 : map.length;
+			const length = -1 >= [ 'pie', 'tabular', 'dataTable' ].indexOf( type ) ? map.length - 1 : map.length;
 			return index < length;
 		});
 
-		chart['visualizer-source'] = type;
+		chart['visualizer-source'] = source;
 		chart['visualizer-default-data'] = 0;
 		chart['visualizer-data'] = chartData;
 		chart['visualizer-series'] = series;
