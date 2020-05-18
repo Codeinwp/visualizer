@@ -401,15 +401,18 @@ class Editor extends Component {
 			fieldName = 'slices';
 		}
 
-		Object.keys( data['visualizer-settings'][fieldName])
-			.map( i => {
-				if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
-					if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
-						delete data['visualizer-settings'][fieldName][i].temp;
-					}
-				}
-			}
-			);
+        // no series for bubble and timeline charts.
+		if ( -1 >= [ 'bubble', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
+            Object.keys( data['visualizer-settings'][fieldName])
+                .map( i => {
+                    if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
+                        if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
+                            delete data['visualizer-settings'][fieldName][i].temp;
+                        }
+                    }
+                }
+            );
+        }
 
 		apiRequest({ path: `/visualizer/v1/update-chart?id=${ this.props.attributes.id }`, method: 'POST', data: data }).then(
 			( data ) => {
@@ -568,6 +571,7 @@ class Editor extends Component {
 										<Button
 											isDefault
 											isLarge
+                                            className="visualizer-bttn-done"
 											onClick={ () => {
 												this.setState({ route: 'renderChart' });
 												this.props.setAttributes({ route: 'renderChart' });
@@ -578,6 +582,7 @@ class Editor extends Component {
 										<Button
 											isPrimary
 											isLarge
+                                            className="visualizer-bttn-save"
 											isBusy={ 'updateChart' === this.state.isLoading }
 											disabled={ 'updateChart' === this.state.isLoading }
 											onClick={ this.updateChart }
