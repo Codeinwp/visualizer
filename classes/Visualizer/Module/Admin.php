@@ -978,6 +978,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 				'page_type' => 'library',
 				'is_front'  => false,
+				'i10n' => array(
+					'conflict' => __( 'We have detected a potential conflict with another component that prevents Visualizer from functioning properly. Please disable any of the following components if they are activated on your instance: Modern Events Calendar plugin, Acronix plugin. In case the aforementioned components are not activated or you continue to see this error message, please disable all other plugins and enable them one by one to find out the component that is causing the conflict.', 'visualizer' ),
+				),
 			)
 		);
 		// render library page

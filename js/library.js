@@ -23,7 +23,11 @@
         },
 
         open: function () {
-            wpmv.MediaFrame.prototype.open.apply(this, arguments);
+            try{
+                wpmv.MediaFrame.prototype.open.apply(this, arguments);
+            }catch(error){
+                alert(visualizer.i10n.conflict);
+            }
             this.$el.addClass('hide-menu');
         }
     });
