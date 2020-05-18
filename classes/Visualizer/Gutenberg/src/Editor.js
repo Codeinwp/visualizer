@@ -341,19 +341,30 @@ class Editor extends Component {
 		if ( 'pie' === type ) {
 			map = chartData;
 			fieldName = 'slices';
-		}
+
+            // pie charts are finicky about a number being a number
+            // and editing a number makes it a string
+            // so let's convert it back into a number.
+            chartData.map( ( i, index ) => {
+                switch ( series[1].type ) {
+                    case 'number':
+                        i[1] = parseFloat( i[1]);
+                        break;
+                }
+            });
+        }
 
 		map.map( ( i, index ) => {
 			if ( 'pie' !== type && 0 === index ) {
-				return;
+                return;
 			}
 
 			const seriesIndex = 'pie' !== type ? index - 1 : index;
 
 			if ( settings[fieldName][seriesIndex] === undefined ) {
-				settings[fieldName][seriesIndex] = {};
+                settings[fieldName][seriesIndex] = {};
 				settings[fieldName][seriesIndex].temp = 1;
-			}
+            }
 		});
 
 		settings[fieldName] = settings[fieldName].filter( ( i, index ) => {
