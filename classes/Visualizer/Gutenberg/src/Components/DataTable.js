@@ -130,7 +130,7 @@ class DataTables extends Component {
                 if ( settings.series[index].format.decimal ) {
                     parts[1] = settings.series[index].format.decimal;
                 }
-                if ( settings.series[index].format.precision && '0' != settings.series[index].format.precision ) {
+                if ( settings.series[index].format.precision && 0 < parseInt( settings.series[index].format.precision ) ) {
                     parts[2] = settings.series[index].format.precision;
                 }
                 if ( settings.series[index].format.prefix ) {
