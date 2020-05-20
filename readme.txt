@@ -1,5 +1,5 @@
 === Visualizer: Tables and Charts Manager for WordPress # ===
-Contributors: codeinwp,themeisle,marius2012,marius_codeinwp,hardeepasrani,contactashish13,Madalin_ThemeIsle
+Contributors: codeinwp,themeisle,marius2012,marius_codeinwp,hardeepasrani,rozroz,Madalin_ThemeIsle
 Tags: tables, charts, pie, visualization, graphs
 Requires at least: 3.5
 Tested up to: 5.4
