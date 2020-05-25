@@ -81,7 +81,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Bubble extends Visualizer_Rend
 				self::_renderColorPickerItem(
 					esc_html__( 'Stroke Color', 'visualizer' ),
 					'bubble[stroke]',
-					isset( $this->bubble[ $index ]['stroke'] ) ? $this->bubble[ $index ]['stroke'] : null,
+					isset( $this->bubble['stroke'] ) ? $this->bubble['stroke'] : null,
 					null
 				);
 
@@ -90,7 +90,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Bubble extends Visualizer_Rend
 					'sortBubblesBySize',
 					$this->sortBubblesBySize ? 1 : 0,
 					1,
-					esc_html__( 'If true, sorts the bubbles by size so the smaller bubbles appear above the larger bubbles. If false, bubbles are sorted according to their order in the DataTable.', 'visualizer' )
+					esc_html__( 'If checked, sorts the bubbles by size so the smaller bubbles appear above the larger bubbles. If unchecked, bubbles are sorted according to their order in the table.', 'visualizer' )
 				);
 
 				self::_renderTextItem(

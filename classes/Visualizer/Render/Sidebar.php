@@ -260,6 +260,17 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : esc_html__( 'To enable copying the data to the clipboard.', 'visualizer' ),
 				$disable_actions
 			);
+
+			// not all charts support downloading as an image.
+			$disabled   = ! $this->can_chart_have_action( 'image' );
+			self::_renderCheckboxItem(
+				esc_html__( 'Download Image', 'visualizer' ),
+				'actions[]',
+				isset( $this->actions ) && in_array( 'image', $this->actions, true ) ? true : false,
+				'image',
+				$disable_actions ? '<span class="viz-section-error">' . esc_html__( 'Upgrade to at least WordPress 4.7 to use this.', 'visualizer' ) . '</span>' : ( $disabled ? '<span class="viz-section-error">' . esc_html__( 'Not supported for this chart type.', 'visualizer' ) . '</span>' : esc_html__( 'To download the chart as an image.', 'visualizer' ) ),
+				$disable_actions || $disabled
+			);
 		self::_renderSectionEnd();
 	}
 

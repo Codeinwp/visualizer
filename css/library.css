@@ -107,6 +107,10 @@
 	background-position: -46px -64px;
 }
 
+.visualizer-chart-image {
+	background-position: -206px -129px;
+}
+
 .visualizer-nochart-clone,
 .visualizer-nochart-delete,
 .visualizer-nochart-edit {
