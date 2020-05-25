@@ -150,7 +150,7 @@
 
         // if vaction=addnew is found as a GET request parameter, show the modal.
         if(location.href.indexOf('vaction=addnew') !== -1){
-            $('.add-new-chart').trigger('click');
+            $('.add-new-chart').first().trigger('click');
         }
 
         $(window).resize(function () {
