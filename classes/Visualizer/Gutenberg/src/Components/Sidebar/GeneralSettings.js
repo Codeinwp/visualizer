@@ -106,15 +106,19 @@ class GeneralSettings extends Component {
 
         switch ( lib ) {
             case 'ChartJS':
-                titleColorElement = settings.title.fontColor;
-                legendColorElement = settings.legend.labels.fontColor;
+                if ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) {
+                    titleColorElement = settings.title.fontColor;
+                    legendColorElement = settings.legend.labels.fontColor;
+                }
                 if ( settings.title.text ) {
                     titleElement = settings.title.text;
                 }
                 break;
             case 'GoogleCharts':
-                titleColorElement = settings.titleTextStyle.color;
-                legendColorElement = settings.legend.textStyle.color;
+                if ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) {
+                    titleColorElement = settings.titleTextStyle.color;
+                    legendColorElement = settings.legend.textStyle.color;
+                }
                 titleElement = settings.title;
                 break;
         }
