@@ -47,6 +47,10 @@ describe('Test Free - gutenberg', function() {
                 
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').should('have.length', 1);
 
+                cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').then( ($chart_block) => {
+                    cy.log('Processing chart: ' + Cypress.$($chart_block).attr('data-chart-type'));
+                });
+
                 // chart and footer divs
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 2);
 

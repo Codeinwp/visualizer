@@ -144,7 +144,7 @@ class ChartSelect extends Component {
 					</InspectorControls>
 				}
 
-				<div className="visualizer-settings__chart">
+				<div className="visualizer-settings__chart" data-chart-type={ chart }>
 
 					{ ( null !== this.props.chart ) &&
                         ( 'dataTable' === chart ? (
