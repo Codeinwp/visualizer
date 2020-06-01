@@ -98,3 +98,8 @@ export const CSVToArray = ( strData, strDelimiter ) => {
 
 	return ( arrData );
 };
+
+
+export const isChecked = ( settings, param ) => {
+    return true === settings[param] || 'true' === settings[param] || '1' === settings[param] || 1 === settings[param];
+};

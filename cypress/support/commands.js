@@ -313,7 +313,6 @@ Cypress.Commands.add( 'create_available_charts', ($num) => {
     });
 });
 
-
 Cypress.Commands.add( 'clear_welcome', () => {
     cy.window().then(win => {
         win.wp

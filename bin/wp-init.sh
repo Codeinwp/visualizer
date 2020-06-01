@@ -45,4 +45,3 @@ docker exec $args visualizer_wordpress wp --allow-root config set TI_CYPRESS_TES
 docker exec $args visualizer_wordpress wp --allow-root config set WP_DEBUG true --raw
 docker exec $args visualizer_wordpress wp --allow-root config set WP_DEBUG_LOG true --raw
 docker exec $args visualizer_wordpress wp --allow-root config set WP_DEBUG_DISPLAY false --raw
-

@@ -230,7 +230,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'tabular', 'gauge', 'geo', 'dataTable', 'timeline' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Tooltip' ) }
 						className="visualizer-inner-sections"

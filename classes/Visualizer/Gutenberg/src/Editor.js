@@ -341,19 +341,30 @@ class Editor extends Component {
 		if ( 'pie' === type ) {
 			map = chartData;
 			fieldName = 'slices';
-		}
+
+            // pie charts are finicky about a number being a number
+            // and editing a number makes it a string
+            // so let's convert it back into a number.
+            chartData.map( ( i, index ) => {
+                switch ( series[1].type ) {
+                    case 'number':
+                        i[1] = parseFloat( i[1]);
+                        break;
+                }
+            });
+        }
 
 		map.map( ( i, index ) => {
 			if ( 'pie' !== type && 0 === index ) {
-				return;
+                return;
 			}
 
 			const seriesIndex = 'pie' !== type ? index - 1 : index;
 
 			if ( settings[fieldName][seriesIndex] === undefined ) {
-				settings[fieldName][seriesIndex] = {};
+                settings[fieldName][seriesIndex] = {};
 				settings[fieldName][seriesIndex].temp = 1;
-			}
+            }
 		});
 
 		settings[fieldName] = settings[fieldName].filter( ( i, index ) => {
@@ -390,15 +401,18 @@ class Editor extends Component {
 			fieldName = 'slices';
 		}
 
-		Object.keys( data['visualizer-settings'][fieldName])
-			.map( i => {
-				if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
-					if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
-						delete data['visualizer-settings'][fieldName][i].temp;
-					}
-				}
-			}
-			);
+        // no series for bubble and timeline charts.
+		if ( -1 >= [ 'bubble', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
+            Object.keys( data['visualizer-settings'][fieldName])
+                .map( i => {
+                    if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
+                        if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
+                            delete data['visualizer-settings'][fieldName][i].temp;
+                        }
+                    }
+                }
+            );
+        }
 
 		apiRequest({ path: `/visualizer/v1/update-chart?id=${ this.props.attributes.id }`, method: 'POST', data: data }).then(
 			( data ) => {
@@ -557,6 +571,7 @@ class Editor extends Component {
 										<Button
 											isDefault
 											isLarge
+                                            className="visualizer-bttn-done"
 											onClick={ () => {
 												this.setState({ route: 'renderChart' });
 												this.props.setAttributes({ route: 'renderChart' });
@@ -567,6 +582,7 @@ class Editor extends Component {
 										<Button
 											isPrimary
 											isLarge
+                                            className="visualizer-bttn-save"
 											isBusy={ 'updateChart' === this.state.isLoading }
 											disabled={ 'updateChart' === this.state.isLoading }
 											onClick={ this.updateChart }
