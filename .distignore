@@ -25,3 +25,4 @@ cypress
 docker-compose.travis.yml
 cypress.env.json.template
 cypress.json
+.github

@@ -20,6 +20,7 @@ import RowCellSettings from './Sidebar/RowCellSettings.js';
 import ComboSettings from './Sidebar/ComboSettings.js';
 import SeriesSettings from './Sidebar/SeriesSettings.js';
 import SlicesSettings from './Sidebar/SlicesSettings.js';
+import BubbleSettings from './Sidebar/BubbleSettings.js';
 import ColumnSettings from './Sidebar/ColumnSettings.js';
 import LayoutAndChartArea from './Sidebar/LayoutAndChartArea.js';
 import FrontendActions from './Sidebar/FrontendActions.js';
@@ -106,8 +107,12 @@ class Sidebar extends Component {
 					<ComboSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'timeline', 'gauge', 'geo', 'pie', 'polarArea', 'dataTable' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'timeline', 'gauge', 'geo', 'pie', 'polarArea', 'bubble', 'dataTable' ].indexOf( type ) ) && (
                     <SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
+				) }
+
+				{ ( 0 <= [ 'bubble' ].indexOf( type ) ) && (
+					<BubbleSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
 				{ ( 0 <= [ 'pie', 'polarArea' ].indexOf( type ) ) && (

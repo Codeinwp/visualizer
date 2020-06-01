@@ -112,38 +112,51 @@ class DataTables extends Component {
 			return data;
 		}
 
-		if ( 'date' === type || 'datetime' === type || 'timeofday' === type ) {
-			if ( settings.series[index].format && settings.series[index].format.from && settings.series[index].format.to ) {
-				return jQuery.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
-			}
+        switch ( type ) {
+            case 'date':
+            case 'datetime':
+            case 'timeofday':
+                if ( settings.series[index].format && settings.series[index].format.from && settings.series[index].format.to ) {
+                    return jQuery.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
+                }
+                return jQuery.fn.dataTable.render.moment( 'MM-DD-YYYY' );
+                break;
+            case 'num':
+                const parts = [ '', '', '', '', '' ];
 
-			return jQuery.fn.dataTable.render.moment( 'MM-DD-YYYY' );
-		}
+                if ( settings.series[index].format.thousands ) {
+                    parts[0] = settings.series[index].format.thousands;
+                }
 
-		if ( 'num' === type ) {
-			const parts = [ '', '', '', '', '' ];
+                if ( settings.series[index].format.decimal ) {
+                    parts[1] = settings.series[index].format.decimal;
+                }
 
-			if ( settings.series[index].format.thousands ) {
-				parts[0] = settings.series[index].format.thousands;
-			}
+                if ( settings.series[index].format.precision ) {
+                    parts[2] = settings.series[index].format.precision;
+                }
 
-			if ( settings.series[index].format.decimal ) {
-				parts[1] = settings.series[index].format.decimal;
-			}
+                if ( settings.series[index].format.prefix ) {
+                    parts[3] = settings.series[index].format.prefix;
+                }
 
-			if ( settings.series[index].format.precision ) {
-				parts[2] = settings.series[index].format.precision;
-			}
-
-			if ( settings.series[index].format.prefix ) {
-				parts[3] = settings.series[index].format.prefix;
-			}
-
-			if ( settings.series[index].format.suffix ) {
-				parts[4] = settings.series[index].format.suffix;
-			}
-
-			return jQuery.fn.dataTable.render.number( ...parts );
+                if ( settings.series[index].format.suffix ) {
+                    parts[4] = settings.series[index].format.suffix;
+                }
+                return jQuery.fn.dataTable.render.number( ...parts );
+                break;
+            case 'boolean':
+                jQuery.fn.dataTable.render.extra = function( data, type, row ) {
+                    if ( ( true === data || 'true' === data ) && 'undefined' !== typeof settings.series[index].format && '' !== settings.series[index].format.truthy ) {
+                        return settings.series[index].format.truthy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
+                    }
+                    if ( ( false === data || 'false' === data ) && 'undefined' !== typeof settings.series[index].format && '' !== settings.series[index].format.falsy ) {
+                        return settings.series[index].format.falsy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
+                    }
+                    return data;
+                };
+                return jQuery.fn.dataTable.render.extra;
+                break;
 		}
 
 		return data;

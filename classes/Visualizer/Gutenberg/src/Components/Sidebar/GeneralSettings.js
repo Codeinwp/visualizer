@@ -317,7 +317,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
+				{ ( -1 >= [ 'tabular', 'gauge', 'geo', 'dataTable', 'timeline' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 					<PanelBody
 						title={ __( 'Tooltip' ) }
 						className="visualizer-inner-sections"
