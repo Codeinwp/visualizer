@@ -3,7 +3,7 @@
  */
 import uuidv4 from 'uuid';
 
-import {merge} from 'lodash';
+const { merge } = lodash;
 
 import { defaults, Scatter, Bubble, Polar, Radar, HorizontalBar, Bar, Line, Pie, Doughnut } from 'react-chartjs-2';
 
