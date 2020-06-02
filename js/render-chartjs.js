@@ -127,8 +127,16 @@
         // chart area
         if(v.is_front == true){ // jshint ignore:line
             $('#' + id).css('position', 'relative');
-            chartjs.canvas.parentNode.style.height = settings.height;
-            chartjs.canvas.parentNode.style.width = settings.width;
+            var height = settings.height.indexOf('%') === -1 ? ( settings.height + 'px' ) : settings.height;
+            var width = settings.width.indexOf('%') === -1 ? ( settings.width + 'px' ) : settings.width;
+            if(settings.height){
+                chartjs.canvas.parentNode.style.height = height;
+                $('#' + id + ' canvas').css('height', height);
+            }
+            if(settings.width){
+                chartjs.canvas.parentNode.style.width = width;
+                $('#' + id + ' canvas').css('width', width);
+            }
         }
 
         // allow user to extend the settings.
