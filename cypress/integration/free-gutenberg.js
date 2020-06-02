@@ -18,10 +18,9 @@ describe('Test Free - gutenberg', function() {
 
         cy.clear_welcome();
 
-        var charts = [];
-        for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
-            charts.push(i);
-        }
+        var charts = Array.from({ length: parseInt(Cypress.env('chart_types').chartjs) }, function(_item, index) {
+            return index + 1;
+        });
 
         cy.wrap(charts).each((value, i, array) => {
             // insert a visualizer block
