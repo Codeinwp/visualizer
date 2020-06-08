@@ -417,7 +417,11 @@ var __visualizer_chart_images   = [];
         google.charts.setOnLoadCallback(function() {
             gv = google.visualization;
             all_charts = v.charts;
-            render();
+            if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
+                renderChart(v.id);
+            } else {
+                render();
+            }
         });
     });
 
