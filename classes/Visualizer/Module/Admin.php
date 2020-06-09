@@ -623,6 +623,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function enqueueLibraryScripts( $suffix ) {
 		if ( $suffix === $this->_libraryPage ) {
+			wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
 			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
 			wp_enqueue_media();
@@ -632,6 +633,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				array(
 					'jquery',
 					'media-views',
+					'visualizer-clipboardjs',
 				),
 				Visualizer_Plugin::VERSION,
 				true
@@ -978,6 +980,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 				'page_type' => 'library',
 				'is_front'  => false,
+				'i10n'          => array(
+					'copied'        => __( 'The shortcode has been copied to your clipboard. Hit Ctrl-V/Cmd-V to paste it.', 'visualizer' ),
+				),
 			)
 		);
 		// render library page
