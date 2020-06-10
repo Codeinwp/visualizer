@@ -13,6 +13,17 @@
 abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sidebar {
 
 	/**
+	 * The array of available legend positions.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_legendPositions;
+
+
+	/**
 	 * The constructor.
 	 */
 	public function __construct( $data = array() ) {
