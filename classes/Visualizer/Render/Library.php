@@ -335,6 +335,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', 'visualizer' ), '"></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', 'visualizer' ), '" data-chart="', $chart_id, '"></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-export" href="javascript:;" title="', esc_attr__( 'Export', 'visualizer' ), '" data-chart="', $export_link, '"></a>';
+		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
+			echo '<a class="visualizer-chart-action visualizer-chart-image" href="javascript:;" title="', esc_attr__( 'Download as image', 'visualizer' ), '" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"></a>';
+		}
 		echo '<a class="visualizer-chart-action visualizer-chart-shortcode" href="javascript:;" title="', esc_attr__( 'Click to copy shortcode', 'visualizer' ), '" data-clipboard-text="', esc_attr( $shortcode ), '"></a>';
 		echo '<span>&nbsp;</span>';
 		echo '<hr><div class="visualizer-chart-status"><span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';

@@ -312,3 +312,11 @@ Cypress.Commands.add( 'create_available_charts', ($num) => {
         cy.get('#visualizer-library .visualizer-chart').should('have.length', $num);
     });
 });
+
+Cypress.Commands.add( 'clear_welcome', () => {
+    cy.window().then(win => {
+        win.wp
+        && ( win.wp.data.select( "core/edit-post" ).isFeatureActive( "welcomeGuide" ) && win.wp.data.dispatch( "core/edit-post" ).toggleFeature( "welcomeGuide" ) )
+        ;
+    });
+});

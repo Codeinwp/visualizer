@@ -112,6 +112,7 @@ class ChartSelect extends Component {
 
 						<PanelButton
 							label={ __( 'Advanced Options' ) }
+                            className="visualizer-advanced-options"
 							icon="admin-tools"
 							onClick={ () => this.setState({ route: 'showAdvanced' }) }
 						/>
