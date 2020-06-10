@@ -2,6 +2,7 @@
  * External dependencies
  */
 import GeneralSettings from './Sidebar/GeneralSettings.js';
+import InstanceSettings from './Sidebar/InstanceSettings.js';
 import HorizontalAxisSettings from './Sidebar/HorizontalAxisSettings.js';
 import VerticalAxisSettings from './Sidebar/VerticalAxisSettings.js';
 import PieSettings from './Sidebar/PieSettings.js';
@@ -44,6 +45,8 @@ class Sidebar extends Component {
 
 		return (
 			<Fragment>
+
+				<InstanceSettings chart={ this.props.chart } attributes={ this.props.attributes } edit={ this.props.edit } />
 
 				<GeneralSettings chart={ this.props.chart } edit={ this.props.edit } />
 

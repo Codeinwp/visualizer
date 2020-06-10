@@ -139,6 +139,9 @@ class Visualizer_Gutenberg_Block {
 					'id' => array(
 						'type' => 'number',
 					),
+					'lazy' => array(
+						'type' => 'string',
+					),
 				),
 			)
 		);
@@ -147,14 +150,39 @@ class Visualizer_Gutenberg_Block {
 	/**
 	 * Gutenberg Block Callback Function
 	 */
-	public function gutenberg_block_callback( $attr ) {
-		if ( isset( $attr['id'] ) ) {
-			$id = $attr['id'];
-			if ( empty( $id ) || $id === 'none' ) {
-				return ''; // no id = no fun
-			}
-			return '[visualizer id="' . $id . '"]';
+	public function gutenberg_block_callback( $atts ) {
+		$atts = shortcode_atts(
+			array(
+				'id'     => false,
+				'lazy' => apply_filters( 'visualizer_lazy_by_default', false, $atts['id'] ),
+				// we are deliberating excluding the class attribute from here 
+				// as this will be handled by the custom class in Gutenberg
+			),
+			$atts
+		);
+
+		// no id, no fun.
+		if ( ! $atts['id'] ) {
+			return '';
 		}
+
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		if ( $atts['lazy'] == -1 || $atts['lazy'] == false ) {
+			$atts['lazy'] = 'no';
+		}
+
+		// we don't want the chart in the editor lazy-loading.
+		if ( is_admin() ) {
+			unset( $atts['lazy'] );
+		}
+
+		$shortcode = '[visualizer';
+		foreach ( $atts as $name => $value ) {
+			$shortcode .= sprintf( ' %s="%s"', $name, $value );
+		}
+		$shortcode .= ']';
+
+		return $shortcode;
 	}
 
 	/**

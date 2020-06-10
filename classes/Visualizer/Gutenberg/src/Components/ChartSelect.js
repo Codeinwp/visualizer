@@ -133,7 +133,7 @@ class ChartSelect extends Component {
 						/>
 
 						{ 'showAdvanced' === this.state.route &&
-							<Sidebar chart={ this.props.chart } edit={ this.props.editSettings } />
+							<Sidebar chart={ this.props.chart } attributes={ this.props.attributes } edit={ this.props.editSettings } />
 						}
 
 						{ 'showPermissions' === this.state.route &&
