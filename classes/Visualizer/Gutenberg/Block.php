@@ -155,7 +155,7 @@ class Visualizer_Gutenberg_Block {
 			array(
 				'id'     => false,
 				'lazy' => apply_filters( 'visualizer_lazy_by_default', false, $atts['id'] ),
-				// we are deliberating excluding the class attribute from here 
+				// we are deliberating excluding the class attribute from here
 				// as this will be handled by the custom class in Gutenberg
 			),
 			$atts
