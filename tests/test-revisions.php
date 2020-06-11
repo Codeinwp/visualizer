@@ -272,6 +272,8 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 	 * @access public
 	 */
 	public function fileProvider() {
+		$this->assertFileExists( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples', 'Folder "samples" does not exist' );
+
 		return array(
 			array( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'line.csv', VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'bar.csv' ),
 		);
