@@ -27,6 +27,9 @@ class Visualizer_Module_Upgrade extends Visualizer_Module {
 		}
 
 		update_option( 'visualizer-upgraded', Visualizer_Plugin::VERSION );
+
+		// this will help in debugging to know which version this was upgraded from.
+		update_option( 'visualizer-upgraded-from', $last_version );
 	}
 
 	/**
