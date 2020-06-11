@@ -23,7 +23,11 @@
         },
 
         open: function () {
-            wpmv.MediaFrame.prototype.open.apply(this, arguments);
+            try{
+                wpmv.MediaFrame.prototype.open.apply(this, arguments);
+            }catch(error){
+                alert(visualizer.i10n.conflict);
+            }
             this.$el.addClass('hide-menu');
         }
     });
@@ -146,7 +150,7 @@
 
         // if vaction=addnew is found as a GET request parameter, show the modal.
         if(location.href.indexOf('vaction=addnew') !== -1){
-            $('.add-new-chart').trigger('click');
+            $('.add-new-chart').first().trigger('click');
         }
 
         $(window).resize(function () {
