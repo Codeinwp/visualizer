@@ -396,6 +396,20 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Disable revisions temporarily for visualizer post type.
+	 */
+	protected final function disableRevisionsTemporarily() {
+		add_filter(
+			'wp_revisions_to_keep', function( $num, $post ) {
+				if ( $post->post_type === Visualizer_Plugin::CPT_VISUALIZER ) {
+					return 0;
+				}
+				return $num;
+			}, 10, 2
+		);
+	}
+
+	/**
 	 * Undo revisions for the chart, and if necessary, restore the earliest version.
 	 *
 	 * @return bool If any revisions were found.
@@ -412,13 +426,12 @@ class Visualizer_Module {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'found %d revisions = %s', count( $revisions ), print_r( $revision_ids, true ) ), 'debug', __FILE__, __LINE__ );
 
 			// when we restore, a new revision is likely to be created. so, let's disable revisions for the time being.
-			add_filter( 'wp_revisions_to_keep', '__return_false' );
+			$this->disableRevisionsTemporarily();
 
 			if ( $restore ) {
 				// restore to the oldest one i.e. the first one.
 				wp_restore_post_revision( array_shift( $revision_ids ) );
 			}
-			remove_filter( 'wp_revisions_to_keep', '__return_false' );
 
 			// delete all revisions.
 			foreach ( $revision_ids as $id ) {
