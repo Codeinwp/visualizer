@@ -80,7 +80,7 @@ class Visualizer_Module {
 	 */
 	public function onShutdown() {
 		$error = error_get_last();
-		if ( $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
+		if ( $error && $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Critical error %s', print_r( $error, true ) ), 'error', __FILE__, __LINE__ );
 		}
 	}
