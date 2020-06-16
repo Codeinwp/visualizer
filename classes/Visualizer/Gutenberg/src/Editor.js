@@ -29,6 +29,7 @@ const {
 	ButtonGroup,
 	Dashicon,
 	Placeholder,
+	Notice,
 	Spinner
 } = wp.components;
 
@@ -78,11 +79,20 @@ class Editor extends Component {
 
 		// Fetch review again if block loaded after saving.
 		if ( this.props.attributes.id ) {
-			let result = await apiFetch({ path: `wp/v2/visualizer/${this.props.attributes.id}` });
+			let result = await apiFetch({ path: `wp/v2/visualizer/${this.props.attributes.id}` }).catch( function( error ) {
+            });
 
-			this.setState({
-				chart: result['chart_data']
-			});
+            if ( result ) {
+                this.setState({
+                    chart: result['chart_data']
+                });
+            } else {
+
+                // if the chart is not found.
+                this.setState({
+                    route: 'error'
+                });
+            }
 		}
 	}
 
@@ -311,10 +321,11 @@ class Editor extends Component {
 		});
 	}
 
-	editChartData( chartData, type ) {
+	editChartData( chartData, source ) {
 		let chart = { ...this.state.chart };
 		let series = [];
 		let settings = { ...chart['visualizer-settings'] };
+        let type = chart['visualizer-chart-type'];
 		chartData[0].map( ( i, index ) => {
 			series[index] = {
 				label: i,
@@ -327,30 +338,41 @@ class Editor extends Component {
 		let map = series;
 		let fieldName = 'series';
 
-		if ( 'pie' === chart['visualizer-chart-type']) {
+		if ( 'pie' === type ) {
 			map = chartData;
 			fieldName = 'slices';
-		}
+
+            // pie charts are finicky about a number being a number
+            // and editing a number makes it a string
+            // so let's convert it back into a number.
+            chartData.map( ( i, index ) => {
+                switch ( series[1].type ) {
+                    case 'number':
+                        i[1] = parseFloat( i[1]);
+                        break;
+                }
+            });
+        }
 
 		map.map( ( i, index ) => {
-			if ( 'pie' !== chart['visualizer-chart-type'] && 0 === index ) {
-				return;
+			if ( 'pie' !== type && 0 === index ) {
+                return;
 			}
 
-			const seriesIndex = 'pie' !== chart['visualizer-chart-type'] ? index - 1 : index;
+			const seriesIndex = 'pie' !== type ? index - 1 : index;
 
 			if ( settings[fieldName][seriesIndex] === undefined ) {
-				settings[fieldName][seriesIndex] = {};
+                settings[fieldName][seriesIndex] = {};
 				settings[fieldName][seriesIndex].temp = 1;
-			}
+            }
 		});
 
 		settings[fieldName] = settings[fieldName].filter( ( i, index ) => {
-			const length = 'pie' !== chart['visualizer-chart-type'] ? map.length - 1 : map.length;
+			const length = -1 >= [ 'pie', 'tabular', 'dataTable' ].indexOf( type ) ? map.length - 1 : map.length;
 			return index < length;
 		});
 
-		chart['visualizer-source'] = type;
+		chart['visualizer-source'] = source;
 		chart['visualizer-default-data'] = 0;
 		chart['visualizer-data'] = chartData;
 		chart['visualizer-series'] = series;
@@ -379,15 +401,18 @@ class Editor extends Component {
 			fieldName = 'slices';
 		}
 
-		Object.keys( data['visualizer-settings'][fieldName])
-			.map( i => {
-				if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
-					if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
-						delete data['visualizer-settings'][fieldName][i].temp;
-					}
-				}
-			}
-			);
+        // no series for bubble and timeline charts.
+		if ( -1 >= [ 'bubble', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
+            Object.keys( data['visualizer-settings'][fieldName])
+                .map( i => {
+                    if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
+                        if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
+                            delete data['visualizer-settings'][fieldName][i].temp;
+                        }
+                    }
+                }
+            );
+        }
 
 		apiRequest({ path: `/visualizer/v1/update-chart?id=${ this.props.attributes.id }`, method: 'POST', data: data }).then(
 			( data ) => {
@@ -406,6 +431,18 @@ class Editor extends Component {
 	}
 
 	render() {
+		if ( 'error' === this.state.route ) {
+			return (
+				<Notice
+					status="error"
+					isDismissible={ false }
+				>
+                        <Dashicon icon="chart-pie" />
+                        { __( 'This chart is not available; it might have been deleted. Please delete this block and resubmit your chart.' ) }
+				</Notice>
+			);
+		}
+
 		if ( 'renderChart' === this.state.route && null !== this.state.chart ) {
 			return (
 				<ChartRender
@@ -534,6 +571,7 @@ class Editor extends Component {
 										<Button
 											isDefault
 											isLarge
+                                            className="visualizer-bttn-done"
 											onClick={ () => {
 												this.setState({ route: 'renderChart' });
 												this.props.setAttributes({ route: 'renderChart' });
@@ -544,6 +582,7 @@ class Editor extends Component {
 										<Button
 											isPrimary
 											isLarge
+                                            className="visualizer-bttn-save"
 											isBusy={ 'updateChart' === this.state.isLoading }
 											disabled={ 'updateChart' === this.state.isLoading }
 											onClick={ this.updateChart }

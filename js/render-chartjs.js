@@ -127,8 +127,16 @@
         // chart area
         if(v.is_front == true){ // jshint ignore:line
             $('#' + id).css('position', 'relative');
-            chartjs.canvas.parentNode.style.height = settings.height;
-            chartjs.canvas.parentNode.style.width = settings.width;
+            var height = settings.height.indexOf('%') === -1 ? ( settings.height + 'px' ) : settings.height;
+            var width = settings.width.indexOf('%') === -1 ? ( settings.width + 'px' ) : settings.width;
+            if(settings.height){
+                chartjs.canvas.parentNode.style.height = height;
+                $('#' + id + ' canvas').css('height', height);
+            }
+            if(settings.width){
+                chartjs.canvas.parentNode.style.width = width;
+                $('#' + id + ' canvas').css('width', width);
+            }
         }
 
         // allow user to extend the settings.
@@ -406,18 +414,32 @@
     });
 
     // front end actions
+    // 'image' is also called from the library
     $('body').on('visualizer:action:specificchart', function(event, v){
+        var id = v.id;
+        if(typeof rendered_charts[id] === 'undefined'){
+            return;
+        }
+        var canvas = $('#' + id + ' canvas');
         switch(v.action){
             case 'print':
-                var id = v.id;
-                if(typeof rendered_charts[id] === 'undefined'){
-                    return;
-                }
-                var canvas = $('#' + id + ' canvas');
                 var win = window.open();
                 win.document.write("<br><img src='" + canvas[0].toDataURL() + "'/>");
                 win.document.close();
                 win.onload = function () { win.print(); setTimeout(win.close, 500); };
+                break;
+            case 'image':
+                var img = canvas[0].toDataURL();
+                if(img !== ''){
+                    var $a = $("<a>"); // jshint ignore:line
+                    $a.attr("href", img);
+                    $("body").append($a);
+                    $a.attr("download", v.dataObj.name);
+                    $a[0].click();
+                    $a.remove();
+                }else{
+                    console.warn("No image generated");
+                }
                 break;
         }
     });

@@ -232,6 +232,8 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 * @access public
 	 */
 	public function fileProvider() {
+		$this->assertFileExists( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples', 'Folder "samples" does not exist' );
+
 		$file = VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'bar.csv';
 		list( $content, $series ) = $this->parseFile( $file );
 
@@ -305,6 +307,8 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 * @access public
 	 */
 	public function urlProvider() {
+		$this->assertFileExists( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples', 'Folder "samples" does not exist' );
+
 		$url  = 'https://demo.themeisle.com/wp-content/plugins/visualizer/samples/bar.csv';
 		$file = download_url( $url );
 		list( $content, $series ) = $this->parseFile( $file );

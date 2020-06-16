@@ -12,6 +12,16 @@ var __visualizer_chart_images   = [];
     var rendered_charts = [];
 
 	function renderChart(id) {
+        var chart = all_charts[id];
+        var hasAnnotation = false;
+        if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined'){
+            hasAnnotation = chart.series.length - chart.settings.series.length > 1;
+        }
+        // re-render the chart only if it doesn't have annotations and it is on the front-end
+        // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
+        if(hasAnnotation){
+            return;
+        }
         renderSpecificChart(id, all_charts[id]);
     }
 
@@ -432,21 +442,34 @@ var __visualizer_chart_images   = [];
     });
 
     // front end actions
+    // 'image' is also called from the library
     $('body').on('visualizer:action:specificchart', function(event, v){
+        var id = v.id;
+        if(typeof rendered_charts[id] === 'undefined'){
+            return;
+        }
+        var arr = id.split('-');
+        var img = __visualizer_chart_images[ arr[0] + '-' + arr[1] ];
         switch(v.action){
             case 'print':
-                var id = v.id;
-                if(typeof rendered_charts[id] === 'undefined'){
-                    return;
-                }
-                var arr = id.split('-');
-                var img = __visualizer_chart_images[ arr[0] + '-' + arr[1] ];
                 // for charts that have no rendered image defined, we print the data instead.
                 var html = v.data;
                 if(img !== ''){
                     html = "<html><body><img src='" + img + "' /></body></html>";
                 }
                 $('body').trigger('visualizer:action:specificchart:defaultprint', {data: html});
+                break;
+            case 'image':
+                if(img !== ''){
+                    var $a = $("<a>"); // jshint ignore:line
+                    $a.attr("href", img);
+                    $("body").append($a);
+                    $a.attr("download", v.dataObj.name);
+                    $a[0].click();
+                    $a.remove();
+                }else{
+                    console.warn("No image generated");
+                }
                 break;
         }
     });
