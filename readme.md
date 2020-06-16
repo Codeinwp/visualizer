@@ -1,5 +1,5 @@
 # Visualizer: Tables and Charts Manager for WordPress # #
-**Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [themeisle](https://profiles.wordpress.org/themeisle), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle), [contactashish13](https://profiles.wordpress.org/contactashish13)  
+**Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [themeisle](https://profiles.wordpress.org/themeisle), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [rozroz](https://profiles.wordpress.org/rozroz), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle)  
 **Tags:** tables, charts, pie, visualization, graphs  
 **Requires at least:** 3.5  
 **Tested up to:** 5.4  
@@ -162,6 +162,19 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 ## Changelog ##
+### 3.4.4 - 2020-06-16  ###
+
+* [Feat] Option to download charts as .png images
+* [Fix] Make UI more intuitive when a chart is missing in the editor
+* [Fix] Clicking Copy chart shows the Copied message multiple times
+* [Fix] Conflict with Modern Events Calendar plugin
+* [Fix] Chart size ( width and height ) options not working for ChartJS charts
+* [Fix] Resizing the window causes annotation-based charts to throw an error
+* [Fix] Remove Inside the Chart option as legend position for Google Pie charts
+* [Fix] Clicking Advanced Options panel breaks Bubble chart
+* [Fix] Missing posts revisions on chart update
+
+
 ### 3.4.3 - 2020-05-04  ###
 
 * [Feat] Improved chart creation UX

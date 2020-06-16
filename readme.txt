@@ -162,6 +162,19 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.4.4 - 2020-06-16  = 
+
+* [Feat] Option to download charts as .png images
+* [Fix] Make UI more intuitive when a chart is missing in the editor
+* [Fix] Clicking Copy chart shows the Copied message multiple times
+* [Fix] Conflict with Modern Events Calendar plugin
+* [Fix] Chart size ( width and height ) options not working for ChartJS charts
+* [Fix] Resizing the window causes annotation-based charts to throw an error
+* [Fix] Remove Inside the Chart option as legend position for Google Pie charts
+* [Fix] Clicking Advanced Options panel breaks Bubble chart
+* [Fix] Missing posts revisions on chart update
+
+
 = 3.4.3 - 2020-05-04  = 
 
 * [Feat] Improved chart creation UX
