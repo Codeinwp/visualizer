@@ -34,10 +34,34 @@ class Visualizer_Module_Upgrade extends Visualizer_Module {
 
 	/**
 	 * All 'dataTable' and 'table' charts to become 'tabular'.
+	 * All charts that do not have a library, to get the default library.
 	 */
 	private static function makeAllTableChartsTabular() {
 		global $wpdb;
 
+		// old table charts may not specify the library.
+		$args = array(
+			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
+			'fields'        => 'ids',
+			'post_status'   => 'publish',
+			'meta_query'    => array(
+				array(
+					'key'       => Visualizer_Plugin::CF_CHART_LIBRARY,
+					'compare'   => 'NOT EXISTS',
+				),
+				array(
+					'key'       => Visualizer_Plugin::CF_CHART_TYPE,
+					'value'     => 'table',
+				),
+			),
+		);
+		$query = new WP_Query( $args );
+		while ( $query->have_posts() ) {
+			$id = $query->next_post();
+			add_post_meta( $id, Visualizer_Plugin::CF_CHART_LIBRARY, 'GoogleCharts' );
+		}
+
+		// make all dataTable and table chart types into tabular.
 		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query(
 			"UPDATE $wpdb->postmeta pm, $wpdb->posts p SET pm.meta_value = 'tabular'
@@ -47,5 +71,6 @@ class Visualizer_Module_Upgrade extends Visualizer_Module {
 			AND pm.meta_value IN ( 'dataTable', 'table' )"
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+
 	}
 }
