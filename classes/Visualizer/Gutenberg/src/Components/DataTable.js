@@ -108,7 +108,7 @@ class DataTables extends Component {
 		const settings = this.props.options;
 
         let renderer = null;
-		if ( 'undefined' === typeof settings.series[index] || 'undefined' === typeof settings.series[index].format ) {
+		if ( 'undefined' === typeof settings.series || 'undefined' === typeof settings.series[index] || 'undefined' === typeof settings.series[index].format ) {
             return renderer;
         }
 
