@@ -65,6 +65,11 @@ class ColumnSettings extends Component {
 				{ Object.keys( settings.series )
 					.map( ( i ) => {
 
+                        // don't show string columns.
+                        if ( 'string' === series[i].type ) {
+                            return null;
+                        }
+
 						return (
 							<PanelBody
 								title={ series[i].label }
