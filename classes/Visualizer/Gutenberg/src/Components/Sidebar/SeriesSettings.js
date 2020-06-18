@@ -140,7 +140,7 @@ class SeriesSettings extends Component {
 
 									) :
 
-									( 'date' === series[i].type ) && (
+									( 0 <= [ 'date', 'datetime', 'timeofday' ].indexOf( series[i].type ) ) && (
 
 										<Fragment>
 
