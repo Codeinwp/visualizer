@@ -54,7 +54,12 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	protected function _renderContent() {
 		echo '<div id="type-picker">';
 		foreach ( $this->types as $type => $array ) {
-			echo '<div class="type-box type-box-', $type, '">';
+			// add classes to each box that identifies the libraries this chart type supports.
+			$lib_classes = '';
+			foreach ( $array['supports'] as $lib ) {
+				$lib_classes .= ' type-lib-' . str_replace( ' ', '', $lib );
+			}
+			echo '<div class="type-box type-box-', $type, $lib_classes, '">';
 			if ( ! $array['enabled'] ) {
 				echo "<a class='pro-upsell' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
 				echo "<span class='visualizder-pro-label'>" . __( 'PREMIUM', 'visualizer' ) . '</span>';
