@@ -115,7 +115,11 @@ class Sidebar extends Component {
 					<ComboSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'timeline', 'bubble', 'gauge', 'geo', 'pie', 'dataTable' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'timeline', 'bubble', 'gauge', 'geo', 'pie', 'tabular', 'dataTable' ].indexOf( type ) ) && (
+					<SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
+				) }
+
+				{ ( 'tabular' === type && 'GoogleCharts' === library ) && (
 					<SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
