@@ -265,7 +265,7 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
 });
 
 // create the first N charts available
-Cypress.Commands.add( 'create_available_charts', ($num) => {
+Cypress.Commands.add( 'create_available_charts', ($num, $lib = '') => {
     var charts = [];
     for(var i = 1; i <= parseInt($num); i++){
         charts.push(i);
@@ -283,10 +283,22 @@ Cypress.Commands.add( 'create_available_charts', ($num) => {
         .then(function ($iframe) {
             const $body = $iframe.contents().find('body');
 
-            // select the chart.
-            cy.wrap($body).find('#type-picker .type-box:nth-child(' + chart + ') .type-radio').check();
-            // create the chart.
-            cy.wrap($body).find('#toolbar input[type="submit"]').click();
+            cy.wrap($body).then(function($body){
+                // if we are targeting a particular library, remove charts that do not support it
+                // like Google may support 2nd, 3rd and 10th charts - so we will remove all but these.
+                if('' !== $lib){
+                    $body.find('#type-picker .type-box:not(.type-lib-' + $lib + ')').remove();
+                }
+                // select the chart.
+                cy.wrap($body).find('#type-picker .type-box:nth-child(' + chart + ') .type-radio').check();
+
+                // if we are targeting a particular library, then select it in the toolbar
+                if('' !== $lib){
+                    cy.wrap($body).find('.viz-select-library').select($lib);
+                }
+                // create the chart.
+                cy.wrap($body).find('#toolbar input[type="submit"]').click();
+            });
         });
 
         cy.wait( Cypress.env('wait') );
@@ -299,7 +311,6 @@ Cypress.Commands.add( 'create_available_charts', ($num) => {
         });
 
         cy.wait( Cypress.env('wait') );
-
         // verify that the chart was created and the count increased by 1
         cy.visit(Cypress.env('urls').library ).then(() => {
             cy.get('#visualizer-library .visualizer-chart').should('have.length', chart);

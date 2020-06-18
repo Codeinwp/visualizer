@@ -12,8 +12,12 @@ describe('Test Free - gutenberg', function() {
     it.skip('temp test', function() {
     });
 
-    it('Create all charts', function() {
-        cy.create_available_charts(Cypress.env('chart_types').free);
+    it('Create GoogleCharts charts', function() {
+        cy.create_available_charts(Cypress.env('chart_types').free, 'GoogleCharts');
+    });
+
+    it('Create DataTable charts', function() {
+        cy.create_available_charts(1, 'DataTable');
     });
 
     it('Verify insertion of charts', function() {
@@ -21,10 +25,9 @@ describe('Test Free - gutenberg', function() {
 
         cy.clear_welcome();
 
-        var charts = [];
-        for(var i = 1; i <= parseInt(Cypress.env('chart_types').free); i++){
-            charts.push(i);
-        }
+        var charts = Array.from({ length: parseInt(Cypress.env('chart_types').free) + 1 }, function(_item, index) {
+            return index + 1;
+        });
 
         cy.wrap(charts).each((value, i, array) => {
             // insert a visualizer block
@@ -49,6 +52,11 @@ describe('Test Free - gutenberg', function() {
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + (i + 1) + ') .visualizer-settings__charts-controls').click();
                 
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').should('have.length', 1);
+
+                // log a line to show which chart we are trying to insert.
+                cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').then( ($chart_block) => {
+                    cy.log('Processing chart: ' + Cypress.$($chart_block).attr('data-chart-type'));
+                });
 
                 // chart and footer divs
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 2);
