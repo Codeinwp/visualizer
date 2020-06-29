@@ -25,6 +25,7 @@ services:
        - ~/wpcore:/var/www/html/
        - ./wp-content:/var/www/html/wp-content/
        - .:/var/www/html/wp-content/plugins/visualizer/
+       - ./bin/:/var/www/html/ti-bin/
     restart: always
     environment:
       WORDPRESS_DB_NAME: wordpress

@@ -1,4 +1,4 @@
-describe('Test Free - gutenberg', function() {
+describe('Test Free - gutenberg (datatable)', function() {
     before(function(){
         Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
@@ -12,8 +12,8 @@ describe('Test Free - gutenberg', function() {
     it.skip('temp test', function() {
     });
 
-    it('Create charts', function() {
-        cy.create_available_charts(Cypress.env('chart_types').free, 'GoogleCharts');
+    it('Create charts charts', function() {
+        cy.create_available_charts(1, 'DataTable');
     });
 
     it('Verify insertion of charts', function() {
@@ -21,7 +21,7 @@ describe('Test Free - gutenberg', function() {
 
         cy.clear_welcome();
 
-        var charts = Array.from({ length: parseInt(Cypress.env('chart_types').free) }, function(_item, index) {
+        var charts = Array.from({ length: 1 }, function(_item, index) {
             return index + 1;
         });
 

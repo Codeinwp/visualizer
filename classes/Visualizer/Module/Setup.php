@@ -204,6 +204,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return;
 		}
 
+		// fire any upgrades necessary.
+		Visualizer_Module_Upgrade::upgrade();
+
 		if ( get_option( 'visualizer-activated' ) ) {
 			delete_option( 'visualizer-activated' );
 			if ( ! headers_sent() ) {
