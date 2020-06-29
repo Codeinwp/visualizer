@@ -241,4 +241,3 @@
         return $(this);
     };
 })(jQuery);
-
