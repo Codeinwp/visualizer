@@ -115,8 +115,6 @@
             localStorage.removeItem( 'viz-facade-loaded' );
         }, 2000);
         
-        $('body').trigger('visualizer:render:chart:start', visualizer);
-
         initChartDisplay();
         initActionsButtons(visualizer);
         registerDefaultActions();
