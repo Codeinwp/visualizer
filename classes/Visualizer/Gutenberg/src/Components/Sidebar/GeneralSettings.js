@@ -34,6 +34,18 @@ class GeneralSettings extends Component {
 
 		tooltipTriggers[2] = { label: __( 'The tooltip will not be displayed' ), value: 'none' };
 
+        let positions = [
+            { label: __( 'Left of the chart' ), value: 'left' },
+            { label: __( 'Right of the chart' ), value: 'right' },
+            { label: __( 'Above the chart' ), value: 'top' },
+            { label: __( 'Below the chart' ), value: 'bottom' },
+            { label: __( 'Omit the legend' ), value: 'none' }
+        ];
+
+        if ( 'pie' !== type ) {
+            positions.push({ label: __( 'Inside the chart' ), value: 'in' });
+        }
+
 		return (
 			<PanelBody
 				title={ __( 'General Settings' ) }
@@ -178,14 +190,7 @@ class GeneralSettings extends Component {
 							label={ __( 'Position' ) }
 							help={ __( 'Determines where to place the legend, compared to the chart area.' ) }
 							value={ settings.legend.position ? settings.legend.position : 'right' }
-							options={ [
-								{ label: __( 'Left of the chart' ), value: 'left' },
-								{ label: __( 'Right of the chart' ), value: 'right' },
-								{ label: __( 'Above the chart' ), value: 'top' },
-								{ label: __( 'Below the chart' ), value: 'bottom' },
-								{ label: __( 'Inside the chart' ), value: 'in' },
-								{ label: __( 'Omit the legend' ), value: 'none' }
-							] }
+							options={ positions }
 							onChange={ e => {
 								if ( 'pie' !== type ) {
 									let axis = 'left' === e ? 1 : 0;
