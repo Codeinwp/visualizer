@@ -151,6 +151,11 @@ class Visualizer_Gutenberg_Block {
 	 * Gutenberg Block Callback Function
 	 */
 	public function gutenberg_block_callback( $atts ) {
+		// no id, no fun.
+		if ( ! isset( $atts['id'] ) ) {
+			return '';
+		}
+
 		$atts = shortcode_atts(
 			array(
 				'id'     => false,
