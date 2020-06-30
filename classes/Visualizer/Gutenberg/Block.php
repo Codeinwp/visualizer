@@ -553,7 +553,9 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		if ( $data['id'] && ! is_wp_error( $data['id'] ) ) {
-
+			if ( get_post_type( $data['id'] ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
+				return new WP_Error( 'invalid_post_type', 'Invalid post type.' );
+			}
 			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
 			$source_type = sanitize_text_field( $data['visualizer-source'] );
 

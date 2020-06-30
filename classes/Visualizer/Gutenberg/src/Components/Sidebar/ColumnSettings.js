@@ -28,6 +28,10 @@ class ColumnSettings extends Component {
 		 */
 		const settings = this.props.chart['visualizer-settings'];
 
+        if ( ! settings.series ) {
+            return;
+        }
+
 		Object.keys( settings.series )
 			.map( i => {
 				if ( settings.series[i] !== undefined ) {
@@ -47,6 +51,10 @@ class ColumnSettings extends Component {
 
 		const type = this.props.chart['visualizer-chart-type'];
 
+        if ( ! settings.series ) {
+            return null;
+        }
+
 		return (
 			<PanelBody
 				title={ __( 'Column Settings' ) }
@@ -56,6 +64,12 @@ class ColumnSettings extends Component {
 
 				{ Object.keys( settings.series )
 					.map( ( i ) => {
+
+                        // don't show string columns.
+                        if ( 'string' === series[i].type ) {
+                            return null;
+                        }
+
 						return (
 							<PanelBody
 								title={ series[i].label }
@@ -63,7 +77,7 @@ class ColumnSettings extends Component {
 								initialOpen={ false }
 							>
 
-								{ ( 'date' === series[i].type || 'datetime' === series[i].type || 'timeofday' === series[i].type ) && (
+								{ 0 <= [ 'date', 'datetime', 'timeofday' ].indexOf( series[i].type ) && (
 									<Fragment>
 										<TextControl
 											label={ __( 'Display Date Format' ) }
@@ -131,6 +145,7 @@ class ColumnSettings extends Component {
 											help={ __( 'Round values to how many decimal places?' ) }
 											value={ settings.series[i].format ? settings.series[i].format.precision : '' }
 											type="number"
+                                            min="0"
 											onChange={ e => {
 												if ( 100 < e ) {
 													return;
@@ -170,7 +185,7 @@ class ColumnSettings extends Component {
 									</Fragment>
 								) }
 
-								{ ( 'boolean' === series[i].type ) && ( 'dataTable' === type ) && (
+								{ ( 'boolean' === series[i].type ) && (
 									<Fragment>
 										<TextControl
 											label={ __( 'Truthy value' ) }

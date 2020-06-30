@@ -46,26 +46,25 @@ class DataTables extends Component {
 
 	initDataTable( tableColumns, tableRow ) {
 		const settings = this.props.options;
-
 		const columns = tableColumns.map( ( i, index ) => {
 			let type = i.type;
 
 			switch ( i.type ) {
-			case 'number':
-				type = 'num';
-				break;
-			case 'date':
-			case 'datetime':
-			case 'timeofday':
-				type = 'date';
-				break;
+                case 'number':
+                    type = 'num';
+                    break;
+                case 'date':
+                case 'datetime':
+                case 'timeofday':
+                    type = 'date';
+                    break;
 			}
 
 			return {
 				title: i.label,
 				data: i.label,
 				type: type,
-				render: this.dataRenderer( data, type, index )
+				render: this.dataRenderer( type, index )
 			};
 		});
 
@@ -94,9 +93,9 @@ class DataTables extends Component {
 			pagingType: settings.pagingType,
 			ordering: 'false' === settings.ordering_bool ? false : true,
 			fixedHeader: 'true' === settings.fixedHeader_bool ? true : false,
-			scrollCollapse: this.props.chartsScreen && true || 'true' === settings.scrollCollapse_bool ? true : false,
+			scrollCollapse: !! this.props.chartsScreen || 'true' === settings.scrollCollapse_bool ? true : false,
 			scrollY: this.props.chartsScreen && 180 || ( 'true' === settings.scrollCollapse_bool && Number( settings.scrollY_int ) || false ),
-			responsive: this.props.chartsScreen && true || 'true' === settings.responsive_bool ? true : false,
+			responsive: !! this.props.chartsScreen || 'true' === settings.responsive_bool ? true : false,
 			searching: false,
 			select: false,
 			lengthChange: false,
@@ -105,61 +104,58 @@ class DataTables extends Component {
 		});
 	}
 
-	dataRenderer( data, type, index ) {
+	dataRenderer( type, index ) {
 		const settings = this.props.options;
 
-		if ( undefined === settings.series[index]) {
-			return data;
-		}
+        let renderer = null;
+		if ( 'undefined' === typeof settings.series || 'undefined' === typeof settings.series[index] || 'undefined' === typeof settings.series[index].format ) {
+            return renderer;
+        }
 
         switch ( type ) {
             case 'date':
             case 'datetime':
             case 'timeofday':
                 if ( settings.series[index].format && settings.series[index].format.from && settings.series[index].format.to ) {
-                    return jQuery.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
+                    renderer = jQuery.fn.dataTable.render.moment( settings.series[index].format.from, settings.series[index].format.to );
+                } else {
+                    renderer = jQuery.fn.dataTable.render.moment( 'MM-DD-YYYY' );
                 }
-                return jQuery.fn.dataTable.render.moment( 'MM-DD-YYYY' );
                 break;
             case 'num':
                 const parts = [ '', '', '', '', '' ];
-
                 if ( settings.series[index].format.thousands ) {
                     parts[0] = settings.series[index].format.thousands;
                 }
-
                 if ( settings.series[index].format.decimal ) {
                     parts[1] = settings.series[index].format.decimal;
                 }
-
-                if ( settings.series[index].format.precision ) {
+                if ( settings.series[index].format.precision && 0 < parseInt( settings.series[index].format.precision ) ) {
                     parts[2] = settings.series[index].format.precision;
                 }
-
                 if ( settings.series[index].format.prefix ) {
                     parts[3] = settings.series[index].format.prefix;
                 }
-
                 if ( settings.series[index].format.suffix ) {
                     parts[4] = settings.series[index].format.suffix;
                 }
-                return jQuery.fn.dataTable.render.number( ...parts );
+                renderer = jQuery.fn.dataTable.render.number( ...parts );
                 break;
             case 'boolean':
                 jQuery.fn.dataTable.render.extra = function( data, type, row ) {
-                    if ( ( true === data || 'true' === data ) && 'undefined' !== typeof settings.series[index].format && '' !== settings.series[index].format.truthy ) {
+                    if ( ( true === data || 'true' === data ) && '' !== settings.series[index].format.truthy ) {
                         return settings.series[index].format.truthy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
                     }
-                    if ( ( false === data || 'false' === data ) && 'undefined' !== typeof settings.series[index].format && '' !== settings.series[index].format.falsy ) {
+                    if ( ( false === data || 'false' === data ) && '' !== settings.series[index].format.falsy ) {
                         return settings.series[index].format.falsy.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
                     }
                     return data;
                 };
-                return jQuery.fn.dataTable.render.extra;
+                renderer = jQuery.fn.dataTable.render.extra;
                 break;
 		}
 
-		return data;
+		return renderer;
 	}
 
 	render() {

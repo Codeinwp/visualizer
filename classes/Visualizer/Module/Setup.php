@@ -204,6 +204,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return;
 		}
 
+		// fire any upgrades necessary.
+		Visualizer_Module_Upgrade::upgrade();
+
 		if ( get_option( 'visualizer-activated' ) ) {
 			delete_option( 'visualizer-activated' );
 			if ( ! headers_sent() ) {
@@ -298,7 +301,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		$error      = $source->get_error();
 		if ( empty( $error ) ) {
-			add_filter( 'wp_revisions_to_keep', '__return_false' );
+			$this->disableRevisionsTemporarily();
 			if ( $load_series ) {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 			}

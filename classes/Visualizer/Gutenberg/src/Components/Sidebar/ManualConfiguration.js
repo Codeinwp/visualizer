@@ -41,7 +41,7 @@ class ManualConfiguration extends Component {
 
 		const settings = this.props.chart['visualizer-settings'];
 
-		if ( 0 <= [ 'gauge', 'table', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+		if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
 			chart = this.props.chart['visualizer-chart-type'];
 		} else {
 			chart = `${ this.props.chart['visualizer-chart-type'] }chart`;

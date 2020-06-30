@@ -107,11 +107,15 @@ class Charts extends Component {
 											title = `#${charts[i].id}`;
 										}
 
-										if ( 0 <= [ 'gauge', 'table', 'timeline', 'dataTable' ].indexOf( data['visualizer-chart-type']) ) {
-											if ( 'dataTable' === data['visualizer-chart-type']) {
+										if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
+											if ( 'DataTable' === data['visualizer-chart-library']) {
 												chart = data['visualizer-chart-type'];
 											} else {
-												chart = startCase( data['visualizer-chart-type']);
+                                                chart = data['visualizer-chart-type'];
+                                                if ( 'tabular' === chart ) {
+                                                    chart = 'table';
+                                                }
+												chart = startCase( chart );
 											}
 										} else {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
@@ -134,13 +138,13 @@ class Charts extends Component {
 													{ title }
 												</div>
 
-												{ ( 'dataTable' === chart ) ? (
+												{ ( 'DataTable' === data['visualizer-chart-library']) ? (
 													<DataTable
 														id={ charts[i].id }
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														chartsScreen={ true }
-														options={ filterCharts( data['visualizer-settings']) }
+														options={ data['visualizer-settings'] }
 													/>
 												) : ( '' !== data['visualizer-data-exploded'] ? (
 													<Chart

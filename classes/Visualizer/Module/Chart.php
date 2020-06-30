@@ -684,7 +684,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 				// ensure that a revision is not created. If a revision is created it will have the proper data and the parent of the revision will have default data.
 				// we do not want any difference in data so disable revisions temporarily.
-				add_filter( 'wp_revisions_to_keep', '__return_false' );
+				$this->disableRevisionsTemporarily();
+
 				wp_update_post( $this->_chart->to_array() );
 			}
 			// save meta data only when it is NOT being canceled.
