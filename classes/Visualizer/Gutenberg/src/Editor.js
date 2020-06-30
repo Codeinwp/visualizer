@@ -112,7 +112,7 @@ class Editor extends Component {
 		this.props.setAttributes({
 			id,
 			route: 'chartSelect',
-            lazy
+            lazy: -1
 		});
 	}
 
