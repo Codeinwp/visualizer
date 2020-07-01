@@ -132,7 +132,8 @@
      * If an `id` is provided, that particular chart will load.
      */
     function showChart(id) {
-        var viz = visualizer;
+        // clone the visualizer object so that the original object is not affected.
+        var viz = Object.assign({}, visualizer);
         if(id){
             viz.id = id;
         }
