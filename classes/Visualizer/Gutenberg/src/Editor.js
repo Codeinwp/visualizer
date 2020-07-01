@@ -111,7 +111,8 @@ class Editor extends Component {
 
 		this.props.setAttributes({
 			id,
-			route: 'chartSelect'
+			route: 'chartSelect',
+            lazy: -1
 		});
 	}
 
@@ -520,6 +521,7 @@ class Editor extends Component {
 				{ ( 'chartSelect' === this.state.route && null !== this.state.chart ) &&
 					<ChartSelect
 						id={ this.props.attributes.id }
+						attributes={ this.props.attributes }
 						chart={ this.state.chart }
 						editSettings={ this.editSettings }
 						editPermissions={ this.editPermissions }

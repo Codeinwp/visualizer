@@ -5,6 +5,13 @@
 (function($, visualizer){
 
     function initActionsButtons(v) {
+        if($('a.visualizer-chart-shortcode').length > 0) {
+            var clipboard1 = new Clipboard('a.visualizer-chart-shortcode'); // jshint ignore:line
+            clipboard1.on('success', function(e) {
+                window.alert(v.i10n['copied']);
+            });
+        }
+
         if($('a.visualizer-action[data-visualizer-type=copy]').length > 0) {
             $('a.visualizer-action[data-visualizer-type=copy]').on('click', function(e) {
                 e.preventDefault();
@@ -108,10 +115,67 @@
             localStorage.removeItem( 'viz-facade-loaded' );
         }, 2000);
         
-        $('body').trigger('visualizer:render:chart:start', visualizer);
+        initChartDisplay();
         initActionsButtons(visualizer);
         registerDefaultActions();
     });
+
+    function initChartDisplay() {
+        if(visualizer.is_front == true){ // jshint ignore:line
+            displayChartsOnFrontEnd();
+        }else{
+            showChart();
+        }
+    }
+
+    /**
+     * If an `id` is provided, that particular chart will load.
+     */
+    function showChart(id) {
+        // clone the visualizer object so that the original object is not affected.
+        var viz = Object.assign({}, visualizer);
+        if(id){
+            viz.id = id;
+        }
+        $('body').trigger('visualizer:render:chart:start', viz);
+    }
+
+    function displayChartsOnFrontEnd() {
+        // display all charts that are NOT to be lazy-loaded.
+        $('div.visualizer-front:not(.visualizer-lazy)').each(function(index, element){
+            var id = $(element).attr('id');
+            showChart(id);
+        });
+
+        // interate through all charts that are to be lazy-loaded and observe each one.
+        $('div.visualizer-front.visualizer-lazy').each(function(index, element){
+            var id = $(element).attr('id');
+            var limit = $(element).attr('data-lazy-limit');
+            if(!limit){
+                limit = 300;
+            }
+            var target = document.querySelector('#' + id);
+
+            // configure the intersection observer instance
+            var intersectionObserverOptions = {
+              root: null,
+              rootMargin: limit + 'px',
+              threshold: 0
+            };
+            
+            var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            observer.unobserve(target);
+                            showChart($(entry.target).attr('id'));
+                        }
+                    });
+            }, intersectionObserverOptions);
+
+            // start observing.
+            observer.observe(target);
+        });
+    }
 
     function registerDefaultActions(){
         $('body').off('visualizer:action:specificchart:defaultprint').on('visualizer:action:specificchart:defaultprint', function(event, v){

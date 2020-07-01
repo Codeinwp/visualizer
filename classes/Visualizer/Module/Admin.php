@@ -598,6 +598,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function enqueueLibraryScripts( $suffix ) {
 		if ( $suffix === $this->_libraryPage ) {
+			wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
 			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
 			wp_enqueue_media();
@@ -607,6 +608,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				array(
 					'jquery',
 					'media-views',
+					'visualizer-clipboardjs',
 				),
 				Visualizer_Plugin::VERSION,
 				true
@@ -953,7 +955,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 				'page_type' => 'library',
 				'is_front'  => false,
-				'i10n' => array(
+				'i10n'          => array(
+					'copied'        => __( 'The shortcode has been copied to your clipboard. Hit Ctrl-V/Cmd-V to paste it.', 'visualizer' ),
 					'conflict' => __( 'We have detected a potential conflict with another component that prevents Visualizer from functioning properly. Please disable any of the following components if they are activated on your instance: Modern Events Calendar plugin, Acronix plugin. In case the aforementioned components are not activated or you continue to see this error message, please disable all other plugins and enable them one by one to find out the component that is causing the conflict.', 'visualizer' ),
 				),
 			)

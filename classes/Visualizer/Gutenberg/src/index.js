@@ -39,6 +39,10 @@ export default registerBlockType( 'visualizer/chart', {
 		id: {
 			type: 'number'
 		},
+		lazy: {
+            default: '-1',
+			type: 'string'
+		},
 		route: {
 			type: 'string'
 		}
