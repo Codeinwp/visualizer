@@ -1,4 +1,11 @@
 
+ ### v3.4.5 - 2020-07-08 
+ **Changes:** 
+ * [Feat] New Google Table Charts
+* [Feat] Option for lazy loading Google Charts
+* [Feat] Option to easily copy chart shortcode code
+* [Fix] Remove Inside the Chart option for the legend position for Google Pie charts
+ 
  ### v3.4.4 - 2020-06-16 
  **Changes:** 
  * [Feat] Option to download charts as .png images
