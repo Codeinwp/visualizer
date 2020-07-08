@@ -107,12 +107,22 @@
 	background-position: -46px -64px;
 }
 
+.visualizer-nochart-shortcode,
+.visualizer-chart-shortcode {
+    background-position: -143px -126px;
+    float: left;
+}
+
+.visualizer-nochart-image,
 .visualizer-chart-image {
 	background-position: -206px -129px;
 }
 
 .visualizer-nochart-clone,
 .visualizer-nochart-delete,
+.visualizer-nochart-shortcode,
+.visualizer-nochart-export,
+.visualizer-nochart-image,
 .visualizer-nochart-edit {
 	opacity: 0.5;
 

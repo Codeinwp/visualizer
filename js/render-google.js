@@ -46,6 +46,9 @@ var __visualizer_chart_images   = [];
 		render = objects[id] || null;
 		if (!render) {
             switch (chart.type) {
+                case "tabular":
+                    render = "Table";
+                    break;
                 case "gauge":
                 case "table":
                 case "timeline":
@@ -134,6 +137,7 @@ var __visualizer_chart_images   = [];
 				}
 				break;
 			case 'table':
+			case 'tabular':
                 if (parseInt(settings['pagination']) !== 1)
                 {
                     delete settings['pageSize'];
@@ -410,6 +414,10 @@ var __visualizer_chart_images   = [];
                     case 'geo':
                         $type = 'geochart';
                         break;
+                    case 'tabular':
+                    case 'table':
+                        $type = 'table';
+                        break;
                     case 'dataTable':
                     case 'polarArea':
                     case 'radar':
@@ -427,7 +435,11 @@ var __visualizer_chart_images   = [];
         google.charts.setOnLoadCallback(function() {
             gv = google.visualization;
             all_charts = v.charts;
-            render();
+            if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
+                renderChart(v.id);
+            } else {
+                render();
+            }
         });
     });
 

@@ -241,11 +241,14 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		global $wp_version;
 		$atts = shortcode_atts(
 			array(
-				'id'     => false, // chart id
-				'class'  => false, // chart class
-				'series' => false, // series filter hook
-				'data'   => false, // data filter hook
-				'settings'   => false, // data filter hook
+				// chart id
+				'id'     => false,
+				// chart class
+				'class'  => false,
+				// for lazy load
+				// set 'yes' to use the default intersection limit (300px)
+				// OR set a number (e.g. 700) to use 700px as the intersection limit
+				'lazy' => apply_filters( 'visualizer_lazy_by_default', false, $atts['id'] ),
 			),
 			$atts
 		);
@@ -255,6 +258,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
+		// do not show the chart?
 		if ( ! apply_filters( 'visualizer_pro_show_chart', true, $atts['id'] ) ) {
 			return '';
 		}
@@ -268,8 +272,18 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
-		$class  = $defaultClass . ' ' . $class . ' ' . 'visualizer-front-' . $atts['id'];
-		$class = ! empty( $class ) ? ' class="' . trim( $class ) . '"' : '';
+
+		$lazyClass = $atts['lazy'] === 'yes' || ctype_digit( $atts['lazy'] ) ? 'visualizer-lazy' : '';
+
+		$class  = sprintf( '%s %s %s %s', $defaultClass, $class, 'visualizer-front-' . $atts['id'], $lazyClass );
+		$attributes = array();
+		if ( ! empty( $class ) ) {
+			$attributes['class'] = trim( $class );
+		}
+
+		if ( ctype_digit( $atts['lazy'] ) ) {
+			$attributes['data-lazy-limit'] = $atts['lazy'];
+		}
 
 		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 
@@ -283,20 +297,12 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		// handle series filter hooks
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-		if ( ! empty( $atts['series'] ) ) {
-			$series = apply_filters( $atts['series'], $series, $chart->ID, $type );
-		}
+
 		// handle settings filter hooks
 		$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
-		if ( ! empty( $atts['settings'] ) ) {
-			$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
-		}
 
 		// handle data filter hooks
 		$data   = self::get_chart_data( $chart, $type );
-		if ( ! empty( $atts['data'] ) ) {
-			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
-		}
 
 		$css        = '';
 		$arguments  = $this->get_inline_custom_css( $id, $settings );
@@ -311,7 +317,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
 		if ( $amp && $amp->is_amp() ) {
-			return '<div id="' . $id . '"' . $class . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
+			return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
 		}
 
 		// add chart to the array
@@ -355,8 +361,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$actions_div            .= $css;
 
-		foreach ( $this->_charts as $id => $attributes ) {
-			$library = $attributes['library'];
+		foreach ( $this->_charts as $id => $array ) {
+			$library = $array['library'];
 			wp_register_script(
 				"visualizer-render-$library",
 				VISUALIZER_ABSURL . 'js/render-facade.js',
@@ -385,7 +391,26 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// return placeholder div
-		return $actions_div . '<div id="' . $id . '"' . $class . '></div>' . $this->addSchema( $chart->ID );
+		return $actions_div . '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '></div>' . $this->addSchema( $chart->ID );
+	}
+
+	/**
+	 * Converts the array of attributes to a string of HTML attributes.
+	 *
+	 * @since ?
+	 *
+	 * @access private
+	 */
+	private function getHtmlAttributes( $attributes ) {
+		$string = '';
+		if ( ! $attributes ) {
+			return $string;
+		}
+
+		foreach ( $attributes as $name => $value ) {
+			$string .= sprintf( '%s="%s"', esc_attr( $name ), esc_attr( $value ) );
+		}
+		return $string;
 	}
 
 	/**

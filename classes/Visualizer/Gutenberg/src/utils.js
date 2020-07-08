@@ -15,6 +15,12 @@ export const formatDate = ( data ) => {
 };
 
 // A fork of deep-compact package as it had some issues
+// NOTE: This method is likely to create problems.
+// Problem Scenario #1:
+// - A table has 5 columns (series). Say the 1st column is Date and others are Numbers.
+// - If the 1st columns format (series.format) is provided, DataTable.js gets 6 (0-5) series.
+// - BUT if the 1st columns format (series.format) is empty, DataTable.js gets 5 (1-4) series.
+// That is why when sending options to DataTable.js, filterChart method has not been used.
 const notEmpty = value => {
 	let key;
 

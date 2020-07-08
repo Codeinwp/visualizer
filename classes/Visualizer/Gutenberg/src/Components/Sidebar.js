@@ -2,6 +2,7 @@
  * External dependencies
  */
 import GeneralSettings from './Sidebar/GeneralSettings.js';
+import InstanceSettings from './Sidebar/InstanceSettings.js';
 import HorizontalAxisSettings from './Sidebar/HorizontalAxisSettings.js';
 import VerticalAxisSettings from './Sidebar/VerticalAxisSettings.js';
 import PieSettings from './Sidebar/PieSettings.js';
@@ -42,17 +43,20 @@ class Sidebar extends Component {
 	render() {
 
 		const type = this.props.chart['visualizer-chart-type'];
+		const library = this.props.chart['visualizer-chart-library'];
 
 		return (
 			<Fragment>
 
+				<InstanceSettings chart={ this.props.chart } attributes={ this.props.attributes } edit={ this.props.edit } />
+
 				<GeneralSettings chart={ this.props.chart } edit={ this.props.edit } />
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
 					<HorizontalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
 					<VerticalAxisSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
@@ -100,7 +104,7 @@ class Sidebar extends Component {
 					<TimelineSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( 0 <= [ 'table', 'dataTable' ].indexOf( type ) ) && (
+				{ ( 0 <= [ 'tabular', 'dataTable' ].indexOf( type ) ) && (
 					<Fragment>
 
 						<TableSettings chart={ this.props.chart } edit={ this.props.edit } />
@@ -114,7 +118,11 @@ class Sidebar extends Component {
 					<ComboSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'timeline', 'bubble', 'gauge', 'geo', 'pie', 'dataTable' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'timeline', 'bubble', 'gauge', 'geo', 'pie', 'tabular', 'dataTable' ].indexOf( type ) ) && (
+					<SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
+				) }
+
+				{ ( 'tabular' === type && 'GoogleCharts' === library ) && (
 					<SeriesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
@@ -127,17 +135,17 @@ class Sidebar extends Component {
 					<SlicesSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( 0 <= [ 'dataTable' ].indexOf( type ) ) && (
+				{ ( 'DataTable' === library ) && (
 					<ColumnSettings chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
-				{ ( -1 >= [ 'dataTable' ].indexOf( type ) ) && (
+				{ ( 'DataTable' !== library ) && (
 					<LayoutAndChartArea chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 
 				<FrontendActions chart={ this.props.chart } edit={ this.props.edit } />
 
-				{ ( -1 >= [ 'dataTable' ].indexOf( type ) ) && (
+				{ ( 'DataTable' !== library ) && (
 					<ManualConfiguration chart={ this.props.chart } edit={ this.props.edit } />
 				) }
 			</Fragment>

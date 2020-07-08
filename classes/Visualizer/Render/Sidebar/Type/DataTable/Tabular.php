@@ -22,11 +22,9 @@
 /**
  * Class for datatables.net table chart sidebar settings.
  *
- * THIS IS ONLY FOR BACKWARD COMPATIBILITY ON DEV SYSTEMS. CAN BE REMOVED IN A FUTURE RELEASE.
- *
  * @since 1.0.0
  */
-class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Render_Sidebar {
+class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render_Sidebar {
 
 
 	/**
@@ -479,22 +477,6 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					isset( $this->series[ $index ]['format']['from'] ) ? $this->series[ $index ]['format']['from'] : '',
 					sprintf( esc_html__( 'What format is the source date in? Similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>' ),
 					'YYYY-MM-DD'
-				);
-				break;
-			case 'boolean':
-				self::_renderTextItem(
-					esc_html__( 'Truthy value', 'visualizer' ),
-					'series[' . $index . '][format][truthy]',
-					isset( $this->series[ $index ]['format']['truthy'] ) ? $this->series[ $index ]['format']['truthy'] : '',
-					sprintf( esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is true. e.g. %1$s (Code: %2$s) instead of true', 'visualizer' ), '&#10004;', '&amp;#10004;' ),
-					''
-				);
-				self::_renderTextItem(
-					esc_html__( 'Falsy value', 'visualizer' ),
-					'series[' . $index . '][format][falsy]',
-					isset( $this->series[ $index ]['format']['falsy'] ) ? $this->series[ $index ]['format']['falsy'] : '',
-					sprintf( esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is false. e.g. %1$s (Code: %2$s) instead of false', 'visualizer' ), '&#10006;', '&amp;#10006;' ),
-					''
 				);
 				break;
 		}

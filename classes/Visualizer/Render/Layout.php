@@ -599,7 +599,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		$chart_id = $args[1];
 		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 		switch ( $type ) {
-			case 'dataTable':
+			case 'tabular':
 				$type = 'table';
 				break;
 			case 'polarArea':

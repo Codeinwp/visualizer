@@ -80,7 +80,7 @@ class Visualizer_Module {
 	 */
 	public function onShutdown() {
 		$error = error_get_last();
-		if ( $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
+		if ( $error && $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Critical error %s', print_r( $error, true ) ), 'error', __FILE__, __LINE__ );
 		}
 	}
@@ -546,6 +546,9 @@ class Visualizer_Module {
 		$name   = $this->load_chart_class_name( $chart_id );
 		$class  = null;
 		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
+			if ( 'Visualizer_Render_Sidebar_Type_DataTable_DataTable' === $name ) {
+				$name = 'Visualizer_Render_Sidebar_Type_DataTable_Tabular';
+			}
 			$class  = new $name;
 		}
 

@@ -61,11 +61,15 @@ class ChartSelect extends Component {
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
 
-		if ( 0 <= [ 'gauge', 'table', 'timeline', 'dataTable' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
-			if ( 'dataTable' === data['visualizer-chart-type']) {
+		if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+			if ( 'DataTable' === data['visualizer-chart-library']) {
 				chart = data['visualizer-chart-type'];
 			} else {
-				chart = startCase( this.props.chart['visualizer-chart-type']);
+                chart = this.props.chart['visualizer-chart-type'];
+                if ( 'tabular' === chart ) {
+                    chart = 'table';
+                }
+                chart = startCase( chart );
 			}
 		} else {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
@@ -134,7 +138,7 @@ class ChartSelect extends Component {
 						/>
 
 						{ 'showAdvanced' === this.state.route &&
-							<Sidebar chart={ this.props.chart } edit={ this.props.editSettings } />
+							<Sidebar chart={ this.props.chart } attributes={ this.props.attributes } edit={ this.props.editSettings } />
 						}
 
 						{ 'showPermissions' === this.state.route &&
@@ -147,7 +151,7 @@ class ChartSelect extends Component {
 
 					{ ( null !== this.props.chart ) &&
 
-						( 'dataTable' === chart ) ? (
+						( 'DataTable' === data['visualizer-chart-library']) ? (
 							<DataTable
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
