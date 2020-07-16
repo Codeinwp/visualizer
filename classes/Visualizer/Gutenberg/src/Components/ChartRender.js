@@ -7,7 +7,7 @@ import DataTable from './DataTable.js';
 
 import merge from 'merge';
 
-import { compact, formatDate, isValidJSON } from '../utils.js';
+import { compact, formatDate, isValidJSON, formatData } from '../utils.js';
 
 /**
  * WordPress dependencies
@@ -97,6 +97,7 @@ class ChartRender extends Component {
 										compact( this.props.chart['visualizer-settings'])
 								}
 								height="500px"
+                                formatters={ formatData( data ) }
 							/>
                         ) : (
 							<Chart
@@ -109,6 +110,7 @@ class ChartRender extends Component {
 										compact( this.props.chart['visualizer-settings'])
 								}
 								height="500px"
+                                formatters={ formatData( data ) }
 							/>
 						) ) }
 
