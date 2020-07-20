@@ -445,7 +445,8 @@ class Visualizer_Gutenberg_Block {
 						'read'          => 'all',
 						'edit'          => 'roles',
 						'edit-specific' => array( 'administrator' ),
-				), );
+				),
+				);
 			}
 
 			$data['visualizer-permissions'] = $permissions;
