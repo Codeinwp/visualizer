@@ -440,9 +440,16 @@ class Visualizer_Gutenberg_Block {
 		if ( Visualizer_Module::is_pro() ) {
 			$permissions = get_post_meta( $post_id, Visualizer_PRO::CF_PERMISSIONS, true );
 
-			if ( ! empty( $permissions ) ) {
-				$data['visualizer-permissions'] = $permissions;
+			if ( empty( $permissions ) ) {
+				$permissions = array( 'permissions' => array(
+						'read'          => 'all',
+						'edit'          => 'roles',
+						'edit-specific' => array( 'administrator' ),
+				),
+				);
 			}
+
+			$data['visualizer-permissions'] = $permissions;
 		}
 
 		return $data;
