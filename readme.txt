@@ -48,7 +48,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 >
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
-The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="nofollow">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
+The plugins works perfectly with the all <a href="https://justfreethemes.com/" rel="nofollow">free</a> or <a href="https://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
 
 
  = See how Visualizer can integrate with your website  =
