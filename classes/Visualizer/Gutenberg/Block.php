@@ -352,6 +352,12 @@ class Visualizer_Gutenberg_Block {
 		// handle data filter hooks
 		$data['visualizer-data'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( get_the_content( $post_id ) ) ), $post_id, $data['visualizer-chart-type'] );
 
+		// we are going to format only for tabular charts, because we are not sure of the effect on others.
+		// this is to solve the case where boolean data shows up as all-ticks on gutenberg.
+		if ( in_array( $data['visualizer-chart-type'], array( 'tabular' ), true ) ) {
+			$data['visualizer-data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
+		}
+
 		$data['visualizer-data-exploded'] = '';
 		// handle annotations for google charts
 		if ( 'GoogleCharts' === $library ) {
