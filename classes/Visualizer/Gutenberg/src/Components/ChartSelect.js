@@ -23,7 +23,7 @@ import PanelButton from './PanelButton.js';
 
 import merge from 'merge';
 
-import { compact, formatDate, isValidJSON } from '../utils.js';
+import { compact, formatDate, isValidJSON, formatData } from '../utils.js';
 
 /**
  * WordPress dependencies
@@ -169,6 +169,7 @@ class ChartSelect extends Component {
 										compact( this.props.chart['visualizer-settings'])
 								}
 								height="500px"
+                                formatters={ formatData( data ) }
 							/>
                         ) : (
 							<Chart
@@ -181,6 +182,7 @@ class ChartSelect extends Component {
 										compact( this.props.chart['visualizer-settings'])
 								}
 								height="500px"
+                                formatters={ formatData( data ) }
 							/>
 						)
 					) }
