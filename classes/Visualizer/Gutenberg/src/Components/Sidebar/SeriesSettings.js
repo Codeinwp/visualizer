@@ -60,7 +60,14 @@ class SeriesSettings extends Component {
 
 				{ Object.keys( settings.series )
 					.map( ( i, index ) => {
+                        let indexToFormat = parseInt( i );
+
+                        if ( 'tabular' !== type ) {
+                            indexToFormat = index;
+                        }
+
 						i++;
+
 						return (
 							<PanelBody
 								title={ series[i].label }
@@ -121,9 +128,9 @@ class SeriesSettings extends Component {
 											<TextControl
 												label={ __( 'Format' ) }
 												help={ __( 'Enter custom format pattern to apply to this series value.' ) }
-												value={ settings.series[index].format }
+												value={ settings.series[indexToFormat].format }
 												onChange={ e => {
-													settings.series[index].format = e;
+													settings.series[indexToFormat].format = e;
 													this.props.edit( settings );
 												} }
 											/>
@@ -148,9 +155,9 @@ class SeriesSettings extends Component {
 												label={ __( 'Date Format' ) }
 												help={ __( 'Enter custom format pattern to apply to this series value.' ) }
 												placeholder="dd LLLL yyyy"
-												value={ settings.series[index].format }
+												value={ settings.series[indexToFormat].format }
 												onChange={ e => {
-													settings.series[index].format = e;
+													settings.series[indexToFormat].format = e;
 													this.props.edit( settings );
 												} }
 											/>
