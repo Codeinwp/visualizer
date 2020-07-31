@@ -352,6 +352,12 @@ class Visualizer_Gutenberg_Block {
 		// handle data filter hooks
 		$data['visualizer-data'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( get_the_content( $post_id ) ) ), $post_id, $data['visualizer-chart-type'] );
 
+		// we are going to format only for tabular charts, because we are not sure of the effect on others.
+		// this is to solve the case where boolean data shows up as all-ticks on gutenberg.
+		if ( in_array( $data['visualizer-chart-type'], array( 'tabular' ), true ) ) {
+			$data['visualizer-data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
+		}
+
 		$data['visualizer-data-exploded'] = '';
 		// handle annotations for google charts
 		if ( 'GoogleCharts' === $library ) {
@@ -653,6 +659,8 @@ class Visualizer_Gutenberg_Block {
 
 	/**
 	 * Format chart data.
+	 *
+	 * Note: No matter how tempted, don't use the similar method from Visualizer_Source. That works on a different structure.
 	 */
 	public function format_chart_data( $data, $series ) {
 		foreach ( $series as $i => $row ) {
@@ -665,36 +673,35 @@ class Visualizer_Gutenberg_Block {
 				continue;
 			}
 
-			if ( $row['type'] === 'number' ) {
-				foreach ( $data as $o => $col ) {
-					$data[ $o ][ $i ] = ( is_numeric( $col[ $i ] ) ) ? floatval( $col[ $i ] ) : ( is_numeric( str_replace( ',', '', $col[ $i ] ) ) ? floatval( str_replace( ',', '', $col[ $i ] ) ) : null );
-				}
-			}
-
-			if ( $row['type'] === 'boolean' ) {
-				foreach ( $data as $o => $col ) {
-					$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_var( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
-				}
-			}
-
-			if ( $row['type'] === 'timeofday' ) {
-				foreach ( $data as $o => $col ) {
-					$date = new DateTime( '1984-03-16T' . $col[ $i ] );
-					if ( $date ) {
-						$data[ $o ][ $i ] = array(
-							intval( $date->format( 'H' ) ),
-							intval( $date->format( 'i' ) ),
-							intval( $date->format( 's' ) ),
-							0,
-						);
+			switch ( $row['type'] ) {
+				case 'number':
+					foreach ( $data as $o => $col ) {
+						$data[ $o ][ $i ] = ( is_numeric( $col[ $i ] ) ) ? floatval( $col[ $i ] ) : ( is_numeric( str_replace( ',', '', $col[ $i ] ) ) ? floatval( str_replace( ',', '', $col[ $i ] ) ) : null );
 					}
-				}
-			}
-
-			if ( $row['type'] === 'string' ) {
-				foreach ( $data as $o => $col ) {
-					$data[ $o ][ $i ] = $this->toUTF8( $col[ $i ] );
-				}
+					break;
+				case 'boolean':
+					foreach ( $data as $o => $col ) {
+						$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_var( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : false;
+					}
+					break;
+				case 'timeofday':
+					foreach ( $data as $o => $col ) {
+						$date = new DateTime( '1984-03-16T' . $col[ $i ] );
+						if ( $date ) {
+							$data[ $o ][ $i ] = array(
+								intval( $date->format( 'H' ) ),
+								intval( $date->format( 'i' ) ),
+								intval( $date->format( 's' ) ),
+								0,
+							);
+						}
+					}
+					break;
+				case 'string':
+					foreach ( $data as $o => $col ) {
+						$data[ $o ][ $i ] = $this->toUTF8( $col[ $i ] );
+					}
+					break;
 			}
 		}
 

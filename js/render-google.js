@@ -14,15 +14,17 @@ var __visualizer_chart_images   = [];
 	function renderChart(id) {
         var chart = all_charts[id];
         var hasAnnotation = false;
-        if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined'){
-            hasAnnotation = chart.series.length - chart.settings.series.length > 1;
-        }
+
         // re-render the chart only if it doesn't have annotations and it is on the front-end
         // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
-        if(hasAnnotation){
-            return;
+        // table/tabular charts do not have annotations.
+        if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined' && chart.type !== 'tabular'){
+            hasAnnotation = chart.series.length - chart.settings.series.length > 1;
         }
-        renderSpecificChart(id, all_charts[id]);
+
+        if(! hasAnnotation){
+            renderSpecificChart(id, all_charts[id]);
+        }
     }
 
     function renderSpecificChart(id, chart) {
@@ -259,6 +261,7 @@ var __visualizer_chart_images   = [];
 		if (settings.series) {
             switch(chart.type){
                 case 'table':
+                case 'tabular':
                     for(i in settings.series){
                         i = parseInt(i);
                         if (!series[i + 1]) {
