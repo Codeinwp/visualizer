@@ -81,7 +81,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return $tag;
 		}
 
-		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
+		$scripts    = array( 'google-jsapi', 'visualizer-render-google-lib', 'visualizer-render-google' );
 
 		foreach ( $scripts as $async ) {
 			if ( $async === $handle ) {
