@@ -46,6 +46,11 @@ class GeneralSettings extends Component {
             positions.push({ label: __( 'Inside the chart' ), value: 'in' });
         }
 
+        let titleHelp = __( 'Text to display above the chart.' );
+        if ( 0 <= [ 'tabular', 'dataTable', 'gauge', 'geo', 'timeline' ].indexOf( type ) ) {
+            titleHelp = __( 'Text to display in the back-end admin area' );
+        }
+
 		return (
 			<PanelBody
 				title={ __( 'General Settings' ) }
@@ -61,7 +66,7 @@ class GeneralSettings extends Component {
 
 					<TextControl
 						label={ __( 'Chart Title' ) }
-						help={ __( 'Text to display above the chart.' ) }
+						help={ titleHelp }
 						value={ settings.title }
 						onChange={ e => {
 							settings.title = e;
