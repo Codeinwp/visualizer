@@ -502,7 +502,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function load_dependent_assets( $libs ) {
 		if ( in_array( 'moment', $libs, true ) && ! wp_script_is( 'moment', 'registered' ) ) {
-			wp_register_script( 'moment', VISUALIZER_ABSURL . 'js/lib/moment.min.js', array(), Visualizer_Plugin::VERSION );
+			wp_register_script( 'moment' );
 		}
 
 		if ( in_array( 'numeral', $libs, true ) && ! wp_script_is( 'numeral', 'registered' ) ) {
