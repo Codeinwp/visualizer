@@ -48,7 +48,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 >
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
-The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="nofollow">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
+The plugins works perfectly with the all <a href="https://justfreethemes.com/" rel="nofollow">free</a> or <a href="https://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
 
 
  = See how Visualizer can integrate with your website  =
@@ -162,6 +162,27 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.4.5 - 2020-07-08  = 
+
+* [Feat] New Google Table Charts
+* [Feat] Option for lazy loading Google Charts
+* [Feat] Option to easily copy chart shortcode code
+* [Fix] Remove Inside the Chart option for the legend position for Google Pie charts
+
+
+= 3.4.4 - 2020-06-16  = 
+
+* [Feat] Option to download charts as .png images
+* [Fix] Make UI more intuitive when a chart is missing in the editor
+* [Fix] Clicking Copy chart shows the Copied message multiple times
+* [Fix] Conflict with Modern Events Calendar plugin
+* [Fix] Chart size ( width and height ) options not working for ChartJS charts
+* [Fix] Resizing the window causes annotation-based charts to throw an error
+* [Fix] Remove Inside the Chart option as legend position for Google Pie charts
+* [Fix] Clicking Advanced Options panel breaks Bubble chart
+* [Fix] Missing posts revisions on chart update
+
+
 = 3.4.3 - 2020-05-04  =
 
 * [Feat] Improved chart creation UX
