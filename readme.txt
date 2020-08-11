@@ -162,6 +162,15 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+= 3.4.6 - 2020-08-11  = 
+
+* - [Feat] Show chart ID in the chart library
+* - [Fix] Compatibility with WP 5.5
+* - [Fix] Google charts: Series number format not applying in the Gutenberg editor
+* - [Fix] Google Table chart does not display chart if boolean values are specified
+* - [Fix] Duplicated enque for jsapi loader
+
+
 = 3.4.5 - 2020-07-08  = 
 
 * [Feat] New Google Table Charts
