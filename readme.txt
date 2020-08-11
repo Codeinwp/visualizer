@@ -2,7 +2,7 @@
 Contributors: codeinwp,themeisle,marius2012,marius_codeinwp,hardeepasrani,rozroz,Madalin_ThemeIsle
 Tags: tables, charts, pie, visualization, graphs
 Requires at least: 3.5
-Tested up to: 5.4
+Tested up to: 5.5
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPL v2.0 or later
@@ -183,7 +183,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * [Fix] Missing posts revisions on chart update
 
 
-= 3.4.3 - 2020-05-04  = 
+= 3.4.3 - 2020-05-04  =
 
 * [Feat] Improved chart creation UX
 * [Feat] New option to control the number of charts per page in the Charts Library
@@ -194,12 +194,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * [Fix] Bulk activation of plugin aborts activation of subsequent plugins
 
 
-= 3.4.2 - 2020-02-17  = 
+= 3.4.2 - 2020-02-17  =
 
 * New Cypress tests for the Gutenberg block
 
 
-= 3.4.1 - 2020-02-14  = 
+= 3.4.1 - 2020-02-14  =
 
 * [Fix] Insert chart button in the classic block
 * [Fix for Pro version] Import from chart did not work

@@ -81,7 +81,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return $tag;
 		}
 
-		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
+		$scripts    = array( 'google-jsapi', 'visualizer-render-google-lib', 'visualizer-render-google' );
 
 		foreach ( $scripts as $async ) {
 			if ( $async === $handle ) {
@@ -108,7 +108,24 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/action/(?P<chart>\d+)/(?P<type>.+)/',
 			array(
-				'methods'  => array( 'GET', 'POST' ),
+				'methods'  => 'GET',
+				'args'     => array(
+					'chart' => array(
+						'required' => true,
+						'sanitize_callback' => function( $param ) {
+							return is_numeric( $param ) ? $param : null;
+						},
+					),
+					'type' => array(
+						'required' => true,
+						'type' => 'string',
+						'enum' => array_keys( $this->get_actions() ),
+					),
+				),
+				'permission_callback' => function ( WP_REST_Request $request ) {
+					$chart_id   = filter_var( sanitize_text_field( $request->get_param( 'chart' ), FILTER_VALIDATE_INT ) );
+					return ! empty( $chart_id ) && apply_filters( 'visualizer_pro_show_chart', true, $chart_id );
+				},
 				'callback' => array( $this, 'perform_action' ),
 			)
 		);
@@ -219,7 +236,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 */
 	public function enqueueScripts() {
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
 	}
@@ -349,7 +365,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );
 					$actions_div    .= ' data-clipboard-text="' . esc_attr( $copy['csv'] ) . '"';
-					wp_enqueue_script( 'visualizer-clipboardjs' );
+					wp_enqueue_script( 'clipboard' );
 				}
 
 				$actions_div    .= apply_filters( 'visualizer_action_attributes', '', $key, $atts['id'] );
@@ -380,6 +396,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'language'      => $this->get_language(),
 					'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 					'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
+					'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
 					'i10n'          => array(
 						'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
 					),

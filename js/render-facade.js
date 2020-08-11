@@ -6,7 +6,7 @@
 
     function initActionsButtons(v) {
         if($('a.visualizer-chart-shortcode').length > 0) {
-            var clipboard1 = new Clipboard('a.visualizer-chart-shortcode'); // jshint ignore:line
+            var clipboard1 = new ClipboardJS('a.visualizer-chart-shortcode'); // jshint ignore:line
             clipboard1.on('success', function(e) {
                 window.alert(v.i10n['copied']);
             });
@@ -16,7 +16,7 @@
             $('a.visualizer-action[data-visualizer-type=copy]').on('click', function(e) {
                 e.preventDefault();
             });
-            var clipboard = new Clipboard('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
+            var clipboard = new ClipboardJS('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
             clipboard.on('success', function(e) {
                 window.alert(v.i10n['copied']);
             });
@@ -31,6 +31,9 @@
             e.preventDefault();
             $.ajax({
                 url     : v.rest_url.replace('#id#', chart).replace('#type#', type),
+                beforeSend: function ( xhr ) {
+                    xhr.setRequestHeader( 'X-WP-Nonce', v.wp_nonce );
+                },
                 success: function(data) {
                     if (data && data.data) {
                         switch(type){

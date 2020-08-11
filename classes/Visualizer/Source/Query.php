@@ -90,6 +90,8 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 1000, $this->_chart_id );
 		}
 
+		$this->_query = apply_filters( 'visualizer_db_query', $this->_query, $this->_chart_id, $this->_params );
+
 		$results    = array();
 		$headers    = array();
 
@@ -145,9 +147,12 @@ class Visualizer_Source_Query extends Visualizer_Source {
 		}
 
 		if ( $as_html ) {
-			return $this->html( $headers, $results );
+			$results = $this->html( $headers, $results );
+		} else {
+			$results = $this->object( $headers, $results );
 		}
-		return $this->object( $headers, $results );
+
+		return apply_filters( 'visualizer_db_query_results', $results, $headers, $as_html, $results_as_numeric_array, $raw_results, $this->_query, $this->_chart_id, $this->_params );
 	}
 
 	/**
