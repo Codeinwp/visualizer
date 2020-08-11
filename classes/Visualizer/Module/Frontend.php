@@ -108,7 +108,24 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/action/(?P<chart>\d+)/(?P<type>.+)/',
 			array(
-				'methods'  => array( 'GET', 'POST' ),
+				'methods'  => 'GET',
+				'args'     => array(
+					'chart' => array(
+						'required' => true,
+						'sanitize_callback' => function( $param ) {
+							return is_numeric( $param ) ? $param : null;
+						},
+					),
+					'type' => array(
+						'required' => true,
+						'type' => 'string',
+						'enum' => array_keys( $this->get_actions() ),
+					),
+				),
+				'permission_callback' => function ( WP_REST_Request $request ) {
+					$chart_id   = filter_var( sanitize_text_field( $request->get_param( 'chart' ), FILTER_VALIDATE_INT ) );
+					return ! empty( $chart_id ) && apply_filters( 'visualizer_pro_show_chart', true, $chart_id );
+				},
 				'callback' => array( $this, 'perform_action' ),
 			)
 		);
@@ -379,6 +396,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'language'      => $this->get_language(),
 					'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 					'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
+					'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
 					'i10n'          => array(
 						'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
 					),

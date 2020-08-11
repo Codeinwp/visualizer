@@ -31,6 +31,9 @@
             e.preventDefault();
             $.ajax({
                 url     : v.rest_url.replace('#id#', chart).replace('#type#', type),
+                beforeSend: function ( xhr ) {
+                    xhr.setRequestHeader( 'X-WP-Nonce', v.wp_nonce );
+                },
                 success: function(data) {
                     if (data && data.data) {
                         switch(type){
