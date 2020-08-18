@@ -125,7 +125,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				),
 				'permission_callback' => function ( WP_REST_Request $request ) {
 					$chart_id   = filter_var( sanitize_text_field( $request->get_param( 'chart' ), FILTER_VALIDATE_INT ) );
-					if ( ! empty( $chart_id ) && in_array( $request->get_param( 'type' ), array( 'save', 'cancel' ) ) ) {
+					if ( ! empty( $chart_id ) && in_array( $request->get_param( 'type' ), array( 'save', 'cancel' ), true ) ) {
 						// let save and cancel go without any check as past version of pro
 						// did not send the X-WP-Nonce
 						// we can change this at a later date.
