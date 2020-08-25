@@ -76,6 +76,9 @@ var __visualizer_chart_images   = [];
         // the ones with a role are ignored
         // e.g. if there are 6 columns (0-5) out of which 1, 3 and 5 are annotations
         // the final series will only include 0, 2, 4 (reindexed as 0, 1, 2)
+
+        // this will capture all the series indexes that became annotations.
+        var series_annotations = [];
         if (settings.series) {
             var adjusted_series = [];
             for (i = 0; i < settings.series.length; i++) {
@@ -86,6 +89,8 @@ var __visualizer_chart_images   = [];
                     table.setColumnProperty(i + 1, 'role', settings.series[i].role);
                     if(settings.series[i].role === '') {
                         adjusted_series.push(settings.series[i]);
+                    }else{
+                        series_annotations.push(i);
                     }
                 }
             }
@@ -275,7 +280,14 @@ var __visualizer_chart_images   = [];
                         if (!series[i + 1] || typeof settings.series[i] === 'undefined') {
                             continue;
                         }
-                        format_data(id, table, series[i + 1].type, settings.series[i].format, i + 1);
+                        var seriesIndexToUse = i + 1;
+
+                        // if an annotation "swallowed" a series, use the following one.
+                        if(series_annotations.includes(i)){
+                            seriesIndexToUse++;
+                        }
+
+                        format_data(id, table, series[seriesIndexToUse].type, settings.series[i].format, seriesIndexToUse);
                     }
                     break;
             }
