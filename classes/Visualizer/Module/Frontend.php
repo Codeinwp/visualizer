@@ -108,7 +108,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/action/(?P<chart>\d+)/(?P<type>.+)/',
 			array(
-				'methods'  => 'GET',
+				// POST is required for save/cancel, GET for all others
+				'methods'  => array( 'POST', 'GET' ),
 				'args'     => array(
 					'chart' => array(
 						'required' => true,
@@ -119,11 +120,17 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'type' => array(
 						'required' => true,
 						'type' => 'string',
-						'enum' => array_keys( $this->get_actions() ),
+						'enum' => array_merge( array( 'save', 'cancel' ), array_keys( $this->get_actions() ) ),
 					),
 				),
 				'permission_callback' => function ( WP_REST_Request $request ) {
 					$chart_id   = filter_var( sanitize_text_field( $request->get_param( 'chart' ), FILTER_VALIDATE_INT ) );
+					if ( ! empty( $chart_id ) && in_array( $request->get_param( 'type' ), array( 'save', 'cancel' ), true ) ) {
+						// let save and cancel go without any check as past version of pro
+						// did not send the X-WP-Nonce
+						// we can change this at a later date.
+						return true;
+					}
 					return ! empty( $chart_id ) && apply_filters( 'visualizer_pro_show_chart', true, $chart_id );
 				},
 				'callback' => array( $this, 'perform_action' ),
