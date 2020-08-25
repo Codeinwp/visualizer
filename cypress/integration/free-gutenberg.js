@@ -55,7 +55,7 @@ describe('Test Free - gutenberg', function() {
                 });
 
                 // chart and footer divs
-                cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 2);
+                cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 1);
 
                 // 2 buttons, one of them "done"
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
