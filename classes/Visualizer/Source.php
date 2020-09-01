@@ -452,7 +452,10 @@ abstract class Visualizer_Source {
 
 		foreach ( $data as $line ) {
 			$data_row = array();
-			foreach ( $line as $header => $value ) {
+			// we have to make sure we are fetching the data in the right order
+			// in case the columns have been reordered
+			foreach ( $headers as $header ) {
+				$value = $line[ $header ];
 				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( in_array( $header, $headers ) ) {
 					$data_row[] = $value;
