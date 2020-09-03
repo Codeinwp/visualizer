@@ -45,8 +45,11 @@ describe('Test Free - gutenberg (datatable)', function() {
                 cy.wrap($block).find('.visualizer-settings__content-option').last().click({force:true});
 
                 // insert chart
+                cy.wrap($block).find('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + (i + 1) + ')').then( ($chart_block) => {
+                    cy.log('Inserting chart: ' + Cypress.$($chart_block).attr('data-chart-type'));
+                });
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + (i + 1) + ') .visualizer-settings__charts-controls').click();
-                
+
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').should('have.length', 1);
 
                 // log a line to show which chart we are trying to insert.
