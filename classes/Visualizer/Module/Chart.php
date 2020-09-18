@@ -215,9 +215,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$chart  = get_post( $chart_id );
 
 		$source = new Visualizer_Source_Json( $params );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true );
 		$source->fetchFromEditableTable();
 
-		$content    = $source->getData();
+		$content    = $source->getData( get_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 		$chart->post_content = $content;
 		wp_update_post( $chart->to_array() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
@@ -266,7 +267,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
-		$render->data   = json_encode( $source->getRawData() );
+		$render->data   = json_encode( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
 		$render->series = json_encode( $source->getSeries() );
 		$render->render();
 
@@ -498,7 +499,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					'post_title'   => 'Visualization',
 					'post_author'  => get_current_user_id(),
 					'post_status'  => 'auto-draft',
-					'post_content' => $source->getData(),
+					'post_content' => $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ),
 				)
 			);
 			if ( $chart_id && ! is_wp_error( $chart_id ) ) {
@@ -851,7 +852,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				if ( filter_var( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, true ), FILTER_VALIDATE_BOOLEAN ) ) {
 					$source = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $type . '.csv' );
 					$source->fetch();
-					$this->_chart->post_content = $source->getData();
+					$this->_chart->post_content = $source->getData( get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 					wp_update_post( $this->_chart->to_array() );
 					update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				}
@@ -1087,7 +1088,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		if ( $source ) {
 			if ( $source->fetch() ) {
-				$content    = $source->getData();
+				$content    = $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 				$populate   = true;
 				if ( is_string( $content ) && is_array( unserialize( $content ) ) ) {
 					$json   = unserialize( $content );
@@ -1114,7 +1115,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 
 				$render->id     = $chart->ID;
-				$render->data   = json_encode( $source->getRawData() );
+				$render->data   = json_encode( $source->getRawData( get_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
 				$render->series = json_encode( $source->getSeries() );
 				$render->settings = json_encode( $settings );
 			} else {
@@ -1349,10 +1350,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				wp_update_post(
 					array(
 						'ID'            => $chart_id,
-						'post_content'  => $source->getData(),
+						'post_content'  => $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ),
 					)
 				);
-				$render->data   = json_encode( $source->getRawData() );
+				$render->data   = json_encode( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
 				$render->series = json_encode( $source->getSeries() );
 				$render->id = $chart_id;
 			} else {
