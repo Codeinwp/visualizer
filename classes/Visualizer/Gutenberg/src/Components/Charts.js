@@ -132,7 +132,7 @@ class Charts extends Component {
                                         }
 
 										return (
-											<div className="visualizer-settings__charts-single" data-chart-type={ chart }> key={ `chart-${ charts[i].id }` }>
+											<div className="visualizer-settings__charts-single" data-chart-type={ chart } key={ `chart-${ charts[i].id }` }>
 
 												<div className="visualizer-settings__charts-title">
 													{ title }
