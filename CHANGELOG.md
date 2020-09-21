@@ -1,4 +1,10 @@
 
+ ### v3.4.7 - 2020-09-21 
+ **Changes:** 
+ * - [Fix] Import from JSON: Reordering columns only reorders the label, not the associated data
+* - [Fix] numberFormat option doesn't apply in Bar charts when using annotations
+* - [Fix] Google GEO chart is not rendering if 3rd data column is added
+ 
  ### v3.4.6 - 2020-08-11 
  **Changes:** 
  * [Feat] Show chart ID in the chart library
