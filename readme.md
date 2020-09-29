@@ -48,7 +48,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 >
 > **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
 
-The plugins works perfectly with the all <a href="http://justfreethemes.com" rel="nofollow">free</a> or <a href="http://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
+The plugins works perfectly with the all <a href="https://justfreethemes.com/" rel="nofollow">free</a> or <a href="https://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
 
 
  = See how Visualizer can integrate with your website  =
@@ -162,6 +162,22 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 ## Changelog ##
+### 3.4.7 - 2020-09-21  ###
+
+* - [Fix] Import from JSON: Reordering columns only reorders the label, not the associated data
+* - [Fix] numberFormat option doesn't apply in Bar charts when using annotations
+* - [Fix] Google GEO chart is not rendering if 3rd data column is added
+
+
+### 3.4.6 - 2020-08-11  ###
+
+* - [Feat] Show chart ID in the chart library
+* - [Fix] Compatibility with WP 5.5
+* - [Fix] Google charts: Series number format not applying in the Gutenberg editor
+* - [Fix] Google Table chart does not display chart if boolean values are specified
+* - [Fix] Duplicated enque for jsapi loader
+
+
 ### 3.4.5 - 2020-07-08  ###
 
 * [Feat] New Google Table Charts
