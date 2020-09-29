@@ -1062,6 +1062,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// delete editor related data.
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR );
 
+		// delete this so that a JSON import can be later edited manually without a problem.
+		delete_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE );
+
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
 		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
