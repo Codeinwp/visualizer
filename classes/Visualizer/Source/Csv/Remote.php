@@ -47,7 +47,7 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 	 * @access public
 	 * @return string The serialized array of data.
 	 */
-	public function getData() {
+	public function getData( $dumb = false ) {
 		return serialize(
 			array(
 				'source' => $this->_filename,
