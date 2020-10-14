@@ -68,6 +68,9 @@ class SlicesSettings extends Component {
 										settings.slices[i].offset = e;
 										this.props.edit( settings );
 									} }
+                                    type="number"
+                                    min="0"
+                                    step="0.1"
 								/>
 
 								<BaseControl
