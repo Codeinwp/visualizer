@@ -308,7 +308,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 			$allow_html = false;
 			$settings   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
-			if ( isset( $settings['allowHtml'] ) && intval( $settings['allowHtml'] ) == 1 ) {
+			if ( isset( $settings['allowHtml'] ) && intval( $settings['allowHtml'] ) === 1 ) {
 				$allow_html = true;
 			}
 
