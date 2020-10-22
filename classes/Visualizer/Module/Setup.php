@@ -306,12 +306,28 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 			}
 
+			$allow_html = false;
+			$settings   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+			if ( isset( $settings['allowHtml'] ) && intval( $settings['allowHtml'] ) == 1 ) {
+				$allow_html = true;
+			}
+
+			$allow_html = apply_filters( 'visualizer_allow_html_content', $allow_html, $chart_id, $chart );
+
+			if ( $allow_html ) {
+				kses_remove_filters();
+			}
+
 			wp_update_post(
 				array(
 					'ID'            => $chart_id,
 					'post_content'  => $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ),
 				)
 			);
+
+			if ( $allow_html ) {
+				kses_init_filters();
+			}
 
 			$chart = get_post( $chart_id );
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );
