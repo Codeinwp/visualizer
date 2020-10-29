@@ -588,14 +588,19 @@ class Visualizer_Gutenberg_Block {
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
 			}
 
-			if ( $source_type === 'Visualizer_Source_Query' ) {
-				$db_schedule = intval( $data['visualizer-db-schedule'] );
-				$db_query = $data['visualizer-db-query'];
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
-			} else {
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
+			// let's check if this is not an external db chart
+			// as there is no support for that in the block editor interface
+			$external_params = get_post_meta( $data['id'], Visualizer_Plugin::CF_REMOTE_DB_PARAMS, true );
+			if ( empty( $external_params ) ) {
+				if ( $source_type === 'Visualizer_Source_Query' ) {
+					$db_schedule = intval( $data['visualizer-db-schedule'] );
+					$db_query = $data['visualizer-db-query'];
+					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
+					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
+				} else {
+					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
+					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
+				}
 			}
 
 			if ( $source_type === 'Visualizer_Source_Json' ) {
