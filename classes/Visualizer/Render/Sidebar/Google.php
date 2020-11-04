@@ -67,14 +67,8 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			'none'   => esc_html__( 'Omit the legend', 'visualizer' ),
 		);
 
-		$chart_type = $this->get_chart_type( false );
-		if ( ! in_array( $chart_type, array( 'Pie' ), true ) ) {
+		if ( ! in_array( $this->get_chart_type( false ), array( 'Pie' ), true ) ) {
 			$this->_legendPositions['in']  = esc_html__( 'Inside the chart', 'visualizer' );
-		}
-
-		if ( in_array( $chart_type, array( 'Bubble' ), true ) ) {
-			unset( $this->_legendPositions['left'] );
-			unset( $this->_legendPositions['right'] );
 		}
 
 		$this->_alignments = array(
