@@ -74,7 +74,6 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 
 		if ( in_array( $chart_type, array( 'Bubble' ), true ) ) {
 			unset( $this->_legendPositions['left'] );
-			unset( $this->_legendPositions['right'] );
 		}
 
 		$this->_alignments = array(
