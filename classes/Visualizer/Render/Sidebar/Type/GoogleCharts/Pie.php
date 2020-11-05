@@ -186,9 +186,11 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 			self::_renderTextItem(
 				esc_html__( 'Slice Offset', 'visualizer' ),
 				'slices[' . $i . '][offset]',
-				isset( $this->slices[ $i ]['offset'] ) ? $this->slices[ $i ]['offset'] : null,
+				isset( $this->slices[ $i ]['offset'] ) && ! empty( $this->slices[ $i ]['offset'] ) ? $this->slices[ $i ]['offset'] : 0,
 				esc_html__( "How far to separate the slice from the rest of the pie, from 0.0 (not at all) to 1.0 (the pie's radius).", 'visualizer' ),
-				'0.0'
+				'0.0',
+				'number',
+				array( 'step' => 0.1, 'min' => 0 )
 			);
 
 			self::_renderColorPickerItem(
