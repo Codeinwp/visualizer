@@ -46,6 +46,12 @@ class GeneralSettings extends Component {
             positions.push({ label: __( 'Inside the chart' ), value: 'in' });
         }
 
+        if ( 'bubble' === type ) {
+            positions = positions.filter( function( obj ) {
+                return 'left' !== obj.value;
+            });
+        }
+
         let titleHelp = __( 'Text to display above the chart.' );
         if ( 0 <= [ 'tabular', 'dataTable', 'gauge', 'geo', 'timeline' ].indexOf( type ) ) {
             titleHelp = __( 'Text to display in the back-end admin area' );
@@ -200,9 +206,11 @@ class GeneralSettings extends Component {
 								if ( 'pie' !== type ) {
 									let axis = 'left' === e ? 1 : 0;
 
-									Object.keys( settings.series ).map( i => {
-										settings.series[i].targetAxisIndex = axis;
-									});
+                                    if ( settings.series ) {
+                                        Object.keys( settings.series ).map( i => {
+                                            settings.series[i].targetAxisIndex = axis;
+                                        });
+                                    }
 								}
 
 								settings.legend.position = e;

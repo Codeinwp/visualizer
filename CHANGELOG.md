@@ -1,4 +1,8 @@
 
+ ### v3.4.8 - 2020-09-29 
+ **Changes:** 
+ * [Fix] Option to edit charts imported from JSON
+ 
  ### v3.4.7 - 2020-09-21 
  **Changes:** 
  * - [Fix] Import from JSON: Reordering columns only reorders the label, not the associated data
