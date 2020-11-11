@@ -96,7 +96,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$sidebar->__data   = $data['data'];
 			}
 		}
-		return str_replace( "'", '"', $sidebar->__toString() );
+
+		// add the permissions tab
+		ob_start();
+		Visualizer_Render_Layout::show( 'permissions', $chart_id );
+		$permissions = ob_get_clean();
+
+		$sidebar_html = $sidebar->__toString() . $permissions;
+
+		return str_replace( "'", '"', $sidebar_html );
 	}
 
 	/**
