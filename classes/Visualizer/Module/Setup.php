@@ -190,10 +190,48 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	/**
 	 * Activate the plugin
 	 */
-	public function activate() {
+	public function activate( $network_wide ) {
+		if ( is_multisite() && $network_wide ) {
+			foreach ( get_sites( array( 'fields' => 'ids' ) ) as $blog_id ) {
+				switch_to_blog( $blog_id );
+				$this->activate_on_site();
+				restore_current_blog();
+			}
+		} else {
+			$this->activate_on_site();
+		}
+	}
+
+	/**
+	 * Activates the plugin on a particular blog instance (supports multisite and single site).
+	 */
+	private function activate_on_site() {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
 		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, 'hourly', 'visualizer_schedule_refresh_db' );
 		add_option( 'visualizer-activated', true );
+	}
+
+	/**
+	 * Deactivate the plugin
+	 */
+	public function deactivate( $network_wide ) {
+		if ( is_multisite() && $network_wide ) {
+			foreach ( get_sites( array( 'fields' => 'ids' ) ) as $blog_id ) {
+				switch_to_blog( $blog_id );
+				$this->deactivate_on_site();
+				restore_current_blog();
+			}
+		} else {
+			$this->deactivate_on_site();
+		}
+	}
+
+	/**
+	 * Deactivates the plugin on a particular blog instance (supports multisite and single site).
+	 */
+	private function deactivate_on_site() {
+		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+		delete_option( 'visualizer-activated', true );
 	}
 
 	/**
@@ -217,14 +255,6 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		}
 	}
 
-
-	/**
-	 * Deactivate the plugin
-	 */
-	public function deactivate() {
-		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
-		delete_option( 'visualizer-activated', true );
-	}
 
 	/**
 	 * Refresh the specific chart from the db.
