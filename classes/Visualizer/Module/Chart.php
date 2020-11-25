@@ -1401,7 +1401,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		if ( ! $hours ) {
+		if ( 0 !== $hours && empty( $hours ) ) {
 			$hours = -1;
 		}
 
