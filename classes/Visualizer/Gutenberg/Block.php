@@ -69,11 +69,6 @@ class Visualizer_Gutenberg_Block {
 	public function enqueue_gutenberg_scripts() {
 		global $wp_version;
 
-		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
-		$handsontableJS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js';
-		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css';
-		$handsontableCSS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css';
-
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
 			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
 		} else {
@@ -81,8 +76,8 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		// Enqueue the bundled block JS file
-		wp_enqueue_script( 'handsontable', $handsontableJS );
-		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment' ), $version, true );
+		wp_enqueue_script( 'handsontable', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js' );
+		wp_enqueue_script( 'visualizer-gutenberg-block', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js', array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment' ), $version, true );
 
 		$type = 'community';
 
@@ -100,15 +95,16 @@ class Visualizer_Gutenberg_Block {
 			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
 			'absurl'    => VISUALIZER_ABSURL,
 			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
-			'adminPage' => menu_page_url( 'visualizer', false ),
+			'adminPage' => add_query_arg( 'vaction', 'addnew', menu_page_url( 'visualizer', false ) ),
 			'sqlTable'  => $table_col_mapping,
 			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
 		// Enqueue frontend and editor block styles
-		wp_enqueue_style( 'handsontable', $handsontableCSS );
-		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $version );
+		wp_enqueue_style( 'handsontable', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css' );
+		wp_enqueue_style( 'visualizer-gutenberg-custom', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/custom.css' );
+		wp_enqueue_style( 'visualizer-gutenberg-block', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css', array( 'visualizer-datatables', 'visualizer-gutenberg-custom' ), $version );
 
 		if ( version_compare( $wp_version, '4.9.0', '>' ) ) {
 
@@ -139,9 +135,6 @@ class Visualizer_Gutenberg_Block {
 					'id' => array(
 						'type' => 'number',
 					),
-					'lazy' => array(
-						'type' => 'string',
-					),
 				),
 			)
 		);
@@ -150,44 +143,14 @@ class Visualizer_Gutenberg_Block {
 	/**
 	 * Gutenberg Block Callback Function
 	 */
-	public function gutenberg_block_callback( $atts ) {
-		// no id, no fun.
-		if ( ! isset( $atts['id'] ) ) {
-			return '';
+	public function gutenberg_block_callback( $attr ) {
+		if ( isset( $attr['id'] ) ) {
+			$id = $attr['id'];
+			if ( empty( $id ) || $id === 'none' ) {
+				return ''; // no id = no fun
+			}
+			return '[visualizer id="' . $id . '"]';
 		}
-
-		$atts = shortcode_atts(
-			array(
-				'id'     => false,
-				'lazy' => apply_filters( 'visualizer_lazy_by_default', false, $atts['id'] ),
-				// we are deliberating excluding the class attribute from here
-				// as this will be handled by the custom class in Gutenberg
-			),
-			$atts
-		);
-
-		// no id, no fun.
-		if ( ! $atts['id'] ) {
-			return '';
-		}
-
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( $atts['lazy'] == -1 || $atts['lazy'] == false ) {
-			$atts['lazy'] = 'no';
-		}
-
-		// we don't want the chart in the editor lazy-loading.
-		if ( is_admin() ) {
-			unset( $atts['lazy'] );
-		}
-
-		$shortcode = '[visualizer';
-		foreach ( $atts as $name => $value ) {
-			$shortcode .= sprintf( ' %s="%s"', $name, $value );
-		}
-		$shortcode .= ']';
-
-		return $shortcode;
 	}
 
 	/**
@@ -352,12 +315,6 @@ class Visualizer_Gutenberg_Block {
 		// handle data filter hooks
 		$data['visualizer-data'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( get_the_content( $post_id ) ) ), $post_id, $data['visualizer-chart-type'] );
 
-		// we are going to format only for tabular charts, because we are not sure of the effect on others.
-		// this is to solve the case where boolean data shows up as all-ticks on gutenberg.
-		if ( in_array( $data['visualizer-chart-type'], array( 'tabular' ), true ) ) {
-			$data['visualizer-data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
-		}
-
 		$data['visualizer-data-exploded'] = '';
 		// handle annotations for google charts
 		if ( 'GoogleCharts' === $library ) {
@@ -446,16 +403,9 @@ class Visualizer_Gutenberg_Block {
 		if ( Visualizer_Module::is_pro() ) {
 			$permissions = get_post_meta( $post_id, Visualizer_PRO::CF_PERMISSIONS, true );
 
-			if ( empty( $permissions ) ) {
-				$permissions = array( 'permissions' => array(
-						'read'          => 'all',
-						'edit'          => 'roles',
-						'edit-specific' => array( 'administrator' ),
-				),
-				);
+			if ( ! empty( $permissions ) ) {
+				$data['visualizer-permissions'] = $permissions;
 			}
-
-			$data['visualizer-permissions'] = $permissions;
 		}
 
 		return $data;
@@ -566,9 +516,7 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		if ( $data['id'] && ! is_wp_error( $data['id'] ) ) {
-			if ( get_post_type( $data['id'] ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
-				return new WP_Error( 'invalid_post_type', 'Invalid post type.' );
-			}
+
 			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
 			$source_type = sanitize_text_field( $data['visualizer-source'] );
 
@@ -588,19 +536,14 @@ class Visualizer_Gutenberg_Block {
 				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
 			}
 
-			// let's check if this is not an external db chart
-			// as there is no support for that in the block editor interface
-			$external_params = get_post_meta( $data['id'], Visualizer_Plugin::CF_REMOTE_DB_PARAMS, true );
-			if ( empty( $external_params ) ) {
-				if ( $source_type === 'Visualizer_Source_Query' ) {
-					$db_schedule = intval( $data['visualizer-db-schedule'] );
-					$db_query = $data['visualizer-db-query'];
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
-				} else {
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
-				}
+			if ( $source_type === 'Visualizer_Source_Query' ) {
+				$db_schedule = intval( $data['visualizer-db-schedule'] );
+				$db_query = $data['visualizer-db-query'];
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
+				update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
+			} else {
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
+				delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
 			}
 
 			if ( $source_type === 'Visualizer_Source_Json' ) {
@@ -664,8 +607,6 @@ class Visualizer_Gutenberg_Block {
 
 	/**
 	 * Format chart data.
-	 *
-	 * Note: No matter how tempted, don't use the similar method from Visualizer_Source. That works on a different structure.
 	 */
 	public function format_chart_data( $data, $series ) {
 		foreach ( $series as $i => $row ) {
@@ -678,35 +619,36 @@ class Visualizer_Gutenberg_Block {
 				continue;
 			}
 
-			switch ( $row['type'] ) {
-				case 'number':
-					foreach ( $data as $o => $col ) {
-						$data[ $o ][ $i ] = ( is_numeric( $col[ $i ] ) ) ? floatval( $col[ $i ] ) : ( is_numeric( str_replace( ',', '', $col[ $i ] ) ) ? floatval( str_replace( ',', '', $col[ $i ] ) ) : null );
+			if ( $row['type'] === 'number' ) {
+				foreach ( $data as $o => $col ) {
+					$data[ $o ][ $i ] = ( is_numeric( $col[ $i ] ) ) ? floatval( $col[ $i ] ) : ( is_numeric( str_replace( ',', '', $col[ $i ] ) ) ? floatval( str_replace( ',', '', $col[ $i ] ) ) : null );
+				}
+			}
+
+			if ( $row['type'] === 'boolean' ) {
+				foreach ( $data as $o => $col ) {
+					$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_var( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : null;
+				}
+			}
+
+			if ( $row['type'] === 'timeofday' ) {
+				foreach ( $data as $o => $col ) {
+					$date = new DateTime( '1984-03-16T' . $col[ $i ] );
+					if ( $date ) {
+						$data[ $o ][ $i ] = array(
+							intval( $date->format( 'H' ) ),
+							intval( $date->format( 'i' ) ),
+							intval( $date->format( 's' ) ),
+							0,
+						);
 					}
-					break;
-				case 'boolean':
-					foreach ( $data as $o => $col ) {
-						$data[ $o ][ $i ] = ! empty( $col[ $i ] ) ? filter_var( $col[ $i ], FILTER_VALIDATE_BOOLEAN ) : false;
-					}
-					break;
-				case 'timeofday':
-					foreach ( $data as $o => $col ) {
-						$date = new DateTime( '1984-03-16T' . $col[ $i ] );
-						if ( $date ) {
-							$data[ $o ][ $i ] = array(
-								intval( $date->format( 'H' ) ),
-								intval( $date->format( 'i' ) ),
-								intval( $date->format( 's' ) ),
-								0,
-							);
-						}
-					}
-					break;
-				case 'string':
-					foreach ( $data as $o => $col ) {
-						$data[ $o ][ $i ] = $this->toUTF8( $col[ $i ] );
-					}
-					break;
+				}
+			}
+
+			if ( $row['type'] === 'string' ) {
+				foreach ( $data as $o => $col ) {
+					$data[ $o ][ $i ] = $this->toUTF8( $col[ $i ] );
+				}
 			}
 		}
 

@@ -18,13 +18,80 @@ const {
 class GeneralSettings extends Component {
 	constructor() {
 		super( ...arguments );
+
+		this.getLegendPositions = this.getLegendPositions.bind( this );
+		this.getAnimationEasings = this.getAnimationEasings.bind( this );
+
 	}
+
+    getAnimationEasings() {
+        const lib = this.props.chart['visualizer-chart-library'];
+		const type = this.props.chart['visualizer-chart-type'];
+
+        let easings = [];
+
+        switch ( lib ) {
+            case 'GoogleCharts':
+                easings = [
+								{ label: __( 'Constant speed' ), value: 'linear' },
+								{ label: __( 'Start slow and speed up' ), value: 'in' },
+								{ label: __( 'Start fast and slow down' ), value: 'out' },
+								{ label: __( 'Start slow, speed up, then slow down' ), value: 'inAndOut' }
+                ];
+                break;
+            case 'ChartJS':
+                easings = [
+								{ label: __( 'Constant speed' ), value: 'linear' },
+								{ label: __( 'easeInQuad' ), value: 'easeInQuad' },
+								{ label: __( 'easeOutQuad' ), value: 'easeOutQuad' },
+								{ label: __( 'easeInOutQuad' ), value: 'easeInOutQuad' },
+								{ label: __( 'easeInCubic' ), value: 'easeInCubic' },
+								{ label: __( 'easeOutCubic' ), value: 'easeOutCubic' },
+								{ label: __( 'easeInOutCubic' ), value: 'easeInOutCubic' },
+								{ label: __( 'easeInQuart' ), value: 'easeInQuart' },
+								{ label: __( 'easeOutQuart' ), value: 'easeOutQuart' },
+								{ label: __( 'easeInOutQuart' ), value: 'easeInOutQuart' },
+								{ label: __( 'easeInQuint' ), value: 'easeInQuint' },
+								{ label: __( 'easeOutQuint' ), value: 'easeOutQuint' }
+                ];
+                break;
+        }
+
+        return easings;
+    }
+
+    getLegendPositions() {
+        const lib = this.props.chart['visualizer-chart-library'];
+		const type = this.props.chart['visualizer-chart-type'];
+
+        let positions = [
+            { label: __( 'Left of the chart' ), value: 'left' },
+            { label: __( 'Right of the chart' ), value: 'right' },
+            { label: __( 'Above the chart' ), value: 'top' },
+            { label: __( 'Below the chart' ), value: 'bottom' }
+        ];
+
+        switch ( lib ) {
+            case 'ChartJS':
+                break;
+            case 'GoogleCharts':
+                if ( 'pie' !== type ) {
+                    positions.push({ label: __( 'Inside the chart' ), value: 'in' });
+                }
+                positions.push({ label: __( 'Omit the legend' ), value: 'none' });
+                break;
+        }
+
+        return positions;
+    }
 
 	render() {
 
 		const type = this.props.chart['visualizer-chart-type'];
 
 		const settings = this.props.chart['visualizer-settings'];
+
+        const lib = this.props.chart['visualizer-chart-library'];
 
 		const tooltipTriggers = [ { label: __( 'The tooltip will be displayed when the user hovers over an element' ), value: 'focus' } ];
 
@@ -34,27 +101,26 @@ class GeneralSettings extends Component {
 
 		tooltipTriggers[2] = { label: __( 'The tooltip will not be displayed' ), value: 'none' };
 
-        let positions = [
-            { label: __( 'Left of the chart' ), value: 'left' },
-            { label: __( 'Right of the chart' ), value: 'right' },
-            { label: __( 'Above the chart' ), value: 'top' },
-            { label: __( 'Below the chart' ), value: 'bottom' },
-            { label: __( 'Omit the legend' ), value: 'none' }
-        ];
+        // elements that are named differently in different libraries.
+        let titleColorElement, legendColorElement, titleElement;
 
-        if ( 'pie' !== type ) {
-            positions.push({ label: __( 'Inside the chart' ), value: 'in' });
-        }
-
-        if ( 'bubble' === type ) {
-            positions = positions.filter( function( obj ) {
-                return 'left' !== obj.value;
-            });
-        }
-
-        let titleHelp = __( 'Text to display above the chart.' );
-        if ( 0 <= [ 'tabular', 'dataTable', 'gauge', 'geo', 'timeline' ].indexOf( type ) ) {
-            titleHelp = __( 'Text to display in the back-end admin area' );
+        switch ( lib ) {
+            case 'ChartJS':
+                if ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) {
+                    titleColorElement = settings.title.fontColor;
+                    legendColorElement = settings.legend.labels.fontColor;
+                }
+                if ( settings.title.text ) {
+                    titleElement = settings.title.text;
+                }
+                break;
+            case 'GoogleCharts':
+                if ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) {
+                    titleColorElement = settings.titleTextStyle.color;
+                    legendColorElement = settings.legend.textStyle.color;
+                }
+                titleElement = settings.title;
+                break;
         }
 
 		return (
@@ -72,15 +138,24 @@ class GeneralSettings extends Component {
 
 					<TextControl
 						label={ __( 'Chart Title' ) }
-						help={ titleHelp }
-						value={ settings.title }
+						help={ __( 'Text to display above the chart.' ) }
+						value={ titleElement }
 						onChange={ e => {
-							settings.title = e;
+
+                            switch ( lib ) {
+                                case 'ChartJS':
+                                    settings.title.text = e;
+                                    break;
+                                case 'GoogleCharts':
+                                    settings.title = e;
+                                    break;
+                            }
+
 							this.props.edit( settings );
 						} }
 					/>
 
-					{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<SelectControl
 							label={ __( 'Chart Title Position' ) }
 							help={ __( 'Where to place the chart title, compared to the chart area.' ) }
@@ -97,21 +172,21 @@ class GeneralSettings extends Component {
 						/>
 					) }
 
-					{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'timeline' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<BaseControl
 							label={ __( 'Chart Title Color' ) }
 						>
 							<ColorPalette
-								value={ settings.titleTextStyle.color }
+								value={ titleColorElement }
 								onChange={ e => {
-									settings.titleTextStyle.color = e;
+									titleColorElement = e;
 									this.props.edit( settings );
 								} }
 							/>
 						</BaseControl>
 					) }
 
-					{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+					{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<SelectControl
 							label={ __( 'Axes Titles Position' ) }
 							help={ __( 'Determines where to place the axis titles, compared to the chart area.' ) }
@@ -130,7 +205,7 @@ class GeneralSettings extends Component {
 
 				</PanelBody>
 
-				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Font Styles' ) }
 						className="visualizer-inner-sections"
@@ -190,7 +265,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Legend' ) }
 						className="visualizer-inner-sections"
@@ -201,16 +276,14 @@ class GeneralSettings extends Component {
 							label={ __( 'Position' ) }
 							help={ __( 'Determines where to place the legend, compared to the chart area.' ) }
 							value={ settings.legend.position ? settings.legend.position : 'right' }
-							options={ positions }
+							options={ this.getLegendPositions() }
 							onChange={ e => {
 								if ( 'pie' !== type ) {
 									let axis = 'left' === e ? 1 : 0;
 
-                                    if ( settings.series ) {
-                                        Object.keys( settings.series ).map( i => {
-                                            settings.series[i].targetAxisIndex = axis;
-                                        });
-                                    }
+									Object.keys( settings.series ).map( i => {
+										settings.series[i].targetAxisIndex = axis;
+									});
 								}
 
 								settings.legend.position = e;
@@ -237,9 +310,9 @@ class GeneralSettings extends Component {
 							label={ __( 'Font Color' ) }
 						>
 							<ColorPalette
-								value={ settings.legend.textStyle.color }
+								value={ legendColorElement }
 								onChange={ e => {
-									settings.legend.textStyle.color = e;
+									legendColorElement = e;
 									this.props.edit( settings );
 								} }
 							/>
@@ -248,7 +321,7 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'tabular', 'gauge', 'geo', 'dataTable', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'tabular', 'gauge', 'geo', 'dataTable', 'timeline' ].indexOf( type ) ) && ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 					<PanelBody
 						title={ __( 'Tooltip' ) }
 						className="visualizer-inner-sections"
@@ -300,13 +373,14 @@ class GeneralSettings extends Component {
 					</PanelBody>
 				) }
 
-				{ ( -1 >= [ 'tabular', 'dataTable', 'gauge', 'geo', 'pie', 'timeline' ].indexOf( type ) ) && (
+				{ ( -1 >= [ 'table', 'gauge', 'geo', 'pie', 'timeline', 'dataTable' ].indexOf( type ) ) && (
 					<PanelBody
 						title={ __( 'Animation' ) }
 						className="visualizer-inner-sections"
 						initialOpen={ false }
 					>
 
+                    { ( -1 >= [ 'ChartJS' ].indexOf( lib ) ) && (
 						<CheckboxControl
 							label={ __( 'Animate on startup?' ) }
 							help={ __( 'Determines if the chart will animate on the initial draw.' ) }
@@ -316,6 +390,8 @@ class GeneralSettings extends Component {
 								this.props.edit( settings );
 							} }
 						/>
+
+                    ) }
 
 						<TextControl
 							label={ __( 'Duration' ) }
@@ -332,12 +408,7 @@ class GeneralSettings extends Component {
 							label={ __( 'Easing' ) }
 							help={ __( 'The easing function applied to the animation.' ) }
 							value={ settings.animation.easing ? settings.animation.easing : 'linear' }
-							options={ [
-								{ label: __( 'Constant speed' ), value: 'linear' },
-								{ label: __( 'Start slow and speed up' ), value: 'in' },
-								{ label: __( 'Start fast and slow down' ), value: 'out' },
-								{ label: __( 'Start slow, speed up, then slow down' ), value: 'inAndOut' }
-							] }
+							options={ this.getAnimationEasings() }
 							onChange={ e => {
 								settings.animation.easing = e;
 								this.props.edit( settings );

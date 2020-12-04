@@ -1,13 +1,14 @@
 /**
- * External dependencies
+ * This file renders the chart when the Done button is clicked.
  */
 import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
+import ChartJS from './ChartJS.js';
 
 import merge from 'merge';
 
-import { compact, formatDate, isValidJSON, formatData } from '../utils.js';
+import { compact, formatDate, isValidJSON } from '../utils.js';
 
 /**
  * WordPress dependencies
@@ -40,15 +41,11 @@ class ChartRender extends Component {
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
 
-		if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
-			if ( 'DataTable' === data['visualizer-chart-library']) {
+		if ( 0 <= [ 'gauge', 'table', 'timeline', 'dataTable' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+			if ( 'dataTable' === data['visualizer-chart-type']) {
 				chart = data['visualizer-chart-type'];
 			} else {
-                chart = this.props.chart['visualizer-chart-type'];
-                if ( 'tabular' === chart ) {
-                    chart = 'table';
-                }
-                chart = startCase( chart );
+				chart = startCase( this.props.chart['visualizer-chart-type']);
 			}
 		} else {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
@@ -79,14 +76,28 @@ class ChartRender extends Component {
 							</Toolbar>
 						</BlockControls>
 
-						{ ( 'DataTable' === data['visualizer-chart-library']) ? (
+
+                        { 'dataTable' === chart ? (
 							<DataTable
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
 							/>
-						) : ( '' !== data['visualizer-data-exploded'] ? (
+                        ) : ( 'ChartJS' === this.props.chart['visualizer-chart-library'] ? (
+                            <ChartJS
+                                chartType={ this.props.chart['visualizer-chart-type'] }
+								id={ this.props.id }
+                                data={ this.props.chart['visualizer-data'] }
+                                series={ this.props.chart['visualizer-series'] }
+								options={
+									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
+										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
+										compact( this.props.chart['visualizer-settings'])
+								}
+								height="250"
+                            />
+                        ) : ( '' !== data['visualizer-data-exploded'] ? (
 							<Chart
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
@@ -97,7 +108,6 @@ class ChartRender extends Component {
 										compact( this.props.chart['visualizer-settings'])
 								}
 								height="500px"
-                                formatters={ formatData( data ) }
 							/>
                         ) : (
 							<Chart
@@ -110,9 +120,9 @@ class ChartRender extends Component {
 										compact( this.props.chart['visualizer-settings'])
 								}
 								height="500px"
-                                formatters={ formatData( data ) }
 							/>
-						) ) }
+                        ) ) ) }
+
 
                          <div className="visualizer-settings__charts-footer"><sub>
                             { footer }

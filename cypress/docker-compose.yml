@@ -1,7 +1,6 @@
 version: '3.3'
 services:
   cypress:
-    ipc: host
     image: "cypress/included:3.8.2"
     network_mode: "host"
     environment:

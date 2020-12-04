@@ -81,7 +81,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return $tag;
 		}
 
-		$scripts    = array( 'google-jsapi', 'visualizer-render-google-lib', 'visualizer-render-google' );
+		$scripts    = array( 'google-jsapi-new', 'google-jsapi-old', 'visualizer-render-google-lib', 'visualizer-render-google' );
 
 		foreach ( $scripts as $async ) {
 			if ( $async === $handle ) {
@@ -108,31 +108,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/action/(?P<chart>\d+)/(?P<type>.+)/',
 			array(
-				// POST is required for save/cancel, GET for all others
-				'methods'  => array( 'POST', 'GET' ),
-				'args'     => array(
-					'chart' => array(
-						'required' => true,
-						'sanitize_callback' => function( $param ) {
-							return is_numeric( $param ) ? $param : null;
-						},
-					),
-					'type' => array(
-						'required' => true,
-						'type' => 'string',
-						'enum' => array_merge( array( 'save', 'cancel' ), array_keys( $this->get_actions() ) ),
-					),
-				),
-				'permission_callback' => function ( WP_REST_Request $request ) {
-					$chart_id   = filter_var( sanitize_text_field( $request->get_param( 'chart' ), FILTER_VALIDATE_INT ) );
-					if ( ! empty( $chart_id ) && in_array( $request->get_param( 'type' ), array( 'save', 'cancel' ), true ) ) {
-						// let save and cancel go without any check as past version of pro
-						// did not send the X-WP-Nonce
-						// we can change this at a later date.
-						return true;
-					}
-					return ! empty( $chart_id ) && apply_filters( 'visualizer_pro_show_chart', true, $chart_id );
-				},
+				'methods'  => array( 'GET', 'POST' ),
 				'callback' => array( $this, 'perform_action' ),
 			)
 		);
@@ -243,6 +219,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 */
 	public function enqueueScripts() {
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
+		wp_register_script( 'visualizer-clipboardjs', VISUALIZER_ABSURL . 'js/lib/clipboardjs/clipboard.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
 	}
@@ -264,14 +241,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		global $wp_version;
 		$atts = shortcode_atts(
 			array(
-				// chart id
-				'id'     => false,
-				// chart class
-				'class'  => false,
-				// for lazy load
-				// set 'yes' to use the default intersection limit (300px)
-				// OR set a number (e.g. 700) to use 700px as the intersection limit
-				'lazy' => apply_filters( 'visualizer_lazy_by_default', false, $atts['id'] ),
+				'id'     => false, // chart id
+				'class'  => false, // chart class
+				'series' => false, // series filter hook
+				'data'   => false, // data filter hook
+				'settings'   => false, // data filter hook
 			),
 			$atts
 		);
@@ -281,7 +255,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
-		// do not show the chart?
 		if ( ! apply_filters( 'visualizer_pro_show_chart', true, $atts['id'] ) ) {
 			return '';
 		}
@@ -295,18 +268,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$id = 'visualizer-' . $atts['id'];
 		$defaultClass   = 'visualizer-front';
 		$class = apply_filters( Visualizer_Plugin::FILTER_CHART_WRAPPER_CLASS, $atts['class'], $atts['id'] );
-
-		$lazyClass = $atts['lazy'] === 'yes' || ctype_digit( $atts['lazy'] ) ? 'visualizer-lazy' : '';
-
-		$class  = sprintf( '%s %s %s %s', $defaultClass, $class, 'visualizer-front-' . $atts['id'], $lazyClass );
-		$attributes = array();
-		if ( ! empty( $class ) ) {
-			$attributes['class'] = trim( $class );
-		}
-
-		if ( ctype_digit( $atts['lazy'] ) ) {
-			$attributes['data-lazy-limit'] = $atts['lazy'];
-		}
+		$class  = $defaultClass . ' ' . $class . ' ' . 'visualizer-front-' . $atts['id'];
+		$class = ! empty( $class ) ? ' class="' . trim( $class ) . '"' : '';
 
 		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 
@@ -320,12 +283,20 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		// handle series filter hooks
 		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-
+		if ( ! empty( $atts['series'] ) ) {
+			$series = apply_filters( $atts['series'], $series, $chart->ID, $type );
+		}
 		// handle settings filter hooks
 		$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
+		if ( ! empty( $atts['settings'] ) ) {
+			$settings = apply_filters( $atts['settings'], $settings, $chart->ID, $type );
+		}
 
 		// handle data filter hooks
 		$data   = self::get_chart_data( $chart, $type );
+		if ( ! empty( $atts['data'] ) ) {
+			$data = apply_filters( $atts['data'], $data, $chart->ID, $type );
+		}
 
 		$css        = '';
 		$arguments  = $this->get_inline_custom_css( $id, $settings );
@@ -340,7 +311,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
 		if ( $amp && $amp->is_amp() ) {
-			return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
+			return '<div id="' . $id . '"' . $class . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
 		}
 
 		// add chart to the array
@@ -372,7 +343,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );
 					$actions_div    .= ' data-clipboard-text="' . esc_attr( $copy['csv'] ) . '"';
-					wp_enqueue_script( 'clipboard' );
+					wp_enqueue_script( 'visualizer-clipboardjs' );
 				}
 
 				$actions_div    .= apply_filters( 'visualizer_action_attributes', '', $key, $atts['id'] );
@@ -384,8 +355,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$actions_div            .= $css;
 
-		foreach ( $this->_charts as $id => $array ) {
-			$library = $array['library'];
+		foreach ( $this->_charts as $id => $attributes ) {
+			$library = $attributes['library'];
 			wp_register_script(
 				"visualizer-render-$library",
 				VISUALIZER_ABSURL . 'js/render-facade.js',
@@ -403,7 +374,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'language'      => $this->get_language(),
 					'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 					'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
-					'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
 					'i10n'          => array(
 						'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
 					),
@@ -415,26 +385,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// return placeholder div
-		return $actions_div . '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '></div>' . $this->addSchema( $chart->ID );
-	}
-
-	/**
-	 * Converts the array of attributes to a string of HTML attributes.
-	 *
-	 * @since ?
-	 *
-	 * @access private
-	 */
-	private function getHtmlAttributes( $attributes ) {
-		$string = '';
-		if ( ! $attributes ) {
-			return $string;
-		}
-
-		foreach ( $attributes as $name => $value ) {
-			$string .= sprintf( '%s="%s"', esc_attr( $name ), esc_attr( $value ) );
-		}
-		return $string;
+		return $actions_div . '<div id="' . $id . '"' . $class . '></div>' . $this->addSchema( $chart->ID );
 	}
 
 	/**

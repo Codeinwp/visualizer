@@ -1,4 +1,4 @@
-describe('Test Free - gutenberg', function() {
+describe('Test Free - gutenberg (chartjs)', function() {
     before(function(){
         Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
@@ -10,7 +10,7 @@ describe('Test Free - gutenberg', function() {
     });
 
     it('Create all charts', function() {
-        cy.create_available_charts(Cypress.env('chart_types').free);
+        cy.create_available_charts(Cypress.env('chart_types').chartjs, 'ChartJS');
     });
 
     it('Verify insertion of charts', function() {
@@ -35,37 +35,13 @@ describe('Test Free - gutenberg', function() {
             cy.get('div[data-type="visualizer/chart"]').should('have.length', (i + 2));
 
             cy.get('div[data-type="visualizer/chart"]:nth-child(' + (i + 1) + ')').then( ($block) => {
-                // 2 rows - create and insert
                 cy.wrap($block).find('.visualizer-settings__content-option').should('have.length', 2);
-                
-                // click insert
                 cy.wrap($block).find('.visualizer-settings__content-option').last().click({force:true});
 
-                // insert chart
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__charts-single:nth-child(' + (i + 1) + ') .visualizer-settings__charts-controls').click();
-                
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').should('have.length', 1);
-
-                cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart').then( ($chart_block) => {
-                    cy.log('Processing chart: ' + Cypress.$($chart_block).attr('data-chart-type'));
-                });
-
-                // chart and footer divs
                 cy.wrap($block).find('.visualizer-settings .visualizer-settings__chart > div').should('have.length', 2);
-
-                // 2 buttons, one of them "done"
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
-                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-done').should('have.length', 1);
-
-                // click advanced options
-                cy.get('.visualizer-advanced-options button.components-button').click({force:true});
-
-                // done button disappears, save button appears
-                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-done').should('have.length', 0);
-                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-save').should('have.length', 1);
-
-                // click save button
-                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-save').click({force:true});
             });
         });
     });

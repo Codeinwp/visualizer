@@ -18,6 +18,9 @@ const {
 	TextControl
 } = wp.components;
 
+
+import HorizontalAxisSettingsChartJS from './ChartJS/HorizontalAxisSettings.js';
+
 class HorizontalAxisSettings extends Component {
 	constructor() {
 		super( ...arguments );
@@ -26,8 +29,14 @@ class HorizontalAxisSettings extends Component {
 	render() {
 
 		const type = this.props.chart['visualizer-chart-type'];
-
 		const settings = this.props.chart['visualizer-settings'];
+        const lib = this.props.chart['visualizer-chart-library'];
+
+        if ( 'ChartJS' === lib ) {
+            return (
+                <HorizontalAxisSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
+            );
+        }
 
 		return (
 			<PanelBody

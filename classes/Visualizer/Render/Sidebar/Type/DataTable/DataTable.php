@@ -22,8 +22,6 @@
 /**
  * Class for datatables.net table chart sidebar settings.
  *
- * THIS IS ONLY FOR BACKWARD COMPATIBILITY ON DEV SYSTEMS. CAN BE REMOVED IN A FUTURE RELEASE.
- *
  * @since 1.0.0
  */
 class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Render_Sidebar {
@@ -444,9 +442,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					'series[' . $index . '][format][precision]',
 					isset( $this->series[ $index ]['format']['precision'] ) ? $this->series[ $index ]['format']['precision'] : '',
 					esc_html__( 'Round values to how many decimal places?', 'visualizer' ),
-					'',
-					'number',
-					array( 'min' => 0 )
+					''
 				);
 				self::_renderTextItem(
 					esc_html__( 'Prefix', 'visualizer' ),

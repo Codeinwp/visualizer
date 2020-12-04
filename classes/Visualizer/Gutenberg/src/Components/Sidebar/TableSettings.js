@@ -25,7 +25,6 @@ class TableSettings extends Component {
 		const settings = this.props.chart['visualizer-settings'];
 
 		const type = this.props.chart['visualizer-chart-type'];
-		const library = this.props.chart['visualizer-chart-library'];
 
 		return (
 			<PanelBody
@@ -34,7 +33,7 @@ class TableSettings extends Component {
 				className="visualizer-advanced-panel"
 			>
 
-				{ ( 'DataTable' === library ) ? (
+				{ ( 'dataTable' === type ) ? (
 					<Fragment>
 						<CheckboxControl
 							label={ __( 'Enable Pagination' ) }

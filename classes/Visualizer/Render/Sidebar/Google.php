@@ -67,13 +67,8 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			'none'   => esc_html__( 'Omit the legend', 'visualizer' ),
 		);
 
-		$chart_type = $this->get_chart_type( false );
-		if ( ! in_array( $chart_type, array( 'Pie' ), true ) ) {
+		if ( ! in_array( $this->get_chart_type( false ), array( 'Pie' ), true ) ) {
 			$this->_legendPositions['in']  = esc_html__( 'Inside the chart', 'visualizer' );
-		}
-
-		if ( in_array( $chart_type, array( 'Bubble' ), true ) ) {
-			unset( $this->_legendPositions['left'] );
 		}
 
 		$this->_alignments = array(
@@ -100,12 +95,13 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 	 * Loads the assets.
 	 */
 	function load_google_assets( $deps, $is_frontend ) {
-		wp_register_script( 'google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'google-jsapi-old', '//www.google.com/jsapi', array( 'google-jsapi-new' ), null, true );
 		wp_register_script(
 			'visualizer-render-google-lib',
 			VISUALIZER_ABSURL . 'js/render-google.js',
 			array(
-				'google-jsapi',
+				'google-jsapi-old',
 			),
 			Visualizer_Plugin::VERSION,
 			true
@@ -122,8 +118,9 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 	 * Enqueue assets.
 	 */
 	public static function enqueue_assets( $deps = array() ) {
-		wp_enqueue_script( 'visualizer-google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
-		wp_enqueue_script( 'visualizer-render-google-lib', VISUALIZER_ABSURL . 'js/render-google.js', array_merge( $deps, array( 'visualizer-google-jsapi' ) ), Visualizer_Plugin::VERSION, true );
+		wp_enqueue_script( 'visualizer-google-jsapi-new', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_enqueue_script( 'visualizer-google-jsapi-old', '//www.google.com/jsapi', array( 'visualizer-google-jsapi-new' ), null, true );
+		wp_enqueue_script( 'visualizer-render-google-lib', VISUALIZER_ABSURL . 'js/render-google.js', array_merge( $deps, array( 'visualizer-google-jsapi-old' ) ), Visualizer_Plugin::VERSION, true );
 		return 'visualizer-render-google-lib';
 	}
 

@@ -33,15 +33,12 @@ export default registerBlockType( 'visualizer/chart', {
 	keywords: [
 		__( 'Visualizer' ),
 		__( 'Chart' ),
-		__( 'Google Charts' )
+		__( 'Google Charts' ),
+		__( 'ChartJS' )
 	],
 	attributes: {
 		id: {
 			type: 'number'
-		},
-		lazy: {
-            default: '-1',
-			type: 'string'
 		},
 		route: {
 			type: 'string'

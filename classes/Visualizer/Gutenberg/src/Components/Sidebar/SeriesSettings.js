@@ -18,6 +18,8 @@ const {
 	TextControl
 } = wp.components;
 
+import SeriesSettingsChartJS from './ChartJS/SeriesSettings.js';
+
 class SeriesSettings extends Component {
 	constructor() {
 		super( ...arguments );
@@ -46,10 +48,15 @@ class SeriesSettings extends Component {
 	render() {
 
 		const type = this.props.chart['visualizer-chart-type'];
-
 		const settings = this.props.chart['visualizer-settings'];
-
 		const series = this.props.chart['visualizer-series'];
+        const lib = this.props.chart['visualizer-chart-library'];
+
+        if ( 'ChartJS' === lib ) {
+            return (
+                <SeriesSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
+            );
+        }
 
 		return (
 			<PanelBody
@@ -60,14 +67,7 @@ class SeriesSettings extends Component {
 
 				{ Object.keys( settings.series )
 					.map( ( i, index ) => {
-                        let indexToFormat = parseInt( i );
-
-                        if ( 'tabular' !== type ) {
-                            indexToFormat = index;
-                        }
-
 						i++;
-
 						return (
 							<PanelBody
 								title={ series[i].label }
@@ -75,7 +75,7 @@ class SeriesSettings extends Component {
 								initialOpen={ false }
 							>
 
-								{ ( -1 >= [ 'tabular', 'pie' ].indexOf( type ) ) && (
+								{ ( -1 >= [ 'table', 'pie' ].indexOf( type ) ) && (
 									<SelectControl
 										label={ __( 'Visible In Legend' ) }
 										help={ __( 'Determines whether the series has to be presented in the legend or not.' ) }
@@ -91,7 +91,7 @@ class SeriesSettings extends Component {
 									/>
 								) }
 
-								{ ( -1 >= [ 'tabular', 'candlestick', 'combo', 'column', 'bar' ].indexOf( type ) ) && (
+								{ ( -1 >= [ 'table', 'candlestick', 'combo', 'column', 'bar' ].indexOf( type ) ) && (
 
 									<Fragment>
 
@@ -128,9 +128,9 @@ class SeriesSettings extends Component {
 											<TextControl
 												label={ __( 'Format' ) }
 												help={ __( 'Enter custom format pattern to apply to this series value.' ) }
-												value={ settings.series[indexToFormat].format }
+												value={ settings.series[index].format }
 												onChange={ e => {
-													settings.series[indexToFormat].format = e;
+													settings.series[index].format = e;
 													this.props.edit( settings );
 												} }
 											/>
@@ -147,7 +147,7 @@ class SeriesSettings extends Component {
 
 									) :
 
-									( 0 <= [ 'date', 'datetime', 'timeofday' ].indexOf( series[i].type ) ) && (
+									( 'date' === series[i].type ) && (
 
 										<Fragment>
 
@@ -155,9 +155,9 @@ class SeriesSettings extends Component {
 												label={ __( 'Date Format' ) }
 												help={ __( 'Enter custom format pattern to apply to this series value.' ) }
 												placeholder="dd LLLL yyyy"
-												value={ settings.series[indexToFormat].format }
+												value={ settings.series[index].format }
 												onChange={ e => {
-													settings.series[indexToFormat].format = e;
+													settings.series[index].format = e;
 													this.props.edit( settings );
 												} }
 											/>
@@ -228,7 +228,7 @@ class SeriesSettings extends Component {
 
 								) }
 
-								{ ( -1 >= [ 'tabular'  ].indexOf( type ) ) && (
+								{ ( -1 >= [ 'table'  ].indexOf( type ) ) && (
 
 									<BaseControl
 										label={ __( 'Color' ) }

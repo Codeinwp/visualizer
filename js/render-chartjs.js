@@ -395,12 +395,7 @@
 
     $('body').on('visualizer:render:chart:start', function(event, v){
         all_charts = v.charts;
-
-        if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
-            renderChart(v.id, v);
-        } else {
-            render(v);
-        }
+        render(v);
 
         // for some reason this needs to be introduced here for dynamic preview updates to work.
         v.update = function(){

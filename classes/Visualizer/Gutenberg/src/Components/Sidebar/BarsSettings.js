@@ -11,6 +11,8 @@ const {
 	TextControl
 } = wp.components;
 
+import BarsSettingsChartJS from './ChartJS/BarsSettings.js';
+
 class BarsSettings extends Component {
 	constructor() {
 		super( ...arguments );
@@ -19,10 +21,17 @@ class BarsSettings extends Component {
 	render() {
 
 		const settings = this.props.chart['visualizer-settings'];
+        const lib = this.props.chart['visualizer-chart-library'];
+
+        if ( 'ChartJS' === lib ) {
+            return (
+                <BarsSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
+            );
+        }
 
 		return (
 			<PanelBody
-				title={ __( 'Bars Settings' ) }
+				title={ __( 'Bar Settings' ) }
 				initialOpen={ false }
 				className="visualizer-advanced-panel"
 			>

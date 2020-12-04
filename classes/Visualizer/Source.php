@@ -141,10 +141,7 @@ abstract class Visualizer_Source {
 	 * @access public
 	 * @return string The serialized array of data.
 	 */
-	public function getData( $fetch_from_editable_table = false ) {
-		if ( $fetch_from_editable_table ) {
-			$this->_fetchDataFromEditableTable();
-		}
+	public function getData() {
 		return serialize( $this->_data );
 	}
 
@@ -156,10 +153,7 @@ abstract class Visualizer_Source {
 	 * @access public
 	 * @return array
 	 */
-	public function getRawData( $fetch_from_editable_table = false ) {
-		if ( $fetch_from_editable_table ) {
-			$this->_fetchDataFromEditableTable();
-		}
+	public function getRawData() {
 		return $this->_data;
 	}
 
@@ -449,6 +443,7 @@ abstract class Visualizer_Source {
 	 * @access private
 	 */
 	private function _fetchDataFromEditableTable() {
+		$params = $this->_args;
 		$headers    = wp_list_pluck( $this->_series, 'label' );
 		$this->fetch();
 
@@ -457,10 +452,7 @@ abstract class Visualizer_Source {
 
 		foreach ( $data as $line ) {
 			$data_row = array();
-			// we have to make sure we are fetching the data in the right order
-			// in case the columns have been reordered
-			foreach ( $headers as $header ) {
-				$value = $line[ $header ];
+			foreach ( $line as $header => $value ) {
 				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( in_array( $header, $headers ) ) {
 					$data_row[] = $value;

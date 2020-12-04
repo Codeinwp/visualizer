@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.4.9';
+	const VERSION = '3.4.3';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -45,7 +45,6 @@ class Visualizer_Plugin {
 
 	const CF_SOURCE_FILTER = 'visualizer-source-filter';
 	const CF_FILTER_CONFIG = 'visualizer-filter-config';
-	const CF_EDITABLE_TABLE = 'visualizer-editable-table';
 
 	// custom actions
 	const ACTION_GET_CHARTS = 'visualizer-get-charts';

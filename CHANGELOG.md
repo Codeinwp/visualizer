@@ -1,41 +1,4 @@
 
- ### v3.4.8 - 2020-09-29 
- **Changes:** 
- * [Fix] Option to edit charts imported from JSON
- 
- ### v3.4.7 - 2020-09-21 
- **Changes:** 
- * - [Fix] Import from JSON: Reordering columns only reorders the label, not the associated data
-* - [Fix] numberFormat option doesn't apply in Bar charts when using annotations
-* - [Fix] Google GEO chart is not rendering if 3rd data column is added
- 
- ### v3.4.6 - 2020-08-11 
- **Changes:** 
- * [Feat] Show chart ID in the chart library
-* [Fix] Compatibility with WP 5.5
-* [Fix] Google charts: Series number format not applying in the Gutenberg editor
-* [Fix] Google Table chart does not display chart if boolean values are specified
-* [Fix] Duplicated enque for jsapi loader
- 
- ### v3.4.5 - 2020-07-08 
- **Changes:** 
- * [Feat] New Google Table Charts
-* [Feat] Option for lazy loading Google Charts
-* [Feat] Option to easily copy chart shortcode code
-* [Fix] Remove Inside the Chart option for the legend position for Google Pie charts
- 
- ### v3.4.4 - 2020-06-16 
- **Changes:** 
- * [Feat] Option to download charts as .png images
-* [Fix] Make UI more intuitive when a chart is missing in the editor
-* [Fix] Clicking Copy chart shows the Copied message multiple times
-* [Fix] Conflict with Modern Events Calendar plugin
-* [Fix] Chart size ( width and height ) options not working for ChartJS charts
-* [Fix] Resizing the window causes annotation-based charts to throw an error
-* [Fix] Remove Inside the Chart option as legend position for Google Pie charts
-* [Fix] Clicking Advanced Options panel breaks Bubble chart
-* [Fix] Missing posts revisions on chart update
- 
  ### v3.4.3 - 2020-05-04 
  **Changes:** 
  * [Feat] Improved chart creation UX
@@ -287,104 +250,60 @@
  **Changes:** 
  - Fixed vendor include.
  
+### 2.0.0 - 13/04/2017
+**Changes:** 
+- Improved UI of the builder.
+- Added compatibility with the new options in the pro version.
+- Added new travis stack.
+- Added optin for tracking.
 
-### 2.0.0 - 13/04/2017
+### 1.7.6 - 20/01/2017
+**Changes:** 
+- Fixed issue when using the same shortcode multiple times on the same page.
 
-**Changes:** 
+### 1.7.5 - 14/12/2016
+**Changes:** 
+- Removed footer banner upsell
+- Fixed series settings issue
+- Fixed issue with comas being used in numbers
 
-- Improved UI of the builder.
+### 1.7.2 - 23/11/2016
+**Changes:** 
+- Improved responsive mechanism
 
-- Added compatibility with the new options in the pro version.
+### 1.7.1 - 20/10/2016
+**Changes:** 
+- Fixed bad link on grid lines
 
-- Added new travis stack.
+### 1.7.0 - 20/10/2016
+**Changes:** 
+- Release 1.7.0
 
-- Added optin for tracking.
+### 1.6.6 - 14/09/2016
+**Changes:** 
+- Fixed issue on chart resizing on tabbed system
 
+### 1.6.5 - 09/09/2016
+**Changes:** 
+- Fixed responsive issue
+- Fixed no axis color for line and bar charts
 
-### 1.7.6 - 20/01/2017
+### 1.6.0 - 19/08/2016
+**Changes:** 
+- Fixed potential XSS security bug
+- Added support for charts in the media library
+- Removed pointer for the pro version
+- Added option to show legend on the left side
 
-**Changes:** 
+### 1.5.6 - 05/07/2016
+**Changes:** 
+- Added support for 3 more chart types
+- Fixed issue with charts not saving
 
-- Fixed issue when using the same shortcode multiple times on the same page.
-
-
-### 1.7.5 - 14/12/2016
-
-**Changes:** 
-
-- Removed footer banner upsell
-
-- Fixed series settings issue
-
-- Fixed issue with comas being used in numbers
-
-
-### 1.7.2 - 23/11/2016
-
-**Changes:** 
-
-- Improved responsive mechanism
-
-
-### 1.7.1 - 20/10/2016
-
-**Changes:** 
-
-- Fixed bad link on grid lines
-
-
-### 1.7.0 - 20/10/2016
-
-**Changes:** 
-
-- Release 1.7.0
-
-
-### 1.6.6 - 14/09/2016
-
-**Changes:** 
-
-- Fixed issue on chart resizing on tabbed system
-
-
-### 1.6.5 - 09/09/2016
-
-**Changes:** 
-
-- Fixed responsive issue
-
-- Fixed no axis color for line and bar charts
-
-
-### 1.6.0 - 19/08/2016
-
-**Changes:** 
-
-- Fixed potential XSS security bug
-
-- Added support for charts in the media library
-
-- Removed pointer for the pro version
-
-- Added option to show legend on the left side
-
-
-### 1.5.6 - 05/07/2016
-
-**Changes:** 
-
-- Added support for 3 more chart types
-
-- Fixed issue with charts not saving
-
-
-### 1.5.5 - 31/05/2016
-
-**Changes:** 
-
-- Added export feature for charts
-
-- Fixed issue with hovering on charts
+### 1.5.5 - 31/05/2016
+**Changes:** 
+- Added export feature for charts
+- Fixed issue with hovering on charts
 
 
 ### 1.5.4 - 04/03/2016

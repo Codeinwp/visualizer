@@ -267,6 +267,7 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
 // create the first N charts available
 Cypress.Commands.add( 'create_available_charts', ($num, $lib = '') => {
     var charts = [];
+
     for(var i = 1; i <= parseInt($num); i++){
         charts.push(i);
     }
@@ -285,7 +286,7 @@ Cypress.Commands.add( 'create_available_charts', ($num, $lib = '') => {
 
             cy.wrap($body).then(function($body){
                 // if we are targeting a particular library, remove charts that do not support it
-                // like Google may support 2nd, 3rd and 10th charts - so we will remove all but these.
+                // like ChartJS may support 2nd, 3rd and 10th charts - so we will remove all but these.
                 if('' !== $lib){
                     $body.find('#type-picker .type-box:not(.type-lib-' + $lib + ')').remove();
                 }
@@ -311,6 +312,7 @@ Cypress.Commands.add( 'create_available_charts', ($num, $lib = '') => {
         });
 
         cy.wait( Cypress.env('wait') );
+
         // verify that the chart was created and the count increased by 1
         cy.visit(Cypress.env('urls').library ).then(() => {
             cy.get('#visualizer-library .visualizer-chart').should('have.length', chart);

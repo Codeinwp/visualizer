@@ -314,7 +314,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// Load all the assets for the different libraries we support.
 			$deps   = array(
 				Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) ),
-				Visualizer_Render_Sidebar_Type_DataTable_Tabular::enqueue_assets( array( 'media-editor' ) ),
+				Visualizer_Render_Sidebar_Type_DataTable_DataTable::enqueue_assets( array( 'media-editor' ) ),
 			);
 
 			wp_enqueue_script( 'visualizer-media-model', VISUALIZER_ABSURL . 'js/media/model.js', $deps, Visualizer_Plugin::VERSION, true );
@@ -392,10 +392,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$types = array_merge(
 			$additional,
 			array(
-				'tabular' => array(
+				'dataTable' => array(
 					'name'    => esc_html__( 'Table', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => array( 'Google Charts', 'DataTable' ),
+					'supports'  => array( 'DataTable' ),
 				),
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie/Donut', 'visualizer' ),
@@ -450,6 +450,11 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'supports'  => array( 'Google Charts' ),
 				),
 				// pro types
+				'table'       => array(
+					'name'    => esc_html__( 'Table (Deprecated)', 'visualizer' ),
+					'enabled' => false,
+					'supports'  => array( 'Google Charts' ),
+				),
 				'timeline'    => array(
 					'name'    => esc_html__( 'Timeline', 'visualizer' ),
 					'enabled' => false,
@@ -520,6 +525,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			case 'types':
 				// fall-through
 			case 'library':
+				// if the user has a Google Table chart, show it as deprecated otherwise remove the option from the library.
+				if ( ! self::hasChartType( 'table' ) ) {
+					$deprecated[]   = 'table';
+					if ( $get2Darray ) {
+						$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
+					} else {
+						$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
+					}
+				}
+
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
 				if ( ! Visualizer_Module::is_pro() ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
@@ -539,6 +554,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				}
 				break;
 			default:
+				// remove the option to create a Google Table chart.
+				$deprecated[]   = 'table';
+
+				// rename the new table chart type.
+				if ( $get2Darray ) {
+					$types['dataTable'] = esc_html__( 'Table', 'visualizer' );
+				} else {
+					$types['dataTable']['name'] = esc_html__( 'Table', 'visualizer' );
+				}
+
 				// if a user has a Gauge/Candlestick chart, then let them keep using it.
 				if ( ! Visualizer_Module::is_pro() ) {
 					if ( ! self::hasChartType( 'gauge' ) ) {
@@ -607,7 +632,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				array(
 					'jquery',
 					'media-views',
-					'clipboard',
 				),
 				Visualizer_Plugin::VERSION,
 				true
@@ -954,8 +978,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				),
 				'page_type' => 'library',
 				'is_front'  => false,
-				'i10n'          => array(
-					'copied'        => __( 'The shortcode has been copied to your clipboard. Hit Ctrl-V/Cmd-V to paste it.', 'visualizer' ),
+				'i10n' => array(
 					'conflict' => __( 'We have detected a potential conflict with another component that prevents Visualizer from functioning properly. Please disable any of the following components if they are activated on your instance: Modern Events Calendar plugin, Acronix plugin. In case the aforementioned components are not activated or you continue to see this error message, please disable all other plugins and enable them one by one to find out the component that is causing the conflict.', 'visualizer' ),
 				),
 			)

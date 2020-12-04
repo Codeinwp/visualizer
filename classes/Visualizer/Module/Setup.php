@@ -190,48 +190,10 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	/**
 	 * Activate the plugin
 	 */
-	public function activate( $network_wide ) {
-		if ( is_multisite() && $network_wide ) {
-			foreach ( get_sites( array( 'fields' => 'ids' ) ) as $blog_id ) {
-				switch_to_blog( $blog_id );
-				$this->activate_on_site();
-				restore_current_blog();
-			}
-		} else {
-			$this->activate_on_site();
-		}
-	}
-
-	/**
-	 * Activates the plugin on a particular blog instance (supports multisite and single site).
-	 */
-	private function activate_on_site() {
+	public function activate() {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
 		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, 'hourly', 'visualizer_schedule_refresh_db' );
 		add_option( 'visualizer-activated', true );
-	}
-
-	/**
-	 * Deactivate the plugin
-	 */
-	public function deactivate( $network_wide ) {
-		if ( is_multisite() && $network_wide ) {
-			foreach ( get_sites( array( 'fields' => 'ids' ) ) as $blog_id ) {
-				switch_to_blog( $blog_id );
-				$this->deactivate_on_site();
-				restore_current_blog();
-			}
-		} else {
-			$this->deactivate_on_site();
-		}
-	}
-
-	/**
-	 * Deactivates the plugin on a particular blog instance (supports multisite and single site).
-	 */
-	private function deactivate_on_site() {
-		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
-		delete_option( 'visualizer-activated', true );
 	}
 
 	/**
@@ -241,9 +203,6 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		if ( defined( 'TI_UNIT_TESTING' ) ) {
 			return;
 		}
-
-		// fire any upgrades necessary.
-		Visualizer_Module_Upgrade::upgrade();
 
 		if ( get_option( 'visualizer-activated' ) ) {
 			delete_option( 'visualizer-activated' );
@@ -255,6 +214,14 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		}
 	}
 
+
+	/**
+	 * Deactivate the plugin
+	 */
+	public function deactivate() {
+		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+		delete_option( 'visualizer-activated', true );
+	}
 
 	/**
 	 * Refresh the specific chart from the db.
@@ -331,33 +298,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		$error      = $source->get_error();
 		if ( empty( $error ) ) {
-			$this->disableRevisionsTemporarily();
+			add_filter( 'wp_revisions_to_keep', '__return_false' );
 			if ( $load_series ) {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
-			}
-
-			$allow_html = false;
-			$settings   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
-			if ( isset( $settings['allowHtml'] ) && intval( $settings['allowHtml'] ) === 1 ) {
-				$allow_html = true;
-			}
-
-			$allow_html = apply_filters( 'visualizer_allow_html_content', $allow_html, $chart_id, $chart );
-
-			if ( $allow_html ) {
-				kses_remove_filters();
 			}
 
 			wp_update_post(
 				array(
 					'ID'            => $chart_id,
-					'post_content'  => $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ),
+					'post_content'  => $source->getData(),
 				)
 			);
-
-			if ( $allow_html ) {
-				kses_init_filters();
-			}
 
 			$chart = get_post( $chart_id );
 			delete_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR );

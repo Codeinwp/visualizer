@@ -1,11 +1,15 @@
 /**
- * External dependencies
+ * This file renders the chart grid for selection.
  */
+
+ /* eslint-disable operator-linebreak */
+
 import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
+import ChartJS from './ChartJS.js';
 
-import { formatDate, filterCharts, formatData } from '../utils.js';
+import { formatDate, filterCharts } from '../utils.js';
 
 /**
  * WordPress dependencies
@@ -48,7 +52,7 @@ class Charts extends Component {
         const perPage = visualizerLocalize.chartsPerPage;
 
 		// Fetch review again if block loaded after saving.
-		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=' + perPage + '&meta_key=visualizer-chart-library&meta_value=ChartJS' });
+		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=' + perPage });
 		this.setState({ charts: result });
 	}
 
@@ -59,7 +63,7 @@ class Charts extends Component {
 
 		this.setState({ isBusy: true });
 
-		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=${ perPage }&meta_key=visualizer-chart-library&meta_value=ChartJS&offset=${ offset }` });
+		let result = await apiFetch({ path: `wp/v2/visualizer/?per_page=${ perPage }&offset=${ offset }` });
 
 		if ( perPage > result.length ) {
 			chartsLoaded = true;
@@ -73,22 +77,10 @@ class Charts extends Component {
 	}
 
 	render() {
-
 		const { charts, isBusy, chartsLoaded, perPage } = this.state;
 
 		return (
 			<div className="visualizer-settings__charts">
-				<Notice
-					status="warning"
-					isDismissible={ false }
-				>
-					{ __( 'ChartJS charts are currently not available for selection here, you must visit the library, get the shortcode, and add the chart here in a shortcode tag.' ) }
-
-					<ExternalLink href={ visualizerLocalize.adminPage }>
-						{ __( 'Click here to visit Visualizer Charts Library.' ) }
-					</ExternalLink>
-				</Notice>
-
 				{
 					( null !== charts ) ?
 						( 1 <= charts.length ) ?
@@ -101,58 +93,62 @@ class Charts extends Component {
 
 										let title, chart, footer;
 
-										if ( data['visualizer-settings'].title ) {
-											title = data['visualizer-settings'].title;
-										} else {
+										if ( data['visualizer-settings'].title  ) {
+                                            // chartjs titles are objects.
+											title = 'object' === typeof data['visualizer-settings'].title ? data['visualizer-settings'].title.text : data['visualizer-settings'].title;
+										}
+                                        if ( ! title || 0 === title.trim().length ) {
 											title = `#${charts[i].id}`;
 										}
 
-										if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
-											if ( 'DataTable' === data['visualizer-chart-library']) {
+										if ( 0 <= [ 'gauge', 'table', 'timeline', 'dataTable' ].indexOf( data['visualizer-chart-type']) ) {
+											if ( 'dataTable' === data['visualizer-chart-type']) {
 												chart = data['visualizer-chart-type'];
 											} else {
-                                                chart = data['visualizer-chart-type'];
-                                                if ( 'tabular' === chart ) {
-                                                    chart = 'table';
-                                                }
-												chart = startCase( chart );
+												chart = startCase( data['visualizer-chart-type']);
 											}
 										} else {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
-										}
-
-										if ( data['visualizer-chart-library']) {
-											if ( 'ChartJS' === data['visualizer-chart-library']) {
-												return;
-											}
 										}
 
 										if ( data['visualizer-data-exploded']) {
                                             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
                                         }
 
+                                        const canvasHeight = 255; // this height is also mentioned in css.
+
 										return (
-											<div className="visualizer-settings__charts-single" data-chart-type={ chart } key={ `chart-${ charts[i].id }` }>
+											<div className="visualizer-settings__charts-single" key={ `chart-${ charts[i].id }` }>
 
 												<div className="visualizer-settings__charts-title">
 													{ title }
 												</div>
 
-												{ ( 'DataTable' === data['visualizer-chart-library']) ? (
+												{ 'dataTable' === chart ? (
 													<DataTable
 														id={ charts[i].id }
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														chartsScreen={ true }
-														options={ data['visualizer-settings'] }
+														options={ filterCharts( data['visualizer-settings']) }
 													/>
+												) : ( 'ChartJS' === data['visualizer-chart-library'] ? (
+                                                    <ChartJS
+														chartType={ data['visualizer-chart-type'] }
+														id={ charts[i].id }
+														data={ data['visualizer-data'] }
+														series={ data['visualizer-series'] }
+														chartsScreen={ true }
+														options={ filterCharts( data['visualizer-settings']) }
+                                                        height={ canvasHeight }
+                                                    />
 												) : ( '' !== data['visualizer-data-exploded'] ? (
 													<Chart
 														chartType={ chart }
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
-                                                        formatters={ formatData( data ) }
+                                                        height={ canvasHeight }
 													/>
 												) : (
 													<Chart
@@ -160,9 +156,9 @@ class Charts extends Component {
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
-                                                        formatters={ formatData( data ) }
+                                                        height={ canvasHeight }
 													/>
-												) ) }
+												) ) ) }
 
                                                  <div className="visualizer-settings__charts-footer"><sub>
                                                     { footer }
@@ -192,13 +188,23 @@ class Charts extends Component {
 									</Button>
 								) }
 
-							</Fragment>						:
+                                <div>
+                                { isBusy ?
+                                        <Spinner/>
+                                         :
+                                    <div/>
+                                }
+                                </div>
+
+							</Fragment>
+                        :
 							<p className="visualizer-no-charts">
 								{ __( 'No charts found.' ) }
-							</p>					:
-						<Placeholder>
-							<Spinner/>
-						</Placeholder>
+							</p>
+                    :
+                        <Placeholder>
+                            <Spinner/>
+                        </Placeholder>
 				}
 
 			</div>

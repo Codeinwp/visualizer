@@ -13,6 +13,8 @@ const {
 	TextControl
 } = wp.components;
 
+import SlicesSettingsChartJS from './ChartJS/SlicesSettings.js';
+
 class SlicesSettings extends Component {
 	constructor() {
 		super( ...arguments );
@@ -41,8 +43,14 @@ class SlicesSettings extends Component {
 	render() {
 
 		const settings = this.props.chart['visualizer-settings'];
-
 		const data = this.props.chart['visualizer-data'];
+        const lib = this.props.chart['visualizer-chart-library'];
+
+        if ( 'ChartJS' === lib ) {
+            return (
+                <SlicesSettingsChartJS chart={ this.props.chart } edit={ this.props.edit } />
+            );
+        }
 
 		return (
 			<PanelBody
@@ -68,9 +76,6 @@ class SlicesSettings extends Component {
 										settings.slices[i].offset = e;
 										this.props.edit( settings );
 									} }
-                                    type="number"
-                                    min="0"
-                                    step="0.1"
 								/>
 
 								<BaseControl

@@ -64,7 +64,11 @@ class ChartPermissions extends Component {
 
 	render() {
 
-		let permissions = this.props.chart['visualizer-permissions'];
+		let permissions;
+
+		if ( 'business' === visualizerLocalize.isPro ) {
+			permissions = this.props.chart['visualizer-permissions'];
+		}
 
 		return (
 			<Fragment>

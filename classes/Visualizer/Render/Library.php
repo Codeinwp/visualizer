@@ -252,7 +252,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<span class="visualizer-chart-action visualizer-nochart-clone"></span>';
 			echo '<span class="visualizer-chart-action visualizer-nochart-edit"></span>';
 			echo '<span class="visualizer-chart-action visualizer-nochart-export"></span>';
-			echo '<span class="visualizer-chart-action visualizer-nochart-shortcode"></span>';
+			echo '<span class="visualizer-chart-shortcode">';
+			echo '&nbsp;[visualizer]&nbsp;';
+			echo '</span>';
 			echo '</div>';
 			echo '</div>';
 			$this->_renderSidebar();
@@ -319,13 +321,12 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			admin_url( 'admin-ajax.php' )
 		);
 
-		$chart_status   = array( 'date' => get_the_modified_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $chart_id ), 'error' => get_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, true ), 'icon' => 'dashicons-yes-alt', 'title' => 'A-OK!' );
+		$chart_status   = array( 'date' => get_the_modified_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $chart_id ), 'error' => get_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, true ), 'icon' => 'dashicons-yes-alt', 'title' => '' );
 		if ( ! empty( $chart_status['error'] ) ) {
 			$chart_status['icon'] = 'error dashicons-dismiss';
 			$chart_status['title'] = __( 'Click to view the error', 'visualizer' );
 		}
 
-		$shortcode = sprintf( '[visualizer id="%s" lazy="no" class=""]', $chart_id );
 		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
@@ -338,9 +339,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
 			echo '<a class="visualizer-chart-action visualizer-chart-image" href="javascript:;" title="', esc_attr__( 'Download as image', 'visualizer' ), '" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"></a>';
 		}
-		echo '<a class="visualizer-chart-action visualizer-chart-shortcode" href="javascript:;" title="', esc_attr__( 'Click to copy shortcode', 'visualizer' ), '" data-clipboard-text="', esc_attr( $shortcode ), '"></a>';
-		echo '<span>&nbsp;</span>';
-		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
+		echo '<span class="visualizer-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">';
+		echo '&nbsp;[visualizer id=&quot;', $chart_id, '&quot;]&nbsp;';
+		echo '</span>';
+		echo '<hr><div class="visualizer-chart-status"><span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
 		echo '</div>';
 		echo '</div>';
 	}

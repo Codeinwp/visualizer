@@ -235,6 +235,18 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			self::_renderSectionEnd();
 
 			self::_renderSectionStart( esc_html__( 'Legend', 'visualizer' ), false );
+
+				/*
+				 This does not work despite the documentation
+				self::_renderCheckboxItem(
+					esc_html__( 'Hide legend', 'visualizer' ),
+					'legend[display]',
+					isset( $this->legend['display'] ) ? $this->legend['display'] : false,
+					'false',
+					esc_html__( 'Show legend or not.', 'visualizer' )
+				);
+				*/
+
 				self::_renderSelectItem(
 					esc_html__( 'Position', 'visualizer' ),
 					'legend[position]',
@@ -242,6 +254,14 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					isset( $this->legend['position'] ) ? $this->legend['position'] : 'top',
 					$this->_legendPositions,
 					esc_html__( 'Determines where to place the legend, compared to the chart area.', 'visualizer' )
+				);
+
+				self::_renderSelectItem(
+					esc_html__( 'Alignment', 'visualizer' ),
+					'legend[alignment]',
+					$this->legend['alignment'],
+					$this->_alignments,
+					esc_html__( 'Determines the alignment of the legend.', 'visualizer' )
 				);
 
 				self::_renderCheckboxItem(
@@ -252,46 +272,13 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					esc_html__( 'Legend will show datasets in reverse order.', 'visualizer' )
 				);
 
-				echo '<div class="viz-section-item">';
-					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
+				self::_renderColorPickerItem(
+					esc_html__( 'Font Color', 'visualizer' ),
+					'legend[labels][fontColor]',
+					isset( $this->legend['labels']['fontColor'] ) ? $this->legend['labels']['fontColor'] : null,
+					'#000'
+				);
 
-					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
-						echo '<tr>';
-							echo '<td class="viz-section-table-column">';
-								echo '<select name="legend[labels][fontName]" class="control-select">';
-									echo '<option></option>';
-		foreach ( self::$_fontFamilies as $font => $label ) {
-			echo '<option value="', $font, '"', selected( $font, $this->legend['labels']['fontName'], false ), '>';
-			echo $label;
-			echo '</option>';
-		}
-								echo '</select>';
-							echo '</td>';
-							echo '<td class="viz-section-table-column">';
-								echo '<select name="legend[labels][fontSize]" class="control-select">';
-									echo '<option></option>';
-		for ( $i = 7; $i <= 20; $i++ ) {
-			echo '<option value="', $i, '"', selected( $i, $this->legend['labels']['fontSize'], false ), '>', $i, '</option>';
-		}
-								echo '</select>';
-							echo '</td>';
-						echo '</tr>';
-					echo '</table>';
-
-					self::_renderColorPickerItem(
-						esc_html__( 'Font Color', 'visualizer' ),
-						'legend[labels][fontColor]',
-						isset( $this->legend['labels']['fontColor'] ) ? $this->legend['labels']['fontColor'] : null,
-						'#000'
-					);
-
-				echo '</div>';
-
-			self::_renderSectionEnd();
-
-			self::_renderSectionStart( esc_html__( 'Tooltip', 'visualizer' ), false );
-				$this->_renderTooltipSettigns();
 			self::_renderSectionEnd();
 
 			$this->_renderAnimationSettings();

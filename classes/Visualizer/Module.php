@@ -80,7 +80,7 @@ class Visualizer_Module {
 	 */
 	public function onShutdown() {
 		$error = error_get_last();
-		if ( $error && $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
+		if ( $error['type'] === E_ERROR && false !== strpos( $error['file'], 'Visualizer/' ) ) {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Critical error %s', print_r( $error, true ) ), 'error', __FILE__, __LINE__ );
 		}
 	}
@@ -396,29 +396,13 @@ class Visualizer_Module {
 	}
 
 	/**
-	 * Disable revisions temporarily for visualizer post type.
-	 */
-	protected final function disableRevisionsTemporarily() {
-		add_filter(
-			'wp_revisions_to_keep', function( $num, $post ) {
-				if ( $post->post_type === Visualizer_Plugin::CPT_VISUALIZER ) {
-					return 0;
-				}
-				return $num;
-			}, 10, 2
-		);
-	}
-
-	/**
 	 * Undo revisions for the chart, and if necessary, restore the earliest version.
 	 *
 	 * @return bool If any revisions were found.
 	 */
 	public final function undoRevisions( $chart_id, $restore = false ) {
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'undoRevisions for %d with%s restore', $chart_id, ( $restore ? '' : 'out' ) ), 'debug', __FILE__, __LINE__ );
-		if ( get_post_type( $chart_id ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
-			return false;
-		}
+
 		$revisions = wp_get_post_revisions( $chart_id, array( 'order' => 'ASC' ) );
 		if ( count( $revisions ) > 1 ) {
 			$revision_ids = array_keys( $revisions );
@@ -426,7 +410,7 @@ class Visualizer_Module {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'found %d revisions = %s', count( $revisions ), print_r( $revision_ids, true ) ), 'debug', __FILE__, __LINE__ );
 
 			// when we restore, a new revision is likely to be created. so, let's disable revisions for the time being.
-			$this->disableRevisionsTemporarily();
+			add_filter( 'wp_revisions_to_keep', '__return_false' );
 
 			if ( $restore ) {
 				// restore to the oldest one i.e. the first one.
@@ -447,11 +431,8 @@ class Visualizer_Module {
 	 * If existing revisions exist for the chart, restore the earliest version and then create a new revision to initiate editing.
 	 */
 	public final function handleExistingRevisions( $chart_id, $chart ) {
-
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'handleExistingRevisions for %d', $chart_id ), 'debug', __FILE__, __LINE__ );
-		if ( get_post_type( $chart_id ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
-			return $chart_id;
-		}
+
 		// undo revisions.
 		$revisions_found    = $this->undoRevisions( $chart_id, true );
 
@@ -546,9 +527,6 @@ class Visualizer_Module {
 		$name   = $this->load_chart_class_name( $chart_id );
 		$class  = null;
 		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
-			if ( 'Visualizer_Render_Sidebar_Type_DataTable_DataTable' === $name ) {
-				$name = 'Visualizer_Render_Sidebar_Type_DataTable_Tabular';
-			}
 			$class  = new $name;
 		}
 

@@ -1,0 +1,9 @@
+.visualizer-settings__charts-single canvas.chartjs-render-monitor {
+	background: #ffffff;
+	height: 255px !important; /* this height is also mentioned in Charts.js */
+}
+
+
+.visualizer-settings .components-spinner {
+    margin: auto;
+}
