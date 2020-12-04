@@ -45,6 +45,10 @@
 
         init_permissions();
 
+        $('body').on('visualizer:render:currentchart:update', function(e){
+            init_permissions();
+        });
+
         if(typeof visualizer !== 'undefined' && visualizer.is_pro) {
             init_db_import();
             init_filter_import();

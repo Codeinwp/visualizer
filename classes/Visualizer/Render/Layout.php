@@ -468,9 +468,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	/**
 	 * Generates the permissions tab.
 	 *
-	 * @access private
+	 * @access public
 	 */
-	private static function _renderPermissions( $args ) {
+	public static function _renderPermissions( $args ) {
 		$chart_id = $args[1];
 
 		// ignore for unit tests because Travis throws the error "Indirect modification of overloaded property Visualizer_Render_Page_Data::$permissions has no effect".
