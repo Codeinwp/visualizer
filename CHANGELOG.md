@@ -1,4 +1,10 @@
 
+ ### v3.4.9 - 2020-11-26 
+ **Changes:** 
+ * [Fix] Pie chart slices offset problem in the Gutenberg editor
+* [Fix] Warning is thrown when remote file is used as source
+* [Fix] Bubble chart legend position not working in the Gutenberg editor
+ 
  ### v3.4.8 - 2020-09-29 
  **Changes:** 
  * [Fix] Option to edit charts imported from JSON
