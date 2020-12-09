@@ -1,4 +1,8 @@
 
+ ### v3.4.10 - 2020-12-09 
+ **Changes:** 
+ * [Fix] Compatibility with Composer 2.0
+ 
  ### v3.4.9 - 2020-11-26 
  **Changes:** 
  * [Fix] Pie chart slices offset problem in the Gutenberg editor

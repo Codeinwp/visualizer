@@ -162,6 +162,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 ## Changelog ##
+### 3.4.10 - 2020-12-09  ###
+
+* [Fix] Compatibility with Composer 2.0
+
+
 ### 3.4.9 - 2020-11-26  ###
 
 * [Fix] Pie chart slices offset problem in the Gutenberg editor
