@@ -20,6 +20,11 @@
     "issues": "https://github.com/Codeinwp/visualizer/issues",
     "source": "https://github.com/Codeinwp/visualizer"
   },
+  "config": {
+    "platform": {
+      "php": "5.6"
+    }
+  },
   "require": {
     "codeinwp/themeisle-sdk": "master",
     "phpoffice/phpspreadsheet": "1.8.2",
