@@ -125,7 +125,7 @@ function visualizer_launch() {
 
 	$plugin->setModule( Visualizer_Module_AMP::NAME );
 
-	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload_52.php';
+	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 	if ( is_readable( $vendor_file ) ) {
 		include_once( $vendor_file );
 	}
