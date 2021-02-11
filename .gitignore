@@ -12,3 +12,4 @@ cypress/integration/localhost*
 cypress/plugins
 cypress.env.json
 grunt
+.DS_Store
