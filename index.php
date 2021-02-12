@@ -8,7 +8,7 @@
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	Requires at least: 3.5
- 	Tested up to:      5.6
+	 Tested up to:      5.6
 	License: GPL v2.0 or later
 	WordPress Available:  yes
 	Requires License:    no
