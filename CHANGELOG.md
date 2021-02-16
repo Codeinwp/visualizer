@@ -1,4 +1,8 @@
 
+ ### v3.4.11 - 2021-02-16 
+ **Changes:** 
+ * Development
+ 
  ### v3.4.10 - 2020-12-09 
  **Changes:** 
  * [Fix] Compatibility with Composer 2.0
