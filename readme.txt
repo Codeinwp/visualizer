@@ -164,7 +164,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 == Changelog ==
 = 3.4.11 - 2021-02-16  = 
 
-* Development
+[Feat] Tested up to WP 5.6
 
 
 = 3.4.10 - 2020-12-09  = 
