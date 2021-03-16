@@ -128,9 +128,9 @@
             }
         });
 
-        $('#thehole').load(function () {
+        $( window ).on( 'load', function() {
             $('#canvas').unlock();
-        });
+        } );
 
         $(document).on('click', '.viz-section-title', function () {
             $(this).toggleClass('open').parent().find('.viz-section-items').toggle();
