@@ -287,8 +287,9 @@ var __visualizer_chart_images   = [];
                         if(series_annotations.includes(i)){
                             seriesIndexToUse++;
                         }
-
-                        format_data(id, table, series[seriesIndexToUse].type, settings.series[i].format, seriesIndexToUse);
+                        if ( series[seriesIndexToUse] ) {
+                            format_data(id, table, series[seriesIndexToUse].type, settings.series[i].format, seriesIndexToUse);
+                        }
                     }
                     break;
             }
