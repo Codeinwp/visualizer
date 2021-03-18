@@ -176,7 +176,6 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
     }
 
     cy.visit(Cypress.env('urls').library ).then(() => {
-        cy.wait( Cypress.env('wait') );
         const id = Cypress.$('div.visualizer-chart div.visualizer-chart-canvas').first().attr('id');
         first_chart = Cypress.$('#' + id).html();
     });
@@ -222,7 +221,6 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
     });
 
     cy.visit(Cypress.env('urls').library ).then(() => {
-        cy.wait( Cypress.env('wait') );
         const id = Cypress.$('div.visualizer-chart div.visualizer-chart-canvas').first().attr('id');
         var content = Cypress.$('#' + id).html();
         expect(content).to.not.equal(first_chart);
