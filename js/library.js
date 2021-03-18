@@ -161,6 +161,8 @@
         $('.visualizer-error i.error').on('click', function(){
             alert( $(this).attr('data-viz-error') );
         });
-        $('.visualizer-chart, .visualizer-library-pagination').fadeIn(500);
+        setTimeout( function() {
+            $('.visualizer-chart, .visualizer-library-pagination').fadeIn(500);
+        } );
     });
 })(jQuery, visualizer.media.view, visualizer.urls);
