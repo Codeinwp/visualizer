@@ -163,6 +163,6 @@
         });
         setTimeout( function() {
             $('.visualizer-chart, .visualizer-library-pagination').fadeIn(500);
-        } );
+        }, 500 );
     });
 })(jQuery, visualizer.media.view, visualizer.urls);
