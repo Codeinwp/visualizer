@@ -324,9 +324,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$chart_status['icon'] = 'error dashicons-dismiss';
 			$chart_status['title'] = __( 'Click to view the error', 'visualizer' );
 		}
-
+		$visualizer_chart_extra_class = true === defined( 'TI_CYPRESS_TESTING' ) ? ' visualizer-chart-display' : '';
 		$shortcode = sprintf( '[visualizer id="%s" lazy="no" class=""]', $chart_id );
-		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
+		echo '<div class="visualizer-chart' . $visualizer_chart_extra_class . '"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';

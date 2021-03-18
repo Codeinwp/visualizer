@@ -52,7 +52,9 @@
 	background-color: #efefef;
 	box-shadow: 0 0 8px #ddd;
 }
-
+.visualizer-chart.visualizer-chart-display {
+	display: block !important;
+}
 .visualizer-chart-canvas {
 	position: relative;
 	width: 30%;
