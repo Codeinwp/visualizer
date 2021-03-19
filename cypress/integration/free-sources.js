@@ -1,8 +1,5 @@
 describe('Test Free - sources', function() {
     before(function(){
-        Cypress.env('host','http://localhost/codeinwp/');
-        Cypress.env('login','wordpress')
-        Cypress.env('pass','wordpress')
         Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
         // login to WP
