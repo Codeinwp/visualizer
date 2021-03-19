@@ -226,10 +226,10 @@ Cypress.Commands.add( 'test_advanced_settings', ($create_new_chart) => {
         //expect(content).to.not.equal(first_chart);
     });
 
+    cy.wait( Cypress.env('wait') * 2 );
     // if the settings cause the chart to be malformed, an error might show and click has to be forced
     cy.get('.visualizer-chart-action.visualizer-chart-edit').first().click({force:true});
 
-    cy.wait( Cypress.env('wait') );
 
     // check if all values are set.
     cy.get('iframe')
