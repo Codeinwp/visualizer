@@ -19,7 +19,7 @@ var __visualizer_chart_images   = [];
         // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
         // remember, some charts do not support annotations so they should not be included in this.
         var no_annotation_charts = ['tabular', 'timeline', 'gauge', 'geo', 'bubble', 'candlestick'];
-        if ( undefined === chart.settings.series.length ) {
+        if ( undefined !== chart.settings && undefined !== chart.settings.series && undefined === chart.settings.series.length ) {
             chart.settings.series = Object.values( chart.settings.series );
         }
         if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined' && ! no_annotation_charts.includes(chart.type) ) {
