@@ -160,7 +160,7 @@ var __visualizer_chart_images   = [];
                 settings.sortBubblesBySize = settings.sortBubblesBySize ? settings.sortBubblesBySize == 1 : false; // jshint ignore:line
 				break;
 			case 'timeline':
-                settings['timeline'] = [];
+                settings['timeline'] = {};
                 settings['timeline']['groupByRowLabel'] = settings['groupByRowLabel'] ? true : false;
                 settings['timeline']['colorByRowLabel'] = settings['colorByRowLabel'] ? true : false;
                 settings['timeline']['showRowLabels']   = settings['showRowLabels'] ? true : false;
