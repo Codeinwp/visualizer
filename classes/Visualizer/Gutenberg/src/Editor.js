@@ -596,7 +596,7 @@ class Editor extends Component {
 											isLarge
                                             className="visualizer-bttn-done"
 											onClick={ () => {
-												this.setState({ route: 'renderChart' });
+												this.setState({ route: 'renderChart', isModified: true });
 												this.props.setAttributes({ route: 'renderChart' });
 											} }
 										>
