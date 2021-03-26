@@ -391,7 +391,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 
 		// this filter can be used to rearrange columns e.g. in candlestick charts
 		// or to add additional data to the root.
-		$array  = apply_filters( 'visualizer_json_massage_data', json_decode( wp_remote_retrieve_body( $response ), true ), $url );
+		$bom = pack( 'H*', 'EFBBBF' );
+		$response_body = wp_remote_retrieve_body( $response );
+		$response_body = preg_replace( "/^$bom/", '', $response_body );
+		$array  = apply_filters( 'visualizer_json_massage_data', json_decode( $response_body, true ), $url );
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'JSON array for the endpoint is %s = ', print_r( $array, true ) ), 'debug', __FILE__, __LINE__ );
 
