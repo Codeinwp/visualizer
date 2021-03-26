@@ -27,11 +27,11 @@ describe('Test Free - gutenberg (datatable)', function() {
 
         cy.wrap(charts).each((value, i, array) => {
             // insert a visualizer block
-            cy.get('div.edit-post-header-toolbar button.edit-post-header-toolbar__inserter-toggle').click();
-            cy.get('.edit-post-layout__inserter-panel-popover-wrapper').then(function ($popup) {
+            cy.get('div.edit-post-header__toolbar button.edit-post-header-toolbar__inserter-toggle').click();
+            cy.get('.edit-post-layout__inserter-panel-content').then(function ($popup) {
                 cy.wrap($popup).find('.block-editor-inserter__search-input').type('visua');
-                cy.wrap($popup).find('.block-editor-inserter__block-list .block-editor-block-types-list__list-item').should('have.length', 1);
-                cy.wrap($popup).find('.block-editor-inserter__block-list button.editor-block-list-item-visualizer-chart').click();
+                cy.wrap($popup).find('.block-editor-block-types-list .editor-block-list-item-visualizer-chart').should('have.length', 1);
+                cy.wrap($popup).find('.block-editor-block-types-list .editor-block-list-item-visualizer-chart').click();
             });
 
             // see the block has the correct elements.
