@@ -221,6 +221,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 											class="visualizer-input json-form-element">
 									</div>
 								</div>
+								<div class="json-wizard-header">
+									<div class="field-title"><?php esc_html_e( 'Additional headers', 'visualizer' ); ?></div>
+									<div>
+										<textarea name="additional_headers" class="visualizer-input" placeholder="<?php esc_html_e( 'Key:Value, Key2:Value2,...' ); ?>"><?php echo isset( $headers['additional_headers'] ) ? $headers['additional_headers'] : ''; ?></textarea>
+									</div>
+								</div>
 							</div>
 						</div>
 					</form>
