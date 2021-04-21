@@ -106,7 +106,8 @@ class Editor extends Component {
 		this.setState({
 			route: 'chartSelect',
 			chart: result['chart_data'],
-			isLoading: false
+			isLoading: true,
+			isModified: true
 		});
 
 		this.props.setAttributes({
