@@ -27,7 +27,7 @@
             },
             beforeActivate: function( event, ui ) {
                 // if settings have changed in tab #2 and tab #1 is being activated, warn the user.
-                if(vizHaveSettingsChanged() && $(ui.newTab.context).attr('id').includes('viz-tab-basic')){
+                if(vizHaveSettingsChanged() && ui.newTab.find( 'a' ).attr( 'id' ).includes('viz-tab-basic')){
                     return confirm(visualizer.l10n.save_settings);
                 }
             }
