@@ -1,5 +1,8 @@
 describe('Test Free - gutenberg', function() {
     before(function(){
+        Cypress.env('host', 'http://codeinwp.local/');
+        Cypress.env('login','admin');
+        Cypress.env('pass','admin');
         Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
         // login to WP
@@ -62,7 +65,7 @@ describe('Test Free - gutenberg', function() {
 
                 // 2 buttons, one of them "done"
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
-                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-done').should('have.length', 1);
+                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-save').should('have.length', 1);
 
                 // make the settings block appear.
                 cy.wrap($block).type('{ctrl}{shift},');
