@@ -62,7 +62,7 @@ describe('Test Free - gutenberg (datatable)', function() {
 
                 // 2 buttons, one of them "done"
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
-                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-done').should('have.length', 1);
+                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-save').should('have.length', 1);
 
                 // make the settings block appear.
                 cy.wrap($block).type('{ctrl}{shift},');
