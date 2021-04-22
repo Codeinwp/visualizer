@@ -1,8 +1,5 @@
 describe('Test Free - gutenberg', function() {
     before(function(){
-        Cypress.env('host', 'http://codeinwp.local/');
-        Cypress.env('login','admin');
-        Cypress.env('pass','admin');
         Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
         // login to WP
