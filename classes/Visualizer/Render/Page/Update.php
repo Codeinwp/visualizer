@@ -57,7 +57,6 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 			echo 'win.vizUpdateChartPreview();';
 
 			// echo $this->updateEditorAndSettings();
-
 			echo '}';
 
 			do_action( 'visualizer_add_update_hook', $this->series, $this->data );

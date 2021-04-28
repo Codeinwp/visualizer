@@ -47,4 +47,9 @@
         <severity>0</severity>
     </rule>
 
+
+    <arg name="extensions" value="php"/>
+    <arg value="sp"/>
+    <arg name="basepath" value="./" />
+    <arg name="parallel" value="20"/>
 </ruleset>
