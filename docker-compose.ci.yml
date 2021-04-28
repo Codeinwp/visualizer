@@ -18,8 +18,8 @@ services:
     restart: always
     volumes:
       - ./bin:/var/www/html/bin
-      - ~/wpcore:/var/www/html/
-      - .:/var/www/html/wp-content/plugins/feedzy-rss-feeds/
+      - wpcore:/var/www/html/
+      - .:/var/www/html/wp-content/plugins/visualizer/
     depends_on:
       - mysql
       - wordpress
@@ -38,8 +38,8 @@ services:
     image: wordpress:latest
     volumes:
       - ./bin:/var/www/html/bin
-      - ~/wpcore:/var/www/html/
-      - .:/var/www/html/wp-content/plugins/feedzy-rss-feeds/
+      - wpcore:/var/www/html/
+      - .:/var/www/html/wp-content/plugins/visualizer/
     restart: always
     environment:
       WORDPRESS_DB_NAME: wordpress

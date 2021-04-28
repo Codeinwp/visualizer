@@ -9,3 +9,5 @@ cypress/integration/localhost*
 cypress/plugins
 cypress.env.json
 .DS_Store
+/cypress/videos/
+/cypress/screenshots/

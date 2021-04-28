@@ -12,9 +12,6 @@ wp  --allow-root theme activate twentynineteen
 # set this constant so that the specific hooks are loaded
 wp  --allow-root config set TI_CYPRESS_TESTING true --raw
 
-# create terms
-wp  --allow-root term create category c_feedzy-1
-wp  --allow-root term create post_tag t_feedzy-1
 
 # debugging
 wp  --allow-root config set WP_DEBUG true --raw

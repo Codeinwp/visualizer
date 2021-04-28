@@ -2,7 +2,7 @@ describe('Test Free - gutenberg (datatable)', function() {
     before(function(){
 
         // login to WP
-        cy.visit('/wp-admin/wp-login.php');
+        cy.visit('/wp-login.php');
         cy.get('#user_login').clear().type( Cypress.env('login') );
         cy.get('#user_pass').clear().type( Cypress.env('pass') );
         cy.get('#wp-submit').click();

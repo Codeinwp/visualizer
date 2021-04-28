@@ -1,6 +1,8 @@
 {
   "baseUrl": "http://localhost:8080",
   "env": {
+    "login": "wordpress",
+    "pass": "wordpress",
     "urls": {
       "library": "/wp-admin/admin.php?page=visualizer",
       "samples": "https://s3.amazonaws.com/downloads.themeisle.com/samples-visualizer/"
