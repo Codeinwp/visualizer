@@ -38,6 +38,7 @@ jobs:
       - name: Run ${{ matrix.env }} Cypress tests
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
         uses: cypress-io/github-action@v2
         with:
           env: host=localhost,port=8080
