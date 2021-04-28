@@ -1,7 +1,8 @@
 #### [Version 3.5.0](https://github.com/Codeinwp/visualizer/compare/v3.4.11...v3.5.0) (2021-04-28)
 
+#### Fixes
 
-- Permissions tab disappears after a user modifies a chart's data [#728](https://github.com/Codeinwp/visualizer/issues/728)
+- Permissions tab disappears after a user modifies a chart's data 
 - Conflict with Edit Flow plugin
 - Improve compatibility with Ninja Forms
 - Fix for color for Minor Grid Lines not working
