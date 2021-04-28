@@ -18,8 +18,10 @@
   },
   "scripts": {
     "dist": "bash bin/dist.sh",
+    "up:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
+    "down:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
     "cypress:open": "cypress open",
-    "cypress:run": "cd cypress && docker-compose up --exit-code-from cypress"
+    "cypress:run": "cypress run --browser=chrome"
   },
   "pot": {
     "reportmsgidbugsto": "https://github.com/Codeinwp/visualizer/issues",
