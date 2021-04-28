@@ -18,6 +18,7 @@
   },
   "scripts": {
     "dist": "bash bin/dist.sh",
+    "release": "semantic-release --debug",
     "up:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
     "down:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
     "cypress:open": "cypress open",
@@ -29,8 +30,17 @@
     "lasttranslator": "Themeisle Translate Team <friends@themeisle.com>"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "^9.0.0",
+    "conventional-changelog-simple-preset": "^1.0.15",
     "cypress": "^7.2.0",
     "cypress-file-upload": "^5.0.6",
-    "load-project-config": "~0.2.1"
+    "grunt-version": "^2.0.0",
+    "grunt-wp-readme-to-markdown": "^2.0.1",
+    "load-project-config": "~0.2.1",
+    "replace-in-file": "^6.2.0",
+    "semantic-release": "^17.1.1",
+    "semantic-release-slack-bot": "^2.1.0"
   }
 }
