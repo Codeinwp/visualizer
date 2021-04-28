@@ -1,4 +1,5 @@
 {
+  "baseUrl": "http://localhost:8080",
   "env": {
     "urls": {
       "library": "/wp-admin/admin.php?page=visualizer",
