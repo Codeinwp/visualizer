@@ -1,7 +1,7 @@
 {
   "env": {
     "urls": {
-      "library": "/admin.php?page=visualizer",
+      "library": "/wp-admin/admin.php?page=visualizer",
       "samples": "https://s3.amazonaws.com/downloads.themeisle.com/samples-visualizer/"
     },
     "chart_types": {

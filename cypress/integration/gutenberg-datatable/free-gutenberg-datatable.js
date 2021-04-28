@@ -1,9 +1,8 @@
 describe('Test Free - gutenberg (datatable)', function() {
     before(function(){
-        Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
         // login to WP
-        cy.visit(Cypress.env('host') + 'wp-login.php');
+        cy.visit('/wp-admin/wp-login.php');
         cy.get('#user_login').clear().type( Cypress.env('login') );
         cy.get('#user_pass').clear().type( Cypress.env('pass') );
         cy.get('#wp-submit').click();
@@ -17,7 +16,7 @@ describe('Test Free - gutenberg (datatable)', function() {
     });
 
     it('Verify insertion of charts', function() {
-        cy.visit('/post-new.php');
+        cy.visit('/wp-admin/post-new.php');
 
         cy.clear_welcome();
 
