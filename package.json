@@ -17,6 +17,7 @@
     "url": "https://github.com/Codeinwp/visualizer/issues"
   },
   "scripts": {
+    "dist": "bash bin/dist.sh",
     "cypress:open": "cypress open",
     "cypress:run": "cd cypress && docker-compose up --exit-code-from cypress"
   },
@@ -28,11 +29,6 @@
   "devDependencies": {
     "cypress": "^3.4.1",
     "cypress-file-upload": "^3.3.4",
-    "grunt-helpscout-faq": "~0.1.0",
-    "grunt-plugin-fleet": "github:codeinwp/grunt-plugin-fleet",
     "load-project-config": "~0.2.0"
-  },
-  "wraithSlug": [
-    "visualizer"
-  ]
+  }
 }
