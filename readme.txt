@@ -162,6 +162,21 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 13. Bar chart
 
 == Changelog ==
+
+#### [Version 3.5.0](https://github.com/Codeinwp/visualizer/compare/v3.4.11...v3.5.0) (2021-04-28)
+
+#### Fixes
+- Permissions tab disappears after a user modifies a chart's data 
+- Conflict with Edit Flow plugin
+- Improve compatibility with Ninja Forms
+- Fix for color for Minor Grid Lines not working
+
+#### Features
+- Add support for key:value header to access JSON endpoints
+- Option to download CSV data of the chart without the row with series type
+
+
+
 = 3.4.11 - 2021-02-16  = 
 
 [Feat] Tested up to WP 5.6
