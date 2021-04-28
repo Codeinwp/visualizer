@@ -35,7 +35,7 @@ describe('Test Free - sources', function() {
             const fileName = 'pie.csv';
             // select file to upload
             cy.fixture(fileName).then(fileContent => {
-                cy.wrap($body).find('#csv-file').upload({ fileContent, fileName, mimeType: 'text/csv' });
+                cy.wrap($body).find('#csv-file').attachFile({ fileContent, fileName, mimeType: 'text/csv' });
                 cy.wrap($body).find('#vz-import-file').click({force:true}).then(() => {
                     cy.wrap($body).find('#settings-button').click({force:true});
                 });
