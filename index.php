@@ -1,5 +1,4 @@
 <?php
-
 /*
 	Plugin Name: Visualizer: Tables and Charts for WordPress
 	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/

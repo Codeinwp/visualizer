@@ -49,8 +49,6 @@
     $('.visualizer-chart-canvas').adjust();
 
     $(document).ready(function () {
-        $('.visualizer-chart, .visualizer-library-pagination').fadeIn(500);
-
         // clears the filters in the library form and submits.
         $('#viz-lib-reset').on('click', function(e){
             e.preventDefault();
@@ -163,5 +161,6 @@
         $('.visualizer-error i.error').on('click', function(){
             alert( $(this).attr('data-viz-error') );
         });
+        $('.visualizer-chart:not(.visualizer-chart-display), .visualizer-library-pagination').fadeIn(500);
     });
 })(jQuery, visualizer.media.view, visualizer.urls);

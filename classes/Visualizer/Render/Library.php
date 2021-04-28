@@ -324,7 +324,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$chart_status['icon'] = 'error dashicons-dismiss';
 			$chart_status['title'] = __( 'Click to view the error', 'visualizer' );
 		}
-
 		$shortcode = sprintf( '[visualizer id="%s" lazy="no" class=""]', $chart_id );
 		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
