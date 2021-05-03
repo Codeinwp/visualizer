@@ -234,7 +234,20 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			self::_renderSectionEnd();
 
 			$this->_renderAnimationSettings();
-
+			self::_renderSectionStart( esc_html__( 'License & Creator', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'License', 'visualizer' ),
+				'license',
+				$this->license,
+				''
+			);
+			self::_renderTextItem(
+				esc_html__( 'Creator', 'visualizer' ),
+				'creator',
+				$this->creator,
+				''
+			);
+			self::_renderSectionEnd();
 			do_action( 'visualizer_chart_settings', get_class( $this ), $this->_data, 'general', array( 'generic' => true ) );
 
 		self::_renderGroupEnd();
