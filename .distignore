@@ -1,7 +1,6 @@
 .git
 .distignore
 .gitignore
-.travis.yml
 .jshintrc
 Gruntfile.js
 grunt
@@ -18,11 +17,12 @@ artifact
 composer.json
 composer.lock
 package-lock.json
-key.enc
 vendor/phpoffice/phpexcel/Examples
 vendor/phpoffice/phpexcel/unitTests
 cypress
-docker-compose.travis.yml
-cypress.env.json.template
 cypress.json
 .github
+.idea
+.wordpress-org
+.releaserc.yml
+docker-compose.ci.yml

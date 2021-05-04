@@ -1,9 +1,8 @@
-describe('Test Free - gutenberg', function() {
+describe('Test Free - gutenberg (datatable)', function() {
     before(function(){
-        Cypress.config('baseUrl', Cypress.env('host') + 'wp-admin/');
 
         // login to WP
-        cy.visit(Cypress.env('host') + 'wp-login.php');
+        cy.visit('/wp-login.php');
         cy.get('#user_login').clear().type( Cypress.env('login') );
         cy.get('#user_pass').clear().type( Cypress.env('pass') );
         cy.get('#wp-submit').click();
@@ -12,26 +11,26 @@ describe('Test Free - gutenberg', function() {
     it.skip('temp test', function() {
     });
 
-    it('Create charts', function() {
-        cy.create_available_charts(Cypress.env('chart_types').free, 'GoogleCharts');
+    it('Create charts charts', function() {
+        cy.create_available_charts(1, 'DataTable');
     });
 
     it('Verify insertion of charts', function() {
-        cy.visit('/post-new.php');
+        cy.visit('/wp-admin/post-new.php');
 
         cy.clear_welcome();
 
-        var charts = Array.from({ length: parseInt(Cypress.env('chart_types').free) }, function(_item, index) {
+        var charts = Array.from({ length: 1 }, function(_item, index) {
             return index + 1;
         });
 
         cy.wrap(charts).each((value, i, array) => {
             // insert a visualizer block
-            cy.get('div.edit-post-header-toolbar button.edit-post-header-toolbar__inserter-toggle').click();
-            cy.get('.edit-post-layout__inserter-panel-popover-wrapper').then(function ($popup) {
+            cy.get('div.edit-post-header__toolbar button.edit-post-header-toolbar__inserter-toggle').click();
+            cy.get('.edit-post-layout__inserter-panel-content').then(function ($popup) {
                 cy.wrap($popup).find('.block-editor-inserter__search-input').type('visua');
-                cy.wrap($popup).find('.block-editor-inserter__block-list .block-editor-block-types-list__list-item').should('have.length', 1);
-                cy.wrap($popup).find('.block-editor-inserter__block-list button.editor-block-list-item-visualizer-chart').click();
+                cy.wrap($popup).find('.block-editor-block-types-list .editor-block-list-item-visualizer-chart').should('have.length', 1);
+                cy.wrap($popup).find('.block-editor-block-types-list .editor-block-list-item-visualizer-chart').click();
             });
 
             // see the block has the correct elements.
@@ -62,7 +61,7 @@ describe('Test Free - gutenberg', function() {
 
                 // 2 buttons, one of them "done"
                 cy.wrap($block).find('.visualizer-settings .components-button-group button').should('have.length', 2);
-                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-done').should('have.length', 1);
+                cy.wrap($block).find('.visualizer-settings .components-button-group button.visualizer-bttn-save').should('have.length', 1);
 
                 // make the settings block appear.
                 cy.wrap($block).type('{ctrl}{shift},');

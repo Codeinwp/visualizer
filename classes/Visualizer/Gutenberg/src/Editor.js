@@ -106,7 +106,8 @@ class Editor extends Component {
 		this.setState({
 			route: 'chartSelect',
 			chart: result['chart_data'],
-			isLoading: false
+			isLoading: true,
+			isModified: true
 		});
 
 		this.props.setAttributes({
@@ -596,7 +597,7 @@ class Editor extends Component {
 											isLarge
                                             className="visualizer-bttn-done"
 											onClick={ () => {
-												this.setState({ route: 'renderChart' });
+												this.setState({ route: 'renderChart', isModified: true });
 												this.props.setAttributes({ route: 'renderChart' });
 											} }
 										>
