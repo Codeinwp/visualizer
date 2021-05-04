@@ -266,6 +266,10 @@ class Visualizer_Module {
 
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 		$fp = tmpfile();
+		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
+			unset( $rows[1] );
+			$rows = array_values( $rows );
+		}
 		// support for MS Excel
 		fprintf( $fp, $bom );
 		foreach ( $rows as $row ) {
@@ -312,12 +316,20 @@ class Visualizer_Module {
 		// PHPExcel did not like sheet names longer than 31 characters and we will assume the same with PhpSpreadsheet
 		$chart      = substr( $filename, 0, 30 );
 		$filename   .= '.xlsx';
-
+		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
+			unset( $rows[1] );
+			$rows = array_values( $rows );
+			$rows = array_map(
+				function( $r ) {
+					return array_map( 'strval', $r );
+				},
+				$rows
+			);
+		}
 		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 		if ( is_readable( $vendor_file ) ) {
 			include_once( $vendor_file );
 		}
-
 		$xlsData    = '';
 		if ( class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) ) {
 			$doc        = new PhpOffice\PhpSpreadsheet\Spreadsheet();

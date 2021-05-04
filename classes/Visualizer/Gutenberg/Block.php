@@ -376,6 +376,10 @@ class Visualizer_Gutenberg_Block {
 						// this series is some kind of annotation, so let's collect its index.
 						// the index will be +1 because the X axis value is index 0, which is being ignored.
 						$annotations[ 'role' . ( intval( $index ) + 1 ) ] = $serie['role'];
+
+						if ( isset( $data['visualizer-series'][ intval( $index ) + 1 ] ) ) {
+							$data['visualizer-series'][ intval( $index ) + 1 ]['role'] = $serie['role'];
+						}
 					}
 				}
 			}

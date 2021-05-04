@@ -70,6 +70,16 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	protected $_headers;
 
 	/**
+	 * The other headers.
+	 *
+	 * @since 3.4.11
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_additional_headers;
+
+	/**
 	 * The array that contains the definition of the data.
 	 *
 	 * @since 1.0.0
@@ -108,6 +118,9 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		}
 		if ( isset( $this->_args['method'] ) ) {
 			$this->_headers['method'] = $this->_args['method'];
+		}
+		if ( isset( $this->_args['additional_headers'] ) ) {
+			$this->_additional_headers = $this->_args['additional_headers'];
 		}
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Constructor called for params = %s', print_r( $params, true ) ), 'debug', __FILE__, __LINE__ );
 	}
@@ -391,7 +404,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 
 		// this filter can be used to rearrange columns e.g. in candlestick charts
 		// or to add additional data to the root.
-		$array  = apply_filters( 'visualizer_json_massage_data', json_decode( wp_remote_retrieve_body( $response ), true ), $url );
+		$bom = pack( 'H*', 'EFBBBF' );
+		$response_body = wp_remote_retrieve_body( $response );
+		$response_body = preg_replace( "/^$bom/", '', $response_body );
+		$array  = apply_filters( 'visualizer_json_massage_data', json_decode( $response_body, true ), $url );
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'JSON array for the endpoint is %s = ', print_r( $array, true ) ), 'debug', __FILE__, __LINE__ );
 
@@ -410,15 +426,38 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( ! empty( $this->_headers ) ) {
 			$args = array( 'method' => strtoupper( $this->_headers['method'] ) );
 			if ( array_key_exists( 'auth', $this->_headers ) ) {
-				$args['headers'] = array( 'Authorization' => $this->_headers['auth'] );
+				if ( ! empty( $this->_headers['auth'] ) ) {
+					$header_auth = explode( ':', $this->_headers['auth'] );
+					$header_key = explode( ' ', reset( $header_auth ) );
+					$args['headers'] = array( 'Authorization' => reset( $header_key ) . ' ' . base64_encode( end( $header_key ) . ':' . end( $header_auth ) ) );
+				}
 			} elseif ( array_key_exists( 'username', $this->_headers ) && array_key_exists( 'password', $this->_headers ) && ! empty( $this->_headers['username'] ) && ! empty( $this->_headers['password'] ) ) {
 				$args['headers'] = array( 'Authorization' => 'Basic ' . base64_encode( $this->_headers['username'] . ':' . $this->_headers['password'] ) );
 			}
 		}
 
 		$args = apply_filters( 'visualizer_json_args', $args, $url );
-		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Connecting to %s with args = %s ', $url, print_r( $args, true ) ), 'debug', __FILE__, __LINE__ );
+		if ( ! empty( $this->_additional_headers ) ) {
+			$this->_additional_headers = explode( ',', $this->_additional_headers );
+			$this->_additional_headers = array_filter( $this->_additional_headers );
+			if ( ! empty( $this->_additional_headers ) ) {
+				$this->_additional_headers = array_map(
+					function( $headers ) {
+						$headers = explode( ':', $headers );
+						$headers = array_map( 'trim', $headers );
+						return $headers;
+					},
+					$this->_additional_headers
+				);
+				foreach ( $this->_additional_headers as $additional_headers ) {
+					$header_key = reset( $additional_headers );
+					$header_value = end( $additional_headers );
+					$args['headers'][ $header_key ] = $header_value;
+				}
+			}
+		}
 
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Connecting to %s with args = %s ', $url, print_r( $args, true ) ), 'debug', __FILE__, __LINE__ );
 		return wp_remote_request( $url, $args );
 	}
 

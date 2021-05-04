@@ -19,6 +19,9 @@ var __visualizer_chart_images   = [];
         // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
         // remember, some charts do not support annotations so they should not be included in this.
         var no_annotation_charts = ['tabular', 'timeline', 'gauge', 'geo', 'bubble', 'candlestick'];
+        if ( undefined !== chart.settings && undefined !== chart.settings.series && undefined === chart.settings.series.length ) {
+            chart.settings.series = Object.values( chart.settings.series );
+        }
         if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined' && ! no_annotation_charts.includes(chart.type) ) {
             hasAnnotation = chart.series.length - chart.settings.series.length > 1;
         }
@@ -157,7 +160,7 @@ var __visualizer_chart_images   = [];
                 settings.sortBubblesBySize = settings.sortBubblesBySize ? settings.sortBubblesBySize == 1 : false; // jshint ignore:line
 				break;
 			case 'timeline':
-                settings['timeline'] = [];
+                settings['timeline'] = {};
                 settings['timeline']['groupByRowLabel'] = settings['groupByRowLabel'] ? true : false;
                 settings['timeline']['colorByRowLabel'] = settings['colorByRowLabel'] ? true : false;
                 settings['timeline']['showRowLabels']   = settings['showRowLabels'] ? true : false;
@@ -287,8 +290,9 @@ var __visualizer_chart_images   = [];
                         if(series_annotations.includes(i)){
                             seriesIndexToUse++;
                         }
-
-                        format_data(id, table, series[seriesIndexToUse].type, settings.series[i].format, seriesIndexToUse);
+                        if ( series[seriesIndexToUse] ) {
+                            format_data(id, table, series[seriesIndexToUse].type, settings.series[i].format, seriesIndexToUse);
+                        }
                     }
                     break;
             }
