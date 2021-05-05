@@ -703,8 +703,8 @@ div.viz-group-content .viz-group-description {
 input#existing-chart {
 	/*left: 18px;
 		width: 110px;
-    position: relative;*/
-}
+		position: relative;*/
+	}
 
 select#chart-id {
 	float: right;
@@ -1461,6 +1461,10 @@ span.viz-section-error {
 	padding: 5px;
 }
 
+.json-wizard-header .field-title {
+	position: absolute;
+	left: 30px;
+}
 /******************************************************************************/
 /********************************  html table editor **************************/
 /******************************************************************************/

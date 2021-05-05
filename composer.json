@@ -20,11 +20,6 @@
     "issues": "https://github.com/Codeinwp/visualizer/issues",
     "source": "https://github.com/Codeinwp/visualizer"
   },
-  "config": {
-    "platform": {
-      "php": "5.6"
-    }
-  },
   "require": {
     "codeinwp/themeisle-sdk": "master",
     "phpoffice/phpspreadsheet": "1.8.2",
@@ -36,6 +31,21 @@
       "vendor/phpoffice/phpspreadsheet/src/Bootstrap.php"
     ]
   },
+  "scripts": {
+    "format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
+    "lint": "phpcs --standard=phpcs.xml"
+  },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "config": {
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "5.6"
+    }
+  },
+  "require-dev": {
+    "wp-coding-standards/wpcs": "1.2.1",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+    "phpcompatibility/phpcompatibility-wp": "*"
+  }
 }
