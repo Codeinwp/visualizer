@@ -296,6 +296,20 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 
 			$this->_renderAnimationSettings();
 
+			self::_renderSectionStart( esc_html__( 'License & Creator', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'License', 'visualizer' ),
+				'license',
+				$this->license,
+				''
+			);
+			self::_renderTextItem(
+				esc_html__( 'Creator', 'visualizer' ),
+				'creator',
+				$this->creator,
+				''
+			);
+			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}
 
