@@ -484,13 +484,48 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
+		$license = '';
+		if ( isset( $settings['license'] ) && ! empty( $settings['license'] ) ) {
+			$license  = $settings['license'];
+			if ( is_array( $license ) ) {
+				$license  = $settings['license']['text'];
+			}
+		}
+		$license = apply_filters( 'visualizer_schema_license', $license, $id );
+		if ( empty( $license ) ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because license is empty -->";
+			}
+			return '';
+		}
+
+		$creator = '';
+		if ( isset( $settings['creator'] ) && ! empty( $settings['creator'] ) ) {
+			$creator  = $settings['creator'];
+			if ( is_array( $creator ) ) {
+				$creator  = $settings['creator']['text'];
+			}
+		}
+		$creator = apply_filters( 'visualizer_schema_creator', $creator, $id );
+		if ( empty( $creator ) ) {
+			if ( $show_errors ) {
+				return "<!-- Not showing structured data for chart $id because creator is empty -->";
+			}
+			return '';
+		}
+
 		$schema = apply_filters(
 			'visualizer_schema',
 			'{
 			  "@context":"https://schema.org/",
 			  "@type":"Dataset",
 			  "name":"' . esc_html( $title ) . '",
-			  "description":"' . esc_html( $desc ) . '"
+			  "description":"' . esc_html( $desc ) . '",
+			  "license": "' . esc_html( $license ) . '",
+			  "creator": {
+			  	"@type": "Person",
+			  	"name": "' . esc_html( $creator ) . '"
+			  }
 			}',
 			$id
 		);
