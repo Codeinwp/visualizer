@@ -139,6 +139,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		if ( -1 < $time ) {
 			add_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, $time );
+			// Update schedules.
+			$schedules              = get_option( Visualizer_Plugin::CF_JSON_SCHEDULE, array() );
+			$schedules[ $chart_id ] = time() + $time * HOUR_IN_SECONDS;
+			update_option( Visualizer_Plugin::CF_JSON_SCHEDULE, $schedules );
 		}
 		wp_send_json_success();
 	}
