@@ -208,7 +208,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 				self::_renderSelectItem(
 					esc_html__( 'Position', 'visualizer' ),
 					'legend[position]',
-					$this->legend['position'],
+					isset( $this->legend['position'] ) ? $this->legend['position'] : '',
 					$this->_legendPositions,
 					esc_html__( 'Determines where to place the legend, compared to the chart area.', 'visualizer' )
 				);
@@ -216,7 +216,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 				self::_renderSelectItem(
 					esc_html__( 'Alignment', 'visualizer' ),
 					'legend[alignment]',
-					$this->legend['alignment'],
+					isset( $this->legend['alignment'] ) ? $this->legend['alignment'] : '',
 					$this->_alignments,
 					esc_html__( 'Determines the alignment of the legend.', 'visualizer' )
 				);
@@ -393,10 +393,12 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
 							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="chartArea[left]" class="control-text" value="', $this->chartArea['left'] || $this->chartArea['left'] === '0' ? esc_attr( $this->chartArea['left'] ) : '', '" placeholder="20%">';
+								$chartarea_left = isset( $this->chartArea['left'] ) ? $this->chartArea['left'] : '';
+								echo '<input type="text" name="chartArea[left]" class="control-text" value="', $chartarea_left || '0' === $chartarea_left ? esc_attr( $chartarea_left ) : '', '" placeholder="20%">';
 							echo '</td>';
 							echo '<td class="viz-section-table-column">';
-								echo '<input type="text" name="chartArea[top]" class="control-text" value="', $this->chartArea['top'] || $this->chartArea['top'] === '0' ? esc_attr( $this->chartArea['top'] ) : '', '" placeholder="20%">';
+								$chartarea_top = isset( $this->chartArea['top'] ) ? $this->chartArea['top'] : '';
+								echo '<input type="text" name="chartArea[top]" class="control-text" value="', $chartarea_top || '0' === $chartarea_top ? esc_attr( $chartarea_top ) : '', '" placeholder="20%">';
 							echo '</td>';
 						echo '</tr>';
 					echo '</table>';
