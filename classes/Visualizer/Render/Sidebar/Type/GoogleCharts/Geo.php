@@ -64,6 +64,27 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 					$this->title,
 					esc_html__( 'Text to display in the back-end admin area.', 'visualizer' )
 				);
+				self::_renderTextAreaItem(
+					esc_html__( 'Chart Description', 'visualizer' ),
+					'description',
+					$this->description,
+					sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+				);
+			self::_renderSectionEnd();
+
+			self::_renderSectionStart( esc_html__( 'License & Creator', 'visualizer' ), false );
+			self::_renderTextItem(
+				esc_html__( 'License', 'visualizer' ),
+				'license',
+				$this->license,
+				''
+			);
+			self::_renderTextItem(
+				esc_html__( 'Creator', 'visualizer' ),
+				'creator',
+				$this->creator,
+				''
+			);
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}
