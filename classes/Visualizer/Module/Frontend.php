@@ -340,7 +340,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
 		if ( $amp && $amp->is_amp() ) {
-			return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
+			return '<div data-amp-auto-lightbox-disable id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
 		}
 
 		// add chart to the array
