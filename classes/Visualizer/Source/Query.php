@@ -145,7 +145,6 @@ class Visualizer_Source_Query extends Visualizer_Source {
 				$this->_error = $wpdb->last_error;
 			}
 		}
-
 		if ( $as_html ) {
 			$results = $this->html( $headers, $results );
 		} else {
@@ -216,8 +215,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			$data[] = $this->_normalizeData( $row );
 		}
 		$this->_data = $data;
-
-		return true;
+		return $this->_data;
 	}
 
 	/**
