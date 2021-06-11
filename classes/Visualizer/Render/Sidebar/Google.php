@@ -101,11 +101,13 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 	 */
 	function load_google_assets( $deps, $is_frontend ) {
 		wp_register_script( 'google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'dom-to-image', VISUALIZER_ABSURL . 'js/lib/dom-to-image.min.js', array(), null, true );
 		wp_register_script(
 			'visualizer-render-google-lib',
 			VISUALIZER_ABSURL . 'js/render-google.js',
 			array(
 				'google-jsapi',
+				'dom-to-image',
 			),
 			Visualizer_Plugin::VERSION,
 			true

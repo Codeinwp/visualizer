@@ -1443,17 +1443,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$file_type       = 'image/png';
 		$hashed_filename = $filename;
 
-		// Save the image in the uploads directory.
-		require_once ABSPATH . '/wp-admin/includes/file.php';
-		\WP_Filesystem();
-		global $wp_filesystem;
-		$upload_file = $wp_filesystem->put_contents( $upload_path . $hashed_filename, $decoded );
-
 		// Delete old chart image.
 		$old_attachment_id = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, true );
 		if ( $old_attachment_id ) {
 			wp_delete_attachment( $old_attachment_id, true );
 		}
+
+		// Save the image in the uploads directory.
+		require_once ABSPATH . '/wp-admin/includes/file.php';
+		\WP_Filesystem();
+		global $wp_filesystem;
+		$upload_file = $wp_filesystem->put_contents( $upload_path . $hashed_filename, $decoded );
 
 		// Insert new chart image.
 		$attachment = array(
