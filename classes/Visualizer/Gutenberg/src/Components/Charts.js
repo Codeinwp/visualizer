@@ -74,6 +74,8 @@ class Charts extends Component {
 
 	render() {
 
+		let chartVersion = google.visualization.Version || 'current';
+
 		const { charts, isBusy, chartsLoaded, perPage } = this.state;
 
 		return (
@@ -148,6 +150,7 @@ class Charts extends Component {
 													/>
 												) : ( '' !== data['visualizer-data-exploded'] ? (
 													<Chart
+														chartVersion={ chartVersion }
 														chartType={ chart }
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
@@ -156,6 +159,7 @@ class Charts extends Component {
 													/>
 												) : (
 													<Chart
+														chartVersion={ chartVersion }
 														chartType={ chart }
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
