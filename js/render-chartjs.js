@@ -170,7 +170,7 @@
         }
 
         if(typeof settings['fontSize'] !== 'undefined' && settings['fontSize'] !== ''){
-            Chart.defaults.global.defaultFontSize = settings['fontSize'];
+            Chart.defaults.global.defaultFontSize = parseInt(settings['fontSize']);
             delete settings['fontSize'];
         }
 
