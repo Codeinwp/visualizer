@@ -320,7 +320,9 @@ var __visualizer_chart_images   = [];
 
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
 
+        $( '.visualizer-hidden-container' ).css( 'display', 'block' ); // Temporary display chart to complete rendering.
         render.draw(table, settings);
+        $( '.visualizer-hidden-container' ).removeAttr( 'style' ); // Remove temporary inline style.
 	}
 
     function format_data(id, table, type, format, index) {
