@@ -904,7 +904,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$data   = self::get_chart_data( $chart, $type );
 
 			// Set default setting series when add manual chart data - Only during first creation.
-			if ( in_array( $type, array( 'line' ), true ) ) {
+			if ( isset( $settings['series'] ) && ! empty( $series ) ) {
 				$count_series = count( $series ) - count( $settings['series'] );
 				if ( $count_series > 1 ) {
 					$clone_last_series = end( $settings['series'] );
