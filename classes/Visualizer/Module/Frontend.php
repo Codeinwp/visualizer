@@ -272,10 +272,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				// set 'yes' to use the default intersection limit (300px)
 				// OR set a number (e.g. 700) to use 700px as the intersection limit
 				'lazy' => apply_filters( 'visualizer_lazy_by_default', false, $atts['id'] ),
+				// Use image chart
+				'use_image' => 'no',
 			),
 			$atts
 		);
-
 		// if empty id or chart does not exists, then return empty string
 		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return '';
@@ -340,7 +341,14 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$amp = Visualizer_Plugin::instance()->getModule( Visualizer_Module_AMP::NAME );
 		if ( $amp && $amp->is_amp() ) {
-			return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
+			return '<div data-amp-auto-lightbox-disable id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . $amp->get_chart( $chart, $data, $series, $settings ) . '</div>';
+		}
+
+		if ( 'yes' === $atts['use_image'] ) {
+			$chart_image = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_IMAGE, true );
+			if ( $chart_image ) {
+				return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . wp_get_attachment_image( $chart_image, 'full' ) . '</div>';
+			}
 		}
 
 		// add chart to the array

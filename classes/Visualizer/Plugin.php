@@ -34,6 +34,7 @@ class Visualizer_Plugin {
 	const CPT_VISUALIZER = 'visualizer';
 
 	// custom meta fields
+	const CF_CHART_IMAGE = 'visualizer-chart-image';
 	const CF_CHART_TYPE = 'visualizer-chart-type';
 	const CF_SOURCE = 'visualizer-source';
 	const CF_SERIES = 'visualizer-series';

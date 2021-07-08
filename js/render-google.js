@@ -313,8 +313,22 @@ var __visualizer_chart_images   = [];
                 var img = render.getImageURI();
                 __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
                 $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+                if ( $( '#chart-img' ).length ) {
+                    $( '#chart-img' ).val( img );
+                }
             }catch(error){
-                console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
+                var canvas = document.getElementById( 'canvas' );
+                domtoimage.toPng(canvas)
+                .then(function ( img ) {
+                    __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
+                    $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+                    if ( $( '#chart-img' ).length ) {
+                        $( '#chart-img' ).val( img );
+                    }
+                })
+                .catch(function (error) {
+                  console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
+                });
             }
         });
 
