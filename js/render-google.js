@@ -462,12 +462,12 @@ var __visualizer_chart_images   = [];
             callback: function () {
                 gv = google.visualization;
                 all_charts = v.charts;
-                if ( document.getElementById( v.id ).offsetParent !== null ) {
-                    if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
+                if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
+                    if ( document.getElementById( v.id ).offsetParent !== null ) {
                         renderChart(v.id);
-                    } else {
-                        render();
                     }
+                } else {
+                    render();
                 }
             }
         });
