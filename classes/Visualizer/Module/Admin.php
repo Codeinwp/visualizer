@@ -903,6 +903,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
 			$data   = self::get_chart_data( $chart, $type );
 
+			// Set default setting series when add manual chart data - Only during first creation.
+			if ( isset( $settings['series'] ) && ! empty( $series ) ) {
+				$count_series = count( $series ) - count( $settings['series'] );
+				if ( $count_series > 1 ) {
+					$clone_last_series = end( $settings['series'] );
+					$clone_last_series = array_fill_keys( array_keys( $clone_last_series ), '' );
+					foreach ( range( 1, $count_series ) as $item ) {
+						$settings['series'][] = $clone_last_series;
+					}
+				}
+			}
+
 			$library = $this->load_chart_type( $chart->ID );
 
 			$id         = 'visualizer-' . $chart->ID;
