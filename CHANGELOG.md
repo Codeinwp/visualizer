@@ -1,3 +1,13 @@
+##### [Version 3.5.1](https://github.com/Codeinwp/visualizer/compare/v3.5.0...v3.5.1) (2021-05-25)
+
+
+- Fix compatibility with 3rd party plugins which use the same js library as Visualizer [#801](https://github.com/Codeinwp/visualizer/issues/801) 
+- Fix fatal error when a new chart is created on PHP 8 [#795](https://github.com/Codeinwp/visualizer/issues/795) 
+- Chart doesn't get refreshed automatically when the JSON endpoint is used as the data source
+ 
+#### Features: 
+- Adds option to add schema.org Dataset for license and creator [#794](https://github.com/Codeinwp/visualizer/issues/794)
+
 #### [Version 3.5.0](https://github.com/Codeinwp/visualizer/compare/v3.4.11...v3.5.0) (2021-04-28)
 
 #### Fixes

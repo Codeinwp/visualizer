@@ -101,11 +101,13 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 	 */
 	function load_google_assets( $deps, $is_frontend ) {
 		wp_register_script( 'google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
+		wp_register_script( 'dom-to-image', VISUALIZER_ABSURL . 'js/lib/dom-to-image.min.js', array(), null, true );
 		wp_register_script(
 			'visualizer-render-google-lib',
 			VISUALIZER_ABSURL . 'js/render-google.js',
 			array(
 				'google-jsapi',
+				'dom-to-image',
 			),
 			Visualizer_Plugin::VERSION,
 			true
@@ -148,6 +150,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 				'scope' => esc_html__( 'Scope', 'visualizer' ),
 				'style' => esc_html__( 'Style', 'visualizer' ),
 				'tooltip' => esc_html__( 'Tooltip', 'visualizer' ),
+				'interval' => esc_html__( 'Interval', 'visualizer' ),
 			),
 			sprintf( esc_html__( 'Determines whether the series has to be used for a special role as mentioned in %1$shere%2$s. You can view a few examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/roles#what-roles-are-available" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/1160-roles-for-series-visualizer" target="_blank">', '</a>' )
 		);

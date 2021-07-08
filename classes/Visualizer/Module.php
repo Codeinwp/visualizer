@@ -248,6 +248,9 @@ class Visualizer_Module {
 				case 'print':
 					$final   = $this->_getHTML( $rows );
 					break;
+				case 'image':
+					$final   = $this->_getImage( $chart );
+					break;
 			}
 		}
 		return $final;
@@ -757,5 +760,24 @@ class Visualizer_Module {
 			return apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
 		}
 		return $altered;
+	}
+
+	/**
+	 * Get chart image.
+	 *
+	 * @param object $chart Chart data.
+	 * @return string
+	 */
+	public function _getImage( $chart = null ) {
+		$image = '';
+		if ( $chart ) {
+			$chart_image = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_IMAGE, true );
+			if ( ! empty( $chart_image ) ) {
+				$image = wp_get_attachment_image( $chart_image, 'full' );
+			}
+		}
+		return array(
+			'csv'  => $image,
+		);
 	}
 }

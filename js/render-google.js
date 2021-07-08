@@ -313,13 +313,26 @@ var __visualizer_chart_images   = [];
                 var img = render.getImageURI();
                 __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
                 $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+                if ( $( '#chart-img' ).length ) {
+                    $( '#chart-img' ).val( img );
+                }
             }catch(error){
-                console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
+                var canvas = document.getElementById( 'canvas' );
+                domtoimage.toPng(canvas)
+                .then(function ( img ) {
+                    __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
+                    $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+                    if ( $( '#chart-img' ).length ) {
+                        $( '#chart-img' ).val( img );
+                    }
+                })
+                .catch(function (error) {
+                  console.warn('render.getImageURI not defined for ' + arr[0] + '-' + arr[1]);
+                });
             }
         });
 
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
-
         render.draw(table, settings);
 	}
 
@@ -363,7 +376,9 @@ var __visualizer_chart_images   = [];
 
 	function render() {
 		for (var id in (all_charts || {})) {
-			renderChart(id);
+            if (document.getElementById( id ).offsetParent !== null) {
+		      renderChart(id);
+            }
 		}
 	}
 
@@ -376,6 +391,12 @@ var __visualizer_chart_images   = [];
 		});
 
         resizeHiddenContainers(true);
+
+        if ( $( '.visualizer-hidden-container' ).length ) {
+            setInterval( function() {
+                $( '.visualizer-hidden-container' ).find(".visualizer-front").resize();
+            }, 500 );
+        }
     });
 
     $(window).on('load', function(){
@@ -456,7 +477,9 @@ var __visualizer_chart_images   = [];
                 gv = google.visualization;
                 all_charts = v.charts;
                 if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
-                    renderChart(v.id);
+                    if ( document.getElementById( v.id ).offsetParent !== null ) {
+                        renderChart(v.id);
+                    }
                 } else {
                     render();
                 }
