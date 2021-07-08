@@ -918,6 +918,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						if ( empty( $row ) ) {
 							continue;
 						}
+						$row = explode( ',', $row );
+						$row = array_map(
+							function( $r ) {
+								return '' === $r ? ' ' : $r;
+							},
+							$row
+						);
+						$row = implode( ',', $row );
 						// don't use fpucsv here because we need to just dump the data
 						// minus the empty rows
 						// because fputcsv needs to tokenize
