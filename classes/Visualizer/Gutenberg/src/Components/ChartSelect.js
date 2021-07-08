@@ -57,6 +57,8 @@ class ChartSelect extends Component {
 
 	render() {
 
+		let chartVersion = google.visualization.Version || 'current';
+
 		let chart, footer;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
@@ -160,6 +162,7 @@ class ChartSelect extends Component {
 							/>
 						) : ( '' !== data['visualizer-data-exploded'] ? (
 							<Chart
+								chartVersion={ chartVersion }
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
@@ -173,6 +176,7 @@ class ChartSelect extends Component {
 							/>
                         ) : (
 							<Chart
+								chartVersion={ chartVersion }
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }

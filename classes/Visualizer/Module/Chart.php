@@ -527,6 +527,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 
+		if ( isset( $_POST['chart-img'] ) && ! empty( $_POST['chart-img'] ) ) {
+			$attachment_id = $this->save_chart_image( $_POST['chart-img'], $chart_id );
+			if ( $attachment_id ) {
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, $attachment_id );
+			}
+		}
 		$lib = $this->load_chart_type( $chart_id );
 
 		// the alpha color picker (RGBA) is not supported by google.
@@ -912,6 +918,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						if ( empty( $row ) ) {
 							continue;
 						}
+						$row = explode( ',', $row );
+						$row = array_map(
+							function( $r ) {
+								return '' === $r ? ' ' : $r;
+							},
+							$row
+						);
+						$row = implode( ',', $row );
 						// don't use fpucsv here because we need to just dump the data
 						// minus the empty rows
 						// because fputcsv needs to tokenize
@@ -1416,5 +1430,49 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
+	}
+
+	/**
+	 * Save chart image.
+	 *
+	 * @param string $base64_img Chart image.
+	 * @param int    $chart_id Chart ID.
+	 * @return attachment ID
+	 */
+	public function save_chart_image( $base64_img, $chart_id ) {
+		// Upload dir.
+		$upload_dir  = wp_upload_dir();
+		$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+
+		$img             = str_replace( 'data:image/png;base64,', '', $base64_img );
+		$img             = str_replace( ' ', '+', $img );
+		$decoded         = base64_decode( $img );
+		$filename        = 'visualization-' . $chart_id . '.png';
+		$file_type       = 'image/png';
+		$hashed_filename = $filename;
+
+		// Delete old chart image.
+		$old_attachment_id = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, true );
+		if ( $old_attachment_id ) {
+			wp_delete_attachment( $old_attachment_id, true );
+		}
+
+		// Save the image in the uploads directory.
+		require_once ABSPATH . '/wp-admin/includes/file.php';
+		\WP_Filesystem();
+		global $wp_filesystem;
+		$upload_file = $wp_filesystem->put_contents( $upload_path . $hashed_filename, $decoded );
+
+		// Insert new chart image.
+		$attachment = array(
+			'post_mime_type' => $file_type,
+			'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
+			'post_content'   => '',
+			'post_status'    => 'inherit',
+			'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename ),
+		);
+
+		$attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
+		return $attach_id;
 	}
 }

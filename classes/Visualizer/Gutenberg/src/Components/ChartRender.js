@@ -36,6 +36,9 @@ class ChartRender extends Component {
 	}
 
 	render() {
+
+		let chartVersion = google.visualization.Version || 'current';
+
 		let chart, footer;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
@@ -88,6 +91,7 @@ class ChartRender extends Component {
 							/>
 						) : ( '' !== data['visualizer-data-exploded'] ? (
 							<Chart
+								chartVersion={ chartVersion }
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
@@ -101,6 +105,7 @@ class ChartRender extends Component {
 							/>
                         ) : (
 							<Chart
+								chartVersion={ chartVersion }
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }

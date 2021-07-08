@@ -118,7 +118,15 @@
                 labels: labels,
                 datasets: datasets
             },
-            options: settings
+            options: settings,
+            plugins: [{
+                afterRender: function () {
+                    var canvas = $( 'canvas' )[0];
+                    if ( $( '#chart-img' ).length ) {
+                        $( '#chart-img' ).val( canvas.toDataURL() );
+                    }
+                },
+            }],
         });
 
         // this line needs to be included twice. This is not an error.
@@ -170,7 +178,7 @@
         }
 
         if(typeof settings['fontSize'] !== 'undefined' && settings['fontSize'] !== ''){
-            Chart.defaults.global.defaultFontSize = settings['fontSize'];
+            Chart.defaults.global.defaultFontSize = parseInt(settings['fontSize']);
             delete settings['fontSize'];
         }
 

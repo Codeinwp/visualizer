@@ -94,7 +94,10 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 		if ( ! is_null( $view ) ) {
 			return $view;
 		}
-		$output = $this->_getDataAs( $chart->ID, 'print' );
+		$output = $this->_getDataAs( $chart->ID, 'image' );
+		if ( empty( $output['csv'] ) ) {
+			$output = $this->_getDataAs( $chart->ID, 'print' );
+		}
 		return $output['csv'];
 	}
 

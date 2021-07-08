@@ -583,6 +583,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 					<ul class="viz-group-content">
 						<ul class="viz-group-wrapper">
 						<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>" method="post">
+							<input type="hidden" id="chart-img" name="chart-img">
 							<?php echo $sidebar; ?>
 							<?php self::_renderPermissions( $args ); ?>
 							<input type="hidden" name="save" value="1">
