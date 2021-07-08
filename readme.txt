@@ -163,6 +163,22 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+#### [Version 3.6.0](https://github.com/Codeinwp/visualizer/compare/v3.5.1...v3.6.0) (2021-07-08)
+
+### Features
+* Adds option to render chart as image
+* Automatically render chart as image on AMP
+
+### Fixes
+* [Chart Type: TABLE] When adding a blank header, the last column of the table disappears
+* Styling is not applied to Chart Area for Table Chart ( Margin, Width, Height)
+* Improve compatibility with Site Kit by Google
+* Loading icon doesn't disappear until you edit the chart again [Line Chart]
+* Broken chart if used inside an accordion (expand/collapse)
+
+
+
+
 ##### [Version 3.5.1](https://github.com/Codeinwp/visualizer/compare/v3.5.0...v3.5.1) (2021-05-25)
 
 
