@@ -319,10 +319,7 @@ var __visualizer_chart_images   = [];
         });
 
         $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
-
-        $( '.visualizer-hidden-container' ).css( 'display', 'block' ); // Temporary display chart to complete rendering.
         render.draw(table, settings);
-        $( '.visualizer-hidden-container' ).removeAttr( 'style' ); // Remove temporary inline style.
 	}
 
     function format_data(id, table, type, format, index) {
@@ -365,7 +362,9 @@ var __visualizer_chart_images   = [];
 
 	function render() {
 		for (var id in (all_charts || {})) {
-			renderChart(id);
+            if (document.getElementById( id ).offsetParent !== null) {
+		      renderChart(id);
+            }
 		}
 	}
 
@@ -378,6 +377,12 @@ var __visualizer_chart_images   = [];
 		});
 
         resizeHiddenContainers(true);
+
+        if ( $( '.visualizer-hidden-container' ).length ) {
+            setInterval( function() {
+                $( '.visualizer-hidden-container' ).find(".visualizer-front").resize();
+            }, 500 );
+        }
     });
 
     $(window).on('load', function(){
@@ -457,10 +462,12 @@ var __visualizer_chart_images   = [];
             callback: function () {
                 gv = google.visualization;
                 all_charts = v.charts;
-                if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
-                    renderChart(v.id);
-                } else {
-                    render();
+                if ( document.getElementById( v.id ).offsetParent !== null ) {
+                    if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
+                        renderChart(v.id);
+                    } else {
+                        render();
+                    }
                 }
             }
         });
