@@ -309,7 +309,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<b>', $title, '</b>';
 			echo '<div>';
-				echo '<input type="text" class="color-picker-hex color-picker" data-alpha="true" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default : esc_attr( $value ), '" data-default-color="', $default, '">';
+				echo '<input type="text" class="color-picker-hex color-picker" data-alpha-enabled="true" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default : esc_attr( $value ), '" data-default-color="', $default, '">';
 			echo '</div>';
 		echo '</div>';
 	}
