@@ -61,6 +61,8 @@ class SeriesSettings extends Component {
 				{ Object.keys( settings.series )
 					.map( ( i, index ) => {
                         let indexToFormat = parseInt( i );
+                        let label = series[i].label || '';
+                        let type = series[i].type || '';
 
                         if ( 'tabular' !== type ) {
                             indexToFormat = index;
@@ -70,7 +72,7 @@ class SeriesSettings extends Component {
 
 						return (
 							<PanelBody
-								title={ series[i].label }
+								title={ label }
 								className="visualizer-inner-sections"
 								initialOpen={ false }
 							>
@@ -121,7 +123,7 @@ class SeriesSettings extends Component {
 
 								{ ( -1 >= [ 'candlestick'  ].indexOf( type ) ) &&
 
-									( 'number' === series[i].type ) ? (
+									( type && 'number' === type ) ? (
 
 										<Fragment>
 
@@ -147,7 +149,7 @@ class SeriesSettings extends Component {
 
 									) :
 
-									( 0 <= [ 'date', 'datetime', 'timeofday' ].indexOf( series[i].type ) ) && (
+									( 0 <= [ 'date', 'datetime', 'timeofday' ].indexOf( type ) ) && (
 
 										<Fragment>
 
