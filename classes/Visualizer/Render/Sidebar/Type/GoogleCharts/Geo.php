@@ -86,6 +86,9 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 				''
 			);
 			self::_renderSectionEnd();
+
+			self::_renderChartImageSettings();
+
 		self::_renderGroupEnd();
 	}
 

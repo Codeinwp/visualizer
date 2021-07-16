@@ -149,6 +149,9 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 				);
 
 			self::_renderSectionEnd();
+
+			self::_renderChartImageSettings();
+
 		self::_renderGroupEnd();
 	}
 

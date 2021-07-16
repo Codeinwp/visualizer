@@ -102,6 +102,8 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 			);
 			self::_renderSectionEnd();
 
+			self::_renderChartImageSettings();
+
 		self::_renderGroupEnd();
 	}
 
