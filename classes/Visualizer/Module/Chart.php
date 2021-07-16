@@ -527,8 +527,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
 		}
 
+		$_POST['save_chart_image'] = isset( $_POST['save_chart_image'] ) && 'yes' === $_POST['save_chart_image'] ? true : false;
+
 		if ( isset( $_POST['chart-img'] ) && ! empty( $_POST['chart-img'] ) ) {
-			$attachment_id = $this->save_chart_image( $_POST['chart-img'], $chart_id );
+			$attachment_id = $this->save_chart_image( $_POST['chart-img'], $chart_id, $_POST['save_chart_image'] );
 			if ( $attachment_id ) {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, $attachment_id );
 			}
@@ -1437,9 +1439,20 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @param string $base64_img Chart image.
 	 * @param int    $chart_id Chart ID.
+	 * @param bool   $save_attachment Save attachment.
 	 * @return attachment ID
 	 */
-	public function save_chart_image( $base64_img, $chart_id ) {
+	public function save_chart_image( $base64_img, $chart_id, $save_attachment = true ) {
+		// Delete old chart image.
+		$old_attachment_id = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, true );
+		if ( $old_attachment_id ) {
+			wp_delete_attachment( $old_attachment_id, true );
+		}
+
+		if ( ! $save_attachment ) {
+			return 0;
+		}
+
 		// Upload dir.
 		$upload_dir  = wp_upload_dir();
 		$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
@@ -1450,12 +1463,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$filename        = 'visualization-' . $chart_id . '.png';
 		$file_type       = 'image/png';
 		$hashed_filename = $filename;
-
-		// Delete old chart image.
-		$old_attachment_id = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, true );
-		if ( $old_attachment_id ) {
-			wp_delete_attachment( $old_attachment_id, true );
-		}
 
 		// Save the image in the uploads directory.
 		require_once ABSPATH . '/wp-admin/includes/file.php';

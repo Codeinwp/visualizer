@@ -251,6 +251,9 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 				''
 			);
 			self::_renderSectionEnd();
+
+			self::_renderChartImageSettings();
+
 			do_action( 'visualizer_chart_settings', get_class( $this ), $this->_data, 'general', array( 'generic' => true ) );
 
 		self::_renderGroupEnd();

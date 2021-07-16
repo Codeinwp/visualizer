@@ -94,6 +94,9 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Tabular extends Visualizer_Ren
 					$this->creator,
 					''
 				);
+
+			self::_renderChartImageSettings();
+
 			self::_renderGroupEnd();
 	}
 
