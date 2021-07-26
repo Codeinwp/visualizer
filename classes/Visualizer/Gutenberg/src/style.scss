@@ -378,6 +378,11 @@
 	z-index: 999999 !important;
 }
 
+.components-panel {
+	.components-select-control {
+		height:auto !important;
+	}
+}
 @media ( min-width: 768px ) {
 	.visualizer-json-query-modal {
 		width: 668px;
