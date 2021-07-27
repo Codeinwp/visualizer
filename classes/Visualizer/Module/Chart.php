@@ -596,6 +596,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$this->_chart = $this->handleExistingRevisions( $chart_id, $this->_chart );
 		}
 
+		// Clear existing chart cache.
+		if ( isset( $_POST['save'] ) && 1 === intval( $_POST['save'] ) ) {
+			$cache_key = Visualizer_Plugin::CF_CHART_CACHE . '_' . $chart_id;
+			if ( get_transient( $cache_key ) ) {
+				delete_transient( $cache_key );
+			}
+		}
+
 		switch ( $tab ) {
 			case 'settings':
 				$this->_handleDataAndSettingsPage();

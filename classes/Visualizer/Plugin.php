@@ -89,6 +89,7 @@ class Visualizer_Plugin {
 	const FILTER_UNDO_REVISIONS = 'visualizer-undo-revisions';
 	const FILTER_HANDLE_REVISIONS = 'visualizer-handle-revisions';
 	const FILTER_GET_CHART_DATA_AS = 'visualizer-get-chart-data-as';
+	const FILTER_HANDLE_CACHE_EXPIRATION_TIME = 'visualizer-handle-expiration-time';
 
 	const CF_DB_SCHEDULE = 'visualizer-db-schedule';
 	const CF_DB_QUERY = 'visualizer-db-query';
@@ -98,6 +99,8 @@ class Visualizer_Plugin {
 	// Added by Ash/Upwork
 	const PRO_TEASER_URL = 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing';
 	const PRO_TEASER_TITLE = 'Check PRO version ';
+
+	const CF_CHART_CACHE = 'visualizer-chart-cache';
 
 	/**
 	 * Name of the option for WordPress DB.
