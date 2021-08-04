@@ -1,3 +1,10 @@
+##### [Version 3.6.1](https://github.com/Codeinwp/visualizer/compare/v3.6.0...v3.6.1) (2021-08-04)
+
+- Fix broken dropdown style issue 
+- Add block support in widget area
+- Add wp alpha color picker support
+- Fix broken chart layout issue when add long title
+
 #### [Version 3.6.0](https://github.com/Codeinwp/visualizer/compare/v3.5.1...v3.6.0) (2021-07-08)
 
 ### Features
