@@ -299,6 +299,9 @@ input:checked + .visualizer-slider:before {
 	padding-bottom: 5px;
 	font-weight: bold;
 	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 div.visualizer-library-form .viz-filter {
