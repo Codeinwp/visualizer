@@ -37,7 +37,7 @@ class ChartRender extends Component {
 
 	render() {
 
-		let chartVersion = google.visualization.Version || 'current';
+		let chartVersion = 'undefined' !== typeof google ? google.visualization.Version : 'current';
 
 		let chart, footer;
 
