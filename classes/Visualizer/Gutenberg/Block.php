@@ -80,6 +80,14 @@ class Visualizer_Gutenberg_Block {
 			$version = $this->version;
 		}
 
+		if ( ! wp_script_is( 'visualizer-datatables', 'registered' ) ) {
+			wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core' ), Visualizer_Plugin::VERSION );
+		}
+
+		if ( ! wp_style_is( 'visualizer-datatables', 'registered' ) ) {
+			wp_register_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+		}
+
 		// Enqueue the bundled block JS file
 		wp_enqueue_script( 'handsontable', $handsontableJS );
 		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment' ), $version, true );

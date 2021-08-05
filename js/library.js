@@ -42,6 +42,7 @@
                 margin = width * 0.02;
 
             width *= 0.305;
+            $(this).prev( '.visualizer-chart-title' ).width(width - 14);
             $(this).width(width - 14).height(width * 0.75).parent().css('margin-right', margin + 'px').css('margin-bottom', margin + 'px');
         });
     };

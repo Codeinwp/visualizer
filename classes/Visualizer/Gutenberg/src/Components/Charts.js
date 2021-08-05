@@ -74,7 +74,7 @@ class Charts extends Component {
 
 	render() {
 
-		let chartVersion = google.visualization.Version || 'current';
+		let chartVersion = 'undefined' !== typeof google ? google.visualization.Version : 'current';
 
 		const { charts, isBusy, chartsLoaded, perPage } = this.state;
 
