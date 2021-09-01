@@ -385,7 +385,8 @@ var __visualizer_chart_images   = [];
 
 	function render() {
 		for (var id in (all_charts || {})) {
-            if (document.getElementById( id ).offsetParent !== null) {
+            var chartElement = document.getElementById( id );
+            if (chartElement && chartElement.offsetParent) {
 		      renderChart(id);
             }
 		}
