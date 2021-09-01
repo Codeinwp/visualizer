@@ -207,7 +207,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 */
 	private function activate_on_site() {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
-		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, 'hourly', 'visualizer_schedule_refresh_db' );
+		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, apply_filters( 'visualizer_chart_schedule_interval', 'hourly' ), 'visualizer_schedule_refresh_db' );
 		add_option( 'visualizer-activated', true );
 	}
 
@@ -394,6 +394,11 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 			// if the time is nigh, we force an update.
 			$this->refresh_db_for_chart( null, $chart_id, true );
+			// Clear existing chart cache.
+			$cache_key = Visualizer_Plugin::CF_CHART_CACHE . '_' . $chart_id;
+			if ( get_transient( $cache_key ) ) {
+				delete_transient( $cache_key );
+			}
 			$hours                      = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
 			$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
 		}
