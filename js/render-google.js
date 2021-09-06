@@ -315,7 +315,9 @@ var __visualizer_chart_images   = [];
             __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = '';
 
             if (render.container && $(render.container).is(':visible')) {
-                $(render.container).addClass( 'visualizer-chart-loaded' );
+                if ($(render.container).parents('div').next( '#sidebar' ).length === 0) {
+                    $(render.container).addClass( 'visualizer-chart-loaded' );
+                }
             }
 
             try{
