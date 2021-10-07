@@ -310,6 +310,9 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 				''
 			);
 			self::_renderSectionEnd();
+
+			self::_renderChartImageSettings();
+
 		self::_renderGroupEnd();
 	}
 

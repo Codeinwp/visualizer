@@ -277,11 +277,16 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			),
 			$atts
 		);
-		// if empty id or chart does not exists, then return empty string
-		if ( ! $atts['id'] || ! ( $chart = get_post( $atts['id'] ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
+
+		$chart_data = $this->getChartData( Visualizer_Plugin::CF_CHART_CACHE, $atts['id'] );
+		// if empty chart does not exists, then return empty string.
+		if ( ! $chart_data ) {
 			return '';
 		}
 
+		$chart        = $chart_data['chart'];
+		$type         = $chart_data['type'];
+		$series       = $chart_data['series'];
 		// do not show the chart?
 		if ( ! apply_filters( 'visualizer_pro_show_chart', true, $atts['id'] ) ) {
 			return '';
@@ -309,18 +314,16 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$attributes['data-lazy-limit'] = $atts['lazy'];
 		}
 
-		$type = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
-
 		$chart = apply_filters( 'visualizer_schedule_refresh_chart', $chart, $chart->ID, false );
 
-		// fetch and update settings
-		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+		// Get and update settings.
+		$settings = $chart_data['settings'];
 		if ( empty( $settings['height'] ) ) {
 			$settings['height'] = '400';
 		}
 
 		// handle series filter hooks
-		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
+		$series = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, $series, $chart->ID, $type );
 
 		// handle settings filter hooks
 		$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
@@ -345,7 +348,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		if ( 'yes' === $atts['use_image'] ) {
-			$chart_image = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_IMAGE, true );
+			$chart_image = $chart_data['chart_image'];
 			if ( $chart_image ) {
 				return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . wp_get_attachment_image( $chart_image, 'full' ) . '</div>';
 			}
@@ -543,5 +546,42 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		return '<script type="application/ld+json">' . $schema . '</script>';
+	}
+
+	/**
+	 * Get chart by ID.
+	 *
+	 * @param string $cache_key Cache key.
+	 * @param int    $chart_id Chart ID.
+	 * @return mixed
+	 */
+	private function getChartData( $cache_key = '', $chart_id = 0 ) {
+		if ( ! $chart_id ) {
+			return false;
+		}
+		// Create unique cache key of each chart.
+		$cache_key .= '_' . $chart_id;
+		// Get chart from cache.
+		$chart = get_transient( $cache_key );
+		if ( $chart ) {
+			return $chart;
+		}
+
+		// Get chart by ID.
+		$chart = get_post( $chart_id );
+		if ( $chart && Visualizer_Plugin::CPT_VISUALIZER === $chart->post_type ) {
+			$chart_data = array(
+				'chart'       => $chart,
+				'type'        => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
+				'settings'    => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true ),
+				'series'      => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ),
+				'chart_image' => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_IMAGE, true ),
+			);
+			// Put the results in a transient. Expire after 12 hours.
+			set_transient( $cache_key, $chart_data, apply_filters( Visualizer_Plugin::FILTER_HANDLE_CACHE_EXPIRATION_TIME, 12 * HOUR_IN_SECONDS ) );
+			return $chart_data;
+		}
+
+		return false;
 	}
 }

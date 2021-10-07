@@ -740,7 +740,7 @@ class Visualizer_Module {
 	 */
 	public static function get_chart_data( $chart, $type, $run_filter = true ) {
 		// change HTML entities
-		$data = unserialize( html_entity_decode( $chart->post_content ) );
+		$data = unserialize( html_entity_decode( htmlentities( $chart->post_content ) ) );
 		$altered = array();
 		foreach ( $data as $index => $array ) {
 			if ( ! is_array( $index ) && is_array( $array ) ) {

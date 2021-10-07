@@ -20,7 +20,12 @@ var __visualizer_chart_images   = [];
         // remember, some charts do not support annotations so they should not be included in this.
         var no_annotation_charts = ['tabular', 'timeline', 'gauge', 'geo', 'bubble', 'candlestick'];
         if ( undefined !== chart.settings && undefined !== chart.settings.series && undefined === chart.settings.series.length ) {
-            chart.settings.series = Object.values( chart.settings.series );
+            var chartSeries = [];
+            var chartSeriesValue = Object.values( chart.settings.series );
+            $.each( Object.keys( chart.settings.series ), function( index, element ) {
+                chartSeries[element] = chartSeriesValue[index];
+            } );
+            chart.settings.series = chartSeries;
         }
         if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined' && ! no_annotation_charts.includes(chart.type) ) {
             hasAnnotation = chart.series.length - chart.settings.series.length > 1;
@@ -33,6 +38,10 @@ var __visualizer_chart_images   = [];
 
     function renderSpecificChart(id, chart) {
         var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
+
+        if ( $('#' + id).hasClass('visualizer-chart-loaded') ) {
+            return;
+        }
 
         if(chart.library !== 'google'){
             return;
@@ -253,7 +262,7 @@ var __visualizer_chart_images   = [];
                     case 'date':
                         // fall-through.
                     case 'datetime':
-                        date = new Date(data[i][j]);
+                        date = new Date(Date.parse(data[i][j].replace(/-/g, '/')));
                         data[i][j] = null;
                         if (Object.prototype.toString.call(date) === "[object Date]") {
                             if (!isNaN(date.getTime())) {
@@ -309,12 +318,21 @@ var __visualizer_chart_images   = [];
         gv.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
             __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = '';
+
+            if (render.container && $(render.container).is(':visible')) {
+                if ($(render.container).parents('div').next( '#sidebar' ).length === 0) {
+                    $(render.container).addClass( 'visualizer-chart-loaded' );
+                }
+            }
+
             try{
-                var img = render.getImageURI();
-                __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
-                $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
-                if ( $( '#chart-img' ).length ) {
-                    $( '#chart-img' ).val( img );
+                if ( typeof render.getImageURI !== 'undefined' ) {
+                    var img = render.getImageURI();
+                    __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = img;
+                    $('body').trigger('visualizer:render:chart', {id: arr[1], image: img});
+                    if ( $( '#chart-img' ).length ) {
+                        $( '#chart-img' ).val( img );
+                    }
                 }
             }catch(error){
                 var canvas = document.getElementById( 'canvas' );
@@ -376,7 +394,8 @@ var __visualizer_chart_images   = [];
 
 	function render() {
 		for (var id in (all_charts || {})) {
-            if (document.getElementById( id ).offsetParent !== null) {
+            var chartElement = document.getElementById( id );
+            if (chartElement && chartElement.offsetParent) {
 		      renderChart(id);
             }
 		}
@@ -394,7 +413,7 @@ var __visualizer_chart_images   = [];
 
         if ( $( '.visualizer-hidden-container' ).length ) {
             setInterval( function() {
-                $( '.visualizer-hidden-container' ).find(".visualizer-front").resize();
+                $( '.visualizer-hidden-container' ).find(".visualizer-front:not(.visualizer-chart-loaded)").resize();
             }, 500 );
         }
     });

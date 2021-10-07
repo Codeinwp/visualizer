@@ -703,7 +703,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$args = array(
 			'label' => __( 'Number of charts per page:', 'visualizer' ),
 			'default' => 6,
-			'option' => 'visualizer_per_page_library',
+			'option' => 'visualizer_library_per_page',
 		);
 		add_screen_option( 'per_page', $args );
 	}
@@ -712,7 +712,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * Returns the screen option for pagination.
 	 */
 	function setScreenOptions( $status, $option, $value ) {
-		if ( 'visualizer_per_page_library' === $option ) {
+		if ( 'visualizer_library_per_page' === $option ) {
 			return $value;
 		}
 	}

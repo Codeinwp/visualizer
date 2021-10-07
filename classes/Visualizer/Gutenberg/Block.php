@@ -659,6 +659,12 @@ class Visualizer_Gutenberg_Block {
 
 			wp_update_post( $chart );
 
+			// Clear existing chart cache.
+			$cache_key = Visualizer_Plugin::CF_CHART_CACHE . '_' . $data['id'];
+			if ( get_transient( $cache_key ) ) {
+				delete_transient( $cache_key );
+			}
+
 			$revisions = wp_get_post_revisions( $data['id'], array( 'order' => 'ASC' ) );
 
 			if ( count( $revisions ) > 1 ) {

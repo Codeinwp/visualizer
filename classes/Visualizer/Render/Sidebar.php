@@ -510,4 +510,26 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		}
 
 	}
+
+	/**
+	 * Renders save chart as image setting group.
+	 *
+	 * @access protected
+	 */
+	protected function _renderChartImageSettings() {
+			// Default enable if amp is active.
+			$is_amp = function_exists( 'amp_is_enabled' ) && amp_is_enabled();
+			$this->save_chart_image = null === $this->save_chart_image && $is_amp ? true : $this->save_chart_image;
+
+			self::_renderSectionStart( esc_html__( 'Save chart as an image inside Media Library', 'visualizer' ), false );
+				self::_renderCheckboxItem(
+					esc_html__( 'Save inside media library?', 'visualizer' ),
+					'save_chart_image',
+					$this->save_chart_image ? true : false,
+					'yes',
+					esc_html__( 'To enable save the image as an inside media library.', 'visualizer' ),
+					false
+				);
+			self::_renderSectionEnd();
+	}
 }
