@@ -163,6 +163,24 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+#### [Version 3.7.0](https://github.com/Codeinwp/visualizer/compare/v3.6.1...v3.7.0) (2021-10-07)
+
+#### Features
+- Add option to enable/disable save the chart image
+- Enhanced caching 
+
+#### Fixes
+- Fix undefined variable errors when using Gutenberg blocks
+- Fix broken chart in iOS and Safari
+- Fix custom refresh time support for DB chart
+- Fix table placed inside accordion cannot be scrolled down (refreshes all the time) 
+- Fix pagination doesn't work in the library 
+- Fix HTML entities in JSON break Visualizer Table Chart
+- Fix string type columns affect the target of the formatting applied to a number column
+
+
+
+
 ##### [Version 3.6.1](https://github.com/Codeinwp/visualizer/compare/v3.6.0...v3.6.1) (2021-08-04)
 
 - Fix broken dropdown style issue 
