@@ -353,6 +353,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . wp_get_attachment_image( $chart_image, 'full' ) . '</div>';
 			}
 		}
+		// Unset chart image base64 string.
+		if ( isset( $settings['chart-img'] ) ) {
+			unset( $settings['chart-img'] );
+		}
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(
