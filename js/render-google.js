@@ -262,7 +262,11 @@ var __visualizer_chart_images   = [];
                     case 'date':
                         // fall-through.
                     case 'datetime':
-                        date = new Date(Date.parse(data[i][j].replace(/-/g, '/')));
+                        if (typeof data[i][j] === 'string') {
+                            date = new Date(Date.parse(data[i][j].replace(/-/g, '/')));
+                        } else if(typeof data[i][j] === 'object') {
+                            date = data[i][j];
+                        }
                         data[i][j] = null;
                         if (Object.prototype.toString.call(date) === "[object Date]") {
                             if (!isNaN(date.getTime())) {
