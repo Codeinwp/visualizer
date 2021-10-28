@@ -742,14 +742,16 @@ class Visualizer_Module {
 		// change HTML entities
 		$data = unserialize( html_entity_decode( htmlentities( $chart->post_content ) ) );
 		$altered = array();
-		foreach ( $data as $index => $array ) {
-			if ( ! is_array( $index ) && is_array( $array ) ) {
-				foreach ( $array as &$datum ) {
-					if ( is_string( $datum ) ) {
-						$datum = stripslashes( $datum );
+		if ( ! empty( $data ) ) {
+			foreach ( $data as $index => $array ) {
+				if ( ! is_array( $index ) && is_array( $array ) ) {
+					foreach ( $array as &$datum ) {
+						if ( is_string( $datum ) ) {
+							$datum = stripslashes( $datum );
+						}
 					}
+					$altered[ $index ] = $array;
 				}
-				$altered[ $index ] = $array;
 			}
 		}
 		// if something goes wrong and the end result is empty, be safe and use the original data

@@ -1137,6 +1137,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					$chart->post_content = $content;
 				}
 				wp_update_post( $chart->to_array() );
+
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
@@ -1146,6 +1147,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				Visualizer_Module_Utility::set_defaults( $chart, null );
 
 				$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+				if ( isset( $settings['series'] ) && ! ( count( $settings['series'] ) - count( $source->getSeries() ) > 1 ) ) {
+					$diff_total_series = abs( count( $settings['series'] ) - count( $source->getSeries() ) );
+					if ( $diff_total_series ) {
+						foreach ( range( 1, $diff_total_series ) as $k => $diff_series ) {
+							$settings['series'][] = end( $settings['series'] );
+						}
+						update_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, $settings );
+					}
+				}
 
 				$render->id     = $chart->ID;
 				$render->data   = json_encode( $source->getRawData( get_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
