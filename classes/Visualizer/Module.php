@@ -740,7 +740,17 @@ class Visualizer_Module {
 	 */
 	public static function get_chart_data( $chart, $type, $run_filter = true ) {
 		// change HTML entities
-		$data = unserialize( html_entity_decode( htmlentities( $chart->post_content ) ) );
+		$post_content = html_entity_decode( htmlentities( $chart->post_content ) );
+		$post_content = preg_replace_callback(
+			'!s:(\d+):"(.*?)";!s',
+			function ( $matches ) {
+				if ( isset( $matches[2] ) ) {
+					return 's:' . strlen( $matches[2] ) . ':"' . $matches[2] . '";';
+				}
+			},
+			$post_content
+		);
+		$data = unserialize( $post_content );
 		$altered = array();
 		if ( ! empty( $data ) ) {
 			foreach ( $data as $index => $array ) {
