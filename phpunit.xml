@@ -12,6 +12,6 @@
 		</testsuite>
 	</testsuites>
 	<php>
-		<const name="WP_TESTS_PHPUNIT_POLYFILLS_PATH" value="vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php"/>
+		<const name="WP_TESTS_PHPUNIT_POLYFILLS_PATH" value="./vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php"/>
 	</php>
 </phpunit>
