@@ -235,6 +235,9 @@ var __visualizer_chart_images   = [];
                     settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
                 }
             }
+            if(settings.hAxis.format == ''){
+                settings.hAxis.format = 'YYYY-MM-dd';
+            }
         }
 
         if(settings.vAxis){
@@ -262,7 +265,11 @@ var __visualizer_chart_images   = [];
                     case 'date':
                         // fall-through.
                     case 'datetime':
-                        date = new Date(Date.parse(data[i][j].replace(/-/g, '/')));
+                        var dateParse = Date.parse(data[i][j].replace(/-/g, '/'));
+                        if ( isNaN( dateParse ) ) {
+                            dateParse = Date.parse(data[i][j]);
+                        }
+                        date = new Date( dateParse );
                         data[i][j] = null;
                         if (Object.prototype.toString.call(date) === "[object Date]") {
                             if (!isNaN(date.getTime())) {
