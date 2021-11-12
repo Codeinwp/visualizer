@@ -11,11 +11,9 @@ if ( ! $_tests_dir ) {
 /**
  * The path to the main file of the plugin to test.
  */
-// define( 'WP_RUN_CORE_TESTS', 1 );
 define( 'WP_USE_THEMES', false );
 define( 'WP_TESTS_FORCE_KNOWN_BUGS', true );
 define( 'TI_UNIT_TESTING', true );
-define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', __DIR__ . '/../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php' );
 
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
