@@ -63,7 +63,7 @@ class SeriesSettings extends Component {
                         let indexToFormat = parseInt( i );
                         let label = series[i].label || '';
                         let type = series[i].type || '';
-
+                        let timer = 0;
                         if ( 'tabular' !== type ) {
                             indexToFormat = index;
                         }
@@ -104,6 +104,15 @@ class SeriesSettings extends Component {
 											onChange={ e => {
 												settings.series[index].lineWidth = e;
 												this.props.edit( settings );
+											} }
+											onKeyUp={ e => {
+												clearTimeout( timer );
+												timer = setTimeout( () => {
+													if ( '' != settings.series[index].lineWidth && 0 >= settings.series[index].lineWidth ) {
+														settings.series[index].lineWidth = '0.1';
+														this.props.edit( settings );
+													}
+												}, 700 );
 											} }
 										/>
 
