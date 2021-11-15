@@ -47,6 +47,6 @@
     "wp-coding-standards/wpcs": "1.2.1",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
     "phpcompatibility/phpcompatibility-wp": "*",
-    "yoast/phpunit-polyfills": "^1.0"
+    "yoast/phpunit-polyfills": "^1.0.1"
   }
 }
