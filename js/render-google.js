@@ -423,6 +423,10 @@ var __visualizer_chart_images   = [];
                 $( '.visualizer-hidden-container' ).find(".visualizer-front:not(.visualizer-chart-loaded)").resize();
             }, 500 );
         }
+
+        $( window ).on( 'orientationchange', function( event ) {
+        	$( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' );
+        } );
     });
 
     $(window).on('load', function(){
