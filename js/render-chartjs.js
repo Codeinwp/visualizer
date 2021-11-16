@@ -173,12 +173,12 @@
         }
 
         if(typeof settings['fontName'] !== 'undefined' && settings['fontName'] !== ''){
-            Chart.defaults.global.defaultFontFamily = settings['fontName'];
+            Chart.defaults.font.family = settings['fontName'];
             delete settings['fontName'];
         }
 
         if(typeof settings['fontSize'] !== 'undefined' && settings['fontSize'] !== ''){
-            Chart.defaults.global.defaultFontSize = parseInt(settings['fontSize']);
+            Chart.defaults.font.size = parseInt(settings['fontSize']);
             delete settings['fontSize'];
         }
 
@@ -337,6 +337,9 @@
         }
         for(var i in settings.series[j]){
             var $attribute = {};
+            if ( settings.series[j].backgroundColor == '' ) {
+                delete settings.series[j].backgroundColor;
+            }
             $attribute[i] = settings.series[j][i];
             $.extend($attributes, $attribute);
         }
