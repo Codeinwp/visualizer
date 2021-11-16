@@ -257,7 +257,7 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 				echo '<tr>';
 					echo '<td class="viz-section-table-column">';
 						$line_width = isset( $this->series[ $index ]['lineWidth'] ) ? $this->series[ $index ]['lineWidth'] : '';
-						echo '<input type="text" name="series[', $index, '][lineWidth]" class="control-text" value="', esc_attr( $line_width ), '" placeholder="2">';
+						echo '<input type="text" name="series[', $index, '][lineWidth]" class="control-text series-linewidth" value="', esc_attr( $line_width ), '" placeholder="2">';
 					echo '</td>';
 					echo '<td class="viz-section-table-column">';
 						$point_size = isset( $this->series[ $index ]['pointSize'] ) ? $this->series[ $index ]['pointSize'] : '';

@@ -556,4 +556,14 @@ var __visualizer_chart_images   = [];
         }
     });
 
+    var timer = 0;
+    $( document ).on( 'input', '.series-linewidth', function() {
+        var seriesLineWidth = $( this );
+        clearTimeout( timer );
+        timer = setTimeout( function() {
+            if ( seriesLineWidth.val() != '' && seriesLineWidth.val() <= 0 ) {
+                seriesLineWidth.val( '0.1' );
+            }
+        }, 700 );
+    } );
 })(jQuery);
