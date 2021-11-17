@@ -1,30 +1,23 @@
-# Copyright (C) 2020 Themeisle
-# This file is distributed under the GPL v2.0 or later.
+# Copyright (C) 2021 Visualizer: Tables and Charts for WordPress
+# This file is distributed under the same license as the Visualizer: Tables and Charts for WordPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Visualizer: Tables and Charts for WordPress 3.4.3\n"
-"Report-Msgid-Bugs-To: https://github.com/Codeinwp/visualizer/issues\n"
-"POT-Creation-Date: 2020-05-14 10:10:00+00:00\n"
+"Project-Id-Version: Visualizer: Tables and Charts for WordPress 3.7.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/visualizer\n"
+"POT-Creation-Date: 2021-11-17 12:32:47+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2021-11-17 18:40+0900\n"
-"Language-Team: Themeisle Translate <friends@themeisle.com>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
-"_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
-"esc_html_x:1,2c\n"
-"X-Poedit-Basepath: ..\n"
-"X-Textdomain-Support: yes\n"
+"PO-Revision-Date: 2021-11-17 21:45+0900\n"
+"Language-Team: \n"
 "X-Generator: Poedit 3.0\n"
 "Last-Translator: \n"
-"Language: ja_JP\n"
-"X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: ja\n"
 
-#: classes/Visualizer/Gutenberg/Block.php:483
-#: classes/Visualizer/Gutenberg/Block.php:504
-#: classes/Visualizer/Module/Chart.php:191
+#: classes/Visualizer/Gutenberg/Block.php:541
+#: classes/Visualizer/Gutenberg/Block.php:562
+#: classes/Visualizer/Module/Chart.php:195
 msgid "Unable to fetch data from the endpoint. Please try again."
 msgstr ""
 "エンドポイントからデータをフェッチできません。もう一度やり直してください。"
@@ -82,10 +75,6 @@ msgid "All"
 msgstr "全て"
 
 #: classes/Visualizer/Module/Admin.php:396
-#: classes/Visualizer/Module/Admin.php:532
-#: classes/Visualizer/Module/Admin.php:534
-#: classes/Visualizer/Module/Admin.php:562
-#: classes/Visualizer/Module/Admin.php:564
 msgid "Table"
 msgstr "表"
 
@@ -131,79 +120,100 @@ msgid "Candlestick"
 msgstr "ローソク足"
 
 #: classes/Visualizer/Module/Admin.php:454
-msgid "Table (Deprecated)"
-msgstr "表 (非推奨)"
-
-#: classes/Visualizer/Module/Admin.php:459
 msgid "Timeline"
 msgstr "タイムライン"
 
-#: classes/Visualizer/Module/Admin.php:464
+#: classes/Visualizer/Module/Admin.php:459
 msgid "Combo"
 msgstr "コンボチャート"
 
-#: classes/Visualizer/Module/Admin.php:469
+#: classes/Visualizer/Module/Admin.php:464
 msgid "Polar Area"
 msgstr "鶏頭図"
 
-#: classes/Visualizer/Module/Admin.php:474
+#: classes/Visualizer/Module/Admin.php:469
 msgid "Radar/Spider"
 msgstr "レーダーチャート"
 
-#: classes/Visualizer/Module/Admin.php:687
+#: classes/Visualizer/Module/Admin.php:663
 msgid "Visualizer"
 msgstr "Visualizer"
 
-#: classes/Visualizer/Module/Admin.php:691
-#: classes/Visualizer/Module/Admin.php:692
+#: classes/Visualizer/Module/Admin.php:667
+#: classes/Visualizer/Module/Admin.php:668
 msgid "Chart Library"
 msgstr "グラフライブラリ"
 
-#: classes/Visualizer/Module/Admin.php:698
-#: classes/Visualizer/Module/Admin.php:699
+#: classes/Visualizer/Module/Admin.php:674
+#: classes/Visualizer/Module/Admin.php:675
 msgid "Add New Chart"
 msgstr "新規グラフを追加"
 
-#: classes/Visualizer/Module/Admin.php:705
-#: classes/Visualizer/Module/Admin.php:706 templates/support.php:24
+#: classes/Visualizer/Module/Admin.php:681
+#: classes/Visualizer/Module/Admin.php:682 templates/support.php:24
 msgid "Support"
 msgstr "サポート"
 
-#: classes/Visualizer/Module/Admin.php:728
+#: classes/Visualizer/Module/Admin.php:704
 msgid "Number of charts per page:"
 msgstr "ページ毎のグラフ数:"
 
-#: classes/Visualizer/Module/Admin.php:1020
+#: classes/Visualizer/Module/Admin.php:970
+msgid ""
+"The shortcode has been copied to your clipboard. Hit Ctrl-V/Cmd-V to paste "
+"it."
+msgstr ""
+"ショートコードがクリップボードにコピーされました。それを貼り付けるためにCtrl-"
+"V / Cmd-Vを押してください。"
+
+#: classes/Visualizer/Module/Admin.php:971
+msgid ""
+"We have detected a potential conflict with another component that prevents "
+"Visualizer from functioning properly. Please disable any of the following "
+"components if they are activated on your instance: Modern Events Calendar "
+"plugin, Acronix plugin. In case the aforementioned components are not "
+"activated or you continue to see this error message, please disable all "
+"other plugins and enable them one by one to find out the component that is "
+"causing the conflict."
+msgstr ""
+"Visualizerが正常に機能することを妨げる別のコンポーネントとの競合の可能性が検"
+"出されました。インスタンス上でアクティブ化されている場合は、次のコンポーネン"
+"トを無効にしてください: Modern Events Calendar プラグイン、 Acronix プラグイ"
+"ン。上記のコンポーネントがアクティブでない場合、またはこのエラーメッセージが"
+"表示され続ける場合は、他のすべてのプラグインを無効にして、競合の原因となって"
+"いるコンポーネントを見つけるためにそれらを1つずつ有効にしてください。"
+
+#: classes/Visualizer/Module/Admin.php:1012
 msgid "Library"
 msgstr "ライブラリ"
 
-#: classes/Visualizer/Module/Admin.php:1045
+#: classes/Visualizer/Module/Admin.php:1037
 msgid "Docs"
 msgstr "ドキュメント"
 
-#: classes/Visualizer/Module/Admin.php:1050
+#: classes/Visualizer/Module/Admin.php:1042
 msgid "Pro Addon"
 msgstr "Proアドオン"
 
-#: classes/Visualizer/Module/Chart.php:760
-#: classes/Visualizer/Module/Chart.php:1249
+#: classes/Visualizer/Module/Chart.php:784
+#: classes/Visualizer/Module/Chart.php:1294
 msgid "You have entered an invalid URL. Please provide a valid URL."
 msgstr "無効なURLが入力されました。正しいURLを入力してください。"
 
-#: classes/Visualizer/Module/Chart.php:761
-#: classes/Visualizer/Module/Chart.php:1250
+#: classes/Visualizer/Module/Chart.php:785
+#: classes/Visualizer/Module/Chart.php:1295
 msgid "Loading..."
 msgstr "読み込み中…"
 
-#: classes/Visualizer/Module/Chart.php:762
+#: classes/Visualizer/Module/Chart.php:786
 msgid "An error occured in fetching data."
 msgstr "データを取得中にエラーが起きました。"
 
-#: classes/Visualizer/Module/Chart.php:763
+#: classes/Visualizer/Module/Chart.php:787
 msgid "Please select a few columns to include in the chart."
 msgstr "グラフに入れる列を選んで下さい。"
 
-#: classes/Visualizer/Module/Chart.php:764
+#: classes/Visualizer/Module/Chart.php:788
 msgid ""
 "You have modified the chart's settings. To modify the source/data again, you "
 "must save this chart and reopen it for editing. If you continue without "
@@ -212,98 +222,98 @@ msgstr ""
 "グラフの設定が変更されました。元データを再度修正するには、グラフを保存し再度"
 "編集する必要があります。グラフを保存しないで続けると、変更が保存されません。"
 
-#: classes/Visualizer/Module/Chart.php:807
+#: classes/Visualizer/Module/Chart.php:831
 msgid "Save Chart"
 msgstr "グラフを保存"
 
-#: classes/Visualizer/Module/Chart.php:808
+#: classes/Visualizer/Module/Chart.php:832
 msgid "Create Chart"
 msgstr "グラフを作成"
 
-#: classes/Visualizer/Module/Chart.php:810
-#: classes/Visualizer/Render/Page/Types.php:132
+#: classes/Visualizer/Module/Chart.php:834
+#: classes/Visualizer/Render/Page/Types.php:137
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: classes/Visualizer/Module/Chart.php:813
+#: classes/Visualizer/Module/Chart.php:837
 #: classes/Visualizer/Module/Language.php:51
 #: classes/Visualizer/Module/Language.php:52
 msgid "Insert Chart"
 msgstr "グラフを挿入"
 
-#: classes/Visualizer/Module/Chart.php:1081
-#: classes/Visualizer/Module/Chart.php:1082
+#: classes/Visualizer/Module/Chart.php:1116
+#: classes/Visualizer/Module/Chart.php:1117
 msgid "CSV file with chart data was not uploaded. Please try again."
 msgstr ""
 "グラフデータを含むCSVファイルがアップロードされませんでした。もう一度試して下"
 "さい。"
 
-#: classes/Visualizer/Module/Chart.php:1122
+#: classes/Visualizer/Module/Chart.php:1167
 msgid "CSV file is broken or invalid. Please try again."
 msgstr "CSVファイルが壊れているか無効です。再度試して下さい。"
 
-#: classes/Visualizer/Module/Frontend.php:127
-#: classes/Visualizer/Render/Sidebar.php:230
+#: classes/Visualizer/Module/Frontend.php:152
+#: classes/Visualizer/Render/Sidebar.php:193
 msgid "Print"
 msgstr "印刷"
 
-#: classes/Visualizer/Module/Frontend.php:128
+#: classes/Visualizer/Module/Frontend.php:153
 msgid "Print Chart"
 msgstr "グラフを印刷"
 
-#: classes/Visualizer/Module/Frontend.php:131
-#: classes/Visualizer/Render/Sidebar.php:238
+#: classes/Visualizer/Module/Frontend.php:156
+#: classes/Visualizer/Render/Sidebar.php:201
 msgid "CSV"
 msgstr "CSV"
 
-#: classes/Visualizer/Module/Frontend.php:132
+#: classes/Visualizer/Module/Frontend.php:157
 msgid "Download as a CSV"
 msgstr "CSVでダウンロード"
 
-#: classes/Visualizer/Module/Frontend.php:135
-#: classes/Visualizer/Render/Sidebar.php:248
+#: classes/Visualizer/Module/Frontend.php:160
+#: classes/Visualizer/Render/Sidebar.php:211
 msgid "Excel"
 msgstr "Excel"
 
-#: classes/Visualizer/Module/Frontend.php:136
+#: classes/Visualizer/Module/Frontend.php:161
 msgid "Download as a spreadsheet"
 msgstr "スプレッドシートでダウンロード"
 
-#: classes/Visualizer/Module/Frontend.php:139
-#: classes/Visualizer/Render/Sidebar.php:256
+#: classes/Visualizer/Module/Frontend.php:164
+#: classes/Visualizer/Render/Sidebar.php:219
 msgid "Copy"
 msgstr "コピー"
 
-#: classes/Visualizer/Module/Frontend.php:140
+#: classes/Visualizer/Module/Frontend.php:165
 msgid "Copy data"
 msgstr "データをコピー"
 
-#: classes/Visualizer/Module/Frontend.php:143
+#: classes/Visualizer/Module/Frontend.php:168
 msgid "Download"
 msgstr "ダウンロード"
 
-#: classes/Visualizer/Module/Frontend.php:144
+#: classes/Visualizer/Module/Frontend.php:169
 msgid "Download as an image"
 msgstr "画像をダウンロード"
 
-#: classes/Visualizer/Module/Frontend.php:152
-#: classes/Visualizer/Render/Library.php:337
+#: classes/Visualizer/Module/Frontend.php:177
+#: classes/Visualizer/Render/Library.php:335
 msgid "Edit"
 msgstr "編集"
 
-#: classes/Visualizer/Module/Frontend.php:153
+#: classes/Visualizer/Module/Frontend.php:178
 msgid "Edit data"
 msgstr "データを編集"
 
-#: classes/Visualizer/Module/Frontend.php:172
+#: classes/Visualizer/Module/Frontend.php:197
 msgid "Invalid chart ID"
 msgstr "無効なグラフID"
 
-#: classes/Visualizer/Module/Frontend.php:176
+#: classes/Visualizer/Module/Frontend.php:201
 msgid "Invalid action"
 msgstr "無効な操作"
 
-#: classes/Visualizer/Module/Frontend.php:378
+#: classes/Visualizer/Module/Frontend.php:431
 msgid ""
 "The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your "
 "spreadsheet editor to paste the data."
@@ -326,23 +336,23 @@ msgstr ""
 msgid "Buy now"
 msgstr "すぐに購入"
 
-#: classes/Visualizer/Plugin.php:130
+#: classes/Visualizer/Plugin.php:135
 msgid "All dates"
 msgstr "全期間"
 
-#: classes/Visualizer/Plugin.php:130
+#: classes/Visualizer/Plugin.php:135
 msgid "Yesterday"
 msgstr "昨日"
 
-#: classes/Visualizer/Plugin.php:130
+#: classes/Visualizer/Plugin.php:135
 msgid "Last Week"
 msgstr "先週"
 
-#: classes/Visualizer/Plugin.php:130
+#: classes/Visualizer/Plugin.php:135
 msgid "Last Month"
 msgstr "先月"
 
-#: classes/Visualizer/Plugin.php:130
+#: classes/Visualizer/Plugin.php:135
 msgid "Last Year"
 msgstr "昨年"
 
@@ -407,7 +417,7 @@ msgid "Password/Secret Key"
 msgstr "パスワード/秘密鍵"
 
 #: classes/Visualizer/Render/Layout.php:210
-#: classes/Visualizer/Render/Layout.php:424
+#: classes/Visualizer/Render/Layout.php:430
 msgid "OR"
 msgstr "OR"
 
@@ -419,27 +429,35 @@ msgstr "Authorization"
 msgid "e.g. SharedKey <AccountName>:<Signature>"
 msgstr "例: 共有鍵 <AccountName>:<Signature>"
 
-#: classes/Visualizer/Render/Layout.php:228
+#: classes/Visualizer/Render/Layout.php:225
+msgid "Additional headers"
+msgstr "追加のヘッダー"
+
+#: classes/Visualizer/Render/Layout.php:227
+msgid "Key:Value, Key2:Value2,..."
+msgstr "Key:Value, Key2:Value2,…"
+
+#: classes/Visualizer/Render/Layout.php:234
 msgid "STEP 2: Choose the JSON root"
 msgstr "STEP 2: JSONのrootを選択"
 
-#: classes/Visualizer/Render/Layout.php:241
+#: classes/Visualizer/Render/Layout.php:247
 msgid "Parse Endpoint"
 msgstr "エンドポイントを解析"
 
-#: classes/Visualizer/Render/Layout.php:244
+#: classes/Visualizer/Render/Layout.php:250
 msgid "STEP 3: Specify miscellaneous parameters"
 msgstr "STEP 3: 各種パラメータを指定"
 
-#: classes/Visualizer/Render/Layout.php:250
+#: classes/Visualizer/Render/Layout.php:256
 msgid "Get results from the first page only"
 msgstr "結果の最初のページだけを取得"
 
-#: classes/Visualizer/Render/Layout.php:274
+#: classes/Visualizer/Render/Layout.php:280
 msgid "STEP 4: Select the data to display in the chart"
 msgstr "STEP 4: グラフで表示するデータを選択"
 
-#: classes/Visualizer/Render/Layout.php:279
+#: classes/Visualizer/Render/Layout.php:285
 msgid ""
 "If you see Invalid Data in the table, you may have selected the wrong root "
 "to fetch data from. Please select an alternative from the JSON root dropdown."
@@ -447,8 +465,8 @@ msgstr ""
 "表に無効なデータがある場合、取得するデータの正しくないrootを選択した可能性が"
 "あります。別のJSONのrootをドロップダウンメニューから選択してください。"
 
-#: classes/Visualizer/Render/Layout.php:280
-#: classes/Visualizer/Render/Layout.php:317
+#: classes/Visualizer/Render/Layout.php:286
+#: classes/Visualizer/Render/Layout.php:323
 msgid ""
 "Select whether to include the data in the chart. Each column selected will "
 "form one series."
@@ -456,13 +474,13 @@ msgstr ""
 "グラフにどのデータを含めるかを選択します。選択した列が、それぞれ一続きになり"
 "ます。"
 
-#: classes/Visualizer/Render/Layout.php:281
-#: classes/Visualizer/Render/Layout.php:318
+#: classes/Visualizer/Render/Layout.php:287
+#: classes/Visualizer/Render/Layout.php:324
 msgid "If a column is selected to be included, specify its data type."
 msgstr "含める列を選ぶ場合、そのデータタイプを指定してください。"
 
-#: classes/Visualizer/Render/Layout.php:282
-#: classes/Visualizer/Render/Layout.php:319
+#: classes/Visualizer/Render/Layout.php:288
+#: classes/Visualizer/Render/Layout.php:325
 msgid ""
 "You can use drag/drop to reorder the columns but this column position is not "
 "saved. So when you reload the table, you may have to reorder again."
@@ -470,8 +488,8 @@ msgstr ""
 "ドラッグ/ドロップで列の順番を変えられますが、列の位置は保存されません。表を再"
 "度読み込むと、もう一度並び替える必要があります。"
 
-#: classes/Visualizer/Render/Layout.php:283
-#: classes/Visualizer/Render/Layout.php:320
+#: classes/Visualizer/Render/Layout.php:289
+#: classes/Visualizer/Render/Layout.php:326
 msgid ""
 "You can select any number of columns but the chart type selected will "
 "determine how many will display in the chart."
@@ -479,107 +497,107 @@ msgstr ""
 "いずれの列数も選べますが、選んだグラフの種類によってグラフ内にいくつ表示され"
 "るかが変わります。"
 
-#: classes/Visualizer/Render/Layout.php:284
+#: classes/Visualizer/Render/Layout.php:290
 msgid ""
 "Once you have made your selection, click 'Show Chart' on the right to view "
 "the chart."
 msgstr ""
 "選択した後、右の’グラフを表示’をクリックするとグラフを見ることが出来ます。"
 
-#: classes/Visualizer/Render/Layout.php:398
+#: classes/Visualizer/Render/Layout.php:404
 msgid "Label"
 msgstr "ラベル"
 
-#: classes/Visualizer/Render/Layout.php:412
+#: classes/Visualizer/Render/Layout.php:418
 msgid "Data Type"
 msgstr "データタイプ"
 
-#: classes/Visualizer/Render/Layout.php:423
+#: classes/Visualizer/Render/Layout.php:429
 msgid "Exclude from chart"
 msgstr "グラフから除外"
 
-#: classes/Visualizer/Render/Layout.php:423
+#: classes/Visualizer/Render/Layout.php:429
 msgid "Exclude"
 msgstr "除外"
 
-#: classes/Visualizer/Render/Layout.php:424
+#: classes/Visualizer/Render/Layout.php:430
 msgid "Include in chart and select data type"
 msgstr "グラフに含めてデータタイプを選択"
 
-#: classes/Visualizer/Render/Layout.php:443
+#: classes/Visualizer/Render/Layout.php:449
 msgid "Value"
 msgstr "値"
 
-#: classes/Visualizer/Render/Layout.php:453
+#: classes/Visualizer/Render/Layout.php:459
 msgid "Invalid Data"
 msgstr "無効なデータ"
 
-#: classes/Visualizer/Render/Layout.php:495
+#: classes/Visualizer/Render/Layout.php:501
 msgid "Permissions"
 msgstr "パーミッション"
 
-#: classes/Visualizer/Render/Layout.php:498
+#: classes/Visualizer/Render/Layout.php:504
 msgid "Configure permissions for the chart."
 msgstr "グラフのパーミッションを設定。"
 
-#: classes/Visualizer/Render/Layout.php:501
+#: classes/Visualizer/Render/Layout.php:507
 msgid "Who can see this chart?"
 msgstr "誰がこのグラフを見られますか？"
 
-#: classes/Visualizer/Render/Layout.php:507
-#: classes/Visualizer/Render/Layout.php:538
+#: classes/Visualizer/Render/Layout.php:513
+#: classes/Visualizer/Render/Layout.php:544
 msgid "All Users"
 msgstr "全てのユーザー"
 
-#: classes/Visualizer/Render/Layout.php:508
-#: classes/Visualizer/Render/Layout.php:539
+#: classes/Visualizer/Render/Layout.php:514
+#: classes/Visualizer/Render/Layout.php:545
 msgid "Select Users"
 msgstr "ユーザーを選択"
 
-#: classes/Visualizer/Render/Layout.php:509
-#: classes/Visualizer/Render/Layout.php:540
+#: classes/Visualizer/Render/Layout.php:515
+#: classes/Visualizer/Render/Layout.php:546
 msgid "Select Roles"
 msgstr "ロールを選択"
 
-#: classes/Visualizer/Render/Layout.php:532
+#: classes/Visualizer/Render/Layout.php:538
 msgid "Who can edit this chart?"
 msgstr "誰がこのグラフを編集出来ますか？"
 
-#: classes/Visualizer/Render/Layout.php:620
+#: classes/Visualizer/Render/Layout.php:627
 msgid "Documentation"
 msgstr "ドキュメンテーション"
 
-#: classes/Visualizer/Render/Layout.php:621
+#: classes/Visualizer/Render/Layout.php:628
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php:73
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php:102
 msgid "General"
 msgstr "一般"
 
-#: classes/Visualizer/Render/Layout.php:623
+#: classes/Visualizer/Render/Layout.php:630
 msgid "Main documentation page"
 msgstr "メインのドキュメンテーションページ"
 
-#: classes/Visualizer/Render/Layout.php:624
+#: classes/Visualizer/Render/Layout.php:631
 msgid "Custom code snippets"
 msgstr "カスタムのコードスニペット"
 
-#: classes/Visualizer/Render/Layout.php:627
+#: classes/Visualizer/Render/Layout.php:634
 msgid "%s chart"
 msgstr "%s グラフ"
 
-#: classes/Visualizer/Render/Layout.php:629
+#: classes/Visualizer/Render/Layout.php:636
 msgid "View demo"
 msgstr "デモを表示"
 
-#: classes/Visualizer/Render/Layout.php:630
+#: classes/Visualizer/Render/Layout.php:637
 msgid "Articles containing \"%s\""
 msgstr "記事を含む “%s”"
 
-#: classes/Visualizer/Render/Layout.php:681
+#: classes/Visualizer/Render/Layout.php:688
 msgid "Import data from file"
 msgstr "ファイルからデータをインポート"
 
-#: classes/Visualizer/Render/Layout.php:683
+#: classes/Visualizer/Render/Layout.php:690
 msgid ""
 "Select and upload your data CSV file here. The first row of the CSV file "
 "should contain the column headings. The second one should contain series "
@@ -589,8 +607,8 @@ msgstr ""
 "の名前が含まれていなければなりません。2行目はデータのタイプ (string, number, "
 "boolean, date, datetime, timeofday) が含まれている必要があります。"
 
-#: classes/Visualizer/Render/Layout.php:684
-#: classes/Visualizer/Render/Layout.php:705
+#: classes/Visualizer/Render/Layout.php:691
+#: classes/Visualizer/Render/Layout.php:712
 msgid ""
 "If you are unsure about how to format your data CSV then please take a look "
 "at this sample: %1$s %2$s%3$s. If you are using non-English characters, "
@@ -600,20 +618,20 @@ msgstr ""
 "%2$s%3$s 英語以外の文字を使う場合は、UTF-8エンコーディングでファイルを保存し"
 "ているか確認してください。"
 
-#: classes/Visualizer/Render/Layout.php:692
-#: classes/Visualizer/Render/Layout.php:735
+#: classes/Visualizer/Render/Layout.php:699
+#: classes/Visualizer/Render/Layout.php:742
 msgid "Import"
 msgstr "インポート"
 
-#: classes/Visualizer/Render/Layout.php:698
+#: classes/Visualizer/Render/Layout.php:705
 msgid "Import data from URL"
 msgstr "URLからデータをインポート"
 
-#: classes/Visualizer/Render/Layout.php:702
+#: classes/Visualizer/Render/Layout.php:709
 msgid "Import from CSV"
 msgstr "CSVからデータをインポート"
 
-#: classes/Visualizer/Render/Layout.php:704
+#: classes/Visualizer/Render/Layout.php:711
 msgid ""
 "You can use this to import data from a remote CSV file or %1$sGoogle "
 "Spreadsheet%2$s."
@@ -621,26 +639,26 @@ msgstr ""
 "これでリモートのCSVファイル、または%1$sGoogle Spreadsheet%2$sからデータをイン"
 "ポートできます。"
 
-#: classes/Visualizer/Render/Layout.php:709
+#: classes/Visualizer/Render/Layout.php:716
 msgid "Please enter the URL of CSV file"
 msgstr "CSVファイルのURLを入力してください"
 
-#: classes/Visualizer/Render/Layout.php:716
-#: classes/Visualizer/Render/Layout.php:763
-#: classes/Visualizer/Render/Layout.php:881
-#: classes/Visualizer/Render/Layout.php:930
+#: classes/Visualizer/Render/Layout.php:723
+#: classes/Visualizer/Render/Layout.php:770
+#: classes/Visualizer/Render/Layout.php:888
+#: classes/Visualizer/Render/Layout.php:937
 msgid "One-time"
 msgstr "ワンタイム"
 
-#: classes/Visualizer/Render/Layout.php:739
+#: classes/Visualizer/Render/Layout.php:746
 msgid "Import & Save schedule"
 msgstr "スケジュールをインポートして保存"
 
-#: classes/Visualizer/Render/Layout.php:748
+#: classes/Visualizer/Render/Layout.php:755
 msgid "Import from JSON"
 msgstr "JSONからインポート"
 
-#: classes/Visualizer/Render/Layout.php:750
+#: classes/Visualizer/Render/Layout.php:757
 msgid ""
 "You can choose here to import/synchronize your chart data with a remote JSON "
 "source. For more info check <a href=\"https://docs.themeisle.com/"
@@ -652,122 +670,122 @@ msgstr ""
 "json-data-rest-endpoints” target=“_blank” >このチュートリアル</a>をチェックし"
 "てください"
 
-#: classes/Visualizer/Render/Layout.php:754
+#: classes/Visualizer/Render/Layout.php:761
 msgid "Modify Parameters"
 msgstr "パラメータの修正"
 
-#: classes/Visualizer/Render/Layout.php:754
+#: classes/Visualizer/Render/Layout.php:761
 msgid "Create Parameters"
 msgstr "パラメータの作成"
 
-#: classes/Visualizer/Render/Layout.php:757
+#: classes/Visualizer/Render/Layout.php:764
 msgid "How often do you want to check the URL"
 msgstr "URLのチェックの頻度"
 
-#: classes/Visualizer/Render/Layout.php:785
-#: classes/Visualizer/Render/Layout.php:897
-#: classes/Visualizer/Render/Layout.php:947
-#: classes/Visualizer/Render/Layout.php:984
-#: classes/Visualizer/Render/Layout.php:993
+#: classes/Visualizer/Render/Layout.php:792
+#: classes/Visualizer/Render/Layout.php:904
+#: classes/Visualizer/Render/Layout.php:954
+#: classes/Visualizer/Render/Layout.php:991
+#: classes/Visualizer/Render/Layout.php:1000
 msgid "Show Chart"
 msgstr "グラフを表示"
 
-#: classes/Visualizer/Render/Layout.php:791
-#: classes/Visualizer/Render/Layout.php:898
-#: classes/Visualizer/Render/Layout.php:948
+#: classes/Visualizer/Render/Layout.php:798
+#: classes/Visualizer/Render/Layout.php:905
+#: classes/Visualizer/Render/Layout.php:955
 msgid "Save Schedule"
 msgstr "スケジュールを保存"
 
-#: classes/Visualizer/Render/Layout.php:803
+#: classes/Visualizer/Render/Layout.php:810
 msgid "Import from other chart"
 msgstr "他のグラフからインポート"
 
-#: classes/Visualizer/Render/Layout.php:807
+#: classes/Visualizer/Render/Layout.php:814
 msgid "You can import here data from your previously created charts"
 msgstr "既存のグラフからデータをインポートできます"
 
-#: classes/Visualizer/Render/Layout.php:850
+#: classes/Visualizer/Render/Layout.php:857
 msgid "Import Chart"
 msgstr "グラフをインポート"
 
-#: classes/Visualizer/Render/Layout.php:868
+#: classes/Visualizer/Render/Layout.php:875
 msgid "Import from WordPress"
 msgstr "WordPressからインポート"
 
-#: classes/Visualizer/Render/Layout.php:872
+#: classes/Visualizer/Render/Layout.php:879
 msgid "You can import data from WordPress here."
 msgstr "WordPressからデータをインポートできます。"
 
-#: classes/Visualizer/Render/Layout.php:874
+#: classes/Visualizer/Render/Layout.php:881
 msgid "How often do you want to refresh the data from WordPress."
 msgstr "WordPressからのデータの更新頻度。"
 
-#: classes/Visualizer/Render/Layout.php:877
+#: classes/Visualizer/Render/Layout.php:884
 msgid "Modify Filter"
 msgstr "フィルタの修正"
 
-#: classes/Visualizer/Render/Layout.php:877
+#: classes/Visualizer/Render/Layout.php:884
 msgid "Create Filter"
 msgstr "フィルタの作成"
 
-#: classes/Visualizer/Render/Layout.php:917
+#: classes/Visualizer/Render/Layout.php:924
 msgid "Import from database"
 msgstr "データベースからインポート"
 
-#: classes/Visualizer/Render/Layout.php:921
+#: classes/Visualizer/Render/Layout.php:928
 msgid "You can import data from the database here."
 msgstr "データベースからデータをインポートできます。"
 
-#: classes/Visualizer/Render/Layout.php:923
+#: classes/Visualizer/Render/Layout.php:930
 msgid "How often do you want to refresh the data from the database."
 msgstr "データベースからのデータの更新頻度"
 
-#: classes/Visualizer/Render/Layout.php:926
+#: classes/Visualizer/Render/Layout.php:933
 msgid "Modify Query"
 msgstr "クエリーの修正"
 
-#: classes/Visualizer/Render/Layout.php:926
+#: classes/Visualizer/Render/Layout.php:933
 msgid "Create Query"
 msgstr "クエリーの作成"
 
-#: classes/Visualizer/Render/Layout.php:957
+#: classes/Visualizer/Render/Layout.php:964
 msgid "Manual Data"
 msgstr "手動のデータ"
 
-#: classes/Visualizer/Render/Layout.php:968
+#: classes/Visualizer/Render/Layout.php:975
 msgid "Use the"
 msgstr "使う"
 
-#: classes/Visualizer/Render/Layout.php:974
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:216
+#: classes/Visualizer/Render/Layout.php:981
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:218
 msgid "Text"
 msgstr "テキスト"
 
-#: classes/Visualizer/Render/Layout.php:974
+#: classes/Visualizer/Render/Layout.php:981
 msgid "Simple"
 msgstr "シンプル"
 
-#: classes/Visualizer/Render/Layout.php:979
+#: classes/Visualizer/Render/Layout.php:986
 msgid "editor to manually edit the chart data."
 msgstr "グラフのデータを編集するエディタ"
 
-#: classes/Visualizer/Render/Layout.php:981
-#: classes/Visualizer/Render/Layout.php:990
+#: classes/Visualizer/Render/Layout.php:988
+#: classes/Visualizer/Render/Layout.php:997
 msgid "Undo Changes"
 msgstr "変更のやり直し"
 
-#: classes/Visualizer/Render/Layout.php:983
-#: classes/Visualizer/Render/Layout.php:985
+#: classes/Visualizer/Render/Layout.php:990
+#: classes/Visualizer/Render/Layout.php:992
 msgid "Edit Data"
 msgstr "データの編集"
 
-#: classes/Visualizer/Render/Layout.php:987
-#: classes/Visualizer/Render/Layout.php:996
+#: classes/Visualizer/Render/Layout.php:994
+#: classes/Visualizer/Render/Layout.php:1003
 msgid "Please make sure you click 'Show Chart' before you save the chart."
 msgstr "グラフを保存する前に、’グラフの表示’をクリックして確認してください。"
 
-#: classes/Visualizer/Render/Layout.php:992
-#: classes/Visualizer/Render/Layout.php:994
+#: classes/Visualizer/Render/Layout.php:999
+#: classes/Visualizer/Render/Layout.php:1001
 msgid "View Editor"
 msgstr "エディタを表示"
 
@@ -838,11 +856,13 @@ msgid "Date"
 msgstr "日付"
 
 #: classes/Visualizer/Render/Library.php:184
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:188
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:132
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:199
+#: classes/Visualizer/Render/Sidebar/Google.php:172
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:134
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:132
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:74
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:60
-#: classes/Visualizer/Render/Sidebar.php:307
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:69
 msgid "Title"
 msgstr "タイトル"
 
@@ -871,80 +891,83 @@ msgstr "フィルタをクリア"
 msgid "No charts found"
 msgstr "グラフがありません"
 
-#: classes/Visualizer/Render/Library.php:327
+#: classes/Visualizer/Render/Library.php:325
 msgid "Click to view the error"
 msgstr "クリックしてエラーを表示"
 
-#: classes/Visualizer/Render/Library.php:335
+#: classes/Visualizer/Render/Library.php:333
 msgid "Delete"
 msgstr "削除"
 
-#: classes/Visualizer/Render/Library.php:336
+#: classes/Visualizer/Render/Library.php:334
 msgid "Clone"
 msgstr "複製"
 
-#: classes/Visualizer/Render/Library.php:338
+#: classes/Visualizer/Render/Library.php:336
 msgid "Export"
 msgstr "エクスポート"
 
-#: classes/Visualizer/Render/Library.php:340
+#: classes/Visualizer/Render/Library.php:338
 msgid "Download as image"
 msgstr "画像をダウンロード"
 
-#: classes/Visualizer/Render/Library.php:342
-#: classes/Visualizer/Render/Templates.php:68
-msgid "Click to select"
-msgstr "クリックして選択"
+#: classes/Visualizer/Render/Library.php:340
+msgid "Click to copy shortcode"
+msgstr "クリックしてショートコードをコピー"
 
-#: classes/Visualizer/Render/Library.php:345
+#: classes/Visualizer/Render/Library.php:342
+msgid "Chart ID"
+msgstr "グラフID"
+
+#: classes/Visualizer/Render/Library.php:342
 msgid "Last Updated"
 msgstr "最終更新"
 
-#: classes/Visualizer/Render/Library.php:357
+#: classes/Visualizer/Render/Library.php:354
 msgid "Discover the power of PRO!"
 msgstr "PROのパワーを体験!"
 
-#: classes/Visualizer/Render/Library.php:358
+#: classes/Visualizer/Render/Library.php:355
 msgid "Spreadsheet like editor"
 msgstr "エディタのようなスプレッドシート"
 
-#: classes/Visualizer/Render/Library.php:359
+#: classes/Visualizer/Render/Library.php:356
 msgid "Import from other charts"
 msgstr "他のグラフをインポート"
 
-#: classes/Visualizer/Render/Library.php:360
+#: classes/Visualizer/Render/Library.php:357
 msgid "Use database query to create charts"
 msgstr "データベースのクエリを使ってグラフを作成"
 
-#: classes/Visualizer/Render/Library.php:361
+#: classes/Visualizer/Render/Library.php:358
 msgid "Create charts from WordPress tables"
 msgstr "WordPressの表からグラフを作成"
 
-#: classes/Visualizer/Render/Library.php:362
+#: classes/Visualizer/Render/Library.php:359
 msgid "Frontend editor"
 msgstr "フロントエンドのエディタ"
 
-#: classes/Visualizer/Render/Library.php:363
+#: classes/Visualizer/Render/Library.php:360
 msgid "Private charts"
 msgstr "プライベートのグラフ"
 
-#: classes/Visualizer/Render/Library.php:364
+#: classes/Visualizer/Render/Library.php:361
 msgid "Auto-sync with online files"
 msgstr "オンラインのファイルとの自動同期"
 
-#: classes/Visualizer/Render/Library.php:365
+#: classes/Visualizer/Render/Library.php:362
 msgid "6 more chart types"
 msgstr "6種類の追加グラフ"
 
-#: classes/Visualizer/Render/Library.php:366
+#: classes/Visualizer/Render/Library.php:363
 msgid "View more features"
 msgstr "もっと多くの機能を見る"
 
-#: classes/Visualizer/Render/Library.php:367
+#: classes/Visualizer/Render/Library.php:364
 msgid "We offer a 30-day no-questions-asked money back guarantee!"
 msgstr "30日の無条件返金保証を提供!"
 
-#: classes/Visualizer/Render/Library.php:368
+#: classes/Visualizer/Render/Library.php:365
 msgid "Don't see the features you need? Help us improve!"
 msgstr "必要な機能がありませんか？改善を手伝って下さい!"
 
@@ -965,45 +988,45 @@ msgstr "ヘルプ"
 msgid "Back"
 msgstr "戻る"
 
-#: classes/Visualizer/Render/Page/Types.php:60
+#: classes/Visualizer/Render/Page/Types.php:65
 msgid "PREMIUM"
 msgstr "PREMIUM"
 
-#: classes/Visualizer/Render/Page/Types.php:119
+#: classes/Visualizer/Render/Page/Types.php:124
 msgid "Use Library"
 msgstr "ライブラリの利用"
 
-#: classes/Visualizer/Render/Page/Types.php:131
+#: classes/Visualizer/Render/Page/Types.php:136
 msgid "Next"
 msgstr "次へ"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:23
-#: classes/Visualizer/Render/Sidebar.php:115
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:34
+#: classes/Visualizer/Render/Sidebar/Google.php:63
 msgid "Left of the chart"
 msgstr "グラフの左"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:24
-#: classes/Visualizer/Render/Sidebar.php:116
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:35
+#: classes/Visualizer/Render/Sidebar/Google.php:64
 msgid "Right of the chart"
 msgstr "グラフの右"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:25
-#: classes/Visualizer/Render/Sidebar.php:117
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:36
+#: classes/Visualizer/Render/Sidebar/Google.php:65
 msgid "Above the chart"
 msgstr "グラフの上"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:26
-#: classes/Visualizer/Render/Sidebar.php:118
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:37
+#: classes/Visualizer/Render/Sidebar/Google.php:66
 msgid "Below the chart"
 msgstr "グラフの下"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:97
-#: classes/Visualizer/Render/Sidebar/Graph.php:389
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:108
+#: classes/Visualizer/Render/Sidebar/Graph.php:388
 msgid "Series Settings"
 msgstr "データシリーズ設定"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:99
-#: classes/Visualizer/Render/Sidebar/Graph.php:391
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:110
+#: classes/Visualizer/Render/Sidebar/Graph.php:390
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php:118
 msgid ""
 "If you have just updated/modified the chart data, you may need to save it "
@@ -1012,204 +1035,240 @@ msgstr ""
 "グラフデータを更新した場合、設定に反映される前に保存する必要があるかもしれま"
 "せん。"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:151
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:162
 #: classes/Visualizer/Render/Sidebar/Graph.php:95
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:134
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:136
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:134
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:76
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:62
-#: classes/Visualizer/Render/Sidebar.php:148
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:71
+#: classes/Visualizer/Render/Sidebar.php:111
 msgid "Chart Title"
 msgstr "グラフタイトル"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:154
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:165
 #: classes/Visualizer/Render/Sidebar/Graph.php:98
-#: classes/Visualizer/Render/Sidebar.php:151
+#: classes/Visualizer/Render/Sidebar.php:114
 msgid "Text to display above the chart."
 msgstr "グラフ上部に表示するテキスト"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:158
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:169
 #: classes/Visualizer/Render/Sidebar/Graph.php:110
-#: classes/Visualizer/Render/Sidebar.php:155
+#: classes/Visualizer/Render/Sidebar.php:118
 msgid "Chart Title Color"
 msgstr "グラフタイトルの色"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:167
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:178
 #: classes/Visualizer/Render/Sidebar/Graph.php:129
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:143
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:145
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:143
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:83
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:68
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:77
 msgid "Chart Description"
 msgstr "グラフの説明"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:170
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:181
 #: classes/Visualizer/Render/Sidebar/Graph.php:132
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:146
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:148
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:146
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:86
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:71
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:80
 msgid ""
 "Description to display in the structured data schema as explained %1$shere"
 "%2$s"
 msgstr "%1$shere%2$s で説明されている構造化データスキーマに表示する説明"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:183
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:194
+#: classes/Visualizer/Render/Sidebar/Google.php:167
 #: classes/Visualizer/Render/Sidebar/Graph.php:189
-#: classes/Visualizer/Render/Sidebar/Graph.php:305
+#: classes/Visualizer/Render/Sidebar/Graph.php:304
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:138
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:240
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:131
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:133
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:131
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:72
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:59
-#: classes/Visualizer/Render/Sidebar.php:302
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:68
 msgid "General Settings"
 msgstr "一般設定"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:185
-#: classes/Visualizer/Render/Sidebar.php:304
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:196
+#: classes/Visualizer/Render/Sidebar/Google.php:169
 msgid ""
 "Configure title, font styles, tooltip, legend and else settings for the "
 "chart."
 msgstr "グラフのタイトル、フォントスタイル、ツールヒント、凡例その他の設定"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:192
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:203
+#: classes/Visualizer/Render/Sidebar/Google.php:176
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:149
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:251
-#: classes/Visualizer/Render/Sidebar.php:311
 msgid "Font Styles"
 msgstr "フォントスタイル"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:195
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:246
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:206
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:257
+#: classes/Visualizer/Render/Sidebar/Google.php:179
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:160
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:262
-#: classes/Visualizer/Render/Sidebar.php:314
 msgid "Family And Size"
 msgstr "ファミリーとサイズ"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:221
-#: classes/Visualizer/Render/Sidebar.php:340
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:232
+#: classes/Visualizer/Render/Sidebar/Google.php:205
 msgid "The default font family and size for all text in the chart."
 msgstr "グラフ中の全テキストのフォントファミリーとサイズの初期設定"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:226
-#: classes/Visualizer/Render/Sidebar.php:345
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:237
+#: classes/Visualizer/Render/Sidebar/Google.php:210
 msgid "Legend"
 msgstr "凡例"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:228
-#: classes/Visualizer/Render/Sidebar.php:347
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:239
+#: classes/Visualizer/Render/Sidebar/Google.php:212
 msgid "Position"
 msgstr "位置"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:233
-#: classes/Visualizer/Render/Sidebar.php:351
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:244
+#: classes/Visualizer/Render/Sidebar/Google.php:216
 msgid "Determines where to place the legend, compared to the chart area."
 msgstr "グラフエリアにおける凡例の位置を決定する"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:237
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:248
 msgid "Show datasets in reverse order"
 msgstr "データセットを逆順で表示"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:241
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:252
 msgid "Legend will show datasets in reverse order."
 msgstr "データセットを逆順で凡例に表示"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:272
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:283
+#: classes/Visualizer/Render/Sidebar/Google.php:228
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:152
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:254
-#: classes/Visualizer/Render/Sidebar.php:363
 msgid "Font Color"
 msgstr "フォントの色"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:282
-#: classes/Visualizer/Render/Sidebar/Google.php:106
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:165
-#: classes/Visualizer/Render/Sidebar.php:370
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:293
+#: classes/Visualizer/Render/Sidebar/Google.php:152
+#: classes/Visualizer/Render/Sidebar/Google.php:235
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:189
 msgid "Tooltip"
 msgstr "ツールヒント"
 
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:299
+#: classes/Visualizer/Render/Sidebar/Google.php:240
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:90
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:75
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:84
+msgid "License & Creator"
+msgstr "ライセンス & 制作者"
+
 #: classes/Visualizer/Render/Sidebar/ChartJS.php:301
-#: classes/Visualizer/Render/Sidebar.php:391
+#: classes/Visualizer/Render/Sidebar/Google.php:242
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:92
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:77
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:86
+msgid "License"
+msgstr "ライセンス"
+
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:307
+#: classes/Visualizer/Render/Sidebar/Google.php:248
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:98
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:83
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:92
+msgid "Creator"
+msgstr "制作者"
+
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:329
+#: classes/Visualizer/Render/Sidebar/Google.php:272
 msgid "Animation"
 msgstr "アニメーション"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:304
-#: classes/Visualizer/Render/Sidebar.php:402
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:332
+#: classes/Visualizer/Render/Sidebar/Google.php:283
 msgid "Duration"
 msgstr "長さ"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:307
-#: classes/Visualizer/Render/Sidebar.php:405
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:335
+#: classes/Visualizer/Render/Sidebar/Google.php:286
 msgid "The duration of the animation, in milliseconds"
 msgstr "アニメーションの長さ（ミリ秒）"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:314
-#: classes/Visualizer/Render/Sidebar.php:411
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:342
+#: classes/Visualizer/Render/Sidebar/Google.php:292
 msgid "Easing"
 msgstr "イージング"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:318
-#: classes/Visualizer/Render/Sidebar.php:415
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:346
+#: classes/Visualizer/Render/Sidebar/Google.php:296
 msgid "Constant speed"
 msgstr "定速"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:319
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:347
 msgid "easeInQuad"
 msgstr "easeInQuad"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:320
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:348
 msgid "easeOutQuad"
 msgstr "easeOutQuad"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:321
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:349
 msgid "easeInOutQuad"
 msgstr "easeInOutQuad"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:322
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:350
 msgid "easeInCubic"
 msgstr "easeInCubic"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:323
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:351
 msgid "easeOutCubic"
 msgstr "easeOutCubic"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:324
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:352
 msgid "easeInOutCubic"
 msgstr "easeInOutCubic"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:325
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:353
 msgid "easeInQuart"
 msgstr "easeInQuart"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:326
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:354
 msgid "easeOutQuart"
 msgstr "easeOutQuart"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:327
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:355
 msgid "easeInOutQuart"
 msgstr "easeInOutQuart"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:328
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:356
 msgid "easeInQuint"
 msgstr "easeInQuint"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:329
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:357
 msgid "easeOutQuint"
 msgstr "easeOutQuint"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:331
-#: classes/Visualizer/Render/Sidebar.php:420
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:359
+#: classes/Visualizer/Render/Sidebar/Google.php:301
 msgid "The easing function applied to the animation."
 msgstr "アニメーションに適用するエージング関数"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:347
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:180
-#: classes/Visualizer/Render/Sidebar.php:436
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:375
+#: classes/Visualizer/Render/Sidebar/Google.php:317
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:204
 msgid "Trigger"
 msgstr "トリガー"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:351
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:379
 msgid ""
 "Determines if the tooltip should only display when the mouse intersects with "
 "an element."
 msgstr "マウスが要素に重なった時のみにツールヒントを表示するかを決定"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:360
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:388
 msgid ""
 "Configure the graph by providing configuration variables right from the "
 "%1$sChartJS API%2$s. You can refer to to some examples %3$shere%4$s."
@@ -1217,16 +1276,16 @@ msgstr ""
 "%1$sChartJS API%2$s からそのまま設定を利用してグラフを構成。%3$shere%4$s の例"
 "を参照可能です。"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:381
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:257
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:361
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:409
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:281
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:385
 msgid "Chart Size"
 msgstr "グラフサイズ"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:383
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:259
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:363
-#: classes/Visualizer/Render/Sidebar.php:467
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:411
+#: classes/Visualizer/Render/Sidebar/Google.php:348
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:283
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:387
 msgid ""
 "Configure the total size of the chart. Two formats are supported: a number, "
 "or a number followed by %. A simple number is a value in pixels; a number "
@@ -1235,17 +1294,17 @@ msgstr ""
 "グラフの全体サイズを設定。2種類のフォーマットをサポート: 数値あるいは%付きの"
 "数値。数値のみの場合はピクセル数、%付きの場合はパーセントになります。"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:387
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:263
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:367
-#: classes/Visualizer/Render/Sidebar.php:471
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:415
+#: classes/Visualizer/Render/Sidebar/Google.php:352
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:287
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:391
 msgid "Width And Height Of Chart"
 msgstr "グラフの幅と高さ"
 
-#: classes/Visualizer/Render/Sidebar/ChartJS.php:401
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:277
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:381
-#: classes/Visualizer/Render/Sidebar.php:485
+#: classes/Visualizer/Render/Sidebar/ChartJS.php:429
+#: classes/Visualizer/Render/Sidebar/Google.php:366
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:301
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:405
 msgid ""
 "Determines the total width and height of the chart. This will only show in "
 "the front-end."
@@ -1310,39 +1369,64 @@ msgstr "バーの透明度、1.0では完全に不透明、0.0では完全に透
 msgid "Axis Text Color"
 msgstr "軸のテキストの色"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:95
+#: classes/Visualizer/Render/Sidebar/Google.php:67
+msgid "Omit the legend"
+msgstr "凡例を非表示"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:72
+#: classes/Visualizer/Render/Sidebar/Graph.php:80
+msgid "Inside the chart"
+msgstr "グラフの中"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:81
+msgid "Aligned to the start of the allocated area"
+msgstr "割り当てられたエリアの開始位置に揃える"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:82
+msgid "Centered in the allocated area"
+msgstr "割り当てられたエリアの中央に揃える"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:83
+msgid "Aligned to the end of the allocated area"
+msgstr "割り当てられたエリアの端に揃える"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:141
 msgid "Special Role"
 msgstr "特殊なロール"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:99
+#: classes/Visualizer/Render/Sidebar/Google.php:145
 msgid "Default (Data)"
 msgstr "デフォルト (データ)"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:100
+#: classes/Visualizer/Render/Sidebar/Google.php:146
 msgid "Annotation"
 msgstr "注釈"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:101
+#: classes/Visualizer/Render/Sidebar/Google.php:147
 msgid "Annotation Text"
 msgstr "注釈テキスト"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:102
+#: classes/Visualizer/Render/Sidebar/Google.php:148
 msgid "Certainty"
 msgstr "確度"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:103
+#: classes/Visualizer/Render/Sidebar/Google.php:149
 msgid "Emphasis"
 msgstr "強調"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:104
+#: classes/Visualizer/Render/Sidebar/Google.php:150
 msgid "Scope"
 msgstr "範囲"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:105
+#: classes/Visualizer/Render/Sidebar/Google.php:151
 msgid "Style"
 msgstr "スタイル"
 
-#: classes/Visualizer/Render/Sidebar/Google.php:108
+#: classes/Visualizer/Render/Sidebar/Google.php:153
+msgid "Interval"
+msgstr "間隔"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:155
 msgid ""
 "Determines whether the series has to be used for a special role as mentioned "
 "in %1$shere%2$s. You can view a few examples %3$shere%4$s."
@@ -1350,10 +1434,154 @@ msgstr ""
 "%1$shere%2$sで説明されている特殊なロールとしてデータシリーズを扱うかを決"
 "定。%3$shere%4$sにある例を参照可能です。"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:80
-#: classes/Visualizer/Render/Sidebar.php:119
-msgid "Inside the chart"
-msgstr "グラフの中"
+#: classes/Visualizer/Render/Sidebar/Google.php:220
+msgid "Alignment"
+msgstr "文字揃え"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:224
+msgid "Determines the alignment of the legend."
+msgstr "凡例の文字揃え"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:275
+msgid "Animate on startup"
+msgstr "起動時にアニメーションする"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:279
+msgid "Determines if the chart will animate on the initial draw."
+msgstr "最初の描画時にグラフをアニメーションする"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:297
+msgid "Start slow and speed up"
+msgstr "ゆっくり開始し速度を上げる"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:298
+msgid "Start fast and slow down"
+msgstr "早く開始し速度をゆるめる"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:299
+msgid "Start slow, speed up, then slow down"
+msgstr "ゆっくり開始し、速度を速め、それからゆっくりにする"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:322
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:209
+msgid "The tooltip will be displayed when the user hovers over an element"
+msgstr "要素にホバーした時にツールヒントが表示されます。"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:323
+msgid "The tooltip will be displayed when the user selects an element"
+msgstr "要素を選択した時にツールヒントが表示されます。"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:324
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:210
+msgid "The tooltip will not be displayed"
+msgstr "ツールヒントが表示されません。"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:326
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:212
+msgid ""
+"Determines the user interaction that causes the tooltip to be displayed."
+msgstr "ツールヒントが表示されるユーザの操作を設定"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:330
+msgid "Show Color Code"
+msgstr "カラーコードを表示"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:334
+msgid ""
+"If set to yes, will show colored squares next to the slice information in "
+"the tooltip."
+msgstr ""
+"yesの場合、ツールヒントのスライス情報の隣に色つきの正方形が表示されます。"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:346
+msgid "Chart Size & Placement"
+msgstr "グラフのサイズと位置"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:347
+msgid "Chart Size/Layout"
+msgstr "グラフのサイズとレイアウト"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:372
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:420
+msgid ""
+"Configure the background color for the main area of the chart and the chart "
+"border width and color."
+msgstr "グラフの主エリアの背景色とグラフの境界の幅・色の設定"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:375
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:102
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:126
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:423
+msgid "Stroke Width"
+msgstr "枠線の太さ"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:378
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:426
+msgid "The chart border width in pixels."
+msgstr "ピクセル数でのグラフの境界の幅"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:383
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Bubble.php:82
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:110
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:134
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:431
+msgid "Stroke Color"
+msgstr "枠線の色"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:391
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:272
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:304
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:336
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:368
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:270
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:302
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:334
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:366
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:438
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:182
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:211
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:240
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:269
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:298
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:327
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:356
+msgid "Background Color"
+msgstr "背景色"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:400
+msgid "Transparent background"
+msgstr "透明な背景"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:405
+msgid "Placement"
+msgstr "位置"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:406
+msgid ""
+"Configure the placement and size of the chart area (where the chart itself "
+"is drawn, excluding axis and legends). Two formats are supported: a number, "
+"or a number followed by %. A simple number is a value in pixels; a number "
+"followed by % is a percentage."
+msgstr ""
+"グラフエリアの位置とサイズの設定 (グラフそのものが描画される位置、軸と凡例を"
+"除く)。サポートされる2種類の型式: 数値と%付きの数値。単なる数値はピクセル数"
+"で、%付きの数値はパーセンテージ"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:410
+msgid "Left And Top Margins"
+msgstr "左と上の余白"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:426
+msgid "Determines how far to draw the chart from the left and top borders."
+msgstr "左と上の境界からどれだけ話してグラフを描画するか"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:432
+msgid "Width And Height Of Chart Area"
+msgstr "グラフエリアの幅と高さ"
+
+#: classes/Visualizer/Render/Sidebar/Google.php:446
+msgid "Determines the width and hight of the chart area."
+msgstr "グラフエリアの幅と高さの設定"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:81
 msgid "Outside the chart"
@@ -1380,7 +1608,7 @@ msgid "Determines where to place the axis titles, compared to the chart area."
 msgstr "グラフエリアにおける軸タイトルの位置"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:146
-#: classes/Visualizer/Render/Sidebar/Graph.php:262
+#: classes/Visualizer/Render/Sidebar/Graph.php:261
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:141
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:243
 msgid "Axis Title"
@@ -1391,7 +1619,7 @@ msgid "The title of the horizontal axis."
 msgstr "水平軸のタイトル"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:153
-#: classes/Visualizer/Render/Sidebar/Graph.php:269
+#: classes/Visualizer/Render/Sidebar/Graph.php:268
 msgid "Text Position"
 msgstr "テキストの位置"
 
@@ -1400,17 +1628,17 @@ msgid "Position of the horizontal axis text, relative to the chart area."
 msgstr "グラフエリアにおける水平軸の位置"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:161
-#: classes/Visualizer/Render/Sidebar/Graph.php:277
+#: classes/Visualizer/Render/Sidebar/Graph.php:276
 msgid "Direction"
 msgstr "方向"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:166
-#: classes/Visualizer/Render/Sidebar/Graph.php:282
+#: classes/Visualizer/Render/Sidebar/Graph.php:281
 msgid "Identical Direction"
 msgstr "順方向"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:167
-#: classes/Visualizer/Render/Sidebar/Graph.php:283
+#: classes/Visualizer/Render/Sidebar/Graph.php:282
 msgid "Reverse Direction"
 msgstr "逆方向"
 
@@ -1419,7 +1647,7 @@ msgid "The direction in which the values along the horizontal axis grow."
 msgstr "水平軸に沿った値の方向"
 
 #: classes/Visualizer/Render/Sidebar/Graph.php:173
-#: classes/Visualizer/Render/Sidebar/Graph.php:289
+#: classes/Visualizer/Render/Sidebar/Graph.php:288
 msgid "Base Line Color"
 msgstr "ベースラインの色"
 
@@ -1428,19 +1656,19 @@ msgstr "ベースラインの色"
 msgid "Horizontal Axis Settings"
 msgstr "水平軸の設定"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:194
-#: classes/Visualizer/Render/Sidebar/Graph.php:310
+#: classes/Visualizer/Render/Sidebar/Graph.php:193
+#: classes/Visualizer/Render/Sidebar/Graph.php:309
 msgid "Grid Lines"
 msgstr "グリッドライン"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:196
-#: classes/Visualizer/Render/Sidebar/Graph.php:215
-#: classes/Visualizer/Render/Sidebar/Graph.php:312
-#: classes/Visualizer/Render/Sidebar/Graph.php:331
+#: classes/Visualizer/Render/Sidebar/Graph.php:195
+#: classes/Visualizer/Render/Sidebar/Graph.php:214
+#: classes/Visualizer/Render/Sidebar/Graph.php:311
+#: classes/Visualizer/Render/Sidebar/Graph.php:330
 msgid "Count"
 msgstr "カウント"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:199
+#: classes/Visualizer/Render/Sidebar/Graph.php:198
 msgid ""
 "The approximate number of horizontal gridlines inside the chart area. You "
 "can specify a value of -1 to automatically compute the number of gridlines, "
@@ -1451,68 +1679,79 @@ msgstr ""
 "もしくは1ではグリッドは描画されず、2以上でグリッドが描画されます。2より大きい"
 "場合、グリッド間の最小間隔を計算するのに利用されます。"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:206
-#: classes/Visualizer/Render/Sidebar/Graph.php:225
-#: classes/Visualizer/Render/Sidebar/Graph.php:322
-#: classes/Visualizer/Render/Sidebar/Graph.php:341
-#: classes/Visualizer/Render/Sidebar/Graph.php:428
+#: classes/Visualizer/Render/Sidebar/Graph.php:205
+#: classes/Visualizer/Render/Sidebar/Graph.php:224
+#: classes/Visualizer/Render/Sidebar/Graph.php:321
+#: classes/Visualizer/Render/Sidebar/Graph.php:340
+#: classes/Visualizer/Render/Sidebar/Graph.php:427
 #: classes/Visualizer/Render/Sidebar/Linear.php:287
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:274
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:306
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:338
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:370
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:279
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:311
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:343
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:375
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:277
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:309
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:341
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:373
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:145
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:172
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:189
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:218
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:247
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:276
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:305
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:334
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:363
 msgid "Color"
 msgstr "色"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:213
-#: classes/Visualizer/Render/Sidebar/Graph.php:329
+#: classes/Visualizer/Render/Sidebar/Graph.php:212
+#: classes/Visualizer/Render/Sidebar/Graph.php:328
 msgid "Minor Grid Lines"
 msgstr "補助グリッド"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:218
-#: classes/Visualizer/Render/Sidebar/Graph.php:334
+#: classes/Visualizer/Render/Sidebar/Graph.php:217
+#: classes/Visualizer/Render/Sidebar/Graph.php:333
 msgid "Specify 0 to disable the minor gridlines."
 msgstr "補助グリッドを無効にするには0を指定"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:234
-#: classes/Visualizer/Render/Sidebar/Graph.php:350
+#: classes/Visualizer/Render/Sidebar/Graph.php:233
+#: classes/Visualizer/Render/Sidebar/Graph.php:349
 msgid "View Window"
 msgstr "ウインドウを表示"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:236
-#: classes/Visualizer/Render/Sidebar/Graph.php:352
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:239
+#: classes/Visualizer/Render/Sidebar/Graph.php:235
+#: classes/Visualizer/Render/Sidebar/Graph.php:351
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:263
 msgid "Maximum Value"
 msgstr "最大値"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:243
-#: classes/Visualizer/Render/Sidebar/Graph.php:359
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:225
+#: classes/Visualizer/Render/Sidebar/Graph.php:242
+#: classes/Visualizer/Render/Sidebar/Graph.php:358
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:249
 msgid "Minimum Value"
 msgstr "最小値"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:265
+#: classes/Visualizer/Render/Sidebar/Graph.php:264
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:144
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:246
 msgid "The title of the vertical axis."
 msgstr "垂直軸のタイトル"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:273
+#: classes/Visualizer/Render/Sidebar/Graph.php:272
 msgid "Position of the vertical axis text, relative to the chart area."
 msgstr "グラフエリアにおける垂直軸タイトルの位置"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:285
+#: classes/Visualizer/Render/Sidebar/Graph.php:284
 msgid "The direction in which the values along the vertical axis grow."
 msgstr "垂直軸に沿った値の方向"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:304
+#: classes/Visualizer/Render/Sidebar/Graph.php:303
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:225
 msgid "Vertical Axis Settings"
 msgstr "垂直軸の設定"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:315
+#: classes/Visualizer/Render/Sidebar/Graph.php:314
 msgid ""
 "The approximate number of vertical gridlines inside the chart area. You can "
 "specify a value of -1 to automatically compute the number of gridlines, 0 or "
@@ -1523,30 +1762,30 @@ msgstr ""
 "もしくは1ではグリッドは描画されず、2以上でグリッドが描画されます。2より大きい"
 "場合、グリッド間の最小間隔を計算するのに利用されます。"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:414
+#: classes/Visualizer/Render/Sidebar/Graph.php:413
 #: classes/Visualizer/Render/Sidebar/Linear.php:241
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:101
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:160
 msgid "Visible In Legend"
 msgstr "凡例での表示"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:419
+#: classes/Visualizer/Render/Sidebar/Graph.php:418
 #: classes/Visualizer/Render/Sidebar/Linear.php:246
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:106
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:165
-#: classes/Visualizer/Render/Sidebar.php:133
+#: classes/Visualizer/Render/Sidebar.php:96
 msgid "No"
 msgstr "No"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:420
+#: classes/Visualizer/Render/Sidebar/Graph.php:419
 #: classes/Visualizer/Render/Sidebar/Linear.php:247
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php:107
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:166
-#: classes/Visualizer/Render/Sidebar.php:132
+#: classes/Visualizer/Render/Sidebar.php:95
 msgid "Yes"
 msgstr "Yes"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:422
+#: classes/Visualizer/Render/Sidebar/Graph.php:421
 #: classes/Visualizer/Render/Sidebar/Linear.php:159
 #: classes/Visualizer/Render/Sidebar/Linear.php:249
 #: classes/Visualizer/Render/Sidebar/Linear.php:282
@@ -1555,22 +1794,22 @@ msgstr "Yes"
 msgid "Determines whether the series has to be presented in the legend or not."
 msgstr "凡例でデータシリーズを表示するか否か"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:447
-#: classes/Visualizer/Render/Sidebar/Graph.php:476
+#: classes/Visualizer/Render/Sidebar/Graph.php:446
+#: classes/Visualizer/Render/Sidebar/Graph.php:475
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:62
-#: classes/Visualizer/Render/Sidebar.php:754
+#: classes/Visualizer/Render/Sidebar.php:441
 msgid "Number Format"
 msgstr "数値フォーマット"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:452
+#: classes/Visualizer/Render/Sidebar/Graph.php:451
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:200
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:302
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:67
 msgid "Enter custom format pattern to apply to horizontal axis labels."
 msgstr "水平軸のラベルに適用するカスタムフォーマットを入力"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:454
-#: classes/Visualizer/Render/Sidebar/Graph.php:483
+#: classes/Visualizer/Render/Sidebar/Graph.php:453
+#: classes/Visualizer/Render/Sidebar/Graph.php:482
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:202
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:304
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:69
@@ -1585,8 +1824,8 @@ msgstr ""
 "&#37; パーセンテージフォーマットを使う場合は、値が100倍されることに注意して下"
 "さい。"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:459
-#: classes/Visualizer/Render/Sidebar/Graph.php:488
+#: classes/Visualizer/Render/Sidebar/Graph.php:458
+#: classes/Visualizer/Render/Sidebar/Graph.php:487
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:207
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:309
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:74
@@ -1597,7 +1836,7 @@ msgstr ""
 "日付軸のラベルでは、%1$sICU date and time format%2$s が日付フォーマットとして"
 "使われるサブセットです。"
 
-#: classes/Visualizer/Render/Sidebar/Graph.php:481
+#: classes/Visualizer/Render/Sidebar/Graph.php:480
 msgid "Enter custom format pattern to apply to vertical axis labels."
 msgstr "垂直軸のラベルに適用するカスタムのフォーマットパターンを入力"
 
@@ -1807,7 +2046,7 @@ msgstr "ポイントのスタイル"
 
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:48
 #: classes/Visualizer/Render/Sidebar/Type/ChartJS/Linear.php:93
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:94
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:118
 msgid "Tick Settings"
 msgstr "ティックの設定"
 
@@ -1904,126 +2143,168 @@ msgstr "チェックするとグラフはドーナツグラフになります。
 msgid "Slices Settings"
 msgstr "スライスの設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:114
-#: classes/Visualizer/Render/Sidebar.php:191
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:116
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:114
+#: classes/Visualizer/Render/Sidebar.php:154
 msgid "Frontend Actions"
 msgstr "フロントエンドの動作"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:116
-#: classes/Visualizer/Render/Sidebar.php:193
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:118
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:116
+#: classes/Visualizer/Render/Sidebar.php:156
 msgid "Configure frontend actions that need to be shown."
 msgstr "表示されるフロントエンドの動作の設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:137
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:139
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:137
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:79
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:65
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:74
 msgid "Text to display in the back-end admin area."
 msgstr "バックエンドの管理エリアで表示されるテキスト"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:161
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:166
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:164
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:111
 msgid "Table Settings"
 msgstr "表の設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:165
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:170
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:168
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:115
 msgid "Enable Pagination"
 msgstr "ページめくりの有効化"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:169
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:174
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:172
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:119
 msgid "To enable paging through the data."
 msgstr "データのページめくりを有効にする"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:175
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:180
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:178
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:125
 msgid "Number of rows per page"
 msgstr "ページあたりの行数"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:178
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:183
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:181
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:128
 msgid "The number of rows in each page, when paging is enabled."
 msgstr "ページめくりを有効にした場合の、各ページに表示する行数"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:187
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:192
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:190
 msgid "Pagination type"
 msgstr "ページめくりの種類"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:191
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:196
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:194
 msgid "Page number buttons only"
 msgstr "ページ番号ボタンのみ"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:192
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:197
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:195
 msgid "'Previous' and 'Next' buttons only"
 msgstr "‘戻る’と’次へ’ボタンのみ"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:193
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:198
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:196
 msgid "'Previous' and 'Next' buttons, plus page numbers"
 msgstr "‘戻る’と’次へ’、ページ番号ボタン"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:194
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:199
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:197
 msgid "'First', 'Previous', 'Next' and 'Last' buttons"
 msgstr "‘最初’、‘戻る’、’次へ’、’最後’ボタン"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:195
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:200
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:198
 msgid "'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers"
 msgstr "‘最初’、‘戻る’、’次へ’、’最後’、ページ番号ボタン"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:196
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:201
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:199
 msgid "'First' and 'Last' buttons, plus page numbers"
 msgstr "‘最初’、’最後’、ページ番号ボタン"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:198
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:203
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:201
 msgid "Determines what type of pagination options to show."
 msgstr "表示するページめくりの種類"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:206
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:211
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:209
 msgid "Table Height"
 msgstr "表の高さ"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:209
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:214
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:212
 msgid "Height of the table in pixels (the table will show a scrollbar)."
 msgstr "ピクセル数での表の高さ（スクロールバーが表示されます）"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:218
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:223
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:221
 msgid "Enable Horizontal Scrolling"
 msgstr "水平スクロールの有効化"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:222
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:227
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:225
 msgid "To disable wrapping of columns and enabling horizontal scrolling."
 msgstr "列の折り返しを無効にし水平スクロールを有効にします。"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:228
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:233
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:231
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:135
 msgid "Disable Sort"
 msgstr "ソートの無効化"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:232
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:237
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:235
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:139
 msgid "To disable sorting on columns."
 msgstr "列のソートを無効化します"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:238
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:243
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:241
 msgid "Freeze Header/Footer"
 msgstr "ヘッダ/フッタの固定"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:242
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:247
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:245
 msgid "Freeze the header and footer."
 msgstr "ヘッダとフッタを固定します"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:248
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:253
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:251
 msgid "Responsive table?"
 msgstr "レスポンシブな表にするか"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:252
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:257
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:255
 msgid "Enable the table to be responsive."
 msgstr "表をレスポンシブにします"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:260
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:265
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:263
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:179
 msgid "Row/Cell Settings"
 msgstr "行/セルの設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:262
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:267
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:265
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:180
 msgid "Header Row"
 msgstr "ヘッダ行"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:264
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:296
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:328
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:360
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:269
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:301
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:333
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:365
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:267
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:299
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:331
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:363
 msgid ""
 "These values may not reflect on preview and will be applied once you save "
 "and reload the chart. "
@@ -2031,74 +2312,101 @@ msgstr ""
 "これらの値はプレビューには反映されないかもしれませんが、保存してグラフをリ"
 "ロードすると適用されます。"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:267
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:299
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:331
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:363
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:414
-#: classes/Visualizer/Render/Sidebar.php:510
-msgid "Background Color"
-msgstr "背景色"
-
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:281
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:313
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:345
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:377
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:286
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:318
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:350
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:382
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:284
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:316
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:348
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:380
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:196
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:225
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:254
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:283
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:312
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:341
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:370
 msgid "Text Orientation"
 msgstr "テキストの方向"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:284
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:316
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:348
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:380
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:289
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:321
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:353
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:385
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:287
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:319
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:351
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:383
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:199
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:228
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:257
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:286
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:315
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:344
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:373
 msgid "In degrees."
 msgstr "角度"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:294
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:299
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:297
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:238
 msgid "Odd Table Row"
 msgstr "奇数行"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:326
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:331
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:329
 msgid "Even Table Row"
 msgstr "偶数行"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:358
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:363
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:361
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:354
 msgid "Table Cell"
 msgstr "表のセル"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:404
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:409
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:407
 msgid "Column Settings"
 msgstr "列の設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:427
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:432
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:430
 msgid "Thousands Separator"
 msgstr "千の区切り"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:434
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:439
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:437
 msgid "Decimal Separator"
 msgstr "10進数の区切り"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:441
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:446
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:444
 msgid "Precision"
 msgstr "精度"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:444
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:449
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:447
 msgid "Round values to how many decimal places?"
 msgstr "丸めた際の桁数"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:448
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:455
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:453
 msgid "Prefix"
 msgstr "プレフィックス"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:455
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:462
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:460
 msgid "Suffix"
 msgstr "サフィックス"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:466
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:473
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:471
 msgid "Display Date Format"
 msgstr "表示するデータフォーマット"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:469
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:476
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:474
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sdate and time formats here%2$s."
@@ -2106,22 +2414,24 @@ msgstr ""
 "シリーズ値に適用するカスタムのフォーマットパターン、%1$sdate and time "
 "formats here%2$sと同様です"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:473
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:480
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:478
 msgid "Source Date Format"
 msgstr "ソースデータフォーマット"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:476
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:483
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php:481
 msgid ""
 "What format is the source date in? Similar to the %1$sdate and time formats "
 "here%2$s."
 msgstr ""
 "ソースデータのフォーマット、%1$sdate and time formats here%2$sと同様です。"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:482
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:489
 msgid "Truthy value"
 msgstr "真値"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:485
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:492
 msgid ""
 "Provide the HTML entity code for the value the table should display when the "
 "value of the column is true. e.g. %1$s (Code: %2$s) instead of true"
@@ -2129,11 +2439,11 @@ msgstr ""
 "列の値がtrueの時に、表中に表示するHTMLの要素のコードを指定します。例: trueの"
 "代わりに%1$s (Code: %2$s)"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:489
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:496
 msgid "Falsy value"
 msgstr "偽値"
 
-#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:492
+#: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php:499
 msgid ""
 "Provide the HTML entity code for the value the table should display when the "
 "value of the column is false. e.g. %1$s (Code: %2$s) instead of false"
@@ -2177,26 +2487,19 @@ msgid ""
 msgstr ""
 "バブルチャートの不透明度の設定、0.0では完全に透明、1.0では完全に不透明です。"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Bubble.php:82
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:110
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:134
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:407
-#: classes/Visualizer/Render/Sidebar.php:502
-msgid "Stroke Color"
-msgstr "枠線の色"
-
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Bubble.php:89
 msgid "Sort Bubbles by Size"
 msgstr "サイズ順にバブルをソート"
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Bubble.php:93
 msgid ""
-"If true, sorts the bubbles by size so the smaller bubbles appear above the "
-"larger bubbles. If false, bubbles are sorted according to their order in the "
-"DataTable."
+"If checked, sorts the bubbles by size so the smaller bubbles appear above "
+"the larger bubbles. If unchecked, bubbles are sorted according to their "
+"order in the table."
 msgstr ""
-"trueに設定すると、バブルをサイズ順にソートするので、小さいバブルが大きいバブ"
-"ルの上に置かれます。falseでは、データテーブルでの順番に従ってソートされます。"
+"チェックされている場合、バブルを大きさでソートするので、小さなバブルは大きな"
+"バブルの上になります。チェックされていない場合、バブルは表での順番に従って並"
+"びます。"
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Bubble.php:97
 msgid "Size (max)"
@@ -2230,13 +2533,6 @@ msgstr "ローソク足の設定"
 msgid "Failing Candles"
 msgstr "Failing Candles"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:102
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:126
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:399
-#: classes/Visualizer/Render/Sidebar.php:494
-msgid "Stroke Width"
-msgstr "枠線の太さ"
-
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php:105
 msgid "The stroke width of falling candles."
 msgstr "Failing Candlesの枠線の太さ"
@@ -2258,110 +2554,110 @@ msgstr "Rising Candlesの枠線の太さ"
 msgid "Gauge Settings"
 msgstr "メーターグラフの設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:98
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:122
 msgid "Min And Max Values"
 msgstr "最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:112
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:136
 msgid "The maximal and minimal values of the gauge."
 msgstr "メーターの最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:117
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:141
 msgid "Minor Ticks"
 msgstr "補助ティック数"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:120
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:144
 msgid "The number of minor tick section in each major tick section."
 msgstr "主ティックセクション毎の補助ティックセクションの数"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:137
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:161
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:185
 msgid "Green Color"
 msgstr "Greenの色"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:138
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:162
 msgid "Configure the green section of the gauge chart."
 msgstr "メーターグラフのGreenセクションの設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:142
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:182
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:222
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:166
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:206
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:246
 msgid "From And To Range"
 msgstr "レンジから/レンジへ"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:156
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:180
 msgid "The lowest and highest values for a range marked by a green color."
 msgstr "Greenのレンジの最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:177
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:201
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:225
 msgid "Yellow Color"
 msgstr "Yellowの色"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:178
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:202
 msgid "Configure the yellow section of the gauge chart."
 msgstr "メーターグラフのYellowセクションの設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:196
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:220
 msgid "The lowest and highest values for a range marked by a yellow color."
 msgstr "Yellowのレンジの最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:217
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:241
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:265
 msgid "Red Color"
 msgstr "Redの色"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:218
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:242
 msgid "Configure the red section of the gauge chart."
 msgstr "メーターグラフのRedセクションの設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:236
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Gauge.php:260
 msgid "The lowest and highest values for a range marked by a red color."
 msgstr "Redのレンジの最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:79
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:103
 msgid "Map Settings"
 msgstr "地図の設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:81
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:105
 msgid "API"
 msgstr "API"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:83
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:107
 msgid "Add the Google Maps API key (Click %1$shere%2$s to get the key)"
 msgstr "Google MapのAPIキーを追加 (キーを取得するには%1$shere%2$sをクリック)"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:87
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:111
 msgid "API Key"
 msgstr "APIキー"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:96
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:108
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:120
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:132
 msgid "Region"
 msgstr "地域"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:98
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:122
 msgid ""
 "Configure the region area to display on the map. (Surrounding areas will be "
 "displayed as well.) Can be one of the following:"
 msgstr ""
 "地図に表示する地域の設定 (周辺地域は表示されます) 以下から1つが使えます:"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:100
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:124
 msgid "'world' - A map of the entire world."
 msgstr "‘world’ - 世界地図"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:101
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:125
 msgid ""
 "A continent or a sub-continent, specified by its %s code, e.g., '011' for "
 "Western Africa."
 msgstr "大陸もしくは亜大陸、%s コードで指定、例: ‘011’ は西アフリカ"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:102
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:126
 msgid "A country, specified by its %s code, e.g., 'AU' for Australia."
 msgstr "国、%s コードで指定、例: ‘AU’ はオーストラリア"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:103
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:127
 msgid ""
 "A state in the United States, specified by its %s code, e.g., 'US-AL' for "
 "Alabama. Note that the resolution option must be set to either 'provinces' "
@@ -2370,20 +2666,20 @@ msgstr ""
 "アメリカ合衆国の州、%s コードで指定、例: ‘US-AL’ はアラバマ州。’province’ も"
 "しくは ‘metros’ のいずれかで粒度オプションを指定する必要があります。"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:116
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:128
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:140
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:152
 msgid "Resolution"
 msgstr "粒度"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:119
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:143
 msgid "The resolution of the map borders. Choose one of the following values:"
 msgstr "地図の境界の粒度。以下から1つ選択:"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:121
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:145
 msgid "'countries' - Supported for all regions, except for US state regions."
 msgstr "‘countries’ - 全ての地域でサポートされますが、アメリカ合衆国の州を除く"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:122
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:146
 msgid ""
 "'provinces' - Supported only for country regions and US state regions. Not "
 "supported for all countries; please test a country to see whether this "
@@ -2393,140 +2689,124 @@ msgstr ""
 "の国でサポートされるものではなく、このオプションがサポートされるかはテストし"
 "てみてください。"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:123
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:147
 msgid ""
 "'metros' - Supported for the US country region and US state regions only."
 msgstr "‘metros’ - アメリカ合衆国の地域と州域のみでサポートされます。"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:133
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:157
 msgid "Countries"
 msgstr "Countries"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:134
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:158
 msgid "Provinces"
 msgstr "Provinces"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:135
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:159
 msgid "Metros"
 msgstr "Metros"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:141
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:153
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:165
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:177
 msgid "Display Mode"
 msgstr "ディスプレイモード"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:144
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:168
 msgid ""
 "Determines which type of map this is. The following values are supported:"
 msgstr "地図のタイプを設定します。以下の値がサポートされます:"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:146
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:170
 msgid "'auto' - Choose based on the format of the data."
 msgstr "‘auto’ - データの型式によって選択"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:147
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:171
 msgid "'regions' - This is a region map."
 msgstr "‘regions’ - 地域の地図"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:148
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:172
 msgid "'markers' - This is a marker map."
 msgstr "‘markers’ - マーカーの地図"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:158
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:182
 msgid "Auto"
 msgstr "自動"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:159
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:183
 msgid "Regions"
 msgstr "地域"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:160
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:184
 msgid "Markers"
 msgstr "マーカー"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:185
-#: classes/Visualizer/Render/Sidebar.php:441
-msgid "The tooltip will be displayed when the user hovers over an element"
-msgstr "要素にホバーした時にツールヒントが表示されます。"
-
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:186
-#: classes/Visualizer/Render/Sidebar.php:443
-msgid "The tooltip will not be displayed"
-msgstr "ツールヒントが表示されません。"
-
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:188
-#: classes/Visualizer/Render/Sidebar.php:445
-msgid ""
-"Determines the user interaction that causes the tooltip to be displayed."
-msgstr "ツールヒントが表示されるユーザの操作を設定"
-
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:200
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:224
 msgid "Color Axis"
 msgstr "色の軸"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:202
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:226
 msgid ""
 "Configure color axis gradient scale, minimum and maximun values and a color "
 "of the dateless regions."
 msgstr "色の軸のグラデーションスケールの設定、最小・最大値と日付の無い地域の色"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:206
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:270
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:230
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:294
 msgid "Minimum And Maximum Values"
 msgstr "最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:220
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:244
 msgid "Determines the minimum and maximum values of color axis."
 msgstr "色の軸の最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:232
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:256
 msgid "Intermediate Value"
 msgstr "中間値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:246
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:270
 msgid "Dateless Region"
 msgstr "日付の無い地域"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:264
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:288
 msgid "Size Axis"
 msgstr "サイズの軸"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:266
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:290
 msgid ""
 "Configure how values are associated with bubble size, minimum and maximun "
 "values and marker opacity setting."
 msgstr ""
 "バブルのサイズと連動する値の設定、最小・最大値とマーカーの不透明度の設定"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:284
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:308
 msgid "Determines the minimum and maximum values of size axis."
 msgstr "サイズの軸の最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:290
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:314
 msgid "Minimum And Maximum Marker Radius"
 msgstr "マーカーの半径の最小・最大値"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:304
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:328
 msgid ""
 "Determines the radius of the smallest and largest possible bubbles, in "
 "pixels."
 msgstr "ピクセル単位でのバブルの最小・最大半径"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:309
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:333
 msgid "Marker Opacity"
 msgstr "マーカーの不透明度"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:312
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:336
 msgid ""
 "The opacity of the markers, where 0.0 is fully transparent and 1.0 is fully "
 "opaque."
 msgstr "マーカーの不透明度、0.0は完全に透明、1.0は完全に不透明です。"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:330
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:354
 msgid "Magnifying Glass"
 msgstr "拡大鏡"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:332
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:356
 msgid ""
 "Configure magnifying glass settings, which appears, when the user lingers "
 "over a cluttered marker. Note: this feature is not supported in browsers "
@@ -2536,31 +2816,31 @@ msgstr ""
 "意: SVGをサポートしないブラウザではこの機能はサポートされません。例: "
 "Internet Explorer 8以前のバージョン"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:335
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:359
 msgid "Enabled"
 msgstr "有効"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:339
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:363
 msgid ""
 "If yes, when the user lingers over a cluttered marker, a magnifiying glass "
 "will be opened."
 msgstr ""
 "yesの場合、分散したマーカー上にユーザーの動線が残ると、拡大鏡が開きます。"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:343
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:367
 msgid "Zoom Factor"
 msgstr "拡大率"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:346
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:370
 msgid ""
 "The zoom factor of the magnifying glass. Can be any number greater than 0."
 msgstr "拡大鏡の拡大率。0以上のいずれの値も設定可能"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:386
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:410
 msgid "Keep Aspect Ratio"
 msgstr "アスペクト比を保持"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:390
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:414
 msgid ""
 "If yes, the map will be drawn at the largest size that can fit inside the "
 "chart area at its natural aspect ratio. If only one of the width and height "
@@ -2571,25 +2851,13 @@ msgstr ""
 "地図が描画されます。幅もしくは高さのいずれかが指定されると、アスペクト比に応"
 "じてもう一方の値が計算されます。"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:391
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:415
 msgid ""
 "If no, the map will be stretched to the exact size of the chart as specified "
 "by the width and height options."
 msgstr ""
 "noの場合、指定された幅もしくは高さになるようにグラフのサイズまで地図が引き延"
 "ばされます。"
-
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:396
-#: classes/Visualizer/Render/Sidebar.php:491
-msgid ""
-"Configure the background color for the main area of the chart and the chart "
-"border width and color."
-msgstr "グラフの主エリアの背景色とグラフの境界の幅・色の設定"
-
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php:402
-#: classes/Visualizer/Render/Sidebar.php:497
-msgid "The chart border width in pixels."
-msgstr "ピクセル数でのグラフの境界の幅"
 
 #: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Line.php:62
 msgid "Interpolate Nulls"
@@ -2727,45 +2995,71 @@ msgstr ""
 "円グラフの他の部分からスライスがどれだけ離れているか、0.0 (離れていない) か"
 "ら 1.0 (円グラフの半径)"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:195
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:197
 msgid "Slice Color"
 msgstr "スライスの色"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:221
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:223
 msgid ""
 "Display both the absolute value of the slice and the percentage of the whole"
 msgstr "スライスの絶対値と全体でのパーセンテージの両方を表示"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:222
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:224
 msgid "Display only the absolute value of the slice"
 msgstr "スライスの絶対値を表示"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:223
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:225
 msgid "Display only the percentage of the whole represented by the slice"
 msgstr "スライスの全体でのパーセンテージを表示"
 
-#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:225
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php:227
 msgid ""
 "Determines what information to display when the user hovers over a pie slice."
 msgstr "円グラフのスライスにホバーした時に表示する情報の設定"
 
-#: classes/Visualizer/Render/Sidebar.php:120
-msgid "Omit the legend"
-msgstr "凡例を非表示"
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:145
+msgid "Freeze Columns"
+msgstr "列を固定"
 
-#: classes/Visualizer/Render/Sidebar.php:125
-msgid "Aligned to the start of the allocated area"
-msgstr "割り当てられたエリアの開始位置に揃える"
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:148
+msgid "The number of columns from the left that will be frozen."
+msgstr "固定する列の左から数えた番号"
 
-#: classes/Visualizer/Render/Sidebar.php:126
-msgid "Centered in the allocated area"
-msgstr "割り当てられたエリアの中央に揃える"
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:159
+msgid "Allow HTML"
+msgstr "HTMLを許可"
 
-#: classes/Visualizer/Render/Sidebar.php:127
-msgid "Aligned to the end of the allocated area"
-msgstr "割り当てられたエリアの端に揃える"
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:163
+msgid ""
+"If enabled, formatted values of cells that include HTML tags will be "
+"rendered as HTML."
+msgstr "有効な場合、HTMLタグを含むセルの整形された値がHTMLとして表示されます。"
 
-#: classes/Visualizer/Render/Sidebar.php:167
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:169
+msgid "Right to Left table"
+msgstr "右から左への表"
+
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:173
+msgid "Adds basic support for right-to-left languages."
+msgstr "右から左へ書く言語の基本的なサポートを追加"
+
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:209
+msgid "Table Row"
+msgstr "表の行"
+
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:267
+msgid "Selected Table Row"
+msgstr "選択した表の行"
+
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:296
+msgid "Hover Table Row"
+msgstr "ホバーした表の行"
+
+#: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php:325
+msgid "Header Cell"
+msgstr "ヘッダーのセル"
+
+#: classes/Visualizer/Render/Sidebar.php:130
 msgid ""
 "Configure the graph by providing configuration variables right from the "
 "%1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere"
@@ -2774,153 +3068,67 @@ msgstr ""
 "%1$sGoogle Visualization API%2$s の設定でグラフを構成する。%3$shere%4$s の例"
 "を参照。"
 
-#: classes/Visualizer/Render/Sidebar.php:199
+#: classes/Visualizer/Render/Sidebar.php:162
 msgid "Manual Configuration"
 msgstr "手動設定"
 
-#: classes/Visualizer/Render/Sidebar.php:202
+#: classes/Visualizer/Render/Sidebar.php:165
 msgid "Configuration"
 msgstr "設定"
 
-#: classes/Visualizer/Render/Sidebar.php:206
+#: classes/Visualizer/Render/Sidebar.php:169
 msgid "One per line in valid JSON (key:value) format e.g. %s"
 msgstr "1行に1つの有効なJSON (key:value) 型式 例: %s"
 
-#: classes/Visualizer/Render/Sidebar.php:228
+#: classes/Visualizer/Render/Sidebar.php:191
 msgid "Actions"
 msgstr "動作"
 
+#: classes/Visualizer/Render/Sidebar.php:197
+#: classes/Visualizer/Render/Sidebar.php:205
+#: classes/Visualizer/Render/Sidebar.php:215
+#: classes/Visualizer/Render/Sidebar.php:223
 #: classes/Visualizer/Render/Sidebar.php:234
-#: classes/Visualizer/Render/Sidebar.php:242
-#: classes/Visualizer/Render/Sidebar.php:252
-#: classes/Visualizer/Render/Sidebar.php:260
-#: classes/Visualizer/Render/Sidebar.php:271
 msgid "Upgrade to at least WordPress 4.7 to use this."
 msgstr "利用するにはWordPressの4.7以上にアップグレードしてください"
 
-#: classes/Visualizer/Render/Sidebar.php:234
+#: classes/Visualizer/Render/Sidebar.php:197
 msgid "To enable printing the chart/data."
 msgstr "グラフ/データの印刷を有効化"
 
-#: classes/Visualizer/Render/Sidebar.php:242
+#: classes/Visualizer/Render/Sidebar.php:205
 msgid "To enable downloading the data as a CSV."
 msgstr "CSVでのデータのダウンロードを有効化"
 
-#: classes/Visualizer/Render/Sidebar.php:252
+#: classes/Visualizer/Render/Sidebar.php:215
 msgid "Enable the ZIP and XML extensions to use this setting."
 msgstr "この設定でZIPとXMLの拡張子を有効化する"
 
-#: classes/Visualizer/Render/Sidebar.php:252
+#: classes/Visualizer/Render/Sidebar.php:215
 msgid "To enable downloading the data as an Excel spreadsheet."
 msgstr "Excelスプレッドシートでのダウンロードを有効化"
 
-#: classes/Visualizer/Render/Sidebar.php:260
+#: classes/Visualizer/Render/Sidebar.php:223
 msgid "To enable copying the data to the clipboard."
 msgstr "クリップボードへのデータのコピーを有効化"
 
-#: classes/Visualizer/Render/Sidebar.php:267
+#: classes/Visualizer/Render/Sidebar.php:230
 msgid "Download Image"
 msgstr "画像をダウンロード"
 
-#: classes/Visualizer/Render/Sidebar.php:271
+#: classes/Visualizer/Render/Sidebar.php:234
 msgid "Not supported for this chart type."
 msgstr "このタイプのグラフはサポートされていません。"
 
-#: classes/Visualizer/Render/Sidebar.php:271
+#: classes/Visualizer/Render/Sidebar.php:234
 msgid "To download the chart as an image."
 msgstr "画像としてグラフをダウンロード"
 
-#: classes/Visualizer/Render/Sidebar.php:355
-msgid "Alignment"
-msgstr "文字揃え"
-
-#: classes/Visualizer/Render/Sidebar.php:359
-msgid "Determines the alignment of the legend."
-msgstr "凡例の文字揃え"
-
-#: classes/Visualizer/Render/Sidebar.php:394
-msgid "Animate on startup"
-msgstr "起動時にアニメーションする"
-
-#: classes/Visualizer/Render/Sidebar.php:398
-msgid "Determines if the chart will animate on the initial draw."
-msgstr "最初の描画時にグラフをアニメーションする"
-
-#: classes/Visualizer/Render/Sidebar.php:416
-msgid "Start slow and speed up"
-msgstr "ゆっくり開始し速度を上げる"
-
-#: classes/Visualizer/Render/Sidebar.php:417
-msgid "Start fast and slow down"
-msgstr "早く開始し速度をゆるめる"
-
-#: classes/Visualizer/Render/Sidebar.php:418
-msgid "Start slow, speed up, then slow down"
-msgstr "ゆっくり開始し、速度を速め、それからゆっくりにする"
-
-#: classes/Visualizer/Render/Sidebar.php:442
-msgid "The tooltip will be displayed when the user selects an element"
-msgstr "要素を選択した時にツールヒントが表示されます。"
-
-#: classes/Visualizer/Render/Sidebar.php:449
-msgid "Show Color Code"
-msgstr "カラーコードを表示"
-
-#: classes/Visualizer/Render/Sidebar.php:453
-msgid ""
-"If set to yes, will show colored squares next to the slice information in "
-"the tooltip."
-msgstr ""
-"yesの場合、ツールヒントのスライス情報の隣に色つきの正方形が表示されます。"
-
-#: classes/Visualizer/Render/Sidebar.php:465
-msgid "Chart Size & Placement"
-msgstr "グラフのサイズと位置"
-
-#: classes/Visualizer/Render/Sidebar.php:466
-msgid "Chart Size/Layout"
-msgstr "グラフのサイズとレイアウト"
-
-#: classes/Visualizer/Render/Sidebar.php:519
-msgid "Transparent background"
-msgstr "透明な背景"
-
-#: classes/Visualizer/Render/Sidebar.php:524
-msgid "Placement"
-msgstr "位置"
-
-#: classes/Visualizer/Render/Sidebar.php:525
-msgid ""
-"Configure the placement and size of the chart area (where the chart itself "
-"is drawn, excluding axis and legends). Two formats are supported: a number, "
-"or a number followed by %. A simple number is a value in pixels; a number "
-"followed by % is a percentage."
-msgstr ""
-"グラフエリアの位置とサイズの設定 (グラフそのものが描画される位置、軸と凡例を"
-"除く)。サポートされる2種類の型式: 数値と%付きの数値。単なる数値はピクセル数"
-"で、%付きの数値はパーセンテージ"
-
-#: classes/Visualizer/Render/Sidebar.php:529
-msgid "Left And Top Margins"
-msgstr "左と上の余白"
-
-#: classes/Visualizer/Render/Sidebar.php:543
-msgid "Determines how far to draw the chart from the left and top borders."
-msgstr "左と上の境界からどれだけ話してグラフを描画するか"
-
-#: classes/Visualizer/Render/Sidebar.php:549
-msgid "Width And Height Of Chart Area"
-msgstr "グラフエリアの幅と高さ"
-
-#: classes/Visualizer/Render/Sidebar.php:563
-msgid "Determines the width and hight of the chart area."
-msgstr "グラフエリアの幅と高さの設定"
-
-#: classes/Visualizer/Render/Sidebar.php:625
+#: classes/Visualizer/Render/Sidebar.php:312
 msgid "Hex Value"
 msgstr "16進数値"
 
-#: classes/Visualizer/Render/Sidebar.php:757
+#: classes/Visualizer/Render/Sidebar.php:444
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, or "
@@ -2932,17 +3140,33 @@ msgstr ""
 "れ、$# なら数字の前にドル記号が付きます。&#37; パーセンテージフォーマットを使"
 "う場合は、値が100倍されることに注意して下さい。"
 
-#: classes/Visualizer/Render/Sidebar.php:765
+#: classes/Visualizer/Render/Sidebar.php:452
 msgid "Date Format"
 msgstr "日付フォーマット"
 
-#: classes/Visualizer/Render/Sidebar.php:768
+#: classes/Visualizer/Render/Sidebar.php:455
 msgid ""
 "Enter custom format pattern to apply to this series value, similar to the "
 "%1$sICU date and time format%2$s."
 msgstr ""
 "データシリーズの値に適用するカスタムのフォーマットパターンを入力します。 "
 "%1$sICU date and time format%2$sと同様です。"
+
+#: classes/Visualizer/Render/Sidebar.php:524
+msgid "Save chart as an image inside Media Library"
+msgstr "メディアライブラリに画像として保存"
+
+#: classes/Visualizer/Render/Sidebar.php:526
+msgid "Save inside media library?"
+msgstr "メディアライブラリに保存しますか？"
+
+#: classes/Visualizer/Render/Sidebar.php:530
+msgid "To enable save the image as an inside media library."
+msgstr "メディアライブラリ内の画像での保存の有効化"
+
+#: classes/Visualizer/Render/Templates.php:68
+msgid "Click to select"
+msgstr "クリックして選択"
 
 #: classes/Visualizer/Source/Csv.php:84
 msgid ""
@@ -2962,7 +3186,7 @@ msgstr ""
 msgid "No file provided. Please try again."
 msgstr "ファイルが指定されていません。再度試して下さい。"
 
-#: classes/Visualizer/Source/Json.php:129
+#: classes/Visualizer/Source/Json.php:142
 msgid "This does not appear to be a valid JSON feed. Please try again."
 msgstr "これは正しいJSONフィードではないようです。再度試して下さい。"
 
