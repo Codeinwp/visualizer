@@ -97,6 +97,9 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 	 * @return array The re populated array of data or old one.
 	 */
 	public function repopulateData( $data, $chart_id ) {
+		if ( ! is_array( $data ) ) {
+			$data = array();
+		}
 		return array_key_exists( 'data', $data ) ? $data['data'] : $data;
 	}
 

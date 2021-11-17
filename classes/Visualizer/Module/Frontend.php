@@ -54,6 +54,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		parent::__construct( $plugin );
 
 		$this->_addAction( 'wp_enqueue_scripts', 'enqueueScripts' );
+		$this->_addAction( 'load-index.php', 'enqueueScripts' );
 		$this->_addAction( 'visualizer_enqueue_scripts', 'enqueueScripts' );
 		$this->_addFilter( 'visualizer_get_language', 'getLanguage' );
 		$this->_addShortcode( 'visualizer', 'renderChart' );
@@ -353,6 +354,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				return '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '>' . wp_get_attachment_image( $chart_image, 'full' ) . '</div>';
 			}
 		}
+		// Unset chart image base64 string.
+		if ( isset( $settings['chart-img'] ) ) {
+			unset( $settings['chart-img'] );
+		}
 
 		// add chart to the array
 		$this->_charts[ $id ] = array(
@@ -395,22 +400,29 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$actions_div            .= $css;
 
+		$_charts = array();
+		$_charts_type = '';
 		foreach ( $this->_charts as $id => $array ) {
+			$_charts = $this->_charts;
 			$library = $array['library'];
-			wp_register_script(
-				"visualizer-render-$library",
-				VISUALIZER_ABSURL . 'js/render-facade.js',
-				apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
-				Visualizer_Plugin::VERSION,
-				true
-			);
-
-			wp_enqueue_script( "visualizer-render-$library" );
+			$_charts_type = $library;
+			if ( ! wp_script_is( "visualizer-render-$library", 'registered' ) ) {
+				wp_register_script(
+					"visualizer-render-$library",
+					VISUALIZER_ABSURL . 'js/render-facade.js',
+					apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
+					Visualizer_Plugin::VERSION,
+					true
+				);
+				wp_enqueue_script( "visualizer-render-$library" );
+			}
+		}
+		if ( wp_script_is( "visualizer-render-$_charts_type" ) ) {
 			wp_localize_script(
-				"visualizer-render-$library",
+				"visualizer-render-$_charts_type",
 				'visualizer',
 				array(
-					'charts'        => $this->_charts,
+					'charts'        => $_charts,
 					'language'      => $this->get_language(),
 					'map_api_key'   => get_option( 'visualizer-map-api-key' ),
 					'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
@@ -422,8 +434,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					'is_front'  => true,
 				)
 			);
-			wp_enqueue_style( 'visualizer-front' );
 		}
+		wp_enqueue_style( 'visualizer-front' );
 
 		// return placeholder div
 		return $actions_div . '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '></div>' . $this->addSchema( $chart->ID );
@@ -570,13 +582,25 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		// Get chart by ID.
 		$chart = get_post( $chart_id );
 		if ( $chart && Visualizer_Plugin::CPT_VISUALIZER === $chart->post_type ) {
+			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+			$series   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
+
+			if ( isset( $settings['series'] ) && ! ( count( $settings['series'] ) - count( $series ) > 1 ) ) {
+				$diff_total_series = abs( count( $settings['series'] ) - count( $series ) );
+				if ( $diff_total_series ) {
+					foreach ( range( 1, $diff_total_series ) as $k => $diff_series ) {
+						$settings['series'][] = end( $settings['series'] );
+					}
+				}
+			}
 			$chart_data = array(
 				'chart'       => $chart,
 				'type'        => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
-				'settings'    => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true ),
-				'series'      => get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ),
+				'settings'    => $settings,
+				'series'      => $series,
 				'chart_image' => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_IMAGE, true ),
 			);
+
 			// Put the results in a transient. Expire after 12 hours.
 			set_transient( $cache_key, $chart_data, apply_filters( Visualizer_Plugin::FILTER_HANDLE_CACHE_EXPIRATION_TIME, 12 * HOUR_IN_SECONDS ) );
 			return $chart_data;

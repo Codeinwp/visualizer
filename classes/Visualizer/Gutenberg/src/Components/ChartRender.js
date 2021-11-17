@@ -61,6 +61,12 @@ class ChartRender extends Component {
             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
         }
 
+		if ( this.props.chart['visualizer-series'] && 0 <= [ 'date', 'datetime', 'timeofday' ].indexOf( this.props.chart['visualizer-series'][0].type ) ) {
+			if ( this.props.chart['visualizer-settings'] && '' == this.props.chart['visualizer-settings'].hAxis.format ) {
+				this.props.chart['visualizer-settings'].hAxis.format = 'YYYY-MM-dd';
+			}
+		}
+
 		return (
 			<div className={ this.props.className }>
 

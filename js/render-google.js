@@ -235,6 +235,9 @@ var __visualizer_chart_images   = [];
                     settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
                 }
             }
+            if(settings.hAxis.format == ''){
+                settings.hAxis.format = 'YYYY-MM-dd';
+            }
         }
 
         if(settings.vAxis){
@@ -262,7 +265,15 @@ var __visualizer_chart_images   = [];
                     case 'date':
                         // fall-through.
                     case 'datetime':
-                        date = new Date(Date.parse(data[i][j].replace(/-/g, '/')));
+                        if (typeof data[i][j] === 'string') {
+                            var dateParse = Date.parse(data[i][j].replace(/-/g, '/'));
+                            if ( isNaN( dateParse ) ) {
+                                dateParse = Date.parse(data[i][j]);
+                            }
+                            date = new Date( dateParse );
+                        } else if(typeof data[i][j] === 'object') {
+                            date = data[i][j];
+                        }
                         data[i][j] = null;
                         if (Object.prototype.toString.call(date) === "[object Date]") {
                             if (!isNaN(date.getTime())) {
@@ -416,6 +427,10 @@ var __visualizer_chart_images   = [];
                 $( '.visualizer-hidden-container' ).find(".visualizer-front:not(.visualizer-chart-loaded)").resize();
             }, 500 );
         }
+
+        $( window ).on( 'orientationchange', function( event ) {
+        	$( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' );
+        } );
     });
 
     $(window).on('load', function(){
@@ -549,4 +564,14 @@ var __visualizer_chart_images   = [];
         }
     });
 
+    var timer = 0;
+    $( document ).on( 'input', '.series-linewidth', function() {
+        var seriesLineWidth = $( this );
+        clearTimeout( timer );
+        timer = setTimeout( function() {
+            if ( seriesLineWidth.val() != '' && seriesLineWidth.val() <= 0 ) {
+                seriesLineWidth.val( '0.1' );
+            }
+        }, 700 );
+    } );
 })(jQuery);

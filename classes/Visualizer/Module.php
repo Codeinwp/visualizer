@@ -740,16 +740,28 @@ class Visualizer_Module {
 	 */
 	public static function get_chart_data( $chart, $type, $run_filter = true ) {
 		// change HTML entities
-		$data = unserialize( html_entity_decode( htmlentities( $chart->post_content ) ) );
-		$altered = array();
-		foreach ( $data as $index => $array ) {
-			if ( ! is_array( $index ) && is_array( $array ) ) {
-				foreach ( $array as &$datum ) {
-					if ( is_string( $datum ) ) {
-						$datum = stripslashes( $datum );
-					}
+		$post_content = html_entity_decode( htmlentities( $chart->post_content ) );
+		$post_content = preg_replace_callback(
+			'!s:(\d+):"(.*?)";!s',
+			function ( $matches ) {
+				if ( isset( $matches[2] ) ) {
+					return 's:' . strlen( $matches[2] ) . ':"' . $matches[2] . '";';
 				}
-				$altered[ $index ] = $array;
+			},
+			$post_content
+		);
+		$data = unserialize( $post_content );
+		$altered = array();
+		if ( ! empty( $data ) ) {
+			foreach ( $data as $index => $array ) {
+				if ( ! is_array( $index ) && is_array( $array ) ) {
+					foreach ( $array as &$datum ) {
+						if ( is_string( $datum ) ) {
+							$datum = stripslashes( $datum );
+						}
+					}
+					$altered[ $index ] = $array;
+				}
 			}
 		}
 		// if something goes wrong and the end result is empty, be safe and use the original data
