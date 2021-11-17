@@ -1,3 +1,38 @@
+#### [Version 3.7.0](https://github.com/Codeinwp/visualizer/compare/v3.6.1...v3.7.0) (2021-10-07)
+
+#### Features
+- Add option to enable/disable save the chart image
+- Enhanced caching 
+
+#### Fixes
+- Fix undefined variable errors when using Gutenberg blocks
+- Fix broken chart in iOS and Safari
+- Fix custom refresh time support for DB chart
+- Fix table placed inside accordion cannot be scrolled down (refreshes all the time) 
+- Fix pagination doesn't work in the library 
+- Fix HTML entities in JSON break Visualizer Table Chart
+- Fix string type columns affect the target of the formatting applied to a number column
+
+##### [Version 3.6.1](https://github.com/Codeinwp/visualizer/compare/v3.6.0...v3.6.1) (2021-08-04)
+
+- Fix broken dropdown style issue 
+- Add block support in widget area
+- Add wp alpha color picker support
+- Fix broken chart layout issue when add long title
+
+#### [Version 3.6.0](https://github.com/Codeinwp/visualizer/compare/v3.5.1...v3.6.0) (2021-07-08)
+
+### Features
+* Adds option to render chart as image
+* Automatically render chart as image on AMP
+
+### Fixes
+* [Chart Type: TABLE] When adding a blank header, the last column of the table disappears
+* Styling is not applied to Chart Area for Table Chart ( Margin, Width, Height)
+* Improve compatibility with Site Kit by Google
+* Loading icon doesn't disappear until you edit the chart again [Line Chart]
+* Broken chart if used inside an accordion (expand/collapse)
+
 ##### [Version 3.5.1](https://github.com/Codeinwp/visualizer/compare/v3.5.0...v3.5.1) (2021-05-25)
 
 
