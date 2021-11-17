@@ -163,6 +163,19 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.7.1](https://github.com/Codeinwp/visualizer/compare/v3.7.0...v3.7.1) (2021-11-17)
+
+- [Feat] Allow charts to render in dashboard areas via 3rd party plugins like Dashboard Widgets Suite 
+- [Fix] Changing Line Chart series style to dot on some series changes the order of tooltip information
+- [Fix] Problem with X-Axis of Line chart on Safari if date/datetime is used as values
+- [Fix] Multiple Visualizer charts causing rendering issues (blank page)
+- [Fix] Charts are not resizing on landscape view on mobile
+- [Fix] Notices/Warnings appear on the front-end if the user is not logged in for some charts
+- [Fix] Radar/Spider Chart Tooltip in PRO does not show the data value
+
+
+
+
 #### [Version 3.7.0](https://github.com/Codeinwp/visualizer/compare/v3.6.1...v3.7.0) (2021-10-07)
 
 #### Features
