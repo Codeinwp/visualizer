@@ -265,11 +265,15 @@ var __visualizer_chart_images   = [];
                     case 'date':
                         // fall-through.
                     case 'datetime':
-                        var dateParse = Date.parse(data[i][j].replace(/-/g, '/'));
-                        if ( isNaN( dateParse ) ) {
-                            dateParse = Date.parse(data[i][j]);
+                        if (typeof data[i][j] === 'string') {
+                            var dateParse = Date.parse(data[i][j].replace(/-/g, '/'));
+                            if ( isNaN( dateParse ) ) {
+                                dateParse = Date.parse(data[i][j]);
+                            }
+                            date = new Date( dateParse );
+                        } else if(typeof data[i][j] === 'object') {
+                            date = data[i][j];
                         }
-                        date = new Date( dateParse );
                         data[i][j] = null;
                         if (Object.prototype.toString.call(date) === "[object Date]") {
                             if (!isNaN(date.getTime())) {
