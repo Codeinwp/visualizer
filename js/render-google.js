@@ -227,6 +227,10 @@ var __visualizer_chart_images   = [];
 					delete axis.viewWindow[property];
 				}
 			}
+
+            if(settings.hAxis.format == ''){
+                settings.hAxis.format = 'YYYY-MM-dd';
+            }
 		}
 
         if(settings.hAxis){
@@ -234,9 +238,6 @@ var __visualizer_chart_images   = [];
                 if(typeof(settings.hAxis.textStyle) === "string") {
                     settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
                 }
-            }
-            if(settings.hAxis.format == ''){
-                settings.hAxis.format = 'YYYY-MM-dd';
             }
         }
 
