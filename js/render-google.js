@@ -228,7 +228,7 @@ var __visualizer_chart_images   = [];
 				}
 			}
 
-            if(settings.hAxis.format == ''){
+            if(settings.hAxis && settings.hAxis.format == ''){
                 settings.hAxis.format = 'YYYY-MM-dd';
             }
 		}
