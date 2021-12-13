@@ -428,12 +428,14 @@ var __visualizer_chart_images   = [];
             }, 500 );
         }
 
-        $( window ).on( 'orientationchange', function( event ) {
-        	$( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' );
-        } );
+        window.onorientationchange = function() {
+            jQuery( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' );
+            resizeHiddenContainers(true);
+        }
     });
 
     $(window).on('load', function(){
+        jQuery( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' );
         resizeHiddenContainers(true);
     });
 
