@@ -271,7 +271,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 */
 	public function enqueueScripts() {
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-		wp_register_style( 'visualizer-front', VISUALIZER_ABSURL . 'css/front.css', array(), Visualizer_Plugin::VERSION );
 		do_action( 'visualizer_pro_frontend_load_resources' );
 	}
 
@@ -470,7 +469,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				)
 			);
 		}
-		wp_enqueue_style( 'visualizer-front' );
 
 		// return placeholder div
 		return '<div class="' . $container_class . '">' . $actions_div . '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '></div>' . $this->addSchema( $chart->ID ) . '</div>';

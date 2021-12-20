@@ -119,7 +119,7 @@
      */
     function showChart(id) {
         // clone the visualizer object so that the original object is not affected.
-        var viz = Object.assign({}, visualizer);
+        var viz = Object.assign(visualizer, window.visualizer || {});
         if(id){
             viz.id = id;
         }
