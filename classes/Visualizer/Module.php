@@ -623,7 +623,7 @@ class Visualizer_Module {
 		}
 
 		$img_path = VISUALIZER_ABSURL . 'images';
-		$css     .= ".locker,.locker-loader{position:absolute;top:0;left:0;width:100%;height:100%}.locker{z-index:1000;opacity:.8;background-color:#fff;-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";filter:alpha(opacity=80)}.locker-loader{z-index:1001;background:url($img_path/ajax-loader.gif) no-repeat center center}.dt-button{display:none!important}";
+		$css     .= ".locker,.locker-loader{position:absolute;top:0;left:0;width:100%;height:100%}.locker{z-index:1000;opacity:.8;background-color:#fff;-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";filter:alpha(opacity=80)}.locker-loader{z-index:1001;background:url($img_path/ajax-loader.gif) no-repeat center center}.dt-button{display:none!important}.visualizer-front-container.visualizer-lazy-render{content-visibility: auto;}";
 		$css     .= '</style>';
 
 		$arguments = array( $css, $settings );
