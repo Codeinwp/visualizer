@@ -429,9 +429,9 @@ var __visualizer_chart_images   = [];
             }, 500 );
         }
 
-        $( window ).on( 'orientationchange', function( event ) {
-        	$( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' );
-        } );
+        window.addEventListener( 'orientationchange', function() {
+            $( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' ).resize();
+        }, false);
     });
 
     $(window).on('load', function(){
