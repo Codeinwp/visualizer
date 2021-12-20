@@ -604,30 +604,29 @@ class Visualizer_Module {
 	protected function get_inline_custom_css( $id, $settings ) {
 		$css        = '';
 
-		$arguments  = array( '', $settings );
-		if ( ! isset( $settings['customcss'] ) ) {
-			return $arguments;
-		}
-
 		$classes    = array();
 		$css        = '<style type="text/css" name="visualizer-custom-css" id="customcss-' . $id . '">';
-		foreach ( $settings['customcss'] as $name => $element ) {
-			$attributes = array();
-			foreach ( $element as $property => $value ) {
-				$attributes[]   = $this->handle_css_property( $property, $value );
+		if ( ! empty( $settings['customcss'] ) ) {
+			foreach ( $settings['customcss'] as $name => $element ) {
+				$attributes = array();
+				foreach ( $element as $property => $value ) {
+					$attributes[]   = $this->handle_css_property( $property, $value );
+				}
+				$class_name = $id . $name;
+				$properties = implode( ' !important; ', array_filter( $attributes ) );
+				if ( ! empty( $properties ) ) {
+					$css    .= '.' . $class_name . ' {' . $properties . ' !important;}';
+					$classes[ $name ] = $class_name;
+				}
 			}
-			$class_name = $id . $name;
-			$properties = implode( ' !important; ', array_filter( $attributes ) );
-			if ( ! empty( $properties ) ) {
-				$css    .= '.' . $class_name . ' {' . $properties . ' !important;}';
-				$classes[ $name ] = $class_name;
-			}
+			$settings['cssClassNames']  = $classes;
 		}
-		$css        .= '</style>';
 
-		$settings['cssClassNames']  = $classes;
+		$img_path = VISUALIZER_ABSURL . 'images';
+		$css     .= ".locker,.locker-loader{position:absolute;top:0;left:0;width:100%;height:100%}.locker{z-index:1000;opacity:.8;background-color:#fff;-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";filter:alpha(opacity=80)}.locker-loader{z-index:1001;background:url($img_path/ajax-loader.gif) no-repeat center center}.dt-button{display:none!important}.visualizer-front-container.visualizer-lazy-render{content-visibility: auto;}";
+		$css     .= '</style>';
 
-		$arguments  = array( $css, $settings );
+		$arguments = array( $css, $settings );
 		apply_filters_ref_array( 'visualizer_inline_css', array( &$arguments ) );
 
 		return $arguments;

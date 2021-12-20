@@ -528,6 +528,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$_POST['save_chart_image'] = isset( $_POST['save_chart_image'] ) && 'yes' === $_POST['save_chart_image'] ? true : false;
+		$_POST['lazy_load_chart']  = isset( $_POST['lazy_load_chart'] ) && 'yes' === $_POST['lazy_load_chart'] ? true : false;
 
 		if ( isset( $_POST['chart-img'] ) && ! empty( $_POST['chart-img'] ) ) {
 			$attachment_id = $this->save_chart_image( $_POST['chart-img'], $chart_id, $_POST['save_chart_image'] );

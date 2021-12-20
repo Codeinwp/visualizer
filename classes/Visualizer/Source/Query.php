@@ -115,7 +115,6 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			$wpdb->hide_errors();
 			// @codingStandardsIgnoreStart
 			$rows       = $wpdb->get_results( $this->_query, $results_as_numeric_array ? ARRAY_N : ARRAY_A );
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Firing query %s to get results %s with error %s', $this->_query, print_r( $rows, true ), print_r( $wpdb->last_error, true ) ), 'debug', __FILE__, __LINE__ );
 			// @codingStandardsIgnoreEnd
 			$wpdb->show_errors();
 
@@ -145,6 +144,9 @@ class Visualizer_Source_Query extends Visualizer_Source {
 				$this->_error = $wpdb->last_error;
 			}
 		}
+		// Query log.
+		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Firing query %s to get results %s with error %s', $this->_query, print_r( $rows, true ), print_r( $wpdb->last_error, true ) ), 'debug', __FILE__, __LINE__ );
+
 		if ( $as_html ) {
 			$results = $this->html( $headers, $results );
 		} else {

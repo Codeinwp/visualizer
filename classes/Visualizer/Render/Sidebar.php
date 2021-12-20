@@ -517,19 +517,38 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderChartImageSettings() {
-			// Default enable if amp is active.
-			$is_amp = function_exists( 'amp_is_enabled' ) && amp_is_enabled();
-			$this->save_chart_image = null === $this->save_chart_image && $is_amp ? true : $this->save_chart_image;
+		// Default enable if amp is active.
+		$is_amp = function_exists( 'amp_is_enabled' ) && amp_is_enabled();
+		$this->save_chart_image = null === $this->save_chart_image && $is_amp ? true : $this->save_chart_image;
 
-			self::_renderSectionStart( esc_html__( 'Save chart as an image inside Media Library', 'visualizer' ), false );
-				self::_renderCheckboxItem(
-					esc_html__( 'Save inside media library?', 'visualizer' ),
-					'save_chart_image',
-					$this->save_chart_image ? true : false,
-					'yes',
-					esc_html__( 'To enable save the image as an inside media library.', 'visualizer' ),
-					false
-				);
-			self::_renderSectionEnd();
+		$is_create_chart = true;
+		if ( filter_input( INPUT_GET, 'library', FILTER_VALIDATE_BOOLEAN ) ) {
+			if ( filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART ) {
+				$is_create_chart = false;
+			}
+		}
+		$this->lazy_load_chart = null === $this->lazy_load_chart && $is_create_chart ? true : $this->lazy_load_chart;
+
+		self::_renderSectionStart( esc_html__( 'Save chart as an image inside Media Library', 'visualizer' ), false );
+			self::_renderCheckboxItem(
+				esc_html__( 'Save inside media library?', 'visualizer' ),
+				'save_chart_image',
+				$this->save_chart_image ? true : false,
+				'yes',
+				esc_html__( 'To enable save the image as an inside media library.', 'visualizer' ),
+				false
+			);
+		self::_renderSectionEnd();
+
+		self::_renderSectionStart( esc_html__( 'Lazy rendering of chart', 'visualizer' ), false );
+			self::_renderCheckboxItem(
+				esc_html__( 'Enable lazy rendering of chart?', 'visualizer' ),
+				'lazy_load_chart',
+				$this->lazy_load_chart ? true : false,
+				'yes',
+				esc_html__( 'To enable lazy chart rendering.', 'visualizer' ),
+				false
+			);
+		self::_renderSectionEnd();
 	}
 }

@@ -227,6 +227,10 @@ var __visualizer_chart_images   = [];
 					delete axis.viewWindow[property];
 				}
 			}
+
+            if(settings.hAxis && settings.hAxis.format == ''){
+                settings.hAxis.format = 'YYYY-MM-dd';
+            }
 		}
 
         if(settings.hAxis){
@@ -234,9 +238,6 @@ var __visualizer_chart_images   = [];
                 if(typeof(settings.hAxis.textStyle) === "string") {
                     settings.hAxis.textStyle = {color: settings.hAxis.textStyle};
                 }
-            }
-            if(settings.hAxis.format == ''){
-                settings.hAxis.format = 'YYYY-MM-dd';
             }
         }
 
@@ -428,12 +429,13 @@ var __visualizer_chart_images   = [];
             }, 500 );
         }
 
-        $( window ).on( 'orientationchange', function( event ) {
-        	$( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' );
-        } );
+        window.addEventListener( 'orientationchange', function() {
+            $( '.visualizer-chart-loaded' ).removeClass( 'visualizer-chart-loaded' ).resize();
+        }, false);
     });
 
     $(window).on('load', function(){
+        $( '.visualizer-front:not(.visualizer-chart-loaded)' ).resize();
         resizeHiddenContainers(true);
     });
 

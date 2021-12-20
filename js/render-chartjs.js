@@ -47,7 +47,8 @@
                 type = 'bar';
                 break;
             case 'bar':
-                type = 'horizontalBar';
+                type = 'bar';
+                settings.indexAxis = 'y';
                 break;
             case 'pie':
                 // donut is not a setting but a separate chart type.
@@ -200,10 +201,24 @@
         if(typeof settings['yAxes'] !== 'undefined' && typeof settings['xAxes'] !== 'undefined'){
             // stacking has to be defined on both axes.
             if(typeof settings['yAxes']['stacked_bool'] !== 'undefined'){
-                settings['xAxes']['stacked_bool'] = 'true';
+                settings['yAxes']['stacked_bool'] = 'true';
             }
             if(typeof settings['xAxes']['stacked_bool'] !== 'undefined'){
-                settings['yAxes']['stacked_bool'] = 'true';
+                settings['xAxes']['stacked_bool'] = 'true';
+            }
+            // Bar percentage.
+            if (typeof settings['yAxes']['barPercentage_int'] !=='undefined' && ''!== settings['yAxes']['barPercentage_int']){
+                settings['barPercentage'] = settings['yAxes']['barPercentage_int'];
+            }
+            if (typeof settings['xAxes']['barPercentage_int'] !=='undefined' && ''!== settings['xAxes']['barPercentage_int']){
+                settings['barPercentage'] = settings['xAxes']['barPercentage_int'];
+            }
+            // Bar thickness.
+            if (typeof settings['yAxes']['barThickness'] !=='undefined' && ''!== settings['yAxes']['barThickness']){
+                settings['barThickness'] = settings['yAxes']['barThickness'];
+            }
+            if (typeof settings['xAxes']['barThickness'] !=='undefined' && ''!== settings['xAxes']['barThickness']){
+                settings['barThickness'] = settings['xAxes']['barThickness'];
             }
         }
         configureAxes(settings, 'yAxes', chart);
@@ -275,6 +290,54 @@
             var $axis = $scales['scales'][axis];
 
             $axis.push($features);
+            // Migrate xAxes settings to v3.0+
+            if ( $scales.scales && $scales.scales.xAxes ) {
+                for (var x in $scales.scales.xAxes) {
+                    $scales.scales.x = {
+                        display: $scales.scales.xAxes[x].scaleLabel.display,
+                        title: {
+                            display:true,
+                            text: $scales.scales.xAxes[x].scaleLabel.labelString,
+                            color: $scales.scales.xAxes[x].scaleLabel.fontColor,
+                            font: {
+                                family: $scales.scales.xAxes[x].scaleLabel.fontFamily,
+                                size: $scales.scales.xAxes[x].scaleLabel.fontSize
+                            }
+                        },
+                        suggestedMax: $scales.scales.xAxes[x].ticks.suggestedMax || '',
+                        suggestedMin: $scales.scales.xAxes[x].ticks.suggestedMin || '',
+                        ticks: {
+                            maxTicksLimit: $scales.scales.xAxes[x].ticks.maxTicksLimit
+                        },
+                        stacked: $scales.scales.xAxes[x].stacked || false
+                    }
+                }
+                delete $scales.scales.xAxes;
+            }
+            // Migrate yAxes settings to v3.0+
+            if ( $scales.scales && $scales.scales.yAxes ) {
+                for (var y in $scales.scales.yAxes) {
+                    $scales.scales.y = {
+                        display: $scales.scales.yAxes[y].scaleLabel.display,
+                        title: {
+                            display:true,
+                            text: $scales.scales.yAxes[y].scaleLabel.labelString,
+                            color: $scales.scales.yAxes[y].scaleLabel.fontColor,
+                            font: {
+                                family: $scales.scales.yAxes[y].scaleLabel.fontFamily,
+                                size: $scales.scales.yAxes[y].scaleLabel.fontSize
+                            }
+                        },
+                        suggestedMax: $scales.scales.yAxes[y].ticks.suggestedMax || '',
+                        suggestedMin: $scales.scales.yAxes[y].ticks.suggestedMin || '',
+                        ticks: {
+                            maxTicksLimit: $scales.scales.yAxes[y].ticks.maxTicksLimit
+                        },
+                        stacked: $scales.scales.yAxes[y].stacked || false
+                    }
+                }
+                delete $scales.scales.yAxes;
+            }
             $.extend(settings, $scales);
 
             // to prevent duplication, indicates that the axis has been set.
@@ -288,12 +351,12 @@
             var format = settings[axis + '_format'];
             switch(axis){
                 case 'xAxes':
-                    settings.scales.xAxes[0].ticks.callback = function(value, index, values){
+                    settings.scales.x.ticks.callback = function(value, index, values){
                         return format_datum(value, format);
                     };
                     break;
                 case 'yAxes':
-                    settings.scales.yAxes[0].ticks.callback = function(value, index, values){
+                    settings.scales.y.ticks.callback = function(value, index, values){
                         return format_datum(value, format);
                     };
                     break;

@@ -25,3 +25,7 @@
 .dt-button {
 	display: none !important;
 }
+
+.visualizer-front-container.visualizer-lazy-render {
+  content-visibility: auto;
+}
