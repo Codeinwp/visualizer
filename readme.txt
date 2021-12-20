@@ -163,6 +163,17 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.7.2](https://github.com/Codeinwp/visualizer/compare/v3.7.1...v3.7.2) (2021-12-20)
+
+- Add latest chartJS library support in the bar chart
+- Fix horizontal axis showing date format in Bar chart 
+- Fix orientation rotate issue in mobile
+- CSS performance improvements
+- Improve JS performance
+
+
+
+
 ##### [Version 3.7.1](https://github.com/Codeinwp/visualizer/compare/v3.7.0...v3.7.1) (2021-11-17)
 
 - [Feat] Allow charts to render in dashboard areas via 3rd party plugins like Dashboard Widgets Suite 
