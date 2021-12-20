@@ -435,6 +435,7 @@ var __visualizer_chart_images   = [];
     });
 
     $(window).on('load', function(){
+        $( '.visualizer-front:not(.visualizer-chart-loaded)' ).resize();
         resizeHiddenContainers(true);
     });
 
