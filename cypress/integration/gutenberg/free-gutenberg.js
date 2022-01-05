@@ -20,7 +20,7 @@ describe('Test Free - gutenberg', function() {
 
         cy.clear_welcome();
 
-        var charts = Array.from({ length: parseInt(Cypress.env('chart_types').free) }, function(_item, index) {
+        var charts = Array.from({ length: parseInt(Cypress.env('chart_types').free - 1) }, function(_item, index) {
             return index + 1;
         });
 
