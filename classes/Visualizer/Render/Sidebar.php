@@ -162,10 +162,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderSectionEnd();
 
 			$this->_renderActionSettings();
-			if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
-				echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
-				echo '</div>';
-			}
+		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+			echo '</div>';
+		}
 		self::_renderGroupEnd();
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );

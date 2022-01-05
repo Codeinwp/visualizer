@@ -1003,9 +1003,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 										<?php } ?>
 										<?php
-											if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
-												echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' );
-											}
+										if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+											echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' );
+										}
 										?>
 									</form>
 								</div>

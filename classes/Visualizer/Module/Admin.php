@@ -1057,6 +1057,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( Visualizer_Module::is_pro() ) {
 			return true;
 		}
-		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false :  true;
+		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false : true;
 	}
 }
