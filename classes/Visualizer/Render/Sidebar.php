@@ -151,12 +151,21 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderAdvancedSettings() {
-		self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) );
+		if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
+			self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) );
+		} else {
+			self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-frontend-actions' ), 'vz-frontend-actions' );
+			echo '<div style="position: relative">';
+		}
 			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure frontend actions that need to be shown.', 'visualizer' ) );
 			self::_renderSectionEnd();
 
 			$this->_renderActionSettings();
+			if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+				echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+				echo '</div>';
+			}
 		self::_renderGroupEnd();
 
 		self::_renderGroupStart( esc_html__( 'Manual Configuration', 'visualizer' ) );

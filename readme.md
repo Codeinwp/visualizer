@@ -37,7 +37,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 >
 > * Import data from other charts, graphs and tables
 > * Easily edit the data using a excel-like data editor
-> * Gain access to 6 more chart types ( Combo, Timeline, Candlestick, Gauge, Radar/Spider, Polar Area )
+> * Gain access to 11 more chart types ( Area, Geo, Column, Bubble, Scatter, Combo, Timeline, Candlestick, Gauge, Radar/Spider, Polar Area )
 > * Import data from any database
 > * Synchronize your data periodically
 > * Create private charts (customizable permissions system)

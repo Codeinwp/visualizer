@@ -1521,3 +1521,10 @@ button#viz-text-editor-button {
 canvas.chartjs-render-monitor {
 	height: 500px !important;
 }
+
+/******************************************************************************/
+/********************************  Frontend Actions ***********************************/
+/******************************************************************************/
+#vz-frontend-actions .only-pro-inner {
+	text-align: center;
+}
