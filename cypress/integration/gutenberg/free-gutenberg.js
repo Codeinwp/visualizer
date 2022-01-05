@@ -12,7 +12,7 @@ describe('Test Free - gutenberg', function() {
     });
 
     it('Create charts', function() {
-        cy.create_available_charts(Cypress.env('chart_types').free, 'GoogleCharts');
+        cy.create_available_charts(Cypress.env('chart_types').free - 1, 'GoogleCharts');
     });
 
     it('Verify insertion of charts', function() {

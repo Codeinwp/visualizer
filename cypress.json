@@ -8,7 +8,7 @@
       "samples": "https://s3.amazonaws.com/downloads.themeisle.com/samples-visualizer/"
     },
     "chart_types": {
-      "free": 3,
+      "free": 4,
       "pro": 11
     },
     "features_locked": {
