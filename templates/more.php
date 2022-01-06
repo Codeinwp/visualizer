@@ -5,7 +5,7 @@ if ( ! Visualizer_Module::is_pro() ) {
 		<div class="pro-feature-inner">
 			<div class="pro-feature-features">
 				<h2>More charts!</h2>
-				<p>Gain access to 6 more charts right away, and more in the future. So far these include the gauge, candlestick, timeline, combo, polar area and radar charts.</p>
+				<p>Gain access to 11 more charts right away, and more in the future. So far these include the area, geo, column, bubble, scatter, gauge, candlestick, timeline, combo, polar area and radar/spider charts.</p>
 				<p>Of course, these are fully customizable!</p>
 			</div>
 			<div class="pro-feature-image"><img src="<?php echo VISUALIZER_ABSURL; ?>/images/pro/more_charts.png"></div>
