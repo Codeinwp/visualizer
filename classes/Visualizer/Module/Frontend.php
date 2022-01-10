@@ -669,9 +669,13 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 			function visualizerLoadScripts() {
 				document.querySelectorAll("script[data-visualizer-script]").forEach(function(elem) {
-					jQuery.getScript( elem.getAttribute("data-visualizer-script"), function() {
+					jQuery.getScript( elem.getAttribute("data-visualizer-script") )
+					.done( function( script, textStatus ) {
 						elem.setAttribute("src", elem.getAttribute("data-visualizer-script"));
 						elem.removeAttribute("data-visualizer-script");
+						setTimeout( function() {
+							jQuery( '.visualizer-front:not(.visualizer-chart-loaded)' ).resize();
+						} );
 					} );
 				});
 			}
