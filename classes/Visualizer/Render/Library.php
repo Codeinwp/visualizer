@@ -365,7 +365,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				echo '<li>' . __( '11 more chart types', 'visualizer' ) . '</li>';
 				echo '<li>' . __( 'Manual Data Editor', 'visualizer' ) . '</li>';
 				echo '<li>' . __( 'ChartJS Charts', 'visualizer' ) . '</li>';
-				echo '<li>' . __( 'Table Google chart as Datatable is the one present in free', 'visualizer' ) . '</li>';
+				echo '<li>' . __( 'Table Google chart', 'visualizer' ) . '</li>';
 				echo '<li>' . __( 'Frontend Actions(Print Chart, Export to CSV, Export to Excel, Copy, Download Chart Image)', 'visualizer' ) . '</li></ul>';
 			}
 			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
