@@ -960,7 +960,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							</li>
 
 							<!-- manual -->
-							<li class="viz-group visualizer_source_manual">
+							<li class="viz-group visualizer_source_manual <?php echo ! Visualizer_Module_Admin::proFeaturesLocked() ? apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ) : ''; ?>">
 								<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?>
 									<span class="dashicons dashicons-lock"></span>
 								</h2>
@@ -1002,6 +1002,11 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 											>
 											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 										<?php } ?>
+										<?php
+										if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+											echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' );
+										}
+										?>
 									</form>
 								</div>
 							</li>

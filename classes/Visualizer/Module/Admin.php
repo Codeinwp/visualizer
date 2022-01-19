@@ -389,64 +389,66 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			);
 		}
 
+		$enabled = self::proFeaturesLocked();
+
 		$types = array_merge(
 			$additional,
 			array(
 				'tabular' => array(
 					'name'    => esc_html__( 'Table', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => array( 'Google Charts', 'DataTable' ),
+					'supports'  => $enabled ? array( 'Google Charts', 'DataTable' ) : array( 'DataTable' ),
 				),
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie/Donut', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => array( 'Google Charts', 'ChartJS' ),
+					'supports'  => $enabled ? array( 'Google Charts', 'ChartJS' ) : array( 'Google Charts' ),
 				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => array( 'Google Charts', 'ChartJS' ),
+					'supports'  => $enabled ? array( 'Google Charts', 'ChartJS' ) : array( 'Google Charts' ),
+				),
+				'bar'         => array(
+					'name'    => esc_html__( 'Bar', 'visualizer' ),
+					'enabled' => true,
+					'supports'  => $enabled ? array( 'Google Charts', 'ChartJS' ) : array( 'Google Charts' ),
 				),
 				'area'        => array(
 					'name'    => esc_html__( 'Area', 'visualizer' ),
-					'enabled' => true,
+					'enabled' => $enabled,
 					// in ChartJS, the fill option is used to make Line chart an area: https://www.chartjs.org/docs/latest/charts/area.html
 					'supports'  => array( 'Google Charts' ),
 				),
 				'geo'         => array(
 					'name'    => esc_html__( 'Geo', 'visualizer' ),
-					'enabled' => true,
+					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
-				),
-				'bar'         => array(
-					'name'    => esc_html__( 'Bar', 'visualizer' ),
-					'enabled' => true,
-					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'column'      => array(
 					'name'    => esc_html__( 'Column', 'visualizer' ),
-					'enabled' => true,
+					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'bubble'         => array(
 					'name'    => esc_html__( 'Bubble', 'visualizer' ),
-					'enabled' => true,
+					'enabled' => $enabled,
 					// chartjs' bubble is ugly looking (and it won't work off the default bubble.csv) so it is being excluded for the time being.
 					'supports'  => array( 'Google Charts' ),
 				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
-					'enabled' => true,
+					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
 				),
 				'gauge'       => array(
 					'name'    => esc_html__( 'Gauge', 'visualizer' ),
-					'enabled' => true,
+					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
 				),
 				'candlestick' => array(
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
-					'enabled' => true,
+					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
 				),
 				// pro types
@@ -1046,4 +1048,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		return $plugin_meta;
 	}
 
+	/**
+	 * If check is existing user.
+	 *
+	 * @return bool Default false
+	 */
+	public static function proFeaturesLocked() {
+		if ( Visualizer_Module::is_pro() ) {
+			return true;
+		}
+		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false : true;
+	}
 }

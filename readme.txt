@@ -16,8 +16,8 @@ A simple and powerful WordPress chart plugin to create responsive charts & table
 
 The plugin uses Google Visualization API, DataTables.net and ChartJS to add responsive & animated charts, graphs and tables, which support cross-browser compatibility and display perfectly on mobile devices. You can greatly customize all aspects of the charts and tables, and import the data from Excel, CSV, Google Sheets and more!
 
-### 9 Chart types + 6 more in the pro version ###
-This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, area charts, bar charts, column charts, pie charts, geo charts, table charts, bubble charts, scatter charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
+### 4 Chart types + 11 more in the pro version ###
+This WordPress graph plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, bar charts, pie charts, table charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
 
 ### One of the best table plugin for wordpress ###
 On top of our responsive charts and graphs, you can also add our responsive tables to your posts and pages, and customize them however you like. Not only can you customize the design of the tables, you can add sorting capabilities, pagination, search and more. You can view a few examples of what can be done <a href="https://demo.themeisle.com/visualizer/table-chart/">here</a>, but many more things can be done, including pricing tables and product tables.
@@ -37,7 +37,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 >
 > * Import data from other charts, graphs and tables
 > * Easily edit the data using a excel-like data editor
-> * Gain access to 6 more chart types ( Combo, Timeline, Candlestick, Gauge, Radar/Spider, Polar Area )
+> * Gain access to 11 more chart types ( Area, Geo, Column, Bubble, Scatter, Combo, Timeline, Candlestick, Gauge, Radar/Spider, Polar Area )
 > * Import data from any database
 > * Synchronize your data periodically
 > * Create private charts (customizable permissions system)

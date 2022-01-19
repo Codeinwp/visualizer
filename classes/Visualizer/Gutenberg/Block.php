@@ -111,6 +111,7 @@ class Visualizer_Gutenberg_Block {
 			'adminPage' => menu_page_url( 'visualizer', false ),
 			'sqlTable'  => $table_col_mapping,
 			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
+			'proFeaturesLocked' => Visualizer_Module_Admin::proFeaturesLocked(),
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 

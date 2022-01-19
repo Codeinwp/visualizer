@@ -806,6 +806,9 @@ button#editor-chart-button {
 .viz-select-library {
 	color: #0085ba;
 }
+.viz-select-library.viz-hide-libary {
+	display: none;
+}
 
 .viz-select-library option:first-child {
 	font-weight: bold;
@@ -1520,4 +1523,11 @@ button#viz-text-editor-button {
 
 canvas.chartjs-render-monitor {
 	height: 500px !important;
+}
+
+/******************************************************************************/
+/********************************  Frontend Actions ***********************************/
+/******************************************************************************/
+#vz-frontend-actions .only-pro-inner {
+	text-align: center;
 }
