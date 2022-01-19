@@ -436,6 +436,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		$_charts = array();
 		$_charts_type = '';
+		$count = 0;
 		foreach ( $this->_charts as $id => $array ) {
 			$_charts = $this->_charts;
 			$library = $array['library'];
@@ -450,24 +451,26 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				);
 				wp_enqueue_script( "visualizer-render-$library" );
 			}
-		}
-		if ( wp_script_is( "visualizer-render-$_charts_type" ) ) {
-			wp_localize_script(
-				"visualizer-render-$_charts_type",
-				'visualizer',
-				array(
-					'charts'        => $_charts,
-					'language'      => $this->get_language(),
-					'map_api_key'   => get_option( 'visualizer-map-api-key' ),
-					'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
-					'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
-					'i10n'          => array(
-						'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
-					),
-					'page_type' => 'frontend',
-					'is_front'  => true,
-				)
-			);
+
+			if ( wp_script_is( "visualizer-render-$_charts_type" ) && 0 === $count ) {
+				wp_localize_script(
+					"visualizer-render-$_charts_type",
+					'visualizer',
+					array(
+						'charts'        => $this->_charts,
+						'language'      => $this->get_language(),
+						'map_api_key'   => get_option( 'visualizer-map-api-key' ),
+						'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
+						'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
+						'i10n'          => array(
+							'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
+						),
+						'page_type' => 'frontend',
+						'is_front'  => true,
+					)
+				);
+			}
+			$count++;
 		}
 
 		// return placeholder div
