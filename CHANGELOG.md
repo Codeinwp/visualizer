@@ -1,3 +1,10 @@
+##### [Version 3.7.3](https://github.com/Codeinwp/visualizer/compare/v3.7.2...v3.7.3) (2022-01-19)
+
+- Fix multiple charts lazy rendering issue
+- Upgrade jQuery UI core library CDN
+- Fix console error when rendering multiple charts
+- Keep only Line / Pie / bar / Table charts in free version
+
 ##### [Version 3.7.2](https://github.com/Codeinwp/visualizer/compare/v3.7.1...v3.7.2) (2021-12-20)
 
 - Add latest chartJS library support in the bar chart
