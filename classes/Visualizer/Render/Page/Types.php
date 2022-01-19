@@ -120,7 +120,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		if ( ! empty( $libraries ) ) {
 			?>
-		<select name="chart-library" class="viz-select-library" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) ); ?>">
+		<select name="chart-library" class="viz-select-library<?php echo ! Visualizer_Module_Admin::proFeaturesLocked() && ! defined( 'TI_CYPRESS_TESTING' ) ? ' viz-hide-libary' : ''; ?>" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) ); ?>">
 			<option value=""><?php esc_html_e( 'Use Library', 'visualizer' ); ?></option>
 			<?php
 			foreach ( $libraries as $library ) {

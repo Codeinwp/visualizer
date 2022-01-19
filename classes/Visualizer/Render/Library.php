@@ -359,7 +359,15 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Private charts', 'visualizer' ) . '</li>';
 			echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
-			echo '<li>' . __( '6 more chart types', 'visualizer' ) . '</li></ul>';
+			if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
+				echo '<li>' . __( '6 more chart types', 'visualizer' ) . '</ul>';
+			} else {
+				echo '<li>' . __( '11 more chart types', 'visualizer' ) . '</li>';
+				echo '<li>' . __( 'Manual Data Editor', 'visualizer' ) . '</li>';
+				echo '<li>' . __( 'ChartJS Charts', 'visualizer' ) . '</li>';
+				echo '<li>' . __( 'Table Google chart', 'visualizer' ) . '</li>';
+				echo '<li>' . __( 'Frontend Actions(Print Chart, Export to CSV, Export to Excel, Copy, Download Chart Image)', 'visualizer' ) . '</li></ul>';
+			}
 			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
 			echo '<p style="background-color: #0073aac7; color: #ffffff; padding: 2px; font-weight: bold;">' . __( 'We offer a 30-day no-questions-asked money back guarantee!', 'visualizer' ) . '</p>';
 			echo '<p><a href="' . VISUALIZER_SURVEY . '" target="_blank" class="">' . __( 'Don\'t see the features you need? Help us improve!', 'visualizer' ) . '</a></p>';

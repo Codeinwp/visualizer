@@ -9,6 +9,7 @@ const {
 } = wp.element;
 
 const {
+	Button,
 	CheckboxControl,
 	PanelBody
 } = wp.components;
@@ -34,6 +35,7 @@ class FrontendActions extends Component {
 		const type = this.props.chart['visualizer-chart-type'];
 
 		return (
+			( '' !== visualizerLocalize.proFeaturesLocked ) ?
 			<PanelBody
 				title={ __( 'Frontend Actions' ) }
 				initialOpen={ false }
@@ -135,7 +137,25 @@ class FrontendActions extends Component {
 
 				) }
 
-			</PanelBody>
+			</PanelBody> :
+			<PanelBody
+				title={ __( 'Frontend Actions' ) }
+				initialOpen={ false }
+				icon="lock"
+				className="visualizer-advanced-panel"
+			>
+
+					<p>{ __( 'Enable this feature in PRO version!' ) }</p>
+
+					<Button
+						isPrimary
+						href={ visualizerLocalize.proTeaser }
+						target="_blank"
+					>
+						{ __( 'Buy Now' ) }
+					</Button>
+
+				</PanelBody>
 		);
 	}
 }

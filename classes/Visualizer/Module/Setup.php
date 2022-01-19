@@ -53,6 +53,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getUsage', 10, 2 );
 
+		$this->_addAction( 'init', 'checkIsExistingUser' );
+
 		// only for testing
 		// $this->_addAction( 'admin_init', 'getUsage' );
 	}
@@ -403,6 +405,22 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
 		}
 		update_option( Visualizer_Plugin::CF_DB_SCHEDULE, $new_schedules );
+	}
+
+	/**
+	 * Save flag for existing users.
+	 */
+	public function checkIsExistingUser() {
+		$chart_exists = get_option( 'visualizer-new-user', '' );
+		if ( '' === $chart_exists ) {
+			$charts = get_posts(
+				array(
+					'post_type' => Visualizer_Plugin::CPT_VISUALIZER,
+					'fields' => 'ids',
+				)
+			);
+			update_option( 'visualizer-new-user', ! empty( $charts ) ? 'no' : 'yes' );
+		}
 	}
 
 }
