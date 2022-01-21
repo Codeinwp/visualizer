@@ -106,6 +106,13 @@
         registerDefaultActions();
     });
 
+    $(window).on('load', function() {
+        // Refresh charts if chart not generated.
+        setTimeout( function() {
+            $( 'div.viz-facade-loaded:not(.visualizer-lazy):empty' ).removeClass( 'viz-facade-loaded' ).resize();
+        }, 100 );
+    } );
+
     function initChartDisplay() {
         if(visualizer.is_front == true){ // jshint ignore:line
             displayChartsOnFrontEnd();
