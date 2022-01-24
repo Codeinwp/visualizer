@@ -522,8 +522,6 @@ var __visualizer_chart_images   = [];
                     }
                 }
             });
-        } else {
-            console.log( 'error', window.google );
         }
     });
 
