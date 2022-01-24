@@ -508,19 +508,23 @@ var __visualizer_chart_images   = [];
         }
 
         objects = {};
-        google.load( 'visualization', 'current', {packages: $chart_types, mapsApiKey: v.map_api_key, 'language' : v.language,
-            callback: function () {
-                gv = google.visualization;
-                all_charts = v.charts;
-                if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
-                    if ( document.getElementById( v.id ).offsetParent !== null ) {
-                        renderChart(v.id);
+        if ( 'object' === typeof google ) {
+            google.load( 'visualization', 'current', {packages: $chart_types, mapsApiKey: v.map_api_key, 'language' : v.language,
+                callback: function () {
+                    gv = google.visualization;
+                    all_charts = v.charts;
+                    if(v.is_front == true && typeof v.id !== 'undefined'){ // jshint ignore:line
+                        if ( document.getElementById( v.id ).offsetParent !== null ) {
+                            renderChart(v.id);
+                        }
+                    } else {
+                        render();
                     }
-                } else {
-                    render();
                 }
-            }
-        });
+            });
+        } else {
+            console.log( 'error', window.google );
+        }
     });
 
     $('body').on('visualizer:render:specificchart:start', function(event, v){

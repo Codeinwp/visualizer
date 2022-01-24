@@ -106,12 +106,12 @@
         registerDefaultActions();
     });
 
-    $(window).on('load', function() {
-        // Refresh charts if chart not generated.
+    // Refresh charts if chart not generated.
+    function refreshEachCharts() {
         setTimeout( function() {
-            $( 'div.viz-facade-loaded:not(.visualizer-lazy):empty' ).removeClass( 'viz-facade-loaded' ).resize();
+            displayChartsOnFrontEnd();
         }, 100 );
-    } );
+    }
 
     function initChartDisplay() {
         if(visualizer.is_front == true){ // jshint ignore:line
@@ -139,6 +139,7 @@
         $('div.visualizer-front:not(.visualizer-lazy):not(.viz-facade-loaded)').each(function(index, element){
             var id = $(element).addClass('viz-facade-loaded').attr('id');
             showChart(id);
+            refreshEachCharts();
         });
 
         // interate through all charts that are to be lazy-loaded and observe each one.
