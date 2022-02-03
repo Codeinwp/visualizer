@@ -677,10 +677,21 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 						elem.setAttribute("src", elem.getAttribute("data-visualizer-script"));
 						elem.removeAttribute("data-visualizer-script");
 						setTimeout( function() {
-							jQuery( '.visualizer-front:not(.visualizer-chart-loaded)' ).resize();
+							visualizerRefreshChart();
 						} );
 					} );
 				});
+			}
+
+			function visualizerRefreshChart() {
+				jQuery( '.visualizer-front:not(.visualizer-chart-loaded)' ).resize();
+				if ( jQuery( 'div.viz-facade-loaded:not(.visualizer-lazy):empty' ).length > 0 ) {
+					visualizerUserInteractionEvents.forEach( function( event ) {
+						window.addEventListener( event, function() {
+							jQuery( '.visualizer-front:not(.visualizer-chart-loaded)' ).resize();
+						}, { passive: true } );
+					} );
+				}
 			}
 		</script>
 			<?php
