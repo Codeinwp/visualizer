@@ -163,6 +163,14 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.7.4](https://github.com/Codeinwp/visualizer/compare/v3.7.3...v3.7.4) (2022-02-07)
+
+- Fix multiple lazy load charts issue
+- Tested up to WordPress 5.9 version
+
+
+
+
 ##### [Version 3.7.3](https://github.com/Codeinwp/visualizer/compare/v3.7.2...v3.7.3) (2022-01-19)
 
 - Fix multiple charts lazy rendering issue
