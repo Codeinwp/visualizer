@@ -253,7 +253,7 @@
 .visualizer-chart.viz-pro {
     padding: 0;
 }
-.visualizer-chart.viz-pro .two-columns{
+.two-col .viz-pro .two-columns{
     padding: 0;
     border: 1px solid #DDDDDD;
     border: 5px solid #007CBA;
