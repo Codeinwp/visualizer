@@ -390,7 +390,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	private function _renderSidebar() {
 		if ( ! Visualizer_Module::is_pro() ) {
 			echo '<div class="items">';
-			echo '<div class="visualizer-chart viz-pro">';
+			echo '<div class="viz-pro">';
 			echo '<div id="visualizer-sidebar" class="one-columns">';
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
