@@ -43,7 +43,18 @@
 
             width *= 0.305;
             $(this).prev( '.visualizer-chart-title' ).width(width - 14);
-            $(this).width(width - 14).height(width * 0.75).parent().css('margin-right', margin + 'px').css('margin-bottom', margin + 'px');
+            var sideBarHeight = width * 0.82;
+            var ChartHeight = width * 0.93;
+            if ( $( '.visualizer-nochart-canvas' ).length === 0 ) {
+                sideBarHeight = width * 0.82;
+                ChartHeight   = width * 0.75;
+                if ( $( '#visualizer-sidebar' ).hasClass('one-columns') ) {
+                    sideBarHeight = width * 0.98;
+                    ChartHeight   = width * 0.89;
+                }
+            }
+            $(this).width(width).height( ChartHeight );
+            $('#visualizer-sidebar').find('.visualizer-sidebar-box').height( sideBarHeight );
         });
     };
 

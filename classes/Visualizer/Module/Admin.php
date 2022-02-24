@@ -686,9 +686,30 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'viz-support',
 			array( $this, 'renderSupportPage' )
 		);
+
+		if ( ! Visualizer_Module::is_pro() ) {
+			$get_pro_hook = add_submenu_page(
+				Visualizer_Plugin::NAME,
+				__( 'Get Visualizer Pro', 'visualizer' ),
+				__( 'Get Visualizer Pro', 'visualizer' ),
+				'edit_posts',
+				'viz-get-pro',
+				'__return_null'
+			);
+			add_action( "load-{$get_pro_hook}", array( $this, 'handleGetProSubMenu' ) );
+		}
 		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
 
 		add_action( "load-{$this->_libraryPage}", array( $this, 'addScreenOptions' ) );
+	}
+
+	/**
+	 * Handle get pro plugin submenu.
+	 */
+	public function handleGetProSubMenu() {
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+		wp_redirect( esc_url( 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing' ) );
+		exit;
 	}
 
 	/**
