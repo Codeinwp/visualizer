@@ -240,10 +240,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 					$this->_renderChartBox( $placeholder_id, $chart['id'] );
 				}
 			}
-			// Show the 2-col sidebar if there are 1 chart.
-			if ( 1 === $count ) {
-				$this->_renderTwoColSidebar();
-			} elseif ( 2 === $count ) {
+			// show the sidebar if there are less than 3 charts.
+			if ( $count < 3 ) {
 				$this->_renderSidebar();
 			}
 			echo '</div>';
@@ -261,7 +259,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<span class="visualizer-chart-action visualizer-nochart-shortcode"></span>';
 			echo '</div>';
 			echo '</div></div>';
-			$this->_renderTwoColSidebar();
+			$this->_renderSidebar();
 			echo '</div>';
 		}
 		echo '</div>';
@@ -353,11 +351,11 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	/**
 	 * Render 2-col sidebar
 	 */
-	private function _renderTwoColSidebar() {
+	private function _renderSidebar() {
 		if ( ! Visualizer_Module::is_pro() ) {
-			echo '<div class="items two-col">';
+			echo '<div class="items">';
 			echo '<div class="viz-pro">';
-			echo '<div id="visualizer-sidebar" class="viz-pro two-columns">';
+			echo '<div id="visualizer-sidebar" class="one-columns">';
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
 			if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
@@ -376,44 +374,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Private charts', 'visualizer' ) . '</li>';
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li></ul>';
-			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
-			echo '</div>';
-			echo '</div>';
-			echo '</div>';
-			echo '</div>';
-		}
-	}
-
-	/**
-	 * Render sidebar.
-	 */
-	private function _renderSidebar() {
-		if ( ! Visualizer_Module::is_pro() ) {
-			echo '<div class="items">';
-			echo '<div class="viz-pro">';
-			echo '<div id="visualizer-sidebar" class="one-columns">';
-			echo '<div class="visualizer-sidebar-box">';
-			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
-			if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '6 more chart types', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Manual Data Editor', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'ChartJS Charts', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Table Google chart', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Use database query to create charts', 'visualizer' ) . '</li>';
-			} else {
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '11 more chart types', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Private charts', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Create charts from WordPress tables', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend Actions(Print, Export, Copy, Download)', 'visualizer' ) . '</li>';
-			}
-			echo '</ul>';
-			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
-			echo '<p class="we-offer">' . __( 'We offer a 30-day money-back guarantee!', 'visualizer' ) . '</p>';
-			echo '<p class="help-us-improve"><a href="' . VISUALIZER_SURVEY . '" target="_blank" class="">' . __( 'Don\'t see the features you need? Help us improve!', 'visualizer' ) . '</a></p>';
+			echo '<p><a href="' . str_replace( '#pricing', '#features', Visualizer_Plugin::PRO_TEASER_URL ) . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';

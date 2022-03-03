@@ -424,28 +424,24 @@ div#visualizer-types ul, div#visualizer-types form p {
 	color: red;
 	cursor: pointer;
 }
-#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li {
-    background: #FF7E65;
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-}
-#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li > a {
-    color: #fff !important;
-}
-#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li > a:hover {
-    box-shadow: inherit;
-}
-#visualizer-library .items .viz-pro{
-	height: 100%;
-	padding-bottom: 24px;
-}
-#visualizer-library .items .viz-pro .one-columns{
-	height: 100%;
-}
-#visualizer-library .items .viz-pro .visualizer-sidebar-box{
-	height: 100%;
-}
-#visualizer-library .items .viz-pro.two-columns{
-	padding-bottom: 0;
+@media (max-width: 1400px) {
+	#visualizer-library .items .viz-pro{
+		height: 100%;
+		padding-bottom: 24px;
+	}
+	#visualizer-library .items .viz-pro .one-columns{
+		height: 100%;
+	}
+	#visualizer-library .items .viz-pro .visualizer-sidebar-box{
+		height: 100%;
+	}
+	#visualizer-library .items .viz-pro.two-columns{
+		padding-bottom: 0;
+	}
+	#visualizer-sidebar.one-columns .visualizer-sidebar-box ul li:nth-child(+n+7) {
+	    display: none;
+	}
+	.visualizer-chart{
+		height: calc(100% - 24px);
+	}
 }
