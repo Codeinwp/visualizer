@@ -43,7 +43,14 @@
 
             width *= 0.305;
             $(this).prev( '.visualizer-chart-title' ).width(width - 14);
-            $(this).width(width - 14).height(width * 0.75).parent().css('margin-right', margin + 'px').css('margin-bottom', margin + 'px');
+            var ChartHeight = width * 0.93;
+            if ( $( '.visualizer-nochart-canvas' ).length === 0 ) {
+                ChartHeight   = width * 0.78;
+                if ( $( '#visualizer-sidebar' ).hasClass('one-columns') ) {
+                    ChartHeight   = width * 0.92;
+                }
+            }
+            $(this).width(width).height( ChartHeight );
         });
     };
 

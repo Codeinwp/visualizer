@@ -223,6 +223,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		// Added by Ash/Upwork
 		echo $this->custom_css;
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
+		echo '<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><symbol id="list-icon" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0ZM7.385 12.66H6.045L2.805 8.12L4.146 6.87L6.715 9.27L11.856 3.339L13.196 4.279L7.385 12.66Z"/></symbol></svg>';
 		$this->getDisplayForm();
 		echo '</div>';
 		echo '<div id="visualizer-content-wrapper">';
@@ -230,10 +231,13 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 			$count = 0;
 			foreach ( $this->charts as $placeholder_id => $chart ) {
-				$this->_renderChartBox( $placeholder_id, $chart['id'] );
 				// show the sidebar after the first 3 charts.
-				if ( $count++ === 2 ) {
+				$count++;
+				if ( 3 === $count ) {
 					$this->_renderSidebar();
+					$this->_renderChartBox( $placeholder_id, $chart['id'] );
+				} else {
+					$this->_renderChartBox( $placeholder_id, $chart['id'] );
 				}
 			}
 			// show the sidebar if there are less than 3 charts.
@@ -243,7 +247,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 		} else {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
-			echo '<div class="visualizer-chart">';
+			echo '<div class="items"><div class="visualizer-chart">';
 			echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
 			echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', 'visualizer' ), '<p><h2><a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a></h2></p></div>';
 			echo '</div>';
@@ -254,7 +258,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<span class="visualizer-chart-action visualizer-nochart-export"></span>';
 			echo '<span class="visualizer-chart-action visualizer-nochart-shortcode"></span>';
 			echo '</div>';
-			echo '</div>';
+			echo '</div></div>';
 			$this->_renderSidebar();
 			echo '</div>';
 		}
@@ -325,7 +329,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$chart_status['title'] = __( 'Click to view the error', 'visualizer' );
 		}
 		$shortcode = sprintf( '[visualizer id="%s" lazy="no" class=""]', $chart_id );
-		echo '<div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
+		echo '<div class="items"><div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
@@ -341,36 +345,38 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<span>&nbsp;</span>';
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
 		echo '</div>';
-		echo '</div>';
+		echo '</div></div>';
 	}
 
 	/**
-	 * Render sidebar.
+	 * Render 2-col sidebar
 	 */
 	private function _renderSidebar() {
 		if ( ! Visualizer_Module::is_pro() ) {
-			echo '<div id="visualizer-sidebar">';
+			echo '<div class="items">';
+			echo '<div class="viz-pro">';
+			echo '<div id="visualizer-sidebar" class="one-columns">';
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
-			echo '<li>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Use database query to create charts', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Create charts from WordPress tables', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Private charts', 'visualizer' ) . '</li>';
-			echo '<li>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li>';
 			if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
-				echo '<li>' . __( '6 more chart types', 'visualizer' ) . '</ul>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '6 more chart types', 'visualizer' ) . '</ul>';
 			} else {
-				echo '<li>' . __( '11 more chart types', 'visualizer' ) . '</li>';
-				echo '<li>' . __( 'Manual Data Editor', 'visualizer' ) . '</li>';
-				echo '<li>' . __( 'ChartJS Charts', 'visualizer' ) . '</li>';
-				echo '<li>' . __( 'Table Google chart', 'visualizer' ) . '</li>';
-				echo '<li>' . __( 'Frontend Actions(Print Chart, Export to CSV, Export to Excel, Copy, Download Chart Image)', 'visualizer' ) . '</li></ul>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '11 more chart types', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Manual Data Editor', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'ChartJS Charts', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Table Google chart', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend Actions(Print, Export, Copy, Download)', 'visualizer' ) . '</li>';
 			}
-			echo '<p><a href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
-			echo '<p style="background-color: #0073aac7; color: #ffffff; padding: 2px; font-weight: bold;">' . __( 'We offer a 30-day no-questions-asked money back guarantee!', 'visualizer' ) . '</p>';
-			echo '<p><a href="' . VISUALIZER_SURVEY . '" target="_blank" class="">' . __( 'Don\'t see the features you need? Help us improve!', 'visualizer' ) . '</a></p>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Use database query to create charts', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Create charts from WordPress tables', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Private charts', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li></ul>';
+			echo '<p><a href="' . str_replace( '#pricing', '#features', Visualizer_Plugin::PRO_TEASER_URL ) . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
+			echo '</div>';
+			echo '</div>';
 			echo '</div>';
 			echo '</div>';
 		}

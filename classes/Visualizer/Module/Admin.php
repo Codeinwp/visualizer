@@ -686,9 +686,51 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'viz-support',
 			array( $this, 'renderSupportPage' )
 		);
+
+		if ( ! Visualizer_Module::is_pro() ) {
+			add_submenu_page(
+				Visualizer_Plugin::NAME,
+				__( 'Get Visualizer Pro', 'visualizer' ),
+				__( 'Get Visualizer Pro', 'visualizer' ),
+				'edit_posts',
+				'viz-get-pro',
+				'__return_null'
+			);
+			add_action( 'admin_footer', array( $this, 'handleGetProSubMenu' ) );
+		}
 		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
 
 		add_action( "load-{$this->_libraryPage}", array( $this, 'addScreenOptions' ) );
+	}
+
+	/**
+	 * Handle get pro plugin submenu.
+	 */
+	public function handleGetProSubMenu() {
+		?>
+		<style type="text/css">
+			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li {
+				background: #FF7E65;
+				font-size: 14px;
+				font-weight: 600;
+				color: #fff;
+			}
+			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li > a {
+				color: #fff !important;
+			}
+			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li > a:hover {
+				box-shadow: inherit;
+			}
+		</style>
+		<script type="text/javascript">
+			jQuery( document ).ready( function() {
+				jQuery( '#toplevel_page_visualizer' ).on( 'click', 'li:not(.wp-submenu-head, .wp-first-item):eq(2)', function( e ) {
+					e.preventDefault();
+					window.open( 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing', '_blank' );
+				} );
+			} );
+		</script>
+		<?php
 	}
 
 	/**
