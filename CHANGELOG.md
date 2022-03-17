@@ -1,3 +1,8 @@
+##### [Version 3.7.5](https://github.com/Codeinwp/visualizer/compare/v3.7.4...v3.7.5) (2022-03-17)
+
+- Fix display long hAxis text issue
+- Improve features discoverability.
+
 ##### [Version 3.7.4](https://github.com/Codeinwp/visualizer/compare/v3.7.3...v3.7.4) (2022-02-07)
 
 - Fix multiple lazy load charts issue
