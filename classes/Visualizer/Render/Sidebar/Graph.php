@@ -150,6 +150,31 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 		);
 
 		self::_renderSelectItem(
+			esc_html__( 'Slanted Text', 'visualizer' ),
+			'hAxis[slantedText]',
+			isset( $this->hAxis['slantedText'] ) ? $this->hAxis['slantedText'] : false,
+			array(
+				false => 'False',
+				true  => 'True',
+			),
+			'',
+			false
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Slanted Text Angle', 'visualizer' ),
+			'hAxis[slantedTextAngle]',
+			isset( $this->hAxis['slantedTextAngle'] ) ? $this->hAxis['slantedTextAngle'] : 45,
+			'',
+			45,
+			'number',
+			array(
+				'min'  => 1,
+				'step' => 15,
+			)
+		);
+
+		self::_renderSelectItem(
 			esc_html__( 'Text Position', 'visualizer' ),
 			'hAxis[textPosition]',
 			isset( $this->hAxis['textPosition'] ) ? $this->hAxis['textPosition'] : '',
