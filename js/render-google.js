@@ -229,7 +229,7 @@ var __visualizer_chart_images   = [];
 			}
 
             if(settings.hAxis && settings.hAxis.format == ''){
-                settings.hAxis.format = 'YYYY-MM-dd';
+                settings.hAxis.format = 'yyyy-MM-dd';
             }
 		}
 
