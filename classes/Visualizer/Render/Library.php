@@ -359,7 +359,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
 			if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '6 more chart types', 'visualizer' ) . '</ul>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '6 more chart types', 'visualizer' );
 			} else {
 				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '11 more chart types', 'visualizer' ) . '</li>';
 				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Manual Data Editor', 'visualizer' ) . '</li>';
