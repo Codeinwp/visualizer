@@ -524,7 +524,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 			}
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
-			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+
+			if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+				wp_die();
+			}
+			exit();
 		}
 
 		$_POST['save_chart_image'] = isset( $_POST['save_chart_image'] ) && 'yes' === $_POST['save_chart_image'] ? true : false;
