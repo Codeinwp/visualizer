@@ -1,3 +1,11 @@
+##### [Version 3.7.6](https://github.com/Codeinwp/visualizer/compare/v3.7.5...v3.7.6) (2022-05-26)
+
+- Fix PHP 8.0 or above compatibility issue
+- Fix the space missing between the id and class attributes of the charts
+- Fix compatibility issue with Ultimate Coupons for WooCommerce Free plugin
+- Fix charts placed in accordion (tabs) that do not load properly
+- Fix conflict with translation plugins
+
 ##### [Version 3.7.5](https://github.com/Codeinwp/visualizer/compare/v3.7.4...v3.7.5) (2022-03-17)
 
 - Fix display long hAxis text issue
