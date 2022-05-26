@@ -490,6 +490,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function renderChartPages() {
 		defined( 'IFRAME_REQUEST' ) || define( 'IFRAME_REQUEST', 1 );
+		if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) && function_exists( 'et_get_theme_version' ) ) {
+			define( 'ET_BUILDER_PRODUCT_VERSION', et_get_theme_version() );
+		}
 		// Set current screen for the render chart.
 		set_current_screen( 'visualizer_render_chart' );
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
@@ -524,7 +527,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 			}
 			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
-			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+
+			if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+				wp_die();
+			}
+			exit();
 		}
 
 		$_POST['save_chart_image'] = isset( $_POST['save_chart_image'] ) && 'yes' === $_POST['save_chart_image'] ? true : false;
