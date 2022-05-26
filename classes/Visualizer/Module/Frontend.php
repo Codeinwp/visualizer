@@ -491,7 +491,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		foreach ( $attributes as $name => $value ) {
-			$string .= sprintf( '%s="%s"', esc_attr( $name ), esc_attr( $value ) );
+			$string .= sprintf( ' %s="%s"', esc_attr( $name ), esc_attr( $value ) );
 		}
 		return $string;
 	}
