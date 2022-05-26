@@ -137,8 +137,10 @@
         // display all charts that are NOT to be lazy-loaded.
         $( 'div.viz-facade-loaded:not(.visualizer-lazy):empty' ).removeClass( 'viz-facade-loaded' );
         $('div.visualizer-front:not(.visualizer-lazy):not(.viz-facade-loaded)').each(function(index, element){
-            var id = $(element).addClass('viz-facade-loaded').attr('id');
-            showChart(id);
+            if ( $(element).is(':visible') ) {
+                var id = $(element).addClass('viz-facade-loaded').attr('id');
+                showChart(id);
+            }
             refreshEachCharts();
         });
 
