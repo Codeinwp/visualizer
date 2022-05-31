@@ -107,7 +107,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		// NOTE: We can't be selective on the post_status here because when a new chart reaches the settings screen, its status changes to publish.
 		if ( ! VISUALIZER_SKIP_CHART_TYPE_PAGE ) {
 			echo '<div class="toolbar-div">';
-			echo '<a class="button button-large" href="', add_query_arg( 'tab', 'types' ), '">';
+			echo '<a class="button button-large" href="', esc_url( add_query_arg( 'tab', 'types' ) ), '">';
 			esc_html_e( 'Back', 'visualizer' );
 			echo '</a>';
 			echo '</div>';

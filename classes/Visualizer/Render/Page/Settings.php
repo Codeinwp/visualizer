@@ -51,7 +51,7 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-		echo '<a class="button button-large" href="', add_query_arg( 'tab', 'data' ), '">';
+		echo '<a class="button button-large" href="', esc_url( add_query_arg( 'tab', 'data' ) ), '">';
 			esc_html_e( 'Back', 'visualizer' );
 		echo '</a>';
 		echo '<input type="submit" class="button button-primary button-large push-right" value="', $this->button, '">';
@@ -65,7 +65,7 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _toHTML() {
-		echo '<form id="settings-form" action="', add_query_arg( 'nonce', wp_create_nonce() ), '" method="post">';
+		echo '<form id="settings-form" action="', esc_url( add_query_arg( 'nonce', wp_create_nonce() ) ), '" method="post">';
 			parent::_toHTML();
 		echo '</form>';
 	}

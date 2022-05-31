@@ -526,7 +526,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				);
 				do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 			}
-			wp_redirect( add_query_arg( 'chart', (int) $chart_id ) );
+			wp_redirect( esc_url_raw( add_query_arg( 'chart', (int) $chart_id ) ) );
 
 			if ( defined( 'WP_TESTS_DOMAIN' ) ) {
 				wp_die();
@@ -891,7 +891,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 				// redirect to next tab
 				// changed by Ash/Upwork
-				wp_redirect( add_query_arg( 'tab', 'settings' ) );
+				wp_redirect( esc_url_raw( add_query_arg( 'tab', 'settings' ) ) );
 
 				return;
 			}
@@ -1226,13 +1226,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
 					}
 				}
-				$redirect = add_query_arg(
-					array(
-						'page' => 'visualizer',
-						'type' => filter_input( INPUT_GET, 'type' ),
-						'vaction' => false,
-					),
-					admin_url( 'admin.php' )
+				$redirect = esc_url(
+					add_query_arg(
+						array(
+							'page' => 'visualizer',
+							'type' => filter_input( INPUT_GET, 'type' ),
+							'vaction' => false,
+						),
+						admin_url( 'admin.php' )
+					)
 				);
 			}
 		}

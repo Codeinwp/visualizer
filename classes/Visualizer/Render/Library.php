@@ -297,30 +297,36 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 
 		$ajax_url    = admin_url( 'admin-ajax.php' );
-		$delete_url  = add_query_arg(
-			array(
-				'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
-				'nonce'  => wp_create_nonce(),
-				'chart'  => $chart_id,
-			),
-			$ajax_url
+		$delete_url  = esc_url(
+			add_query_arg(
+				array(
+					'action' => Visualizer_Plugin::ACTION_DELETE_CHART,
+					'nonce'  => wp_create_nonce(),
+					'chart'  => $chart_id,
+				),
+				$ajax_url
+			)
 		);
-		$clone_url   = add_query_arg(
-			array(
-				'action' => Visualizer_Plugin::ACTION_CLONE_CHART,
-				'nonce'  => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
-				'chart'  => $chart_id,
-				'type'   => $this->type,
-			),
-			$ajax_url
+		$clone_url   = esc_url(
+			add_query_arg(
+				array(
+					'action' => Visualizer_Plugin::ACTION_CLONE_CHART,
+					'nonce'  => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
+					'chart'  => $chart_id,
+					'type'   => $this->type,
+				),
+				$ajax_url
+			)
 		);
-		$export_link = add_query_arg(
-			array(
-				'action'   => Visualizer_Plugin::ACTION_EXPORT_DATA,
-				'chart'    => $chart_id,
-				'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
-			),
-			admin_url( 'admin-ajax.php' )
+		$export_link = esc_url(
+			add_query_arg(
+				array(
+					'action'   => Visualizer_Plugin::ACTION_EXPORT_DATA,
+					'chart'    => $chart_id,
+					'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
+				),
+				admin_url( 'admin-ajax.php' )
+			)
 		);
 
 		$chart_status   = array( 'date' => get_the_modified_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $chart_id ), 'error' => get_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, true ), 'icon' => 'dashicons-yes-alt', 'title' => 'A-OK!' );

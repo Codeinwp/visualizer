@@ -128,13 +128,15 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 */
 	public static function _renderJsonScreen( $args ) {
 		$id      = $args[1];
-		$action = add_query_arg(
-			array(
-				'action' => Visualizer_Plugin::ACTION_JSON_SET_DATA,
-				'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
-				'chart'  => $id,
-			),
-			admin_url( 'admin-ajax.php' )
+		$action = esc_url(
+			add_query_arg(
+				array(
+					'action' => Visualizer_Plugin::ACTION_JSON_SET_DATA,
+					'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
+					'chart'  => $id,
+				),
+				admin_url( 'admin-ajax.php' )
+			)
 		);
 
 		$url = get_post_meta( $id, Visualizer_Plugin::CF_JSON_URL, true );
@@ -306,13 +308,15 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 */
 	public static function _renderSimpleEditorScreen( $args ) {
 		$chart_id   = $args[1];
-		$action = add_query_arg(
-			array(
-				'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
-				'nonce'  => wp_create_nonce(),
-				'chart'  => $chart_id,
-			),
-			admin_url( 'admin-ajax.php' )
+		$action = esc_url(
+			add_query_arg(
+				array(
+					'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
+					'nonce'  => wp_create_nonce(),
+					'chart'  => $chart_id,
+				),
+				admin_url( 'admin-ajax.php' )
+			)
 		);
 		?>
 			<div class="viz-simple-editor">
@@ -582,13 +586,13 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<li class="viz-group open" id="vz-chart-settings">
 					<ul class="viz-group-content">
 						<ul class="viz-group-wrapper">
-						<form id="settings-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>" method="post">
+						<form id="settings-form" action="<?php echo esc_url( add_query_arg( 'nonce', wp_create_nonce() ) ); ?>" method="post">
 							<input type="hidden" id="chart-img" name="chart-img">
 							<?php echo $sidebar; ?>
 							<?php self::_renderPermissions( $args ); ?>
 							<input type="hidden" name="save" value="1">
 						</form>
-						<form id="cancel-form" action="<?php echo add_query_arg( 'nonce', wp_create_nonce() ); ?>" method="post">
+						<form id="cancel-form" action="<?php echo esc_url( add_query_arg( 'nonce', wp_create_nonce() ) ); ?>" method="post">
 							<input type="hidden" name="cancel" value="1">
 						</form>
 						</ul>
@@ -654,13 +658,15 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	public static function _renderTabBasic( $args ) {
 		$chart_id = $args[1];
 
-		$upload_link = add_query_arg(
-			array(
-				'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
-				'nonce'  => wp_create_nonce(),
-				'chart'  => $chart_id,
-			),
-			admin_url( 'admin-ajax.php' )
+		$upload_link = esc_url(
+			add_query_arg(
+				array(
+					'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
+					'nonce'  => wp_create_nonce(),
+					'chart'  => $chart_id,
+				),
+				admin_url( 'admin-ajax.php' )
+			)
 		);
 
 		// this will allow us to open the correct source tab by default.
@@ -815,12 +821,14 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 										<form>
 											<select name="vz-import-from-chart" id="chart-id" class="visualizer-select">
 												<?php
-												$fetch_link        = add_query_arg(
-													array(
-														'action' => Visualizer_Module::is_pro() ? Visualizer_Pro::ACTION_FETCH_DATA : '',
-														'nonce'  => wp_create_nonce(),
-													),
-													admin_url( 'admin-ajax.php' )
+												$fetch_link        = esc_url(
+													add_query_arg(
+														array(
+															'action' => Visualizer_Module::is_pro() ? Visualizer_Pro::ACTION_FETCH_DATA : '',
+															'nonce'  => wp_create_nonce(),
+														),
+														admin_url( 'admin-ajax.php' )
+													)
 												);
 												$query_args_charts = array(
 													'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
@@ -862,12 +870,14 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							</li>
 
 							<?php
-								$save_filter = add_query_arg(
-									array(
-										'action' => Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY,
-										'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY . Visualizer_Plugin::VERSION ),
-										'chart'  => $chart_id,
-									), admin_url( 'admin-ajax.php' )
+								$save_filter = esc_url(
+									add_query_arg(
+										array(
+											'action' => Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY,
+											'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY . Visualizer_Plugin::VERSION ),
+											'chart'  => $chart_id,
+										), admin_url( 'admin-ajax.php' )
+									)
 								);
 							?>
 							<!-- import from WordPress -->
@@ -911,12 +921,14 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							</li>
 
 							<?php
-								$save_query = add_query_arg(
-									array(
-										'action' => Visualizer_Plugin::ACTION_SAVE_DB_QUERY,
-										'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION ),
-										'chart'  => $chart_id,
-									), admin_url( 'admin-ajax.php' )
+								$save_query = esc_url(
+									add_query_arg(
+										array(
+											'action' => Visualizer_Plugin::ACTION_SAVE_DB_QUERY,
+											'security'  => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION ),
+											'chart'  => $chart_id,
+										), admin_url( 'admin-ajax.php' )
+									)
 								);
 							?>
 							<!-- import from db -->
