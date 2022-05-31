@@ -365,7 +365,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'types'   => array_keys( $chart_types ),
 			),
 			'nonce'      => wp_create_nonce(),
-			'buildurl'   => add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ),
+			'buildurl'   => esc_url( add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ) ),
 		);
 
 		return $strings;
@@ -988,24 +988,28 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'map_api_key' => get_option( 'visualizer-map-api-key' ),
 				'charts' => $charts,
 				'urls'   => array(
-					'base'   => add_query_arg( array( 'vpage' => false, 'vaction' => false ) ),
-					'create' => add_query_arg(
-						array(
-							'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
-							'library' => 'yes',
-							'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
-							'chart-library'      => isset( $_GET['chart-library'] ) ? $_GET['chart-library'] : '',
-							'vaction' => false,
-						),
-						$ajaxurl
+					'base'   => esc_url( add_query_arg( array( 'vpage' => false, 'vaction' => false ) ) ),
+					'create' => esc_url(
+						add_query_arg(
+							array(
+								'action'  => Visualizer_Plugin::ACTION_CREATE_CHART,
+								'library' => 'yes',
+								'type'      => isset( $_GET['type'] ) ? $_GET['type'] : '',
+								'chart-library'      => isset( $_GET['chart-library'] ) ? $_GET['chart-library'] : '',
+								'vaction' => false,
+							),
+							$ajaxurl
+						)
 					),
-					'edit'   => add_query_arg(
-						array(
-							'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
-							'library' => 'yes',
-							'vaction' => false,
-						),
-						$ajaxurl
+					'edit'   => esc_url(
+						add_query_arg(
+							array(
+								'action'  => Visualizer_Plugin::ACTION_EDIT_CHART,
+								'library' => 'yes',
+								'vaction' => false,
+							),
+							$ajaxurl
+						)
 					),
 				),
 				'page_type' => 'library',
@@ -1024,7 +1028,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
-				'base'    => add_query_arg( array( 'vpage' => '%#%', 'vaction' => false ) ),
+				'base'    => esc_url( add_query_arg( array( 'vpage' => '%#%', 'vaction' => false ) ) ),
 				'format'  => '',
 				'current' => $page,
 				'total'   => $query->max_num_pages,

@@ -251,7 +251,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			delete_option( 'visualizer-activated' );
 			if ( ! headers_sent() ) {
 				$page_name = Visualizer_Module::numberOfCharts() > 0 ? Visualizer_Plugin::NAME : 'viz-support';
-				wp_redirect( add_query_arg( 'page', $page_name, admin_url( 'admin.php' ) ) );
+				wp_redirect( esc_url_raw( add_query_arg( 'page', $page_name, admin_url( 'admin.php' ) ) ) );
 				exit();
 			}
 		}
