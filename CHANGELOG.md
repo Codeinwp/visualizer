@@ -1,3 +1,7 @@
+##### [Version 3.7.7](https://github.com/Codeinwp/visualizer/compare/v3.7.6...v3.7.7) (2022-05-31)
+
+* Harden security by enforcing unescaped urls.
+
 ##### [Version 3.7.6](https://github.com/Codeinwp/visualizer/compare/v3.7.5...v3.7.6) (2022-05-26)
 
 - Fix PHP 8.0 or above compatibility issue
