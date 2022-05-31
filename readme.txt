@@ -165,7 +165,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 ##### [Version 3.7.7](https://github.com/Codeinwp/visualizer/compare/v3.7.6...v3.7.7) (2022-05-31)
 
-* Harden security by enforcing unescaped urls.
+* Harden security by enforcing escaped urls.
 
 
 
