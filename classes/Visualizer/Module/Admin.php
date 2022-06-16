@@ -1028,7 +1028,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$render->custom_css     = $css;
 		$render->pagination = paginate_links(
 			array(
-				'base'    => esc_url( add_query_arg( array( 'vpage' => '%#%', 'vaction' => false ) ) ),
+				'base'    => add_query_arg( array( 'vpage' => '%#%', 'vaction' => false ) ),
 				'format'  => '',
 				'current' => $page,
 				'total'   => $query->max_num_pages,
