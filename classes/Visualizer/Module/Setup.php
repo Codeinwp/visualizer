@@ -244,6 +244,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return;
 		}
 
+		define( 'VISUALIZER_SURVEY', Visualizer_Module::is_pro() ? 'https://forms.gle/7Zo7FuZbvQ8DTvRi6' : 'https://forms.gle/muMtbcyvHn1aTvmJ7' );
 		// fire any upgrades necessary.
 		Visualizer_Module_Upgrade::upgrade();
 
