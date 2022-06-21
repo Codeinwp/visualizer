@@ -1,3 +1,10 @@
+##### [Version 3.7.8](https://github.com/Codeinwp/visualizer/compare/v3.7.7...v3.7.8) (2022-06-21)
+
+- Add the description field in the pie chart
+- Fix Label other is not visible on the pie chart
+- Fix the pagination issue in the chart library
+- Update dependencies
+
 ##### [Version 3.7.7](https://github.com/Codeinwp/visualizer/compare/v3.7.6...v3.7.7) (2022-05-31)
 
 * Harden security by enforcing unescaped urls.
