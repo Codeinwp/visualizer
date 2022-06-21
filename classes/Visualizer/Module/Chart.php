@@ -737,6 +737,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					$title  = $this->_chart->ID;
 				}
 				$settings['internal_title'] = $title;
+				$settings_label = $settings['pieResidueSliceLabel'];
+				if ( empty( $settings_label ) ) {
+					$settings['pieResidueSliceLabel'] = esc_html__( 'Other', 'visualizer' );
+				} else {
+					$settings['pieResidueSliceLabel'] = $settings_label;
+				}
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $settings );
 			}
 			$render       = new Visualizer_Render_Page_Send();
