@@ -1,14 +1,15 @@
 /* global console */
 /* global visualizer */
 /* global jQuery */
-
+var vizClipboard1=null;
 (function($, visualizer){
 
     function initActionsButtons(v) {
-        if($('a.visualizer-chart-shortcode').length > 0) {
-            var clipboard1 = new ClipboardJS('a.visualizer-chart-shortcode'); // jshint ignore:line
-            clipboard1.on('success', function(e) {
+        if($('a.visualizer-chart-shortcode').length > 0 && vizClipboard1 === null) {
+            vizClipboard1 = new ClipboardJS('a.visualizer-chart-shortcode'); // jshint ignore:line
+            vizClipboard1.on('success', function(e) {
                 window.alert(v.i10n['copied']);
+
             });
         }
 
