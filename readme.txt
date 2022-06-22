@@ -163,6 +163,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.7.9](https://github.com/Codeinwp/visualizer/compare/v3.7.8...v3.7.9) (2022-06-22)
+
+* Fix branding bad HTML
+
+
+
+
 ##### [Version 3.7.8](https://github.com/Codeinwp/visualizer/compare/v3.7.7...v3.7.8) (2022-06-21)
 
 - Add the description field in the pie chart
