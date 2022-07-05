@@ -750,8 +750,12 @@ class Visualizer_Gutenberg_Block {
 			return false;
 		}
 
-		if ( $data['url'] && ! is_wp_error( $data['url'] ) && filter_var( $data['url'], FILTER_VALIDATE_URL ) ) {
-			$source = new Visualizer_Source_Csv_Remote( $data['url'] );
+		$remote_data = false;
+		if ( isset( $data['url'] ) && function_exists( 'wp_http_validate_url' ) ) {
+			$remote_data = wp_http_validate_url( $data['url'] );
+		}
+		if ( false !== $remote_data && ! is_wp_error( $remote_data ) ) {
+			$source = new Visualizer_Source_Csv_Remote( $remote_data );
 			if ( $source->fetch() ) {
 				$temp = $source->getData();
 				if ( is_string( $temp ) && is_array( unserialize( $temp ) ) ) {
