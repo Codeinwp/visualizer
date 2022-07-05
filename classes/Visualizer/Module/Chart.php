@@ -1111,10 +1111,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$source = null;
 		$render = new Visualizer_Render_Page_Update();
-		if ( isset( $_POST['remote_data'] ) && filter_var( $_POST['remote_data'], FILTER_VALIDATE_URL ) ) {
-			$source = new Visualizer_Source_Csv_Remote( $_POST['remote_data'] );
+
+		$remote_data = false;
+		if ( isset( $_POST['remote_data'] ) && function_exists( 'wp_http_validate_url' ) ) {
+			$remote_data = wp_http_validate_url( $_POST['remote_data'] );
+		}
+		if ( false !== $remote_data ) {
+			$source = new Visualizer_Source_Csv_Remote( $remote_data );
 			if ( isset( $_POST['vz-import-time'] ) ) {
-				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $_POST['remote_data'], $_POST['vz-import-time'] );
+				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $remote_data, $_POST['vz-import-time'] );
 			}
 			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
