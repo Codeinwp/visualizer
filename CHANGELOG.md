@@ -1,3 +1,8 @@
+##### [Version 3.7.10](https://github.com/Codeinwp/visualizer/compare/v3.7.9...v3.7.10) (2022-07-05)
+
+
+- Fix watermark/copyright opacity wrong value [#910](https://github.com/Codeinwp/visualizer/issues/910)
+
 ##### [Version 3.7.9](https://github.com/Codeinwp/visualizer/compare/v3.7.8...v3.7.9) (2022-06-22)
 
 * Fix branding bad HTML
