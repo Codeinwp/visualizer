@@ -1245,7 +1245,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 							'vaction' => false,
 						),
 						admin_url( 'admin.php' )
-					)
+					),
+					null,
+					'db'
 				);
 			}
 		}
@@ -1253,7 +1255,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( defined( 'WP_TESTS_DOMAIN' ) ) {
 			wp_die();
 		}
-
 		wp_redirect( $redirect );
 		exit;
 	}
