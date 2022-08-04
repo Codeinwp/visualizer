@@ -129,7 +129,7 @@ class VerticalAxisSettings extends Component {
 
 							<p>
 								{ __( 'For date axis labels, this is a subset of the date formatting ' ) }
-								<ExternalLink href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax">
+								<ExternalLink href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax">
 									{ __( 'ICU date and time format.' ) }
 								</ExternalLink>
 							</p>
