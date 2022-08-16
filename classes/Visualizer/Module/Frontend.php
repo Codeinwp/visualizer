@@ -494,7 +494,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		if ( ! $attributes ) {
 			return $string;
 		}
-		$attributes = apply_filters( 'visualizer_schema_show_errors', $attributes );
+
 		foreach ( $attributes as $name => $value ) {
 			$string .= sprintf( ' %s="%s"', esc_attr( $name ), esc_attr( $value ) );
 		}
