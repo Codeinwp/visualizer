@@ -85,9 +85,9 @@ class VerticalAxisSettings extends Component {
 						label={ __( 'Base Line Color' ) }
 					>
 						<ColorPalette
-							value={ settings.vAxis.baselineColor }
+							value={ settings.hAxis.baselineColor }
 							onChange={ e => {
-								settings.vAxis.baselineColor = e;
+								settings.hAxis.baselineColor = e;
 								this.props.edit( settings );
 							} }
 						/>

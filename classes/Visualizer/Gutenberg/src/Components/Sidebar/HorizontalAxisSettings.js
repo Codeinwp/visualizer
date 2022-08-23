@@ -85,9 +85,9 @@ class HorizontalAxisSettings extends Component {
 						label={ __( 'Base Line Color' ) }
 					>
 						<ColorPalette
-							value={ settings.hAxis.baselineColor }
+							value={ settings.vAxis.baselineColor }
 							onChange={ e => {
-								settings.hAxis.baselineColor = e;
+								settings.vAxis.baselineColor = e;
 								this.props.edit( settings );
 							} }
 						/>
