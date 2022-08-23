@@ -18,6 +18,8 @@ const {
 	TextControl
 } = wp.components;
 
+import { getColorCode } from '../../utils.js';
+
 class VerticalAxisSettings extends Component {
 	constructor() {
 		super( ...arguments );
@@ -87,7 +89,7 @@ class VerticalAxisSettings extends Component {
 						<ColorPalette
 							value={ settings.hAxis.baselineColor }
 							onChange={ e => {
-								settings.hAxis.baselineColor = e;
+								settings.hAxis.baselineColor = getColorCode( e );
 								this.props.edit( settings );
 							} }
 						/>
@@ -100,7 +102,7 @@ class VerticalAxisSettings extends Component {
 							value={ settings.vAxis.textStyle.color || settings.vAxis.textStyle }
 							onChange={ e => {
 								settings.vAxis.textStyle = {};
-								settings.vAxis.textStyle.color = e;
+								settings.vAxis.textStyle.color = getColorCode( e );
 								this.props.edit( settings );
 							} }
 						/>
