@@ -581,7 +581,7 @@ class Editor extends Component {
 									} else if ( 'chartSelect' === this.state.route ) {
 										route = 'showCharts';
 									}
-									this.setState({ route });
+									this.setState({ route, isLoading: false });
 									this.props.setAttributes({ route });
 								} }
 							>
