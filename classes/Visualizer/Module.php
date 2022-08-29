@@ -67,6 +67,7 @@ class Visualizer_Module {
 		$this->_addFilter( Visualizer_Plugin::FILTER_UNDO_REVISIONS, 'undoRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, 'getDataAs', 10, 3 );
+		$this->_addFilter( Visualizer_Plugin::FILTER_CHART_TITLE, 'filterChartTitle', 10, 2 );
 		register_shutdown_function( array($this, 'onShutdown') );
 
 	}
@@ -790,5 +791,22 @@ class Visualizer_Module {
 		return array(
 			'csv'  => $image,
 		);
+	}
+
+	/**
+	 * Filter chart title.
+	 *
+	 * @access public
+	 * @param string $post_title Post title.
+	 * @param int    $post_id Post ID.
+	 * @return string
+	 */
+	public function filterChartTitle( $post_title, $post_id ) {
+		$post_type = get_post_type( $post_id );
+		$post_title     = trim( $post_title );
+		if ( 'visualizer' === $post_type && 'Visualization' === $post_title ) {
+			return sprintf( '%s #%d', $post_title, $post_id );
+		}
+		return $post_title;
 	}
 }

@@ -90,6 +90,7 @@ class Visualizer_Plugin {
 	const FILTER_HANDLE_REVISIONS = 'visualizer-handle-revisions';
 	const FILTER_GET_CHART_DATA_AS = 'visualizer-get-chart-data-as';
 	const FILTER_HANDLE_CACHE_EXPIRATION_TIME = 'visualizer-handle-expiration-time';
+	const FILTER_CHART_TITLE = 'the_title';
 
 	const CF_DB_SCHEDULE = 'visualizer-db-schedule';
 	const CF_DB_QUERY = 'visualizer-db-query';
