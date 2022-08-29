@@ -65,7 +65,7 @@
         for (i = 0; i < data.length; i++) {
 			row = [];
 			for (j = 0; j < series.length; j++) {
-				if (series[j].type === 'date' || series[j].type === 'datetime') {                  
+				if (series[j].type === 'date' || series[j].type === 'datetime') {
 					date = new Date(data[i][j]);
 					data[i][j] = null;
 					if (Object.prototype.toString.call(date) === "[object Date]") {
@@ -349,19 +349,22 @@
         // format the axes labels.
         if(typeof settings[axis + '_format'] !== 'undefined' && settings[axis + '_format'] !== ''){
             var format = settings[axis + '_format'];
-            switch(axis){
-                case 'xAxes':
-                    settings.scales.x.ticks.callback = function(value, index, values){
-                        return format_datum(value, format);
-                    };
-                    break;
-                case 'yAxes':
-                    settings.scales.y.ticks.callback = function(value, index, values){
-                        return format_datum(value, format);
-                    };
-                    break;
-            }
-            delete settings[axis + '_format'];
+            var isDateFormat = moment( moment().format( format ),format, true ).isValid();
+            if ( ! isDateFormat ) {
+	            switch(axis){
+	                case 'xAxes':
+	                    settings.scales.x.ticks.callback = function(value, index, values){
+	                        return format_datum(value, format);
+	                    };
+	                    break;
+	                case 'yAxes':
+	                    settings.scales.y.ticks.callback = function(value, index, values){
+	                        return format_datum(value, format);
+	                    };
+	                    break;
+	            }
+	            delete settings[axis + '_format'];
+	        }
         }
         delete settings[axis];
     }
@@ -445,6 +448,11 @@
     function format_data(datum, j, settings, series){
         j = j - 1;
         var format = typeof settings.series !== 'undefined' && typeof settings.series[j] !== 'undefined' ? settings.series[j].format : '';
+        if ( '' === format && typeof settings.yAxes_format !== 'undefined' ) {
+        	format = settings.yAxes_format;
+        } else if ( '' === format && typeof settings.xAxes_format !== 'undefined' ) {
+        	format = settings.xAxes_format;
+        }
         return format_datum(datum, format, series[j + 1].type);
     }
 
