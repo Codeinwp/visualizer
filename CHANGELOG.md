@@ -1,3 +1,14 @@
+##### [Version 3.7.11](https://github.com/Codeinwp/visualizer/compare/v3.7.10...v3.7.11) (2022-08-30)
+
+- Fix update axis baseline color [#925](https://github.com/Codeinwp/visualizer/issues/925) 
+- Update more features images [#926](https://github.com/Codeinwp/visualizer/issues/926)
+- Fix update minor grid line field [#924](https://github.com/Codeinwp/visualizer/issues/924) 
+- Add new filter for container attributes [#922](https://github.com/Codeinwp/visualizer/issues/922) 
+- Fix axis data format issue [#920](https://github.com/Codeinwp/visualizer/issues/920) 
+- Chart unique title [#915](https://github.com/Codeinwp/visualizer/issues/915) 
+- Fix block back button issue [#930](https://github.com/Codeinwp/visualizer/issues/930) 
+- Userguide broken documentation link [#918](https://github.com/Codeinwp/visualizer/issues/918)
+
 ##### [Version 3.7.10](https://github.com/Codeinwp/visualizer/compare/v3.7.9...v3.7.10) (2022-07-05)
 
 
