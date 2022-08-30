@@ -205,7 +205,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 					),
 					sprintf(
 						esc_html__( 'For date axis labels, this is a subset of the date formatting %1$sICU date and time format%2$s.', 'visualizer' ),
-						'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
+						'<a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax" target="_blank">',
 						'</a>'
 					)
 				)
@@ -307,7 +307,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 					),
 					sprintf(
 						esc_html__( 'For date axis labels, this is a subset of the date formatting %1$sICU date and time format%2$s.', 'visualizer' ),
-						'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
+						'<a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax" target="_blank">',
 						'</a>'
 					)
 				)
