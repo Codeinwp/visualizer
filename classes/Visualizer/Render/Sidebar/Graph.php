@@ -242,7 +242,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
 				0,
 				'number',
-				array( 'min' => 0, 'max' => 1, 'step' => 1 )
+				array( 'min' => 0, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -358,7 +358,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
 				0,
 				'number',
-				array( 'min' => 0, 'max' => 1, 'step' => 1 )
+				array( 'min' => 0, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
