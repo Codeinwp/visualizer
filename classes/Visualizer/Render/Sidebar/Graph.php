@@ -242,7 +242,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
 				0,
 				'number',
-				array( 'min' => 0, 'max' => 1, 'step' => 1 )
+				array( 'min' => 0, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -358,7 +358,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Specify 0 to disable the minor gridlines.', 'visualizer' ),
 				0,
 				'number',
-				array( 'min' => 0, 'max' => 1, 'step' => 1 )
+				array( 'min' => 0, 'step' => 1 )
 			);
 
 			self::_renderColorPickerItem(
@@ -481,7 +481,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				),
 				sprintf(
 					esc_html__( 'For date axis labels, this is a subset of the date formatting %1$sICU date and time format%2$s.', 'visualizer' ),
-					'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
+					'<a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax" target="_blank">',
 					'</a>'
 				)
 			)
@@ -510,7 +510,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				),
 				sprintf(
 					esc_html__( 'For date axis labels, this is a subset of the date formatting %1$sICU date and time format%2$s.', 'visualizer' ),
-					'<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">',
+					'<a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax" target="_blank">',
 					'</a>'
 				)
 			)

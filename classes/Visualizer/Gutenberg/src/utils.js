@@ -178,3 +178,14 @@ export const getFormatterForGoogle = ( dataType ) => {
     }
     return null;
 };
+
+export const getColorCode = ( color ) => {
+	if ( -1 === color.indexOf( '#' ) ) {
+		let getCssVar = color.match( /\((.*)\)/ ).pop();
+		if ( getCssVar ) {
+			let style = getComputedStyle( document.body );
+			return style.getPropertyValue( getCssVar );
+		}
+	}
+	return color;
+};

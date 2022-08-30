@@ -468,7 +468,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					esc_html__( 'Date Format', 'visualizer' ),
 					'series[' . $index . '][format]',
 					isset( $this->series[ $index ]['format'] ) ? $this->series[ $index ]['format'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU date and time format%2$s.', 'visualizer' ), '<a href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax" target="_blank">', '</a>' ),
+					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU date and time format%2$s.', 'visualizer' ), '<a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax" target="_blank">', '</a>' ),
 					'eeee, dd LLLL yyyy'
 				);
 				break;

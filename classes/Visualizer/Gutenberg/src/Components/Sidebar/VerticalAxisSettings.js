@@ -18,6 +18,8 @@ const {
 	TextControl
 } = wp.components;
 
+import { getColorCode } from '../../utils.js';
+
 class VerticalAxisSettings extends Component {
 	constructor() {
 		super( ...arguments );
@@ -85,9 +87,9 @@ class VerticalAxisSettings extends Component {
 						label={ __( 'Base Line Color' ) }
 					>
 						<ColorPalette
-							value={ settings.vAxis.baselineColor }
+							value={ settings.hAxis.baselineColor }
 							onChange={ e => {
-								settings.vAxis.baselineColor = e;
+								settings.hAxis.baselineColor = getColorCode( e );
 								this.props.edit( settings );
 							} }
 						/>
@@ -100,7 +102,7 @@ class VerticalAxisSettings extends Component {
 							value={ settings.vAxis.textStyle.color || settings.vAxis.textStyle }
 							onChange={ e => {
 								settings.vAxis.textStyle = {};
-								settings.vAxis.textStyle.color = e;
+								settings.vAxis.textStyle.color = getColorCode( e );
 								this.props.edit( settings );
 							} }
 						/>
@@ -129,7 +131,7 @@ class VerticalAxisSettings extends Component {
 
 							<p>
 								{ __( 'For date axis labels, this is a subset of the date formatting ' ) }
-								<ExternalLink href="http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax">
+								<ExternalLink href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax">
 									{ __( 'ICU date and time format.' ) }
 								</ExternalLink>
 							</p>

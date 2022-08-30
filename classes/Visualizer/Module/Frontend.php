@@ -341,6 +341,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$attributes['data-lazy-limit'] = $atts['lazy'];
 		}
 
+		$attributes = apply_filters( 'visualizer_container_attributes', $attributes, $chart->ID );
+
 		$chart = apply_filters( 'visualizer_schedule_refresh_chart', $chart, $chart->ID, false );
 
 		// Get and update settings.
