@@ -1,3 +1,7 @@
+##### [Version 3.7.12](https://github.com/Codeinwp/visualizer/compare/v3.7.11...v3.7.12) (2022-09-07)
+
+- Fixed compatibility issue with some themes and plugins [#933](https://github.com/Codeinwp/visualizer/issues/933)
+
 ##### [Version 3.7.11](https://github.com/Codeinwp/visualizer/compare/v3.7.10...v3.7.11) (2022-08-30)
 
 - Fix update axis baseline color [#925](https://github.com/Codeinwp/visualizer/issues/925) 
