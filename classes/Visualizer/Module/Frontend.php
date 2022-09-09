@@ -395,6 +395,19 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			unset( $settings['chart-img'] );
 		}
 
+		$enable_controls = false;
+		if ( isset( $settings['controls'] ) && ! empty( $settings['controls']['controlType'] ) ) {
+			$column_index = $settings['controls']['filterColumnIndex'];
+			$column_label = $settings['controls']['filterColumnLabel'];
+			if ( 'false' !== $column_index || 'false' !== $column_label ) {
+				$enable_controls = true;
+			}
+		}
+
+		if ( ! $enable_controls ) {
+			unset( $settings['controls'] );
+		}
+
 		// add chart to the array
 		$this->_charts[ $id ] = array(
 			'type'     => $type,
@@ -478,8 +491,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		if ( $type === 'tabular' ) {
 			$prefix = 'T' . 'a' . 'bl' . 'e';
 		}
+		if ( Visualizer_Module::is_pro() && $enable_controls ) {
+			$actions_div .= '<div id="control_wrapper_' . $id . '"></div>';
+		}
 		// return placeholder div
-		return '<div class="' . $container_class . '">' . $actions_div . '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '></div>' . $this->addSchema( $chart->ID ) . ( ! Visualizer_Module::is_pro() ? ( '<' . 'di' . 'v st' . 'yl' . 'e="' . 'op' . 'a' . 'ci' . 't' . 'y:' . '0' . '.7' . ';t' . 'ex' . 't-a' . 'li' . 'gn:' . 'ri' . 'gh' . 't;b' . 'o' . 'tto' . 'm: 1' . '0px; z-i' . 'nd' . 'ex:1' . '00' . '0; ' . 'le' . 'ft' . ':2' . '0px' . '; fo' . 'nt-si' . 'ze: 1' . '4px">' . $prefix . ' b' . 'y' . ' <a ' . 'h' . 're' . 'f="ht' . 'tp' . 's:/' . '/t' . 'he' . 'me' . 'i' . 'sl' . 'e' . '.c' . 'om' . '/p' . 'lu' . 'gi' . 'ns' . '/v' . 'i' . 'su' . 'al' . 'iz' . 'er' . '-c' . 'ha' . 'rts' . '-a' . 'nd' . '-gr' . 'ap' . 'hs' . '/" t' . 'arg' . 'et="' . '_bl' . 'an' . 'k" re' . 'l=' . '"no' . 'fol' . 'l' . 'ow"' . '>V' . 'is' . 'u' . 'a' . 'l' . 'i' . 'z' . 'e' . 'r' . '</' . 'a' . '>' . '<' . '/' . 'd' . 'i' . 'v' . '>' ) : '' ) . '</div>';
+		return '<div class="' . $container_class . '" id="chart_wrapper_' . $id . '">' . $actions_div . '<div id="' . $id . '"' . $this->getHtmlAttributes( $attributes ) . '></div>' . $this->addSchema( $chart->ID ) . ( ! Visualizer_Module::is_pro() ? ( '<' . 'di' . 'v st' . 'yl' . 'e="' . 'op' . 'a' . 'ci' . 't' . 'y:' . '0' . '.7' . ';t' . 'ex' . 't-a' . 'li' . 'gn:' . 'ri' . 'gh' . 't;b' . 'o' . 'tto' . 'm: 1' . '0px; z-i' . 'nd' . 'ex:1' . '00' . '0; ' . 'le' . 'ft' . ':2' . '0px' . '; fo' . 'nt-si' . 'ze: 1' . '4px">' . $prefix . ' b' . 'y' . ' <a ' . 'h' . 're' . 'f="ht' . 'tp' . 's:/' . '/t' . 'he' . 'me' . 'i' . 'sl' . 'e' . '.c' . 'om' . '/p' . 'lu' . 'gi' . 'ns' . '/v' . 'i' . 'su' . 'al' . 'iz' . 'er' . '-c' . 'ha' . 'rts' . '-a' . 'nd' . '-gr' . 'ap' . 'hs' . '/" t' . 'arg' . 'et="' . '_bl' . 'an' . 'k" re' . 'l=' . '"no' . 'fol' . 'l' . 'ow"' . '>V' . 'is' . 'u' . 'a' . 'l' . 'i' . 'z' . 'e' . 'r' . '</' . 'a' . '>' . '<' . '/' . 'd' . 'i' . 'v' . '>' ) : '' ) . '</div>';
 	}
 
 	/**
