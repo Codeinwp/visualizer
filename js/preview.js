@@ -52,7 +52,7 @@
 				v.charts.canvas.settings = settings;
                 $('body').trigger('visualizer:render:currentchart:update', {visualizer: v});
                 vizSettingsHaveChanged(true);
-			}, 1000);
+			}, 1500);
 		}
 
         function validateJSON() {
@@ -72,6 +72,19 @@
 		});
 		$('textarea[name="manual"]').change(validateJSON).keyup(validateJSON);
 
+		$( document ).on( 'change', '.vz-controls-opt', function() {
+			$( '#control_wrapper_canvas' ).removeClass( 'no-filter' );
+			var controlsOpt = $( '.vz-controls-opt' ).map(
+				function() {
+					var val = $(this).val();
+					return '' !== val && 'false' !== val ? val : false ;
+				}
+				).get();
+			controlsOpt = controlsOpt.filter( function(el) { return el; } );
+			if ( controlsOpt.length === 0 ) {
+				$( '#control_wrapper_canvas' ).addClass( 'no-filter' ).html('');
+			}
+		} );
 	});
 })(jQuery, visualizer);
 

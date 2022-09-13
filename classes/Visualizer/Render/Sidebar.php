@@ -621,7 +621,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'DateRangeFilter'   => esc_html__( 'Date Range Filter', 'visualizer' ),
 			),
 			'',
-			false
+			false,
+			array( 'vz-controls-opt' )
 		);
 
 		$column_index = [ 'false' => '' ];
@@ -638,10 +639,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		self::_renderSelectItem(
 			esc_html__( 'Filter By Column Index', 'visualizer' ),
 			'controls[filterColumnIndex]',
-			! empty( $this->controls['filterColumnIndex'] ) ? $this->controls['filterColumnIndex'] : '',
+			isset( $this->controls['filterColumnIndex'] ) ? $this->controls['filterColumnIndex'] : '',
 			$column_index,
 			'',
-			false
+			false,
+			array( 'vz-controls-opt' )
 		);
 
 		self::_renderSelectItem(
@@ -650,7 +652,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			! empty( $this->controls['filterColumnLabel'] ) ? $this->controls['filterColumnLabel'] : '',
 			$column_label,
 			'',
-			false
+			false,
+			array( 'vz-controls-opt' )
 		);
 
 		self::_renderSelectItem(

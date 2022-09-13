@@ -336,9 +336,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		$shortcode = sprintf( '[visualizer id="%s" lazy="no" class=""]', $chart_id );
 		echo '<div class="items"><div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
+		if ( Visualizer_Module::is_pro() ) {
+			echo '<div id="chart_wrapper_' . $placeholder_id . '">';
+			echo '<div id="control_wrapper_' . $placeholder_id . '" class="vz-library-chart-filter"></div>';
+		}
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
+		if ( Visualizer_Module::is_pro() ) {
+			echo '</div>';
+		}
 		echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', 'visualizer' ), '" onclick="return showNotice.warn();"></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', 'visualizer' ), '"></a>';

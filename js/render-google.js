@@ -78,6 +78,9 @@ var chartWrapperError = [];
             var controlWrapperElement = document.getElementById( "control_wrapper_" + id ) || null;
             var withControlMode = typeof settings.controls !== 'undefined' && controlWrapperElement ? true : false;
 
+            if ( $( controlWrapperElement ).hasClass( 'no-filter' ) ) {
+                withControlMode = false;
+            }
             if ( withControlMode ) {
                 // Chart wrapper.
                 render = new gv.ChartWrapper({
@@ -92,6 +95,7 @@ var chartWrapperError = [];
                 gv.events.addListener(chartWrapper, 'error', function ( err ) {
                     if ( chartWrapperError.length === 0 ) {
                         chartWrapperError.push( err );
+                        gv.errors.removeError( err.id );
                         var chartContainer = $( chartWrapperElement ).find( '.visualizer-front' );
                         if ( chartContainer && chartContainer.is(':visible')) {
                             if (chartContainer.parents('div').next( '#sidebar' ).length === 0) {

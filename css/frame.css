@@ -17,7 +17,15 @@
 	bottom: 10px;
 	left: 10px;
 }
-
+#control_wrapper_canvas:not(:empty) {
+	margin: 15px 0 0 5px;
+}
+#control_wrapper_canvas:not(:empty) + #canvas {
+	top: 50px;
+}
+.goog-combobox input {
+	min-height: auto;
+}
 .loader {
 	position: absolute;
 	top: 50%;
@@ -1528,6 +1536,6 @@ canvas.chartjs-render-monitor {
 /******************************************************************************/
 /********************************  Frontend Actions ***********************************/
 /******************************************************************************/
-#vz-frontend-actions .only-pro-inner {
+#vz-frontend-actions .only-pro-inner, #vz-data-controls .only-pro-inner {
 	text-align: center;
 }

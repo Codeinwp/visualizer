@@ -424,6 +424,17 @@ div#visualizer-types ul, div#visualizer-types form p {
 	color: red;
 	cursor: pointer;
 }
+.goog-combobox input {
+	min-height: auto;
+}
+.vz-library-chart-filter:not(:empty) {
+	background-color: #ffffff;
+	padding: 5px 0 5px 5px;
+	border: 1px solid #ddd;
+}
+.google-visualization-controls-rangefilter-thumblabel {
+	padding: 0 !important;
+}
 @media (-webkit-min-device-pixel-ratio: 2) and (min-width: 1000px) and (max-width: 1600px)  {
 	#visualizer-sidebar.one-columns .visualizer-sidebar-box ul li:nth-child(+n+7) {
 	    display: none;
