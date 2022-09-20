@@ -711,17 +711,6 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			false
 		);
 
-		self::_renderSelectItem(
-			esc_html__( 'Case Sensitive', 'visualizer' ),
-			'controls[caseSensitive]',
-			! empty( $this->controls['caseSensitive'] ) ? $this->controls['caseSensitive'] : '',
-			array(
-				'false' => esc_html__( 'False', 'visualizer' ),
-				'true'  => esc_html__( 'True', 'visualizer' ),
-			),
-			'',
-			false
-		);
 		self::_renderSectionEnd();
 
 		self::_renderSectionStart( esc_html__( 'UI Options', 'visualizer' ), false );
@@ -755,8 +744,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderSelectItem(
 			esc_html__( 'Label Stacking', 'visualizer' ),
-			'controls[labelStacking]',
-			! empty( $this->controls['labelStacking'] ) ? $this->controls['labelStacking'] : '',
+			'controls[ui][labelStacking]',
+			! empty( $this->controls['ui']['labelStacking'] ) ? $this->controls['ui']['labelStacking'] : '',
 			array(
 				'horizontal' => esc_html__( 'Horizontal', 'visualizer' ),
 				'vertical'   => esc_html__( 'Vertical', 'visualizer' ),
@@ -767,8 +756,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderSelectItem(
 			esc_html__( 'Orientation', 'visualizer' ),
-			'controls[orientation]',
-			! empty( $this->controls['orientation'] ) ? $this->controls['orientation'] : '',
+			'controls[ui][orientation]',
+			! empty( $this->controls['ui']['orientation'] ) ? $this->controls['ui']['orientation'] : '',
 			array(
 				'horizontal' => esc_html__( 'Horizontal', 'visualizer' ),
 				'vertical'   => esc_html__( 'Vertical', 'visualizer' ),

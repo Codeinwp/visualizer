@@ -21,7 +21,8 @@
 	margin: 15px 0 0 5px;
 }
 #control_wrapper_canvas:not(:empty) + #canvas {
-	top: 50px;
+	top: 55px;
+	left: 50px;
 }
 .goog-combobox input {
 	min-height: auto;
