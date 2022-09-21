@@ -737,7 +737,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					$title  = $this->_chart->ID;
 				}
 				$settings['internal_title'] = $title;
-				$settings_label = $settings['pieResidueSliceLabel'];
+				$settings_label = isset( $settings['pieResidueSliceLabel'] ) ? $settings['pieResidueSliceLabel'] : '';
 				if ( empty( $settings_label ) ) {
 					$settings['pieResidueSliceLabel'] = esc_html__( 'Other', 'visualizer' );
 				} else {

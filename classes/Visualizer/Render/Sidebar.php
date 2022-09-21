@@ -158,6 +158,9 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderAdvancedSettings() {
+		// Chart control settings.
+		$this->_renderChartControlsGroup();
+
 		if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
 			self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) );
 		} else {
@@ -345,14 +348,15 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $type The type for the input (out of number, email, tel etc., default is text).
 	 * @param array  $custom_attributes The custom attributes.
 	 */
-	protected static function _renderTextItem( $title, $name, $value, $desc, $placeholder = '', $type = 'text', $custom_attributes = array() ) {
+	protected static function _renderTextItem( $title, $name, $value, $desc, $placeholder = '', $type = 'text', $custom_attributes = array(), $extra_class = array() ) {
 		$attributes     = '';
 		if ( $custom_attributes ) {
 			foreach ( $custom_attributes as $k => $v ) {
 				$attributes .= ' ' . $k . '="' . esc_attr( $v ) . '"';
 			}
 		}
-		echo '<div class="viz-section-item">';
+		$extra_class[] = 'viz-section-item';
+		echo '<div class="' . esc_attr( implode( ' ', $extra_class ) ) . '">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
 			echo '<input type="', $type, '" class="control-text" ', $attributes, ' name="', $name, '" value="', esc_attr( $value ), '" placeholder="', $placeholder, '">';
@@ -565,6 +569,238 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				esc_html__( 'To enable lazy chart rendering.', 'visualizer' ),
 				false
 			);
+		self::_renderSectionEnd();
+	}
+
+	/**
+	 * Renders chart controls group.
+	 *
+	 * @access protected
+	 */
+	protected function _renderChartControlsGroup() {
+		if ( 'google' !== $this->getLibrary() ) {
+			return;
+		}
+		if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
+			self::_renderGroupStart( esc_html__( 'Chart Data Filter Configuration', 'visualizer' ) );
+		} else {
+			self::_renderGroupStart( esc_html__( 'Chart Data Filter Configuration', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-filter-controls' ), 'vz-data-controls' );
+			echo '<div style="position: relative">';
+		}
+		self::_renderSectionStart();
+		self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the data filter controls by providing configuration variables right from the %1$sChart Controls API%2$s. ', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/controls#controls-gallery" target="_blank">', '</a>' ) . '</span>' );
+		self::_renderSectionEnd();
+		$this->_renderChartControlsSettings();
+		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+			echo '</div>';
+		}
+		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders chart controls setting.
+	 *
+	 * @access protected
+	 */
+	protected function _renderChartControlsSettings() {
+
+		self::_renderSectionStart( esc_html__( 'Options', 'visualizer' ), false );
+		$control_type = ! empty( $this->controls['controlType'] ) ? $this->controls['controlType'] : '';
+
+		self::_renderSelectItem(
+			esc_html__( 'Filter Type', 'visualizer' ),
+			'controls[controlType]',
+			$control_type,
+			array(
+				''                  => '',
+				'StringFilter'      => esc_html__( 'String Filter', 'visualizer' ),
+				'NumberRangeFilter' => esc_html__( 'Number Range Filter', 'visualizer' ),
+				'CategoryFilter'    => esc_html__( 'Category Filter', 'visualizer' ),
+				'ChartRangeFilter'  => esc_html__( 'Chart Range Filter', 'visualizer' ),
+				'DateRangeFilter'   => esc_html__( 'Date Range Filter', 'visualizer' ),
+			),
+			'',
+			false,
+			array( 'vz-controls-opt' )
+		);
+
+		$column_index = [ 'false' => '' ];
+		$column_label = [ 'false' => '' ];
+		if ( ! empty( $this->__series ) ) {
+			foreach ( $this->__series as $key => $column ) {
+				$column_type            = isset( $column['type'] ) ? $column['type'] : '';
+				$label                  = isset( $column['label'] ) ? $column['label'] : '';
+				$column_label[ $label ] = $label;
+				$column_index[ $key ]   = sprintf( __( '%1$d — Column Type: %2$s ', 'visualizer' ), $key, ucfirst( $column_type ) );
+			}
+		}
+
+		self::_renderSelectItem(
+			esc_html__( 'Filter By Column Index', 'visualizer' ),
+			'controls[filterColumnIndex]',
+			isset( $this->controls['filterColumnIndex'] ) ? $this->controls['filterColumnIndex'] : '',
+			$column_index,
+			'',
+			false,
+			array( 'vz-controls-opt' )
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Filter By Column Label', 'visualizer' ),
+			'controls[filterColumnLabel]',
+			! empty( $this->controls['filterColumnLabel'] ) ? $this->controls['filterColumnLabel'] : '',
+			$column_label,
+			'',
+			false,
+			array( 'vz-controls-opt' )
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Use Formatted Value', 'visualizer' ),
+			'controls[useFormattedValue]',
+			! empty( $this->controls['useFormattedValue'] ) ? $this->controls['useFormattedValue'] : '',
+			array(
+				'false' => esc_html__( 'False', 'visualizer' ),
+				'true'  => esc_html__( 'True', 'visualizer' ),
+			),
+			'',
+			false
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Min Value', 'visualizer' ),
+			'controls[minValue]',
+			! empty( $this->controls['minValue'] ) ? $this->controls['minValue'] : '',
+			esc_html__( 'Minimum allowed value for the range lower extent.', 'visualizer' ),
+			'',
+			'text'
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Max Value', 'visualizer' ),
+			'controls[maxValue]',
+			! empty( $this->controls['maxValue'] ) ? $this->controls['maxValue'] : '',
+			esc_html__( 'Maximum allowed value for the range higher extent.', 'visualizer' ),
+			'',
+			'text'
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Match Type', 'visualizer' ),
+			'controls[matchType]',
+			! empty( $this->controls['matchType'] ) ? $this->controls['matchType'] : '',
+			array(
+				'prefix' => esc_html__( 'Prefix', 'visualizer' ),
+				'exact'  => esc_html__( 'Exact', 'visualizer' ),
+				'any'    => esc_html__( 'Any', 'visualizer' ),
+			),
+			'',
+			false
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Case Sensitive', 'visualizer' ),
+			'controls[caseSensitive]',
+			! empty( $this->controls['caseSensitive'] ) ? $this->controls['caseSensitive'] : '',
+			array(
+				'false' => esc_html__( 'False', 'visualizer' ),
+				'true'  => esc_html__( 'True', 'visualizer' ),
+			),
+			'',
+			false
+		);
+
+		self::_renderSectionEnd();
+
+		self::_renderSectionStart( esc_html__( 'UI Options', 'visualizer' ), false );
+
+		self::_renderTextItem(
+			esc_html__( 'Label', 'visualizer' ),
+			'controls[ui][label]',
+			! empty( $this->controls['ui']['label'] ) ? $this->controls['ui']['label'] : '',
+			'',
+			'',
+			'text'
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Label Separator', 'visualizer' ),
+			'controls[ui][labelSeparator]',
+			! empty( $this->controls['ui']['labelSeparator'] ) ? $this->controls['ui']['labelSeparator'] : '',
+			'',
+			'',
+			'text'
+		);
+
+		self::_renderTextItem(
+			esc_html__( 'Caption', 'visualizer' ),
+			'controls[ui][caption]',
+			! empty( $this->controls['ui']['caption'] ) ? $this->controls['ui']['caption'] : '',
+			'',
+			'',
+			'text'
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Label Stacking', 'visualizer' ),
+			'controls[ui][labelStacking]',
+			! empty( $this->controls['ui']['labelStacking'] ) ? $this->controls['ui']['labelStacking'] : '',
+			array(
+				'horizontal' => esc_html__( 'Horizontal', 'visualizer' ),
+				'vertical'   => esc_html__( 'Vertical', 'visualizer' ),
+			),
+			'',
+			false
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Orientation', 'visualizer' ),
+			'controls[ui][orientation]',
+			! empty( $this->controls['ui']['orientation'] ) ? $this->controls['ui']['orientation'] : '',
+			array(
+				'horizontal' => esc_html__( 'Horizontal', 'visualizer' ),
+				'vertical'   => esc_html__( 'Vertical', 'visualizer' ),
+			),
+			'',
+			false
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Show Range Values', 'visualizer' ),
+			'controls[showRangeValues]',
+			! empty( $this->controls['showRangeValues'] ) ? $this->controls['showRangeValues'] : '',
+			array(
+				'true'  => esc_html__( 'True', 'visualizer' ),
+				'false' => esc_html__( 'False', 'visualizer' ),
+			),
+			'',
+			false
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Allow Multiple', 'visualizer' ),
+			'controls[allowMultiple]',
+			! empty( $this->controls['allowMultiple'] ) ? $this->controls['allowMultiple'] : '',
+			array(
+				'true'  => esc_html__( 'True', 'visualizer' ),
+				'false' => esc_html__( 'False', 'visualizer' ),
+			),
+			'',
+			false
+		);
+
+		self::_renderSelectItem(
+			esc_html__( 'Allow Typing', 'visualizer' ),
+			'controls[allowTyping]',
+			! empty( $this->controls['allowTyping'] ) ? $this->controls['allowTyping'] : '',
+			array(
+				'true'  => esc_html__( 'True', 'visualizer' ),
+				'false' => esc_html__( 'False', 'visualizer' ),
+			),
+			'',
+			false
+		);
 		self::_renderSectionEnd();
 	}
 }

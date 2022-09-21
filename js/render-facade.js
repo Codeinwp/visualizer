@@ -136,7 +136,7 @@ var vizClipboard1=null;
 
     function displayChartsOnFrontEnd() {
         // display all charts that are NOT to be lazy-loaded.
-        $( 'div.viz-facade-loaded:not(.visualizer-lazy):empty' ).removeClass( 'viz-facade-loaded' );
+        $( 'div.viz-facade-loaded:not(.visualizer-lazy):not(.visualizer-cw-error):empty' ).removeClass( 'viz-facade-loaded' );
         $('div.visualizer-front:not(.visualizer-lazy):not(.viz-facade-loaded)').each(function(index, element){
             if ( $(element).is(':visible') ) {
                 var id = $(element).addClass('viz-facade-loaded').attr('id');

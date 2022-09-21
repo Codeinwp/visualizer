@@ -57,9 +57,16 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		$this->add_additional_content();
 
 		// Added by Ash/Upwork
+		if ( Visualizer_Module::is_pro() ) {
+			echo '<div id="chart_wrapper_canvas">';
+			echo '<div id="control_wrapper_canvas"></div>';
+		}
 		echo '<div id="canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
+		if ( Visualizer_Module::is_pro() ) {
+			echo '</div>';
+		}
 		echo $this->custom_css;
 	}
 
