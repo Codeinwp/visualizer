@@ -1,3 +1,7 @@
+#### [Version 3.8.0](https://github.com/Codeinwp/visualizer/compare/v3.7.12...v3.8.0) (2022-09-21)
+
+- Add data filter support for the charts
+
 ##### [Version 3.7.12](https://github.com/Codeinwp/visualizer/compare/v3.7.11...v3.7.12) (2022-09-07)
 
 - Fixed compatibility issue with some themes and plugins [#933](https://github.com/Codeinwp/visualizer/issues/933)
