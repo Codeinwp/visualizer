@@ -4,6 +4,7 @@
 
 // this will store the images for each chart rendered.
 var __visualizer_chart_images   = [];
+var chartWrapperError = [];
 
 (function($) {
 	var gv;
@@ -74,7 +75,41 @@ var __visualizer_chart_images   = [];
                     break;
             }
 
-			render = new gv[render](container);
+            var controlWrapperElement = document.getElementById( "control_wrapper_" + id ) || null;
+            var withControlMode = typeof settings.controls !== 'undefined' && controlWrapperElement ? true : false;
+
+            if ( $( controlWrapperElement ).hasClass( 'no-filter' ) ) {
+                withControlMode = false;
+            }
+            if ( withControlMode ) {
+                // Chart wrapper.
+                render = new gv.ChartWrapper({
+                  'chartType': render,
+                  'containerId': id,
+                });
+                // Chart dashboard wrapper.
+                var chartWrapperElement   = document.getElementById( "chart_wrapper_" + id ) || null;
+                var chartWrapper          = new gv.Dashboard( chartWrapperElement );
+
+                // Error Handler.
+                gv.events.addListener(chartWrapper, 'error', function ( err ) {
+                    if ( chartWrapperError.length === 0 ) {
+                        chartWrapperError.push( err );
+                        gv.errors.removeError( err.id );
+                        var chartContainer = $( chartWrapperElement ).find( '.visualizer-front' );
+                        if ( chartContainer && chartContainer.is(':visible')) {
+                            if (chartContainer.parents('div').next( '#sidebar' ).length === 0) {
+                                chartContainer.addClass( 'visualizer-chart-loaded' ).addClass( 'visualizer-cw-error' );
+                                $( chartWrapperElement ).addClass( 'visualizer-cw-error' );
+                            }
+                        }
+                    } else {
+                        gv.errors.removeError( err.id );
+                    }
+                } );
+            } else {
+                render = new gv[render](container);
+            }
 		}
 
         if (settings['animation'] && parseInt(settings['animation']['startup']) === 1)
@@ -329,6 +364,7 @@ var __visualizer_chart_images   = [];
 
         gv.events.addListener(render, 'ready', function () {
             var arr = id.split('-');
+            render = typeof render.getChart !== 'undefined' ? render.getChart() : render;
             __visualizer_chart_images[ arr[0] + '-' + arr[1] ] = '';
 
             if (render.container && $(render.container).is(':visible')) {
@@ -362,8 +398,22 @@ var __visualizer_chart_images   = [];
             }
         });
 
-        $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
-        render.draw(table, settings);
+        if ( withControlMode ) {
+            // Create a control wrapper, passing some options.
+            var controlWrapper = new gv.ControlWrapper( {
+                containerId: 'control_wrapper_' + id,
+                controlType: settings.controls.controlType,
+                'options': settings.controls,
+            } );
+
+            $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
+            render.setOptions(settings);
+            chartWrapper.bind(controlWrapper, render);
+            chartWrapper.draw(table);
+        } else {
+            $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
+            render.draw(table, settings);
+        }
 	}
 
     function format_data(id, table, type, format, index) {
@@ -509,6 +559,7 @@ var __visualizer_chart_images   = [];
 
         objects = {};
         if ( 'object' === typeof google ) {
+            $chart_types.push( 'controls' );
             google.load( 'visualization', 'current', {packages: $chart_types, mapsApiKey: v.map_api_key, 'language' : v.language,
                 callback: function () {
                     gv = google.visualization;

@@ -233,11 +233,20 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			foreach ( $this->charts as $placeholder_id => $chart ) {
 				// show the sidebar after the first 3 charts.
 				$count++;
+				$enable_controls = false;
+				$settings = isset( $chart['settings'] ) ? $chart['settings'] : array();
+				if ( ! empty( $settings['controls']['controlType'] ) ) {
+					$column_index = $settings['controls']['filterColumnIndex'];
+					$column_label = $settings['controls']['filterColumnLabel'];
+					if ( 'false' !== $column_index || 'false' !== $column_label ) {
+						$enable_controls = true;
+					}
+				}
 				if ( 3 === $count ) {
 					$this->_renderSidebar();
-					$this->_renderChartBox( $placeholder_id, $chart['id'] );
+					$this->_renderChartBox( $placeholder_id, $chart['id'], $enable_controls );
 				} else {
-					$this->_renderChartBox( $placeholder_id, $chart['id'] );
+					$this->_renderChartBox( $placeholder_id, $chart['id'], $enable_controls );
 				}
 			}
 			// show the sidebar if there are less than 3 charts.
@@ -282,7 +291,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @param string $placeholder_id The placeholder's id for the chart.
 	 * @param int    $chart_id The id of the chart.
 	 */
-	private function _renderChartBox( $placeholder_id, $chart_id ) {
+	private function _renderChartBox( $placeholder_id, $chart_id, $with_filter = false ) {
 		$settings    = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS );
 		$title       = '#' . $chart_id;
 		if ( ! empty( $settings[0]['title'] ) ) {
@@ -336,9 +345,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		$shortcode = sprintf( '[visualizer id="%s" lazy="no" class=""]', $chart_id );
 		echo '<div class="items"><div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
+		if ( Visualizer_Module::is_pro() && $with_filter ) {
+			echo '<div id="chart_wrapper_' . $placeholder_id . '">';
+			echo '<div id="control_wrapper_' . $placeholder_id . '" class="vz-library-chart-filter"></div>';
+		}
 		echo '<div id="', $placeholder_id, '" class="visualizer-chart-canvas">';
 		echo '<img src="', VISUALIZER_ABSURL, 'images/ajax-loader.gif" class="loader">';
 		echo '</div>';
+		if ( Visualizer_Module::is_pro() && $with_filter ) {
+			echo '</div>';
+		}
 		echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', 'visualizer' ), '" onclick="return showNotice.warn();"></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', 'visualizer' ), '"></a>';

@@ -12,7 +12,7 @@
       "pro": 11
     },
     "features_locked": {
-      "free": 7
+      "free": 8
     },
     "query": "SELECT post_type, count(*) from wp_posts GROUP by post_type",
     "wait": 10000,

@@ -25,6 +25,21 @@
             vizSettingsHaveChanged(false);
         };
 
+        // Update google chart filter control.
+        window.vizUpdateFilterControl = function() {
+        	$( '#control_wrapper_canvas' ).removeClass( 'no-filter' );
+			var controlsOpt = $( '.vz-controls-opt' ).map(
+				function() {
+					var val = $(this).val();
+					return '' !== val && 'false' !== val ? val : false ;
+				}
+				).get();
+			controlsOpt = controlsOpt.filter( function(el) { return el; } );
+			if ( controlsOpt.length === 0 ) {
+				$( '#control_wrapper_canvas' ).addClass( 'no-filter' ).html('');
+			}
+        }
+
         $('#settings-button').click(function() {
 			$('#settings-form').submit();
 		});
@@ -42,6 +57,7 @@
         // this portion captures if the settings have changed so that tabs can handle that information.
 
 		function updateChart() {
+			vizUpdateFilterControl();
 			clearTimeout(timeout);
 			timeout = setTimeout(function() {
 				var settings = $('#settings-form').serializeObject();
@@ -52,7 +68,7 @@
 				v.charts.canvas.settings = settings;
                 $('body').trigger('visualizer:render:currentchart:update', {visualizer: v});
                 vizSettingsHaveChanged(true);
-			}, 1000);
+			}, 1500);
 		}
 
         function validateJSON() {
