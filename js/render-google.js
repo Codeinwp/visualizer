@@ -76,7 +76,7 @@ var chartWrapperError = [];
             }
 
             var controlWrapperElement = document.getElementById( "control_wrapper_" + id ) || null;
-            var withControlMode = typeof settings.controls !== 'undefined' && controlWrapperElement ? true : false;
+            var withControlMode = ( typeof settings.controls !== 'undefined' && '' !== settings.controls.controlType ) && controlWrapperElement ? true : false;
 
             if ( $( controlWrapperElement ).hasClass( 'no-filter' ) ) {
                 withControlMode = false;
