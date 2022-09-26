@@ -19,10 +19,23 @@
 }
 #control_wrapper_canvas:not(:empty) {
 	margin: 15px 0 0 5px;
+	position: relative;
+	z-index: 1;
 }
-#control_wrapper_canvas:not(:empty) + #canvas {
-	top: 55px;
-	left: 50px;
+#control_wrapper_canvas:not(:empty) + #canvas .google-visualization-table {
+	top: 60px;
+}
+.vz-vertical .google-visualization-table {
+	left: 70px;
+}
+.google-visualization-controls-categoryfilter label.google-visualization-controls-label {
+	vertical-align: middle;
+}
+.google-visualization-controls-categoryfilter li.goog-inline-block {
+	margin: 0 0.2em;
+}
+.google-visualization-controls-categoryfilter li {
+	padding: 0 0.2em;
 }
 .goog-combobox input {
 	min-height: auto;
