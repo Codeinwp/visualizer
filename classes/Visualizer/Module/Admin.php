@@ -74,9 +74,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->_addAction( 'admin_init', 'init' );
 
-		// Multilingual support.
-		$this->_addAction( 'visualizer_chart_languages', 'addMultilingualSupport' );
-
 		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
@@ -770,11 +767,20 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	private function getDisplayFilters( &$query_args ) {
 		$query  = array();
 
-		if ( function_exists( 'icl_get_languages' ) ) {
-			$query[] = array(
-				'key'     => 'chart_lang',
-				'compare' => 'NOT EXISTS',
-			);
+		if ( Visualizer_Module::is_pro() && function_exists( 'icl_get_languages' ) ) {
+			$current_lang = icl_get_current_language();
+			if ( in_array( $current_lang, array( 'all', icl_get_default_language() ), true ) ) {
+				$query[] = array(
+					'key'     => 'chart_lang',
+					'compare' => 'NOT EXISTS',
+				);
+			} else {
+				$query[] = array(
+					'key'     => 'chart_lang',
+					'value'   => $current_lang,
+					'compare' => '=',
+				);
+			}
 		}
 
 		// add chart type filter to the query arguments
@@ -1114,44 +1120,5 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			return true;
 		}
 		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false : true;
-	}
-
-	/**
-	 * Multilingual Support.
-	 *
-	 * @return bool Default false
-	 */
-	public static function addMultilingualSupport( $chart_id ) {
-		if ( function_exists( 'icl_get_languages' ) ) {
-			$language     = icl_get_languages();
-			$current_lang = icl_get_current_language();
-			global $sitepress;
-			$trid         = $sitepress->get_element_trid( $chart_id, 'post_' . Visualizer_Plugin::CPT_VISUALIZER );
-			$translations = $sitepress->get_element_translations( $trid );
-			?>
-			<hr><div class="visualizer-languages-list">
-				<?php
-				foreach ( $language as $lang ) {
-					$lang_code = $lang['code'];
-					if ( $current_lang !== $lang_code ) {
-						$lang_chart_exist = get_post_meta( $chart_id, Visualizer_Plugin::NAME . '_' . $lang_code, true );
-						$translate_info = isset( $translations[ $lang_code ] ) ? $translations[ $lang_code ] : false;
-						?>
-						<a href="javascript:;" data-lang_code="<?php echo esc_attr( $lang_code ); ?>" data-chart="<?php echo $translate_info ? $translate_info->element_id : $chart_id; ?>">
-							<img src="<?php echo esc_url( $lang['country_flag_url'] ); ?>" alt="<?php echo esc_attr( $lang['translated_name'] ); ?>">
-							<?php if ( $translate_info ) : ?>
-								<i class="otgs-ico-edit"></i>
-							<?php else : ?>
-								<i class="otgs-ico-add"></i>
-							<?php endif; ?>
-						</a>
-						<?php
-					}
-				}
-				?>
-			</div>
-			<?php
-		}
-		return;
 	}
 }

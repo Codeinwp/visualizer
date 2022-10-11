@@ -305,7 +305,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$atts
 		);
 
-		if ( function_exists( 'icl_get_languages' ) ) {
+		if ( Visualizer_Module::is_pro() && function_exists( 'icl_get_languages' ) ) {
 			global $sitepress;
 			$locale       = get_locale();
 			$locale       = strtolower( str_replace( '_', '-', $locale ) );
