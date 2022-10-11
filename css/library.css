@@ -435,6 +435,32 @@ div#visualizer-types ul, div#visualizer-types form p {
 .google-visualization-controls-rangefilter {
 	white-space: inherit !important;
 }
+.visualizer-languages-list {
+	text-align: right;
+}
+.visualizer-languages-list a {
+	text-decoration: none;
+	display: inline-block;
+	margin-left: 3px;
+	padding: 0;
+	border: none;
+	outline: none;
+	box-shadow: none;
+}
+.visualizer-languages-list a:focus {
+	border: none;
+	outline: none;
+	box-shadow: none;
+}
+.visualizer-languages-list i {
+	display: none;
+}
+.visualizer-languages-list a:hover img {
+	display: none;
+}
+.visualizer-languages-list a:hover img + i {
+	display: block;
+}
 @media (-webkit-min-device-pixel-ratio: 2) and (min-width: 1000px) and (max-width: 1600px)  {
 	#visualizer-sidebar.one-columns .visualizer-sidebar-box ul li:nth-child(+n+7) {
 	    display: none;

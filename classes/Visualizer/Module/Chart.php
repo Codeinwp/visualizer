@@ -439,7 +439,20 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 		if ( $success ) {
-			wp_delete_post( $chart_id, true );
+			if ( function_exists( 'icl_get_languages' ) ) {
+				global $sitepress;
+				$trid         = $sitepress->get_element_trid( $chart_id, 'post_' . Visualizer_Plugin::CPT_VISUALIZER );
+				$translations = $sitepress->get_element_translations( $trid );
+				if ( ! empty( $translations ) ) {
+					foreach ( $translations as $translated_post ) {
+						wp_delete_post( $translated_post->element_id, true );
+					}
+				} else {
+					wp_delete_post( $chart_id, true );
+				}
+			} else {
+				wp_delete_post( $chart_id, true );
+			}
 		}
 		if ( $is_post ) {
 			self::_sendResponse(
@@ -524,6 +537,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'focusTarget' => 'datum',
 					)
 				);
+
+				if ( ! empty( $_GET['lang'] ) && ! empty( $_GET['parent_chart_id'] ) ) {
+					$parent_chart_id = (int) $_GET['parent_chart_id'];
+					add_post_meta( $chart_id, 'chart_lang', $_GET['lang'] );
+					$this->set_wpml_element_language_details( $parent_chart_id, $chart_id, $_GET['lang'] );
+				}
 				do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 			}
 			wp_redirect( esc_url_raw( add_query_arg( 'chart', (int) $chart_id ) ) );
@@ -1521,5 +1540,44 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
 		return $attach_id;
+	}
+
+	/**
+	 * WPML set element language details.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param int    $translated_post_id Translated post ID.
+	 * @param string $language_code Selected language code.
+	 */
+	public function set_wpml_element_language_details( $post_id = 0, $translated_post_id = 0, $language_code = '' ) {
+		global $sitepress;
+		if ( $post_id && ! empty( $language_code ) ) {
+			$post_type          = Visualizer_Plugin::CPT_VISUALIZER;
+			$wpml_element_type  = apply_filters( 'wpml_element_type', $post_type );
+			$trid               = $sitepress->get_element_trid( $post_id, 'post_' . $post_type );
+			$recursive          = false;
+			$original_post_id   = $translated_post_id;
+			$original_lang_code = $language_code;
+			if ( empty( $trid ) ) {
+				$translated_post_id = $post_id;
+				$trid               = $post_id;
+				$recursive          = true;
+				$language_code      = icl_get_default_language();
+			}
+
+			$language_args = array(
+				'element_id'           => $translated_post_id,
+				'element_type'         => $wpml_element_type,
+				'trid'                 => $trid,
+				'language_code'        => $language_code,
+				'source_language_code' => ! $recursive ? icl_get_default_language() : null,
+			);
+			// Set language details.
+			do_action( 'wpml_set_element_language_details', $language_args );
+
+			if ( $recursive ) {
+				$this->set_wpml_element_language_details( $post_id, $original_post_id, $original_lang_code );
+			}
+		}
 	}
 }

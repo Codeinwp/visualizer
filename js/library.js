@@ -92,9 +92,20 @@
             }
         });
 
+        $( '.visualizer-languages-list' ).on( 'click', '[data-lang_code]', function() {
+            if ( $(this).find( 'i' ).hasClass( 'otgs-ico-add' ) ) {
+                vu.create = vu.create + '&lang=' + $(this).data('lang_code') + '&parent_chart_id=' + $(this).data('chart');
+                $('.add-new-chart').click();
+            } else {
+                vu.edit = vu.edit + '&lang=' + $(this).data('lang_code') + '&chart=' + $(this).data('chart');
+                $('.visualizer-chart-edit').click();
+            }
+        } );
+
         $('.add-new-chart').click(function () {
             var wnd = window,
                 view = new vmv.Chart({action: vu.create});
+            vu.create = vu.create.replace(/[\?&]lang=[^&]+/, '').replace(/[\?&]parent_chart_id=[^&]+/, '');
 
             window.parent.addEventListener('message', function(event){
                 switch(event.data) {
@@ -116,8 +127,11 @@
         });
 
         $('.visualizer-chart-edit').click(function () {
-            var wnd = window,
-                view = new vmv.Chart({action: vu.edit + '&chart=' + $(this).attr('data-chart')});
+            var wnd = window;
+            var view = new vmv.Chart( {
+                action: vu.edit.indexOf('&chart') != -1 ? vu.edit : vu.edit + '&chart=' + $(this).attr('data-chart')
+            } );
+            vu.edit = vu.edit.replace(/[\?&]lang=[^&]+/, '');
 
             wnd.send_to_editor = function () {
                 wnd.location.href = wnd.location.href.replace(/vaction/, '');
