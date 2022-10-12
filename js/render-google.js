@@ -399,6 +399,7 @@ var chartWrapperError = [];
         });
 
         if ( withControlMode ) {
+           // alert( chart.is_library_page );
             // Create a control wrapper, passing some options.
             var controlWrapper = new gv.ControlWrapper( {
                 containerId: 'control_wrapper_' + id,
@@ -410,6 +411,16 @@ var chartWrapperError = [];
             render.setOptions(settings);
             chartWrapper.bind(controlWrapper, render);
             chartWrapper.draw(table);
+
+            gv.events.addListener(controlWrapper, 'ready', function ( err ) {
+                if ( 'vertical' === settings.controls.ui.orientation ) {
+                    if ( 'canvas' === id ) {
+                        jQuery( '#' + id ).addClass( 'vz-vertical' );
+                    }
+                } else {
+                    jQuery( '#' + id ).removeClass( 'vz-vertical' );
+                }
+            });
         } else {
             $('body').trigger('visualizer:chart:settings:extend', {id: id, chart: chart, settings: settings, data: table});
             render.draw(table, settings);

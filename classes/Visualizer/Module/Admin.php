@@ -968,6 +968,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				$settings   = $arguments[1];
 			}
 
+			if ( isset( $settings['controls']['ui']['labelStacking'] ) ) {
+				unset( $settings['controls']['ui']['labelStacking'] );
+			}
+			if ( isset( $settings['controls']['ui']['orientation'] ) ) {
+				unset( $settings['controls']['ui']['orientation'] );
+			}
+
 			// add chart to the array
 			$charts[ $id ] = array(
 				'id'       => $chart->ID,
