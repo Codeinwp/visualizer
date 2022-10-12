@@ -61,7 +61,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 			}
 			echo '<div class="type-box type-box-', $type, $lib_classes, '">';
 			if ( ! $array['enabled'] ) {
-				echo "<a class='pro-upsell' href='" . Visualizer_Plugin::PRO_TEASER_URL . "' target='_blank'>";
+				echo "<a class='pro-upsell' href='" . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'charttypes' ) . "' target='_blank'>";
 				echo "<span class='visualizder-pro-label'>" . __( 'PREMIUM', 'visualizer' ) . '</span>';
 			}
 			echo '<label class="type-label', $type === $this->type ? ' type-label-selected' : '', '">';
