@@ -270,6 +270,9 @@ class Visualizer_Module {
 
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 		$fp = tmpfile();
+		if ( null === $fp ) {
+			$fp = fopen( wp_tempnam(), 'w+' );
+		}
 		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
 			unset( $rows[1] );
 			$rows = array_values( $rows );
