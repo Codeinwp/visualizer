@@ -105,7 +105,7 @@ class Visualizer_Gutenberg_Block {
 
 		$translation_array = array(
 			'isPro'     => $type,
-			'proTeaser' => Visualizer_Plugin::PRO_TEASER_URL,
+			'proTeaser' => tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'blockupsell'),
 			'absurl'    => VISUALIZER_ABSURL,
 			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
 			'adminPage' => menu_page_url( 'visualizer', false ),

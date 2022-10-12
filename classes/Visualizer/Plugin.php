@@ -98,7 +98,7 @@ class Visualizer_Plugin {
 	const CF_CHART_URL = 'visualizer-chart-url';
 	const CF_CHART_SCHEDULE = 'visualizer-chart-schedule';
 	// Added by Ash/Upwork
-	const PRO_TEASER_URL = 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing';
+	const PRO_TEASER_URL = 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/';
 	const PRO_TEASER_TITLE = 'Check PRO version ';
 
 	const CF_CHART_CACHE = 'visualizer-chart-cache';

@@ -11,7 +11,7 @@
 				href="https://themeisle.com/">ThemeIsle</a></span>
 		<div class="header-btns">
 			<?php if ( $show_more ) { ?>
-			<a target="_blank" href="<?php echo Visualizer_Plugin::PRO_TEASER_URL; ?>" class="buy-now"><span
+			<a target="_blank" href="<?php echo tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'supportheader' ); ?>" class="buy-now"><span
 					class="dashicons dashicons-cart"></span>More features</a>
 			<?php } ?>
 		</div>

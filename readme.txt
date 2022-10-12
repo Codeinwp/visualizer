@@ -12,7 +12,7 @@ A simple and powerful WordPress chart plugin to create responsive charts & table
 
 ## Description ##
 
-<p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/" rel="nofollow">Visualizer: Tables and Charts for WordPress plugin</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
+<p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=plugin-readme&utm_medium=visualizer&utm_campaign=description" rel="nofollow">Visualizer: Tables and Charts for WordPress plugin</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
 
 The plugin uses Google Visualization API, DataTables.net and ChartJS to add responsive & animated charts, graphs and tables, which support cross-browser compatibility and display perfectly on mobile devices. You can greatly customize all aspects of the charts and tables, and import the data from Excel, CSV, Google Sheets and more!
 
@@ -46,7 +46,7 @@ Charts are rendered using HTML5/SVG technology to provide cross-browser compatib
 > * Priority email support from the developer of the plugin
 > * Support and updates for as long as your subscription is valid
 >
-> **[Learn more about Visualizer PRO](http://themeisle.com/plugins/visualizer-charts-and-graphs/)**
+> **[Learn more about Visualizer PRO](https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=plugin-readme&utm_medium=visualizer&utm_campaign=learnmore)**
 
 The plugins works perfectly with the all <a href="https://justfreethemes.com/" rel="nofollow">free</a> or <a href="https://www.codeinwp.com/blog/best-wordpress-themes/" rel="nofollow">premium WordPress themes</a>
 

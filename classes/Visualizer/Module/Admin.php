@@ -726,7 +726,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			jQuery( document ).ready( function() {
 				jQuery( '#toplevel_page_visualizer' ).on( 'click', 'li:not(.wp-submenu-head, .wp-first-item):eq(2)', function( e ) {
 					e.preventDefault();
-					window.open( 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing', '_blank' );
+					window.open( '<?php echo tsdk_utmify( 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/', 'toplevel' ); ?>', '_blank' );
 				} );
 			} );
 		</script>
@@ -968,6 +968,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				$settings   = $arguments[1];
 			}
 
+			if ( isset( $settings['controls']['ui']['labelStacking'] ) ) {
+				unset( $settings['controls']['ui']['labelStacking'] );
+			}
+			if ( isset( $settings['controls']['ui']['orientation'] ) ) {
+				unset( $settings['controls']['ui']['orientation'] );
+			}
+
 			// add chart to the array
 			$charts[ $id ] = array(
 				'id'       => $chart->ID,
@@ -1086,7 +1093,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			);
 			// flattr link
 			$plugin_meta[] = sprintf(
-				'<a style="color:red" href="' . Visualizer_Plugin::PRO_TEASER_URL . '" target="_blank">%s</a>',
+				'<a style="color:red" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'pluginrow' ) . '" target="_blank">%s</a>',
 				esc_html__( 'Pro Addon', 'visualizer' )
 			);
 		}

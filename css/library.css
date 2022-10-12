@@ -124,9 +124,20 @@
 }
 
 .visualizer-nochart-shortcode,
-.visualizer-chart-shortcode {
-    background-position: -143px -126px;
+.visualizer-nochart-shortcode:focus,
+.visualizer-chart-shortcode,
+.visualizer-chart-shortcode:focus {
     float: left;
+    background: none;
+    text-decoration: none;
+    box-shadow: none;
+}
+.visualizer-chart-shortcode:hover {
+	color: #404040;
+}
+.visualizer-nochart-shortcode .dashicons-admin-page ,
+.visualizer-chart-shortcode .dashicons-admin-page {
+	font-size: 16px;
 }
 
 .visualizer-nochart-image,
@@ -152,8 +163,7 @@
 }
 
 .visualizer-chart-shortcode {
-	padding: 3px 0;
-	color: #aaa;
+	color: #404040;
 	text-shadow: 0 1px 0 #fff;
 	cursor: pointer;
 }

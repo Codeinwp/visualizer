@@ -363,7 +363,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
 			echo '<a class="visualizer-chart-action visualizer-chart-image" href="javascript:;" title="', esc_attr__( 'Download as image', 'visualizer' ), '" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"></a>';
 		}
-		echo '<a class="visualizer-chart-action visualizer-chart-shortcode" href="javascript:;" title="', esc_attr__( 'Click to copy shortcode', 'visualizer' ), '" data-clipboard-text="', esc_attr( $shortcode ), '"></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-shortcode" href="javascript:;" title="', esc_attr__( 'Click to copy shortcode', 'visualizer' ), '" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-admin-page"></span></a>';
 		echo '<span>&nbsp;</span>';
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
 		echo '</div>';
@@ -397,7 +397,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Private charts', 'visualizer' ) . '</li>';
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li></ul>';
-			echo '<p><a href="' . str_replace( '#pricing', '#features', Visualizer_Plugin::PRO_TEASER_URL ) . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
+			echo '<p><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarupsell' ) . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
