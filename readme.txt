@@ -163,6 +163,19 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.8.1](https://github.com/Codeinwp/visualizer/compare/v3.8.0...v3.8.1) (2022-10-12)
+
+
+- Change copy shortcode icon to clone a chart We can change copy Short Code icon [#945](https://github.com/Codeinwp/visualizer/issues/945)
+- Fix temp file creation issue on instawp selecting the line chart is not working on instawp [#940](https://github.com/Codeinwp/visualizer/issues/940)
+- Fix control Type error
+- Fixed simple editor scrolling issue
+- Fix filter broken layout
+- Fix chartJs javascript error when rendering multiple charts
+
+
+
+
 #### [Version 3.8.0](https://github.com/Codeinwp/visualizer/compare/v3.7.12...v3.8.0) (2022-09-21)
 
 - Add data filter support for the charts
