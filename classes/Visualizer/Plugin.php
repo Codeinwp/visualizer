@@ -28,7 +28,7 @@
 class Visualizer_Plugin {
 
 	const NAME = 'visualizer';
-	const VERSION = '3.8.0';
+	const VERSION = '3.8.1';
 
 	// custom post types
 	const CPT_VISUALIZER = 'visualizer';
@@ -98,7 +98,7 @@ class Visualizer_Plugin {
 	const CF_CHART_URL = 'visualizer-chart-url';
 	const CF_CHART_SCHEDULE = 'visualizer-chart-schedule';
 	// Added by Ash/Upwork
-	const PRO_TEASER_URL = 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/#pricing';
+	const PRO_TEASER_URL = 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/';
 	const PRO_TEASER_TITLE = 'Check PRO version ';
 
 	const CF_CHART_CACHE = 'visualizer-chart-cache';

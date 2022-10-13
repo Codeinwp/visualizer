@@ -47,7 +47,7 @@
     }
   },
   "require-dev": {
-    "wp-coding-standards/wpcs": "1.2.1",
+    "wp-coding-standards/wpcs": "^2.3",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
     "phpcompatibility/phpcompatibility-wp": "*"
   }

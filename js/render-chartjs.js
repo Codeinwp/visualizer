@@ -113,6 +113,11 @@
 
         handleSettings(settings, chart);
 
+        const getChart = Chart.getChart(context);
+        if ( getChart ) {
+            return;
+        }
+
         var chartjs = new Chart(context, {
             type: type,
             data: {

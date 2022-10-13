@@ -1,9 +1,9 @@
 <?php
 /*
 	Plugin Name: Visualizer: Tables and Charts for WordPress
-	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs-lite/
+	Plugin URI: https://themeisle.com/plugins/visualizer-charts-and-graphs/
 	Description: A simple, easy to use and quite powerful tool to create, manage and embed interactive charts into your WordPress posts and pages. The plugin uses Google Visualization API to render charts, which supports cross-browser compatibility (adopting VML for older IE versions) and cross-platform portability to iOS and new Android releases.
-	Version: 3.8.0
+	Version: 3.8.1
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	Requires at least: 3.5
@@ -69,6 +69,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
+	define( 'VISUALIZER_DIRNAME', basename( VISUALIZER_ABSPATH ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
 	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
 	// this is also used in Block.php
@@ -132,7 +133,16 @@ function visualizer_launch() {
 	}
 	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
 	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
-
+	add_filter(
+		'themeisle_sdk_compatibilities/' . VISUALIZER_DIRNAME, function ( $compatibilities ) {
+			$compatibilities['VisualizerPRO'] = array(
+				'basefile'  => defined( 'VISUALIZER_PRO_BASEFILE' ) ? VISUALIZER_PRO_BASEFILE : '',
+				'required'  => '1.8',
+				'tested_up' => '1.12',
+			);
+			return $compatibilities;
+		}
+	);
 }
 
 /**
