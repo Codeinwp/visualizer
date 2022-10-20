@@ -139,6 +139,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			)
 		);
 
+		$is_wc_source = get_post_meta( $id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true );
 		$url = get_post_meta( $id, Visualizer_Plugin::CF_JSON_URL, true );
 		$root = get_post_meta( $id, Visualizer_Plugin::CF_JSON_ROOT, true );
 		$paging = get_post_meta( $id, Visualizer_Plugin::CF_JSON_PAGING, true );
@@ -171,9 +172,11 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							name="url"
 							value="<?php echo esc_url( $url ); ?>"
 							placeholder="<?php esc_html_e( 'Please enter the URL', 'visualizer' ); ?>"
-							class="visualizer-input json-form-element">
+							class="visualizer-input json-form-element"
+							<?php echo $is_wc_source ? 'readonly' : ''; ?>
+							>
 						<button class="button button-secondary button-small" id="visualizer-json-fetch"><?php esc_html_e( 'Fetch Endpoint', 'visualizer' ); ?></button>
-						
+
 						<div class="visualizer-json-subform">
 							<h3 class="viz-substep <?php echo $headers_open ? 'open' : ''; ?>"><?php _e( 'Headers', 'visualizer' ); ?></h3>
 							<div class="json-wizard-headers">
@@ -670,7 +673,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		);
 
 		// this will allow us to open the correct source tab by default.
-		$source_of_chart    = strtolower( get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true ) );
+		$source_of_chart       = strtolower( get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true ) );
+		// Import from woocommerce report.
+		$is_woocommerce_source = strtolower( get_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true ) );
+		if ( ! empty( $is_woocommerce_source ) ) {
+			$source_of_chart .= '_wc';
+		}
 		// both import from wp and import from db have the same source so we need to differentiate.
 		$filter_config      = get_post_meta( $chart_id, Visualizer_Plugin::CF_FILTER_CONFIG, true );
 		// if filter config is present, then its import from wp.
@@ -920,6 +928,104 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 								</div>
 							</li>
 
+							<!-- import from WooCommerce -->
+							<?php
+							if ( class_exists( 'WooCommerce', false ) ) :
+								$wc_source = strtolower( get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_WOOCOMMERCE_SOURCE, true ) );
+								$wc_source_list = apply_filters(
+									'visualizer_woocommerce_report_endpoints',
+									array(
+										array(
+											'name'     => esc_html__( 'Sales', 'visualizer' ),
+											'endpoint' => esc_attr( 'sales' ),
+										),
+										array(
+											'name'     => esc_html__( 'Top Sellers', 'visualizer' ),
+											'endpoint' => esc_attr( 'top_sellers' ),
+										),
+										array(
+											'name'     => esc_html__( 'Coupons Totals', 'visualizer' ),
+											'endpoint' => esc_attr( 'coupons/totals' ),
+										),
+										array(
+											'name'     => esc_html__( 'Customers Totals', 'visualizer' ),
+											'endpoint' => esc_attr( 'customers/totals' ),
+										),
+										array(
+											'name'     => esc_html__( 'Orders Totals', 'visualizer' ),
+											'endpoint' => esc_attr( 'orders/totals' ),
+										),
+										array(
+											'name'     => esc_html__( 'Products Totals', 'visualizer' ),
+											'endpoint' => esc_attr( 'products/totals' ),
+										),
+										array(
+											'name'     => esc_html__( 'Reviews Totals', 'visualizer' ),
+											'endpoint' => esc_attr( 'reviews/totals' ),
+										),
+									)
+								);
+								?>
+							<li class="viz-group visualizer_woocommerce_source<?php echo 'visualizer_source_json_wc' === $source_of_chart ? ' open' : ''; ?> <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-wc-report' ); ?> ">
+								<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from WooCommerce Reports', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
+								<div class="viz-group-content edit-data-content">
+									<div>
+										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a WooCommerce report API. For more info check <a href="https://woocommerce.github.io/woocommerce-rest-api-docs/?shell#reports" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+										<form id="vz-import-woo-report" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
+											<div class="remote-file-section">
+												<?php
+												$bttn_label = 'visualizer_source_json_wc' === $source_of_chart ? __( 'Modify Parameters', 'visualizer' ) : __( 'Create Parameters', 'visualizer' );
+												?>
+													<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
+													<select name="time" id="vz-woo-time" class="visualizer-select json-form-element" data-chart="<?php echo $chart_id; ?>">
+														<?php
+														$hours     = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
+														$schedules = apply_filters(
+															'visualizer_chart_schedules', array(
+																'-1' => __( 'One-time', 'visualizer' ),
+															),
+															'json',
+															$chart_id
+														);
+														foreach ( $schedules as $num => $name ) {
+																// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+															$extra = $num == $hours ? 'selected' : '';
+															?>
+															<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+															<?php
+														}
+														do_action( 'visualizer_chart_schedules_spl', 'json', $chart_id, 1 );
+														?>
+													</select>
+													<p class="viz-group-description"><?php _e( 'Select report endpoint', 'visualizer' ); ?></p>
+													<select name="vz_woo_source" id="vz-woo-source" class="visualizer-select json-form-element" data-chart="<?php echo $chart_id; ?>">
+														<option value=""></option>
+														<?php
+														if ( ! empty( $wc_source_list ) ) {
+															foreach ( $wc_source_list as $api ) {
+																if ( isset( $api['name'] ) && $api['endpoint'] ) {
+																	echo sprintf( '<option value="%2$s" %3$s>%1$s</option>', $api['name'], $api['endpoint'], selected( $wc_source, $api['endpoint'], false ) ); // phpcs:ignore
+																}
+															}
+														}
+														?>
+													</select>
+											</div>
+
+											<input type="button" id="woo-chart-button" class="button button-secondary show-chart-toggle"
+											value="<?php echo $bttn_label; ?>" data-current="chart"
+											data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+											data-t-chart="<?php echo $bttn_label; ?>"
+											<?php empty( $wc_source ) ? 'disabled' : ''; ?>
+											>
+											<input type="button" id="woo-chart-save-button" class="button button-primary "
+												value="<?php _e( 'Save Schedule', 'visualizer' ); ?>" <?php empty( $wc_source ) ? 'disabled' : ''; ?>>
+										</form>
+										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wc-report' ); ?>
+									</div>
+								</div>
+							</li>
+							<?php endif; ?>
 							<?php
 								$save_query = esc_url(
 									add_query_arg(
