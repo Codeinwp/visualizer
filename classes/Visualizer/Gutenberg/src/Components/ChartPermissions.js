@@ -73,6 +73,7 @@ class ChartPermissions extends Component {
 					<PanelBody
 						title={ __( 'Who can see this chart?' ) }
 						initialOpen={ false }
+						className="vz-permission-tab"
 					>
 
 						<SelectControl
@@ -128,6 +129,7 @@ class ChartPermissions extends Component {
 					<PanelBody
 						title={ __( 'Who can edit this chart?' ) }
 						initialOpen={ false }
+						className="vz-permission-tab"
 					>
 
 						<SelectControl
