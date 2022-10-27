@@ -218,6 +218,7 @@ abstract class Visualizer_Source {
 			}
 			switch ( $series['type'] ) {
 				case 'number':
+					$data[ $i ] = preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $data[ $i ] );
 					$data[ $i ] = ( is_numeric( $data[ $i ] ) ) ? floatval( $data[ $i ] ) : ( is_numeric( str_replace( ',', '', $data[ $i ] ) ) ? floatval( str_replace( ',', '', $data[ $i ] ) ) : null );
 					break;
 				case 'boolean':
