@@ -560,6 +560,9 @@
 
         // Select WooCommerce report endpoint.
         $( '#vz-woo-source' ).on( 'click', function( e ) {
+            // Trigger change action.
+            $( 'body' ).trigger( 'visualizer:change:action' );
+
             if ( '' !== $( this ).val() ) {
                 $( '#woo-chart-button, #woo-chart-save-button' ).removeAttr( 'disabled' );
             } else {
