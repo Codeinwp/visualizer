@@ -247,6 +247,9 @@
                 }
                 if(typeof series.format.decimal !== ''){
                     parts[1] = series.format.decimal;
+                    if ( '' === series.format.precision ) {
+                        series.format.precision = 2;
+                    }
                 }
                 if(typeof series.format.precision !== '' && parseInt(series.format.precision) > 0){
                     parts[2] = series.format.precision;
