@@ -377,7 +377,11 @@
 .DTCR_pointer {
 	z-index: 999999 !important;
 }
-
+.vz-permission-tab {
+	select.components-select-control__input {
+		overflow:auto !important;
+	}
+}
 .components-panel {
 	.components-select-control {
 		height:auto !important;
