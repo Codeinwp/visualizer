@@ -269,7 +269,8 @@ class Visualizer_Module {
 		$filename .= '.csv';
 
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
-		$fp = tmpfile();
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$fp = @tmpfile();
 		if ( null === $fp ) {
 			$fp = fopen( wp_tempnam(), 'w+' );
 		}
