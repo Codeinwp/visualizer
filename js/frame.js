@@ -383,17 +383,23 @@
         });
 
         // toggle between chart and create/modify parameters
-        $( '#json-chart-button' ).on( 'click', function(){
+        $( '#json-chart-button, #woo-chart-button' ).on( 'click', function(){
 
             $('body').off('visualizer:change:action').on('visualizer:change:action', function(e){
-                var filter_button = $( '#json-chart-button' );
+                var filter_button = $( '#json-chart-button, #woo-chart-button' );
                 $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
                 filter_button.val( filter_button.attr( 'data-t-chart' ) );
                 filter_button.html( filter_button.attr( 'data-t-chart' ) );
                 filter_button.attr( 'data-current', 'chart' );
                 $( '#canvas' ).css("z-index", "1").show();
+                $( '#vz-import-woo-report' ).find( 'select, input' ).removeAttr( 'disabled' );
             });
 
+            if ( 'json-chart-button' === $( this ).attr( 'id' ) ) {
+                $( '#vz-import-woo-report' ).find( 'select, input' ).attr( 'disabled', true );
+            } else {
+                $( '#vz-import-woo-report' ).find( 'select, input' ).removeAttr( 'disabled' );
+            }
             $('#content').css('width', 'calc(100% - 100px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 // toggle from chart to LHS form
@@ -402,6 +408,15 @@
                 $(this).attr( 'data-current', 'filter' );
                 $( '.visualizer-editor-lhs' ).hide();
                 $( '#visualizer-json-screen' ).css("z-index", "9999").show();
+                if ( 'woo-chart-button' === $( this ).attr( 'id' ) && '' !== $( '#vz-woo-source:visible' ).val() ) {
+                    $( '#vz-import-json-url' ).val( visualizer.rest_base + $( '#vz-woo-source' ).val() ).attr( 'readonly', true );
+                } else {
+                    if ( 'undefined' !== $( '#vz-import-json-url' ).attr( 'readonly' ) ) {
+                        $( '#vz-import-json-url' ).val( '' ).removeAttr( 'readonly' ).removeAttr( 'value' );
+                        $('#json-endpoint-form')[0].reset();
+                        $('.visualizer-json-form h3.viz-step:not(.step1)').addClass('ui-state-disabled');
+                    }
+                }
                 $( '#canvas' ).hide();
             }else{
                 // toggle from LHS form to chart
@@ -410,14 +425,14 @@
         } );
 
         $('body').on('visualizer:json:form:submit', function() {
-            var filter_button = $( '#json-chart-button' );
+            var filter_button = $( '#json-chart-button, #woo-chart-button' );
             $( '#visualizer-json-screen' ).css("z-index", "-1").hide();
             $('#canvas').lock();
             filter_button.val( filter_button.attr( 'data-t-chart' ) );
             filter_button.html( filter_button.attr( 'data-t-chart' ) );
             filter_button.attr( 'data-current', 'chart' );
             end_ajax( $( '#visualizer-json-screen' ) );
-            $( '#canvas' ).css("z-index", "1").show();
+            $( '#canvas' ).removeClass('visualizer-chart-loaded').css("z-index", "1").show();
         });
 
 
@@ -512,7 +527,7 @@
             }
 
             // populate the form elements that are in the other tabs.
-            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element, #vz-import-json .json-form-element').each(function(x, y){
+            $('#json-conclude-form-helper .json-form-element, #json-endpoint-form .json-form-element, #json-root-form .json-form-element, #vz-import-json .json-form-element, #vz-import-woo-report .json-form-element:not(:disabled)').each(function(x, y){
                 $('#json-conclude-form').append('<input type="hidden" name="' + y.name + '" value="' + y.value + '">');
             });
 
@@ -520,17 +535,19 @@
         });
 
         // update the schedule
-        $('#json-chart-save-button').on('click', function(e){
+        $('#json-chart-save-button, #woo-chart-save-button').on('click', function(e){
             e.preventDefault();
             $('#canvas').lock();
+            var btnID = jQuery( this ).attr( 'id' );
             $.ajax({
                 url     : ajaxurl,
                 method  : 'post',
                 data    : {
                     'action'    : visualizer.ajax['actions']['json_set_schedule'],
                     'security'  : visualizer.ajax['nonces']['json_set_schedule'],
-                    'chart'     : $('#vz-json-time').attr('data-chart'),
-                    'time'      : $('#vz-json-time').val()
+                    'chart'     : $('#vz-json-time, #vz-woo-time').attr('data-chart'),
+                    'time'      : $('#vz-json-time, #vz-woo-time').val(),
+                    'is_woocommerce_report': 'woo-chart-save-button' === btnID,
                 },
                 success : function(data){
                     // do nothing.
@@ -540,6 +557,18 @@
                 }
             });
         });
+
+        // Select WooCommerce report endpoint.
+        $( '#vz-woo-source' ).on( 'click', function( e ) {
+            // Trigger change action.
+            $( 'body' ).trigger( 'visualizer:change:action' );
+
+            if ( '' !== $( this ).val() ) {
+                $( '#woo-chart-button, #woo-chart-save-button' ).removeAttr( 'disabled' );
+            } else {
+                $( '#woo-chart-button, #woo-chart-save-button' ).attr( 'disabled', true );
+            }
+        } );
 
     }
 

@@ -732,7 +732,7 @@ class Visualizer_Module {
 	public static final function get_features_for_license( $plan ) {
 		switch ( $plan ) {
 			case 1:
-				return array( 'import-wp', 'db-query' );
+				return array( 'import-wp', 'db-query', 'import-wc-report' );
 			case 2:
 				return array( 'schedule-chart', 'chart-permissions' );
 		}

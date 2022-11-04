@@ -135,6 +135,20 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
+		if ( Visualizer_Module::is_pro() ) {
+			$is_woocommerce_report = filter_input(
+				INPUT_POST,
+				'is_woocommerce_report',
+				FILTER_VALIDATE_BOOLEAN
+			);
+
+			if ( $is_woocommerce_report ) {
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true );
+			} else {
+				delete_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE );
+			}
+		}
+
 		delete_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE );
 
 		if ( -1 < $time ) {
@@ -244,6 +258,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING );
 		if ( ! empty( $params['paging'] ) ) {
 			add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING, $params['paging'] );
+		}
+
+		if ( Visualizer_Module::is_pro() ) {
+			if ( ! empty( $params['vz_woo_source'] ) ) {
+				update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_WOOCOMMERCE_SOURCE, $params['vz_woo_source'] );
+			} else {
+				delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_WOOCOMMERCE_SOURCE );
+			}
 		}
 
 		$time = filter_input(
@@ -881,6 +903,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				'json_tag_separator' => Visualizer_Source_Json::TAG_SEPARATOR,
 				'json_tag_separator_view' => Visualizer_Source_Json::TAG_SEPARATOR_VIEW,
 				'is_front'  => false,
+				'rest_base' => get_rest_url( null, 'wc/v3/reports/' ),
 			)
 		);
 

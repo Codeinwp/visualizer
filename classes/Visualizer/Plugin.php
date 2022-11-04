@@ -102,6 +102,8 @@ class Visualizer_Plugin {
 	const PRO_TEASER_TITLE = 'Check PRO version ';
 
 	const CF_CHART_CACHE = 'visualizer-chart-cache';
+	const CF_JSON_WOOCOMMERCE_SOURCE = 'visualizer-woocommerce-source';
+	const CF_IS_WOOCOMMERCE_SOURCE = 'visualizer-is-woocommerce-source';
 
 	/**
 	 * Name of the option for WordPress DB.
