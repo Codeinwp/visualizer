@@ -305,6 +305,17 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$atts
 		);
 
+		if ( Visualizer_Module::is_pro() && function_exists( 'icl_get_languages' ) ) {
+			global $sitepress;
+			$locale       = icl_get_current_language();
+			$locale       = strtolower( str_replace( '_', '-', $locale ) );
+			$trid         = $sitepress->get_element_trid( $atts['id'], 'post_' . Visualizer_Plugin::CPT_VISUALIZER );
+			$translations = $sitepress->get_element_translations( $trid );
+			if ( isset( $translations[ $locale ] ) && is_object( $translations[ $locale ] ) ) {
+				$atts['id'] = $translations[ $locale ]->element_id;
+			}
+		}
+
 		$chart_data = $this->getChartData( Visualizer_Plugin::CF_CHART_CACHE, $atts['id'] );
 		// if empty chart does not exists, then return empty string.
 		if ( ! $chart_data ) {

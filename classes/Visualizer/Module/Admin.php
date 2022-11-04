@@ -767,6 +767,22 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	private function getDisplayFilters( &$query_args ) {
 		$query  = array();
 
+		if ( Visualizer_Module::is_pro() && function_exists( 'icl_get_languages' ) ) {
+			$current_lang = icl_get_current_language();
+			if ( in_array( $current_lang, array( 'all', icl_get_default_language() ), true ) ) {
+				$query[] = array(
+					'key'     => 'chart_lang',
+					'compare' => 'NOT EXISTS',
+				);
+			} else {
+				$query[] = array(
+					'key'     => 'chart_lang',
+					'value'   => $current_lang,
+					'compare' => '=',
+				);
+			}
+		}
+
 		// add chart type filter to the query arguments
 		$type = filter_input( INPUT_GET, 'type' );
 		if ( $type && in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
