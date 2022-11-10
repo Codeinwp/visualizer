@@ -163,6 +163,18 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+#### [Version 3.9.0](https://github.com/Codeinwp/visualizer/compare/v3.8.1...v3.9.0) (2022-11-10)
+
+- Fixed table chart decimal number issue Decimal Numbers are ignored and not displayed [#955](https://github.com/Codeinwp/visualizer/issues/955)
+- Fix the scrollbar issue that happens on WP 6.1 version [WP 6.1] Chart permissions selector is not scrollable [#950](https://github.com/Codeinwp/visualizer/issues/950)
+- Fix PHP Warning Warning when copy (frontend action) is enabled [#949](https://github.com/Codeinwp/visualizer/issues/949)
+- Compatibility with the WPML translation plugin for translating charts [PRO feature] add support for string translations [#731](https://github.com/Codeinwp/visualizer/issues/731)
+- Integration with Woocommerce Data endpoints for creating charts [PRO feature]
+- Show new features on chart library page
+
+
+
+
 ##### [Version 3.8.1](https://github.com/Codeinwp/visualizer/compare/v3.8.0...v3.8.1) (2022-10-12)
 
 
