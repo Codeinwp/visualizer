@@ -1125,7 +1125,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return bool Default false
 	 */
 	public static function proFeaturesLocked() {
-		return false;
 		if ( Visualizer_Module::is_pro() ) {
 			return true;
 		}
