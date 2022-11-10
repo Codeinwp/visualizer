@@ -74,6 +74,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->_addAction( 'admin_init', 'init' );
 
+		$this->_addAction( 'visualizer_chart_languages', 'addMultilingualSupport' );
+
 		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
@@ -1123,9 +1125,55 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return bool Default false
 	 */
 	public static function proFeaturesLocked() {
+		return false;
 		if ( Visualizer_Module::is_pro() ) {
 			return true;
 		}
 		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false : true;
+	}
+
+	/**
+	 * Multilingual Support.
+	 *
+	 * @param int $chart_id Chart ID.
+	 * @return bool Default false
+	 */
+	public function addMultilingualSupport( $chart_id ) {
+		if ( Visualizer_Module::is_pro() ) {
+			return;
+		}
+		if ( function_exists( 'icl_get_languages' ) ) {
+			$language     = icl_get_languages();
+			$current_lang = icl_get_current_language();
+			$default_lang = icl_get_default_language();
+			$post_info    = wpml_get_language_information( null, $chart_id );
+
+			global $sitepress;
+			$translations = array();
+			if ( ! empty( $post_info ) && ( $default_lang === $post_info['language_code'] ) ) {
+				$trid         = $sitepress->get_element_trid( $chart_id, 'post_' . Visualizer_Plugin::CPT_VISUALIZER );
+				$translations = $sitepress->get_element_translations( $trid );
+			}
+			if ( empty( $translations ) ) {
+				return;
+			}
+			?>
+			<hr><div class="visualizer-languages-list only-pro">
+				<?php
+				foreach ( $language as $lang ) {
+					$lang_code = $lang['code'];
+					if ( $current_lang !== $lang_code ) {
+						?>
+						<a href="javascript:;">
+							<img src="<?php echo esc_url( $lang['country_flag_url'] ); ?>" alt="<?php echo esc_attr( $lang['translated_name'] ); ?>">
+						</a>
+						<?php
+					}
+				}
+				?>
+				<a href="<?php echo tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'wpml-support', 'visualizer_render_char' ); ?>"target="_blank"><?php esc_html_e( 'Upgrade to PRO to active this translation for charts', 'visualizer' ); ?></a>
+			</div>
+			<?php
+		}
 	}
 }
