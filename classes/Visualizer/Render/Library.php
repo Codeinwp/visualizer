@@ -365,6 +365,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		echo '<a class="visualizer-chart-action visualizer-chart-shortcode" href="javascript:;" title="', esc_attr__( 'Click to copy shortcode', 'visualizer' ), '" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-admin-page"></span></a>';
 		echo '<span>&nbsp;</span>';
+		do_action( 'visualizer_chart_languages', $chart_id );
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
 		echo '</div>';
 		echo '</div></div>';
@@ -396,6 +397,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Create charts from WordPress tables', 'visualizer' ) . '</li>';
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Private charts', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'WPML support for translating charts', 'visualizer' ) . '</li>';
+			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Integration with Woocommerce Data endpoints', 'visualizer' ) . '</li>';
 			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li></ul>';
 			echo '<p><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarupsell' ) . '" target="_blank" class="button button-primary">' . __( 'View more features', 'visualizer' ) . '</a></p>';
 			echo '</div>';

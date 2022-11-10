@@ -269,7 +269,8 @@ class Visualizer_Module {
 		$filename .= '.csv';
 
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
-		$fp = tmpfile();
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$fp = @tmpfile();
 		if ( null === $fp ) {
 			$fp = fopen( wp_tempnam(), 'w+' );
 		}
@@ -732,7 +733,7 @@ class Visualizer_Module {
 	public static final function get_features_for_license( $plan ) {
 		switch ( $plan ) {
 			case 1:
-				return array( 'import-wp', 'db-query' );
+				return array( 'import-wp', 'db-query', 'import-wc-report' );
 			case 2:
 				return array( 'schedule-chart', 'chart-permissions' );
 		}

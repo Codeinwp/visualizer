@@ -305,6 +305,17 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$atts
 		);
 
+		if ( Visualizer_Module::is_pro() && function_exists( 'icl_get_languages' ) ) {
+			global $sitepress;
+			$locale       = icl_get_current_language();
+			$locale       = strtolower( str_replace( '_', '-', $locale ) );
+			$trid         = $sitepress->get_element_trid( $atts['id'], 'post_' . Visualizer_Plugin::CPT_VISUALIZER );
+			$translations = $sitepress->get_element_translations( $trid );
+			if ( isset( $translations[ $locale ] ) && is_object( $translations[ $locale ] ) ) {
+				$atts['id'] = $translations[ $locale ]->element_id;
+			}
+		}
+
 		$chart_data = $this->getChartData( Visualizer_Plugin::CF_CHART_CACHE, $atts['id'] );
 		// if empty chart does not exists, then return empty string.
 		if ( ! $chart_data ) {
@@ -316,6 +327,10 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$series       = $chart_data['series'];
 		// do not show the chart?
 		if ( ! apply_filters( 'visualizer_pro_show_chart', true, $atts['id'] ) ) {
+			return '';
+		}
+
+		if ( ! is_admin() && ! empty( $chart_data['is_woocommerce_report'] ) ) {
 			return '';
 		}
 
@@ -639,8 +654,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		// Get chart by ID.
 		$chart = get_post( $chart_id );
 		if ( $chart && Visualizer_Plugin::CPT_VISUALIZER === $chart->post_type ) {
-			$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
-			$series   = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
+			$settings              = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+			$series                = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
+			$is_woocommerce_report = get_post_meta( $chart->ID, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true );
 
 			if ( isset( $settings['series'] ) && ! ( count( $settings['series'] ) - count( $series ) > 1 ) ) {
 				$diff_total_series = abs( count( $settings['series'] ) - count( $series ) );
@@ -651,11 +667,12 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				}
 			}
 			$chart_data = array(
-				'chart'       => $chart,
-				'type'        => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
-				'settings'    => $settings,
-				'series'      => $series,
-				'chart_image' => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_IMAGE, true ),
+				'chart'                 => $chart,
+				'type'                  => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true ),
+				'settings'              => $settings,
+				'series'                => $series,
+				'chart_image'           => get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_IMAGE, true ),
+				'is_woocommerce_report' => $is_woocommerce_report,
 			);
 
 			// Put the results in a transient. Expire after 12 hours.
