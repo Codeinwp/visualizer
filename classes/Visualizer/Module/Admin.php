@@ -768,8 +768,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	private function getDisplayFilters( &$query_args ) {
 		$query  = array();
-
-		if ( Visualizer_Module::is_pro() && function_exists( 'icl_get_languages' ) ) {
+		global $sitepress;
+		if ( Visualizer_Module::is_pro() && ( function_exists( 'icl_get_languages' ) && $sitepress instanceof \SitePress ) ) {
 			$current_lang = icl_get_current_language();
 			if ( in_array( $current_lang, array( 'all', icl_get_default_language() ), true ) ) {
 				$query[] = array(
@@ -1138,16 +1138,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return bool Default false
 	 */
 	public function addMultilingualSupport( $chart_id ) {
+		global $sitepress;
 		if ( Visualizer_Module::is_pro() ) {
 			return;
 		}
-		if ( function_exists( 'icl_get_languages' ) ) {
+		if ( function_exists( 'icl_get_languages' ) && $sitepress instanceof \SitePress ) {
 			$language     = icl_get_languages();
 			$current_lang = icl_get_current_language();
 			$default_lang = icl_get_default_language();
 			$post_info    = wpml_get_language_information( null, $chart_id );
-
-			global $sitepress;
 			$translations = array();
 			if ( ! empty( $post_info ) && ( $default_lang === $post_info['language_code'] ) ) {
 				$trid         = $sitepress->get_element_trid( $chart_id, 'post_' . Visualizer_Plugin::CPT_VISUALIZER );
