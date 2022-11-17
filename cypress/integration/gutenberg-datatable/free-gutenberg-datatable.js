@@ -18,7 +18,8 @@ describe('Test Free - gutenberg (datatable)', function() {
     it('Verify insertion of charts', function() {
         cy.visit('/wp-admin/post-new.php');
 
-        cy.clear_welcome();
+        // get rid of that irritating popup
+        cy.get('.edit-post-welcome-guide .components-modal__header button').click();
 
         var charts = Array.from({ length: 1 }, function(_item, index) {
             return index + 1;

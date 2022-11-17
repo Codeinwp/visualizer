@@ -461,8 +461,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 		if ( $success ) {
-			if ( Visualizer_Module::is_pro() && function_exists( 'icl_get_languages' ) ) {
-				global $sitepress;
+			global $sitepress;
+			if ( Visualizer_Module::is_pro() && ( function_exists( 'icl_get_languages' ) && $sitepress instanceof \SitePress ) ) {
 				$trid         = $sitepress->get_element_trid( $chart_id, 'post_' . Visualizer_Plugin::CPT_VISUALIZER );
 				$translations = $sitepress->get_element_translations( $trid );
 				if ( ! empty( $translations ) ) {
