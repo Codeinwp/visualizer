@@ -163,6 +163,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.9.1](https://github.com/Codeinwp/visualizer/compare/v3.9.0...v3.9.1) (2022-11-17)
+
+- Fixed PHP error when Polylang plugin is activated [#960](https://github.com/Codeinwp/visualizer/issues/960)
+
+
+
+
 #### [Version 3.9.0](https://github.com/Codeinwp/visualizer/compare/v3.8.1...v3.9.0) (2022-11-10)
 
 - Fixed table chart decimal number issue Decimal Numbers are ignored and not displayed [#955](https://github.com/Codeinwp/visualizer/issues/955)
