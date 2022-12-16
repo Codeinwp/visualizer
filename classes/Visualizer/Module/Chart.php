@@ -532,6 +532,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		set_current_screen( 'visualizer_render_chart' );
 		// check chart, if chart not exists, will create new one and redirects to the same page with proper chart id
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
+		if ( ! empty( $_POST ) ) {
+			$_POST = map_deep( $_POST, 'wp_strip_all_tags' );
+		}
 		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			if ( empty( $_GET['lang'] ) || empty( $_GET['parent_chart_id'] ) ) {
 				$this->deleteOldCharts();
