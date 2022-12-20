@@ -197,6 +197,10 @@
             }
         }
 
+        settings.plugins = {
+            legend: settings.legend,
+        };
+
         handleAxes(settings, chart);
 
         override(settings, chart);
