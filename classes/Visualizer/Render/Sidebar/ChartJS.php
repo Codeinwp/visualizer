@@ -35,6 +35,8 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			'right'  => esc_html__( 'Right of the chart', 'visualizer' ),
 			'top'    => esc_html__( 'Above the chart', 'visualizer' ),
 			'bottom' => esc_html__( 'Below the chart', 'visualizer' ),
+			'bottom' => esc_html__( 'Below the chart', 'visualizer' ),
+			'none'   => esc_html__( 'Omit the legend', 'visualizer' ),
 		);
 
 	}

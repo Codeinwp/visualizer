@@ -61,7 +61,8 @@
 			clearTimeout(timeout);
 			timeout = setTimeout(function() {
 				var settings = $('#settings-form').serializeObject();
-
+				settings = JSON.stringify( settings ).replace( /<\/?[^>]+(>|$)/g, '' );
+				settings = JSON.parse( settings );
 				delete settings['width'];
 				delete settings['height'];
 

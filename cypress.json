@@ -5,7 +5,7 @@
     "pass": "wordpress",
     "urls": {
       "library": "/wp-admin/admin.php?page=visualizer",
-      "samples": "https://s3.amazonaws.com/downloads.themeisle.com/samples-visualizer/"
+      "samples": "https://s3.amazonaws.com/verti-utils/samples-visualizer/"
     },
     "chart_types": {
       "free": 4,
