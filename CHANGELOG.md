@@ -1,3 +1,9 @@
+##### [Version 3.9.2](https://github.com/Codeinwp/visualizer/compare/v3.9.1...v3.9.2) (2022-12-21)
+
+- Fixed Geo chart [PRO] flickering issue
+- Added disable legend option for ChartJS chart
+- Enhanced security
+
 ##### [Version 3.9.1](https://github.com/Codeinwp/visualizer/compare/v3.9.0...v3.9.1) (2022-11-17)
 
 - Fixed PHP error when Polylang plugin is activated [#960](https://github.com/Codeinwp/visualizer/issues/960)
