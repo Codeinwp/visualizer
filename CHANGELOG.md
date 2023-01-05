@@ -1,3 +1,7 @@
+##### [Version 3.9.3](https://github.com/Codeinwp/visualizer/compare/v3.9.2...v3.9.3) (2023-01-05)
+
+- Fixed the chart refresh problem when importing from CSV [#970](https://github.com/Codeinwp/visualizer/issues/970)
+
 ##### [Version 3.9.2](https://github.com/Codeinwp/visualizer/compare/v3.9.1...v3.9.2) (2022-12-21)
 
 - Fixed Geo chart [PRO] flickering issue
