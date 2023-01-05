@@ -40,7 +40,7 @@ var chartWrapperError = [];
     function renderSpecificChart(id, chart) {
         var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
 
-        if ( $('#' + id).hasClass('visualizer-chart-loaded') || $('#' + id).children( ':not(.loader)' ).length > 0 ) {
+        if ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader)' ).length > 0 ) ) {
             return;
         }
 
