@@ -539,6 +539,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( empty( $_GET['lang'] ) || empty( $_GET['parent_chart_id'] ) ) {
 				$this->deleteOldCharts();
 				$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
+				$chart_status = Visualizer_Module_Admin::checkChartStatus( $default_type );
+				if ( ! $chart_status ) {
+					$default_type = 'line';
+				}
 				$source       = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $default_type . '.csv' );
 				$source->fetch();
 				$chart_id = wp_insert_post(
@@ -949,7 +953,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			$library = filter_input( INPUT_POST, 'chart-library' );
-			if ( in_array( $type, Visualizer_Plugin::getChartTypes(), true ) ) {
+			if ( Visualizer_Module_Admin::checkChartStatus( $type ) ) {
 				if ( empty( $library ) ) {
 					// library cannot be empty.
 					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Chart library empty while creating the chart! Aborting...', 'error', __FILE__, __LINE__ );

@@ -1174,4 +1174,19 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			<?php
 		}
 	}
+
+	/**
+	 * Check chart is enabled or not.
+	 *
+	 * @param string $type Chart ID.
+	 *
+	 * @return bool Default false
+	 */
+	public function checkChartStatus( $type ) {
+		$types = self::_getChartTypesLocalized( false, false, false, true );
+		if ( isset( $types[ $type ] ) ) {
+			return ! empty( $types[ $type ]['enabled'] );
+		}
+		return false;
+	}
 }
