@@ -1,3 +1,7 @@
+##### [Version 3.9.4](https://github.com/Codeinwp/visualizer/compare/v3.9.3...v3.9.4) (2023-01-12)
+
+- Fixed the lock of PRO features bypass
+
 ##### [Version 3.9.3](https://github.com/Codeinwp/visualizer/compare/v3.9.2...v3.9.3) (2023-01-05)
 
 - Fixed the chart refresh problem when importing from CSV [#970](https://github.com/Codeinwp/visualizer/issues/970)
