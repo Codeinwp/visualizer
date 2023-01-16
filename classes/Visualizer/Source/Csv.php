@@ -47,8 +47,8 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 * @access public
 	 * @param string $filename The path to the file.
 	 */
-	public function __construct( $filename = null ) {
-		$this->_filename = trim( $filename );
+	public function __construct( $filename = '' ) {
+		$this->_filename = trim( (string) $filename );
 	}
 
 	/**

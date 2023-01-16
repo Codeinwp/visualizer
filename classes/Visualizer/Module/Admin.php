@@ -883,7 +883,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->getDisplayFilters( $query_args );
 
 		// Added by Ash/Upwork
-		$filterByMeta = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
+		$filterByMeta = ! empty( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( $filterByMeta ) {
 			$query                    = array(
 				'key'     => Visualizer_Plugin::CF_SETTINGS,

@@ -216,10 +216,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 */
 	private function _renderLibrary() {
 		// Added by Ash/Upwork
-		$filterBy = null;
-		if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) > 0 ) {
-			$filterBy = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
-		}
+		$filterBy = ! empty( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		// Added by Ash/Upwork
 		echo $this->custom_css;
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
