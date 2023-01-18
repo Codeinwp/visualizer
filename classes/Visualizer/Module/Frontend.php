@@ -305,6 +305,11 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$atts
 		);
 
+		$atts['id']        = (int) $atts['id'];
+		$atts['class']     = esc_attr( $atts['class'] );
+		$atts['lazy']      = esc_attr( $atts['lazy'] );
+		$atts['use_image'] = esc_attr( $atts['use_image'] );
+
 		global $sitepress;
 		if ( Visualizer_Module::is_pro() && ( function_exists( 'icl_get_languages' ) && $sitepress instanceof \SitePress ) ) {
 			global $sitepress;
