@@ -270,7 +270,7 @@ class Visualizer_Module {
 
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		$fp = @tmpfile();
+		$fp = function_exists( 'tmpfile' ) ? @tmpfile() : null;
 		if ( null === $fp ) {
 			$fp = fopen( wp_tempnam(), 'w+' );
 		}
