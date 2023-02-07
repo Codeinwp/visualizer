@@ -118,6 +118,31 @@
             return;
         }
 
+        // Format series label.
+        settings.plugins.tooltip = {
+            callbacks: {
+                label: function(context) {
+                    var label = context.dataset.label || '';
+                    if ( label ) {
+                        label += ': ';
+                    }
+
+                    var format = context.dataset.format || '';
+                    if ( format ) {
+                        label += format_datum( context.formattedValue, format );
+                    } else {
+                        format = 'undefined' !== typeof context.chart.config._config.options.format ? context.chart.config._config.options.format : '';
+                        if ( format ) {
+                            label += format_datum( context.formattedValue, format );
+                        } else {
+                            label += context.formattedValue;
+                        }
+                    }
+                    return label;
+                }
+            }
+        };
+
         var chartjs = new Chart(context, {
             type: type,
             data: {
@@ -131,7 +156,7 @@
                     if ( $( '#chart-img' ).length ) {
                         $( '#chart-img' ).val( canvas.toDataURL() );
                     }
-                },
+                }
             }],
         });
 
