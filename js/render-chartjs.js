@@ -122,11 +122,15 @@
         settings.plugins.tooltip = {
             callbacks: {
                 label: function(context) {
-                    var label = context.dataset.label || '';
+                    var label = '';
+                    if ( 'object' === typeof context.dataset.label ) {
+                        label = context.label || '';
+                    } else {
+                        label = context.dataset.label || '';
+                    }
                     if ( label ) {
                         label += ': ';
                     }
-
                     var format = context.dataset.format || '';
                     if ( format ) {
                         label += format_datum( context.formattedValue, format );
