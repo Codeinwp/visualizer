@@ -106,6 +106,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 			remove_all_actions( 'admin_notices' );
 		}
 		add_action( 'admin_enqueue_scripts', array( $this, 'visualizer_enqueue_setup_wizard_scripts' ) );
+		add_filter( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, array( $this, 'visualizer_filter_chart_settings' ) );
 	}
 
 	/**
@@ -114,10 +115,12 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	 * @access public
 	 */
 	public function visualizer_enqueue_setup_wizard_scripts() {
-		wp_enqueue_style( 'visualizer-smart-wizard', VISUALIZER_ABSURL . 'css/lib/smart_wizard_all.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'jquery-slick', VISUALIZER_ABSURL . 'css/lib/slick.min.css', array(), Visualizer_Plugin::VERSION );
+		wp_enqueue_style( 'jquery-smart-wizard', VISUALIZER_ABSURL . 'css/lib/smart_wizard_all.min.css', array(), Visualizer_Plugin::VERSION );
 		wp_enqueue_style( 'visualizer-setup-wizard', VISUALIZER_ABSURL . 'css/style-wizard.css', array(), Visualizer_Plugin::VERSION, 'all' );
 
-		wp_enqueue_script( 'visualizer-jquery-smart-wizard', VISUALIZER_ABSURL . 'js/lib/jquery.smartWizard.min.js', array( 'jquery', 'clipboard' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'jquery-slick', VISUALIZER_ABSURL . 'js/lib/slick.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_enqueue_script( 'jquery-smart-wizard', VISUALIZER_ABSURL . 'js/lib/jquery.smartWizard.min.js', array( 'jquery', 'jquery-slick', 'clipboard' ), Visualizer_Plugin::VERSION, true );
 		wp_enqueue_script( 'visualizer-setup-wizard', VISUALIZER_ABSURL . 'js/setup-wizard.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_localize_script(
 			'visualizer-setup-wizard',
@@ -496,5 +499,19 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 			$this->dismissWizard( false );
 			wp_send_json( $response );
 		}
+	}
+
+	/**
+	 * Filter chart setting.
+	 *
+	 * @param array $settings Chart settings.
+	 * @return array
+	 */
+	public function visualizer_filter_chart_settings( $settings ) {
+		$settings['backgroundColor'] = array(
+			'fill'        => '#39c3d21a',
+			'fillOpacity' => '.1',
+		);
+		return $settings;
 	}
 }

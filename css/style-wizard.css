@@ -777,10 +777,10 @@ display: none;
 	position: absolute;
 	width: 90%;
 	max-width: 429px;
-	height: 243px;
+	height: fit-content;
 	inset: 0;
 	margin: auto;
-	padding: 24px 20px 10px;
+	padding: 24px 20px;
 	background: #FFFFFF;
 	border-radius: 8px;
 	text-align: center;
@@ -988,19 +988,57 @@ display: none;
 }
 /* visualizer accordion style End */
 .vz-chart-list{
-	max-width: 780px;
+/*	max-width: 780px;*/
+	padding: 0 18px;
+	margin-bottom: 40px;
 }
 .vz-chart-list > ul{
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
 }
+.vz-chart-list .slick-arrow{
+	position: absolute;
+	width: 30px;
+	top: 50%;
+	height: 30px;
+	margin-top: -15px;
+	font-size: 0;
+	color: #757575;
+	display: grid;
+	place-items: center;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+.vz-chart-list .slick-arrow:before{
+	display: block;
+	font-family: "dashicons";
+	font-size: 24px;
+	line-height: 1;
+}
+.vz-chart-list .slick-arrow.slick-prev{
+	left: -42px;
+}
+.vz-chart-list .slick-arrow.slick-prev:before{
+	content: "\f341";
+}
+.vz-chart-list .slick-arrow.slick-next{
+	right: -42px;
+}
+.vz-chart-list .slick-arrow.slick-next:before{
+	content: "\f345";
+}
 .vz-chart-list > ul > li{
 	width: 48%;
 	max-width: 362px;
 	padding-bottom: 60px;
 }
+.vz-chart-list .slick-slide{
+	margin-right: 34px;
+}
 .vz-chart-option{
+	width: 317px;
 	position: relative;
 	display: flex;
 	flex-wrap: wrap;
@@ -1160,8 +1198,6 @@ display: none;
 	background: #39C3D2;
 	transition: all .3s ease-in-out;
 }
-
-
 
 @media (max-width: 767px){
 	.wp-toolbar .vz-wizard-fullscreen{margin-top: 0;}

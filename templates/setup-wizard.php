@@ -187,7 +187,7 @@ $last_step_number   = 5;
 													</div>
 													<div class="txt">
 														<h4 class="h4 pb-4"><?php esc_html_e( 'Importing demo data', 'visualizer' ); ?></h4>
-														<p class="p"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
+														<p class="p" data-import_message="<?php esc_attr_e( 'Done! Demo data imported successfully', 'visualizer' ); ?>"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
 													</div>
 												</div>
 											</div>
@@ -204,45 +204,47 @@ $last_step_number   = 5;
 						<div class="vz-accordion-item">
 							<div class="vz-accordion-item__title">
 								<div class="vz-accordion-item__button">
-									<h2 class="h2 pb-8"><?php esc_html_e( 'Chart preview and shortcode', 'visualizer' ); ?></h2>
+									<h2 class="h2 pb-8"><?php esc_html_e( 'Insert chart into the draft page', 'visualizer' ); ?></h2>
 									<p class="p"><?php esc_html_e( 'Create a draft page with a Visualizer chart with just one click', 'visualizer' ); ?></p>
 								</div>
 							</div>
 							<div class="vz-accordion-item__content border-top">
 								<div class="vz-form-wrap">
 									<div class="form-block">
-										<div class="vz-shortcode-preview-box">
-											<div class="vz-shortcode-preview-title">
-												<div class="icon">
-													<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/alternate-file.svg' ); ?>" alt="">
-												</div>
-												<div class="txt">
-													<h4 class="h4 pb-4"><?php esc_html_e( 'Create a draft page', 'visualizer' ); ?></h4>
-													<p class="help-text"><?php esc_html_e( 'We will automatically create a draft page with Visualizer chart for preview', 'visualizer' ); ?></p>
-												</div>
-											</div>
-											<div class="vz-shortcode-preview-content">
-												<div class="content-title">
-													<h4 class="h4"><?php esc_html_e( 'Insert chart into the draft page.', 'visualizer' ); ?></h4>
-													<div class="check">
-														<input type="checkbox" class="vz-switch-toggle" id="insert_shortcode" checked>
-													</div>
-												</div>
-												<div class="vz-shortcode-preview">
-													<h4 class="h4 pb-16"><?php esc_html_e( 'Demo chart', 'visualizer' ); ?></h4>
-													<div class="vz-chart pb-30">
-														<?php
-															$shortcode = '[visualizer id="{{chart_id}}" lazy="" class=""]';
-														if ( ! empty( $_GET['preview_chart'] ) ) {
-															$shortcode = str_replace( '{{chart_id}}', $chart_id, $shortcode );
-															echo do_shortcode( $shortcode );
-														}
-														?>
-													</div>
-													<div class="vz-code-box">
-														<input type="text" id="basic_shortcode" value="<?php echo esc_attr( $shortcode ); ?>" redonly>
-														<button type="button" class="vz-copy-code-btn" data-clipboard-target="#basic_shortcode"><?php esc_html_e( 'click to copy', 'visualizer' ); ?> <img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/copy.svg' ); ?>" alt="">
+										<div class="vz-accordion">
+											<div class="vz-accordion-item vz-features-accordion mb-0">
+												<div class="vz-shortcode-preview-box">
+													<div class="vz-accordion-item__title vz-accordion-checkbox__title">
+														<div class="vz-checkbox">
+															<input type="checkbox" class="vz-checkbox-btn" id="insert_shortcode" checked>
+														</div>
+														<button type="button" class="vz-accordion-item__button">
+															<div class="vz-accordion__step-title h4 pb-4"><?php esc_html_e( 'Create a draft page', 'visualizer' ); ?></div>
+															<p class="help-text"><?php esc_html_e( 'We will automatically create a draft page with Visualizer chart for preview', 'visualizer' ); ?></p>
+															<div class="vz-accordion__icon"><span class="dashicons dashicons-arrow-down-alt2"></span>
+															</div>
 														</button>
+													</div>
+													<div class="vz-accordion-item__content">
+														<div class="vz-shortcode-preview-content">
+															<div class="vz-shortcode-preview">
+																<h4 class="h4 pb-16"><?php esc_html_e( 'Chart preview', 'visualizer' ); ?></h4>
+																<div class="vz-chart pb-30">
+																	<?php
+																		$shortcode = '[visualizer id="{{chart_id}}" lazy="" class=""]';
+																	if ( ! empty( $_GET['preview_chart'] ) ) {
+																		$shortcode = str_replace( '{{chart_id}}', $chart_id, $shortcode );
+																		echo do_shortcode( $shortcode );
+																	}
+																	?>
+																</div>
+																<div class="vz-code-box">
+																	<input type="text" id="basic_shortcode" value="<?php echo esc_attr( $shortcode ); ?>" redonly>
+																	<button type="button" class="vz-copy-code-btn" data-clipboard-target="#basic_shortcode"><?php esc_html_e( 'click to copy', 'visualizer' ); ?> <img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/copy.svg' ); ?>" alt="">
+																	</button>
+																</div>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>

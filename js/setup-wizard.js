@@ -12,6 +12,8 @@ jQuery(function ($) {
 		if ( 1 == id ) {
 			var chartType = $(".vz-radio-btn:checked").val();
 			var percentBarWidth = 100;
+			var delayCount = 1;
+			var loaderDelay;
 			$.ajax( {
 				xhr: function () {
 					var xhr = new window.XMLHttpRequest();
@@ -36,17 +38,31 @@ jQuery(function ($) {
 					step: 'step_2',
 				},
 				success: function (data) {
-					if ( 1 === data.success ) {
-						$('#step-2').find('button.disabled').removeClass('disabled');
-					} else if( 2 === data.status && '' !== data.message ) {
-						$('#step-2')
-						.find('.vz-error-notice')
-						.html( '<p>' + data.message + '</p>' )
-						.removeClass('hidden');
-					} else {
-						$('#smartwizard').smartWizard('reset');
-					}
-					$('#step-2').find('.vz-progress-bar').animate({ width: '0' });
+					loaderDelay = setInterval(function () {
+						$('.vz-progress-bar').css({
+							width: percentBarWidth-- + '%'
+						});
+						if ( delayCount > 4 ) {
+							if ( 1 === data.success ) {
+								var importMessage = jQuery('[data-import_message]');
+								importMessage
+								.html( importMessage.data('import_message') )
+								.addClass('import_message');
+
+								$('#step-2').find('button.disabled').removeClass('disabled');
+							} else if( 2 === data.status && '' !== data.message ) {
+								$('#step-2')
+								.find('.vz-error-notice')
+								.html( '<p>' + data.message + '</p>' )
+								.removeClass('hidden');
+							} else {
+								$('#smartwizard').smartWizard('reset');
+							}
+							$('#step-2').find('.vz-progress-bar').animate({ width: '0' });
+							clearInterval( loaderDelay );
+						}
+						delayCount++;
+					}, 1000 );
 				},
 				error: function() {
 					$('#step-2').find('.vz-progress-bar').animate({ width: '0' });
@@ -266,5 +282,14 @@ jQuery(function ($) {
 					' <span class="dashicons dashicons-arrow-right-alt"></span>'
 			);
 		}
+	});
+
+	$('.vz-chart-list > ul').slick({
+		dots: false,
+		infinite: false,
+		speed: 400,
+		slidesToShow: 1,
+		centerMode: false,
+		variableWidth: true
 	});
 });
