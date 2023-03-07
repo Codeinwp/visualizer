@@ -282,6 +282,17 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 				)
 			);
 		}
+		if ( function_exists( 'use_block_editor_for_post_type' ) && use_block_editor_for_post_type( 'page' ) ) {
+			$this->wizard_data = get_option( self::OPTION_NAME, array() );
+			if ( ! empty( $this->wizard_data['chart_id'] ) ) {
+				$block_data      = array(
+					'id'    => $this->wizard_data['chart_id'],
+					'lazy'  => '-1',
+					'route' => 'chartSelect',
+				);
+				$basic_shortcode = '<!-- wp:visualizer/chart ' . wp_json_encode( $block_data ) . ' /-->';
+			}
+		}
 		$post_title = __( 'Visualizer Demo Page', 'visualizer' );
 		$page_id    = post_exists( $post_title, '', '', 'page' );
 		$args       = array(

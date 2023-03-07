@@ -1198,6 +1198,9 @@ display: none;
 	background: #39C3D2;
 	transition: all .3s ease-in-out;
 }
+.vz-chart-list .slick-arrow[disabled="disabled"], .vz-chart-list .slick-arrow[aria-disabled="true"] {
+	color: #eeeeee
+}
 
 @media (max-width: 767px){
 	.wp-toolbar .vz-wizard-fullscreen{margin-top: 0;}

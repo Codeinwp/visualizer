@@ -291,5 +291,19 @@ jQuery(function ($) {
 		slidesToShow: 1,
 		centerMode: false,
 		variableWidth: true
-	});
+	})
+	.on( 'afterChange', function(event, slick, currentSlide) {
+		// Disable next buttion.
+		if( currentSlide === 4 ) {
+			$('.slick-next').attr('disabled', true).css('pointer-events', 'none');
+		} else {
+			$('.slick-next').removeAttr('disabled').css('pointer-events', 'all');
+		}
+		// Disable prev buttion.
+		if( currentSlide === 0 ) {
+			$('.slick-prev').attr('disabled', true).css('pointer-events', 'none');
+		} else {
+			$('.slick-prev').removeAttr('disabled').css('pointer-events', 'all');
+		}
+	} );
 });
