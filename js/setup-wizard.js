@@ -12,21 +12,14 @@ jQuery(function ($) {
 		if ( 1 == id ) {
 			var chartType = $(".vz-radio-btn:checked").val();
 			var percentBarWidth = 100;
-			var delayCount = 1;
 			var loaderDelay;
 			$.ajax( {
-				xhr: function () {
-					var xhr = new window.XMLHttpRequest();
-					xhr.addEventListener("progress", function (evt) {
-						if (evt.lengthComputable) {
-							var percentComplete = evt.loaded / evt.total;
-							percentBarWidth = percentBarWidth - percentComplete;
-							$('.vz-progress-bar').css({
-								width: percentBarWidth + '%'
-							});
-						}
-					}, false);
-					return xhr;
+				beforeSend: function() {
+					loaderDelay = setInterval(function () {
+						$('.vz-progress-bar').css({
+							width: percentBarWidth-- + '%'
+						});
+					}, 1000);
 				},
 				type: 'POST',
 				url: visualizerSetupWizardData.ajax.url,
@@ -38,11 +31,12 @@ jQuery(function ($) {
 					step: 'step_2',
 				},
 				success: function (data) {
+					clearInterval( loaderDelay );
 					loaderDelay = setInterval(function () {
 						$('.vz-progress-bar').css({
 							width: percentBarWidth-- + '%'
 						});
-						if ( delayCount > 4 ) {
+						if ( percentBarWidth <= 0 ) {
 							if ( 1 === data.success ) {
 								var importMessage = jQuery('[data-import_message]');
 								importMessage
@@ -58,11 +52,12 @@ jQuery(function ($) {
 							} else {
 								$('#smartwizard').smartWizard('reset');
 							}
-							$('#step-2').find('.vz-progress-bar').animate({ width: '0' });
+							$('.vz-progress-bar').css({
+								width: 0
+							});
 							clearInterval( loaderDelay );
 						}
-						delayCount++;
-					}, 1000 );
+					}, 100 );
 				},
 				error: function() {
 					$('#step-2').find('.vz-progress-bar').animate({ width: '0' });

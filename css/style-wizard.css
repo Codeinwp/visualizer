@@ -481,6 +481,7 @@ fieldset[disabled] .form-control {
 .vz-btn-group{
 	display: flex;
 	flex-wrap: wrap;
+	align-items: center;
 }
 .vz-btn-group .btn{
 	margin-bottom: 8px;
@@ -489,7 +490,6 @@ fieldset[disabled] .form-control {
 .vz-btn-group .btn:last-child{
 	margin-right: 0px;
 }
-/* visualizer button style end */
 
 .vz-wizard-wrap .container{
 	max-width: 930px;
@@ -1111,10 +1111,24 @@ display: none;
 	flex-wrap: wrap;
 	align-items: center;
 }
-.vz-chart-option .h3 span.pro-label{
-	margin-left: 30px;
+.vz-pro-label-wrap {
+	order: 3;
+	width: calc(100% - 20px);
+	padding-left: 12px;
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 }
-
+.vz-pro-label-wrap h3 {
+	opacity: .7;
+	color: #000000;
+}
+.vz-pro-label-wrap span.pro-label{
+	margin-left: 30px;
+	font-weight: 600;
+}
 .vz-chart-option input[type=radio].vz-radio-btn:checked ~ .bg{
 	background: #BDE6EB;	
 }
@@ -1200,6 +1214,9 @@ display: none;
 }
 .vz-chart-list .slick-arrow[disabled="disabled"], .vz-chart-list .slick-arrow[aria-disabled="true"] {
 	color: #eeeeee
+}
+.vz-btn-group span.spinner {
+	margin-bottom: 8px;
 }
 
 @media (max-width: 767px){

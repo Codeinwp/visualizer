@@ -125,9 +125,11 @@ $last_step_number   = 5;
 												<li>
 													<div class="vz-pro-option">
 														<label class="vz-chart-option">
-															<input type="radio" class="vz-radio-btn" id="vz-chart-5">
-															<h3 class="h3"><?php esc_html_e( 'Geo chart', 'visualizer' ); ?> <span
-																	class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?> </span></h3>
+															<input type="radio" class="vz-radio-btn" id="vz-chart-5" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Geo chart', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+															</div>
 															<div class="img type-box-geo"></div>
 															<div class="bg"></div>
 														</label>
@@ -169,7 +171,7 @@ $last_step_number   = 5;
 							<div class="vz-accordion-item__title">
 								<div class="vz-accordion-item__button">
 									<h2 class="h2 pb-8"><?php esc_html_e( 'You\'re almost done!', 'visualizer' ); ?></h2>
-									<p class="p"><?php esc_html_e( 'We use demo data during the import process, don&#x92;t worry you can customize it latter', 'visualizer' ); ?></p>
+									<p class="p"><?php esc_html_e( 'We use demo data during the import process, don&#x92;t worry you can customize it later', 'visualizer' ); ?></p>
 								</div>
 								<div class="vz-progress">
 									<div class="vz-progress-bar" style="width: 100%;"></div>
