@@ -301,4 +301,10 @@ jQuery(function ($) {
 			$('.slick-prev').removeAttr('disabled').css('pointer-events', 'all');
 		}
 	} );
+
+	$(window).bind('pageshow', function() {
+		if ( jQuery('.vz-chart-option input').is(':checked') ) {
+			$('#step-1').find('button.disabled').removeClass('disabled');
+		}
+	});
 });

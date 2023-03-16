@@ -1062,20 +1062,20 @@ display: none;
 	-webkit-filter: grayscale(100%); */
 }
 .vz-chart-option .img.type-box-pie{
-	background-position: 27px -10px;
+	background-position: 15px -10px;
 }
 .vz-chart-option .img.type-box-bar{
-	background-position: -280px -235px;
+	background-position: -295px -235px;
 }
 .vz-chart-option .img.type-box-line{
-	background-position: -583px -7px;
+	background-position: -600px -7px;
 }
 .vz-chart-option .img.type-box-tabular{
-	background-position: -330px -742px;
+	background-position: -334px -742px;
   background-size: 1000px 1250px;
 }
 .vz-chart-option .img.type-box-geo{
-	background-position: -584px -460px;
+	background-position: -600px -460px;
 }
 .vz-chart-option:hover .img{
 	background-image: url(../images/chart_types_v340.png);
