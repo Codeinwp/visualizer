@@ -136,7 +136,7 @@ $last_step_number   = 5;
 														<div class="pro-overlay">
 															<div class="pro-box">
 																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
-																	class="btn btn-secondary"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
 															</div>
 														</div>
 													</div>
@@ -153,7 +153,7 @@ $last_step_number   = 5;
 															</li>
 															<li><?php esc_html_e( 'Create charts from WordPress tables', 'visualizer' ); ?></li>
 														</ul>
-														<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>" class="btn btn-secondary"><?php esc_html_e( 'View more features', 'visualizer' ); ?></a>
+														<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>" class="btn btn-secondary" target="_blank"><?php esc_html_e( 'View more features', 'visualizer' ); ?></a>
 													</div>
 												</li>
 											</ul>
@@ -194,7 +194,7 @@ $last_step_number   = 5;
 												</div>
 											</div>
 										</div>
-										<p class="help-text help-text-primary pb-16"><?php esc_html_e( 'Import data from other Charts, WordPress, DataBase, or Manual Data with Visualizer', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"><?php esc_html_e( 'Premium version', 'visualizer' ); ?></a></p>
+										<p class="help-text help-text-primary pb-16"><?php esc_html_e( 'Import data from other Charts, WordPress, DataBase, or Manual Data with Visualizer', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Premium version', 'visualizer' ); ?></a></p>
 									</div>
 									<div class="form-block"><button class="btn btn-primary disabled" data-step_number="3"><?php esc_html_e( 'Continue', 'visualizer' ); ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
 									</div>
@@ -295,7 +295,7 @@ $last_step_number   = 5;
 																</div>
 																<div class="txt">
 																	<div class="h4 pb-4"><?php esc_html_e( 'Boost your website speed', 'visualizer' ); ?> <span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span></div>
-																	<p class="help-text"><?php esc_html_e( 'Improve your website speed and images by 80% with', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( 'https://optimole.com/pricing/', 'VisualizerSetupWizard' ) ); ?>"><?php esc_html_e( 'Optimole', 'visualizer' ); ?></a></p>
+																	<p class="help-text"><?php esc_html_e( 'Improve your website speed and images by 80% with', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( 'https://optimole.com/pricing/', 'VisualizerSetupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Optimole', 'visualizer' ); ?></a></p>
 																</div>
 															</li>
 														</ul>
