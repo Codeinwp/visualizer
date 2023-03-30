@@ -163,6 +163,14 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.9.7](https://github.com/Codeinwp/visualizer/compare/v3.9.6...v3.9.7) (2023-03-30)
+
+- Improved chart actions icons
+- Updated WordPress core tested up to version
+
+
+
+
 ##### [Version 3.9.6](https://github.com/Codeinwp/visualizer/compare/v3.9.5...v3.9.6) (2023-03-20)
 
 - Fixed custom format issue in ChartJS
