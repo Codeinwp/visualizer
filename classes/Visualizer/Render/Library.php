@@ -258,11 +258,14 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', 'visualizer' ), '<p><h2><a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a></h2></p></div>';
 			echo '</div>';
 			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
-			echo '<span class="visualizer-chart-action visualizer-nochart-delete"></span>';
-			echo '<span class="visualizer-chart-action visualizer-nochart-clone"></span>';
-			echo '<span class="visualizer-chart-action visualizer-nochart-edit"></span>';
-			echo '<span class="visualizer-chart-action visualizer-nochart-export"></span>';
-			echo '<span class="visualizer-chart-action visualizer-nochart-shortcode"></span>';
+			echo '<div class="visualizer-action-group visualizer-nochart">';
+			echo '<span class="visualizer-chart-action visualizer-nochart-delete"><span class="dashicons dashicons-trash"></span></span>';
+			echo '<span class="visualizer-chart-action visualizer-nochart-shortcode"><span class="dashicons dashicons-shortcode"></span></span>';
+			echo '<span class="visualizer-chart-action visualizer-nochart-image"><span class="dashicons dashicons-format-image"></span></span>';
+			echo '<span class="visualizer-chart-action visualizer-nochart-export"><span class="dashicons dashicons-download"></span></span>';
+			echo '<span class="visualizer-chart-action visualizer-nochart-clone"><span class="dashicons dashicons-admin-page"></span></span>';
+			echo '<span class="visualizer-chart-action visualizer-nochart-edit"><span class="dashicons dashicons-admin-generic"></span></span>';
+			echo '</div>';
 			echo '</div>';
 			echo '</div></div>';
 			$this->_renderSidebar();
@@ -353,15 +356,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 		}
 		echo '<div class="visualizer-chart-footer visualizer-clearfix">';
-		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" title="', esc_attr__( 'Delete', 'visualizer' ), '" onclick="return showNotice.warn();"></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '" title="', esc_attr__( 'Clone', 'visualizer' ), '"></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" title="', esc_attr__( 'Edit', 'visualizer' ), '" data-chart="', $chart_id, '"></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-export" href="javascript:;" title="', esc_attr__( 'Export', 'visualizer' ), '" data-chart="', $export_link, '"></a>';
+		echo '<div class="visualizer-action-group">';
+		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_attr__( 'Delete', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-shortcode" href="javascript:;" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-shortcode"></span><span class="tooltip-text">' . esc_attr__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
 		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
-			echo '<a class="visualizer-chart-action visualizer-chart-image" href="javascript:;" title="', esc_attr__( 'Download as image', 'visualizer' ), '" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-image" href="javascript:;" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"><span class="dashicons dashicons-format-image"></span><span class="tooltip-text">' . esc_attr__( 'Download PNG', 'visualizer' ) . '</span></a>';
 		}
-		echo '<a class="visualizer-chart-action visualizer-chart-shortcode" href="javascript:;" title="', esc_attr__( 'Click to copy shortcode', 'visualizer' ), '" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-admin-page"></span></a>';
-		echo '<span>&nbsp;</span>';
+		echo '<a class="visualizer-chart-action visualizer-chart-export" href="javascript:;" data-chart="', $export_link, '"><span class="dashicons dashicons-download"></span><span class="tooltip-text">' . esc_attr__( 'Export CSV', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-clone" href="', $clone_url, '"><span class="dashicons dashicons-admin-page"></span><span class="tooltip-text">' . esc_attr__( 'Duplicate', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-edit" href="javascript:;" data-chart="', $chart_id, '"><span class="dashicons dashicons-admin-generic"></span><span class="tooltip-text">' . esc_attr__( 'Edit', 'visualizer' ) . '</span></a>';
+		echo '</div>';
 		do_action( 'visualizer_chart_languages', $chart_id );
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
 		echo '</div>';
