@@ -96,6 +96,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_DOC_COLLECTION', 'https://docs.themeisle.com/search?collectionId=561ec249c69791452ed4bceb&query=#+visualizer' );
 	define( 'VISUALIZER_DEMO_URL', 'https://demo.themeisle.com/visualizer/#' );
 	define( 'VISUALIZER_CODE_SNIPPETS_URL', 'https://docs.themeisle.com/category/726-visualizer' );
+	define( 'VISUALIZER_SUBSCRIBE_API', 'https://api.themeisle.com/tracking/subscribe' );
 
 	// to redirect all themeisle_log_event to error log.
 	define( 'VISUALIZER_LOCAL_DEBUG', false );
@@ -126,6 +127,9 @@ function visualizer_launch() {
 	$plugin->setModule( Visualizer_Module_Frontend::NAME );
 
 	$plugin->setModule( Visualizer_Module_AMP::NAME );
+
+	// Set setup wizard module.
+	$plugin->setModule( Visualizer_Module_Wizard::NAME );
 
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 	if ( is_readable( $vendor_file ) ) {
