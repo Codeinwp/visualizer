@@ -64,6 +64,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$this->_addAction( 'wp_print_footer_scripts', 'printFooterScripts' );
 		$this->_addAction( 'wp_enqueue_scripts', 'enqueueScripts' );
 		$this->_addAction( 'load-index.php', 'enqueueScripts' );
+		$this->_addAction( 'load-visualizer_page_visualizer-setup-wizard', 'enqueueScripts' );
 		$this->_addAction( 'visualizer_enqueue_scripts', 'enqueueScripts' );
 		$this->_addFilter( 'visualizer_get_language', 'getLanguage' );
 		$this->_addShortcode( 'visualizer', 'renderChart' );
@@ -368,6 +369,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 		// Get and update settings.
 		$settings = $chart_data['settings'];
+		$settings = ! empty( $settings ) ? $settings : array();
 		if ( empty( $settings['height'] ) ) {
 			$settings['height'] = '400';
 		}
