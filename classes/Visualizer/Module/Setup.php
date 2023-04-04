@@ -211,6 +211,10 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
 		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, apply_filters( 'visualizer_chart_schedule_interval', 'hourly' ), 'visualizer_schedule_refresh_db' );
 		add_option( 'visualizer-activated', true );
+		$is_fresh_install  = get_option( 'visualizer_fresh_install', false );
+		if ( ! defined( 'TI_CYPRESS_TESTING' ) && false === $is_fresh_install ) {
+			update_option( 'visualizer_fresh_install', '1' );
+		}
 	}
 
 	/**
@@ -251,8 +255,23 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		if ( get_option( 'visualizer-activated' ) ) {
 			delete_option( 'visualizer-activated' );
 			if ( ! headers_sent() ) {
-				$page_name = Visualizer_Module::numberOfCharts() > 0 ? Visualizer_Plugin::NAME : 'viz-support';
-				wp_redirect( esc_url_raw( add_query_arg( 'page', $page_name, admin_url( 'admin.php' ) ) ) );
+				if ( ! Visualizer_Module::is_pro() && ! empty( get_option( 'visualizer_fresh_install', false ) ) ) {
+					$redirect_url = array(
+						'page' => 'visualizer-setup-wizard',
+						'tab'  => '#step-1',
+					);
+				} else {
+					$page_name    = Visualizer_Module::numberOfCharts() > 0 ? Visualizer_Plugin::NAME : 'viz-support';
+					$redirect_url = array(
+						'page' => $page_name,
+					);
+				}
+				wp_safe_redirect(
+					add_query_arg(
+						$redirect_url,
+						admin_url( 'admin.php' )
+					)
+				);
 				exit();
 			}
 		}

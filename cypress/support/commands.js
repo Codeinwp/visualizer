@@ -294,7 +294,7 @@ Cypress.Commands.add( 'create_available_charts', ($num, $lib = '') => {
 
                 // if we are targeting a particular library, then select it in the toolbar
                 if('' !== $lib){
-                    cy.wrap($body).find('.viz-select-library').select($lib);
+                    cy.wrap($body).find('.viz-select-library').invoke('show').select($lib);
                 }
                 // create the chart.
                 cy.wrap($body).find('#toolbar input[type="submit"]').click();
