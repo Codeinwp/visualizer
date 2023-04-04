@@ -142,7 +142,7 @@ function visualizer_launch() {
 			$compatibilities['VisualizerPRO'] = array(
 				'basefile'  => defined( 'VISUALIZER_PRO_BASEFILE' ) ? VISUALIZER_PRO_BASEFILE : '',
 				'required'  => '1.8',
-				'tested_up' => '1.12',
+				'tested_up' => '1.13',
 			);
 			return $compatibilities;
 		}
