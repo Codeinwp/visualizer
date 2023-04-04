@@ -1,3 +1,8 @@
+#### [Version 3.10.0](https://github.com/Codeinwp/visualizer/compare/v3.9.7...v3.10.0) (2023-04-04)
+
+- Added a setup wizard onboarding page
+- Fixed empty chart issue
+
 ##### [Version 3.9.7](https://github.com/Codeinwp/visualizer/compare/v3.9.6...v3.9.7) (2023-03-30)
 
 - Improved chart actions icons
