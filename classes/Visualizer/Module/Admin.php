@@ -723,6 +723,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li > a:hover {
 				box-shadow: inherit;
 			}
+			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li + li {
+				display: none;
+			}
 		</style>
 		<script type="text/javascript">
 			jQuery( document ).ready( function() {
