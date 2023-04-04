@@ -571,7 +571,7 @@ var chartWrapperError = [];
         objects = {};
         if ( 'object' === typeof google ) {
             $chart_types.push( 'controls' );
-            google.load( 'visualization', 'current', {packages: $chart_types, mapsApiKey: v.map_api_key, 'language' : v.language,
+            google.load( 'visualization', '46', {packages: $chart_types, mapsApiKey: v.map_api_key, 'language' : v.language,
                 callback: function () {
                     gv = google.visualization;
                     all_charts = v.charts;
