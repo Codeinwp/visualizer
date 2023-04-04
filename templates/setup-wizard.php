@@ -295,7 +295,7 @@ $last_step_number   = 5;
 																</div>
 																<div class="txt">
 																	<div class="h4 pb-4"><?php esc_html_e( 'Boost your website speed', 'visualizer' ); ?> <span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span></div>
-																	<p class="help-text"><?php esc_html_e( 'Improve your website speed and images by 80% with', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( 'https://optimole.com/pricing/', 'VisualizerSetupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Optimole', 'visualizer' ); ?></a></p>
+																	<p class="help-text"><?php esc_html_e( 'Improve your website speed and images by 80% with', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( 'https://optimole.com/', 'VisualizerSetupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Optimole', 'visualizer' ); ?></a></p>
 																</div>
 															</li>
 														</ul>
