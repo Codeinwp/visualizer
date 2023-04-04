@@ -1054,31 +1054,33 @@ display: none;
 	height: 198px;
 	background-color: #ffffff;
 	margin-bottom: 20px;
-	background-image: url(../images/chart_types_v340_g.png);
+	background-image: url(../images/chart_types_v395.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	transition: all .3s ease-in-out;
 	/* filter: grayscale(100%);
 	-webkit-filter: grayscale(100%); */
+	background-size: 900px 1150px;
+	filter: grayscale(100%);
 }
 .vz-chart-option .img.type-box-pie{
-	background-position: 15px -10px;
+	background-position: -5px -17px;
 }
 .vz-chart-option .img.type-box-bar{
-	background-position: -295px -235px;
+	background-position: -305px -235px;
 }
 .vz-chart-option .img.type-box-line{
-	background-position: -600px -7px;
+	background-position: -606px -14px;
 }
 .vz-chart-option .img.type-box-tabular{
-	background-position: -334px -742px;
-  background-size: 1000px 1250px;
+	background-position: -306px -693px;
 }
 .vz-chart-option .img.type-box-geo{
-	background-position: -600px -460px;
+	background-position: -603px -459px;
 }
 .vz-chart-option:hover .img{
-	background-image: url(../images/chart_types_v340.png);
+	background-image: url(../images/chart_types_v395.png);
+	filter: grayscale(0);
 }
 .vz-chart-option .bg{
 	position: absolute;
@@ -1133,7 +1135,8 @@ display: none;
 	background: #BDE6EB;	
 }
 .vz-chart-option input[type=radio].vz-radio-btn:checked ~ .img{
-	background-image: url(../images/chart_types_v340.png);
+	background-image: url(../images/chart_types_v395.png);
+	filter: grayscale(0);
 }
 
 .vz-pro-option{
