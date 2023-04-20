@@ -280,7 +280,6 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 						'strokeWidth' => '',
 						'stroke'      => '',
 						'fill'        => '',
-						'fill'        => '',
 					),
 					'chartArea'       => array(
 						'left'   => '',
