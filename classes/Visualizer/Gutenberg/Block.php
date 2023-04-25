@@ -367,6 +367,10 @@ class Visualizer_Gutenberg_Block {
 			$data['visualizer-data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
 		}
 
+		if ( ! isset( $data['visualizer-settings']['hAxis']['format'] ) ) {
+			$data['visualizer-settings']['hAxis']['format'] = '';
+		}
+
 		$data['visualizer-data-exploded'] = '';
 		// handle annotations for google charts
 		if ( 'GoogleCharts' === $library ) {
