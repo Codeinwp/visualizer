@@ -289,6 +289,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 					),
 					'focusTarget'     => 'datum',
 					'series'          => $setting_series,
+					'slices'          => array(),
 					'vAxis'           => array(
 						'title'          => '',
 						'textPosition'   => '',
