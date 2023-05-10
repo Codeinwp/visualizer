@@ -37,7 +37,6 @@ class ChartImport extends Component {
 			if ( 'object' === typeof label ) {
 				label = `#${i.id}`;
 			}
-			console.log( label );
 			if ( 0 === index ) {
 				id = i.id;
 			}
