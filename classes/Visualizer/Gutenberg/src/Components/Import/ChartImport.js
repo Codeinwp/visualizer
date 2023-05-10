@@ -34,7 +34,10 @@ class ChartImport extends Component {
 
 		charts = charts.map( ( i, index ) => {
 			let label = i['chart_data']['visualizer-settings'].title ? i['chart_data']['visualizer-settings'].title : `#${i.id}`;
-
+			if ( 'object' === typeof label ) {
+				label = `#${i.id}`;
+			}
+			console.log( label );
 			if ( 0 === index ) {
 				id = i.id;
 			}
@@ -52,6 +55,7 @@ class ChartImport extends Component {
 	}
 
 	render() {
+		console.log( this.state.charts );
 		return (
 			( 'community' !== visualizerLocalize.isPro ) ?
 				<PanelBody
