@@ -54,7 +54,6 @@ class ChartImport extends Component {
 	}
 
 	render() {
-		console.log( this.state.charts );
 		return (
 			( 'community' !== visualizerLocalize.isPro ) ?
 				<PanelBody
