@@ -150,7 +150,7 @@ class TableSettings extends Component {
 						<SelectControl
 							label={ __( 'Enable Pagination' ) }
 							help={ __( 'To enable paging through the data.' ) }
-							value={ settings.pagination ? settings.pagination : 'disable' }
+							value={ settings.pagination ? settings.pagination : 0 }
 							options={ [
 								{ label: __( 'Enable' ), value: 1 },
 								{ label: __( 'Disable' ), value: 0 }
