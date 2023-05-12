@@ -124,6 +124,9 @@ class Editor extends Component {
 
 	editSettings( settings ) {
 		let chart = { ...this.state.chart };
+		if ( '1' !== settings.pagination ) {
+			delete settings.pageSize;
+		}
 		chart['visualizer-settings'] = settings;
 		this.setState({
 			chart,
