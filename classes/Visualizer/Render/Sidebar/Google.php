@@ -318,7 +318,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			'tooltip[trigger]',
 			isset( $this->tooltip['trigger'] ) ? $this->tooltip['trigger'] : null,
 			array(
-				''          => '',
+				''          => esc_html__( 'Default', 'visualizer' ),
 				'focus'     => esc_html__( 'The tooltip will be displayed when the user hovers over an element', 'visualizer' ),
 				'selection' => esc_html__( 'The tooltip will be displayed when the user selects an element', 'visualizer' ),
 				'none'      => esc_html__( 'The tooltip will not be displayed', 'visualizer' ),
