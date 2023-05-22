@@ -272,6 +272,9 @@ class Visualizer_Module {
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$fp = function_exists( 'tmpfile' ) ? @tmpfile() : null;
 		if ( null === $fp ) {
+			if ( ! function_exists( 'wp_tempnam' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
 			$fp = fopen( wp_tempnam(), 'w+' );
 		}
 		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
