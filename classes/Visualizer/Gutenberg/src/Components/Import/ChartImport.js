@@ -34,7 +34,9 @@ class ChartImport extends Component {
 
 		charts = charts.map( ( i, index ) => {
 			let label = i['chart_data']['visualizer-settings'].title ? i['chart_data']['visualizer-settings'].title : `#${i.id}`;
-
+			if ( 'object' === typeof label ) {
+				label = `#${i.id}`;
+			}
 			if ( 0 === index ) {
 				id = i.id;
 			}
