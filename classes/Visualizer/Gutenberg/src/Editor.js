@@ -469,6 +469,18 @@ class Editor extends Component {
 			);
 		}
 
+		if ( '1' === visualizerLocalize.isFullSiteEditor ) {
+			return (
+				<Notice
+					status="error"
+					isDismissible={ false }
+				>
+                        <Dashicon icon="chart-pie" />
+                        { __( 'Visualizer block charts are currently not available for selection here, you must visit the library, get the shortcode, and add the chart here in a shortcode tag.' ) }
+				</Notice>
+			);
+		}
+
 		if ( 'renderChart' === this.state.route && null !== this.state.chart ) {
 			return (
 				<ChartRender
