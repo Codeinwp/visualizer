@@ -150,27 +150,29 @@ class TableSettings extends Component {
 						<SelectControl
 							label={ __( 'Enable Pagination' ) }
 							help={ __( 'To enable paging through the data.' ) }
-							value={ settings.page ? settings.page : 'disable' }
+							value={ settings.pagination ? settings.pagination : 0 }
 							options={ [
-								{ label: __( 'Enable' ), value: 'enable' },
-								{ label: __( 'Disable' ), value: 'disable' }
+								{ label: __( 'Enable' ), value: 1 },
+								{ label: __( 'Disable' ), value: 0 }
 							] }
 							onChange={ e => {
-								settings.page = e;
+								settings.pagination = e;
 								this.props.edit( settings );
 							} }
 						/>
 
-						<TextControl
-							label={ __( 'Number of rows per page' ) }
-							help={ __( 'The number of rows in each page, when paging is enabled.' ) }
-							type="number"
-							value={ settings.pageSize }
-							onChange={ e => {
-								settings.pageSize = e;
-								this.props.edit( settings );
-							} }
-						/>
+						{ '1' === settings.pagination && (
+							<TextControl
+								label={ __( 'Number of rows per page' ) }
+								help={ __( 'The number of rows in each page, when paging is enabled.' ) }
+								type="number"
+								value={ settings.pageSize }
+								onChange={ e => {
+									settings.pageSize = e;
+									this.props.edit( settings );
+								} }
+							/>
+						) }
 
 						<SelectControl
 							label={ __( 'Disable Sort' ) }
