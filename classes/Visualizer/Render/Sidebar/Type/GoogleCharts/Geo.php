@@ -205,7 +205,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 			'tooltip[trigger]',
 			isset( $this->tooltip['trigger'] ) ? $this->tooltip['trigger'] : null,
 			array(
-				''          => '',
+				''          => esc_html__( 'Default', 'visualizer' ),
 				'focus'     => esc_html__( 'The tooltip will be displayed when the user hovers over an element', 'visualizer' ),
 				'none'      => esc_html__( 'The tooltip will not be displayed', 'visualizer' ),
 			),
