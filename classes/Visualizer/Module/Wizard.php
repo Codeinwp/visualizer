@@ -206,6 +206,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 
 		$source = new Visualizer_Source_Csv( VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . $chart_type . '.csv' );
 		$source->fetch();
+		$series   = $source->getSeries();
 		$response = array(
 			'success' => 2,
 			'message' => __( 'Something went wrong while importing the chart', 'visualizer' ),
@@ -228,13 +229,111 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_DEFAULT_DATA, 1 );
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $series );
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, '' );
+
+			$setting_series = array();
+			foreach ( $series as $s ) {
+				$setting_series[] = array(
+					'visibleInLegend' => '',
+					'lineWidth'       => '',
+					'pointSize'       => '',
+					'format'          => '',
+					'curveType'       => '',
+					'color'           => '',
+					'role'            => '',
+				);
+			}
 			update_post_meta(
 				$chart_id,
 				Visualizer_Plugin::CF_SETTINGS,
 				array(
-					'focusTarget' => 'datum',
+					'title'           => '',
+					'titlePosition'   => '',
+					'titleTextStyle'  => array(
+						'color' => '#000',
+					),
+					'legend'          => array(
+						'position'  => 'right',
+						'alignment' => 15,
+						'textStyle' => array(
+							'color' => '#000',
+							'text'  => 'both',
+						),
+					),
+					'tooltip'         => array(
+						'trigger'       => 'focus',
+						'showColorCode' => 0,
+						'showColorCode' => 0,
+					),
+					'animation'       => array(
+						'startup'  => 0,
+						'duration' => '',
+						'easing'   => 'linear',
+					),
+					'width'           => '',
+					'height'          => '',
+					'keepAspectRatio' => false,
+					'isStacked'       => false,
+					'lazy_load_chart' => true,
+					'backgroundColor' => array(
+						'strokeWidth' => '',
+						'stroke'      => '',
+						'fill'        => '',
+					),
+					'chartArea'       => array(
+						'left'   => '',
+						'top'    => '',
+						'width'  => '',
+						'height' => '',
+					),
+					'focusTarget'     => 'datum',
+					'series'          => $setting_series,
+					'slices'          => array(),
+					'vAxis'           => array(
+						'title'          => '',
+						'textPosition'   => '',
+						'direction'      => 1,
+						'baselineColor'  => '#000',
+						'textStyle'      => array(
+							'color' => '#000',
+						),
+						'format'         => '',
+						'gridlines'      => array(
+							'count' => '',
+							'color' => '#ccc',
+						),
+						'minorGridlines' => array(
+							'count' => '',
+							'color' => '',
+						),
+						'viewWindow'     => array(
+							'max' => '',
+							'min' => '',
+						),
+					),
+					'hAxis'           => array(
+						'title'          => '',
+						'textPosition'   => '',
+						'direction'      => 1,
+						'baselineColor'  => '#000',
+						'textStyle'      => array(
+							'color' => '#000',
+						),
+						'format'         => '',
+						'gridlines'      => array(
+							'count' => '',
+							'color' => '#ccc',
+						),
+						'minorGridlines' => array(
+							'count' => '',
+							'color' => '',
+						),
+						'viewWindow'     => array(
+							'max' => '',
+							'min' => '',
+						),
+					),
 				)
 			);
 			$wizard_data = array(

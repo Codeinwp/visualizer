@@ -272,6 +272,9 @@ class Visualizer_Module {
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$fp = function_exists( 'tmpfile' ) ? @tmpfile() : null;
 		if ( null === $fp ) {
+			if ( ! function_exists( 'wp_tempnam' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
 			$fp = fopen( wp_tempnam(), 'w+' );
 		}
 		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
@@ -628,7 +631,7 @@ class Visualizer_Module {
 		}
 
 		$img_path = VISUALIZER_ABSURL . 'images';
-		$css     .= ".locker,.locker-loader{position:absolute;top:0;left:0;width:100%;height:100%}.locker{z-index:1000;opacity:.8;background-color:#fff;-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";filter:alpha(opacity=80)}.locker-loader{z-index:1001;background:url($img_path/ajax-loader.gif) no-repeat center center}.dt-button{display:none!important}.visualizer-front-container.visualizer-lazy-render{content-visibility: auto;}.google-visualization-controls-categoryfilter label.google-visualization-controls-label {vertical-align: middle;}.google-visualization-controls-categoryfilter li.goog-inline-block {margin: 0 0.2em;}.google-visualization-controls-categoryfilter li {padding: 0 0.2em;}";
+		$css     .= ".locker,.locker-loader{position:absolute;top:0;left:0;width:100%;height:100%}.locker{z-index:1000;opacity:.8;background-color:#fff;-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";filter:alpha(opacity=80)}.locker-loader{z-index:1001;background:url($img_path/ajax-loader.gif) no-repeat center center}.dt-button{display:none!important}.visualizer-front-container.visualizer-lazy-render{content-visibility: auto;}.google-visualization-controls-categoryfilter label.google-visualization-controls-label {vertical-align: middle;}.google-visualization-controls-categoryfilter li.goog-inline-block {margin: 0 0.2em;}.google-visualization-controls-categoryfilter li {padding: 0 0.2em;}.visualizer-front-container .dataTables_scrollHeadInner{margin: 0 auto;}";
 		$css     .= '</style>';
 
 		$arguments = array( $css, $settings );
