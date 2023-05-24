@@ -3,7 +3,7 @@ Contributors: codeinwp,themeisle,marius2012,marius_codeinwp,hardeepasrani,rozroz
 Tags: tables, charts, pie, visualization, graphs
 Requires at least: 3.5
 Tested up to: 6.2
-Requires PHP: 5.6
+Requires PHP: 7.4
 Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
