@@ -62,7 +62,7 @@ class ChartRender extends Component {
         }
 
 		if ( this.props.chart['visualizer-series'] && 0 <= [ 'date', 'datetime', 'timeofday' ].indexOf( this.props.chart['visualizer-series'][0].type ) ) {
-			if ( this.props.chart['visualizer-settings'] && '' == this.props.chart['visualizer-settings'].hAxis.format ) {
+			if ( this.props.chart['visualizer-settings'] && ( this.props.chart['visualizer-settings'].hAxis && '' == this.props.chart['visualizer-settings'].hAxis.format ) ) {
 				this.props.chart['visualizer-settings'].hAxis.format = 'YYYY-MM-dd';
 			}
 		}

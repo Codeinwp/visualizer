@@ -67,7 +67,7 @@ class Visualizer_Gutenberg_Block {
 	 * Enqueue front end and editor JavaScript and CSS
 	 */
 	public function enqueue_gutenberg_scripts() {
-		global $wp_version;
+		global $wp_version, $pagenow;
 
 		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
 		$handsontableJS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js';
@@ -112,6 +112,7 @@ class Visualizer_Gutenberg_Block {
 			'sqlTable'  => $table_col_mapping,
 			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
 			'proFeaturesLocked' => Visualizer_Module_Admin::proFeaturesLocked(),
+			'isFullSiteEditor'  => 'site-editor.php' === $pagenow,
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
@@ -351,7 +352,9 @@ class Visualizer_Gutenberg_Block {
 
 		// faetch and update settings
 		$data['visualizer-settings'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SETTINGS, true );
-
+		if ( empty( $data['visualizer-settings']['pagination'] ) ) {
+			$data['visualizer-settings']['pageSize'] = '';
+		}
 		// handle series filter hooks
 		$data['visualizer-series'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $post_id, Visualizer_Plugin::CF_SERIES, true ), $post_id, $data['visualizer-chart-type'] );
 
@@ -365,6 +368,10 @@ class Visualizer_Gutenberg_Block {
 		// this is to solve the case where boolean data shows up as all-ticks on gutenberg.
 		if ( in_array( $data['visualizer-chart-type'], array( 'tabular' ), true ) ) {
 			$data['visualizer-data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
+		}
+
+		if ( ! isset( $data['visualizer-settings']['hAxis']['format'] ) ) {
+			$data['visualizer-settings']['hAxis']['format'] = '';
 		}
 
 		$data['visualizer-data-exploded'] = '';

@@ -124,6 +124,9 @@ class Editor extends Component {
 
 	editSettings( settings ) {
 		let chart = { ...this.state.chart };
+		if ( '1' !== settings.pagination ) {
+			delete settings.pageSize;
+		}
 		chart['visualizer-settings'] = settings;
 		this.setState({
 			chart,
@@ -462,6 +465,18 @@ class Editor extends Component {
 				>
                         <Dashicon icon="chart-pie" />
                         { __( 'This chart is not available; it might have been deleted. Please delete this block and resubmit your chart.' ) }
+				</Notice>
+			);
+		}
+
+		if ( '1' === visualizerLocalize.isFullSiteEditor ) {
+			return (
+				<Notice
+					status="error"
+					isDismissible={ false }
+				>
+                        <Dashicon icon="chart-pie" />
+                        { __( 'Visualizer block charts are currently not available for selection here, you must visit the library, get the shortcode, and add the chart here in a shortcode tag.' ) }
 				</Notice>
 			);
 		}
