@@ -1,3 +1,16 @@
+##### [Version 3.10.1](https://github.com/Codeinwp/visualizer/compare/v3.10.0...v3.10.1) (2023-05-24)
+
+- Fixed data tables horizontal scrolling issue
+- Added legend position default label text
+- Added tooltip default label text
+- Fixed Gutenberg block error
+- Fixed table chart rendering issue in Gutenberg block
+- Fixed compatibility issue with the FSE editor
+- Fixed compatibility issue with WP 5.6
+- Fixed console error when importing charts from others
+- Fixed pagination enable/disable issue
+- Fixed editor rows limitation issue
+
 #### [Version 3.10.0](https://github.com/Codeinwp/visualizer/compare/v3.9.7...v3.10.0) (2023-04-04)
 
 - Added a setup wizard onboarding page
