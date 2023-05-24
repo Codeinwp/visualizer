@@ -352,7 +352,9 @@ class Visualizer_Gutenberg_Block {
 
 		// faetch and update settings
 		$data['visualizer-settings'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SETTINGS, true );
-
+		if ( empty( $data['visualizer-settings']['pagination'] ) ) {
+			$data['visualizer-settings']['pageSize'] = '';
+		}
 		// handle series filter hooks
 		$data['visualizer-series'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $post_id, Visualizer_Plugin::CF_SERIES, true ), $post_id, $data['visualizer-chart-type'] );
 

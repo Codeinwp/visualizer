@@ -60,6 +60,7 @@ class SeriesSettings extends Component {
 
 				{ Object.keys( settings.series )
 					.map( ( i, index ) => {
+						i = parseInt( i ) + 1;
                         let indexToFormat = parseInt( i );
                         let label = series[i].label || '';
                         let type = series[i].type || '';
