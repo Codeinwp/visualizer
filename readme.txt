@@ -163,6 +163,14 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.10.2](https://github.com/Codeinwp/visualizer/compare/v3.10.1...v3.10.2) (2023-06-05)
+
+- Added About Us page integration
+- Updated dependencies
+
+
+
+
 ##### [Version 3.10.1](https://github.com/Codeinwp/visualizer/compare/v3.10.0...v3.10.1) (2023-05-24)
 
 - Fixed data tables horizontal scrolling issue
