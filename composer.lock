@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70f95a41eef54d256d3b52f94b61c9cb",
+    "content-hash": "b1c4972cf7a69e915c83661005512e70",
     "packages": [
         {
             "name": "codeinwp/themeisle-sdk",
-            "version": "3.2.41",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeinwp/themeisle-sdk.git",
-                "reference": "25e9a580df8cdbe324d117be112aacd7ad021762"
+                "reference": "68dc5d11c1d7a20a13f3ae730183f61ff309d574"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/25e9a580df8cdbe324d117be112aacd7ad021762",
-                "reference": "25e9a580df8cdbe324d117be112aacd7ad021762",
+                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/68dc5d11c1d7a20a13f3ae730183f61ff309d574",
+                "reference": "68dc5d11c1d7a20a13f3ae730183f61ff309d574",
                 "shasum": ""
             },
             "require-dev": {
@@ -40,11 +40,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "support": {
-                "issues": "https://github.com/Codeinwp/themeisle-sdk/issues",
-                "source": "https://github.com/Codeinwp/themeisle-sdk/tree/v3.2.41"
-            },
-            "time": "2023-05-10T08:11:42+00:00"
+            "time": "2023-05-30T08:55:06+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -482,10 +478,6 @@
                 "stylecheck",
                 "tests"
             ],
-            "support": {
-                "issues": "https://github.com/PHPCSStandards/composer-installer/issues",
-                "source": "https://github.com/PHPCSStandards/composer-installer"
-            },
             "time": "2023-01-05T11:28:13+00:00"
         },
         {
@@ -601,10 +593,6 @@
                 "standards",
                 "static analysis"
             ],
-            "support": {
-                "issues": "https://github.com/PHPCompatibility/PHPCompatibilityParagonie/issues",
-                "source": "https://github.com/PHPCompatibility/PHPCompatibilityParagonie"
-            },
             "time": "2022-10-25T01:46:02+00:00"
         },
         {
@@ -656,10 +644,6 @@
                 "static analysis",
                 "wordpress"
             ],
-            "support": {
-                "issues": "https://github.com/PHPCompatibility/PHPCompatibilityWP/issues",
-                "source": "https://github.com/PHPCompatibility/PHPCompatibilityWP"
-            },
             "time": "2022-10-24T09:00:36+00:00"
         },
         {
@@ -712,11 +696,6 @@
                 "standards",
                 "static analysis"
             ],
-            "support": {
-                "issues": "https://github.com/squizlabs/PHP_CodeSniffer/issues",
-                "source": "https://github.com/squizlabs/PHP_CodeSniffer",
-                "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
-            },
             "time": "2023-02-22T23:07:41+00:00"
         },
         {
@@ -781,5 +760,5 @@
     "platform-overrides": {
         "php": "5.6"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "1.1.0"
 }
