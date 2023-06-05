@@ -7,7 +7,7 @@
 	Author: Themeisle
 	Author URI: http://themeisle.com
 	Requires at least: 3.5
-	 Tested up to:      5.6
+	Tested up to:      5.6
 	License: GPL v2.0 or later
 	WordPress Available:  yes
 	Requires License:    no
@@ -145,6 +145,18 @@ function visualizer_launch() {
 				'tested_up' => '1.13',
 			);
 			return $compatibilities;
+		}
+	);
+	add_filter(
+		'visualizer_about_us_metadata',
+		function() {
+			return array(
+				'logo'             => esc_url( VISUALIZER_ABSURL . 'images/visualizer-logo.svg' ),
+				'location'         => 'visualizer',
+				'has_upgrade_menu' => ! Visualizer_Module::is_pro(),
+				'upgrade_text'     => esc_html__( 'Get Visualizer Pro', 'feedzy-rss-feeds' ),
+				'upgrade_link'     => esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'aboutUsPage' ) ),
+			);
 		}
 	);
 }

@@ -21,7 +21,7 @@
     "source": "https://github.com/Codeinwp/visualizer"
   },
   "require": {
-    "codeinwp/themeisle-sdk": "^3.2",
+    "codeinwp/themeisle-sdk": "^3.3",
     "phpoffice/phpspreadsheet": "1.8.2",
     "neitanod/forceutf8": "~2.0"
   },

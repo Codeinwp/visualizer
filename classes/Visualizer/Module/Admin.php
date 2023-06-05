@@ -689,53 +689,43 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			array( $this, 'renderSupportPage' )
 		);
 
-		if ( ! Visualizer_Module::is_pro() ) {
-			add_submenu_page(
-				Visualizer_Plugin::NAME,
-				__( 'Get Visualizer Pro', 'visualizer' ),
-				__( 'Get Visualizer Pro', 'visualizer' ),
-				'edit_posts',
-				'viz-get-pro',
-				'__return_null'
-			);
-			add_action( 'admin_footer', array( $this, 'handleGetProSubMenu' ) );
-		}
 		remove_submenu_page( Visualizer_Plugin::NAME, Visualizer_Plugin::NAME );
 
 		add_action( "load-{$this->_libraryPage}", array( $this, 'addScreenOptions' ) );
+		add_action( 'admin_footer', array( $this, 'handleGetProSubMenu' ) );
 	}
 
 	/**
 	 * Handle get pro plugin submenu.
 	 */
 	public function handleGetProSubMenu() {
-		?>
+		if ( ! Visualizer_Module::is_pro() ) {
+			?>
 		<style type="text/css">
-			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li {
+			#toplevel_page_visualizer ul.wp-submenu li:last-child {
 				background: #FF7E65;
 				font-size: 14px;
 				font-weight: 600;
 				color: #fff;
 			}
-			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li > a {
+			#toplevel_page_visualizer ul.wp-submenu li:last-child > a {
 				color: #fff !important;
 			}
-			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li > a:hover {
+			#toplevel_page_visualizer ul.wp-submenu li:last-child > a:hover {
 				box-shadow: inherit;
 			}
-			#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li + li {
-				display: none;
-			}
 		</style>
-		<script type="text/javascript">
-			jQuery( document ).ready( function() {
-				jQuery( '#toplevel_page_visualizer' ).on( 'click', 'li:not(.wp-submenu-head, .wp-first-item):eq(2)', function( e ) {
-					e.preventDefault();
-					window.open( '<?php echo tsdk_utmify( 'https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/', 'toplevel' ); ?>', '_blank' );
-				} );
-			} );
-		</script>
-		<?php
+			<?php
+			if ( get_option( 'visualizer_fresh_install', false ) ) {
+				?>
+			<style type="text/css">
+				#toplevel_page_visualizer ul.wp-submenu li.wp-first-item + li + li + li {
+					display: none;
+				}
+			</style>
+				<?php
+			}
+		}
 	}
 
 	/**
