@@ -382,7 +382,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div id="visualizer-sidebar" class="one-columns">';
 			echo '<div class="visualizer-sidebar-box">';
 			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Remove branding label \'Chart by Visualizer\'', 'visualizer' ) . '</li>';
 			if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
 				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '6 more chart types', 'visualizer' );
 			} else {
