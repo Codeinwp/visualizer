@@ -1,3 +1,7 @@
+##### [Version 3.10.3](https://github.com/Codeinwp/visualizer/compare/v3.10.2...v3.10.3) (2023-06-13)
+
+- Removed branding label
+
 ##### [Version 3.10.2](https://github.com/Codeinwp/visualizer/compare/v3.10.1...v3.10.2) (2023-06-05)
 
 - Added About Us page integration
