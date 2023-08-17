@@ -1,3 +1,8 @@
+##### [Version 3.10.4](https://github.com/Codeinwp/visualizer/compare/v3.10.3...v3.10.4) (2023-08-17)
+
+- Updated dependencies
+- Updated WordPress version required to 5.2 or higher
+
 ##### [Version 3.10.3](https://github.com/Codeinwp/visualizer/compare/v3.10.2...v3.10.3) (2023-06-13)
 
 - Removed branding label
