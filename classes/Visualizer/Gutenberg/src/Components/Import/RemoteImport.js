@@ -86,6 +86,7 @@ class RemoteImport extends Component {
 							value={ this.props.chart['visualizer-chart-schedule'] ? this.props.chart['visualizer-chart-schedule'] : 1 }
 							options={ [
 								{ label: __( 'Each hour' ), value: '1' },
+								{ label: __( 'Live' ), value: '0' },
 								{ label: __( 'Each 12 hours' ), value: '12' },
 								{ label: __( 'Each day' ), value: '24' },
 								{ label: __( 'Each 3 days' ), value: '72' }
