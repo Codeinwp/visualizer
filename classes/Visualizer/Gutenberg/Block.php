@@ -90,7 +90,7 @@ class Visualizer_Gutenberg_Block {
 
 		// Enqueue the bundled block JS file
 		wp_enqueue_script( 'handsontable', $handsontableJS );
-		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment' ), $version, true );
+		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment', 'lodash' ), $version, true );
 
 		$type = 'community';
 
