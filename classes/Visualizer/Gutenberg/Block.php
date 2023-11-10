@@ -598,7 +598,7 @@ class Visualizer_Gutenberg_Block {
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SERIES, $data['visualizer-series'] );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $data['visualizer-settings'] );
 
-			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] ) {
+			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] >= 0 ) {
 				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
 				$chart_schedule = intval( $data['visualizer-chart-schedule'] );
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $chart_url );
