@@ -318,7 +318,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 		if ( $tables ) {
 			return $tables;
 		}
-
+		$tables = array();
 		$prefix = apply_filters( 'visualizer_db_prefix', $wpdb->prefix );
 		$sql    = $wpdb->get_col( 'SHOW TABLES', 0 );
 		foreach ( $sql as $table ) {
