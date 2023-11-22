@@ -5,6 +5,7 @@
 // this will store the images for each chart rendered.
 var __visualizer_chart_images   = [];
 var chartWrapperError = [];
+var isResizeRequest = false;
 
 (function($) {
 	var gv;
@@ -40,7 +41,7 @@ var chartWrapperError = [];
     function renderSpecificChart(id, chart) {
         var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
 
-        if ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader)' ).length > 0 ) ) {
+        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader)' ).length > 0 ) ) ) {
             return;
         }
 
@@ -477,8 +478,9 @@ var chartWrapperError = [];
     var resizeTimeout;
 
 	$(document).ready(function() {
-		$(window).resize(function() {
+		$(window).resize(function(e) {
 			clearTimeout(resizeTimeout);
+            window.isResizeRequest = 'undefined' !== typeof e.originalEvent ? true : false;
 			resizeTimeout = setTimeout(render, 100);
 		});
 
