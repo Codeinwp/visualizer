@@ -442,8 +442,8 @@ class Visualizer_Gutenberg_Block {
 
 		$json_paging = get_post_meta( $post_id, Visualizer_Plugin::CF_JSON_PAGING, true );
 
-		if ( ! empty( $import ) && ! empty( $schedule ) ) {
-			$data['visualizer-chart-url'] = $import;
+		if ( ! empty( $import ) && $schedule >= 0 ) {
+			$data['visualizer-chart-url']      = $import;
 			$data['visualizer-chart-schedule'] = $schedule;
 		}
 
@@ -598,7 +598,7 @@ class Visualizer_Gutenberg_Block {
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SERIES, $data['visualizer-series'] );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $data['visualizer-settings'] );
 
-			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] ) {
+			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] >= 0 ) {
 				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
 				$chart_schedule = intval( $data['visualizer-chart-schedule'] );
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $chart_url );
@@ -620,6 +620,16 @@ class Visualizer_Gutenberg_Block {
 				} else {
 					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
 					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
+				}
+
+				if ( 'Visualizer_Source_Csv_Remote' === $source_type ) {
+					$schedule_url = $data['visualizer-chart-url'];
+					$schedule_id  = $data['visualizer-chart-schedule'];
+					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $schedule_url );
+					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_SCHEDULE, $schedule_id );
+				} else {
+					delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
+					delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_SCHEDULE );
 				}
 			}
 

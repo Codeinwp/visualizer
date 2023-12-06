@@ -1587,6 +1587,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		require_once ABSPATH . '/wp-admin/includes/file.php';
 		\WP_Filesystem();
 		global $wp_filesystem;
+		if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base' ) ) {
+			$creds = request_filesystem_credentials( site_url() );
+			wp_filesystem( $creds );
+		}
 		$upload_file = $wp_filesystem->put_contents( $upload_path . $hashed_filename, $decoded );
 
 		// Insert new chart image.
