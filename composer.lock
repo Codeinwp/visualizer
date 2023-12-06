@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "codeinwp/themeisle-sdk",
-            "version": "3.3.2",
+            "version": "3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeinwp/themeisle-sdk.git",
-                "reference": "b799403bec877749ee0a2916dc859366d62bd76c"
+                "reference": "d960c559b643f468d16ffc5379e83efdb1526224"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/b799403bec877749ee0a2916dc859366d62bd76c",
-                "reference": "b799403bec877749ee0a2916dc859366d62bd76c",
+                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/d960c559b643f468d16ffc5379e83efdb1526224",
+                "reference": "d960c559b643f468d16ffc5379e83efdb1526224",
                 "shasum": ""
             },
             "require-dev": {
@@ -40,7 +40,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2023-08-02T13:04:20+00:00"
+            "time": "2023-11-16T15:27:37+00:00"
         },
         {
             "name": "markbaker/complex",

@@ -117,6 +117,11 @@ var chartWrapperError = [];
             settings['animation']['startup'] = true;
             settings['animation']['duration'] = parseInt(settings['animation']['duration']);
         }
+        if ( settings['controls'] ) {
+            settings['controls']['ui']['allowMultiple'] = 'true' === settings['controls']['allowMultiple'] ? true : false;
+            settings['controls']['ui']['allowTyping'] = 'true' === settings['controls']['allowTyping'] ? true : false;
+            settings['controls']['ui']['showRangeValues'] = 'true' === settings['controls']['showRangeValues'] ? true : false;
+        }
 
         // mark roles for series that have specified a role
         // and then remove them from future processing
