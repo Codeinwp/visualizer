@@ -109,6 +109,9 @@ var vizClipboard1=null;
 
     // Refresh charts if chart not generated.
     function refreshEachCharts() {
+        if ( 'object' === typeof window.fusionAnimationsVars ) {
+            return;
+        }
         setTimeout( function() {
             displayChartsOnFrontEnd();
         }, 100 );

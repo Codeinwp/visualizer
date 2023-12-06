@@ -133,7 +133,8 @@
                     }
                     var format = context.dataset.format || '';
                     if ( format ) {
-                        label += format_datum( context.formattedValue, format );
+                        var lastSuffix = numeral(context.formattedValue).format(format).replace(/[0-9]/g, '');
+                        label += context.formattedValue + lastSuffix;
                     } else {
                         format = 'undefined' !== typeof context.chart.config._config.options.format ? context.chart.config._config.options.format : '';
                         if ( format ) {
@@ -467,7 +468,7 @@
         switch(type) {
             case 'number':
                 // numeral.js works on 0 instead of # so we just replace that in the ICU pattern set.
-                format = format.replace(/#/g, '0');
+                format = format.replace(/#/g, '0').replace(/%/g, '');
                 // we also replace all instance of '$' as that is more relevant for ticks.
                 if(removeDollar){
                     format = format.replace(/\$/g, '');

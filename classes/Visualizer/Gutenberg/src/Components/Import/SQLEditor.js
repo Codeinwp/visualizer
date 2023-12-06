@@ -97,7 +97,7 @@ class SQLEditor extends Component {
 				<div className="visualizer-db-query-actions">
 					<Button
 						isLarge
-						isDefault
+						variant="secondary"
 						isBusy={ this.state.isLoading }
 						onClick={ this.onSave }
 					>

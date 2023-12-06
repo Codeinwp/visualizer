@@ -80,7 +80,7 @@ class ChartEditor extends Component {
 
 				<ButtonGroup>
 					<Button
-						isDefault
+						variant="secondary"
 						isLarge
 						onClick={ this.props.toggleModal }
 					>
