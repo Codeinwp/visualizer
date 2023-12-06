@@ -62,8 +62,8 @@ class SeriesSettings extends Component {
 					.map( ( i, index ) => {
 						i = parseInt( i ) + 1;
                         let indexToFormat = parseInt( i );
-                        let label = series[i].label || '';
-                        let type = series[i].type || '';
+                        let label = 'object' === typeof series[i] ? series[i].label : '';
+                        let type = 'object' == typeof series[i] ? series[i].type : '';
                         let timer = 0;
                         if ( 'tabular' !== type ) {
                             indexToFormat = index;

@@ -3,6 +3,9 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 module.exports = {
+	externals: {
+        'lodash': 'lodash'
+    },
 	mode: NODE_ENV,
 	entry: './src/index.js',
 	output: {
