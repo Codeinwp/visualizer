@@ -587,7 +587,7 @@ class Editor extends Component {
 						<ButtonGroup>
 
 							<Button
-								isDefault
+								variant="secondary"
 								isLarge
 								onClick={ () => {
 									let route;
@@ -608,7 +608,7 @@ class Editor extends Component {
 
 									{ false === this.state.isModified ?
 										<Button
-											isDefault
+											variant="secondary"
 											isLarge
                                             className="visualizer-bttn-done"
 											onClick={ () => {

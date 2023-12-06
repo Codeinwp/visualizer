@@ -56,8 +56,7 @@ class ChartSelect extends Component {
 	}
 
 	render() {
-
-		let chartVersion = 'undefined' !== typeof google ? google.visualization.Version : 'current';
+		let chartVersion = 'undefined' !== typeof google.visualization ? google.visualization.Version : 'current';
 
 		let chart, footer;
 
