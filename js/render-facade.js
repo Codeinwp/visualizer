@@ -107,16 +107,6 @@ var vizClipboard1=null;
         registerDefaultActions();
     });
 
-    // Refresh charts if chart not generated.
-    function refreshEachCharts() {
-        if ( 'object' === typeof window.fusionAnimationsVars ) {
-            return;
-        }
-        setTimeout( function() {
-                        displayChartsOnFrontEnd();
-        }, 100 );
-    }
-
     function initChartDisplay() {
         if(visualizer.is_front == true){ // jshint ignore:line
                         displayChartsOnFrontEnd();
@@ -139,22 +129,12 @@ var vizClipboard1=null;
 
     function displayChartsOnFrontEnd() {
 
-        // Render the charts that are not lazy-loaded and with no errors.
-        var nonLazyLoadedCharts = $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error');
-     
-        if ( nonLazyLoadedCharts.length ) {
-            nonLazyLoadedCharts.each(function(index, element){
-                if ( $(element).is(':visible') ) {
-                    var id = $(element).addClass('viz-facade-loaded').attr('id');
-                    showChart(id);
-                }
-            });
-            
-            refreshEachCharts();
-        } else {
-            // Remove the loaded status for charts that are empty.
-            $( 'div.viz-facade-loaded:not(.visualizer-lazy):not(.visualizer-cw-error):empty' ).removeClass( 'viz-facade-loaded' );
-        }
+        $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error):empty').each(function(index, element){
+            if ( $(element).is(':visible') ) {
+                var id = $(element).addClass('viz-facade-loaded').attr('id');
+                showChart(id);
+            }
+        });
 
         // interate through all charts that are to be lazy-loaded and observe each one.
         $('div.visualizer-front.visualizer-lazy').each(function(index, element){
