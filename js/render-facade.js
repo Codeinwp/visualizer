@@ -4,6 +4,9 @@
 var vizClipboard1=null;
 (function($, visualizer){
 
+    // Once the facade is loaded, we need to refresh the charts. But we need to it one time only per chart.
+    var chartReloadedAfterFacade = [];
+
     function initActionsButtons(v) {
         if($('a.visualizer-chart-shortcode').length > 0 && vizClipboard1 === null) {
             vizClipboard1 = new ClipboardJS('a.visualizer-chart-shortcode'); // jshint ignore:line
@@ -144,8 +147,13 @@ var vizClipboard1=null;
             if ( $(element).is(':visible') ) {
                 var id = $(element).addClass('viz-facade-loaded').attr('id');
                 showChart(id);
+
+                // Reload the chart and mark it as reloaded.
+                if ( chartReloadedAfterFacade.indexOf( id ) === -1 ) {
+                    refreshEachCharts();
+                    chartReloadedAfterFacade.push( id );
+                }
             }
-            refreshEachCharts();
         });
 
         // interate through all charts that are to be lazy-loaded and observe each one.
