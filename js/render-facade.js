@@ -3,10 +3,7 @@
 /* global jQuery */
 var vizClipboard1=null;
 (function($, visualizer){
-
-    // Once the facade is loaded, we need to refresh the charts. But we need to it one time only per chart.
-    var chartReloadedAfterFacade = [];
-
+    
     function initActionsButtons(v) {
         if($('a.visualizer-chart-shortcode').length > 0 && vizClipboard1 === null) {
             vizClipboard1 = new ClipboardJS('a.visualizer-chart-shortcode'); // jshint ignore:line
@@ -116,13 +113,13 @@ var vizClipboard1=null;
             return;
         }
         setTimeout( function() {
-            displayChartsOnFrontEnd();
+                        displayChartsOnFrontEnd();
         }, 100 );
     }
 
     function initChartDisplay() {
         if(visualizer.is_front == true){ // jshint ignore:line
-            displayChartsOnFrontEnd();
+                        displayChartsOnFrontEnd();
         }else{
             showChart();
         }
@@ -141,20 +138,23 @@ var vizClipboard1=null;
     }
 
     function displayChartsOnFrontEnd() {
-        // display all charts that are NOT to be lazy-loaded.
-        $( 'div.viz-facade-loaded:not(.visualizer-lazy):not(.visualizer-cw-error):empty' ).removeClass( 'viz-facade-loaded' );
-        $('div.visualizer-front:not(.visualizer-lazy):not(.viz-facade-loaded)').each(function(index, element){
-            if ( $(element).is(':visible') ) {
-                var id = $(element).addClass('viz-facade-loaded').attr('id');
-                showChart(id);
 
-                // Reload the chart and mark it as reloaded.
-                if ( chartReloadedAfterFacade.indexOf( id ) === -1 ) {
-                    refreshEachCharts();
-                    chartReloadedAfterFacade.push( id );
+        // Render the charts that are not lazy-loaded and with no errors.
+        var nonLazyLoadedCharts = $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error');
+     
+        if ( nonLazyLoadedCharts.length ) {
+            nonLazyLoadedCharts.each(function(index, element){
+                if ( $(element).is(':visible') ) {
+                    var id = $(element).addClass('viz-facade-loaded').attr('id');
+                    showChart(id);
                 }
-            }
-        });
+            });
+            
+            refreshEachCharts();
+        } else {
+            // Remove the loaded status for charts that are empty.
+            $( 'div.viz-facade-loaded:not(.visualizer-lazy):not(.visualizer-cw-error):empty' ).removeClass( 'viz-facade-loaded' );
+        }
 
         // interate through all charts that are to be lazy-loaded and observe each one.
         $('div.visualizer-front.visualizer-lazy').each(function(index, element){
