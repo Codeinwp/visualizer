@@ -14,8 +14,17 @@ var isResizeRequest = false;
     var rendered_charts = [];
 
 	function renderChart(id) {
+        
+    if ( ! all_charts || 0 === Object.keys( all_charts ).length ) {
+            return;
+        }
+
         var chart = all_charts[id];
         var hasAnnotation = false;
+
+        if ( ! chart ) {
+            return;
+        }
 
         // re-render the chart only if it doesn't have annotations and it is on the front-end
         // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
