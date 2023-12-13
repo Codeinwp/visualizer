@@ -15,7 +15,7 @@ var isResizeRequest = false;
 
 	function renderChart(id) {
         
-    if ( ! all_charts || 0 === Object.keys( all_charts ).length ) {
+        if ( ! all_charts || 0 === Object.keys( all_charts ).length ) {
             return;
         }
 

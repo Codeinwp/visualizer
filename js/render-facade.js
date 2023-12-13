@@ -109,8 +109,8 @@ var vizClipboard1=null;
 
     function initChartDisplay() {
         if(visualizer.is_front == true){ // jshint ignore:line
-                        displayChartsOnFrontEnd();
-        }else{
+            displayChartsOnFrontEnd();
+        } else {
             showChart();
         }
     }
