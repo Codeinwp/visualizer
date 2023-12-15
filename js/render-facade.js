@@ -132,7 +132,10 @@ var vizClipboard1=null;
         $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error):empty').each(function(index, element){
             if ( $(element).is(':visible') ) {
                 var id = $(element).addClass('viz-facade-loaded').attr('id');
-                showChart(id);
+                setTimeout(function(){
+                    // Add a short delay between each chart to avoid overloading the browser event loop.
+                    showChart(id);
+                }, ( index + 1 ) * 100);
             }
         });
 
