@@ -212,12 +212,13 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 			'message' => __( 'Something went wrong while importing the chart', 'visualizer' ),
 		);
 
+		$data     = $source->getData();
 		$args     = array(
 			'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
 			'post_title'   => 'Visualization',
 			'post_author'  => get_current_user_id(),
 			'post_status'  => 'publish',
-			'post_content' => $source->getData(),
+			'post_content' => $data,
 		);
 		$chart_id = wp_insert_post( $args );
 
@@ -232,8 +233,10 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $series );
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, '' );
 
+			$data           = maybe_unserialize( $data );
 			$setting_series = array();
-			foreach ( $series as $s ) {
+			$setting_slices = array();
+			foreach ( $data as $s ) {
 				$setting_series[] = array(
 					'visibleInLegend' => '',
 					'lineWidth'       => '',
@@ -242,6 +245,10 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 					'curveType'       => '',
 					'color'           => '',
 					'role'            => '',
+				);
+				$setting_slices[] = array(
+					'offset' => 0,
+					'color'  => '',
 				);
 			}
 			update_post_meta(
@@ -289,7 +296,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 					),
 					'focusTarget'     => 'datum',
 					'series'          => $setting_series,
-					'slices'          => array(),
+					'slices'          => $setting_slices,
 					'vAxis'           => array(
 						'title'          => '',
 						'textPosition'   => '',

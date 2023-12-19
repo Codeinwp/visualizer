@@ -523,6 +523,10 @@ class Visualizer_Module {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		WP_Filesystem();
 		global $wp_filesystem;
+		if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base' ) ) {
+			$creds = request_filesystem_credentials( site_url() );
+			wp_filesystem( $creds );
+		}
 
 		$multisite_arg = '/';
 		if ( is_multisite() && ! is_main_site() ) {

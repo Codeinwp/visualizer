@@ -5,6 +5,7 @@
 // this will store the images for each chart rendered.
 var __visualizer_chart_images   = [];
 var chartWrapperError = [];
+var isResizeRequest = false;
 
 (function($) {
 	var gv;
@@ -13,8 +14,17 @@ var chartWrapperError = [];
     var rendered_charts = [];
 
 	function renderChart(id) {
+        
+        if ( ! all_charts || 0 === Object.keys( all_charts ).length ) {
+            return;
+        }
+
         var chart = all_charts[id];
         var hasAnnotation = false;
+
+        if ( ! chart ) {
+            return;
+        }
 
         // re-render the chart only if it doesn't have annotations and it is on the front-end
         // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
@@ -40,7 +50,7 @@ var chartWrapperError = [];
     function renderSpecificChart(id, chart) {
         var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
 
-        if ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader)' ).length > 0 ) ) {
+        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader)' ).length > 0 ) ) ) {
             return;
         }
 
@@ -116,6 +126,11 @@ var chartWrapperError = [];
         {
             settings['animation']['startup'] = true;
             settings['animation']['duration'] = parseInt(settings['animation']['duration']);
+        }
+        if ( settings['controls'] ) {
+            settings['controls']['ui']['allowMultiple'] = 'true' === settings['controls']['allowMultiple'] ? true : false;
+            settings['controls']['ui']['allowTyping'] = 'true' === settings['controls']['allowTyping'] ? true : false;
+            settings['controls']['ui']['showRangeValues'] = 'true' === settings['controls']['showRangeValues'] ? true : false;
         }
 
         // mark roles for series that have specified a role
@@ -477,8 +492,9 @@ var chartWrapperError = [];
     var resizeTimeout;
 
 	$(document).ready(function() {
-		$(window).resize(function() {
+		$(window).resize(function(e) {
 			clearTimeout(resizeTimeout);
+            window.isResizeRequest = 'undefined' !== typeof e.originalEvent ? true : false;
 			resizeTimeout = setTimeout(render, 100);
 		});
 
