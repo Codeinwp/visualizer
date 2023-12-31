@@ -147,19 +147,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 ## Screenshots ##
 
-1. Chart selection
-2. Chart selection 2
-3. Library
-4. Download
-5. Line settings
-6. Pie settings
-7. Block editor - Pie chart settings
-8. Block editor - Pie chart
-9. Block editor - Chart library
-10. Block editor chart
-11. Bar settings
-12. Bar settings, Series settings
-13. Bar chart
+1. Charts Selection
+2. Quick Actions
+3. Import Options
+4. Bar Chart
+5. Bar Chart Settings
+6. Line Chart Settings
+7. Block editor - Chart Library
 
 == Changelog ==
 
