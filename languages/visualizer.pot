@@ -315,7 +315,7 @@ msgid "Upgrade your license to at least the %s version to activate this feature!
 msgstr ""
 
 #: classes/Visualizer/Module/Sources.php:149
-msgid "Buy now"
+msgid "Upgrade Now"
 msgstr ""
 
 #: classes/Visualizer/Plugin.php:130

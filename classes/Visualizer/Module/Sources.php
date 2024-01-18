@@ -146,7 +146,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			$return .= '	<div class="only-pro-container">';
 			$return .= '		<div class="only-pro-inner">';
 			$return .= '			<p>' . $msg . '</p>';
-			$return .= '            <a target="_blank" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, esc_attr( $feature ) ) . '" title="' . __( 'Buy now', 'visualizer' ) . '">' . __( 'Buy now', 'visualizer' ) . '</a>';
+			$return .= '            <a target="_blank" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, esc_attr( $feature ) ) . '" title="' . __( 'Upgrade Now', 'visualizer' ) . '">' . __( 'Upgrade Now', 'visualizer' ) . '</a>';
 			$return .= ' 		</div>';
 			$return .= ' 	</div>';
 			$return .= '</div>';
