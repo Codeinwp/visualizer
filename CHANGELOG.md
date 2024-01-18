@@ -1,3 +1,8 @@
+##### [Version 3.10.6](https://github.com/Codeinwp/visualizer/compare/v3.10.5...v3.10.6) (2024-01-18)
+
+### Fixes
+- Enhanced security
+
 ##### [Version 3.10.5](https://github.com/Codeinwp/visualizer/compare/v3.10.4...v3.10.5) (2023-12-19)
 
 ### Improvements
