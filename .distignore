@@ -17,8 +17,8 @@ artifact
 composer.json
 composer.lock
 package-lock.json
-vendor/phpoffice/phpexcel/Examples
-vendor/phpoffice/phpexcel/unitTests
+vendor/phpoffice/phpspreadsheet/samples
+vendor/phpoffice/phpspreadsheet/docs
 cypress
 cypress.json
 .github
