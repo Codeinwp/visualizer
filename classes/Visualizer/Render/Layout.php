@@ -1078,7 +1078,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							</li>
 
 							<!-- manual -->
-							<li class="viz-group visualizer_source_manual <?php echo ! Visualizer_Module_Admin::proFeaturesLocked() ? apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'manual-data' ) : ''; ?>">
+							<li class="viz-group visualizer_source_manual <?php echo ! Visualizer_Module_Admin::proFeaturesLocked() ? apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ) : ''; ?>">
 								<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?>
 									<span class="dashicons dashicons-lock"></span>
 								</h2>
