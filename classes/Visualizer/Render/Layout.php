@@ -105,7 +105,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			</thead>
 			<tfoot>
 			</tfoot>
-			<tbody>					
+			<tbody>
 		<?php
 		foreach ( $results as $result ) {
 			echo '<tr>';
@@ -199,7 +199,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 											name="username"
 											value="<?php echo ( array_key_exists( 'auth', $headers ) && array_key_exists( 'username', $headers['auth'] ) ? $headers['auth']['username'] : '' ); ?>"
 											placeholder="<?php esc_html_e( 'Username/Access Key', 'visualizer' ); ?>"
-											class="json-form-element">								
+											class="json-form-element">
 										&
 										<input
 											type="password"
@@ -207,7 +207,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 											name="password"
 											value="<?php echo ( array_key_exists( 'auth', $headers ) && array_key_exists( 'password', $headers['auth'] ) ? $headers['auth']['password'] : '' ); ?>"
 											placeholder="<?php esc_html_e( 'Password/Secret Key', 'visualizer' ); ?>"
-											class="json-form-element">	
+											class="json-form-element">
 									</div>
 								</div>
 								<div class="json-wizard-header">
@@ -420,7 +420,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 		?>
 				</tr>
 			</thead>
-			<tbody>	
+			<tbody>
 				<tr>
 					<th><?php _e( 'Data Type', 'visualizer' ); ?></th>
 		<?php
@@ -872,7 +872,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 										<input type="button" id="existing-chart" class="button button-primary"
 											   value="<?php _e( 'Import Chart', 'visualizer' ); ?>"
 											   data-viz-link="<?php echo $fetch_link; ?>">
-										<?php echo apply_filters( 'visualizer_pro_upsell', '' ); ?>
+										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-chart' ); ?>
 									</div>
 								</div>
 							</li>
@@ -1078,7 +1078,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							</li>
 
 							<!-- manual -->
-							<li class="viz-group visualizer_source_manual <?php echo ! Visualizer_Module_Admin::proFeaturesLocked() ? apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ) : ''; ?>">
+							<li class="viz-group visualizer_source_manual <?php echo ! Visualizer_Module_Admin::proFeaturesLocked() ? apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'manual-data' ) : ''; ?>">
 								<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?>
 									<span class="dashicons dashicons-lock"></span>
 								</h2>
@@ -1122,7 +1122,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 										<?php } ?>
 										<?php
 										if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
-											echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' );
+											echo apply_filters( 'visualizer_pro_upsell', '', 'manual-data' );
 										}
 										?>
 									</form>

@@ -742,7 +742,7 @@ class Visualizer_Module {
 			case 1:
 				return array( 'import-wp', 'db-query', 'import-wc-report' );
 			case 2:
-				return array( 'schedule-chart', 'chart-permissions' );
+				return array( 'schedule-chart', 'chart-permissions', 'import-chart', 'manual-data', 'data-filter-configuration', 'frontend-actions' );
 		}
 	}
 
