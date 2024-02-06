@@ -173,7 +173,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 			$this->_renderActionSettings();
 		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
-			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+			echo apply_filters( 'visualizer_pro_upsell', '', 'frontend-actions' );
 			echo '</div>';
 		}
 		self::_renderGroupEnd();
@@ -592,7 +592,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		self::_renderSectionEnd();
 		$this->_renderChartControlsSettings();
 		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
-			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+			echo apply_filters( 'visualizer_pro_upsell', '', 'data-filter-configuration' );
 			echo '</div>';
 		}
 		self::_renderGroupEnd();

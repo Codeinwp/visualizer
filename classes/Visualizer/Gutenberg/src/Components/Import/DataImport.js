@@ -48,7 +48,7 @@ class DataImport extends Component {
 						href={ visualizerLocalize.proTeaser }
 						target="_blank"
 					>
-						{ __( 'Buy Now' ) }
+						{ __( 'Upgrade Now' ) }
 					</Button>
 
 				</PanelBody>

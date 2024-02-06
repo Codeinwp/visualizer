@@ -130,13 +130,18 @@ var vizClipboard1=null;
     function displayChartsOnFrontEnd() {
 
         $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error):empty').each(function(index, element){
-            if ( $(element).is(':visible') ) {
-                var id = $(element).addClass('viz-facade-loaded').attr('id');
-                setTimeout(function(){
-                    // Add a short delay between each chart to avoid overloading the browser event loop.
-                    showChart(id);
-                }, ( index + 1 ) * 100);
+
+            // Do not render charts that are intentionally hidden.
+            var style = window.getComputedStyle(element);
+            if (style.display === 'none' || style.visibility === 'hidden') {
+                return;
             }
+           
+            var id = $(element).addClass('viz-facade-loaded').attr('id');
+            setTimeout(function(){
+                // Add a short delay between each chart to avoid overloading the browser event loop.
+                showChart(id);
+            }, ( index + 1 ) * 100);
         });
 
         // interate through all charts that are to be lazy-loaded and observe each one.
