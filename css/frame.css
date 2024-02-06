@@ -1082,15 +1082,20 @@ button#editor-chart-button {
 	display: inline-block;
 	padding: 7px 12px;
 	color: #fff;
-	background: #ff595e;
+	background: #3F57E1;
 	font-weight: 600;
 	text-decoration: none;
-	text-transform: uppercase;
 	transition: 0.1s ease;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 3px;
+}
+.only-pro-content .only-pro-container a {
+	color: #fff !important;
 }
 
 .only-pro-content a:hover {
-	background: #ce484c;
+	background: #2D419B;
 }
 
 #sidebar::-webkit-scrollbar {
