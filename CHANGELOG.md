@@ -1,3 +1,11 @@
+##### [Version 3.10.7](https://github.com/Codeinwp/visualizer/compare/v3.10.6...v3.10.7) (2024-02-06)
+
+### Fixes
+- Rendering charts that are under tabs/hidden containers
+- Updated dependencies
+- Updated CTA buttons
+- Updated UTM campaign links
+
 ##### [Version 3.10.6](https://github.com/Codeinwp/visualizer/compare/v3.10.5...v3.10.6) (2024-01-18)
 
 ### Fixes
