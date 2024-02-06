@@ -236,7 +236,8 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 														<div class="vz-shortcode-preview-content">
 																<?php $shortcode = '[visualizer id="{{chart_id}}" lazy="" class=""]'; ?>
 																<?php if ( $is_live_preview ) { ?>
-																	<h4 class="h4 pb-16"><?php esc_html_e( 'Chart are rendered in page via shortcodes.', 'visualizer' ); ?></h4>
+																	<p class="pb-16"><?php esc_html_e( 'Charts are added in the page/post via Gutenberg Blocks.', 'visualizer' ); ?></p>
+																	<p class="pb-16"><?php esc_html_e( 'Alternatively, you can use a shortcode with the following structure:', 'visualizer' ); ?></p>
 																<?php } else { ?>
 																	<h4 class="h4 pb-16"><?php esc_html_e( 'Chart preview', 'visualizer' ); ?></h4>
 																	<div class="vz-chart pb-30">
