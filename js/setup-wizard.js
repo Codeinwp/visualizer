@@ -7,6 +7,48 @@
  */
 /* jshint unused:false */
 jQuery(function ($) {
+
+	/**
+	 * Check if the user is in live preview mode.
+	 * Live Preview is used in WordPress Playground to test the plugin.
+	 * Use this check to deactivate any process that does not showcase the plugin features (e.g. subscription to the newsletter, etc.)
+	 * 
+	 * @type {boolean}
+	 */
+	const isLivePreview = window.location.search.includes('env=preview');
+
+	/**
+	 * Redirect to draft page after subscribe (optional).
+	 * 
+	 * @param {Object} postData - Post data. 
+	 */
+	const goToDraftPage = function ( postData = {} ) {
+		postData ??= {};
+		postData.action ??= 'visualizer_wizard_step_process';
+		postData.security ??= visualizerSetupWizardData.ajax.security;
+		postData.step ??= 'step_subscribe';
+
+		// Subscribe the user using the email if provided. Redirect to the draft page.
+		$.post(visualizerSetupWizardData.ajax.url, postData, function (res) {
+
+			// Toggle the redirect popup.
+			$('.redirect-popup').find('h3.popup-title').html(res.message);
+			$('.redirect-popup').show();
+
+			if (1 === res.status) {
+				setTimeout(function () {
+					window.location.href = res.redirect_to;
+				}, 5000);
+			} else {
+				$('.redirect-popup').hide();
+			}
+			currentStep.find('.spinner').removeClass('is-active');
+		}).fail(function () {
+			$('.redirect-popup').hide();
+			currentStep.find('.spinner').removeClass('is-active');
+		});
+	}
+
 	var provideContent = function(id, stepDirection, stepPosition, selStep, callback) {
 		// Import chart data.
 		if ( 1 == id ) {
@@ -119,6 +161,7 @@ jQuery(function ($) {
 		".btn-primary:not(.next-btn,.vz-create-page,.vz-subscribe)",
 		function (e) {
 			var stepNumber = $(this).data("step_number");
+			
 			switch (stepNumber) {
 				case 1:
 					if ($(".vz-radio-btn").is(":checked")) {
@@ -126,10 +169,14 @@ jQuery(function ($) {
 					}
 					break;
 				case 3:
-					var urlParams = new URLSearchParams(window.location.search);
-					urlParams.set('preview_chart', Date.now());
-					window.location.hash = "#step-3";
-					window.location.search = urlParams;
+					if ( isLivePreview ) {
+						$('#smartwizard').smartWizard('next');
+					} else {
+						var urlParams = new URLSearchParams(window.location.search);
+						urlParams.set('preview_chart', Date.now());
+						window.location.hash = "#step-3";
+						window.location.search = urlParams;
+					} 
 					break;
 				case 4:
 					$('#step-4').find('.spinner').addClass('is-active');
@@ -181,7 +228,11 @@ jQuery(function ($) {
 			},
 			function (res) {
 				if (res.status > 0) {
-					$("#smartwizard").smartWizard("next");
+					if ( isLivePreview ) {
+						goToDraftPage();
+					} else {
+						$("#smartwizard").smartWizard("next");
+					}
 				}
 				_this.next(".spinner").removeClass("is-active");
 			}
@@ -235,21 +286,7 @@ jQuery(function ($) {
 		var currentStep = $( '.vz-wizard-wrap .tab-pane:last-child' );
 		currentStep.find(".spinner").addClass("is-active");
 
-		$.post(visualizerSetupWizardData.ajax.url, postData, function (res) {
-			$('.redirect-popup').find('h3.popup-title').html(res.message);
-			$('.redirect-popup').show();
-			if (1 === res.status) {
-				setTimeout(function () {
-					window.location.href = res.redirect_to;
-				}, 5000);
-			} else {
-				$('.redirect-popup').hide();
-			}
-			currentStep.find('.spinner').removeClass('is-active');
-		}).fail(function () {
-			$('.redirect-popup').hide();
-			currentStep.find('.spinner').removeClass('is-active');
-		});
+		goToDraftPage( postData );
 		e.preventDefault();
 	});
 
