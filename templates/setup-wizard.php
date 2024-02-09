@@ -322,7 +322,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 							</div>
 						</div>
 					<?php } ?>
-					<?php if ( ! $is_live_preview ) {?>
+					<?php if ( ! $is_live_preview ) { ?>
 						<div id="step-<?php echo esc_attr( $last_step_number ); ?>" class="tab-pane" role="tabpanel" aria-labelledby="step-5">
 							<div class="vz-accordion-item">
 								<div class="vz-accordion-item__title">
