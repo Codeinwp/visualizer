@@ -234,26 +234,25 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 													</div>
 													<div class="vz-accordion-item__content">
 														<div class="vz-shortcode-preview-content">
-																<?php $shortcode = '[visualizer id="{{chart_id}}" lazy="" class=""]'; ?>
-																<?php if ( $is_live_preview ) { ?>
-																	<p class="pb-16"><?php esc_html_e( 'Charts are added in the page/post via Gutenberg Blocks.', 'visualizer' ); ?></p>
-																	<p class="pb-16"><?php esc_html_e( 'Alternatively, you can use a shortcode with the following structure:', 'visualizer' ); ?></p>
-																<?php } else { ?>
-																	<h4 class="h4 pb-16"><?php esc_html_e( 'Chart preview', 'visualizer' ); ?></h4>
-																	<div class="vz-chart pb-30">
-																		<?php
-																		if ( ! empty( $_GET['preview_chart'] ) ) {
-																			$shortcode = str_replace( '{{chart_id}}', $chart_id, $shortcode );
-																			echo do_shortcode( $shortcode );
-																		}
-																		?>
-																	</div>
-																<?php } ?>
-																<div class="vz-code-box">
-																	<input type="text" id="basic_shortcode" value="<?php echo esc_attr( $shortcode ); ?>" readonly>
-																	<button type="button" class="vz-copy-code-btn" data-clipboard-target="#basic_shortcode"><?php esc_html_e( 'click to copy', 'visualizer' ); ?> <img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/copy.svg' ); ?>" alt="">
-																	</button>
+															<?php $shortcode = '[visualizer id="{{chart_id}}" lazy="" class=""]'; ?>
+															<?php if ( $is_live_preview ) { ?>
+																<p class="pb-16"><?php esc_html_e( 'Charts are added in the page/post via Gutenberg Blocks.', 'visualizer' ); ?></p>
+																<p class="pb-16"><?php esc_html_e( 'Alternatively, you can use a shortcode with the following structure:', 'visualizer' ); ?></p>
+															<?php } else { ?>
+																<h4 class="h4 pb-16"><?php esc_html_e( 'Chart preview', 'visualizer' ); ?></h4>
+																<div class="vz-chart pb-30">
+																	<?php
+																	if ( ! empty( $_GET['preview_chart'] ) ) {
+																		$shortcode = str_replace( '{{chart_id}}', $chart_id, $shortcode );
+																		echo do_shortcode( $shortcode );
+																	}
+																	?>
 																</div>
+															<?php } ?>
+															<div class="vz-code-box">
+																<input type="text" id="basic_shortcode" value="<?php echo esc_attr( $shortcode ); ?>" readonly>
+																<button type="button" class="vz-copy-code-btn" data-clipboard-target="#basic_shortcode"><?php esc_html_e( 'click to copy', 'visualizer' ); ?> <img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/copy.svg' ); ?>" alt="">
+																</button>
 															</div>
 														</div>
 													</div>
@@ -270,60 +269,60 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 						</div>
 					</div>
 					<?php if ( ! $wp_optimole_active && ! $is_live_preview ) { ?>
-					<div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
-						<div class="vz-accordion-item">
-							<div class="vz-accordion-item__title">
-								<div class="vz-accordion-item__button">
-									<h2 class="h2 pb-8"><?php esc_html_e( 'Extra Features', 'visualizer' ); ?></h2>
-									<p class="p"><?php esc_html_e( 'We\'re confident you\'ll see the improvements. Otherwise, you can remove it anytime', 'visualizer' ); ?></p>
+						<div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+							<div class="vz-accordion-item">
+								<div class="vz-accordion-item__title">
+									<div class="vz-accordion-item__button">
+										<h2 class="h2 pb-8"><?php esc_html_e( 'Extra Features', 'visualizer' ); ?></h2>
+										<p class="p"><?php esc_html_e( 'We\'re confident you\'ll see the improvements. Otherwise, you can remove it anytime', 'visualizer' ); ?></p>
+									</div>
 								</div>
-							</div>
-							<div class="vz-accordion-item__content border-top">
-								<div class="vz-form-wrap">
-									<div class="form-block">
-										<div class="vz-error-notice notice notice-error hidden"></div>
-										<div class="vz-accordion">
-											<div class="vz-accordion-item vz-features-accordion mb-0">
-												<div class="vz-accordion-item__title vz-accordion-checkbox__title">
-													<div class="vz-checkbox">
-														<input type="checkbox" class="vz-checkbox-btn" checked>
-													</div>
-													<button type="button" class="vz-accordion-item__button">
-														<div class="vz-accordion__step-title h4 pb-4"><?php esc_html_e( 'Enable perfomance features for your website.', 'visualizer' ); ?></div>
-														<p class="help-text"><?php esc_html_e( 'Optimise and speed up your site with our trusted addon - It&#x92;s Free', 'visualizer' ); ?></p>
-														<div class="vz-accordion__icon"><span class="dashicons dashicons-arrow-down-alt2"></span>
+								<div class="vz-accordion-item__content border-top">
+									<div class="vz-form-wrap">
+										<div class="form-block">
+											<div class="vz-error-notice notice notice-error hidden"></div>
+											<div class="vz-accordion">
+												<div class="vz-accordion-item vz-features-accordion mb-0">
+													<div class="vz-accordion-item__title vz-accordion-checkbox__title">
+														<div class="vz-checkbox">
+															<input type="checkbox" class="vz-checkbox-btn" checked>
 														</div>
-													</button>
-												</div>
-												<div class="vz-accordion-item__content">
-													<div class="vz-features-list">
-														<ul>
-															<li>
-																<div class="icon">
-																	<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/boost-logo.png' ); ?>" width="37" height="30" alt="">
-																</div>
-																<div class="txt">
-																	<div class="h4 pb-4"><?php esc_html_e( 'Boost your website speed', 'visualizer' ); ?> <span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span></div>
-																	<p class="help-text"><?php esc_html_e( 'Improve your website speed and images by 80% with', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( 'https://optimole.com/', 'VisualizerSetupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Optimole', 'visualizer' ); ?></a></p>
-																</div>
-															</li>
-														</ul>
+														<button type="button" class="vz-accordion-item__button">
+															<div class="vz-accordion__step-title h4 pb-4"><?php esc_html_e( 'Enable perfomance features for your website.', 'visualizer' ); ?></div>
+															<p class="help-text"><?php esc_html_e( 'Optimise and speed up your site with our trusted addon - It&#x92;s Free', 'visualizer' ); ?></p>
+															<div class="vz-accordion__icon"><span class="dashicons dashicons-arrow-down-alt2"></span>
+															</div>
+														</button>
+													</div>
+													<div class="vz-accordion-item__content">
+														<div class="vz-features-list">
+															<ul>
+																<li>
+																	<div class="icon">
+																		<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/boost-logo.png' ); ?>" width="37" height="30" alt="">
+																	</div>
+																	<div class="txt">
+																		<div class="h4 pb-4"><?php esc_html_e( 'Boost your website speed', 'visualizer' ); ?> <span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span></div>
+																		<p class="help-text"><?php esc_html_e( 'Improve your website speed and images by 80% with', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( 'https://optimole.com/', 'VisualizerSetupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Optimole', 'visualizer' ); ?></a></p>
+																	</div>
+																</li>
+															</ul>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="form-block">
-										<button class="btn btn-primary vz-wizard-install-plugin" data-step_number="4"><?php esc_html_e( 'Improve now', 'visualizer' ); ?>
-										<button class="btn btn-primary next-btn skip-improvement" style="display: none;"><?php esc_html_e( 'Skip Improvement', 'visualizer' ); ?></button>
-										<span class="spinner"></span>
+										<div class="form-block">
+											<button class="btn btn-primary vz-wizard-install-plugin" data-step_number="4"><?php esc_html_e( 'Improve now', 'visualizer' ); ?>
+											<button class="btn btn-primary next-btn skip-improvement" style="display: none;"><?php esc_html_e( 'Skip Improvement', 'visualizer' ); ?></button>
+											<span class="spinner"></span>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 					<?php } ?>
-					<?php if ( ! $wp_optimole_active && ! $is_live_preview ) { ?>
+					<?php if ( ! $is_live_preview ) {?>
 						<div id="step-<?php echo esc_attr( $last_step_number ); ?>" class="tab-pane" role="tabpanel" aria-labelledby="step-5">
 							<div class="vz-accordion-item">
 								<div class="vz-accordion-item__title">
