@@ -5,7 +5,7 @@ import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
 
-import { formatDate, filterCharts, formatData } from '../utils.js';
+import { formatDate, filterCharts, formatData, googleChartPackages } from '../utils.js';
 
 /**
  * WordPress dependencies
@@ -156,6 +156,7 @@ class Charts extends Component {
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
                                                         formatters={ formatData( data ) }
+														chartPackages={ googleChartPackages }
 													/>
 												) : (
 													<Chart
@@ -165,6 +166,7 @@ class Charts extends Component {
 														columns={ data['visualizer-series'] }
 														options={ filterCharts( data['visualizer-settings']) }
                                                         formatters={ formatData( data ) }
+														chartPackages={ googleChartPackages }
 													/>
 												) ) }
 
