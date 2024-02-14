@@ -671,14 +671,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			__( 'Chart Library', 'visualizer' ),
 			__( 'Chart Library', 'visualizer' ),
 			'edit_posts',
-			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME )
+			'admin.php?page=' . Visualizer_Plugin::NAME
 		);
 		add_submenu_page(
 			Visualizer_Plugin::NAME,
 			__( 'Add New Chart', 'visualizer' ),
 			__( 'Add New Chart', 'visualizer' ),
 			'edit_posts',
-			admin_url( 'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew' )
+			'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew'
 		);
 		add_submenu_page(
 			Visualizer_Plugin::NAME,
