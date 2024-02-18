@@ -57,7 +57,7 @@ jQuery(function ($) {
 							});
 							clearInterval( loaderDelay );
 						}
-					}, 100 );
+					}, 40 );
 				},
 				error: function() {
 					$('#step-2').find('.vz-progress-bar').animate({ width: '0' });

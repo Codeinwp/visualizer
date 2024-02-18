@@ -173,13 +173,10 @@ $last_step_number   = 5;
 									<h2 class="h2 pb-8"><?php esc_html_e( 'You\'re almost done!', 'visualizer' ); ?></h2>
 									<p class="p"><?php esc_html_e( 'We use demo data during the import process, don&#x92;t worry you can customize it later', 'visualizer' ); ?></p>
 								</div>
-								<div class="vz-progress">
-									<div class="vz-progress-bar" style="width: 100%;"></div>
-								</div>
 							</div>
 							<div class="vz-accordion-item__content">
 								<div class="vz-form-wrap">
-									<div class="form-block">
+									<div class="form-block" style="padding-top: 8px">
 										<div class="vz-error-notice notice notice-error hidden"></div>
 										<div class="pb-30">
 											<div class="vz-shortcode-preview-box">
@@ -187,9 +184,12 @@ $last_step_number   = 5;
 													<div class="icon">
 														<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/database-icon.png' ); ?>" alt="">
 													</div>
-													<div class="txt">
+													<div class="txt" style="width: 100%;">
 														<h4 class="h4 pb-4"><?php esc_html_e( 'Importing demo data', 'visualizer' ); ?></h4>
-														<p class="p" data-import_message="<?php esc_attr_e( 'Done! Demo data imported successfully', 'visualizer' ); ?>"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
+														<p class="p" data-import_message="<?php esc_attr_e( 'Done! Demo data imported successfully.', 'visualizer' ); ?>"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
+													<div class="vz-progress" style="margin-top: 4px;">
+														<div class="vz-progress-bar" style="width: 100%;"></div>
+													</div>
 													</div>
 												</div>
 											</div>
