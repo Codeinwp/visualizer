@@ -56,7 +56,7 @@ jQuery(function ($) {
 								width: 100 + '%'
 							});
 							$('.vz-progress').css({
-								display: 'none'
+								visibility: 'hidden'
 							});
 							clearInterval( loaderDelay );
 						}
