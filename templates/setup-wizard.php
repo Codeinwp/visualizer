@@ -188,7 +188,7 @@ $last_step_number   = 5;
 														<h4 class="h4 pb-4"><?php esc_html_e( 'Importing demo data', 'visualizer' ); ?></h4>
 														<p class="p" data-import_message="<?php esc_attr_e( 'Done! Demo data imported successfully.', 'visualizer' ); ?>"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
 													<div class="vz-progress" style="margin-top: 4px;">
-														<div class="vz-progress-bar" style="width: 100%;"></div>
+														<div class="vz-progress-bar"></div>
 													</div>
 													</div>
 												</div>
