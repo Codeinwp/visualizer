@@ -189,3 +189,6 @@ export const getColorCode = ( color ) => {
 	}
 	return color;
 };
+
+// Google Chart Packages
+export const googleChartPackages = [ 'corechart', 'geochart', 'gauge', 'table', 'timeline', 'controls' ];

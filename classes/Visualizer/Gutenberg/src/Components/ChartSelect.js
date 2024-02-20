@@ -23,7 +23,7 @@ import PanelButton from './PanelButton.js';
 
 import merge from 'merge';
 
-import { compact, formatDate, isValidJSON, formatData } from '../utils.js';
+import { compact, formatDate, isValidJSON, formatData, googleChartPackages } from '../utils.js';
 
 /**
  * WordPress dependencies
@@ -172,6 +172,7 @@ class ChartSelect extends Component {
 								}
 								height="500px"
                                 formatters={ formatData( data ) }
+								chartPackages={ googleChartPackages }
 							/>
                         ) : (
 							<Chart
@@ -186,6 +187,7 @@ class ChartSelect extends Component {
 								}
 								height="500px"
                                 formatters={ formatData( data ) }
+								chartPackages={ googleChartPackages }
 							/>
 						)
 					) }

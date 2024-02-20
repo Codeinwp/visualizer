@@ -7,7 +7,7 @@ import DataTable from './DataTable.js';
 
 import merge from 'merge';
 
-import { compact, formatDate, isValidJSON, formatData } from '../utils.js';
+import { compact, formatDate, isValidJSON, formatData, googleChartPackages } from '../utils.js';
 
 /**
  * WordPress dependencies
@@ -108,6 +108,7 @@ class ChartRender extends Component {
 								}
 								height="500px"
                                 formatters={ formatData( data ) }
+								chartPackages={ googleChartPackages }
 							/>
                         ) : (
 							<Chart
@@ -122,6 +123,7 @@ class ChartRender extends Component {
 								}
 								height="500px"
                                 formatters={ formatData( data ) }
+								chartPackages={ googleChartPackages }
 							/>
 						) ) }
 
