@@ -72,3 +72,21 @@ Same thing for chart library visualization, it can be either from admin dashboar
 
 > [!NOTE]
 > Unlike the jQeury, the Gutenberg block require a build step, you will need to install all the NPM dependencies and run `npm run dev` or `npm run build` to see the changes.
+
+### Setup Wizard
+
+The `Setup Wizard` is an onboarding process that helps the user to set up its first chart. When the plugin is installed for the first time, the user is redirected to the wizard.
+
+The steps includes:
+
+1. Choosing the chart type;
+2. Importing the sample data;
+3. Asking the user if he wants a draft page to show the chart;
+4. Promotion (optional);
+5. Email subscription;
+6. Redirect to draft page if the user marked the option at step 3. Otherwise, redirect to the plugin dashboard.
+
+The page rendering is done using the `setup-wizard.php` file, and the server logic is in the `Visualizer_Module_Wizard` class. A jQuery script (`setup-wizard`) is used to handle the interactions.
+
+> [!NOTE]
+> The usual process include showing the promotion and email collection form. Those are hidden when the `preview` query parameter is present in the URL. The Preview is used as demo presentation for the `Live Preview` feature of the WordPress store.
