@@ -33,7 +33,7 @@ For data importing, the most basic usage is using a CSV or JSON file. The source
 
 For parsing the CSV and JSON files, we use built-in PHP functions.
 
-> ![NOTE]
+> [!NOTE]
 > The `samples` folder contains some sample data files that can be used for testing.
 
 Advanced data importing features include data from:
@@ -90,3 +90,32 @@ The page rendering is done using the `setup-wizard.php` file, and the server log
 
 > [!NOTE]
 > The usual process include showing the promotion and email collection form. Those are hidden when the `preview` query parameter is present in the URL. The Preview is used as demo presentation for the `Live Preview` feature of the WordPress store.
+
+### Quirks
+
+#### Number Formatting
+
+The workflow for adding a chart with number formatting is:
+
+1. Select the chart;
+2. Add the data without any other specific sign (`$`, `%`, `.`, etc.) -- `2.5` will be added as `25`;
+3. Generate the chart;
+4. Add number formatting (`#.#` for `2.5`).
+
+For displaying data mentioning a percentage (%), amount, or any other specific signs ($, €, etc.); you need to specify the correct number formatting.
+
+Percentage:
+
+1. When manually inputting the data, if you want to display 80%, you need to add it as `0.8`.
+2. Then you go trough the number formatting box and input `#%`.
+
+Amounts:
+
+1. For inputting amounts like `2,345`, you need to input it as `2345`.
+2. Then you go to number formatting and input `#,###`.
+3. Same thing for `2.5`, you need add the format as `#.#`.
+
+For specific signs:
+
+1. For displaying a sign like `$` (like `$2.345`), you need to follow the same steps as for the amount.
+2. Except the number formatting will be `$#,###`.
