@@ -345,39 +345,39 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 						'headerRow' => array(
 							'background-color' => '',
 							'color' => '',
-							'transform' => ''
+							'transform' => '',
 						),
 						'tableRow' => array(
 							'background-color' => '',
 							'color' => '',
-							'transform' => ''
+							'transform' => '',
 						),
 						'oddTableRow' => array(
 							'background-color' => '',
 							'color' => '',
-							'transform' => ''
+							'transform' => '',
 						),
 						'selectedTableRow' => array(
 							'background-color' => '',
 							'color' => '',
-							'transform' => ''
+							'transform' => '',
 						),
 						'hoverTableRow' => array(
 							'background-color' => '',
 							'color' => '',
-							'transform' => ''
+							'transform' => '',
 						),
 						'headerCell' => array(
 							'background-color' => '',
 							'color' => '',
-							'transform' => ''
+							'transform' => '',
 						),
 						'tableCell' => array(
 							'background-color' => '',
 							'color' => '',
-							'transform' => ''
-						)
-					)
+							'transform' => '',
+						),
+					),
 				)
 			);
 			$wizard_data = array(
