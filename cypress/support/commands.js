@@ -331,3 +331,28 @@ Cypress.Commands.add( 'clear_welcome', () => {
         ;
     });
 });
+
+Cypress.Commands.add('updateWPSetting', (setting, value) => {
+    // Navigate to an admin page that includes the wpApiSettings nonce
+    cy.visit('/wp-admin').then(() => {
+        // Retrieve the nonce from the window object
+        cy.window().then((win) => {
+            const nonce = win.wpApiSettings.nonce;
+
+            // Make the REST API request to update the WordPress setting
+            cy.request({
+                method: 'POST',
+                url: '/wp-json/wp/v2/settings',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': nonce,
+                },
+                body: {
+                    [setting]: value,
+                },
+            }).then((response) => {
+                expect(response.status).to.eq(200);
+            });
+        });
+    });
+});
