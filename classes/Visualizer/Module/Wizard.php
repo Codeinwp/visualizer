@@ -341,6 +341,43 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 							'min' => '',
 						),
 					),
+					'customcss' => array(
+						'headerRow' => array(
+							'background-color' => '',
+							'color' => '',
+							'transform' => ''
+						),
+						'tableRow' => array(
+							'background-color' => '',
+							'color' => '',
+							'transform' => ''
+						),
+						'oddTableRow' => array(
+							'background-color' => '',
+							'color' => '',
+							'transform' => ''
+						),
+						'selectedTableRow' => array(
+							'background-color' => '',
+							'color' => '',
+							'transform' => ''
+						),
+						'hoverTableRow' => array(
+							'background-color' => '',
+							'color' => '',
+							'transform' => ''
+						),
+						'headerCell' => array(
+							'background-color' => '',
+							'color' => '',
+							'transform' => ''
+						),
+						'tableCell' => array(
+							'background-color' => '',
+							'color' => '',
+							'transform' => ''
+						)
+					)
 				)
 			);
 			$wizard_data = array(
