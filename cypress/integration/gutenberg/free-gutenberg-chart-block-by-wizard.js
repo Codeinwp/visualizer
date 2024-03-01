@@ -56,7 +56,12 @@ describe('Gutenberg Block create via Wizard', function() {
 
             // POST PAGE WITH THE CREATED CHART
             // Wait for the redirect to load and check if the block is visible
-            cy.get('.edit-post-welcome-guide .components-modal__header button').click(); // Close the welcome modal.
+            cy.get('body').then($body => {
+                // Close the Welcome Guide if it exists
+                if ($body.find('.edit-post-welcome-guide .components-modal__header button').length > 0) {
+                  cy.get('.edit-post-welcome-guide .components-modal__header button').click();
+                }
+              });
             cy.get('.visualizer-settings__title', {timeout: 30000}).should('be.visible');
             cy.get('.visualizer-settings__title').click();
 
