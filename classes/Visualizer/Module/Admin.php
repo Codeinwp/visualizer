@@ -1260,7 +1260,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$metadata = $this->get_survey_metadata();
 
 		do_action( 'themeisle_sdk_dependency_enqueue_script', 'survey' );
-		wp_enqueue_script( 'visualizer_chart_survey', VISUALIZER_ABSURL . 'js/survey.js', array( $survey_handler ), $metadata['attributes']['version'], true );
+		wp_enqueue_script( 'visualizer_chart_survey', VISUALIZER_ABSURL . 'js/survey.js', array( $survey_handler ), $metadata['attributes']['free_version'], true );
 		wp_localize_script( 'visualizer_chart_survey', 'visualizerSurveyData', $metadata );
 	}
 }
