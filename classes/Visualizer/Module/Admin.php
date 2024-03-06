@@ -900,6 +900,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderSupportPage() {
 		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
+		$this->load_survey();
 		include_once VISUALIZER_ABSPATH . '/templates/support.php';
 	}
 
@@ -1053,6 +1054,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'type'    => 'array',
 			)
 		);
+
+		$this->load_survey();
+
 		$render->render();
 	}
 
@@ -1181,5 +1185,82 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			return ! empty( $types[ $type ]['enabled'] );
 		}
 		return false;
+	}
+
+	/**
+	 * Get the survey metadata.
+	 *
+	 * @return array The survey metadata.
+	 */
+	private function get_survey_metadata() {
+		$install_date = get_option( 'visualizer_pro_install', false );
+
+		// Fallback to Free version.
+		if ( false === $install_date ) {
+			$install_date = get_option( 'visualizer_install', false );
+		}
+
+		$install_category = 0;
+
+		if ( false !== $install_date ) {
+			$days_since_install = round( ( time() - $install_date ) / DAY_IN_SECONDS );
+
+			if ( 0 === $days_since_install || 1 === $days_since_install ) {
+				$install_category = 0;
+			} elseif ( 1 < $days_since_install && 8 > $days_since_install ) {
+				$install_category = 7;
+			} elseif ( 8 <= $days_since_install && 31 > $days_since_install ) {
+				$install_category = 30;
+			} elseif ( 30 < $days_since_install && 90 > $days_since_install ) {
+				$install_category = 90;
+			} elseif ( 90 <= $days_since_install ) {
+				$install_category = 91;
+			}
+		}
+
+		$plugin_data    = get_plugin_data( VISUALIZER_BASEFILE, false, false );
+		$plugin_version = '';
+		if ( ! empty( $plugin_data['Version'] ) ) {
+			$plugin_version = $plugin_data['Version'];
+		}
+
+		$user_id = 'visualizer_' . preg_replace( '/[^\w\d]*/', '', get_site_url() ); // Use a normalized version of the site URL as a user ID.
+
+		$license_data = get_option( 'visualizer_pro_license_data', false );
+		if ( false !== $license_data ) {
+			$user_id = 'visualizer_' . $license_data->key;
+		}
+
+		return array(
+			'userId' => $user_id,
+			'attributes' => array(
+				'days_since_install' => $install_category,
+				'free_version'       => $plugin_version,
+				'pro_version'        => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
+				'license_status'     => apply_filters( 'product_visualizer_license_status', 'invalid' ),
+			),
+		);
+	}
+
+	/**
+	 * Load the survey.
+	 */
+	private function load_survey() {
+
+		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
+			return;
+		}
+
+		$survey_handler = apply_filters( 'themeisle_sdk_dependency_script_handler', 'survey' );
+
+		if ( empty( $survey_handler ) ) {
+			return;
+		}
+
+		$metadata = $this->get_survey_metadata();
+
+		do_action( 'themeisle_sdk_dependency_enqueue_script', 'survey' );
+		wp_enqueue_script( 'visualizer_chart_survey', VISUALIZER_ABSURL . 'js/survey.js', array( $survey_handler ), $metadata['attributes']['version'], true );
+		wp_localize_script( 'visualizer_chart_survey', 'visualizerSurveyData', $metadata );
 	}
 }
