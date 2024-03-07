@@ -1193,13 +1193,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array The survey metadata.
 	 */
 	private function get_survey_metadata() {
-		$install_date = get_option( 'visualizer_pro_install', false );
-
-		// Fallback to Free version.
-		if ( false === $install_date ) {
-			$install_date = get_option( 'visualizer_install', false );
-		}
-
+		$install_date     = get_option( 'visualizer_install', false );
 		$install_category = 0;
 
 		if ( false !== $install_date ) {
