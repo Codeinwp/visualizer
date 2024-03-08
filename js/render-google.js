@@ -53,9 +53,9 @@ var isResizeRequest = false;
         if( chart.library !== 'google' ) {
             return;
         }
-
+      
         // Bail if the chart is already rendered or is being rendered.
-        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( '.loader' ).length > 0 ) ) ) {
+        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader, style)' ).length > 0 ) ) ) {
             return;
         }
         rendered_charts[id] = 'yes';
