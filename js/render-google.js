@@ -50,11 +50,12 @@ var isResizeRequest = false;
     function renderSpecificChart(id, chart) {
         var render, container, series, data, table, settings, i, j, row, date, axis, property, format, formatter;
 
-        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader)' ).length > 0 ) ) ) {
+        if( chart.library !== 'google' ) {
             return;
         }
 
-        if(chart.library !== 'google'){
+        // Bail if the chart is already rendered or is being rendered.
+        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( '.loader' ).length > 0 ) ) ) {
             return;
         }
         rendered_charts[id] = 'yes';
