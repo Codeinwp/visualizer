@@ -53,13 +53,13 @@ jQuery(function ($) {
 		// Import chart data.
 		if ( 1 == id ) {
 			var chartType = $(".vz-radio-btn:checked").val();
-			var percentBarWidth = 100;
+			var percentBarWidth = 0;
 			var loaderDelay;
 			$.ajax( {
 				beforeSend: function() {
 					loaderDelay = setInterval(function () {
 						$('.vz-progress-bar').css({
-							width: percentBarWidth-- + '%'
+							width: percentBarWidth++ + '%'
 						});
 					}, 1000);
 				},
@@ -76,9 +76,9 @@ jQuery(function ($) {
 					clearInterval( loaderDelay );
 					loaderDelay = setInterval(function () {
 						$('.vz-progress-bar').css({
-							width: percentBarWidth-- + '%'
+							width: percentBarWidth++ + '%'
 						});
-						if ( percentBarWidth <= 0 ) {
+						if ( percentBarWidth >= 100 ) {
 							if ( 1 === data.success ) {
 								var importMessage = jQuery('[data-import_message]');
 								importMessage
@@ -95,11 +95,14 @@ jQuery(function ($) {
 								$('#smartwizard').smartWizard('reset');
 							}
 							$('.vz-progress-bar').css({
-								width: 0
+								width: 100 + '%'
+							});
+							$('.vz-progress').css({
+								visibility: 'hidden'
 							});
 							clearInterval( loaderDelay );
 						}
-					}, 100 );
+					}, 36 );
 				},
 				error: function() {
 					$('#step-2').find('.vz-progress-bar').animate({ width: '0' });
