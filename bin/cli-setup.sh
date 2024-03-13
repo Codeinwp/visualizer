@@ -1,9 +1,9 @@
 
 # install WP
-wp  --allow-root core install --url="http://localhost:8080" --admin_user="wordpress" --admin_password="wordpress" --admin_email="test1@xx.com" --title="test" --skip-email
+wp  --allow-root core install --url="http://localhost:8889" --admin_user="admin" --admin_password="password" --admin_email="test1@xx.com" --title="test" --skip-email
 mkdir -p /var/www/html/wp-content/uploads
 chmod -R 777 /var/www/html/wp-content/uploads/*
-wp  --allow-root  plugin install classic-editor --activate
+wp  --allow-root  plugin install classic-editor
 
 # activate
 wp  --allow-root plugin activate visualizer
