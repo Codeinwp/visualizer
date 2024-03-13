@@ -14,7 +14,6 @@
 import fs from 'fs';
 import filenamify from 'filenamify';
 
-t
 // Remove "steps" to prevent stringify circular structure.
 function formatTestResult( testResult ) {
 	const result = { ...testResult, steps: undefined };

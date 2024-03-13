@@ -45,6 +45,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
       - name: Archive test results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
