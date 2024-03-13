@@ -14,8 +14,6 @@ jobs:
       DOCKER_FILE: docker-compose.ci.yml
     strategy:
       fail-fast: false
-      matrix:
-        env: ["default", "gutenberg", "gutenberg-datatable"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,6 +32,7 @@ jobs:
       - name: Install npm deps
         run: |
           npm ci
+          npm install -g playwright-cli
           npx playwright install --with-deps chromium
       - name: Install composer deps
         run: composer install --no-dev
