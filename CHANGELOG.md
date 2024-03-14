@@ -1,3 +1,13 @@
+##### [Version 3.10.8](https://github.com/Codeinwp/visualizer/compare/v3.10.7...v3.10.8) (2024-03-14)
+
+### Bug Fixes
+- Fix Google chart rendering condition for Classic Plugin
+- Changes the speed and position of the loading bar
+
+### Improvements
+- Add a Live Preview button for the plugin page on wordpress.org
+- Added NPS survey
+
 ##### [Version 3.10.7](https://github.com/Codeinwp/visualizer/compare/v3.10.6...v3.10.7) (2024-02-06)
 
 ### Fixes
