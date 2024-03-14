@@ -3,6 +3,10 @@
  */
 const { Admin, expect, RequestUtils } = require( '@wordpress/e2e-test-utils-playwright' );
 
+
+/**
+ * Internal dependencies
+ */
 const path = require('path');
 const os = require('os');
 

@@ -2,6 +2,10 @@
  * WordPress dependencies
  */
 const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
+
+/**
+ * Internal dependencies
+ */
 const { deleteAllCharts, getAssetFilePath, CHART_JS_LABELS, selectChartAdmin } = require('../utils/common');
 
 test.describe( 'Data Free Sources', () => {

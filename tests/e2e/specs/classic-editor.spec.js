@@ -2,6 +2,10 @@
  * WordPress dependencies
  */
 const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
+
+/**
+ * Internal dependencies
+ */
 const { deleteAllCharts, createChartWithAdmin } = require('../utils/common');
 
 test.describe( 'Charts with Classic Editor', () => {
