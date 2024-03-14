@@ -56,8 +56,6 @@ export async function createChartWithAdmin( admin, page, chart_label = CHART_JS_
     // The string must be numeric.
     expect( chartId ).toMatch(/^\d+$/);
 
-    
-
     await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click({ timeout: 5000 });
 
     await page.waitForURL( '**/admin.php?page=visualizer', { timeout: 5000 } );
@@ -140,6 +138,8 @@ export function getAssetFilePath( assetName ) {
  */
 export async function selectChartAdmin(iframeLocator, chartLabel) {
     const labelRegex = new RegExp(`^${chartLabel}$`);
+    await expect( iframeLocator.locator('div#type-picker').locator('label').filter({ hasText: labelRegex }) ).toBeVisible({ timeout: 5000 });
     await iframeLocator.locator('div#type-picker').locator('label').filter({ hasText: labelRegex }).click();
+    await expect( iframeLocator.getByRole('button', { name: 'Next' }) ).toBeVisible({ timeout: 5000 });
     await iframeLocator.getByRole('button', { name: 'Next' }).click();
 }
