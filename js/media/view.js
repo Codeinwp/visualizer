@@ -57,7 +57,7 @@
 			chart.settings = model.get('settings');
 			chart.settings.width = self.options.width;
 			chart.settings.height = self.options.height;
-            $('#' + self.id).append(model.get('css'));
+            $('#' + self.id).parent().append(model.get('css'));
 
             $('body').trigger('visualizer:render:specificchart:start', {id: self.id, chart: chart, v: {page_type: 'post'}} );
 		}

@@ -1,0 +1,33 @@
+{
+    "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"_comment1": "Set the Wizard Setup page as landing page with preview environment (which disable distractions)",
+    "landingPage": "/wp-admin/admin.php?page=visualizer-setup-wizard&env=preview",
+    "_comment2": "Preferred WordPress instance specifications",
+    "preferredVersions": {
+        "php": "8.0",
+        "wp": "latest"
+    },
+    "features": {
+        "_comment3.1": "Allow networking for internet access",
+        "networking": true
+    },
+    "steps": [
+        {
+            "_comment4.1": "Login to the WordPress instance",
+            "step": "login",
+            "username": "admin",
+            "password": "password"
+        },
+        {
+            "_comment4.2": "Install the Visualizer plugin",
+            "step": "installPlugin",
+            "pluginZipFile": {
+                "resource": "wordpress.org/plugins",
+                "slug": "visualizer"
+            },
+            "options": {
+                "activate": true
+            }
+        }
+    ]
+}
