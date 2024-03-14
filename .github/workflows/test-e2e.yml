@@ -38,7 +38,7 @@ jobs:
         run: composer install --no-dev
       - name: Install environment
         run: |
-          npm run up:ci
+          npm run env:up
       - name: Run the tests
         run: |
           npm run test:e2e:playwright

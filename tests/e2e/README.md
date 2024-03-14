@@ -34,6 +34,17 @@ npm run test:e2e:playwright:debug
 > [!NOTE]
 > When writing a test, using the debug mode is recommended since it will allow you to see the browser and the test in action.
 
+For database connection, the credentials are:
+
+- Host: `localhost` or `127.0.0.1`
+- Database: `wordpress`
+- User: `admin`
+- Password: `password`
+- Port: `3306`
+
+> [!NOTE]
+> You can modify the credentials in the `docker-compose.yml` file.
+
 ### Learn more about E2E testing
 
 Resources:

@@ -19,8 +19,8 @@
   "scripts": {
     "dist": "bash bin/dist.sh",
     "release": "semantic-release --debug",
-    "up:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
-    "down:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
+    "env:up": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
+    "env:down": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --browser=chrome",
     "wp-env": "wp-env",

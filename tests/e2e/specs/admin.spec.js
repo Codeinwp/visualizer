@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
-const { createChartWithAdmin, deleteAllCharts, waitForLibraryToLoad } = require('../common');
+const { createChartWithAdmin, deleteAllCharts, waitForLibraryToLoad, createAllFreeCharts } = require('../utils/common');
 
 test.describe( 'Chart Library', () => {
 
@@ -110,6 +110,16 @@ test.describe( 'Chart Library', () => {
         
         await waitForLibraryToLoad( page );
         await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBe( 0 );
+    } );
+
+    test( 'create all free charts', async ( { admin, page } ) => {
+        const chartsId = await createAllFreeCharts( admin, page );
+        await waitForLibraryToLoad( page );
+
+        expect( page.locator('.visualizer-chart').count() ).resolves.toBe( 4 );
+        for (const chartId of chartsId) {
+            await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBeGreaterThan( 0 );
+        }
     } );
 } );
 
