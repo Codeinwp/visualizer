@@ -17,7 +17,6 @@ test.describe( 'Data Free Sources', () => {
         await page.waitForSelector('h1:text("Visualizer")');
         
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
-        await page.frameLocator('iframe').getByRole('button', { name: 'Next' }).click();
         
         // Upload the CSV file
         await expect( page.frameLocator('iframe').locator('#csv-file') ).toBeVisible();
@@ -39,7 +38,6 @@ test.describe( 'Data Free Sources', () => {
         await page.waitForSelector('h1:text("Visualizer")');
   
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.area );
-        await  page.frameLocator('iframe').getByRole('button', { name: 'Next' }).click();
         
         // Fill the URL of the CSV file and import it.
         await page.frameLocator('iframe').getByRole('heading', { name: 'Import data from URL' }).click();
@@ -62,7 +60,6 @@ test.describe( 'Data Free Sources', () => {
         await page.waitForSelector('h1:text("Visualizer")');
     
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
-        await  page.frameLocator('iframe').getByRole('button', { name: 'Next' }).click();
 
         await page.frameLocator('iframe').getByRole('heading', { name: 'Import data from URL' }).click();
         await page.frameLocator('iframe').getByText('Import from JSON').click();
