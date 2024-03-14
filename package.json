@@ -28,7 +28,7 @@
     "test:env:stop": "wp-env stop",
     "test:env:clean": "wp-env clean",
     "test:e2e:playwright": "wp-scripts test-playwright --config tests/e2e/playwright.config.js",
-		"test:e2e:playwright:debug": "wp-scripts test-playwright --config tests/e2e/playwright.config.js --ui"
+    "test:e2e:playwright:debug": "wp-scripts test-playwright --config tests/e2e/playwright.config.js --ui"
   },
   "pot": {
     "reportmsgidbugsto": "https://github.com/Codeinwp/visualizer/issues",
@@ -40,7 +40,6 @@
     "@semantic-release/exec": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
     "@wordpress/e2e-test-utils-playwright": "^0.21.0",
-    "@wordpress/env": "^9.5.0",
     "@wordpress/scripts": "^27.4.0",
     "conventional-changelog-simple-preset": "^1.0.15",
     "cypress": "^7.2.0",
