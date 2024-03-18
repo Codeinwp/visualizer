@@ -26,3 +26,4 @@ cypress.json
 .wordpress-org
 .releaserc.yml
 docker-compose.ci.yml
+CONTRIBUTING.md
