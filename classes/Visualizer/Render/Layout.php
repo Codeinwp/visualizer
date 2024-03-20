@@ -872,7 +872,11 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 										<input type="button" id="existing-chart" class="button button-primary"
 											   value="<?php _e( 'Import Chart', 'visualizer' ); ?>"
 											   data-viz-link="<?php echo $fetch_link; ?>">
-										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-chart' ); ?>
+										<?php
+										if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+											echo apply_filters( 'visualizer_pro_upsell', '', 'import-chart' );
+										}
+										?>
 									</div>
 								</div>
 							</li>
