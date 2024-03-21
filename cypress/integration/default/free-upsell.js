@@ -8,11 +8,13 @@ describe('Test Free - upsells', function() {
         cy.get('#wp-submit').click();
     });
 
-    it('Check upsell links', function() {
+    beforeEach(() => {
         cy.visit(Cypress.env('urls').library );
-        cy.get('.visualizer-chart > .visualizer-chart-canvas > .visualizer-notfound > h2 > .add-new-h2').click()
+        cy.get('.add-new-h2.add-new-chart').first().click();
         cy.wait( Cypress.env('wait') );
+    });
 
+    it('Check upsell links', function() {
         cy.get('iframe')
             .then(function ($iframe) {
                 const $body = $iframe.contents().find('body');
@@ -74,10 +76,6 @@ describe('Test Free - upsells', function() {
     });
 
     it('Check Settings upsell links', function() {
-        cy.visit(Cypress.env('urls').library );
-        cy.get('.visualizer-chart > .visualizer-chart-canvas > .visualizer-notfound > h2 > .add-new-h2').click()
-        cy.wait( Cypress.env('wait') );
-
         cy.get('iframe')
             .then(function ($iframe) {
                 const $body = $iframe.contents().find('body');
