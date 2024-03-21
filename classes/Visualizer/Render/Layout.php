@@ -925,7 +925,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 
 											<input type="button" id="filter-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
 											<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
-											<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
 										</form>
 										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wp' ); ?>
 									</div>
