@@ -27,3 +27,4 @@ cypress.json
 .releaserc.yml
 docker-compose.ci.yml
 CONTRIBUTING.md
+artifacts
