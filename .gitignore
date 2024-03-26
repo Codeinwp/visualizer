@@ -11,3 +11,4 @@ cypress.env.json
 .DS_Store
 /cypress/videos/
 /cypress/screenshots/
+artifacts
