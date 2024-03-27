@@ -19,10 +19,16 @@
   "scripts": {
     "dist": "bash bin/dist.sh",
     "release": "semantic-release --debug",
-    "up:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
-    "down:ci": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
+    "env:up": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
+    "env:down": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run --browser=chrome"
+    "cypress:run": "cypress run --browser=chrome",
+    "wp-env": "wp-env",
+    "test:env:start": "wp-env start",
+    "test:env:stop": "wp-env stop",
+    "test:env:clean": "wp-env clean",
+    "test:e2e:playwright": "wp-scripts test-playwright --config tests/e2e/playwright.config.js",
+    "test:e2e:playwright:debug": "wp-scripts test-playwright --config tests/e2e/playwright.config.js --ui"
   },
   "pot": {
     "reportmsgidbugsto": "https://github.com/Codeinwp/visualizer/issues",
@@ -33,12 +39,15 @@
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/exec": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
+    "@wordpress/e2e-test-utils-playwright": "^0.21.0",
+    "@wordpress/scripts": "^27.4.0",
     "conventional-changelog-simple-preset": "^1.0.15",
     "cypress": "^7.2.0",
     "cypress-file-upload": "^5.0.6",
     "grunt-version": "^2.0.0",
     "grunt-wp-readme-to-markdown": "^2.0.1",
     "load-project-config": "~0.2.1",
+    "playwright": "^1.42.1",
     "replace-in-file": "^6.2.0",
     "semantic-release": "^17.1.1",
     "semantic-release-slack-bot": "^2.1.0"
