@@ -157,6 +157,15 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.10.9](https://github.com/Codeinwp/visualizer/compare/v3.10.8...v3.10.9) (2024-03-27)
+
+### Fixes
+- Visualizer live preview fixed
+- Updated internal dependencies
+
+
+
+
 ##### [Version 3.10.8](https://github.com/Codeinwp/visualizer/compare/v3.10.7...v3.10.8) (2024-03-14)
 
 ### Bug Fixes
