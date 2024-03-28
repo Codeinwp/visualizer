@@ -433,3 +433,6 @@ Examples:
 - https://github.com/johnbillion/user-switching/blob/d26e982fc1389fff24e6d6572e238066e2b056d2/.wordpress-org/blueprints/blueprint.json
 - https://github.com/10up/ads-txt/blob/ef95e10f5a9973aaf4cad773e8e78aafd03af059/.wordpress-org/blueprints/blueprint.json
 - https://github.com/janw-me/default-featured-image/blob/de4d226216105f3d8c573dfbf28bbba89330286e/.wordpress-org/blueprints/blueprint.json
+
+> [!NOTE]
+> Make sure to respect the [schema](https://github.com/WordPress/wordpress-playground/blob/trunk/packages/playground/blueprints/public/blueprint-schema.json). You can validate your blueprint using a schema validator: [online](https://www.jsonschemavalidator.net/), [CLI](https://ajv.js.org/packages/ajv-cli.html)
