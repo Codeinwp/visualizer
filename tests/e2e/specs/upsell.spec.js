@@ -78,4 +78,15 @@ test.describe( 'Upsell', () => {
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('chart-permissions');
     });
+
+    test( 'featured tab in Install Plugin (SDK)', async ( { admin, page } ) => {
+        await admin.visitAdminPage( 'plugin-install.php' );
+
+        // Those should be visible only when a PRO product is installed.
+        await expect( page.getByText('Image Optimization by Optimole') ).toBeHidden();
+        await expect( page.locator('#the-list div').filter({ hasText: 'Otter Blocks' }).nth(1) ).toBeHidden();
+
+        await expect( page.getByLabel('Install Image Optimization by') ).toBeHidden();
+        await expect( page.getByLabel('Install Otter Blocks') ).toBeHidden();
+    });
 } );
