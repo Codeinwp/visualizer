@@ -436,3 +436,6 @@ Examples:
 
 > [!NOTE]
 > Make sure to respect the [schema](https://github.com/WordPress/wordpress-playground/blob/trunk/packages/playground/blueprints/public/blueprint-schema.json). You can validate your blueprint using a schema validator: [online](https://www.jsonschemavalidator.net/), [CLI](https://ajv.js.org/packages/ajv-cli.html)
+
+> [!NOTE]
+> To test the blueprint, you can publish the branch and append the `blueprint.json` path to the URL: `https://playground.wordpress.net/?plugin=visualizer&blueprint-url=`. [Example](https://playground.wordpress.net/?plugin=visualizer&blueprint-url=https://raw.githubusercontent.com/Codeinwp/visualizer/fix/blueprint-redirect/.wordpress-org/blueprints/blueprint.json).
