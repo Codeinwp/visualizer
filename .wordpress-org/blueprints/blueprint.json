@@ -1,6 +1,6 @@
 {
     "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-    "landingPage": "/wp-admin/admin.php?page=visualizer-setup-wizard&env=preview",
+    "landingPage": "\/wp-admin\/admin.php?page=visualizer-setup-wizard&env=preview",
     "preferredVersions": {
         "php": "8.0",
         "wp": "latest"
@@ -23,6 +23,10 @@
             "options": {
                 "activate": true
             }
+        },
+        {
+            "step": "wp-cli",
+            "command": "wp option update visualizer_fresh_install 1"
         }
     ]
 }
