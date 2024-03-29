@@ -10,15 +10,6 @@
     },
     "steps": [
         {
-            "step": "wp-cli",
-            "command": "wp option update visualizer_fresh_install 1"
-        },
-        {
-            "step": "login",
-            "username": "admin",
-            "password": "password"
-        },
-        {
             "step": "installPlugin",
             "pluginZipFile": {
                 "resource": "wordpress.org/plugins",
@@ -27,6 +18,19 @@
             "options": {
                 "activate": true
             }
+        },
+        {
+            "step": "wp-cli",
+            "command": "wp option update visualizer_fresh_install 1"
+        },
+        {
+            "step": "wp-cli",
+            "command": "wp option delete visualizer-activated"
+        },
+        {
+            "step": "login",
+            "username": "admin",
+            "password": "password"
         }
     ]
 }
