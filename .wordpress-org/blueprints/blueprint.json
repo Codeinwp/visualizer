@@ -1,6 +1,6 @@
 {
     "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-    "landingPage": "\/wp-admin\/admin.php?page=visualizer-setup-wizard&env=preview",
+    "landingPage": "\/wp-admin\/admin.php?page=visualizer-setup-wizard&env=preview&tab#step-1",
     "preferredVersions": {
         "php": "8.0",
         "wp": "latest"
