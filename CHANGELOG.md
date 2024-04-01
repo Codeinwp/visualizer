@@ -1,3 +1,9 @@
+##### [Version 3.10.11](https://github.com/Codeinwp/visualizer/compare/v3.10.10...v3.10.11) (2024-04-01)
+
+### Fixes
+- Updated internal dependencies
+- Improved E2E testing
+
 ##### [Version 3.10.10](https://github.com/Codeinwp/visualizer/compare/v3.10.9...v3.10.10) (2024-03-28)
 
 ### Fixes
