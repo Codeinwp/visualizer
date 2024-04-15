@@ -80,7 +80,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 		}
 
 		// only select queries allowed.
-		if ( preg_match( '/^\s*(insert|delete|update|replace|create|alter|drop|truncate)\s/i', $this->_query ) ) {
+		if ( preg_match( '/\s*(insert|delete|update|replace|create|alter|drop|truncate)\s/i', $this->_query ) ) {
 			$this->_error = __( 'Only SELECT queries are allowed', 'visualizer' );
 			return false;
 		}
