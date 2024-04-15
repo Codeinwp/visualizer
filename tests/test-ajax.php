@@ -88,6 +88,32 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Test the AJAX response for fetching the database data with a valid query that uses columns that might get filtered.
+	 */
+	public function test_ajax_response_get_query_data_valid_query_with_filtered_columns() {
+		$this->_setRole( 'administrator' );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
+
+		$_POST['params'] = array(
+			'query' => 'select date_create from wp_insert;',
+			'chart_id' => 1,
+		);
+		try {
+			// Trigger the AJAX action
+			$this->_handleAjax( Visualizer_Plugin::ACTION_FETCH_DB_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertObjectHasAttribute( 'success', $response );
+		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( $response->success );
+	}
+
+	/**
 	 * Test the AJAX response for fetching the database data with user capability.
 	 */
 	public function test_ajax_response_get_query_data_subcriber_dissallow() {
