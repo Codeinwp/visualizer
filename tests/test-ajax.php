@@ -8,11 +8,22 @@
  * @since       3.10.12
  */
 
+/**
+ * Test the AJAX functionality.
+ */
 class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
+	/**
+	 * Admin user ID.
+	 *
+	 * @var int
+	 */
 	private $admin_user_id;
 
-	public function setUp() :void {
+	/**
+	 * Set up.
+	 */
+	public function setUp() {
 		parent::setUp();
 		$this->admin_user_id = $this->factory->user->create(
 			array(
@@ -23,6 +34,9 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 	}
 
+	/**
+	 * Test the AJAX response for fetching the database data.
+	 */
 	public function test_ajax_response_get_query_data_valid_query() {
 		$this->_setRole( 'administrator' );
 
@@ -34,7 +48,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		try {
 			// Trigger the AJAX action
 			$this->_handleAjax( Visualizer_Plugin::ACTION_FETCH_DB_DATA );
-		} catch (WPAjaxDieContinueException $e) {
+		} catch ( WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
 
@@ -45,6 +59,9 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( $response->success );
 	}
 
+	/**
+	 * Test the AJAX response for fetching the database data with invalid query.
+	 */
 	public function test_ajax_response_get_query_data_invalid_query() {
 		$this->_setRole( 'administrator' );
 
@@ -56,7 +73,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		try {
 			// Trigger the AJAX action
 			$this->_handleAjax( Visualizer_Plugin::ACTION_FETCH_DB_DATA );
-		} catch (WPAjaxDieContinueException $e) {
+		} catch ( WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
 
@@ -68,6 +85,9 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$this->assertFalse( $response->success );
 	}
 
+	/**
+	 * Test the AJAX response for fetching the database data with user capability.
+	 */
 	public function test_ajax_response_get_query_data_subcriber_dissallow() {
 		$this->_setRole( 'subscriber' );
 
@@ -79,7 +99,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		try {
 			// Trigger the AJAX action
 			$this->_handleAjax( Visualizer_Plugin::ACTION_FETCH_DB_DATA );
-		} catch (WPAjaxDieContinueException $e) {
+		} catch ( WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
 
