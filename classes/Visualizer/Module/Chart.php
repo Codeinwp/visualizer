@@ -1421,6 +1421,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function getQueryData() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION, 'security' );
 
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
+		}
+
 		$params     = wp_parse_args( $_POST['params'] );
 		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
 
