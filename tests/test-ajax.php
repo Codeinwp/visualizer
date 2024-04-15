@@ -44,6 +44,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$_POST['params'] = array(
 			'query' => 'SELECT * FROM wp_posts',
+			'chart_id' => 1,
 		);
 		try {
 			// Trigger the AJAX action
@@ -69,6 +70,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$_POST['params'] = array(
 			'query' => "/**/UPDATE wp_options SET option_value='administrator' WHERE option_name='default_role' --",
+			'chart_id' => 1,
 		);
 		try {
 			// Trigger the AJAX action
@@ -95,6 +97,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$_POST['params'] = array(
 			'query' => "/**/UPDATE wp_options SET option_value='administrator' WHERE option_name='default_role' --",
+			'chart_id' => 1,
 		);
 		try {
 			// Trigger the AJAX action
