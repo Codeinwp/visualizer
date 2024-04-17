@@ -21,9 +21,16 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	private $admin_user_id;
 
 	/**
+	 * Subscriber user ID.
+	 *
+	 * @var int
+	 */
+	private $subscriber_user_id;
+
+	/**
 	 * Set up.
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->admin_user_id = $this->factory->user->create(
 			array(
@@ -31,6 +38,12 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 			)
 		);
 		wp_set_current_user( $this->admin_user_id );
+
+		$this->subscriber_user_id = $this->factory->user->create(
+			array(
+				'role' => 'subscriber',
+			)
+		);
 
 	}
 
@@ -117,6 +130,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	 * Test the AJAX response for fetching the database data with user capability.
 	 */
 	public function test_ajax_response_get_query_data_subcriber_dissallow() {
+		wp_set_current_user( $this->subscriber_user_id );
 		$this->_setRole( 'subscriber' );
 
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
