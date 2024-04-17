@@ -80,7 +80,43 @@ class Visualizer_Source_Query extends Visualizer_Source {
 		}
 
 		// only select queries allowed.
-		if ( preg_match( '/\s*(\binsert\b|\bdelete\b|\bupdate\b|\breplace\b|\bcreate\b|\balter\b|\bdrop\b|\btruncate\b)\s/i', $this->_query ) ) {
+		if ( ! preg_match( '/\s*(\bselect\b)\s/i', $this->_query ) ) {
+			$this->_error = __( 'Only SELECT queries are allowed', 'visualizer' );
+			return false;
+		}
+
+		// if previous check passed, check for disallowed query parts to prevent subqueries and other harmful queries.
+		$disallow_query_parts = array(
+			'INSERT',
+			'UPDATE',
+			'DELETE',
+			'RENAME',
+			'DROP',
+			'CREATE',
+			'TRUNCATE',
+			'ALTER',
+			'COMMIT',
+			'ROLLBACK',
+			'MERGE',
+			'CALL',
+			'EXPLAIN',
+			'LOCK',
+			'GRANT',
+			'REVOKE',
+			'SAVEPOINT',
+			'TRANSACTION',
+			'SET',
+		);
+		$disallow_regex = implode(
+			'|',
+			array_map(
+				function ( $value ) {
+					return '\b' . $value . '\b';
+				}, $disallow_query_parts
+			)
+		);
+
+		if ( preg_match( '/(' . $disallow_regex . ')/i', $this->_query) !== 0 ) {
 			$this->_error = __( 'Only SELECT queries are allowed', 'visualizer' );
 			return false;
 		}
