@@ -194,4 +194,31 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$this->assertEquals( 'Action not allowed for this user.', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
+
+	/**
+	 * Test the AJAX response for fetching the database data with invalid query.
+	 */
+	public function test_ajax_response_get_query_data_invalid_query_subquery() {
+		$this->_setRole( 'administrator' );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
+
+		$_POST['params'] = array(
+			'query' => "UPDATE wp_options SET option_value = ( SELECT role_name FROM role_configurations WHERE condition = 'specific_condition' LIMIT 1 )WHERE option_name = 'default_role';",
+			'chart_id' => 1,
+		);
+		try {
+			// Trigger the AJAX action
+			$this->_handleAjax( Visualizer_Plugin::ACTION_FETCH_DB_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertObjectHasAttribute( 'success', $response );
+		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertEquals( 'Only SELECT queries are allowed', $response->data->msg );
+		$this->assertFalse( $response->success );
+	}
 }

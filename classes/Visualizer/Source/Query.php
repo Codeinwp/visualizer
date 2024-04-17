@@ -85,6 +85,42 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			return false;
 		}
 
+		// if previous check passed, check for disallowed query parts to prevent subqueries and other harmful queries.
+		$disallow_query_parts = array(
+			'INSERT',
+			'UPDATE',
+			'DELETE',
+			'RENAME',
+			'DROP',
+			'CREATE',
+			'TRUNCATE',
+			'ALTER',
+			'COMMIT',
+			'ROLLBACK',
+			'MERGE',
+			'CALL',
+			'EXPLAIN',
+			'LOCK',
+			'GRANT',
+			'REVOKE',
+			'SAVEPOINT',
+			'TRANSACTION',
+			'SET',
+		);
+		$disallow_regex = implode(
+			'|',
+			array_map(
+				function ( $value ) {
+					return '\b' . $value . '\b';
+				}, $disallow_query_parts
+			)
+		);
+
+		if ( preg_match( '/(' . $disallow_regex . ')/i', $this->_query) !== 0 ) {
+			$this->_error = __( 'Only SELECT queries are allowed', 'visualizer' );
+			return false;
+		}
+
 		// impose a limit if no limit clause is provided.
 		if ( strpos( strtolower( $this->_query ), ' limit ' ) === false ) {
 			$this->_query   .= ' LIMIT ' . apply_filters( 'visualizer_sql_query_limit', 1000, $this->_chart_id );
