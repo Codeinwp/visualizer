@@ -87,14 +87,17 @@ class Visualizer_Source_Query extends Visualizer_Source {
 
 		// if previous check passed, check for disallowed query parts to prevent subqueries and other harmful queries.
 		$disallow_query_parts = array(
-			'INSERT',
-			'UPDATE',
-			'DELETE',
-			'RENAME',
-			'DROP',
 			'CREATE',
-			'TRUNCATE',
 			'ALTER',
+			'TRUNCATE',
+			'DROP',
+
+			'INSERT',
+			'DELETE',
+			'UPDATE',
+			'REPLACE',
+
+			'RENAME',
 			'COMMIT',
 			'ROLLBACK',
 			'MERGE',

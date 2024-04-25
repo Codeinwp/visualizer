@@ -221,4 +221,31 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$this->assertEquals( 'Only SELECT queries are allowed', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
+
+	/**
+	 * Test the AJAX response for fetching the database data with invalid query.
+	 */
+	public function test_ajax_response_get_query_data_invalid_query_comment() {
+		$this->_setRole( 'administrator' );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
+
+		$_POST['params'] = array(
+			'query' => "/* SELECT */ REPLACE INTO wp_options ( option_name, option_value ) VALUES ( 'default_role', 'contributor' )",
+			'chart_id' => 1,
+		);
+		try {
+			// Trigger the AJAX action
+			$this->_handleAjax( Visualizer_Plugin::ACTION_FETCH_DB_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertObjectHasAttribute( 'success', $response );
+		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertEquals( 'Only SELECT queries are allowed', $response->data->msg );
+		$this->assertFalse( $response->success );
+	}
 }
