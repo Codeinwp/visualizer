@@ -37,7 +37,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp(): void {
+	public function setUp() {
 		parent::setUp();
 		$this->admin_user_id = $this->factory->user->create(
 			array(
