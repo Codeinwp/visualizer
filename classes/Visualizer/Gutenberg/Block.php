@@ -131,7 +131,7 @@ class Visualizer_Gutenberg_Block {
 						'dragDrop'          => false,
 						'matchBrackets'     => true,
 						'autoCloseBrackets' => true,
-						'extraKeys'         => array( 'Ctrl-Space' => 'autocomplete' ),
+						'extraKeys'         => array( 'Shift-Space' => 'autocomplete' ),
 						'hintOptions'       => array( 'tables' => $table_col_mapping ),
 					),
 				)

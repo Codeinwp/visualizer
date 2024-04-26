@@ -182,7 +182,7 @@
             width               : '50%',
             search_contains     : true
         });
-        
+
         $('.visualizer-permission-type').each(function(x, y){
             var type    = $(y).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -191,7 +191,7 @@
                 return;
             }
         });
-        
+
         $('.visualizer-permission-type').on('change', function(evt, params) {
             var type    = $(this).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -226,6 +226,7 @@
 
     // https://codemirror.net/
     function init_db_import_component(){
+        console.log( 'HERE' );
         var table_columns = visualizer.db_query.tables;
         var code_mirror = wp.CodeMirror || CodeMirror;
         var cm = code_mirror.fromTextArea($('.visualizer-db-query').get(0), {
@@ -236,7 +237,7 @@
                     dragDrop: false,
                     matchBrackets: true,
                     autoCloseBrackets: true,
-                    extraKeys: {"Ctrl-Space": "autocomplete"},
+                    extraKeys: {"Shift-Space": "autocomplete"},
                     hintOptions: { tables: table_columns }
         });
 
@@ -246,7 +247,7 @@
         });
 
         cm.focus();
-        
+
         // update text area.
         cm.on('inputRead', function(x, y){
             cm.save();
@@ -257,7 +258,7 @@
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
         });
-        
+
         // clear the editor.
         $('body').on('visualizer:db:query:setvalue', function(event, data){
             cm.setValue(data.value);
@@ -288,7 +289,7 @@
             if($('.visualizer-db-query').val() === ''){
                 return;
             }
-            
+
             start_ajax($('#visualizer-db-query'));
             $('.db-wizard-results').empty();
             $('.db-wizard-error').empty();
@@ -327,7 +328,7 @@
                 $( '#canvas' ).css("z-index", "1").show();
             });
 
-            $('#content').css('width', 'calc(100% - 300px)');
+            $('#content').css('width', 'calc(100% - 350px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 $(this).val( $(this).attr( 'data-t-filter' ) );
                 $(this).html( $(this).attr( 'data-t-filter' ) );
@@ -376,7 +377,7 @@
             active: false,
             collapsible: true
         });
-        
+
         // open the accordions by default if they are indicated with the 'open' class.
         $('.visualizer-json-subform .viz-substep.open').each(function(i, e){
             $('.visualizer-json-subform').accordion( "option", "active", i );
@@ -597,7 +598,7 @@
 
         // show column visibility button only when more than 6 columns are found (including the Label column)
         if($(element + ' table.viz-editor-table thead tr th').length > 6){
-            $.extend( settings, { 
+            $.extend( settings, {
                 dom: 'Bt',
                 buttons: [
                     {

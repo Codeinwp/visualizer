@@ -158,6 +158,11 @@ class Visualizer_Source_Query extends Visualizer_Source {
 				return $rows;
 			}
 
+			if ( $wpdb->last_error ) {
+				$this->_error = $wpdb->last_error;
+				return [];
+			}
+
 			if ( $rows ) {
 				$results    = array();
 				$headers    = array();
