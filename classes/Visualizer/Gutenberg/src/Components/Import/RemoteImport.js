@@ -85,8 +85,8 @@ class RemoteImport extends Component {
 							label={ __( 'How often do you want to check the url?' ) }
 							value={ this.props.chart['visualizer-chart-schedule'] ? this.props.chart['visualizer-chart-schedule'] : 1 }
 							options={ [
+								{ label: __( '10 minutes' ), value: '0.16' },
 								{ label: __( 'Each hour' ), value: '1' },
-								{ label: __( 'Live' ), value: '0' },
 								{ label: __( 'Each 12 hours' ), value: '12' },
 								{ label: __( 'Each day' ), value: '24' },
 								{ label: __( 'Each 3 days' ), value: '72' }
