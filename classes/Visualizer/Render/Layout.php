@@ -56,15 +56,15 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	public static function _renderDbQuery( $args ) {
 		global $wpdb;
 		$query      = $args[1];
-        if ( ! $query ) {
-            $query = '
+		if ( ! $query ) {
+			$query = '
 /* List Posts published per. month */
 SELECT CONCAT( YEAR(post_date), "/", MONTH(post_date) ) as date, COUNT(*) AS post_count
 FROM ' . $wpdb->prefix . 'posts
 WHERE post_type = "post" AND post_status = "publish"
 GROUP BY YEAR(post_date), MONTH(post_date)
 ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
-        }
+		}
 		?>
 		<div id='visualizer-db-query' style="display: none">
 			<div class="visualizer-db-query-form">
@@ -82,7 +82,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			</div>
 			<div class='db-wizard-hints'>
 				<ul>
-                    <li><?php echo __( 'Your database prefix is:', 'visualizer' ); ?> <span class="visualizer-emboss"><?php echo $wpdb->prefix; ?></span></li>
+					<li><?php echo __( 'Your database prefix is:', 'visualizer' ); ?> <span class="visualizer-emboss"><?php echo $wpdb->prefix; ?></span></li>
 					<li><?php echo sprintf( __( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
 					<li><?php echo sprintf( __( 'Use %1$sShift+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
 					<?php do_action( 'visualizer_db_query_add_hints', $args ); ?>
