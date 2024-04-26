@@ -249,7 +249,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	 */
 	private function parseFile( $file, $multiplyValuesBy = 1 ) {
 		$file = $file;
-		ini_set( 'auto_detect_line_endings', true );
+		@ini_set( 'auto_detect_line_endings', true );
 		$handle = fopen( $file, 'rb' );
 		// read column titles
 		$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
