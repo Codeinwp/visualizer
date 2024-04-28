@@ -9,9 +9,10 @@
 (function ($) {
     $(window).on('load', function(){
         // scroll to the selected chart type.
-        if($('label.type-label.type-label-selected').length > 0) {
-            $('label.type-label.type-label-selected')[0].scrollIntoView();
-        }
+        // if($('label.type-label.type-label-selected').length > 0) {
+        //     $('label.type-label.type-label-selected')[0].scrollIntoView();
+        // }
+        $('#chart-select').scrollIntoView();
     });
 
     $(document).ready(function () {
@@ -170,9 +171,11 @@
 
     function enable_libraries_for($type, $typeVsLibrary) {
         $('select.viz-select-library option').addClass('disabled').attr('disabled', 'disabled');
+        $('select.viz-select-library option').append('<span class="premium-label"> (PREMIUM)</span>');
         var $libs = $typeVsLibrary[$type];
         $.each($libs, function( i, $lib ) {
             $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
+            $('select.viz-select-library option[value="' + $lib + '"] .premium-label').remove();
         });
         $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
     }
@@ -182,7 +185,7 @@
             width               : '50%',
             search_contains     : true
         });
-        
+
         $('.visualizer-permission-type').each(function(x, y){
             var type    = $(y).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -191,7 +194,7 @@
                 return;
             }
         });
-        
+
         $('.visualizer-permission-type').on('change', function(evt, params) {
             var type    = $(this).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -246,7 +249,7 @@
         });
 
         cm.focus();
-        
+
         // update text area.
         cm.on('inputRead', function(x, y){
             cm.save();
@@ -257,7 +260,7 @@
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
         });
-        
+
         // clear the editor.
         $('body').on('visualizer:db:query:setvalue', function(event, data){
             cm.setValue(data.value);
@@ -288,7 +291,7 @@
             if($('.visualizer-db-query').val() === ''){
                 return;
             }
-            
+
             start_ajax($('#visualizer-db-query'));
             $('.db-wizard-results').empty();
             $('.db-wizard-error').empty();
@@ -376,7 +379,7 @@
             active: false,
             collapsible: true
         });
-        
+
         // open the accordions by default if they are indicated with the 'open' class.
         $('.visualizer-json-subform .viz-substep.open').each(function(i, e){
             $('.visualizer-json-subform').accordion( "option", "active", i );
@@ -597,7 +600,7 @@
 
         // show column visibility button only when more than 6 columns are found (including the Label column)
         if($(element + ' table.viz-editor-table thead tr th').length > 6){
-            $.extend( settings, { 
+            $.extend( settings, {
                 dom: 'Bt',
                 buttons: [
                     {
