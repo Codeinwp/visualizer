@@ -53,7 +53,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 */
 	protected function _renderContent() {
 		echo '<div id="type-picker">';
-        echo '<div id="chart-select">' . $this->render_chart_selection() . '</div>';
+		echo '<div id="chart-select">' . $this->render_chart_selection() . '</div>';
 		foreach ( $this->types as $type => $array ) {
 			// add classes to each box that identifies the libraries this chart type supports.
 			$lib_classes = '';
@@ -97,36 +97,41 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		return str_replace( ' ', '', $value );
 	}
 
-    private function render_chart_selection() {
-	    $chart_types = Visualizer_Module_Admin::_getChartTypesLocalized( true, false, false, 'types' );
-	    $type_vs_library = array();
+	/**
+	 * Render the chart select component.
+	 *
+	 * @return string
+	 */
+	private function render_chart_selection() {
+		$chart_types = Visualizer_Module_Admin::_getChartTypesLocalized( true, false, false, 'types' );
+		$type_vs_library = array();
 
-	    $libraries = array();
-	    foreach ( $chart_types as $type => $atts ) {
-		    if ( empty( $atts['supports'] ) ) {
-			    continue;
-		    }
-		    $libraries = array_merge( $libraries, $atts['supports'] );
-		    $type_vs_library[ trim( $type ) ] = array_map( array( $this, '_removeSpaceFromLibrary' ), $atts['supports'] );
-	    }
+		$libraries = array();
+		foreach ( $chart_types as $type => $atts ) {
+			if ( empty( $atts['supports'] ) ) {
+				continue;
+			}
+			$libraries = array_merge( $libraries, $atts['supports'] );
+			$type_vs_library[ trim( $type ) ] = array_map( array( $this, '_removeSpaceFromLibrary' ), $atts['supports'] );
+		}
 
-	    $libraries = array_unique( $libraries );
+		$libraries = array_unique( $libraries );
 
-        $select = '';
-	    if ( ! empty( $libraries ) ) {
-            $select .= '<label for="chart-library">' . __( 'Select Library for charts', 'visualizer' ) . '</label>';
-		    $select .= '<select name="chart-library" class="viz-select-library" data-type-vs-library="' . esc_attr( json_encode( $type_vs_library ) ) . '">';
-            foreach ( $libraries as $library ) {
-                $select .= '<option value="' . $this->_removeSpaceFromLibrary( $library ) . '">' . $library . '</option>';
-            }
-            if ( ! Visualizer_Module_Admin::proFeaturesLocked() && ! defined( 'TI_CYPRESS_TESTING' ) ) {
-                $select .= '<option value="ChartJS">' . __( 'ChartJS', 'visualizer' ) . '</option>';
-            }
+		$select = '';
+		if ( ! empty( $libraries ) ) {
+			$select .= '<label for="chart-library">' . __( 'Select Library for charts', 'visualizer' ) . '</label>';
+			$select .= '<select name="chart-library" class="viz-select-library" data-type-vs-library="' . esc_attr( json_encode( $type_vs_library ) ) . '">';
+			foreach ( $libraries as $library ) {
+				$select .= '<option value="' . $this->_removeSpaceFromLibrary( $library ) . '">' . $library . '</option>';
+			}
+			if ( ! Visualizer_Module_Admin::proFeaturesLocked() && ! defined( 'TI_CYPRESS_TESTING' ) ) {
+				$select .= '<option value="ChartJS">' . __( 'ChartJS', 'visualizer' ) . '</option>';
+			}
 
-		    $select .= '</select>';
-	    }
-	    return $select;
-    }
+			$select .= '</select>';
+		}
+		return $select;
+	}
 
 	/**
 	 * Renders toolbar content.
@@ -136,7 +141,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {
-        // $this->render_chart_selection();
+		// $this->render_chart_selection();
 		?>
 		<input type="submit" class="button button-primary button-large push-right" value="<?php esc_attr_e( 'Next', 'visualizer' ); ?>">
 		<input type="button" class="button button-secondary button-large push-right viz-abort" value="<?php esc_attr_e( 'Cancel', 'visualizer' ); ?>">
