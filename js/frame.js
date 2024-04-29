@@ -226,7 +226,6 @@
 
     // https://codemirror.net/
     function init_db_import_component(){
-        console.log( 'HERE' );
         var table_columns = visualizer.db_query.tables;
         var code_mirror = wp.CodeMirror || CodeMirror;
         var cm = code_mirror.fromTextArea($('.visualizer-db-query').get(0), {
