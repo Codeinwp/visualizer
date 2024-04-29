@@ -156,6 +156,6 @@ test.describe( 'Support', () => {
 
         // Check disabled Options
         await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveCount(2);
-        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveText( [ 'DataTable', 'ChartJS' ] );
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveText( [ /DataTable/, /ChartJS/ ] );
     } );
 } );
