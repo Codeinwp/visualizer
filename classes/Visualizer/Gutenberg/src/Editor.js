@@ -511,7 +511,7 @@ class Editor extends Component {
 						{ /* You can apply "locked" class to lock any of the following list items. */ }
 
 						<a
-							href={ visualizerLocalize.adminPage }
+							href={ visualizerLocalize.createChart }
 							target="_blank"
 							className="visualizer-settings__content-option"
 						>
