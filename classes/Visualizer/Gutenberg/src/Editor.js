@@ -56,6 +56,7 @@ class Editor extends Component {
 		this.getChartData = this.getChartData.bind( this );
 		this.editChartData = this.editChartData.bind( this );
 		this.updateChart = this.updateChart.bind( this );
+		this.createChart = this.createChart.bind( this );
 
 		this.state = {
 
@@ -71,7 +72,8 @@ class Editor extends Component {
 			chart: null,
 			isModified: false,
 			isLoading: false,
-			isScheduled: false
+			isScheduled: false,
+			createChartInterval: null
 		};
 	}
 
@@ -94,6 +96,10 @@ class Editor extends Component {
                 });
             }
 		}
+	}
+
+	componentWillUnmount() {
+		clearInterval( this.state.createChartInterval );
 	}
 
 	async getChart( id ) {
@@ -456,6 +462,29 @@ class Editor extends Component {
 		);
 	}
 
+	/**
+	 * Open a popup to create a new chart from the library. After closing the popup, show the charts list.
+	 *
+	 * @returns {void}
+	 */
+	async createChart() {
+		const createChartPopup = window.open( visualizerLocalize.createChart, 'popup' );
+
+		if ( ! createChartPopup ) {
+			return;
+		}
+
+		const interval = setInterval( () => {
+			if ( createChartPopup.closed ) {
+				clearInterval( interval );
+				this.setState({ route: 'showCharts' });
+				this.props.setAttributes({ route: 'showCharts' });
+			}
+		}, 1000 );
+
+		this.setState({ createChartInterval: interval });
+	}
+
 	render() {
 		if ( 'error' === this.state.route ) {
 			return (
@@ -511,7 +540,7 @@ class Editor extends Component {
 						{ /* You can apply "locked" class to lock any of the following list items. */ }
 
 						<a
-							href={ visualizerLocalize.createChart }
+							onClick={ this.createChart }
 							target="_blank"
 							className="visualizer-settings__content-option"
 						>
