@@ -124,7 +124,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 			foreach ( $libraries as $library ) {
 				$select .= '<option value="' . $this->_removeSpaceFromLibrary( $library ) . '">' . $library . '</option>';
 			}
-			if ( ! Visualizer_Module_Admin::proFeaturesLocked() && ! defined( 'TI_CYPRESS_TESTING' ) ) {
+			if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
 				$select .= '<option value="ChartJS">' . __( 'ChartJS', 'visualizer' ) . '</option>';
 			}
 
