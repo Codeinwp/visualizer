@@ -155,7 +155,7 @@ test.describe( 'Support', () => {
         await expect(page.frameLocator('iframe').getByRole('combobox')).toHaveValue('GoogleCharts');
 
         // Check disabled Options
-        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled').count()).toBe(2);
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveCount(2);
         await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveText( [ 'DataTable', 'ChartJS' ] );
     } );
 } );
