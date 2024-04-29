@@ -19,9 +19,9 @@ test.describe( 'Chart Library', () => {
     test( 'check Add New button', async ( { page} ) => {
         await expect(page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link')).toBeVisible();
     } );
-    
+
     test( 'check filters options', async ( { page } ) => {
-        
+
         // CHART TYPE FILTER
         await expect( page.locator('select[name="type"]') ).toBeVisible();
         await expect( page.locator('select[name="type"] option').count() ).resolves.toBe( 15 + 1 );
@@ -33,7 +33,7 @@ test.describe( 'Chart Library', () => {
         for (const option of libraryOptions) {
             await expect( page.locator('select[name="library"] option').filter({ hasText: option }).count() ).resolves.toBe( 1 );
         }
-        
+
         // DATE FILTER
         const dateOptions = ['Yesterday', 'Last Week', 'Last Month', 'Last Year', 'All dates'];
         await expect( page.locator('select[name="date"]') ).toBeVisible();
@@ -41,7 +41,7 @@ test.describe( 'Chart Library', () => {
         for (const option of dateOptions) {
             await expect( page.locator('select[name="date"] option').filter({ hasText: option }).count() ).resolves.toBe( 1 );
         }
-        
+
         // SOURCES FILTER
         const sourcesOptions = ['All sources', 'Database', 'JSON', 'Local CSV', 'Remote CSV', 'WordPress'];
         await expect( page.locator('select[name="source"]') ).toBeVisible();
@@ -86,7 +86,7 @@ test.describe( 'Chart Library', () => {
 
         // Count the current charts, then compare after cloning.
         const chartsCount = await page.locator('.visualizer-chart').count();
-        
+
         // Select the chart and clone it.
         const chartContainer = page.locator(`.visualizer-chart`, { has: page.locator(`#visualizer-${chartId}`) });
         expect( chartContainer ).toBeVisible();
@@ -94,24 +94,24 @@ test.describe( 'Chart Library', () => {
 
         await waitForLibraryToLoad( page );
         const newChartsCount = await page.locator('.visualizer-chart').count();
-        
+
         expect( newChartsCount ).toBeGreaterThan( chartsCount );
     } );
 
     test('delete a chart', async ( { page, admin } ) => {
         const chartId = await createChartWithAdmin( admin, page );
         await admin.visitAdminPage( 'admin.php?page=visualizer' );
-        
+
         await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBeGreaterThan( 0 );
 
         // Accept the dialog to delete the chart.
         page.on('dialog', dialog => dialog.accept());
-        
+
         // Select the chart and delete it.
         const chartContainer = page.locator(`.visualizer-chart`, { has: page.locator(`#visualizer-${chartId}`) });
         expect( chartContainer ).toBeVisible();
         await chartContainer.locator('a.visualizer-chart-delete').click({ timeout: 5000 });
-        
+
         await waitForLibraryToLoad( page );
         await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBe( 0 );
     } );
@@ -143,5 +143,19 @@ test.describe( 'Support', () => {
         await page.getByRole('link', { name: 'Help us improve!' }).click();
         await expect( page.getByRole('heading', { name: 'Answer a few questions for us' }) ).toBeVisible();
         await expect( page.getByRole('link', { name: 'survey' }) ).toBeVisible();
+    } );
+
+    test('check Chart selection', async ( { page, admin } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer' );
+        await page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link').click();
+        await expect(page.frameLocator('iframe').getByText('Select Library for charts')).toBeVisible();
+        await expect(page.frameLocator('iframe').getByRole('combobox')).toBeVisible();
+        await expect(page.frameLocator('iframe').locator('#chart-select')).toContainText('Select Library for charts');
+        // Check Default Option
+        await expect(page.frameLocator('iframe').getByRole('combobox')).toHaveValue('GoogleCharts');
+
+        // Check disabled Options
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled').count()).toBe(2);
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveText( [ 'DataTable', 'ChartJS' ] );
     } );
 } );
