@@ -41,6 +41,7 @@
         var source = $('#visualizer-chart-id').attr('data-chart-source');
         $('li.viz-group.' + source).addClass('open');
         $('li.viz-group.' + source + ' span.viz-section-title.' + source).addClass('open');
+        $('li.viz-group.' + source + ' span.viz-section-title.' + source + '.open').parent().find('div.viz-section-items').show();
 
         init_permissions();
 

@@ -690,6 +690,11 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			$source_of_chart = 'visualizer_source_manual';
 		}
 
+		// For Manual Source for non-pro users since it is the only unlocked source.
+		if ( ! Visualizer_Module::is_pro() ) {
+			$source_of_chart = 'visualizer_source_manual';
+		}
+
 		$type   = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$lib    = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		?>
