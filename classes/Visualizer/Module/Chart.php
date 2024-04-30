@@ -925,6 +925,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				: esc_html__( 'Create Chart', 'visualizer' );
 			if ( filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART ) {
 				$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
+			} else {
+				$render->cancel_button = esc_html__( 'Skip', 'visualizer' );
 			}
 		} else {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );

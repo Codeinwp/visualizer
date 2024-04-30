@@ -6,7 +6,7 @@ const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 /**
  * Internal dependencies
  */
-const { createChartWithAdmin, deleteAllCharts, waitForLibraryToLoad, createAllFreeCharts } = require('../utils/common');
+const { createChartWithAdmin, deleteAllCharts, waitForLibraryToLoad, createAllFreeCharts, CHART_JS_LABELS, selectChartAdmin } = require('../utils/common');
 
 test.describe( 'Chart Library', () => {
 
@@ -124,6 +124,20 @@ test.describe( 'Chart Library', () => {
         for (const chartId of chartsId) {
             await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBeGreaterThan( 0 );
         }
+    } );
+
+    test( 'skip second step of chart creation', async ( { admin, page } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForSelector('h1:text("Visualizer")');
+        
+        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
+
+        await page.frameLocator('iframe').getByRole('button', { name: 'Skip' }).click();
+        await waitForLibraryToLoad( page );
+       
+        // The Create Chart button should be not exists since we skipped the second step.
+        expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
     } );
 } );
 
