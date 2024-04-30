@@ -39,11 +39,22 @@ test.describe( 'Upsell', () => {
 
         await expect( page.frameLocator('iframe').locator( '#viz-tabs' ) ).toBeVisible();
 
-        expect( await page.frameLocator('iframe').locator('#vz-chart-source .viz-group-title .dashicons-lock').count() ).toBe( 4 );
+        expect( await page.frameLocator('iframe').locator('#vz-chart-source .viz-group-title .dashicons-lock').count() ).toBe( 5 );
+
+
+        const uploadFileUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_csv .only-pro-inner a');
+        let href = await uploadFileUpsell.getAttribute('href');
+        let searchParams = new URLSearchParams(href);
+        expect( searchParams.get('utm_campaign') ).toBe('import-file');
+
+        const remoteImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_json .only-pro-inner a').first();
+        href = await remoteImportUpsell.getAttribute('href');
+        searchParams = new URLSearchParams(href);
+        expect( searchParams.get('utm_campaign') ).toBe('import-url');
 
         const otherChartUpsell = page.frameLocator('iframe').locator('#vz-chart-source .viz-import-from-other .only-pro-inner a');
-        let href = await otherChartUpsell.getAttribute('href');
-        let searchParams = new URLSearchParams(href);
+        href = await otherChartUpsell.getAttribute('href');
+        searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('import-chart');
 
         const wpImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query_wp .only-pro-inner a');
@@ -55,11 +66,6 @@ test.describe( 'Upsell', () => {
         href = await dbImportUpsell.getAttribute('href');
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('db-query');
-
-        const manualDataUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_manual .only-pro-inner a');
-        href = await manualDataUpsell.getAttribute('href');
-        searchParams = new URLSearchParams(href);
-        expect( searchParams.get('utm_campaign') ).toBe('manual-data');
 
         await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
 

@@ -1062,14 +1062,18 @@ button#editor-chart-button {
 }
 
 .only-pro-container {
-	display: table;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
 }
 
 .only-pro-inner {
-	display: table-cell;
-	vertical-align: middle;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .only-pro-content p {
@@ -1096,6 +1100,10 @@ button#editor-chart-button {
 
 .only-pro-content a:hover {
 	background: #2D419B;
+}
+
+.only-pro-anchor {
+	position: relative;
 }
 
 #sidebar::-webkit-scrollbar {
