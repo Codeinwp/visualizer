@@ -23,9 +23,28 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await editor.insertBlock( { name: 'visualizer/chart'} );
 
         // Check chart selection options are available.
-        expect( page.getByText('Make a new chart or display') ).toBeVisible();
-        expect( page.getByRole('link', { name: 'Create a new chart' }) ).toBeVisible();
-        expect( page.locator('div').filter({ hasText: /^Display an existing chart$/ }) ).toBeVisible();
+        await expect( page.getByText('Make a new chart or display') ).toBeVisible();
+        await expect( page.getByLabel('Editor content').locator('a') ).toBeVisible();
+        await expect( page.locator('div').filter({ hasText: /^Display an existing chart$/ }) ).toBeVisible();
+    } );
+
+    test('new chart creation', async ( { admin, editor, page } ) => {
+        await admin.createNewPost();
+        await editor.insertBlock( { name: 'visualizer/chart'} );
+        
+        await expect( page.getByText('Make a new chart or display') ).toBeVisible();
+        await expect( page.getByLabel('Editor content').locator('a') ).toBeVisible();
+        
+        const popupOpened = new Promise(resolve => {
+            page.on('popup', async () => {
+                resolve(true);
+            });
+        });
+
+        await page.getByLabel('Editor content').locator('a').click({ force: true});
+
+        // Check if a new page is opened for chart creation.
+        expect(await popupOpened).toBe(true);
     } );
 
     test( 'insert an existing chart', async ( { admin, page, editor } ) => {
