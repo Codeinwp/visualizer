@@ -1,0 +1,12 @@
+{
+    "core": "WordPress/WordPress#master",
+    "phpVersion": "7.4",
+	"plugins": [ ".", "WordPress/classic-editor" ],
+	"config": {
+        "SCRIPT_DEBUG": false  
+    },
+	"env": {
+		"development": {},
+		"tests": {}
+	}
+}
