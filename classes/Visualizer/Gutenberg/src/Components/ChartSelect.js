@@ -33,11 +33,68 @@ const { startCase } = lodash;
 const { __ } = wp.i18n;
 
 const {
+	Button
+} = wp.components;
+
+const {
 	Component,
 	Fragment
 } = wp.element;
 
 const { InspectorControls } = wp.blockEditor || wp.editor;
+
+let vm, vmv;
+vm = visualizer.media = {};
+vmv = vm.view = {};
+
+vmv.Chart = wp.media.view.MediaFrame.extend(
+	{
+		initialize: function() {
+			const self = this;
+
+			_.defaults(
+				self.options, {
+					action: '',
+					id: 'visualizer',
+					state: 'iframe:visualizer',
+					title: 'Visualizer'
+				}
+			);
+
+			wp.media.view.MediaFrame.prototype.initialize.apply( self, arguments );
+
+			wp.media.view.settings.tab = 'Visualizer';
+			wp.media.view.settings.tabUrl = self.options.action;
+			self.createIframeStates();
+		},
+
+		createIframeStates: function( passedOptions ) {
+			const self = this;
+			wp.media.view.MediaFrame.prototype.createIframeStates.apply( self, arguments );
+
+			self.state( self.options.state ).set(
+				_.defaults(
+					{
+						tab: self.options.id,
+						src: self.options.action + '&tab=' + self.options.id,
+						title: self.options.title,
+						content: 'iframe',
+						menu: 'default'
+					}, passedOptions
+				)
+			);
+
+		},
+
+		open: function() {
+			try {
+				wp.media.view.MediaFrame.prototype.open.apply( this, arguments );
+			} catch ( error ) {
+				console.error( error );
+			}
+		}
+	}
+);
 
 class ChartSelect extends Component {
 	constructor() {
@@ -80,10 +137,25 @@ class ChartSelect extends Component {
             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
         }
 
+		const openEditChart = ( chartId ) => {
+			let wnd = window;
+			let view = new vmv.Chart(
+				{
+					action: 'https://visualizer-new.test/wp-admin/admin-ajax.php?action=visualizer-edit-chart&library=yes&chart=' + chartId
+				}
+			);
+
+			view.open();
+		};
+
 		return (
 			<Fragment>
 				{ 'home' === this.state.route &&
 					<InspectorControls>
+
+						<Button
+							isPrimary={true}
+							onClick={ () => { openEditChart( this.props.id ); } }> Edit Chart </ Button>
 
 						<FileImport
 							chart={ this.props.chart }
