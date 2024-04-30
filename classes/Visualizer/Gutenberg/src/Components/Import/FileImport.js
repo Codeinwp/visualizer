@@ -37,34 +37,53 @@ class FileImport extends Component {
 
 	render() {
 		return (
-			<PanelBody
-				title={ __( 'Import data from file' ) }
-				initialOpen={ false }
-			>
-
-				<p>{ __( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).' ) }</p>
-				<p>
-					{ __( 'If you are unsure about how to format your data CSV then please take a look at this sample: ' ) }
-					<ExternalLink href={ `${visualizerLocalize.absurl}samples/${this.props.chart['visualizer-chart-type']}.csv` }>
-						{ `${this.props.chart['visualizer-chart-type']}.csv` }
-					</ExternalLink>
-				</p>
-
-				<input
-					type="file"
-					accept="text/csv"
-					ref={ this.uploadInput }
-					onChange={ this.fileUploaded }
-				/>
-
-				<Button
-					isPrimary
-					onClick={ this.uploadImport }
+			( 'community' !== visualizerLocalize.isPro ) ? (
+				<PanelBody
+					title={ __( 'Import data from file' ) }
+					initialOpen={ false }
 				>
-					{ this.state.uploadLabel }
-				</Button>
 
-			</PanelBody>
+					<p>{ __( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).' ) }</p>
+					<p>
+						{ __( 'If you are unsure about how to format your data CSV then please take a look at this sample: ' ) }
+						<ExternalLink href={ `${visualizerLocalize.absurl}samples/${this.props.chart['visualizer-chart-type']}.csv` }>
+							{ `${this.props.chart['visualizer-chart-type']}.csv` }
+						</ExternalLink>
+					</p>
+
+					<input
+						type="file"
+						accept="text/csv"
+						ref={ this.uploadInput }
+						onChange={ this.fileUploaded }
+					/>
+
+					<Button
+						isPrimary
+						onClick={ this.uploadImport }
+					>
+						{ this.state.uploadLabel }
+					</Button>
+
+				</PanelBody>
+			) : (
+				<PanelBody
+					title={ __( 'Import data from file' ) }
+					icon="lock"
+					initialOpen={ false }
+				>
+					<p>{ __( 'Enable this feature in PRO version!' ) }</p>
+
+					<Button
+						isPrimary
+						href={ visualizerLocalize.proTeaser }
+						target="_blank"
+					>
+						{ __( 'Upgrade Now' ) }
+					</Button>
+
+				</PanelBody>
+			)
 		);
 	}
 }

@@ -29,40 +29,61 @@ class RemoteImport extends Component {
 				title={ __( 'Import data from URL' ) }
 				initialOpen={ false }
 				className="visualizer-advanced-panel"
+				icon={ ( 'community' === visualizerLocalize.isPro ) ? 'lock' : '' }
 			>
-
-				<PanelBody
-					title={ __( 'One Time Import' ) }
-					className="visualizer-inner-sections"
-					initialOpen={ false }
-				>
-
-					<p>{ __( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).' ) }</p>
-					<p>
-						{ __( 'If you are unsure about how to format your data CSV then please take a look at this sample: ' ) }
-						<ExternalLink href={ `${visualizerLocalize.absurl}samples/${this.props.chart['visualizer-chart-type']}.csv` }>
-							{ `${this.props.chart['visualizer-chart-type']}.csv` }
-						</ExternalLink>
-					</p>
-					<p>{ __( 'You can also import data from Google Spreadsheet.' ) }</p>
-
-					<TextControl
-						placeholder={ __( 'Please enter the URL of your CSV file' ) }
-						value={ this.props.chart['visualizer-chart-url'] ? this.props.chart['visualizer-chart-url'] : '' }
-						onChange={ this.props.editURL }
-					/>
-
-					<Button
-						isPrimary
-						isLarge
-						isBusy={ 'uploadData' === this.props.isLoading }
-						disabled={ 'uploadData' === this.props.isLoading }
-						onClick={ () => this.props.uploadData( false ) }
+				{ ( 'community' !== visualizerLocalize.isPro ) ? (
+					<PanelBody
+						title={ __( 'One Time Import' ) }
+						className="visualizer-inner-sections"
+						initialOpen={ false }
 					>
-						{ __( 'Import Data' ) }
-					</Button>
 
-				</PanelBody>
+						<p>{ __( 'You can use this to import data from a remote CSV file. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).' ) }</p>
+						<p>
+							{ __( 'If you are unsure about how to format your data CSV then please take a look at this sample: ' ) }
+							<ExternalLink href={ `${visualizerLocalize.absurl}samples/${this.props.chart['visualizer-chart-type']}.csv` }>
+								{ `${this.props.chart['visualizer-chart-type']}.csv` }
+							</ExternalLink>
+						</p>
+						<p>{ __( 'You can also import data from Google Spreadsheet.' ) }</p>
+
+						<TextControl
+							placeholder={ __( 'Please enter the URL of your CSV file' ) }
+							value={ this.props.chart['visualizer-chart-url'] ? this.props.chart['visualizer-chart-url'] : '' }
+							onChange={ this.props.editURL }
+						/>
+
+						<Button
+							isPrimary
+							isLarge
+							isBusy={ 'uploadData' === this.props.isLoading }
+							disabled={ 'uploadData' === this.props.isLoading }
+							onClick={ () => this.props.uploadData( false ) }
+						>
+							{ __( 'Import Data' ) }
+						</Button>
+
+					</PanelBody>
+				) : (
+					<PanelBody
+						title={ __( 'One Time Import' ) }
+						icon="lock"
+						className="visualizer-inner-sections"
+						initialOpen={ false }
+					>
+
+						<p>{ __( 'Enable this feature in PRO version!' ) }</p>
+
+						<Button
+							isPrimary
+							href={ visualizerLocalize.proTeaser }
+							target="_blank"
+						>
+							{ __( 'Upgrade Now' ) }
+						</Button>
+
+					</PanelBody>
+				) }
 
 				{ ( 'business' === visualizerLocalize.isPro ) ?
 					<PanelBody
