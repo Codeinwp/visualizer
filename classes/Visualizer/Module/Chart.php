@@ -1424,6 +1424,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
 		}
+		if ( ! is_super_admin() ) {
+			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
+		}
 
 		$params     = wp_parse_args( $_POST['params'] );
 		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
