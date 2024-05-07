@@ -160,7 +160,7 @@
      * @returns {void}
      */
     function init_available_chart_list() {
-        const rendererSelect = document.querySelector('select.viz-select-library:not(.viz-hide-library):not(.viz-testing-mode)');
+        const rendererSelect = document.querySelector('select.viz-select-library');
         if ( ! rendererSelect ) {
             return;
         }
@@ -172,13 +172,30 @@
 
         /** @type {Record<string, ('GoogleCharts' | 'ChartJS' | 'DataTable')[]>} */
         const rendererTypesMapping = JSON.parse( rendererTypesMappingData );
+
+        document.querySelectorAll('input.type-radio').forEach( chartTypeRadio => {
+            chartTypeRadio.addEventListener('click', (event) => {
+                // Check if the chart type is supported by the selected renderer. If not, select the first supported renderer.
+                const chartType = event.target.value;
+                const selectedRenderer = rendererSelect.value;
+                if ( ! rendererTypesMapping[chartType]?.includes( selectedRenderer ) ) {
+                    rendererSelect.value = rendererTypesMapping[chartType][0]
+                }
+            });
+        });
         
-        // Update the chart list on user interaction.
+        if ( ! rendererSelect.classList.contains('.viz-pro-enabled') ) {
+            return;
+        }
+
+        /**
+         * Pro feature: Update the chart list on user interaction.
+         */
         rendererSelect.addEventListener('change', (event) => {
             toggle_renderer_type( event.target.value );
             toggle_chart_types_by_render( event.target.value, rendererTypesMapping );
         });
-
+    
         // Init available chart list.
         toggle_renderer_type( rendererSelect.value );
         toggle_chart_types_by_render( rendererSelect.value, rendererTypesMapping );
