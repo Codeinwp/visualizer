@@ -471,6 +471,10 @@ div.viz-group-content .viz-group-description {
 	box-shadow: 0 0 8px #ddd;
 }
 
+.type-box.viz-hidden {
+	display: none;
+}
+
 .type-box:nth-child(3n+3) {
 	margin-right: 0;
 }
@@ -500,6 +504,14 @@ div.viz-group-content .viz-group-description {
 	background-position: center center;
 	background-size: 900px 1150px;
 	filter: grayscale(100%);
+}
+
+#type-picker.lib-ChartJS .type-label {
+	background-image: url(../images/chart_types_chartjs.png);
+}
+
+#type-picker.lib-DataTable .type-label {
+	background-image: url(../images/chart_types_datatable.png);
 }
 
 .type-label-selected,
@@ -832,7 +844,7 @@ button#editor-chart-button {
 .viz-select-library {
 	color: #0085ba;
 }
-.viz-select-library.viz-hide-libary {
+.viz-select-library.viz-hide-library {
 	display: none;
 }
 
