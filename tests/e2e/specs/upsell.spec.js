@@ -21,9 +21,9 @@ test.describe( 'Upsell', () => {
         await page.waitForSelector('h1:text("Visualizer")');
 
         expect( await page.frameLocator('iframe').locator('.pro-upsell').count() ).toBe( 11 );
-       
+
         const proUpsellElements = await page.frameLocator('iframe').locator('a.pro-upsell').all();
-        
+
         for (const element of proUpsellElements) {
             const href = await element.getAttribute('href');
             const searchParams = new URLSearchParams(href);
@@ -61,11 +61,17 @@ test.describe( 'Upsell', () => {
         href = await wpImportUpsell.getAttribute('href');
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('import-wp');
+        await page.frameLocator('iframe').getByRole('heading', { name: /Import from WordPress/ }).click();
+        await expect(page.frameLocator('iframe').locator('#vz-chart-source')).toContainText('Upgrade to PRO to activate this feature!');
 
         const dbImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query .only-pro-inner a');
         href = await dbImportUpsell.getAttribute('href');
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('db-query');
+
+        await page.frameLocator('iframe').getByRole('heading', { name: /Import from database/ }).click();
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade to Developer plan to activate this feature!');
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade Now');
 
         await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
 
@@ -83,6 +89,9 @@ test.describe( 'Upsell', () => {
         href = await chartPermissionsUpsell.getAttribute('href');
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('chart-permissions');
+        await page.frameLocator('iframe').getByRole('heading', { name: /Permissions/ }).click();
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade to Developer plan to activate this feature!');
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade Now');
     });
 
     test( 'featured tab in Install Plugin (SDK)', async ( { admin, page } ) => {
