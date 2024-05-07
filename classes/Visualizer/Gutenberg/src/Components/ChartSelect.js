@@ -113,6 +113,7 @@ class ChartSelect extends Component {
 	}
 
 	render() {
+		const { legacyBlockEdit, blockEditDoc } = window.visualizerLocalize;
 		let chartVersion = 'undefined' !== typeof google.visualization ? google.visualization.Version : 'current';
 
 		let chart, footer;
@@ -152,53 +153,64 @@ class ChartSelect extends Component {
 			<Fragment>
 				{ 'home' === this.state.route &&
 					<InspectorControls>
+						{ ! legacyBlockEdit && (
+							<div className="viz-edit-chart-new">
+								<Button
+									isPrimary={true}
+									onClick={ () => {
+ openEditChart( this.props.id );
+} }> Edit Chart </ Button>
+								<p dangerouslySetInnerHTML={{__html: blockEditDoc}}></p>
+							</div>
+						) }
 
-						<Button
-							isPrimary={true}
-							onClick={ () => { openEditChart( this.props.id ); } }> Edit Chart </ Button>
+						{ legacyBlockEdit && (
+							<>
 
-						<FileImport
-							chart={ this.props.chart }
-							readUploadedFile={ this.props.readUploadedFile }
-						/>
+								<FileImport
+									chart={ this.props.chart }
+									readUploadedFile={ this.props.readUploadedFile }
+								/>
 
-						<RemoteImport
-							id={ this.props.id }
-							chart={ this.props.chart }
-							editURL={ this.props.editURL }
-							isLoading={ this.props.isLoading }
-							uploadData={ this.props.uploadData }
-							editSchedule={ this.props.editSchedule }
-							editJSONSchedule={ this.props.editJSONSchedule }
-							editJSONURL={ this.props.editJSONURL }
-							editJSONHeaders={ this.props.editJSONHeaders }
-							editJSONRoot={ this.props.editJSONRoot }
-							editJSONPaging={ this.props.editJSONPaging }
-							JSONImportData={ this.props.JSONImportData }
-						/>
+								<RemoteImport
+									id={ this.props.id }
+									chart={ this.props.chart }
+									editURL={ this.props.editURL }
+									isLoading={ this.props.isLoading }
+									uploadData={ this.props.uploadData }
+									editSchedule={ this.props.editSchedule }
+									editJSONSchedule={ this.props.editJSONSchedule }
+									editJSONURL={ this.props.editJSONURL }
+									editJSONHeaders={ this.props.editJSONHeaders }
+									editJSONRoot={ this.props.editJSONRoot }
+									editJSONPaging={ this.props.editJSONPaging }
+									JSONImportData={ this.props.JSONImportData }
+								/>
 
-						<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
+								<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
 
-						<DataImport
-							chart={ this.props.chart }
-							editSchedule={ this.props.editDatabaseSchedule }
-							databaseImportData={ this.props.databaseImportData }
-						/>
+								<DataImport
+									chart={ this.props.chart }
+									editSchedule={ this.props.editDatabaseSchedule }
+									databaseImportData={ this.props.databaseImportData }
+								/>
 
-						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
+								<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
 
-						<PanelButton
-							label={ __( 'Advanced Options' ) }
-                            className="visualizer-advanced-options"
-							icon="admin-tools"
-							onClick={ () => this.setState({ route: 'showAdvanced' }) }
-						/>
+								<PanelButton
+									label={ __( 'Advanced Options' ) }
+									className="visualizer-advanced-options"
+									icon="admin-tools"
+									onClick={ () => this.setState({ route: 'showAdvanced' }) }
+								/>
 
-						<PanelButton
-							label={ __( 'Chart Permissions' ) }
-							icon="admin-users"
-							onClick={ () => this.setState({ route: 'showPermissions' }) }
-						/>
+								<PanelButton
+									label={ __( 'Chart Permissions' ) }
+									icon="admin-users"
+									onClick={ () => this.setState({ route: 'showPermissions' }) }
+								/>
+							</>
+						) }
 					</InspectorControls>
 				}
 

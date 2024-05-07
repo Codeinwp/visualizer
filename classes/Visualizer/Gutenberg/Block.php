@@ -113,6 +113,9 @@ class Visualizer_Gutenberg_Block {
 			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
 			'proFeaturesLocked' => Visualizer_Module_Admin::proFeaturesLocked(),
 			'isFullSiteEditor'  => 'site-editor.php' === $pagenow,
+			'legacyBlockEdit'   => apply_filters( 'visualizer_legacy_block_edit', false ),
+			/* translators: %1$s: opening tag, %2$s: closing tag */
+			'blockEditDoc'      => sprintf( __( 'The editor for managing chart settings has been removed from the block editor. You can find more information in this %1$sdocumentation%2$s', 'visualizer' ), '<a href="https://docs.themeisle.com/article/1705-how-can-i-display-a-chart#using-visualizer-block" target="_blank">', '</a>' ),
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 

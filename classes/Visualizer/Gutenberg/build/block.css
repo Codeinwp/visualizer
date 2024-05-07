@@ -240,3 +240,15 @@
     display: grid;
     grid-template-columns: 100%; } }
 
+.viz-edit-chart-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; }
+  .viz-edit-chart-new p {
+    padding: 12px;
+    padding-left: 24px;
+    color: #ff9901; }
+    .viz-edit-chart-new p a:hover {
+      pointer: cursor; }
+
