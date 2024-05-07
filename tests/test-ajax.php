@@ -253,13 +253,13 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	 * Test the query stripping of comments.
 	 */
 	public function test_sql_comment_strip() {
-		$source = new Visualizer_Source_Query("SELECT * FROM test_table /* WHERE post_type = 'post' */");
-		$this->assertEquals( "SELECT * FROM test_table", $source->get_query() );
+		$source = new Visualizer_Source_Query( "SELECT * FROM test_table /* WHERE post_type = 'post' */");
+		$this->assertEquals( 'SELECT * FROM test_table', $source->get_query() );
 
-		$source = new Visualizer_Source_Query("SELECT * FROM test_table -- WHERE post_type = 'post'");
-		$this->assertEquals( "SELECT * FROM test_table", $source->get_query() );
+		$source = new Visualizer_Source_Query( "SELECT * FROM test_table -- WHERE post_type = 'post'");
+		$this->assertEquals( 'SELECT * FROM test_table', $source->get_query() );
 
-		$source = new Visualizer_Source_Query("/* SELECT */ DELETE * FROM test_table /* WHERE post_type = 'post' */");
-		$this->assertEquals( "DELETE * FROM test_table", $source->get_query() );
+		$source = new Visualizer_Source_Query( "/* SELECT */ DELETE * FROM test_table /* WHERE post_type = 'post' */");
+		$this->assertEquals( 'DELETE * FROM test_table', $source->get_query() );
 	}
 }
