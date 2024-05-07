@@ -468,7 +468,7 @@ class Editor extends Component {
 	 * @returns {void}
 	 */
 	async createChart() {
-		const createChartPopup = window.open( visualizerLocalize.createChart, 'popup' );
+		const createChartPopup = window.open( visualizerLocalize.createChart, 'visualizerChartCreation', 'top=100,left=100,width=1400,height=800' );
 
 		if ( ! createChartPopup ) {
 			return;
