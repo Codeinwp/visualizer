@@ -160,7 +160,7 @@
      * @returns {void}
      */
     function init_available_chart_list() {
-        const rendererSelect = document.querySelector('select.viz-select-library:not(.viz-hide-library)');
+        const rendererSelect = document.querySelector('select.viz-select-library:not(.viz-hide-library):not(.viz-testing-mode)');
         if ( ! rendererSelect ) {
             return;
         }
@@ -213,7 +213,7 @@
             if ( ! chartType ) {
                 return;
             }
-            
+
             const isSupported = rendererTypesMapping[chartType]?.includes( rendererType );
             typeBox.classList.toggle('viz-hidden', ! isSupported);
         });
