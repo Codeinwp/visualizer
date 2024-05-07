@@ -43,11 +43,11 @@ const {
 
 const { InspectorControls } = wp.blockEditor || wp.editor;
 
-let vm, vmv;
-vm = visualizer.media = {};
-vmv = vm.view = {};
+let visualizerMedia, visualizerMediaView;
+visualizerMedia = visualizer.media = {};
+visualizerMediaView = visualizerMedia.view = {};
 
-vmv.Chart = wp.media.view.MediaFrame.extend(
+visualizerMediaView.Chart = wp.media.view.MediaFrame.extend(
 	{
 		initialize: function() {
 			const self = this;
@@ -139,9 +139,8 @@ class ChartSelect extends Component {
         }
 
 		const openEditChart = ( chartId ) => {
-			let wnd = window;
-			const baseURL = ( wnd.visualizerLocalize.chartEditUrl ) ? wnd.visualizerLocalize.chartEditUrl : '';
-			let view = new vmv.Chart(
+			const baseURL = ( window.visualizerLocalize.chartEditUrl ) ? window.visualizerLocalize.chartEditUrl : '';
+			let view = new visualizerMediaView.Chart(
 				{
 					action: `${baseURL}?action=visualizer-edit-chart&library=yes&chart=` + chartId
 				}
