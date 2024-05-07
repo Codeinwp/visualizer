@@ -168,11 +168,13 @@
 
     function enable_libraries_for($type, $typeVsLibrary) {
         $('select.viz-select-library option').addClass('disabled').attr('disabled', 'disabled');
+        $('select.viz-select-library option .premium-label').remove();
         $('select.viz-select-library option').append('<span class="premium-label"> (PREMIUM)</span>');
         var $libs = $typeVsLibrary[$type];
         $.each($libs, function( i, $lib ) {
             $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
             $('select.viz-select-library option[value="' + $lib + '"] .premium-label').remove();
+            console.log( $lib );
         });
         $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
     }
