@@ -140,9 +140,10 @@ class ChartSelect extends Component {
 
 		const openEditChart = ( chartId ) => {
 			let wnd = window;
+			const baseURL = ( wnd.visualizerLocalize.chartEditUrl ) ? wnd.visualizerLocalize.chartEditUrl : '';
 			let view = new vmv.Chart(
 				{
-					action: 'https://visualizer-new.test/wp-admin/admin-ajax.php?action=visualizer-edit-chart&library=yes&chart=' + chartId
+					action: `${baseURL}?action=visualizer-edit-chart&library=yes&chart=` + chartId
 				}
 			);
 
