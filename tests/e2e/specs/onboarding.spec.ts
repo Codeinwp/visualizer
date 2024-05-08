@@ -49,8 +49,8 @@ test.describe( 'Onboarding', () => {
         // Step 2
         await expect(page.getByLabel('You\'re almost done! We use').locator('h2')).toContainText('You\'re almost done!');
         await expect(page.getByRole('heading', { name: 'Importing demo data' })).toBeVisible();
-        await expect(page.getByText('Done! Demo data imported')).toBeVisible();
-        await expect(page.getByLabel('You\'re almost done! We use')).toContainText('Import data from other Charts, WordPress, DataBase, or Manual Data with Visualizer Premium version');
+        await expect(page.getByText('Done! Demo data has been successfully imported.')).toBeVisible();
+        await expect(page.getByLabel('You\'re almost done! We use')).toContainText('Import data from other charts, WordPress, databases, or manual data entries using Visualizer');
         await page.getByRole('button', { name: 'Continue ' }).click();
 
         // Step 3
@@ -72,7 +72,7 @@ test.describe( 'Onboarding', () => {
         await page.getByRole('button', { name: 'Skip Improvement' }).click();
 
         // Step 5
-        await expect(page.getByRole('heading')).toContainText('Updates, tutorials, special offers & more');
+        await expect(page.getByRole('heading')).toContainText('Updates, tutorials, special offers, and more');
         await expect(page.getByLabel('Updates, tutorials, special')).toContainText('Get exclusive access of Visualizer newsletter');
         await expect(page.getByLabel('Updates, tutorials, special').locator('img')).toBeVisible();
         await expect(page.getByPlaceholder('test1@xx.com')).toBeVisible();
