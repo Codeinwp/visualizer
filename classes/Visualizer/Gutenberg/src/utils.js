@@ -200,7 +200,7 @@ export const googleChartPackages = [ 'corechart', 'geochart', 'gauge', 'table', 
  *
  * @example
  *
- * const popupBuilder = initChartPopup();
+ * const popupBuilder = buildChartPopup;
  * const popup = new popupBuilder();
  * popup.open();
  */
