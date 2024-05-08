@@ -681,3 +681,80 @@
         return $(this);
     };
 })(jQuery);
+
+// Telemetry
+function getChartID() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('chart') ?? '';
+}
+
+const groupId = getChartID();
+
+const chartTypes = document.querySelector('#viz-types-form')
+if( chartTypes ) {
+    console.log('init', 'chart-create');
+    document.querySelector('.push-right[type=submit]')?.addEventListener('click', function () {
+        try {
+            const formData = new FormData(document.querySelector('#viz-types-form'));
+            const savedData = Object.fromEntries(formData);
+        
+            tiTrk?.with('visualizer')?.add({
+                feature: 'chart-create',
+                featureComponent: 'saved-data',
+                featureData: {
+                    type: savedData?.['type'],
+                    library: savedData?.['chart-library']
+                },
+                groupId
+            });
+            tiTrk?.uploadEvents();
+        } catch (_) {
+            // NOTE: Suppress errors from showing in Console. Since the event is send at the same time as the form submission, the request might not get the confirmation, but the data is still sent.
+        }
+    });
+}
+
+[
+    {
+        selector: '#editor-button',
+        featureComponent: 'source-manual-data'
+    },
+    {
+        selector: '#vz-import-file',
+        featureComponent: 'source-import-csv-file'
+    },
+    {
+        selector: '#vz-save-schedule',
+        featureComponent: 'source-import-csv-remote'
+    },
+    {
+        selector: '#visualizer-json-fetch',
+        featureComponent: 'source-import-json-remote'
+    },
+    {
+        selector: '#existing-chart',
+        featureComponent: 'source-import-chart'
+    },
+    {
+        selector: '#filter-chart-button',
+        featureComponent: 'source-import-wordpress',
+    },
+    {
+        selector: '#woo-chart-button',
+        featureComponent: 'source-import-woocommerce'
+    },
+    {
+        selector: '#db-chart-button',
+        featureComponent: 'source-import-database'
+    }
+].forEach(({ selector, featureComponent }) => {
+    document.querySelector(selector)?.addEventListener('click', function () {
+        console.log('clicked', selector);
+        tiTrk?.with('visualizer')?.set('used-source',{
+            feature: 'chart-edit-used-source',
+            featureComponent,
+            groupId
+        });
+    });
+});
+
