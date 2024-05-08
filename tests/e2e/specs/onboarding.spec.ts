@@ -73,7 +73,7 @@ test.describe( 'Onboarding', () => {
 
         // Step 5
         await expect(page.getByRole('heading')).toContainText('Updates, tutorials, special offers, and more');
-        await expect(page.getByLabel('Updates, tutorials, special')).toContainText('Get exclusive access of Visualizer newsletter');
+        await expect(page.getByLabel('Updates, tutorials, special')).toContainText('Get exclusive access to the Visualizer newsletter.');
         await expect(page.getByLabel('Updates, tutorials, special').locator('img')).toBeVisible();
         await expect(page.getByPlaceholder('test1@xx.com')).toBeVisible();
         await page.getByPlaceholder('test1@xx.com').click();
