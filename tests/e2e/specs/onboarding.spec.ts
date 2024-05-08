@@ -54,7 +54,7 @@ test.describe( 'Onboarding', () => {
         await page.getByRole('button', { name: 'Continue ' }).click();
 
         // Step 3
-        await expect(page.getByRole('heading')).toContainText('Insert chart into the draft page');
+        await expect(page.getByRole('heading')).toContainText('Insert a chart into the draft page');
         await expect(page.getByRole('button', { name: 'Create a draft page We will' })).toBeVisible();
         await page.getByRole('button', { name: 'Create a draft page We will' }).click();
         await expect(page.getByRole('heading', { name: 'Chart preview' })).toBeVisible();
