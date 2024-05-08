@@ -40,8 +40,15 @@
 			}
         }
 
-        $('#settings-button').click(function() {
-			$('#settings-form').submit();
+        document.getElementById('settings-button').addEventListener('click', function() {
+			// Get the chart id from URL param chart. Use modern URLSearchParams if available.
+			var urlParams = new URLSearchParams(window.location.search);
+			var chartID = urlParams.get('chart');
+			if ( chartID ) {
+				window.parent.postMessage({ chartID: chartID}, '*');
+			}
+
+			document.getElementById('settings-form').submit();
 		});
 
         // this portion captures if the settings have changed so that tabs can handle that information.

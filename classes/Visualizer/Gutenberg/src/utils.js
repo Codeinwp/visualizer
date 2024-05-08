@@ -192,3 +192,65 @@ export const getColorCode = ( color ) => {
 
 // Google Chart Packages
 export const googleChartPackages = [ 'corechart', 'geochart', 'gauge', 'table', 'timeline', 'controls' ];
+
+/**
+ * This function extends the wp.media.view.MediaFrame class to create a custom frame for Visualizer Charts creation/editing.
+ *
+ * @returns {wp.media.view.MediaFrame} The extended MediaFrame object.
+ *
+ * @example
+ *
+ * const popupBuilder = initChartPopup();
+ * const popup = new popupBuilder();
+ * popup.open();
+ */
+export const buildChartPopup = () => {
+    return wp.media.view.MediaFrame.extend(
+        {
+            initialize: function() {
+                const self = this;
+
+                _.defaults(
+                    self.options, {
+                        action: '',
+                        id: 'visualizer',
+                        state: 'iframe:visualizer',
+                        title: 'Visualizer'
+                    }
+                );
+
+                wp.media.view.MediaFrame.prototype.initialize.apply( self, arguments );
+
+                wp.media.view.settings.tab = 'Visualizer';
+                wp.media.view.settings.tabUrl = self.options.action;
+                self.createIframeStates();
+            },
+
+            createIframeStates: function( passedOptions ) {
+                const self = this;
+                wp.media.view.MediaFrame.prototype.createIframeStates.apply( self, arguments );
+
+                self.state( self.options.state ).set(
+                    _.defaults(
+                        {
+                            tab: self.options.id,
+                            src: self.options.action + '&tab=' + self.options.id,
+                            title: self.options.title,
+                            content: 'iframe',
+                            menu: 'default'
+                        }, passedOptions
+                    )
+                );
+
+            },
+
+            open: function() {
+                try {
+                    wp.media.view.MediaFrame.prototype.open.apply( this, arguments );
+                } catch ( error ) {
+                    console.error( error );
+                }
+            }
+        }
+    );
+};

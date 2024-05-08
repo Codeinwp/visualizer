@@ -7,7 +7,7 @@ import ChartSelect from './Components/ChartSelect.js';
 
 import ChartRender from './Components/ChartRender.js';
 
-import { CSVToArray } from './utils.js';
+import { CSVToArray, buildChartPopup } from './utils.js';
 
 /**
  * WordPress dependencies
@@ -72,8 +72,7 @@ class Editor extends Component {
 			chart: null,
 			isModified: false,
 			isLoading: false,
-			isScheduled: false,
-			createChartInterval: null
+			isScheduled: false
 		};
 	}
 
@@ -96,10 +95,6 @@ class Editor extends Component {
                 });
             }
 		}
-	}
-
-	componentWillUnmount() {
-		clearInterval( this.state.createChartInterval );
 	}
 
 	async getChart( id ) {
@@ -463,26 +458,31 @@ class Editor extends Component {
 	}
 
 	/**
-	 * Open a popup to create a new chart from the library. After closing the popup, show the charts list.
+	 * Create a new chart via popup.
 	 *
 	 * @returns {void}
 	 */
 	async createChart() {
-		const createChartPopup = window.open( visualizerLocalize.createChart, 'visualizerChartCreation', 'top=100,left=100,width=1400,height=800' );
 
-		if ( ! createChartPopup ) {
-			return;
-		}
+		// Use the same popup like in Chart Library.
+		const createChartPopup = new ( buildChartPopup() )({
+			action: visualizerLocalize.createChart
+		});
 
-		const interval = setInterval( () => {
-			if ( createChartPopup.closed ) {
-				clearInterval( interval );
-				this.setState({ route: 'showCharts' });
-				this.props.setAttributes({ route: 'showCharts' });
+		// eslint-disable-next-line camelcase
+		window.send_to_editor = () => {
+			createChartPopup.close();
+		};
+
+		window.parent.addEventListener( 'message', ( event ) => {
+			if ( 'visualizer:mediaframe:close' === event.data ) {
+				createChartPopup.close();
+			} else if ( event.data.chartID ) {
+				this.getChart( event.data.chartID );
 			}
-		}, 1000 );
+		}, false );
 
-		this.setState({ createChartInterval: interval });
+		createChartPopup.open();
 	}
 
 	render() {

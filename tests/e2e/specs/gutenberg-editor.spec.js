@@ -34,17 +34,14 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         
         await expect( page.getByText('Make a new chart or display') ).toBeVisible();
         await expect( page.getByLabel('Editor content').locator('a') ).toBeVisible();
-        
-        const popupOpened = new Promise(resolve => {
-            page.on('popup', async () => {
-                resolve(true);
-            });
-        });
 
         await page.getByLabel('Editor content').locator('a').click({ force: true});
 
-        // Check if a new page is opened for chart creation.
-        expect(await popupOpened).toBe(true);
+        // Create chart via popup.
+        await page.frameLocator('iframe').getByRole('button', { name: 'Next' }).click();
+        await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
+        
+        await expect( page.getByRole('button', { name: 'Save', exact: true }) ).toBeVisible();
     } );
 
     test( 'insert an existing chart', async ( { admin, page, editor } ) => {
