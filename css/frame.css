@@ -504,6 +504,7 @@ div.viz-group-content .viz-group-description {
 	background-position: center center;
 	background-size: 900px 1150px;
 	filter: grayscale(100%);
+	cursor: pointer;
 }
 
 #type-picker.lib-ChartJS .type-label {

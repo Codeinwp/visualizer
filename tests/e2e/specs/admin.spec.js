@@ -139,6 +139,22 @@ test.describe( 'Chart Library', () => {
         // The Create Chart button should be not exists since we skipped the second step.
         expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
     } );
+
+    test( 'chart filtering', async ( { admin, page } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForSelector('h1:text("Visualizer")');
+
+        await page.frameLocator('iframe').locator('label').filter({ hasText: 'Pie/Donut' }).click();
+        
+        await expect( page.frameLocator('iframe').getByRole('combobox').locator('option').first() ).toBeDisabled(); // Placeholder is disabled.
+        
+        expect( page.locator('.viz-hidden') ).toHaveCount(0) // No hidden charts by default.
+        
+        await page.frameLocator('iframe').getByRole('combobox').selectOption({ value: 'ChartJS' });
+        
+        await expect( page.frameLocator('iframe').locator('.viz-hidden').count() ).resolves.toBeGreaterThan( 0 ); // We should have hidden charts.
+    });
 } );
 
 test.describe( 'Support', () => {
