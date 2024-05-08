@@ -119,15 +119,14 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		$libraries = array_unique( $libraries );
 
 		if ( ! empty( $libraries ) ) {
-			?>
-		<select name="chart-library" class="viz-select-library<?php echo ! Visualizer_Module_Admin::proFeaturesLocked() && ! defined( 'TI_CYPRESS_TESTING' ) ? ' viz-hide-library' : ''; ?><?php echo Visualizer_Module_Admin::proFeaturesLocked() ? ' viz-pro-enabled' : ''; ?>" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) ); ?>">
-			<?php foreach ( $libraries as $library ) { ?>
-				<option value="<?php echo $this->_removeSpaceFromLibrary( $library ); ?>"><?php echo $library; ?></option>
-			<?php } ?>
-		</select>
-			<?php
-		}
 		?>
+			<select name="chart-library" class="viz-select-library" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) ); ?>">
+				<option value="" id="library-select-placeholder"><?php esc_html_e( 'Use Library', 'visualizer' ); ?></option>
+				<?php foreach ( $libraries as $library ) { ?>
+					<option value="<?php echo $this->_removeSpaceFromLibrary( $library ); ?>"><?php echo $library; ?></option>
+				<?php } ?>
+			</select>
+		<?php } ?>
 		<input type="submit" class="button button-primary button-large push-right" value="<?php esc_attr_e( 'Next', 'visualizer' ); ?>">
 		<input type="button" class="button button-secondary button-large push-right viz-abort" value="<?php esc_attr_e( 'Cancel', 'visualizer' ); ?>">
 		<?php
