@@ -119,7 +119,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		$libraries = array_unique( $libraries );
 
 		if ( ! empty( $libraries ) ) {
-		?>
+			?>
 			<select name="chart-library" class="viz-select-library" data-type-vs-library="<?php echo esc_attr( json_encode( $type_vs_library ) ); ?>">
 				<option value="" id="library-select-placeholder"><?php esc_html_e( 'Use Library', 'visualizer' ); ?></option>
 				<?php foreach ( $libraries as $library ) { ?>
