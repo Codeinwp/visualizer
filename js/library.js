@@ -33,6 +33,79 @@
     });
 })(wp.media.view);
 
+function createPopup() {
+    if ( visualizer.is_pro ) {
+        return;
+    }
+
+    var popup = document.createElement('div');
+
+
+    popup.style.display = 'none';
+    popup.style.position = 'fixed';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.backgroundColor = '#fff';
+    popup.style.padding = '20px';
+    popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.2)';
+    popup.style.zIndex = '1000';
+
+
+    var heading = document.createElement('h2');
+    heading.textContent = 'Alert';
+    heading.style.color = 'red';
+    heading.style.textAlign = 'left';
+    heading.style.marginBottom = '10px';
+    popup.appendChild(heading);
+
+
+    var message = document.createElement('p');
+    message.textContent = 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.';
+    message.style.wordWrap = 'break-word';
+    message.style.width = '250px';
+    popup.appendChild(message);
+
+
+    var buttonsContainer = document.createElement('div');
+    buttonsContainer.style.display = 'grid';
+    buttonsContainer.style.gridTemplateColumns = '1fr'; // Single column layout
+    buttonsContainer.style.gap = '10px';
+    buttonsContainer.style.textAlign = 'center';
+    buttonsContainer.style.marginTop = '20px';
+
+
+    var link1 = document.createElement('a');
+    link1.href = 'https://store.themeisle.com/';
+    link1.target = '_blank';
+    var button1 = document.createElement('button');
+    button1.textContent = 'Renew License';
+    button1.style.padding = '10px 20px';
+    button1.style.cursor = 'pointer';
+    button1.style.backgroundColor = 'blue';
+    button1.style.color = 'white';
+    link1.appendChild(button1);
+    buttonsContainer.appendChild(link1);
+
+
+    var link2 = document.createElement('a');
+    link2.href = '/wp-admin/options-general.php#visualizer_pro_license';
+    var button2 = document.createElement('button');
+    button2.textContent = 'Activate License';
+    button2.style.padding = '10px 20px';
+    button2.style.cursor = 'pointer';
+    button2.style.backgroundColor = 'green';
+    button2.style.color = 'white';
+    link2.appendChild(button2);
+    buttonsContainer.appendChild(link2);
+
+   popup.appendChild(buttonsContainer);
+
+    document.body.appendChild(popup);
+
+    popup.style.display = 'block';
+}
+
 (function ($, vmv, vu) {
     var resizeTimeout;
 
@@ -164,6 +237,7 @@
         });
 
         $(".visualizer-chart-image").on("click", function () {
+            createPopup();
             $('body').trigger('visualizer:action:specificchart', {action: 'image', id: $(this).attr("data-chart"), data: null, dataObj: {name: $(this).attr("data-chart-title")}});
             return false;
         });
