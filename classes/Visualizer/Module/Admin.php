@@ -76,7 +76,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->_addAction( 'visualizer_chart_languages', 'addMultilingualSupport' );
 
-		$this->_addFilter( 'admin_footer_text', 'render_review_notice', null, 10, 2 );
+		$this->_addFilter( 'admin_footer_text', 'render_review_notice' );
 
 		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
 			$this->load_cypress_hooks();
