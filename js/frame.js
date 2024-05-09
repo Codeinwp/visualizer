@@ -681,3 +681,12 @@
         return $(this);
     };
 })(jQuery);
+
+document.querySelector('#viz-copy-shortcode')?.addEventListener('click', function() {
+    var copyText = document.querySelector('#viz-shortcode')?.value;
+    if ( !copyText ) {
+        return;
+    }
+
+    navigator.clipboard.writeText(copyText);
+});
