@@ -86,18 +86,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	/**
 	 * Display review notice.
 	 */
-	public function render_review_notice ( $footer_text ) {
+	public function render_review_notice( $footer_text ) {
 		$current_screen = get_current_screen();
 
 		$visualizer_page_ids = ['toplevel_page_visualizer', 'visualizer_page_viz-support', 'visualizer_page_ti-about-visualizer' ];
 
-		if ( !empty( $current_screen ) && isset( $current_screen->id ) ) {
+		if ( ! empty( $current_screen ) && isset( $current_screen->id ) ) {
 			foreach ( $visualizer_page_ids as $page_to_check ) {
-				if ( strpos($current_screen->id, $page_to_check ) !== false) {
+				if ( strpos($current_screen->id, $page_to_check ) !== false ) {
 					$footer_text = sprintf(
-						__('Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer'),
+						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
 						'<b>Visualizer</b>',
-						'<strong>' . esc_html__('You can help us by leaving a', 'visualizer') . '</strong>',
+						'<strong>' . esc_html__( 'You can help us by leaving a', 'visualizer' ) . '</strong>',
 						'<a href="https://wordpress.org/support/plugin/visualizer/reviews/" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
 					);
 					break;
