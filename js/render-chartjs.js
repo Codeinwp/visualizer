@@ -25,7 +25,6 @@
         data = chart.data;
         settings = chart.settings;
 
-        console.log(settings);
         container = document.getElementById(id);
         if (container == null) {
             return;
