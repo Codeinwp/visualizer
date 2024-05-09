@@ -32,6 +32,8 @@ const { startCase } = lodash;
 
 const { __ } = wp.i18n;
 
+const { apiFetch } = wp;
+
 const {
 	Button
 } = wp.components;
@@ -145,6 +147,23 @@ class ChartSelect extends Component {
 					action: `${baseURL}?action=visualizer-edit-chart&library=yes&chart=` + chartId
 				}
 			);
+			const updateChartState = async() => {
+				await this.setState({
+					isLoading: 'getChart'
+				});
+
+				let result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
+				await this.props.editSettings( result['chart_data']['visualizer-settings']);
+				await this.props.getChartData( chartId );
+
+				await this.setState({ route: 'home', chart: result['chart_data'], isModified: true, isLoading: true });
+			};
+			// eslint-disable-next-line camelcase
+			window.send_to_editor = function() {
+				updateChartState().then( () => {
+					view.close();
+				});
+			};
 
 			view.open();
 		};
