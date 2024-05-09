@@ -93,7 +93,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		if ( ! empty( $current_screen ) && isset( $current_screen->id ) ) {
 			foreach ( $visualizer_page_ids as $page_to_check ) {
-				if ( strpos($current_screen->id, $page_to_check ) !== false ) {
+				if ( strpos( $current_screen->id, $page_to_check ) !== false ) {
 					$footer_text = sprintf(
 						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
 						'<b>Visualizer</b>',
