@@ -114,7 +114,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			return;
 		}
 
-        $is_new_personal = apply_filters( 'visualizer_is_new_personal', false );
+		$is_new_personal = apply_filters( 'visualizer_is_new_personal', false );
 
 		$hours = array(
 			'0' => __( 'Live', 'visualizer' ),
