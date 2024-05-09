@@ -25,6 +25,7 @@
         data = chart.data;
         settings = chart.settings;
 
+        console.log(settings);
         container = document.getElementById(id);
         if (container == null) {
             return;
@@ -199,10 +200,6 @@
             settings['animation']['duration'] = 1000;
         }
 
-        if(typeof settings['title'] !== 'undefined' && settings['title']['text'] !== ''){
-            settings['title']['display'] = true;
-        }
-
         if(typeof settings['tooltip'] !== 'undefined' && typeof settings['tooltip']['intersect'] !== 'undefined'){
             // jshint ignore:line
             settings['tooltip']['intersect'] = settings['tooltip']['intersect'] == true || parseInt(settings['tooltip']['intersect']) === 1;  // jshint ignore:line
@@ -230,6 +227,12 @@
         settings.plugins = {
             legend: settings.legend,
         };
+
+        if(typeof settings['title'] !== 'undefined' && settings['title']['text'] !== ''){
+            settings.plugins['title'] = {};
+            settings.plugins['title']['display'] = true;
+            settings.plugins['title']['text'] = settings['title']['text'];
+        }
 
         handleAxes(settings, chart);
 
@@ -272,7 +275,7 @@
                 if(Array.isArray(settings[axis][i]) || typeof settings[axis][i] === 'object'){
                     for(var j in settings[axis][i]){
                         var $val = '';
-                        if(j === 'labelString'){ 
+                        if(j === 'labelString'){
                             $o['display'] = true;
                             $val = settings[axis][i][j];
                         }else if(i === 'ticks'){
