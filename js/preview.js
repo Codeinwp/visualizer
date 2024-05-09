@@ -81,7 +81,7 @@
 		/**
 		 * Capture feature usage.
 		 */
-		function trackSavedData() {
+		async function trackSavedData() {
 			const savedData = captureFormData();
 
 			// Remove default values.
@@ -111,23 +111,27 @@
 
 			const urlParams = new URLSearchParams(window.location.search);
 
-			tiTrk?.with('visualizer')?.add({
+			window?.tiTrk?.with('visualizer')?.add({
 				feature: 'chart-edit',
 				featureComponent: 'saved-data',
 				featureData,
 				groupId: urlParams.get('chart') ?? ''
 			});
 
-			tiTrk?.uploadEvents();
+			// Do not make the user to wait too long for the event to be uploaded.
+			const timer = new Promise((resolve) => setTimeout(resolve, 500));
+			await Promise.race([timer, window?.tiTrk?.uploadEvents()]);
 		}
 
-		document.querySelector('#settings-button')?.addEventListener('click', function() {
-			try {
-				trackSavedData();
-			} catch (error) {
-				console.error(error);
+		document.querySelector('#settings-button')?.addEventListener('click', async function() {
+			if( typeof window.tiTrk !== 'undefined' ) {
+				try {
+					await trackSavedData();
+				} catch (e) {
+					console.warn(e);
+				}
 			}
-			// $('#settings-form').submit();
+			$('#settings-form').submit();
 		});
 
         // this portion captures if the settings have changed so that tabs can handle that information.
