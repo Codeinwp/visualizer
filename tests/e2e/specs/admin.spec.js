@@ -126,14 +126,14 @@ test.describe( 'Chart Library', () => {
         }
     } );
 
-    test( 'skip second step of chart creation', async ( { admin, page } ) => {
+    test( 'cancel second step of chart creation', async ( { admin, page } ) => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
         await page.waitForSelector('h1:text("Visualizer")');
         
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
 
-        await page.frameLocator('iframe').getByRole('button', { name: 'Skip' }).click();
+        await page.frameLocator('iframe').getByRole('button', { name: 'Cancel' }).click();
         await waitForLibraryToLoad( page );
        
         // The Create Chart button should be not exists since we skipped the second step.
