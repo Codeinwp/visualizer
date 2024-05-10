@@ -206,7 +206,7 @@ function createPopup() {
 
         $('.visualizer-chart-shortcode').click(function (e) {
 
-            if ( ! visualizer.is_pro_user ) {
+            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
                 createPopup();
                 e.preventDefault();
                 e.stopPropagation();
@@ -264,7 +264,7 @@ function createPopup() {
 
         $('.visualizer-chart-edit').click(function () {
 
-            if ( ! visualizer.is_pro_user ) {
+            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
                 createPopup();
                 return;
             }
@@ -284,7 +284,7 @@ function createPopup() {
             return false;
         });
         $(".visualizer-chart-clone").on("click", function ( event ) {
-            if ( ! visualizer.is_pro_user ) {
+            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
                 createPopup();
                 event.preventDefault();
             }
@@ -292,7 +292,7 @@ function createPopup() {
 
         $(".visualizer-chart-export").on("click", function () {
 
-            if ( ! visualizer.is_pro_user ) {
+            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
                 createPopup();
                 return;
             }
@@ -318,7 +318,7 @@ function createPopup() {
         });
 
         $(".visualizer-chart-image").on("click", function () {
-            if ( ! visualizer.is_pro_user ) {
+            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
                 createPopup();
                 return;
             }
