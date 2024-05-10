@@ -174,6 +174,21 @@
         const rendererTypesMapping = JSON.parse( rendererTypesMappingData );
 
         document.querySelectorAll('input.type-radio').forEach( chartTypeRadio => {
+
+            // Init the lib based on the default selected chart type.
+            if ( chartTypeRadio.checked ) {
+                const chartType = chartTypeRadio.value;
+                if ( ! chartType ) {
+                    return;
+                }
+
+                const selectedRenderer = rendererSelect.value;
+                if ( ! rendererTypesMapping[chartType]?.includes( selectedRenderer ) ) {
+                    disable_renderer_select_placeholder();
+                    rendererSelect.value = rendererTypesMapping[chartType][0]
+                }
+            }
+            
             chartTypeRadio.addEventListener('click', (event) => {
                 // Check if the chart type is supported by the selected renderer. If not, select the first supported renderer.
                 const chartType = event.target.value;

@@ -2,6 +2,11 @@ import isPlainObject from 'is-plain-object';
 
 import deepFilter from 'deep-filter';
 
+// Import WordPress dependencies
+const {
+	apiFetch
+} = wp;
+
 // Format Date of Chart Data
 export const formatDate = ( data ) => {
 	Object.keys( data['visualizer-series']).map( i => {
@@ -192,3 +197,95 @@ export const getColorCode = ( color ) => {
 
 // Google Chart Packages
 export const googleChartPackages = [ 'corechart', 'geochart', 'gauge', 'table', 'timeline', 'controls' ];
+
+/**
+ * This function extends the wp.media.view.MediaFrame class to create a custom frame for Visualizer Charts creation/editing.
+ *
+ * @returns {wp.media.view.MediaFrame} The extended MediaFrame object.
+ *
+ * @example
+ *
+ * const popupBuilder = buildChartPopup;
+ * const popup = new popupBuilder();
+ * popup.open();
+ */
+export const buildChartPopup = () => {
+    return wp.media.view.MediaFrame.extend(
+        {
+            initialize: function() {
+                const self = this;
+
+                _.defaults(
+                    self.options, {
+                        action: '',
+                        id: 'visualizer',
+                        state: 'iframe:visualizer',
+                        title: 'Visualizer'
+                    }
+                );
+
+                wp.media.view.MediaFrame.prototype.initialize.apply( self, arguments );
+
+                wp.media.view.settings.tab = 'Visualizer';
+                wp.media.view.settings.tabUrl = self.options.action;
+                self.createIframeStates();
+            },
+
+            createIframeStates: function( passedOptions ) {
+                const self = this;
+                wp.media.view.MediaFrame.prototype.createIframeStates.apply( self, arguments );
+
+                self.state( self.options.state ).set(
+                    _.defaults(
+                        {
+                            tab: self.options.id,
+                            src: self.options.action + '&tab=' + self.options.id,
+                            title: self.options.title,
+                            content: 'iframe',
+                            menu: 'default'
+                        }, passedOptions
+                    )
+                );
+
+            },
+
+            open: function() {
+                try {
+                    wp.media.view.MediaFrame.prototype.open.apply( this, arguments );
+                } catch ( error ) {
+                    console.error( error );
+                }
+            }
+        }
+    );
+};
+
+/**
+ * Try to get the chart data from the server.
+ *
+ * If the status is not 'publish', it will retry.
+ *
+ * @param {number|string} chartId The chart ID.
+ * @returns {Promise<{result: Object, status: string}>} The chart data and status.
+ */
+export async function tryGetPublishedChartData( chartId ) {
+    let result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
+    const numRetries = 8;
+
+    let attempt = 0;
+    while (
+        result &&
+        undefined !== result.status &&
+        'publish' !== result.status &&
+        numRetries > attempt
+    ) {
+        await new Promise( resolve => setTimeout( resolve, 750 ) );
+        result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
+        attempt++;
+    }
+
+    return {
+        result: result,
+        chartStatus: result.status ? result.status : 'auto-draft'
+    };
+}
