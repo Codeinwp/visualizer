@@ -156,8 +156,7 @@ test.describe( 'Chart Library', () => {
         await page.frameLocator('iframe').getByRole('button', { name: 'Copy' }).click();
         const clipboardValue = await page.evaluate(() => navigator.clipboard.readText());
         expect( clipboardValue ).toBe( shortcode );
-
-        // Check two-way binding of the internal name.
+        
         const backendName = 'Test Backend Name';
         const chartName   = 'Test Chart Name';
         
@@ -171,7 +170,7 @@ test.describe( 'Chart Library', () => {
 
         await page.frameLocator('iframe').locator('input[name="title"]').fill(chartName);
         const internalNameValue = await page.frameLocator('iframe').locator('#viz-backend-name').inputValue();
-        expect( internalNameValue ).not.toBe( chartName );
+        expect( internalNameValue ).not.toBe( chartName ); // Backend title should not be changed by chart title.
 
         await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
         await waitForLibraryToLoad( page );
