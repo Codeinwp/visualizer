@@ -97,7 +97,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					$footer_text = sprintf(
 						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
 						'<b>Visualizer</b>',
-						 esc_html__( 'You can help us by leaving a', 'visualizer' ),
+						esc_html__( 'You can help us by leaving a', 'visualizer' ),
 						'<a href="https://wordpress.org/support/plugin/visualizer/reviews/" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
 					);
 					break;
