@@ -124,11 +124,11 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		$hours = array(
-			'0' => __( 'Live', 'visualizer' ),
-			'1'  => __( 'Each hour', 'visualizer' ),
-			'12' => __( 'Each 12 hours', 'visualizer' ),
-			'24' => __( 'Each day', 'visualizer' ),
-			'72' => __( 'Each 3 days', 'visualizer' ),
+			'0.16' => __( '10 minutes', 'visualizer' ),
+			'1'    => __( 'Each hour', 'visualizer' ),
+			'12'   => __( 'Each 12 hours', 'visualizer' ),
+			'24'   => __( 'Each day', 'visualizer' ),
+			'72'   => __( 'Each 3 days', 'visualizer' ),
 		);
 
 		switch ( $feature ) {
