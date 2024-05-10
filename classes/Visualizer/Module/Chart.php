@@ -752,7 +752,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'dragDrop'          => false,
 						'matchBrackets'     => true,
 						'autoCloseBrackets' => true,
-						'extraKeys'         => array( 'Ctrl-Space' => 'autocomplete' ),
+						'extraKeys'         => array( 'Shift-Space' => 'autocomplete' ),
 						'hintOptions'       => array( 'tables' => $table_col_mapping ),
 					),
 				)
@@ -1430,8 +1430,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$params     = wp_parse_args( $_POST['params'] );
 		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
+		$query      = trim( $params['query'], ';' );
 
-		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
+		$source     = new Visualizer_Source_Query( stripslashes( $query ), $chart_id, $params );
 		$html       = $source->fetch( true );
 		$error      = $source->get_error();
 		if ( ! empty( $error ) ) {
@@ -1478,11 +1479,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render = new Visualizer_Render_Page_Update();
 		if ( $chart_id ) {
 			$params     = wp_parse_args( $_POST['params'] );
-			$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
+			$query      = trim( $params['query'], ';' );
+			$source     = new Visualizer_Source_Query( stripslashes( $query ), $chart_id, $params );
 			$source->fetch( false );
 			$error      = $source->get_error();
 			if ( empty( $error ) ) {
-				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, stripslashes( $params['query'] ) );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, stripslashes( $query ) );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );
