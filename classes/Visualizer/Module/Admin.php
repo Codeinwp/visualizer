@@ -404,12 +404,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie/Donut', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => $enabled ? array( 'Google Charts', 'ChartJS' ) : array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => $enabled ? array( 'Google Charts', 'ChartJS' ) : array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'bar'         => array(
 					'name'    => esc_html__( 'Bar', 'visualizer' ),

@@ -145,7 +145,7 @@
             $('#cancel-form').submit();
         });
 
-        init_type_vs_library();
+        init_available_chart_list();
 
         $('.viz-abort').on('click', function(e){
             e.preventDefault();
@@ -154,27 +154,93 @@
 
     }
 
-    function init_type_vs_library() {
-        var $data = $('select.viz-select-library').attr('data-type-vs-library');
-        if(typeof $data === 'undefined' || $data.length === 0){
+    /**
+     * Initialize/Update the available chart list based on their supported renderer libraries.
+     * 
+     * @returns {void}
+     */
+    function init_available_chart_list() {
+        const rendererSelect = document.querySelector('select.viz-select-library');
+        if ( ! rendererSelect ) {
             return;
         }
-        var $typeVsLibrary = JSON.parse( $('select.viz-select-library').attr('data-type-vs-library') );
-        // disable all unsupported libraries for the chart type.
-        $('input.type-radio').on('click', function(){
-            enable_libraries_for($(this).val(), $typeVsLibrary);
-        });
 
-        enable_libraries_for($('input.type-radio:checked').val(), $typeVsLibrary);
+        const rendererTypesMappingData = rendererSelect?.getAttribute('data-type-vs-library');
+        if( ! rendererTypesMappingData ) {
+            return;
+        }
+
+        /** @type {Record<string, ('GoogleCharts' | 'ChartJS' | 'DataTable')[]>} */
+        const rendererTypesMapping = JSON.parse( rendererTypesMappingData );
+
+        document.querySelectorAll('input.type-radio').forEach( chartTypeRadio => {
+            chartTypeRadio.addEventListener('click', (event) => {
+                // Check if the chart type is supported by the selected renderer. If not, select the first supported renderer.
+                const chartType = event.target.value;
+                if ( ! chartType ) {
+                    return;
+                }
+
+                const selectedRenderer = rendererSelect.value;
+                if ( ! rendererTypesMapping[chartType]?.includes( selectedRenderer ) ) {
+                    disable_renderer_select_placeholder();
+                    rendererSelect.value = rendererTypesMapping[chartType][0]
+                }
+            });
+        });
+       
+        // Update the chart list on user interaction.
+        rendererSelect.addEventListener('change', (event) => {
+            disable_renderer_select_placeholder();
+            toggle_renderer_type( event.target.value );
+            toggle_chart_types_by_render( event.target.value );
+        });
+        
     }
 
-    function enable_libraries_for($type, $typeVsLibrary) {
-        $('select.viz-select-library option').addClass('disabled').attr('disabled', 'disabled');
-        var $libs = $typeVsLibrary[$type];
-        $.each($libs, function( i, $lib ) {
-            $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
+    /**
+     * Disable the placeholder option in the renderer select.
+     */
+    function disable_renderer_select_placeholder() {
+        const placeholderOption = document.querySelector('#library-select-placeholder');
+        if ( placeholderOption && placeholderOption.disabled === false ) {
+            placeholderOption.disabled = true;
+        }
+    }
+
+    /**
+     * Toggle the renderer type class based on the given renderer type.
+     * 
+     * The class is used to style the chart type picker based on the given renderer library.
+     * 
+     * @param {('GoogleCharts' | 'ChartJS' | 'DataTable')} rendererType The renderer type to toggle the class.
+     */
+    function toggle_renderer_type( rendererType ) {
+        const typePicker = document.querySelector('#type-picker');
+        if ( ! typePicker ) {
+            return;
+        }
+        
+        typePicker.classList.remove('lib-GoogleCharts', 'lib-ChartJS', 'lib-DataTable');
+        typePicker.classList.add(`lib-${rendererType}`);
+    }
+
+    /**
+     * Toggle chart types based on the given renderer type.
+     * 
+     * @param {('GoogleCharts' | 'ChartJS' | 'DataTable')} rendererType The renderer type to filter the chart types.
+     */
+    function toggle_chart_types_by_render( rendererType ) {
+        document.querySelectorAll('.type-box').forEach( typeBox => {
+            const hasLib = typeBox.classList.contains(`type-lib-${rendererType}`);
+            typeBox.classList.toggle('viz-hidden', ! hasLib );
+
+            // Reset unavailable chart type selection.
+            const chartOption = typeBox.querySelector('input[type="radio"]');
+            if ( ! hasLib && chartOption?.checked ) {
+                chartOption.checked = false;
+            }
         });
-        $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
     }
 
     function init_permissions(){
