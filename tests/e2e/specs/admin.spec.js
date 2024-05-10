@@ -19,9 +19,9 @@ test.describe( 'Chart Library', () => {
     test( 'check Add New button', async ( { page} ) => {
         await expect(page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link')).toBeVisible();
     } );
-    
+
     test( 'check filters options', async ( { page } ) => {
-        
+
         // CHART TYPE FILTER
         await expect( page.locator('select[name="type"]') ).toBeVisible();
         await expect( page.locator('select[name="type"] option').count() ).resolves.toBe( 15 + 1 );
@@ -33,7 +33,7 @@ test.describe( 'Chart Library', () => {
         for (const option of libraryOptions) {
             await expect( page.locator('select[name="library"] option').filter({ hasText: option }).count() ).resolves.toBe( 1 );
         }
-        
+
         // DATE FILTER
         const dateOptions = ['Yesterday', 'Last Week', 'Last Month', 'Last Year', 'All dates'];
         await expect( page.locator('select[name="date"]') ).toBeVisible();
@@ -41,7 +41,7 @@ test.describe( 'Chart Library', () => {
         for (const option of dateOptions) {
             await expect( page.locator('select[name="date"] option').filter({ hasText: option }).count() ).resolves.toBe( 1 );
         }
-        
+
         // SOURCES FILTER
         const sourcesOptions = ['All sources', 'Database', 'JSON', 'Local CSV', 'Remote CSV', 'WordPress'];
         await expect( page.locator('select[name="source"]') ).toBeVisible();
@@ -78,6 +78,14 @@ test.describe( 'Chart Library', () => {
         const chartId = await createChartWithAdmin( admin, page );
         await admin.visitAdminPage( 'admin.php?page=visualizer' );
         await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBeGreaterThan( 0 );
+
+        // Check shortcode generated.
+        const chartContainer = page.locator(`.visualizer-chart`, { has: page.locator(`#visualizer-${chartId}`) });
+        expect( chartContainer ).toBeVisible();
+        await chartContainer.locator('a.visualizer-chart-shortcode').click();
+        let shortcodeClipboard = await page.evaluate("navigator.clipboard.readText()");
+        expect(shortcodeClipboard).toMatch(/\[visualizer\sid="\d+"\sclass=""]/);
+
     } );
 
     test('clone/duplicate a chart', async ( { page, admin } ) => {
@@ -86,7 +94,7 @@ test.describe( 'Chart Library', () => {
 
         // Count the current charts, then compare after cloning.
         const chartsCount = await page.locator('.visualizer-chart').count();
-        
+
         // Select the chart and clone it.
         const chartContainer = page.locator(`.visualizer-chart`, { has: page.locator(`#visualizer-${chartId}`) });
         expect( chartContainer ).toBeVisible();
@@ -94,24 +102,24 @@ test.describe( 'Chart Library', () => {
 
         await waitForLibraryToLoad( page );
         const newChartsCount = await page.locator('.visualizer-chart').count();
-        
+
         expect( newChartsCount ).toBeGreaterThan( chartsCount );
     } );
 
     test('delete a chart', async ( { page, admin } ) => {
         const chartId = await createChartWithAdmin( admin, page );
         await admin.visitAdminPage( 'admin.php?page=visualizer' );
-        
+
         await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBeGreaterThan( 0 );
 
         // Accept the dialog to delete the chart.
         page.on('dialog', dialog => dialog.accept());
-        
+
         // Select the chart and delete it.
         const chartContainer = page.locator(`.visualizer-chart`, { has: page.locator(`#visualizer-${chartId}`) });
         expect( chartContainer ).toBeVisible();
         await chartContainer.locator('a.visualizer-chart-delete').click({ timeout: 5000 });
-        
+
         await waitForLibraryToLoad( page );
         await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBe( 0 );
     } );
@@ -130,14 +138,69 @@ test.describe( 'Chart Library', () => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
         await page.waitForSelector('h1:text("Visualizer")');
-        
+
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
 
         await page.frameLocator('iframe').getByRole('button', { name: 'Cancel' }).click();
         await waitForLibraryToLoad( page );
-       
+
         // The Create Chart button should be not exists since we skipped the second step.
         expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
+    } );
+
+    test( 'chart filtering', async ( { admin, page } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForSelector('h1:text("Visualizer")');
+
+        await page.frameLocator('iframe').locator('label').filter({ hasText: 'Pie/Donut' }).click();
+        
+        await expect( page.frameLocator('iframe').getByRole('combobox').locator('option').first() ).toBeDisabled(); // Placeholder is disabled.
+        
+        expect( page.locator('.viz-hidden') ).toHaveCount(0) // No hidden charts by default.
+        
+        await page.frameLocator('iframe').getByRole('combobox').selectOption({ value: 'ChartJS' });
+        
+        await expect( page.frameLocator('iframe').locator('.viz-hidden').count() ).resolves.toBeGreaterThan( 0 ); // We should have hidden charts.
+    });
+
+    test( 'check info panel', async ( { admin, page } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForSelector('h1:text("Visualizer")');
+        
+        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
+
+        await expect( page.frameLocator('iframe').locator('#viz-shortcode') ).toBeVisible();
+        await expect( page.frameLocator('iframe').getByRole('button', { name: 'Copy' }) ).toBeVisible();
+        await expect( page.frameLocator('iframe').locator('#viz-backend-name') ).toBeVisible();
+        
+        // Check if the shortcode is copied to the clipboard.
+        const shortcode = await page.frameLocator('iframe').locator('#viz-shortcode').inputValue();
+        await page.frameLocator('iframe').getByRole('button', { name: 'Copy' }).click();
+        const clipboardValue = await page.evaluate(() => navigator.clipboard.readText());
+        expect( clipboardValue ).toBe( shortcode );
+        
+        const backendName = 'Test Backend Name';
+        const chartName   = 'Test Chart Name';
+        
+        await page.frameLocator('iframe').locator('#viz-backend-name').fill(backendName);
+        const titleValue = await page.frameLocator('iframe').locator('#settings-form input[name="backend-title"]').inputValue();
+        expect( titleValue ).toBe( backendName );
+
+        await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
+        await page.frameLocator('iframe').getByRole('heading', { name: 'General Settings' }).click();
+        await page.frameLocator('iframe').getByText('Title', { exact: true }).click();
+
+        await page.frameLocator('iframe').locator('input[name="title"]').fill(chartName);
+        const internalNameValue = await page.frameLocator('iframe').locator('#viz-backend-name').inputValue();
+        expect( internalNameValue ).not.toBe( chartName ); // Backend title should not be changed by chart title.
+
+        await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
+        await waitForLibraryToLoad( page );
+
+        await expect( page.getByText(backendName) ).toBeVisible();
+        await expect( page.locator('g').filter({ hasText: 'Test Chart Name' }).locator('rect') ).toBeVisible();
     } );
 } );
 

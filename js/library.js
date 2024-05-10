@@ -344,3 +344,27 @@ function createPopup() {
         $('.visualizer-chart:not(.visualizer-chart-display), .visualizer-library-pagination').fadeIn(500);
     });
 })(jQuery, visualizer.media.view, visualizer.urls);
+
+document.querySelectorAll('.visualizer-chart').forEach(function (chart) {
+    const translatable = chart.querySelector('.visualizer-languages-list');
+    if ( ! translatable ) {
+        return;
+    }
+
+    const chartId = chart.querySelector('.visualizer-chart-canvas')?.id?.replace('visualizer-', '');
+
+    if ( ! chartId ) {
+        return;
+    }
+
+    const translatableActions = translatable.querySelectorAll('[data-lang_code]');
+    translatableActions.forEach(function (action) {
+        action.addEventListener('click', function () {
+            window?.tiTrk?.with('visualizer')?.add({
+                feature: 'chart-library',
+                featureComponent: 'chart-language-translations-used',
+                groupId: chartId,
+            });
+        });
+    });
+});

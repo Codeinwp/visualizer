@@ -28,6 +28,13 @@
 class Visualizer_Render_Layout extends Visualizer_Render {
 
 	/**
+	 * Fallback time for live update option.
+	 *
+	 * @var float
+	 */
+	public static $live_option_fallback_hour = 0.16; // 10 minutes
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0
@@ -54,7 +61,17 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 * @access public
 	 */
 	public static function _renderDbQuery( $args ) {
+		global $wpdb;
 		$query      = $args[1];
+		if ( ! $query ) {
+			$query = '
+/* List Posts published per. month */
+SELECT CONCAT( YEAR(post_date), "/", MONTH(post_date) ) as date, COUNT(*) AS post_count
+FROM ' . $wpdb->prefix . 'posts
+WHERE post_type = "post" AND post_status = "publish"
+GROUP BY YEAR(post_date), MONTH(post_date)
+ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
+		}
 		?>
 		<div id='visualizer-db-query' style="display: none">
 			<div class="visualizer-db-query-form">
@@ -72,8 +89,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			</div>
 			<div class='db-wizard-hints'>
 				<ul>
+					<li><?php echo __( 'Your database prefix is:', 'visualizer' ); ?> <span class="visualizer-emboss"><?php echo $wpdb->prefix; ?></span></li>
 					<li><?php echo sprintf( __( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
-					<li><?php echo sprintf( __( 'Use %1$sControl+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
+					<li><?php echo sprintf( __( 'Use %1$sShift+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
 					<?php do_action( 'visualizer_db_query_add_hints', $args ); ?>
 				</ul>
 			</div>
@@ -583,7 +601,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 * @access public
 	 */
 	public static function _renderTabAdvanced( $args ) {
-		$sidebar = $args[2];
+		$chart_id = $args[1];
+		$sidebar  = $args[2];
+
+		$chart_options = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+		$backend_title = isset( $chart_options['backend-title'] ) && ! empty( $chart_options['backend-title'] ) ? $chart_options['backend-title'] : '';
+
 		?>
 			<ul class="viz-group-wrapper full-height">
 				<li class="viz-group open" id="vz-chart-settings">
@@ -591,6 +614,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						<ul class="viz-group-wrapper">
 						<form id="settings-form" action="<?php echo esc_url( add_query_arg( 'nonce', wp_create_nonce() ) ); ?>" method="post">
 							<input type="hidden" id="chart-img" name="chart-img">
+							<input type="hidden" id="backend-title" name="backend-title" value="<?php echo esc_html( $backend_title ); ?>">
 							<?php echo $sidebar; ?>
 							<?php self::_renderPermissions( $args ); ?>
 							<input type="hidden" name="save" value="1">
@@ -793,7 +817,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 													);
 													foreach ( $schedules as $num => $name ) {
 														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-														$extra = $num == $hours ? 'selected' : '';
+														$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 														?>
 														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 														<?php
@@ -843,7 +867,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 																);
 																foreach ( $schedules as $num => $name ) {
 																	// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-																	$extra = $num == $hours ? 'selected' : '';
+																	$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 																	?>
 																	<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 																	<?php
@@ -970,8 +994,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 												$chart_id
 											);
 											foreach ( $schedules as $num => $name ) {
-												// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-												$extra = $num == $hours ? 'selected' : '';
+												$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 												?>
 												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 													<?php
@@ -1048,8 +1071,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 															$chart_id
 														);
 														foreach ( $schedules as $num => $name ) {
-																// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-															$extra = $num == $hours ? 'selected' : '';
+															$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 															?>
 															<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 															<?php
@@ -1118,8 +1140,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 										$chart_id
 									);
 									foreach ( $schedules as $num => $name ) {
-										// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-										$extra = $num == $hours ? 'selected' : '';
+										$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 										?>
 										<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 											<?php
@@ -1144,5 +1165,40 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<span id="visualizer-chart-id" data-id="<?php echo $chart_id; ?>" data-chart-source="<?php echo esc_attr( $source_of_chart ); ?>" data-chart-type="<?php echo esc_attr( $type ); ?>" data-chart-lib="<?php echo esc_attr( $lib ); ?>"></span>
 			<iframe id="thehole" name="thehole"></iframe>
 		<?php
+	}
+
+	/**
+	 * Check if the given hour is selected.
+	 *
+	 * @param int|float|string $hour The hour.
+	 * @param int|float|string $reference The number.
+	 *
+	 * @return bool
+	 */
+	public static function is_hour_selected( $hour, $reference ) {
+
+		if ( ! is_numeric( $hour ) || ! is_numeric( $reference ) ) {
+			return false;
+		}
+
+		$hour      = floatval( $hour );
+		$reference = floatval( $reference );
+
+		if ( self::is_live_update_option( $reference ) ) {
+			$reference = self::$live_option_fallback_hour;
+		}
+
+		return abs( $hour - $reference ) < 0.000001;
+	}
+
+	/**
+	 * Check if the reference option is deprecated live update option.
+	 *
+	 * @param float $reference_hour The reference hour.
+	 *
+	 * @return bool
+	 */
+	public static function is_live_update_option( $reference_hour ) {
+		return abs( $reference_hour ) < 0.000001;
 	}
 }
