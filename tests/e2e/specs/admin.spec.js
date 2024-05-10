@@ -154,13 +154,13 @@ test.describe( 'Chart Library', () => {
         await page.waitForSelector('h1:text("Visualizer")');
 
         await page.frameLocator('iframe').locator('label').filter({ hasText: 'Pie/Donut' }).click();
-        
+
         await expect( page.frameLocator('iframe').getByRole('combobox').locator('option').first() ).toBeDisabled(); // Placeholder is disabled.
-        
+
         expect( page.locator('.viz-hidden') ).toHaveCount(0) // No hidden charts by default.
-        
+
         await page.frameLocator('iframe').getByRole('combobox').selectOption({ value: 'ChartJS' });
-        
+
         await expect( page.frameLocator('iframe').locator('.viz-hidden').count() ).resolves.toBeGreaterThan( 0 ); // We should have hidden charts.
     });
 
@@ -226,7 +226,7 @@ test.describe( 'Support', () => {
         await expect(page.frameLocator('iframe').getByRole('combobox')).toHaveValue('GoogleCharts');
 
         // Check disabled Options
-        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveCount(1);
-        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveText( [ /DataTable/ ] );
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option')).toHaveCount(3);
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option')).toHaveText( [ "DataTable", "Google Charts", "ChartJS" ] );
     } );
 } );
