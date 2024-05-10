@@ -346,7 +346,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 
 		$pro_class = '';
 
-		if ( ! empty( $chart_type ) &&  in_array( $chart_type, $types) ) {
+		if ( ! empty( $chart_type ) && in_array( $chart_type, $types, true ) ) {
 			$pro_class = 'viz-is-pro-chart';
 		}
 
@@ -378,7 +378,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="', $clone_url, '"><span class="dashicons dashicons-admin-page"></span><span class="tooltip-text">' . esc_attr__( 'Duplicate', 'visualizer' ) . '</span></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $chart_id, '"><span class="dashicons dashicons-admin-generic"></span><span class="tooltip-text">' . esc_attr__( 'Edit', 'visualizer' ) . '</span></a>';
 		echo '</div>';
-        error_log($chart_id);
 		do_action( 'visualizer_chart_languages', $chart_id );
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
 		echo '</div>';
