@@ -1,3 +1,7 @@
+##### [Version 3.10.14](https://github.com/Codeinwp/visualizer/compare/v3.10.13...v3.10.14) (2024-05-10)
+
+> Things are getting better every day. 🚀
+
 ##### [Version 3.10.13](https://github.com/Codeinwp/visualizer/compare/v3.10.12...v3.10.13) (2024-04-17)
 
 ### Fixes
