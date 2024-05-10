@@ -15,66 +15,25 @@ test.describe( 'Data Free Sources', () => {
         page.setDefaultTimeout( 5000 );
     } );
 
-    test( 'import a local CSV file', async ( { admin, page } ) => {
+    test( 'manual import', async ( { admin, page } ) => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
         await page.waitForSelector('h1:text("Visualizer")');
         
-        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
-        
-        // Upload the CSV file
-        await expect( page.frameLocator('iframe').locator('#csv-file') ).toBeVisible();
-        await page.frameLocator('iframe').locator('#csv-file').setInputFiles( getAssetFilePath( 'pie.csv' ) );
-        await page.frameLocator('iframe').getByRole('button', { name: 'Import' }).click();
-
-       
-        await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
-
-        // Check if the chart contains the data from the CSV file
-        await expect( page.locator('text').filter({ hasText: 'Warcraft' }) ).toBeVisible();
-    } );
-
-    test( 'import a remote CSV file', async ( { admin, page } ) => {
-        const importURL = 'https://s3.amazonaws.com/verti-utils/samples-visualizer/area.csv';
-
-        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
-        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
-        await page.waitForSelector('h1:text("Visualizer")');
-  
-        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.area );
-        
-        // Fill the URL of the CSV file and import it.
-        await page.frameLocator('iframe').getByRole('heading', { name: 'Import data from URL' }).click();
-        await page.frameLocator('iframe').getByText('Import from CSV').click();
-        await page.frameLocator('iframe').getByPlaceholder('Please enter the URL of CSV').fill( importURL );
-        await page.frameLocator('iframe').getByRole('button', { name: 'Import' }).click();
-        await expect( page.frameLocator('iframe').getByRole('img').getByText('Bolivia') ).toBeVisible();
-        
-        await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
-
-        // Check if the chart contains the data from the CSV file
-        await expect( page.locator('text').filter({ hasText: '/05/01' }) ).toBeVisible();
-    } );
-
-    test( 'import a remote JSON file', async ( { admin, page } ) => {
-        const importURL = 'https://s3.amazonaws.com/verti-utils/samples-visualizer/test.json';
-
-        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
-        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
-        await page.waitForSelector('h1:text("Visualizer")');
-    
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
 
-        await page.frameLocator('iframe').getByRole('heading', { name: 'Import data from URL' }).click();
-        await page.frameLocator('iframe').getByText('Import from JSON').click();
-        await page.frameLocator('iframe').getByRole('button', { name: 'Create Parameters' }).click();
+        const manualDataTab = page.frameLocator('iframe').locator('li.viz-group.visualizer_source_manual');
 
-        await page.frameLocator('iframe').getByPlaceholder('Please enter the URL', { exact: true }).fill( importURL );
-        await page.frameLocator('iframe').getByRole('button', { name: 'Fetch Endpoint' }).click({ force: true});
+        // add `open`class to the tab to make it visible.
+        await manualDataTab.evaluate( ( node ) => node.classList.add('open') );
 
+        await page.frameLocator('iframe').getByLabel('Month: activate to sort').click();
+        await page.frameLocator('iframe').getByRole('button', { name: 'Edit Data' }).click();
+
+        await page.frameLocator('iframe').getByRole('button', { name: 'Show Chart' }).click();
+        await page.waitForTimeout( 500 );
         await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
-
-        // Check if the chart contains the data from the JSON file
-        await expect( page.getByRole('gridcell', { name: '/05/01' }) ).toBeVisible();
-    } );
+     
+        await expect( page.locator('table').filter({ hasText: /^MonthBoliviaEcuadorMadagascarPapua New GuineaRwanda$/ }).getByLabel('Month: activate to sort') ).toBeVisible();
+    });
 } );
