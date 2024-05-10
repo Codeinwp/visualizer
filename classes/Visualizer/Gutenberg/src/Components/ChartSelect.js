@@ -85,6 +85,8 @@ class ChartSelect extends Component {
 				{ 'home' === this.state.route &&
 					<InspectorControls>
 
+						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
+
 						<FileImport
 							chart={ this.props.chart }
 							readUploadedFile={ this.props.readUploadedFile }
@@ -112,8 +114,6 @@ class ChartSelect extends Component {
 							editSchedule={ this.props.editDatabaseSchedule }
 							databaseImportData={ this.props.databaseImportData }
 						/>
-
-						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
 
 						<PanelButton
 							label={ __( 'Advanced Options' ) }

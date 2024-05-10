@@ -28,6 +28,13 @@
 class Visualizer_Render_Layout extends Visualizer_Render {
 
 	/**
+	 * Fallback time for live update option.
+	 *
+	 * @var float
+	 */
+	public static $live_option_fallback_hour = 0.16; // 10 minutes
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0
@@ -804,7 +811,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 													);
 													foreach ( $schedules as $num => $name ) {
 														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-														$extra = $num == $hours ? 'selected' : '';
+														$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 														?>
 														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 														<?php
@@ -854,7 +861,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 																);
 																foreach ( $schedules as $num => $name ) {
 																	// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-																	$extra = $num == $hours ? 'selected' : '';
+																	$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 																	?>
 																	<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 																	<?php
@@ -981,8 +988,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 												$chart_id
 											);
 											foreach ( $schedules as $num => $name ) {
-												// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-												$extra = $num == $hours ? 'selected' : '';
+												$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 												?>
 												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 													<?php
@@ -1059,8 +1065,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 															$chart_id
 														);
 														foreach ( $schedules as $num => $name ) {
-																// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-															$extra = $num == $hours ? 'selected' : '';
+															$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 															?>
 															<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 															<?php
@@ -1129,8 +1134,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 										$chart_id
 									);
 									foreach ( $schedules as $num => $name ) {
-										// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-										$extra = $num == $hours ? 'selected' : '';
+										$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 										?>
 										<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 											<?php
@@ -1155,5 +1159,40 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			<span id="visualizer-chart-id" data-id="<?php echo $chart_id; ?>" data-chart-source="<?php echo esc_attr( $source_of_chart ); ?>" data-chart-type="<?php echo esc_attr( $type ); ?>" data-chart-lib="<?php echo esc_attr( $lib ); ?>"></span>
 			<iframe id="thehole" name="thehole"></iframe>
 		<?php
+	}
+
+	/**
+	 * Check if the given hour is selected.
+	 *
+	 * @param int|float|string $hour The hour.
+	 * @param int|float|string $reference The number.
+	 *
+	 * @return bool
+	 */
+	public static function is_hour_selected( $hour, $reference ) {
+
+		if ( ! is_numeric( $hour ) || ! is_numeric( $reference ) ) {
+			return false;
+		}
+
+		$hour      = floatval( $hour );
+		$reference = floatval( $reference );
+
+		if ( self::is_live_update_option( $reference ) ) {
+			$reference = self::$live_option_fallback_hour;
+		}
+
+		return abs( $hour - $reference ) < 0.000001;
+	}
+
+	/**
+	 * Check if the reference option is deprecated live update option.
+	 *
+	 * @param float $reference_hour The reference hour.
+	 *
+	 * @return bool
+	 */
+	public static function is_live_update_option( $reference_hour ) {
+		return abs( $reference_hour ) < 0.000001;
 	}
 }
