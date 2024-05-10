@@ -487,7 +487,8 @@ class Editor extends Component {
 			if ( 'visualizer:mediaframe:close' === event.data ) {
 				createChartPopup.close();
 			} else if ( event.data.chartID ) {
-				this.getChart( event.data.chartID );
+				const chartID = parseInt(  event.data.chartID, 10 );
+				this.getChart( chartID );
 			}
 		}, false );
 
