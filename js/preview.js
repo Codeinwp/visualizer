@@ -41,7 +41,7 @@
         }
 
         document.getElementById('settings-button').addEventListener('click', function() {
-			// Get the chart id from URL param chart. Use modern URLSearchParams if available.
+			// Get and send the chart ID (used by Visualizer Block).
 			var urlParams = new URLSearchParams(window.location.search);
 			var chartID = urlParams.get('chart');
 			if ( chartID ) {
