@@ -35,6 +35,17 @@
 
 function createPopup() {
 
+    var overlay = document.createElement('div');
+    overlay.id = 'overlay-visualizer';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.zIndex = '999';
+    document.body.appendChild(overlay);
+
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
@@ -45,6 +56,7 @@ function createPopup() {
     var closeIcon = document.createElement('i');
     closeIcon.classList.add('dashicons', 'dashicons-no', 'close-icon');
     closeIcon.addEventListener('click', function() {
+        document.body.removeChild(overlay);
         popup.style.display = 'none';
     });
     closeIcon.style.position = 'absolute';
