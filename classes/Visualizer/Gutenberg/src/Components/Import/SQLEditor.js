@@ -42,7 +42,7 @@ class SQLEditor extends Component {
 			dragDrop: false,
 			matchBrackets: true,
 			autoCloseBrackets: true,
-			extraKeys: { 'Ctrl-Space': 'autocomplete' },
+			extraKeys: { 'Shift-Space': 'autocomplete' },
 			hintOptions: { tables: visualizerLocalize.sqlTable }
 		});
 

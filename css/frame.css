@@ -1379,13 +1379,6 @@ span.viz-section-error {
 	background-color: #ff0d00;
 }
 
-#db-query-form .CodeMirror-scroll {
-	overflow: hidden !important;
-	height: 50%;
-	margin: 0;
-	padding: 0;
-}
-
 #db-query-form .CodeMirror-wrap {
 	height: 200px;
 	padding: 15px;
@@ -1407,7 +1400,11 @@ span.viz-section-error {
 }
 
 #db-query-form .CodeMirror-wrap pre .cm-keyword {
-	color: #f92472 !important;
+	color: #FF6188 !important;
+}
+
+#db-query-form .CodeMirror-wrap pre .cm-builtin {
+	color: #78DCE8 !important;
 }
 
 #db-query-form .CodeMirror-wrap pre .cm-comment {
@@ -1416,7 +1413,7 @@ span.viz-section-error {
 
 #db-query-form .CodeMirror-wrap pre .cm-number,
 #db-query-form .CodeMirror-wrap pre .cm-string {
-	color: #fff !important;
+	color: #A9DC76 !important;
 }
 
 .visualizer-db-query-form > div {
@@ -1436,6 +1433,7 @@ span.viz-section-error {
 
 .db-wizard-error {
 	color: #f00;
+	padding: 16px 0;
 }
 
 .db-wizard-hints,
@@ -1457,6 +1455,7 @@ span.viz-section-error {
 .html-table-editor-hints ul,
 .json-wizard-hints ul {
 	list-style: square;
+	padding: 0 16px;
 }
 
 .db-wizard-results .dataTables_wrapper .dataTables_info {

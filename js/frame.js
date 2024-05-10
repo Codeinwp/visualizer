@@ -248,7 +248,7 @@
             width               : '50%',
             search_contains     : true
         });
-        
+
         $('.visualizer-permission-type').each(function(x, y){
             var type    = $(y).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -257,7 +257,7 @@
                 return;
             }
         });
-        
+
         $('.visualizer-permission-type').on('change', function(evt, params) {
             var type    = $(this).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -302,7 +302,7 @@
                     dragDrop: false,
                     matchBrackets: true,
                     autoCloseBrackets: true,
-                    extraKeys: {"Ctrl-Space": "autocomplete"},
+                    extraKeys: {"Shift-Space": "autocomplete"},
                     hintOptions: { tables: table_columns }
         });
 
@@ -312,7 +312,7 @@
         });
 
         cm.focus();
-        
+
         // update text area.
         cm.on('inputRead', function(x, y){
             cm.save();
@@ -323,7 +323,7 @@
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
         });
-        
+
         // clear the editor.
         $('body').on('visualizer:db:query:setvalue', function(event, data){
             cm.setValue(data.value);
@@ -354,7 +354,7 @@
             if($('.visualizer-db-query').val() === ''){
                 return;
             }
-            
+
             start_ajax($('#visualizer-db-query'));
             $('.db-wizard-results').empty();
             $('.db-wizard-error').empty();
@@ -393,7 +393,7 @@
                 $( '#canvas' ).css("z-index", "1").show();
             });
 
-            $('#content').css('width', 'calc(100% - 300px)');
+            $('#content').css('width', 'calc(100% - 350px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 $(this).val( $(this).attr( 'data-t-filter' ) );
                 $(this).html( $(this).attr( 'data-t-filter' ) );
@@ -442,7 +442,7 @@
             active: false,
             collapsible: true
         });
-        
+
         // open the accordions by default if they are indicated with the 'open' class.
         $('.visualizer-json-subform .viz-substep.open').each(function(i, e){
             $('.visualizer-json-subform').accordion( "option", "active", i );
@@ -663,7 +663,7 @@
 
         // show column visibility button only when more than 6 columns are found (including the Label column)
         if($(element + ' table.viz-editor-table thead tr th').length > 6){
-            $.extend( settings, { 
+            $.extend( settings, {
                 dom: 'Bt',
                 buttons: [
                     {
@@ -746,7 +746,89 @@
 
         return $(this);
     };
+
+    // Telemetry
+    function getChartID() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('chart') ?? '';
+    }
+
+    const groupId = getChartID();
+
+    const chartTypes = document.querySelector('#viz-types-form')
+    if( chartTypes ) {
+        document.querySelector('.push-right[type=submit]')?.addEventListener('click', async function (event) {
+            if ( typeof window.tiTrk !== 'undefined' ) {
+                event.preventDefault();    
+                try {
+                    const formData = new FormData(document.querySelector('#viz-types-form'));
+                    const savedData = Object.fromEntries(formData);
+                
+                    tiTrk?.with('visualizer')?.add({
+                        feature: 'chart-create',
+                        featureComponent: 'saved-data',
+                        featureData: {
+                            type: savedData?.['type'],
+                            library: savedData?.['chart-library']
+                        },
+                        groupId
+                    });
+                   
+                    // Do not make the user to wait too long for the event to be uploaded.
+                    const timer = new Promise((resolve) => setTimeout(resolve, 500));
+                    await Promise.race([timer, tiTrk?.uploadEvents()]);
+                } catch (e) {
+                    console.warn(e);
+                }
+                $('#viz-types-form').submit();
+            }
+        });
+    }
+
+    [
+        {
+            selector: '#editor-button',
+            featureComponent: 'source-manual-data'
+        },
+        {
+            selector: '#vz-import-file',
+            featureComponent: 'source-import-csv-file'
+        },
+        {
+            selector: '#vz-save-schedule',
+            featureComponent: 'source-import-csv-remote'
+        },
+        {
+            selector: '#visualizer-json-fetch',
+            featureComponent: 'source-import-json-remote'
+        },
+        {
+            selector: '#existing-chart',
+            featureComponent: 'source-import-chart'
+        },
+        {
+            selector: '#filter-chart-button',
+            featureComponent: 'source-import-wordpress',
+        },
+        {
+            selector: '#woo-chart-button',
+            featureComponent: 'source-import-woocommerce'
+        },
+        {
+            selector: '#db-chart-button',
+            featureComponent: 'source-import-database'
+        }
+    ].forEach(({ selector, featureComponent }) => {
+        document.querySelector(selector)?.addEventListener('click', function () {
+            window?.tiTrk?.with('visualizer')?.set('used-source',{
+                feature: 'chart-edit-used-source',
+                featureComponent,
+                groupId
+            });
+        });
+    });
 })(jQuery);
+
 
 document.querySelector('#viz-copy-shortcode')?.addEventListener('click', function() {
     var copyText = document.querySelector('#viz-shortcode')?.value;

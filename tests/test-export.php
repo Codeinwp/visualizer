@@ -84,7 +84,7 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 		ob_end_clean();
 
 		$response = json_decode( $this->_last_response );
-		$this->assertInternalType( 'object', $response );
+		$this->assertIsObject( $response );
 		$this->assertObjectHasAttribute( 'success', $response );
 		$this->assertObjectHasAttribute( 'data', $response );
 		$this->assertTrue( $response->success );
