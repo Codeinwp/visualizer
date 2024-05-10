@@ -139,6 +139,39 @@ test.describe( 'Chart Library', () => {
         // The Create Chart button should be not exists since we skipped the second step.
         expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
     } );
+
+    test( 'check info panel', async ( { admin, page } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForSelector('h1:text("Visualizer")');
+        
+        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
+
+        await expect( page.frameLocator('iframe').locator('#viz-shortcode') ).toBeVisible();
+        await expect( page.frameLocator('iframe').getByRole('button', { name: 'Copy' }) ).toBeVisible();
+        await expect( page.frameLocator('iframe').locator('#viz-internal-name') ).toBeVisible();
+        
+        // Check if the shortcode is copied to the clipboard.
+        const shortcode = await page.frameLocator('iframe').locator('#viz-shortcode').inputValue();
+        await page.frameLocator('iframe').getByRole('button', { name: 'Copy' }).click();
+        const clipboardValue = await page.evaluate(() => navigator.clipboard.readText());
+        expect( clipboardValue ).toBe( shortcode );
+
+        // Check two-way binding of the internal name.
+        const name1 = 'Test Internal Name 1';
+        const name2 = 'Test Internal Name 2';
+        
+        await page.frameLocator('iframe').locator('#viz-internal-name').fill(name1);
+        const titleValue = await page.frameLocator('iframe').locator('#settings-form input[name="title"]').inputValue();
+        expect( titleValue ).toBe( name1 );
+
+        await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
+        await page.frameLocator('iframe').getByRole('heading', { name: 'General Settings' }).click();
+
+        await page.frameLocator('iframe').locator('input[name="title"]').fill(name2);
+        const internalNameValue = await page.frameLocator('iframe').locator('#viz-internal-name').inputValue();
+        expect( internalNameValue ).toBe( name2 );
+    } );
 } );
 
 test.describe( 'Support', () => {
