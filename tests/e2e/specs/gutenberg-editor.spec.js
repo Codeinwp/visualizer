@@ -60,7 +60,18 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         expect( page.getByRole('button', { name: 'Import data from file' }) ).toBeVisible();
 
         await page.getByRole('button', { name: 'Import data from file' }).click();
+
         await page.getByRole('button', { name: 'Import data from URL' }).click();
+        await page.getByRole('button', { name: 'One Time' }).click();
+        await page.getByRole('button', { name: 'Schedule Import' }).click();
+        await page.getByRole('button', { name: 'Import from JSON' }).click();
+
+        await page.getByRole('button', { name: 'Import from other chart' }).click();
+
+        await page.getByRole('button', { name: 'Import data from database' }).click();
+        
+        const upgradeLinks = await page.locator('a').filter({ hasText: 'Upgrade Now' }).count();
+        expect( upgradeLinks ).toBe( 6 );
 
         await page.getByRole('button', { name: 'Advanced Options' }).click();
         await page.getByRole('button', { name: 'Chart Settings' }).click();
