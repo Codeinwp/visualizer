@@ -93,7 +93,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			</div>
 			<div class="viz-info-item">
 				<p><?php _e( 'Backend chart title for internal usage', 'visualizer' ); ?></p>
-				<input type="text" id="viz-internal-name" value="<?php echo  $hasTitle ? $chartSettings['title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>" readonly>
+				<input type="text" id="viz-internal-name" value="<?php echo  $hasTitle ? $chartSettings['title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>">
 			</div>
 		</div>
 		<div id="viz-tabs">

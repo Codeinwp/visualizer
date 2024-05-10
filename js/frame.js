@@ -689,4 +689,19 @@ document.querySelector('#viz-copy-shortcode')?.addEventListener('click', functio
     }
 
     navigator.clipboard.writeText(copyText);
+    alert(visualizer.l10n.copied);
 });
+
+// Create a two way sync between Chart Title Info Panel and Setting Chart Title.
+const internalTitle = document.querySelector( '#viz-internal-name' );
+const formChartTile = document.querySelector( '#settings-form input[name="title"]' );
+
+if ( internalTitle && formChartTile ) {
+    internalTitle.addEventListener('input', function() {
+        formChartTile.value = this.value;
+    });
+
+    formChartTile.addEventListener('input', function() {
+        internalTitle.value = this.value;
+    });
+}

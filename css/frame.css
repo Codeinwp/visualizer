@@ -416,6 +416,7 @@ div.viz-group-content .viz-group-description {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
+	gap: 3px;
 }
 
 .viz-info-panel .viz-info-row {
