@@ -139,8 +139,8 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			( in_array( $feature, $pro_features, true ) && ! Visualizer_Module::is_pro() )
 		) {
 			$msg = sprintf( __( 'Upgrade to %s to activate this feature!', 'visualizer' ), 'PRO' );
-			if ( Visualizer_Module::is_pro() && in_array( $feature, $biz_features, true ) ) {
-				$msg = sprintf( __( 'Upgrade your license to at least the %s version to activate this feature!', 'visualizer' ), 'DEVELOPER' );
+			if ( in_array( $feature, $biz_features, true ) ) {
+				$msg = sprintf( __( 'Upgrade to %s plan to activate this feature!', 'visualizer' ), 'Developer' );
 			}
 			$return = '<div class="only-pro-content">';
 			$return .= '	<div class="only-pro-container">';
