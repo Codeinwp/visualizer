@@ -42,6 +42,13 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
         
         await expect( page.getByRole('button', { name: 'Save', exact: true }) ).toBeVisible();
+        await page.getByRole('button', { name: 'Save', exact: true }).click();
+        await expect( page.getByRole('button', { name: 'Done' }) ).toBeVisible();
+        await page.getByRole('button', { name: 'Done' }).click();
+
+        await expect( page.locator('.wp-block-visualizer-chart').count() ).resolves.toBe( 1 );
+        await expect( page.getByRole('button', { name: 'Done' }) ).toBeHidden();
+
     } );
 
     test( 'insert an existing chart', async ( { admin, page, editor } ) => {

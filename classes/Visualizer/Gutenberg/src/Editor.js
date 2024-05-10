@@ -422,19 +422,22 @@ class Editor extends Component {
 			data['visualizer-chart-schedule'] = '';
 		}
 
-		let fieldName = 'series';
+		let dataChartStylingOption = 'series';
 
 		if ( 'pie' === data['visualizer-chart-type']) {
-			fieldName = 'slices';
+			dataChartStylingOption = 'slices';
 		}
 
         // no series for bubble and timeline charts.
-		if ( -1 >= [ 'bubble', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
-            Object.keys( data['visualizer-settings'][fieldName])
+		if (
+			undefined !== data['visualizer-settings'][dataChartStylingOption] &&
+			-1 >= [ 'bubble', 'timeline' ].indexOf( data['visualizer-chart-type'])
+		) {
+            Object.keys( data['visualizer-settings'][dataChartStylingOption])
                 .map( i => {
-                    if ( data['visualizer-settings'][fieldName][i] !== undefined ) {
-                        if ( data['visualizer-settings'][fieldName][i].temp !== undefined ) {
-                            delete data['visualizer-settings'][fieldName][i].temp;
+                    if ( data['visualizer-settings'][dataChartStylingOption][i] !== undefined ) {
+                        if ( data['visualizer-settings'][dataChartStylingOption][i].temp !== undefined ) {
+                            delete data['visualizer-settings'][dataChartStylingOption][i].temp;
                         }
                     }
                 }
@@ -478,7 +481,9 @@ class Editor extends Component {
 			if ( 'visualizer:mediaframe:close' === event.data ) {
 				createChartPopup.close();
 			} else if ( event.data.chartID ) {
-				this.getChart( event.data.chartID );
+				setTimeout( () => {
+					this.getChart( event.data.chartID );
+				}, 700 );
 			}
 		}, false );
 
