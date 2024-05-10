@@ -206,7 +206,7 @@ function createPopup() {
 
         $('.visualizer-chart-shortcode').click(function (e) {
 
-            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && e.target.classList.contains('is_pro') ) {
                 createPopup();
                 e.preventDefault();
                 e.stopPropagation();
@@ -262,9 +262,9 @@ function createPopup() {
             return false;
         });
 
-        $('.visualizer-chart-edit').click(function () {
+        $('.visualizer-chart-edit').click(function (event) {
 
-            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
                 createPopup();
                 return;
             }
@@ -284,15 +284,15 @@ function createPopup() {
             return false;
         });
         $(".visualizer-chart-clone").on("click", function ( event ) {
-            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
                 createPopup();
                 event.preventDefault();
             }
         });
 
-        $(".visualizer-chart-export").on("click", function () {
+        $(".visualizer-chart-export").on("click", function (event) {
 
-            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
                 createPopup();
                 return;
             }
@@ -317,8 +317,8 @@ function createPopup() {
             return false;
         });
 
-        $(".visualizer-chart-image").on("click", function () {
-            if ( ! visualizer.is_pro_user && element.classList.contains('is_pro') ) {
+        $(".visualizer-chart-image").on("click", function (event) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
                 createPopup();
                 return;
             }
