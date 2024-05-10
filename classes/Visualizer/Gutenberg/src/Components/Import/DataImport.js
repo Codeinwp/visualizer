@@ -69,7 +69,7 @@ class DataImport extends Component {
 					label={ __( 'How often do you want to check the url?' ) }
 					value={ this.props.chart['visualizer-db-schedule'] ? this.props.chart['visualizer-db-schedule'] : 0 }
 					options={ [
-						{ label: __( 'Live' ), value: '0' },
+						{ label: __( '10 minutes' ), value: '0.16' },
 						{ label: __( 'Each hour' ), value: '1' },
 						{ label: __( 'Each 12 hours' ), value: '12' },
 						{ label: __( 'Each day' ), value: '24' },
