@@ -2,6 +2,11 @@ import isPlainObject from 'is-plain-object';
 
 import deepFilter from 'deep-filter';
 
+// Import WordPress dependencies
+const {
+	apiFetch
+} = wp;
+
 // Format Date of Chart Data
 export const formatDate = ( data ) => {
 	Object.keys( data['visualizer-series']).map( i => {
@@ -254,3 +259,33 @@ export const buildChartPopup = () => {
         }
     );
 };
+
+/**
+ * Try to get the chart data from the server.
+ *
+ * If the status is not 'publish', it will retry.
+ *
+ * @param {number|string} chartId The chart ID.
+ * @returns {Promise<{result: Object, status: string}>} The chart data and status.
+ */
+export async function tryGetPublishedChartData( chartId ) {
+    let result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
+    const numRetries = 8;
+
+    let attempt = 0;
+    while (
+        result &&
+        undefined !== result.status &&
+        'publish' !== result.status &&
+        numRetries > attempt
+    ) {
+        await new Promise( resolve => setTimeout( resolve, 750 ) );
+        result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
+        attempt++;
+    }
+
+    return {
+        result: result,
+        chartStatus: result.status ? result.status : 'auto-draft'
+    };
+}

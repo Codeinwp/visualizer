@@ -7,7 +7,7 @@ import ChartSelect from './Components/ChartSelect.js';
 
 import ChartRender from './Components/ChartRender.js';
 
-import { CSVToArray, buildChartPopup } from './utils.js';
+import { CSVToArray, buildChartPopup, tryGetPublishedChartData } from './utils.js';
 
 /**
  * WordPress dependencies
@@ -102,11 +102,17 @@ class Editor extends Component {
 			isLoading: 'getChart'
 		});
 
-		let result = await apiFetch({ path: `wp/v2/visualizer/${id}` });
+		const chartDataRequest = await tryGetPublishedChartData( id );
+
+		if ( 'publish' !== chartDataRequest.chartStatus ) {
+			this.setState({ route: 'showCharts', isLoading: false });
+			this.props.setAttributes({ route: 'showCharts' });
+			return;
+		}
 
 		this.setState({
 			route: 'chartSelect',
-			chart: result['chart_data'],
+			chart: chartDataRequest.result['chart_data'],
 			isLoading: true,
 			isModified: true
 		});
@@ -481,9 +487,7 @@ class Editor extends Component {
 			if ( 'visualizer:mediaframe:close' === event.data ) {
 				createChartPopup.close();
 			} else if ( event.data.chartID ) {
-				setTimeout( () => {
-					this.getChart( event.data.chartID );
-				}, 700 );
+				this.getChart( event.data.chartID );
 			}
 		}, false );
 
