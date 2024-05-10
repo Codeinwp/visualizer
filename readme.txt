@@ -157,6 +157,20 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.10.15](https://github.com/Codeinwp/visualizer/compare/v3.10.14...v3.10.15) (2024-05-10)
+
+> Things are getting better every day. 🚀
+
+
+
+
+##### [Version 3.10.14](https://github.com/Codeinwp/visualizer/compare/v3.10.13...v3.10.14) (2024-05-10)
+
+> Things are getting better every day. 🚀
+
+
+
+
 ##### [Version 3.10.13](https://github.com/Codeinwp/visualizer/compare/v3.10.12...v3.10.13) (2024-04-17)
 
 ### Fixes
@@ -391,13 +405,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 ##### [Version 3.7.11](https://github.com/Codeinwp/visualizer/compare/v3.7.10...v3.7.11) (2022-08-30)
 
-- Fix update axis baseline color [#925](https://github.com/Codeinwp/visualizer/issues/925) 
+- Fix update axis baseline color [#925](https://github.com/Codeinwp/visualizer/issues/925)
 - Update more features images [#926](https://github.com/Codeinwp/visualizer/issues/926)
-- Fix update minor grid line field [#924](https://github.com/Codeinwp/visualizer/issues/924) 
-- Add new filter for container attributes [#922](https://github.com/Codeinwp/visualizer/issues/922) 
-- Fix axis data format issue [#920](https://github.com/Codeinwp/visualizer/issues/920) 
-- Chart unique title [#915](https://github.com/Codeinwp/visualizer/issues/915) 
-- Fix block back button issue [#930](https://github.com/Codeinwp/visualizer/issues/930) 
+- Fix update minor grid line field [#924](https://github.com/Codeinwp/visualizer/issues/924)
+- Add new filter for container attributes [#922](https://github.com/Codeinwp/visualizer/issues/922)
+- Fix axis data format issue [#920](https://github.com/Codeinwp/visualizer/issues/920)
+- Chart unique title [#915](https://github.com/Codeinwp/visualizer/issues/915)
+- Fix block back button issue [#930](https://github.com/Codeinwp/visualizer/issues/930)
 - Userguide broken documentation link [#918](https://github.com/Codeinwp/visualizer/issues/918)
 
 
@@ -475,7 +489,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 ##### [Version 3.7.2](https://github.com/Codeinwp/visualizer/compare/v3.7.1...v3.7.2) (2021-12-20)
 
 - Add latest chartJS library support in the bar chart
-- Fix horizontal axis showing date format in Bar chart 
+- Fix horizontal axis showing date format in Bar chart
 - Fix orientation rotate issue in mobile
 - CSS performance improvements
 - Improve JS performance
@@ -485,7 +499,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 ##### [Version 3.7.1](https://github.com/Codeinwp/visualizer/compare/v3.7.0...v3.7.1) (2021-11-17)
 
-- [Feat] Allow charts to render in dashboard areas via 3rd party plugins like Dashboard Widgets Suite 
+- [Feat] Allow charts to render in dashboard areas via 3rd party plugins like Dashboard Widgets Suite
 - [Fix] Changing Line Chart series style to dot on some series changes the order of tooltip information
 - [Fix] Problem with X-Axis of Line chart on Safari if date/datetime is used as values
 - [Fix] Multiple Visualizer charts causing rendering issues (blank page)
@@ -500,14 +514,14 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 #### Features
 - Add option to enable/disable save the chart image
-- Enhanced caching 
+- Enhanced caching
 
 #### Fixes
 - Fix undefined variable errors when using Gutenberg blocks
 - Fix broken chart in iOS and Safari
 - Fix custom refresh time support for DB chart
-- Fix table placed inside accordion cannot be scrolled down (refreshes all the time) 
-- Fix pagination doesn't work in the library 
+- Fix table placed inside accordion cannot be scrolled down (refreshes all the time)
+- Fix pagination doesn't work in the library
 - Fix HTML entities in JSON break Visualizer Table Chart
 - Fix string type columns affect the target of the formatting applied to a number column
 
@@ -516,7 +530,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 ##### [Version 3.6.1](https://github.com/Codeinwp/visualizer/compare/v3.6.0...v3.6.1) (2021-08-04)
 
-- Fix broken dropdown style issue 
+- Fix broken dropdown style issue
 - Add block support in widget area
 - Add wp alpha color picker support
 - Fix broken chart layout issue when add long title
@@ -543,11 +557,11 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 ##### [Version 3.5.1](https://github.com/Codeinwp/visualizer/compare/v3.5.0...v3.5.1) (2021-05-25)
 
 
-- Fix compatibility with 3rd party plugins which use the same js library as Visualizer [#801](https://github.com/Codeinwp/visualizer/issues/801) 
-- Fix fatal error when a new chart is created on PHP 8 [#795](https://github.com/Codeinwp/visualizer/issues/795) 
+- Fix compatibility with 3rd party plugins which use the same js library as Visualizer [#801](https://github.com/Codeinwp/visualizer/issues/801)
+- Fix fatal error when a new chart is created on PHP 8 [#795](https://github.com/Codeinwp/visualizer/issues/795)
 - Chart doesn't get refreshed automatically when the JSON endpoint is used as the data source
- 
-#### Features: 
+
+#### Features:
 - Adds option to add schema.org Dataset for license and creator [#794](https://github.com/Codeinwp/visualizer/issues/794)
 
 
@@ -556,7 +570,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 #### [Version 3.5.0](https://github.com/Codeinwp/visualizer/compare/v3.4.11...v3.5.0) (2021-04-28)
 
 #### Fixes
-- Permissions tab disappears after a user modifies a chart's data 
+- Permissions tab disappears after a user modifies a chart's data
 - Conflict with Edit Flow plugin
 - Improve compatibility with Ninja Forms
 - Fix for color for Minor Grid Lines not working
@@ -567,36 +581,36 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 
 
-= 3.4.11 - 2021-02-16  = 
+= 3.4.11 - 2021-02-16  =
 
 [Feat] Tested up to WP 5.6
 
 
-= 3.4.10 - 2020-12-09  = 
+= 3.4.10 - 2020-12-09  =
 
 * [Fix] Compatibility with Composer 2.0
 
 
-= 3.4.9 - 2020-11-26  = 
+= 3.4.9 - 2020-11-26  =
 
 * [Fix] Pie chart slices offset problem in the Gutenberg editor
 * [Fix] Warning is thrown when remote file is used as source
 * [Fix] Bubble chart legend position not working in the Gutenberg editor
 
 
-= 3.4.8 - 2020-09-29  = 
+= 3.4.8 - 2020-09-29  =
 
 * [Fix] Option to edit charts imported from JSON
 
 
-= 3.4.7 - 2020-09-21  = 
+= 3.4.7 - 2020-09-21  =
 
 * - [Fix] Import from JSON: Reordering columns only reorders the label, not the associated data
 * - [Fix] numberFormat option doesn't apply in Bar charts when using annotations
 * - [Fix] Google GEO chart is not rendering if 3rd data column is added
 
 
-= 3.4.6 - 2020-08-11  = 
+= 3.4.6 - 2020-08-11  =
 
 * - [Feat] Show chart ID in the chart library
 * - [Fix] Compatibility with WP 5.5
@@ -605,7 +619,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * - [Fix] Duplicated enque for jsapi loader
 
 
-= 3.4.5 - 2020-07-08  = 
+= 3.4.5 - 2020-07-08  =
 
 * [Feat] New Google Table Charts
 * [Feat] Option for lazy loading Google Charts
@@ -613,7 +627,7 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 * [Fix] Remove Inside the Chart option for the legend position for Google Pie charts
 
 
-= 3.4.4 - 2020-06-16  = 
+= 3.4.4 - 2020-06-16  =
 
 * [Feat] Option to download charts as .png images
 * [Fix] Make UI more intuitive when a chart is missing in the editor

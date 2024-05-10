@@ -80,7 +80,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	protected function _renderSidebarContent() {
 
 		$chartSettings = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
-		$hasTitle = isset( $chartSettings['title'] ) && '' !== $chartSettings['title'];
+		$hasTitle = isset( $chartSettings['backend-title'] ) && '' !== $chartSettings['backend-title'];
 
 		?>
 		<div class="viz-info-panel">
@@ -92,8 +92,8 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 				</div>
 			</div>
 			<div class="viz-info-item">
-				<label for="viz-internal-name"><?php _e( 'Backend chart title for internal usage', 'visualizer' ); ?></label>
-				<input type="text" id="viz-internal-name" value="<?php echo  $hasTitle ? $chartSettings['title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>">
+				<label for="viz-backend-name"><?php _e( 'Backend chart title for internal usage', 'visualizer' ); ?></label>
+				<input type="text" id="viz-backend-name" value="<?php echo  $hasTitle ? $chartSettings['backend-title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>">
 			</div>
 		</div>
 		<div id="viz-tabs">

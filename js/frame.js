@@ -174,6 +174,21 @@
         const rendererTypesMapping = JSON.parse( rendererTypesMappingData );
 
         document.querySelectorAll('input.type-radio').forEach( chartTypeRadio => {
+
+            // Init the lib based on the default selected chart type.
+            if ( chartTypeRadio.checked ) {
+                const chartType = chartTypeRadio.value;
+                if ( ! chartType ) {
+                    return;
+                }
+
+                const selectedRenderer = rendererSelect.value;
+                if ( ! rendererTypesMapping[chartType]?.includes( selectedRenderer ) ) {
+                    disable_renderer_select_placeholder();
+                    rendererSelect.value = rendererTypesMapping[chartType][0]
+                }
+            }
+            
             chartTypeRadio.addEventListener('click', (event) => {
                 // Check if the chart type is supported by the selected renderer. If not, select the first supported renderer.
                 const chartType = event.target.value;
@@ -840,16 +855,12 @@ document.querySelector('#viz-copy-shortcode')?.addEventListener('click', functio
     alert(visualizer.l10n.copied);
 });
 
-// Create a two way sync between Chart Title Info Panel and Setting Chart Title.
-const internalTitle = document.querySelector( '#viz-internal-name' );
-const formChartTile = document.querySelector( '#settings-form input[name="title"]' );
+// Connect Chart Backend Title Info Panel with the field from the settings form.
+const interactiveBackendTitleField = document.querySelector( '#viz-backend-name' );
+const backendTitleSave = document.querySelector( '#settings-form input[name="backend-title"]' );
 
-if ( internalTitle && formChartTile ) {
-    internalTitle.addEventListener('input', function() {
-        formChartTile.value = this.value;
-    });
-
-    formChartTile.addEventListener('input', function() {
-        internalTitle.value = this.value;
+if ( interactiveBackendTitleField && backendTitleSave ) {
+    interactiveBackendTitleField.addEventListener('input', function() {
+        backendTitleSave.value = this.value;
     });
 }

@@ -23,9 +23,32 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await editor.insertBlock( { name: 'visualizer/chart'} );
 
         // Check chart selection options are available.
-        expect( page.getByText('Make a new chart or display') ).toBeVisible();
-        expect( page.getByRole('link', { name: 'Create a new chart' }) ).toBeVisible();
-        expect( page.locator('div').filter({ hasText: /^Display an existing chart$/ }) ).toBeVisible();
+        await expect( page.getByText('Make a new chart or display') ).toBeVisible();
+        await expect( page.getByLabel('Editor content').locator('a') ).toBeVisible();
+        await expect( page.locator('div').filter({ hasText: /^Display an existing chart$/ }) ).toBeVisible();
+    } );
+
+    test('new chart creation', async ( { admin, editor, page } ) => {
+        await admin.createNewPost();
+        await editor.insertBlock( { name: 'visualizer/chart'} );
+        
+        await expect( page.getByText('Make a new chart or display') ).toBeVisible();
+        await expect( page.getByLabel('Editor content').locator('a') ).toBeVisible();
+
+        await page.getByLabel('Editor content').locator('a').click({ force: true});
+
+        // Create chart via popup.
+        await page.frameLocator('iframe').getByRole('button', { name: 'Next' }).click();
+        await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
+        
+        await expect( page.getByRole('button', { name: 'Save', exact: true }) ).toBeVisible();
+        await page.getByRole('button', { name: 'Save', exact: true }).click();
+        await expect( page.getByRole('button', { name: 'Done' }) ).toBeVisible();
+        await page.getByRole('button', { name: 'Done' }).click();
+
+        await expect( page.locator('.wp-block-visualizer-chart').count() ).resolves.toBe( 1 );
+        await expect( page.getByRole('button', { name: 'Done' }) ).toBeHidden();
+
     } );
 
     test( 'insert an existing chart', async ( { admin, page, editor } ) => {
