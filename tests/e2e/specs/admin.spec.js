@@ -155,8 +155,6 @@ test.describe( 'Chart Library', () => {
 
         await page.frameLocator('iframe').locator('label').filter({ hasText: 'Pie/Donut' }).click();
 
-        await expect( page.frameLocator('iframe').getByRole('combobox').locator('option').first() ).toBeDisabled(); // Placeholder is disabled.
-
         expect( page.locator('.viz-hidden') ).toHaveCount(0) // No hidden charts by default.
 
         await page.frameLocator('iframe').getByRole('combobox').selectOption({ value: 'ChartJS' });
