@@ -60,9 +60,26 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 * @param array  $params Any additional parameters (e.g. for connecting to a remote db).
 	 */
 	public function __construct( $query = null, $chart_id = null, $params = null ) {
-		$this->_query = $query;
+		$this->_query = $this->strip_sql_comments( $query );
 		$this->_chart_id = $chart_id;
 		$this->_params = $params;
+	}
+
+	/**
+	 * Strips SQL comments from the query.
+	 *
+	 * @param string $query The query.
+	 *
+	 * @return string
+	 */
+	private function strip_sql_comments( $query = '' ) {
+		if ( empty( $query ) ) {
+			return $query;
+		}
+
+		// Regex https://regex101.com/r/xd5Vrg/1
+		$sql_comments_regex = '@(--[^\r\n]*)|(\#[^\r\n]*)|(/\*[\w\W]*?(?=\*/)\*/)@ms';
+		return trim( preg_replace( $sql_comments_regex, '', $query ) );
 	}
 
 	/**
@@ -79,22 +96,25 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			return false;
 		}
 
-		// only select queries allowed.
-		if ( ! preg_match( '/\s*(\bselect\b)\s/i', $this->_query ) ) {
+		// only select queries allowed. must start with SELECT keyword.
+		if ( ! preg_match( '/^(\bselect\b)\s/i', $this->_query ) ) {
 			$this->_error = __( 'Only SELECT queries are allowed', 'visualizer' );
 			return false;
 		}
 
 		// if previous check passed, check for disallowed query parts to prevent subqueries and other harmful queries.
 		$disallow_query_parts = array(
-			'INSERT',
-			'UPDATE',
-			'DELETE',
-			'RENAME',
-			'DROP',
 			'CREATE',
-			'TRUNCATE',
 			'ALTER',
+			'TRUNCATE',
+			'DROP',
+
+			'INSERT',
+			'DELETE',
+			'UPDATE',
+			'REPLACE',
+
+			'RENAME',
 			'COMMIT',
 			'ROLLBACK',
 			'MERGE',
@@ -156,6 +176,11 @@ class Visualizer_Source_Query extends Visualizer_Source {
 
 			if ( $raw_results ) {
 				return $rows;
+			}
+
+			if ( $wpdb->last_error ) {
+				$this->_error = $wpdb->last_error;
+				return [];
 			}
 
 			if ( $rows ) {

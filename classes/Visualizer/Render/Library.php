@@ -343,7 +343,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$chart_status['icon'] = 'error dashicons-dismiss';
 			$chart_status['title'] = __( 'Click to view the error', 'visualizer' );
 		}
-		$shortcode = sprintf( '[visualizer id="%s" lazy="no" class=""]', $chart_id );
+		$shortcode = sprintf( '[visualizer id="%s" class=""]', $chart_id );
 		echo '<div class="items"><div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
 		if ( Visualizer_Module::is_pro() && $with_filter ) {
 			echo '<div id="chart_wrapper_' . $placeholder_id . '">';
