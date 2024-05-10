@@ -746,6 +746,87 @@
 
         return $(this);
     };
+
+    // Telemetry
+    function getChartID() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('chart') ?? '';
+    }
+
+    const groupId = getChartID();
+
+    const chartTypes = document.querySelector('#viz-types-form')
+    if( chartTypes ) {
+        document.querySelector('.push-right[type=submit]')?.addEventListener('click', async function (event) {
+            if ( typeof window.tiTrk !== 'undefined' ) {
+                event.preventDefault();    
+                try {
+                    const formData = new FormData(document.querySelector('#viz-types-form'));
+                    const savedData = Object.fromEntries(formData);
+                
+                    tiTrk?.with('visualizer')?.add({
+                        feature: 'chart-create',
+                        featureComponent: 'saved-data',
+                        featureData: {
+                            type: savedData?.['type'],
+                            library: savedData?.['chart-library']
+                        },
+                        groupId
+                    });
+                   
+                    // Do not make the user to wait too long for the event to be uploaded.
+                    const timer = new Promise((resolve) => setTimeout(resolve, 500));
+                    await Promise.race([timer, tiTrk?.uploadEvents()]);
+                } catch (e) {
+                    console.warn(e);
+                }
+                $('#viz-types-form').submit();
+            }
+        });
+    }
+
+    [
+        {
+            selector: '#editor-button',
+            featureComponent: 'source-manual-data'
+        },
+        {
+            selector: '#vz-import-file',
+            featureComponent: 'source-import-csv-file'
+        },
+        {
+            selector: '#vz-save-schedule',
+            featureComponent: 'source-import-csv-remote'
+        },
+        {
+            selector: '#visualizer-json-fetch',
+            featureComponent: 'source-import-json-remote'
+        },
+        {
+            selector: '#existing-chart',
+            featureComponent: 'source-import-chart'
+        },
+        {
+            selector: '#filter-chart-button',
+            featureComponent: 'source-import-wordpress',
+        },
+        {
+            selector: '#woo-chart-button',
+            featureComponent: 'source-import-woocommerce'
+        },
+        {
+            selector: '#db-chart-button',
+            featureComponent: 'source-import-database'
+        }
+    ].forEach(({ selector, featureComponent }) => {
+        document.querySelector(selector)?.addEventListener('click', function () {
+            window?.tiTrk?.with('visualizer')?.set('used-source',{
+                feature: 'chart-edit-used-source',
+                featureComponent,
+                groupId
+            });
+        });
+    });
 })(jQuery);
 
 document.querySelector('#viz-copy-shortcode')?.addEventListener('click', function() {
