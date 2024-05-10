@@ -131,8 +131,7 @@
 					console.warn(e);
 				}
 			}
-			$('#settings-form').submit();
-        document.getElementById('settings-button').addEventListener('click', function() {
+
 			// Get and send the chart ID (used by Visualizer Block).
 			var urlParams = new URLSearchParams(window.location.search);
 			var chartID = urlParams.get('chart');
@@ -140,7 +139,7 @@
 				window.parent.postMessage({ chartID: chartID}, '*');
 			}
 
-			document.getElementById('settings-form').submit();
+			$('#settings-form').submit();
 		});
 
         // this portion captures if the settings have changed so that tabs can handle that information.
