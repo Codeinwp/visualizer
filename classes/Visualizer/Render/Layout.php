@@ -590,7 +590,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 * @access public
 	 */
 	public static function _renderTabAdvanced( $args ) {
-		$sidebar = $args[2];
+		$chart_id = $args[1];
+		$sidebar  = $args[2];
+
+		$chart_options = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+		$backend_title = isset( $chart_options['backend-title'] ) && ! empty( $chart_options['backend-title'] ) ? $chart_options['backend-title'] : '';
+
 		?>
 			<ul class="viz-group-wrapper full-height">
 				<li class="viz-group open" id="vz-chart-settings">
@@ -598,6 +603,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						<ul class="viz-group-wrapper">
 						<form id="settings-form" action="<?php echo esc_url( add_query_arg( 'nonce', wp_create_nonce() ) ); ?>" method="post">
 							<input type="hidden" id="chart-img" name="chart-img">
+							<input type="hidden" id="backend-title" name="backend-title" value="<?php echo esc_html( $backend_title ); ?>">
 							<?php echo $sidebar; ?>
 							<?php self::_renderPermissions( $args ); ?>
 							<input type="hidden" name="save" value="1">

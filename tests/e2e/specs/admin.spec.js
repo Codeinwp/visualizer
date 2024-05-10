@@ -145,11 +145,11 @@ test.describe( 'Chart Library', () => {
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
         await page.waitForSelector('h1:text("Visualizer")');
         
-        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
+        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
 
         await expect( page.frameLocator('iframe').locator('#viz-shortcode') ).toBeVisible();
         await expect( page.frameLocator('iframe').getByRole('button', { name: 'Copy' }) ).toBeVisible();
-        await expect( page.frameLocator('iframe').locator('#viz-internal-name') ).toBeVisible();
+        await expect( page.frameLocator('iframe').locator('#viz-backend-name') ).toBeVisible();
         
         // Check if the shortcode is copied to the clipboard.
         const shortcode = await page.frameLocator('iframe').locator('#viz-shortcode').inputValue();
@@ -158,19 +158,26 @@ test.describe( 'Chart Library', () => {
         expect( clipboardValue ).toBe( shortcode );
 
         // Check two-way binding of the internal name.
-        const name1 = 'Test Internal Name 1';
-        const name2 = 'Test Internal Name 2';
+        const backendName = 'Test Backend Name';
+        const chartName   = 'Test Chart Name';
         
-        await page.frameLocator('iframe').locator('#viz-internal-name').fill(name1);
-        const titleValue = await page.frameLocator('iframe').locator('#settings-form input[name="title"]').inputValue();
-        expect( titleValue ).toBe( name1 );
+        await page.frameLocator('iframe').locator('#viz-backend-name').fill(backendName);
+        const titleValue = await page.frameLocator('iframe').locator('#settings-form input[name="backend-title"]').inputValue();
+        expect( titleValue ).toBe( backendName );
 
         await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
         await page.frameLocator('iframe').getByRole('heading', { name: 'General Settings' }).click();
+        await page.frameLocator('iframe').getByText('Title', { exact: true }).click();
 
-        await page.frameLocator('iframe').locator('input[name="title"]').fill(name2);
-        const internalNameValue = await page.frameLocator('iframe').locator('#viz-internal-name').inputValue();
-        expect( internalNameValue ).toBe( name2 );
+        await page.frameLocator('iframe').locator('input[name="title"]').fill(chartName);
+        const internalNameValue = await page.frameLocator('iframe').locator('#viz-backend-name').inputValue();
+        expect( internalNameValue ).not.toBe( chartName );
+
+        await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
+        await waitForLibraryToLoad( page );
+
+        await expect( page.getByText(backendName) ).toBeVisible();
+        await expect( page.locator('g').filter({ hasText: 'Test Chart Name' }).locator('rect') ).toBeVisible();
     } );
 } );
 
