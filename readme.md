@@ -8,7 +8,7 @@
 **License:** GPL v2.0 or later  
 **License URI:** http://www.opensource.org/licenses/gpl-license.php  
 
-A simple and powerful WordPress chart plugin to create responsive charts & tables and embed them into your site.
+A simple and powerful WordPress chart plugin to create responsive charts & tables and embed them into your site. 
 
 ## Description ##
 
