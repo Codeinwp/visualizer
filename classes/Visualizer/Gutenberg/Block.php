@@ -109,6 +109,7 @@ class Visualizer_Gutenberg_Block {
 			'absurl'    => VISUALIZER_ABSURL,
 			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
 			'adminPage' => menu_page_url( 'visualizer', false ),
+			'createChart' => add_query_arg( array( 'action' => 'visualizer-create-chart', 'library' => 'yes', 'type' => '', 'chart-library' => '', 'tab' => 'visualizer' ), admin_url( 'admin-ajax.php' ) ),
 			'sqlTable'  => $table_col_mapping,
 			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
 			'proFeaturesLocked' => Visualizer_Module_Admin::proFeaturesLocked(),

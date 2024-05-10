@@ -128,7 +128,7 @@ test.describe( 'Chart Library', () => {
         const chartsId = await createAllFreeCharts( admin, page );
         await waitForLibraryToLoad( page );
 
-        expect( page.locator('.visualizer-chart').count() ).resolves.toBe( 4 );
+        await expect( page.locator('.visualizer-chart').count() ).resolves.toBe( 4 );
         for (const chartId of chartsId) {
             await expect( page.locator(`#visualizer-${chartId}`).count() ).resolves.toBeGreaterThan( 0 );
         }
@@ -145,7 +145,7 @@ test.describe( 'Chart Library', () => {
         await waitForLibraryToLoad( page );
 
         // The Create Chart button should be not exists since we skipped the second step.
-        expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
+        await expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
     } );
 
     test( 'chart filtering', async ( { admin, page } ) => {

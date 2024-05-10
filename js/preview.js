@@ -131,6 +131,14 @@
 					console.warn(e);
 				}
 			}
+
+			// Get and send the chart ID (used by Visualizer Block).
+			var urlParams = new URLSearchParams(window.location.search);
+			var chartID = urlParams.get('chart');
+			if ( chartID ) {
+				window.parent.postMessage({ chartID: chartID}, '*');
+			}
+
 			$('#settings-form').submit();
 		});
 
