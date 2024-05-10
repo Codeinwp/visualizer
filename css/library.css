@@ -138,8 +138,8 @@
 .visualizer-chart-action .tooltip-text::before {
   content: '';
   position: absolute;
-  display: block;    
-  width: 0px;        
+  display: block;
+  width: 0px;
   left: 50%;
   top: 0;
   border: 10px solid transparent;
@@ -253,8 +253,8 @@
     justify-content: center;
 }
 .visualizer-sidebar-box .we-offer{
-    background-color: transparent; 
-    color: #007CBA; 
+    background-color: transparent;
+    color: #007CBA;
     font-weight: 400;
     padding: 0px;
     font-size: 14px;
@@ -517,4 +517,85 @@ div#visualizer-types ul, div#visualizer-types form p {
 	.visualizer-chart{
 		height: calc(100% - 24px);
 	}
+}
+
+
+
+.vizualizer-renew-notice-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+}
+
+.vizualizer-renew-notice-popup {
+	display: block;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	z-index: 1000;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	max-width: 400px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.vizualizer-renew-notice-heading {
+	color: #d32f2f;
+	text-align: left;
+	margin-bottom: 10px;
+}
+
+.vizualizer-renew-notice-message {
+	word-wrap: break-word;
+	width: 250px;
+}
+
+.vizualizer-renew-notice-buttons-container {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 10px;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.vizualizer-renew-notice-button {
+	padding: 10px 20px;
+	cursor: pointer;
+	color: white;
+	border: none;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	width: 200px;
+	height: 50px;
+	border-radius: 4px;
+	transition: background-color 0.3s;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.vizualizer-renew-notice-renew-button {
+	background-color: #008CBA;
+}
+
+.vizualizer-renew-notice-activate-button {
+	background-color: #4CAF50;
+}
+
+.vizualizer-renew-notice-close-icon {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	color: #333;
 }

@@ -33,132 +33,63 @@
     });
 })(wp.media.view);
 
-function createPopup() {
-
-    var overlay = document.createElement('div');
-    overlay.id = 'overlay-visualizer';
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    overlay.style.zIndex = '999';
-    document.body.appendChild(overlay);
+function createPopupProBlocker() {
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
     document.head.appendChild(link);
 
+    var overlay = document.createElement('div');
+    overlay.classList.add('vizualizer-renew-notice-overlay');
+    overlay.id = 'overlay-visualizer';
+    document.body.appendChild(overlay);
+
     var popup = document.createElement('div');
+    popup.classList.add('vizualizer-renew-notice-popup');
 
     var closeIcon = document.createElement('i');
-    closeIcon.classList.add('dashicons', 'dashicons-no', 'close-icon');
+    closeIcon.classList.add('fas', 'fa-times', 'vizualizer-renew-notice-close-icon');
     closeIcon.addEventListener('click', function() {
         document.body.removeChild(overlay);
         popup.style.display = 'none';
     });
-    closeIcon.style.position = 'absolute';
-    closeIcon.style.top = '10px';
-    closeIcon.style.right = '10px';
-    closeIcon.style.cursor = 'pointer';
-    closeIcon.style.color = '#333';
-    closeIcon.classList.add('fas', 'fa-times', 'close-icon');
     popup.appendChild(closeIcon);
-
-    popup.style.display = 'none';
-
-    popup.style.position = 'fixed';
-    popup.style.top = '50%';
-    popup.style.left = '50%';
-    popup.style.transform = 'translate(-50%, -50%)';
-    popup.style.backgroundColor = '#fff';
-    popup.style.zIndex = '1000';
-    popup.style.backgroundColor = '#fff';
-    popup.style.padding = '20px';
-    popup.style.border = '1px solid #ccc';
-    popup.style.borderRadius = '8px';
-    popup.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-    popup.style.zIndex = '1000';
-    popup.style.maxWidth = '400px';
-    popup.style.fontWeight = 'bold';
-    popup.style.marginBottom = '20px';
 
     var heading = document.createElement('h1');
     heading.textContent = 'Alert!';
-    heading.style.color = '#d32f2f';
-    heading.style.textAlign = 'left';
-    heading.style.marginBottom = '10px';
+    heading.classList.add('vizualizer-renew-notice-heading');
     popup.appendChild(heading);
-
 
     var message = document.createElement('p');
     message.textContent = 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.';
-    message.style.wordWrap = 'break-word';
-    message.style.width = '250px';
+    message.classList.add('vizualizer-renew-notice-message');
     popup.appendChild(message);
 
-
     var buttonsContainer = document.createElement('div');
-    buttonsContainer.style.display = 'grid';
-    buttonsContainer.style.gridTemplateColumns = '1fr'; // Single column layout
-    buttonsContainer.style.gap = '10px';
-    buttonsContainer.style.textAlign = 'center';
-    buttonsContainer.style.marginTop = '20px';
-
+    buttonsContainer.classList.add('vizualizer-renew-notice-buttons-container');
 
     var link1 = document.createElement('a');
     link1.href = 'https://store.themeisle.com/';
     link1.target = '_blank';
     var button1 = document.createElement('button');
-    button1.innerHTML = '<span style="margin-right: 8px;" class="fas fa-shopping-cart "></span> Renew License'; // Add shopping cart icon
-    button1.style.padding = '10px 20px';
-    button1.style.cursor = 'pointer';
-    button1.style.backgroundColor = '#008CBA';
-    button1.style.color = 'white';
-    button1.style.border = 'none';
-    button1.style.textAlign = 'center';
-    button1.style.textDecoration = 'none';
-    button1.style.display = 'inline-block';
-    button1.style.fontSize = '16px';
-    button1.style.width = '200px';
-    button1.style.height = '50px';
-    button1.style.borderRadius = '4px';
-    button1.style.transition = 'background-color 0.3s';
-    button1.style.fontWeight = 'bold';
-    button1.style.marginTop = '10px';
+    button1.innerHTML = '<span class="fas fa-shopping-cart"></span> Renew License';
+    button1.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-renew-button');
     link1.appendChild(button1);
     buttonsContainer.appendChild(link1);
-
 
     var link2 = document.createElement('a');
     link2.href = '/wp-admin/options-general.php#visualizer_pro_license';
     var button2 = document.createElement('button');
-    button2.innerHTML = '<span style="margin-right: 8px;" class="fas fa-key"></span> Activate License';
-    button2.style.padding = '10px 20px';
-    button2.style.cursor = 'pointer';
-    button2.style.backgroundColor = '#4CAF50';
-    button2.style.color = 'white';
-    button2.style.border = 'none';
-    button2.style.textAlign = 'center';
-    button2.style.textDecoration = 'none';
-    button2.style.display = 'inline-block';
-    button2.style.fontSize = '16px';
-    button2.style.width = '200px';
-    button2.style.height = '50px';
-    button2.style.borderRadius = '4px';
-    button2.style.transition = 'background-color 0.3s';
-    button2.style.fontWeight = 'bold';
-    button2.style.marginTop = '10px';
+    button2.innerHTML = '<span class="fas fa-key"></span> Activate License';
+    button2.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-activate-button');
     link2.appendChild(button2);
     buttonsContainer.appendChild(link2);
 
-   popup.appendChild(buttonsContainer);
+    popup.appendChild(buttonsContainer);
 
     document.body.appendChild(popup);
 
-    popup.style.display = 'block';
 }
 
 (function ($, vmv, vu) {
@@ -207,7 +138,7 @@ function createPopup() {
         $('.visualizer-chart-shortcode').click(function (e) {
 
             if ( ! visualizer.is_pro_user && e.target.classList.contains('is_pro') ) {
-                createPopup();
+                createPopupProBlocker();
                 e.preventDefault();
                 e.stopPropagation();
                 return;
@@ -265,7 +196,7 @@ function createPopup() {
         $('.visualizer-chart-edit').click(function (event) {
 
             if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
-                createPopup();
+                createPopupProBlocker();
                 return;
             }
 
@@ -285,7 +216,7 @@ function createPopup() {
         });
         $(".visualizer-chart-clone").on("click", function ( event ) {
             if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
-                createPopup();
+                createPopupProBlocker();
                 event.preventDefault();
             }
         });
@@ -293,7 +224,7 @@ function createPopup() {
         $(".visualizer-chart-export").on("click", function (event) {
 
             if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
-                createPopup();
+                createPopupProBlocker();
                 return;
             }
 
@@ -319,7 +250,7 @@ function createPopup() {
 
         $(".visualizer-chart-image").on("click", function (event) {
             if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
-                createPopup();
+                createPopupProBlocker();
                 return;
             }
             $('body').trigger('visualizer:action:specificchart', {action: 'image', id: $(this).attr("data-chart"), data: null, dataObj: {name: $(this).attr("data-chart-title")}});
