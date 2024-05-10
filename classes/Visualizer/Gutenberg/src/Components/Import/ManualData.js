@@ -36,59 +36,39 @@ class ManualData extends Component {
 
 	render() {
 		return (
-			( 'community' !== visualizerLocalize.isPro ) ?
-				<Fragment>
-
-					<PanelBody
-						title={ __( 'Manual Data' ) }
-						initialOpen={ false }
-					>
-
-						<p>{ __( 'You can manually edit the chart data using a spreadsheet like editor.' ) }</p>
-
-						<Button
-							isPrimary
-							isLarge
-							isBusy={ this.state.isOpen }
-							onClick={ this.toggleModal }
-						>
-							{ __( 'View Editor' ) }
-						</Button>
-
-					</PanelBody>
-
-					{ this.state.isOpen && (
-						<Modal
-							title={ 'Chart Editor' }
-							onRequestClose={ this.toggleModal }
-							shouldCloseOnClickOutside={ false }
-						>
-							<ChartEditor
-								chart={ this.props.chart }
-								editChartData={ this.props.editChartData }
-								toggleModal={ this.toggleModal }
-							/>
-						</Modal>
-					) }
-
-				</Fragment>			:
+			<Fragment>
 				<PanelBody
 					title={ __( 'Manual Data' ) }
-					icon="lock"
 					initialOpen={ false }
 				>
 
-					<p>{ __( 'Enable this feature in PRO version!' ) }</p>
+					<p>{ __( 'You can manually edit the chart data using a spreadsheet like editor.' ) }</p>
 
 					<Button
 						isPrimary
-						href={ visualizerLocalize.proTeaser }
-						target="_blank"
+						isLarge
+						isBusy={ this.state.isOpen }
+						onClick={ this.toggleModal }
 					>
-						{ __( 'Upgrade Now' ) }
+						{ __( 'View Editor' ) }
 					</Button>
 
 				</PanelBody>
+
+				{ this.state.isOpen && (
+					<Modal
+						title={ 'Chart Editor' }
+						onRequestClose={ this.toggleModal }
+						shouldCloseOnClickOutside={ false }
+					>
+						<ChartEditor
+							chart={ this.props.chart }
+							editChartData={ this.props.editChartData }
+							toggleModal={ this.toggleModal }
+						/>
+					</Modal>
+				) }
+			</Fragment>
 		);
 	}
 }

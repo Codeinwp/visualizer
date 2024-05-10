@@ -395,6 +395,37 @@ div.viz-group-content .viz-group-description {
 #viz-tabs .wp-color-picker {
   width: 4rem !important;
 }
+
+.viz-info-panel {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	gap: 10px;
+}
+
+.viz-info-panel label {
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+}
+
+.viz-info-panel input {
+	flex: 1;
+}
+
+.viz-info-panel .viz-info-item {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 3px;
+}
+
+.viz-info-panel .viz-info-row {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+}
+
 /******************************************************************************/
 /********************************  TOOLBAR  ***********************************/
 /******************************************************************************/
@@ -1062,14 +1093,18 @@ button#editor-chart-button {
 }
 
 .only-pro-container {
-	display: table;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
 }
 
 .only-pro-inner {
-	display: table-cell;
-	vertical-align: middle;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .only-pro-content p {
@@ -1096,6 +1131,10 @@ button#editor-chart-button {
 
 .only-pro-content a:hover {
 	background: #2D419B;
+}
+
+.only-pro-anchor {
+	position: relative;
 }
 
 #sidebar::-webkit-scrollbar {

@@ -186,10 +186,12 @@ class ChartSelect extends Component {
 						{ legacyBlockEdit && (
 							<>
 
-								<FileImport
-									chart={ this.props.chart }
-									readUploadedFile={ this.props.readUploadedFile }
-								/>
+						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
+
+						<FileImport
+							chart={ this.props.chart }
+							readUploadedFile={ this.props.readUploadedFile }
+						/>
 
 								<RemoteImport
 									id={ this.props.id }
@@ -214,14 +216,12 @@ class ChartSelect extends Component {
 									databaseImportData={ this.props.databaseImportData }
 								/>
 
-								<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
-
-								<PanelButton
-									label={ __( 'Advanced Options' ) }
-									className="visualizer-advanced-options"
-									icon="admin-tools"
-									onClick={ () => this.setState({ route: 'showAdvanced' }) }
-								/>
+						<PanelButton
+							label={ __( 'Advanced Options' ) }
+                            className="visualizer-advanced-options"
+							icon="admin-tools"
+							onClick={ () => this.setState({ route: 'showAdvanced' }) }
+						/>
 
 								<PanelButton
 									label={ __( 'Chart Permissions' ) }
