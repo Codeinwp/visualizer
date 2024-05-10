@@ -85,14 +85,14 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		?>
 		<div class="viz-info-panel">
 			<div class="viz-info-item">
-				<p><?php _e( 'Shortcode', 'visualizer' ); ?></p>
+				<label for="viz-shortcode"><?php _e( 'Shortcode', 'visualizer' ); ?></label>
 				<div class="viz-info-row">
 					<input type="text" id="viz-shortcode" value="[visualizer id=&quot;<?php echo $this->chart->ID; ?>&quot; class='']" readonly>
 					<button class="button" id="viz-copy-shortcode"><?php _e( 'Copy', 'visualizer' ); ?></button>
 				</div>
 			</div>
 			<div class="viz-info-item">
-				<p><?php _e( 'Backend chart title for internal usage', 'visualizer' ); ?></p>
+				<label for="viz-internal-name"><?php _e( 'Backend chart title for internal usage', 'visualizer' ); ?></label>
 				<input type="text" id="viz-internal-name" value="<?php echo  $hasTitle ? $chartSettings['title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>">
 			</div>
 		</div>

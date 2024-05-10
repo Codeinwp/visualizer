@@ -399,13 +399,14 @@ div.viz-group-content .viz-group-description {
 .viz-info-panel {
 	display: flex;
 	flex-direction: column;
-	padding: 5px;
+	padding: 10px;
 	gap: 10px;
 }
 
-.viz-info-panel p {
+.viz-info-panel label {
 	margin: 0;
 	padding: 0;
+	font-weight: bold;
 }
 
 .viz-info-panel input {
