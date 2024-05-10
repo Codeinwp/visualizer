@@ -68,8 +68,9 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
 
+		global $wpdb;
 		$_POST['params'] = array(
-			'query' => 'SELECT * FROM wp_posts',
+			'query' => 'SELECT * FROM ' . $wpdb->prefix . 'posts LIMIT 1',
 			'chart_id' => 1,
 		);
 		try {
@@ -136,7 +137,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$this->assertIsObject( $response );
 		$this->assertObjectHasAttribute( 'success', $response );
 		$this->assertObjectHasAttribute( 'data', $response );
-		$this->assertTrue( $response->success );
+		$this->assertFalse( $response->success );
+		$this->assertTrue( strpos( $response->data->msg, ".wp_insert' doesn't exist" ) !== false );
 	}
 
 	/**

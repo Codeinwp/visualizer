@@ -740,9 +740,9 @@ class Visualizer_Module {
 	public static final function get_features_for_license( $plan ) {
 		switch ( $plan ) {
 			case 1:
-				return array( 'import-wp', 'db-query', 'import-wc-report', 'import-file', 'import-url' );
+				return array( 'import-wp', 'import-wc-report', 'import-file', 'import-url' );
 			case 2:
-				return array( 'schedule-chart', 'chart-permissions', 'import-chart', 'data-filter-configuration', 'frontend-actions' );
+				return array( 'db-query', 'schedule-chart', 'chart-permissions', 'import-chart', 'data-filter-configuration', 'frontend-actions' );
 		}
 	}
 
