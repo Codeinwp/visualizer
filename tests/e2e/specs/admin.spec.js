@@ -130,12 +130,12 @@ test.describe( 'Chart Library', () => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
         await page.waitForSelector('h1:text("Visualizer")');
-        
+
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
 
         await page.frameLocator('iframe').getByRole('button', { name: 'Cancel' }).click();
         await waitForLibraryToLoad( page );
-       
+
         // The Create Chart button should be not exists since we skipped the second step.
         expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
     } );
@@ -144,13 +144,13 @@ test.describe( 'Chart Library', () => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
         await page.waitForSelector('h1:text("Visualizer")');
-        
+
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
 
         await expect( page.frameLocator('iframe').locator('#viz-shortcode') ).toBeVisible();
         await expect( page.frameLocator('iframe').getByRole('button', { name: 'Copy' }) ).toBeVisible();
         await expect( page.frameLocator('iframe').locator('#viz-internal-name') ).toBeVisible();
-        
+
         // Check if the shortcode is copied to the clipboard.
         const shortcode = await page.frameLocator('iframe').locator('#viz-shortcode').inputValue();
         await page.frameLocator('iframe').getByRole('button', { name: 'Copy' }).click();
@@ -160,7 +160,7 @@ test.describe( 'Chart Library', () => {
         // Check two-way binding of the internal name.
         const name1 = 'Test Internal Name 1';
         const name2 = 'Test Internal Name 2';
-        
+
         await page.frameLocator('iframe').locator('#viz-internal-name').fill(name1);
         const titleValue = await page.frameLocator('iframe').locator('#settings-form input[name="title"]').inputValue();
         expect( titleValue ).toBe( name1 );
@@ -202,7 +202,7 @@ test.describe( 'Support', () => {
         await expect(page.frameLocator('iframe').getByRole('combobox')).toHaveValue('GoogleCharts');
 
         // Check disabled Options
-        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveCount(2);
-        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveText( [ /DataTable/, /ChartJS/ ] );
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveCount(1);
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option:disabled')).toHaveText( [ /DataTable/ ] );
     } );
 } );
