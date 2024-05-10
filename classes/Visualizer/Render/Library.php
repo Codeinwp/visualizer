@@ -301,6 +301,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( is_array( $title ) && isset( $title['text'] ) ) {
 			$title = $title['text'];
 		}
+		if ( ! empty( $settings[0]['backend-title'] ) ) {
+			$title  = $settings[0]['backend-title'];
+		}
 		if ( empty( $title ) ) {
 			$title  = '#' . $chart_id;
 		}
