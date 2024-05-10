@@ -24,7 +24,7 @@ const config = defineConfig( {
 	projects: [
 		{
 			name: 'chromium',
-			use: { ...devices[ 'Desktop Chrome' ], permissions: ["clipboard-read"] },
+			use: { ...devices[ 'Desktop Chrome' ], permissions: ['clipboard-read', 'clipboard-write'] },
 			grepInvert: /-chromium/,
 		},
 		// {
