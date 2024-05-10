@@ -347,7 +347,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		$pro_class = '';
 
 		if ( ! empty( $chart_type ) && isset( $types[ $chart_type ] ) ) {
-			$pro_class = 'is_pro';
+			$pro_class = 'viz-is-pro-chart';
 		}
 
 		$chart_status   = array( 'date' => get_the_modified_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $chart_id ), 'error' => get_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, true ), 'icon' => 'dashicons-yes-alt', 'title' => 'A-OK!' );

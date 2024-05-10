@@ -137,7 +137,7 @@ function createPopupProBlocker() {
 
         $('.visualizer-chart-shortcode').click(function (e) {
 
-            if ( ! visualizer.is_pro_user && e.target.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && e.target.classList.contains('viz-is-pro-chart') ) {
                 createPopupProBlocker();
                 e.preventDefault();
                 e.stopPropagation();
@@ -195,7 +195,7 @@ function createPopupProBlocker() {
 
         $('.visualizer-chart-edit').click(function (event) {
 
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
                 createPopupProBlocker();
                 return;
             }
@@ -215,7 +215,7 @@ function createPopupProBlocker() {
             return false;
         });
         $(".visualizer-chart-clone").on("click", function ( event ) {
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
                 createPopupProBlocker();
                 event.preventDefault();
             }
@@ -223,7 +223,7 @@ function createPopupProBlocker() {
 
         $(".visualizer-chart-export").on("click", function (event) {
 
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
                 createPopupProBlocker();
                 return;
             }
@@ -249,7 +249,7 @@ function createPopupProBlocker() {
         });
 
         $(".visualizer-chart-image").on("click", function (event) {
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('is_pro') ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
                 createPopupProBlocker();
                 return;
             }
