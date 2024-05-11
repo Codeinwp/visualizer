@@ -173,6 +173,12 @@
             $('.add-new-chart').first().trigger('click');
         }
 
+        //if vaction=edit is found as a GET request parameter, show the modal.
+        if(location.href.indexOf('vaction=edit') !== -1 && location.href.indexOf('chart=') !== -1){
+            const chartId = location.href.split('chart=')[1].split('&')[0];
+            $('.visualizer-chart-edit').attr('data-chart', chartId).trigger('click');
+        }
+
         $(window).resize(function () {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function () {
@@ -187,12 +193,13 @@
     });
 })(jQuery, visualizer.media.view, visualizer.urls);
 
+
 document.querySelectorAll('.visualizer-chart').forEach(function (chart) {
     const translatable = chart.querySelector('.visualizer-languages-list');
     if ( ! translatable ) {
         return;
     }
-    
+
     const chartId = chart.querySelector('.visualizer-chart-canvas')?.id?.replace('visualizer-', '');
 
     if ( ! chartId ) {
