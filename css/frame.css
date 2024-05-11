@@ -464,6 +464,18 @@ div.viz-group-content .viz-group-description {
 	vertical-align: top;
 }
 
+#chart-select {
+	display: flex;
+	padding: 12px 8px;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+}
+
+#chart-select label {
+	font-weight: bold;
+}
+
 /******************************************************************************/
 /********************************  TYPE PICKER   ******************************/
 /******************************************************************************/
@@ -506,7 +518,11 @@ div.viz-group-content .viz-group-description {
 	display: none;
 }
 
-.type-box:nth-child(3n+3) {
+.type-box.viz-hidden {
+	display: none;
+}
+
+.type-box:nth-child(3n+1) {
 	margin-right: 0;
 }
 

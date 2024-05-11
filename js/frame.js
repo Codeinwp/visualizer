@@ -9,9 +9,7 @@
 (function ($) {
     $(window).on('load', function(){
         // scroll to the selected chart type.
-        if($('label.type-label.type-label-selected').length > 0) {
-            $('label.type-label.type-label-selected')[0].scrollIntoView();
-        }
+        $('#chart-select').scrollIntoView();
     });
 
     $(document).ready(function () {
@@ -174,7 +172,7 @@
         const rendererTypesMapping = JSON.parse( rendererTypesMappingData );
 
         document.querySelectorAll('input.type-radio').forEach( chartTypeRadio => {
-
+            
             // Init the lib based on the default selected chart type.
             if ( chartTypeRadio.checked ) {
                 const chartType = chartTypeRadio.value;
@@ -188,7 +186,7 @@
                     rendererSelect.value = rendererTypesMapping[chartType][0]
                 }
             }
-            
+
             chartTypeRadio.addEventListener('click', (event) => {
                 // Check if the chart type is supported by the selected renderer. If not, select the first supported renderer.
                 const chartType = event.target.value;
@@ -256,6 +254,20 @@
                 chartOption.checked = false;
             }
         });
+
+        enable_libraries_for($('input.type-radio:checked').val(), $typeVsLibrary);
+    }
+
+    function enable_libraries_for($type, $typeVsLibrary) {
+        $('select.viz-select-library option').addClass('disabled').attr('disabled', 'disabled');
+        $('select.viz-select-library option .premium-label').remove();
+        $('select.viz-select-library option').append('<span class="premium-label"> (PREMIUM)</span>');
+        var $libs = $typeVsLibrary[$type];
+        $.each($libs, function( i, $lib ) {
+            $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
+            $('select.viz-select-library option[value="' + $lib + '"] .premium-label').remove();
+        });
+        $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
     }
 
     function init_permissions(){

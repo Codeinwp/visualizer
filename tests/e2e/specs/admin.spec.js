@@ -154,13 +154,11 @@ test.describe( 'Chart Library', () => {
         await page.waitForSelector('h1:text("Visualizer")');
 
         await page.frameLocator('iframe').locator('label').filter({ hasText: 'Pie/Donut' }).click();
-        
-        await expect( page.frameLocator('iframe').getByRole('combobox').locator('option').first() ).toBeDisabled(); // Placeholder is disabled.
-        
+
         expect( page.locator('.viz-hidden') ).toHaveCount(0) // No hidden charts by default.
-        
+
         await page.frameLocator('iframe').getByRole('combobox').selectOption({ value: 'ChartJS' });
-        
+
         await expect( page.frameLocator('iframe').locator('.viz-hidden').count() ).resolves.toBeGreaterThan( 0 ); // We should have hidden charts.
     });
 
@@ -168,22 +166,22 @@ test.describe( 'Chart Library', () => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
         await page.waitForSelector('h1:text("Visualizer")');
-        
+
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
 
         await expect( page.frameLocator('iframe').locator('#viz-shortcode') ).toBeVisible();
         await expect( page.frameLocator('iframe').getByRole('button', { name: 'Copy' }) ).toBeVisible();
         await expect( page.frameLocator('iframe').locator('#viz-backend-name') ).toBeVisible();
-        
+
         // Check if the shortcode is copied to the clipboard.
         const shortcode = await page.frameLocator('iframe').locator('#viz-shortcode').inputValue();
         await page.frameLocator('iframe').getByRole('button', { name: 'Copy' }).click();
         const clipboardValue = await page.evaluate(() => navigator.clipboard.readText());
         expect( clipboardValue ).toBe( shortcode );
-        
+
         const backendName = 'Test Backend Name';
         const chartName   = 'Test Chart Name';
-        
+
         await page.frameLocator('iframe').locator('#viz-backend-name').fill(backendName);
         const titleValue = await page.frameLocator('iframe').locator('#settings-form input[name="backend-title"]').inputValue();
         expect( titleValue ).toBe( backendName );
@@ -220,5 +218,19 @@ test.describe( 'Support', () => {
         await page.getByRole('link', { name: 'Help us improve!' }).click();
         await expect( page.getByRole('heading', { name: 'Answer a few questions for us' }) ).toBeVisible();
         await expect( page.getByRole('link', { name: 'survey' }) ).toBeVisible();
+    } );
+
+    test('check Chart selection', async ( { page, admin } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer' );
+        await page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link').click();
+        await expect(page.frameLocator('iframe').getByText('Select Library for charts')).toBeVisible();
+        await expect(page.frameLocator('iframe').getByRole('combobox')).toBeVisible();
+        await expect(page.frameLocator('iframe').locator('#chart-select')).toContainText('Select Library for charts');
+        // Check Default Option
+        await expect(page.frameLocator('iframe').getByRole('combobox')).toHaveValue('GoogleCharts');
+
+        // Check disabled Options
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option')).toHaveCount(3);
+        await expect(page.frameLocator('iframe').locator('#chart-select > select option')).toHaveText( [ "DataTable", "Google Charts", "ChartJS" ] );
     } );
 } );
