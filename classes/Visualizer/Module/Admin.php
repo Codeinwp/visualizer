@@ -141,14 +141,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			return;
 		}
 
-		$license = __( 'PRO', 'visualizer' );
-		if ( Visualizer_Module::is_pro() ) {
-			switch ( $plan ) {
-				case 1:
-					$license = __( 'Developer', 'visualizer' );
-					break;
-			}
-		}
+		$is_new_personal = apply_filters( 'visualizer_is_new_personal', false );
 
 		$hours = array(
 			'0.16' => __( '10 minutes', 'visualizer' ),
@@ -162,7 +155,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			case 'json':
 			case 'csv':
 				// no more schedules if pro is already active.
-				if ( Visualizer_Module::is_pro() ) {
+				if ( Visualizer_Module::is_pro() && ! $is_new_personal ) {
 					return;
 				}
 				break;
@@ -174,7 +167,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				return;
 		}
 
-		echo '<optgroup disabled label="' . sprintf( __( 'More in the %s version', 'visualizer' ), $license ) . '">';
+		echo '<optgroup disabled label="' . __( 'Upgrade required', 'visualizer' ) . '">';
 		foreach ( $hours as $hour => $desc ) {
 			echo '<option disabled>' . $desc . '</option>';
 		}
