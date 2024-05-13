@@ -1242,14 +1242,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$user_id = 'visualizer_' . preg_replace( '/[^\w\d]*/', '', get_site_url() ); // Use a normalized version of the site URL as a user ID.
 
 		$license_data = get_option( 'visualizer_pro_license_data', false );
-		if ( false !== $license_data ) {
+		if ( false !== $license_data && isset( $license_data->key ) ) {
 			$user_id = 'visualizer_' . $license_data->key;
 		}
 
 		return array(
 			'userId' => $user_id,
 			'attributes' => array(
-				'days_since_install' => $install_category,
+				'days_since_install' => strval( $install_category ),
 				'free_version'       => $plugin_version,
 				'pro_version'        => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
 				'license_status'     => apply_filters( 'product_visualizer_license_status', 'invalid' ),
