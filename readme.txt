@@ -25,23 +25,23 @@ The plugin uses the Google Visualization API, DataTables.net, and ChartJS librar
 
 ### Why You’ll Love Visualizer ###
 
-* <b>Diverse Chart Options:</b> Begin with essential chart types like line, pie, bar, and table in the free version. Elevate your data presentation with advanced chart types such as scatter, area, and geo available in the Pro version. The free version offers a comprehensive range of options that are perfect for various visualization needs.
+- **Diverse Chart Options:** Begin with essential chart types like line, pie, bar, and table in the free version. Elevate your data presentation with advanced chart types such as scatter, area, and geo available in the Pro version. The free version offers a comprehensive range of options that are perfect for various visualization needs.
 
-* <b>Flexible Data Source Options:</b> Visualizer Free supports a variety of accessible data input methods to suit your specific needs:
+- **Flexible Data Source Options:**Visualizer Free supports a variety of accessible data input methods to suit your specific needs:
 
-* <b>Import Data from Files:</b> Upload CSV files directly into Visualizer. This feature is ideal for those who prepare data in spreadsheet tools like Microsoft Excel or Google Sheets, allowing for quick and easy data visualization.
+- **Import Data from Files:** Upload CSV files directly into Visualizer. This feature is ideal for those who prepare data in spreadsheet tools like Microsoft Excel or Google Sheets, allowing for quick and easy data visualization.
 
-*  <b>Import Data from URLs:</b> Keep your charts updated by importing data dynamically from external sources in CSV or JSON formats via URLs. This powerful feature is essential for displaying real-time or frequently updated data, reducing the need for manual updates.
+- **Import Data from URLs:** Keep your charts updated by importing data dynamically from external sources in CSV or JSON formats via URLs. This powerful feature is essential for displaying real-time or frequently updated data, reducing the need for manual updates.
 
-*  <b>Manual Data Entry:</b> Input data manually for quick visualization tasks or when dealing with smaller data sets. This method provides ultimate control over the content and structure of your charts, making it simple to tailor data presentation directly within the plugin interface.
+- **Manual Data Entry:** Input data manually for quick visualization tasks or when dealing with smaller data sets. This method provides ultimate control over the content and structure of your charts, making it simple to tailor data presentation directly within the plugin interface.
 
-*  <b>Ultimate Responsiveness:</b> Crafted using HTML5/SVG technology, Visualizer charts ensure flawless functionality across all devices. This commitment to responsiveness guarantees that your data is not only accessible but also optimally displayed on desktops, tablets, and smartphones, enhancing user interaction and engagement.
+- **Ultimate Responsiveness:** Crafted using HTML5/SVG technology, Visualizer charts ensure flawless functionality across all devices. This commitment to responsiveness guarantees that your data is not only accessible but also optimally displayed on desktops, tablets, and smartphones, enhancing user interaction and engagement.
 
-*  <b>Data Table Capabilities:</b> In addition to our responsive charts and graphs, you can also add responsive tables to your posts and pages and customize them to your liking. Visualizer Pro lets you enhance them with features such as sorting capabilities, pagination, and search functions. From pricing tables to product tables, the possibilities are vast and customizable to meet any data presentation need.
+- **Data Table Capabilities:** In addition to our responsive charts and graphs, you can also add responsive tables to your posts and pages and customize them to your liking. Visualizer Pro lets you enhance them with features such as sorting capabilities, pagination, and search functions. From pricing tables to product tables, the possibilities are vast and customizable to meet any data presentation need.
 
-*  <b>Seamless Integration and Compatibility:</b> Whether you're using the Gutenberg editor or other page builders, Visualizer integrates effortlessly into your WordPress environment. This seamless compatibility allows for straightforward chart insertion and management.
+- **Seamless Integration and Compatibility:** Whether you're using the Gutenberg editor or other page builders, Visualizer integrates effortlessly into your WordPress environment. This seamless compatibility allows for straightforward chart insertion and management.
 
-*  <b>Flexible and Customizable:</b> Make the charts and tables truly your own. Visualizer offers an extensive set of configuration options to perfectly match the look and feel of your website. Utilize Google Chart Tools with their default settings for simplicity, or dive into customization if your site’s style requires a unique approach. Every chart and table exposes numerous options that customize its appearance and functionality, ensuring your visualizations integrate seamlessly into your pages.
+- **Flexible and Customizable:** Make the charts and tables truly your own. Visualizer offers an extensive set of configuration options to perfectly match the look and feel of your website. Utilize Google Chart Tools with their default settings for simplicity, or dive into customization if your site’s style requires a unique approach. Every chart and table exposes numerous options that customize its appearance and functionality, ensuring your visualizations integrate seamlessly into your pages.
 
 These versatile data handling capabilities ensure that Visualizer Free is equipped to meet a wide range of data visualization requirements right out of the box. Perfect for bloggers, educators, small businesses, and more, Visualizer helps you turn raw data into compelling, interactive charts that engage and inform your audience.
 
@@ -54,19 +54,19 @@ These versatile data handling capabilities ensure that Visualizer Free is equipp
 
 ### ✨ YOU SHOULD USE VISUALIZER IF: ###
 
-* <b>You Own a Personal or Small Business Website:</b> You need a straightforward, powerful tool to enhance your website's visual appeal with interactive charts and tables. Visualizer makes complex data understandable and engaging.
+- **You Own a Personal or Small Business Website:** You need a straightforward, powerful tool to enhance your website's visual appeal with interactive charts and tables. Visualizer makes complex data understandable and engaging.
 
-* <b>You Run an Educational or Financial Institution:</b> For organizations that require regular reporting and data display, Visualizer offers comprehensive options for creating dynamic and informative charts and tables. This helps in better data analysis and presentation, aiding in decision-making and reporting.
+- **You Run an Educational or Financial Institution:** For organizations that require regular reporting and data display, Visualizer offers comprehensive options for creating dynamic and informative charts and tables. This helps in better data analysis and presentation, aiding in decision-making and reporting.
 
-* <b>You Aim to Enhance SEO and User Engagement:</b> Using Visualizer’s interactive and responsive charts can significantly improve user engagement, keeping visitors on your site longer, which can positively impact your SEO rankings.
+- **You Aim to Enhance SEO and User Engagement:** Using Visualizer’s interactive and responsive charts can significantly improve user engagement, keeping visitors on your site longer, which can positively impact your SEO rankings.
 
-* <b>You are a Non-Profit Organizations:</b> Non-profits can use Visualizer to display the impact of their initiatives through data. Create pie charts to show the distribution of spending or line charts to track donation trends over time, which can be powerful visuals for fundraising campaigns and annual reports.
+- **You are a Non-Profit Organizations:** Non-profits can use Visualizer to display the impact of their initiatives through data. Create pie charts to show the distribution of spending or line charts to track donation trends over time, which can be powerful visuals for fundraising campaigns and annual reports.
 
-* <b>You are Financial Advisors and Economists:</b> Visualizer allows for detailed financial reporting and economic analyses with advanced chart types like candlestick and radar charts. These tools can be used to depict stock performances, economic cycles, or budget allocations, providing clients with clear insights into financial matters.
+- **You are Financial Advisors and Economists:** Visualizer allows for detailed financial reporting and economic analyses with advanced chart types like candlestick and radar charts. These tools can be used to depict stock performances, economic cycles, or budget allocations, providing clients with clear insights into financial matters.
 
-* <b>Regardless of Industry:</b> With over 30,000 happy active users and 160+ 5-star ratings, Visualizer has been employed across a broad range of industries, including healthcare, marketing, education, and finance, demonstrating its versatility and effectiveness in any field.
+- **Regardless of Industry:** With over 30,000 happy active users and 160+ 5-star ratings, Visualizer has been employed across a broad range of industries, including healthcare, marketing, education, and finance, demonstrating its versatility and effectiveness in any field.
 
-<b>Types of charts you can create with Visualizer:</b> Visualizer WordPress graph and charts plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, bar charts, pie charts, table charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
+**Types of charts you can create with Visualizer:** Visualizer WordPress graph and charts plugin provides a variety of charts that are optimized to address your WordPress data visualization needs. In the free version, it has line charts, bar charts, pie charts, table charts. These charts are based on pure HTML5/SVG technology (adopting VML for old IE versions), so no extra plugins are required. Adding these charts to your page can be done in a few simple steps.
 
 - **Table:** Tables are extremely useful tools for displaying organized data. We use the datatable library to offer you endless customization options for any table needs you might have. [Click here to see demo](https://demo.themeisle.com/visualizer/table-chart/).
 - **Pie Chart:** Pie charts are simple visualizations that allow you to easily illustrate the proportion of your data to your users. [Click here to see demo](https://demo.themeisle.com/visualizer/pie-chart/).
