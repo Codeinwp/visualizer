@@ -369,7 +369,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 		echo '<div class="visualizer-action-group">';
-		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text ' . esc_attr( $pro_class ) . '">' . esc_attr__( 'Delete', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_attr__( 'Delete', 'visualizer' ) . '</span></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-shortcode ' . esc_attr( $pro_class ) . '" href="javascript:;" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-shortcode ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_attr__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
 		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
 			echo '<a class="visualizer-chart-action visualizer-chart-image ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"><span class="dashicons dashicons-format-image ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_attr__( 'Download PNG', 'visualizer' ) . '</span></a>';
