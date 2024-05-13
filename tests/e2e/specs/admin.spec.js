@@ -140,12 +140,17 @@ test.describe( 'Chart Library', () => {
         await page.waitForSelector('h1:text("Visualizer")');
 
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
+       
+        const backendTitle = await page.frameLocator('iframe').locator('input[name="backend-title"]').inputValue();
 
         await page.frameLocator('iframe').getByRole('button', { name: 'Cancel' }).click();
         await waitForLibraryToLoad( page );
 
-        // The Create Chart button should be not exists since we skipped the second step.
+        // The iframe should be closed.
         await expect( page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }) ).toBeHidden();
+
+        // The chart should not be created.
+        await expect( page.locator('.visualizer-chart-title').filter({ hasText: backendTitle }).count() ).resolves.toBe( 0 );
     } );
 
     test( 'chart filtering', async ( { admin, page } ) => {

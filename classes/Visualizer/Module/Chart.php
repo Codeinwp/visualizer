@@ -788,7 +788,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
-			if ( $this->_chart->post_status === 'auto-draft' ) {
+			$is_canceled      = isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] );
+			$is_newly_created = $this->_chart->post_status === 'auto-draft';
+
+			if ( $is_newly_created && ! $is_canceled ) {
 				$this->_chart->post_status = 'publish';
 
 				// ensure that a revision is not created. If a revision is created it will have the proper data and the parent of the revision will have default data.
@@ -798,7 +801,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				wp_update_post( $this->_chart->to_array() );
 			}
 			// save meta data only when it is NOT being canceled.
-			if ( ! ( isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] ) ) ) {
+			if ( ! $is_canceled ) {
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
 
 				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
