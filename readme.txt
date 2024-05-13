@@ -226,6 +226,24 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+#### [Version 3.11.0](https://github.com/Codeinwp/visualizer/compare/v3.10.15...v3.11.0) (2024-05-13)
+
+#### Enhancements
+- Added a manual data edit feature to the free version of the plugin
+- Improved the flow of chart creation
+- Added a chart information panel: backend chart title & quick shortcode access
+- Line and Pie charts from the ChartJS library are now available for free users, along with library selection and relative images
+- Improved wording in onboarding
+- Improved workflow for creating charts via the Visualizer Gutenberg block
+- Moved chart library selection to the top of the page and showing charts from the available library only
+- Unified chart edition (removed duplicated chart settings in block editor)
+- Added optional feature usage data
+- Enhanced security
+- Improved the UI of the database query option (visible database prefix, sample query, autocompleting table names) [PRO]
+
+
+
+
 ##### [Version 3.10.15](https://github.com/Codeinwp/visualizer/compare/v3.10.14...v3.10.15) (2024-05-10)
 
 - Updated internal dependencies
