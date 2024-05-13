@@ -32,12 +32,71 @@ const { startCase } = lodash;
 
 const { __ } = wp.i18n;
 
+const { apiFetch } = wp;
+
+const {
+	Button
+} = wp.components;
+
 const {
 	Component,
 	Fragment
 } = wp.element;
 
 const { InspectorControls } = wp.blockEditor || wp.editor;
+
+let visualizerMedia, visualizerMediaView;
+visualizerMedia = visualizer.media = {};
+visualizerMediaView = visualizerMedia.view = {};
+
+visualizerMediaView.Chart = wp.media.view.MediaFrame.extend(
+	{
+		initialize: function() {
+			const self = this;
+
+			_.defaults(
+				self.options, {
+					action: '',
+					id: 'visualizer',
+					state: 'iframe:visualizer',
+					title: 'Visualizer'
+				}
+			);
+
+			wp.media.view.MediaFrame.prototype.initialize.apply( self, arguments );
+
+			wp.media.view.settings.tab = 'Visualizer';
+			wp.media.view.settings.tabUrl = self.options.action;
+			self.createIframeStates();
+		},
+
+		createIframeStates: function( passedOptions ) {
+			const self = this;
+			wp.media.view.MediaFrame.prototype.createIframeStates.apply( self, arguments );
+
+			self.state( self.options.state ).set(
+				_.defaults(
+					{
+						tab: self.options.id,
+						src: self.options.action + '&tab=' + self.options.id,
+						title: self.options.title,
+						content: 'iframe',
+						menu: 'default'
+					}, passedOptions
+				)
+			);
+
+		},
+
+		open: function() {
+			try {
+				wp.media.view.MediaFrame.prototype.open.apply( this, arguments );
+			} catch ( error ) {
+				console.error( error );
+			}
+		}
+	}
+);
 
 class ChartSelect extends Component {
 	constructor() {
@@ -56,6 +115,7 @@ class ChartSelect extends Component {
 	}
 
 	render() {
+		const { legacyBlockEdit, blockEditDoc } = window.visualizerLocalize;
 		let chartVersion = 'undefined' !== typeof google.visualization ? google.visualization.Version : 'current';
 
 		let chart, footer;
@@ -80,40 +140,81 @@ class ChartSelect extends Component {
             footer = __( 'Annotations in this chart may not display here but they will display in the front end.' );
         }
 
+		const openEditChart = ( chartId ) => {
+			const baseURL = ( window.visualizerLocalize.chartEditUrl ) ? window.visualizerLocalize.chartEditUrl : '';
+			let view = new visualizerMediaView.Chart(
+				{
+					action: `${baseURL}?action=visualizer-edit-chart&library=yes&chart=` + chartId
+				}
+			);
+			const updateChartState = async() => {
+				await this.setState({
+					isLoading: 'getChart'
+				});
+
+				let result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
+				await this.props.editSettings( result['chart_data']['visualizer-settings']);
+				await this.props.getChartData( chartId );
+
+				await this.setState({ route: 'home', chart: result['chart_data'], isModified: true, isLoading: true });
+			};
+			// eslint-disable-next-line camelcase
+			window.send_to_editor = function() {
+				updateChartState().then( () => {
+					view.close();
+				});
+			};
+
+			view.open();
+		};
+
 		return (
 			<Fragment>
 				{ 'home' === this.state.route &&
 					<InspectorControls>
+						{ ! legacyBlockEdit && (
+							<div className="viz-edit-chart-new">
+								<Button
+									isPrimary={true}
+									onClick={ () => {
+ openEditChart( this.props.id );
+} }> Edit Chart </ Button>
+								<p dangerouslySetInnerHTML={{__html: blockEditDoc}}></p>
+							</div>
+						) }
+
+						{ legacyBlockEdit && (
+							<>
+
+						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
 
 						<FileImport
 							chart={ this.props.chart }
 							readUploadedFile={ this.props.readUploadedFile }
 						/>
 
-						<RemoteImport
-							id={ this.props.id }
-							chart={ this.props.chart }
-							editURL={ this.props.editURL }
-							isLoading={ this.props.isLoading }
-							uploadData={ this.props.uploadData }
-							editSchedule={ this.props.editSchedule }
-							editJSONSchedule={ this.props.editJSONSchedule }
-							editJSONURL={ this.props.editJSONURL }
-							editJSONHeaders={ this.props.editJSONHeaders }
-							editJSONRoot={ this.props.editJSONRoot }
-							editJSONPaging={ this.props.editJSONPaging }
-							JSONImportData={ this.props.JSONImportData }
-						/>
+								<RemoteImport
+									id={ this.props.id }
+									chart={ this.props.chart }
+									editURL={ this.props.editURL }
+									isLoading={ this.props.isLoading }
+									uploadData={ this.props.uploadData }
+									editSchedule={ this.props.editSchedule }
+									editJSONSchedule={ this.props.editJSONSchedule }
+									editJSONURL={ this.props.editJSONURL }
+									editJSONHeaders={ this.props.editJSONHeaders }
+									editJSONRoot={ this.props.editJSONRoot }
+									editJSONPaging={ this.props.editJSONPaging }
+									JSONImportData={ this.props.JSONImportData }
+								/>
 
-						<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
+								<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
 
-						<DataImport
-							chart={ this.props.chart }
-							editSchedule={ this.props.editDatabaseSchedule }
-							databaseImportData={ this.props.databaseImportData }
-						/>
-
-						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
+								<DataImport
+									chart={ this.props.chart }
+									editSchedule={ this.props.editDatabaseSchedule }
+									databaseImportData={ this.props.databaseImportData }
+								/>
 
 						<PanelButton
 							label={ __( 'Advanced Options' ) }
@@ -122,11 +223,13 @@ class ChartSelect extends Component {
 							onClick={ () => this.setState({ route: 'showAdvanced' }) }
 						/>
 
-						<PanelButton
-							label={ __( 'Chart Permissions' ) }
-							icon="admin-users"
-							onClick={ () => this.setState({ route: 'showPermissions' }) }
-						/>
+								<PanelButton
+									label={ __( 'Chart Permissions' ) }
+									icon="admin-users"
+									onClick={ () => this.setState({ route: 'showPermissions' }) }
+								/>
+							</>
+						) }
 					</InspectorControls>
 				}
 

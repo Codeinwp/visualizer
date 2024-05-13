@@ -144,7 +144,7 @@ function visualizer_launch() {
 			$compatibilities['VisualizerPRO'] = array(
 				'basefile'  => defined( 'VISUALIZER_PRO_BASEFILE' ) ? VISUALIZER_PRO_BASEFILE : '',
 				'required'  => '1.8',
-				'tested_up' => '1.13',
+				'tested_up' => '1.14',
 			);
 			return $compatibilities;
 		}
@@ -157,10 +157,45 @@ function visualizer_launch() {
 				'location'         => 'visualizer',
 				'has_upgrade_menu' => ! Visualizer_Module::is_pro(),
 				'upgrade_text'     => esc_html__( 'Get Visualizer Pro', 'feedzy-rss-feeds' ),
-				'upgrade_link'     => esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'aboutUsPage' ) ),
+				'upgrade_link'     => esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade' ) ),
 			);
 		}
 	);
+
+	if ( ! defined( 'TI_CYPRESS_TESTING' ) && 'yes' === get_option( 'visualizer_logger_flag', 'no' ) ) {
+		add_filter( 'themeisle_sdk_enable_telemetry', '__return_true' );
+		add_filter(
+			'themeisle_sdk_telemetry_products',
+			function( $products ) {
+				$already_registered = false;
+
+				$license = get_option( 'visualizer_pro_license_data', 'free' );
+				if ( ! empty( $license ) && is_object( $license ) ) {
+					$license = $license->key;
+				}
+				$track_hash = 'free' === $license ? 'free' : wp_hash( $license );
+
+				foreach ( $products as &$product ) {
+					if ( strstr( $product['slug'], 'visualizer' ) !== false ) {
+						$already_registered   = true;
+						$product['trackHash'] = $track_hash;
+					}
+				}
+
+				if ( $already_registered ) {
+					return $products;
+				}
+
+				// Add Visualizer to the list of products to track the usage of AI Block.
+				$products[] = array(
+					'slug'      => 'visualizer',
+					'consent'   => 'yes' === get_option( 'visualizer_logger_flag', 'no' ),
+					'trackHash' => $track_hash,
+				);
+				return $products;
+			}
+		);
+	}
 }
 
 /**

@@ -752,7 +752,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'dragDrop'          => false,
 						'matchBrackets'     => true,
 						'autoCloseBrackets' => true,
-						'extraKeys'         => array( 'Ctrl-Space' => 'autocomplete' ),
+						'extraKeys'         => array( 'Shift-Space' => 'autocomplete' ),
 						'hintOptions'       => array( 'tables' => $table_col_mapping ),
 					),
 				)
@@ -788,7 +788,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
-			if ( $this->_chart->post_status === 'auto-draft' ) {
+			$is_canceled      = isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] );
+			$is_newly_created = $this->_chart->post_status === 'auto-draft';
+
+			if ( $is_newly_created && ! $is_canceled ) {
 				$this->_chart->post_status = 'publish';
 
 				// ensure that a revision is not created. If a revision is created it will have the proper data and the parent of the revision will have default data.
@@ -798,7 +801,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				wp_update_post( $this->_chart->to_array() );
 			}
 			// save meta data only when it is NOT being canceled.
-			if ( ! ( isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] ) ) ) {
+			if ( ! $is_canceled ) {
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
 
 				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
@@ -874,10 +877,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			array(
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
-					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
-					'json_error'    => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
-					'select_columns'    => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
-					'save_settings'    => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
+					'loading'        => esc_html__( 'Loading...', 'visualizer' ),
+					'json_error'     => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
+					'select_columns' => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
+					'save_settings'  => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
+					'copied'         => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -923,9 +927,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$render->button = filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART
 				? esc_html__( 'Save Chart', 'visualizer' )
 				: esc_html__( 'Create Chart', 'visualizer' );
-			if ( filter_input( INPUT_GET, 'action' ) === Visualizer_Plugin::ACTION_EDIT_CHART ) {
-				$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
-			}
+
+			$render->cancel_button = esc_html__( 'Cancel', 'visualizer' );
 		} else {
 			$render->button = esc_attr__( 'Insert Chart', 'visualizer' );
 		}
@@ -1424,11 +1427,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
 		}
+		if ( ! is_super_admin() ) {
+			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
+		}
 
 		$params     = wp_parse_args( $_POST['params'] );
 		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
+		$query      = trim( $params['query'], ';' );
 
-		$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
+		$source     = new Visualizer_Source_Query( stripslashes( $query ), $chart_id, $params );
 		$html       = $source->fetch( true );
 		$error      = $source->get_error();
 		if ( ! empty( $error ) ) {
@@ -1475,11 +1482,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render = new Visualizer_Render_Page_Update();
 		if ( $chart_id ) {
 			$params     = wp_parse_args( $_POST['params'] );
-			$source     = new Visualizer_Source_Query( stripslashes( $params['query'] ), $chart_id, $params );
+			$query      = trim( $params['query'], ';' );
+			$source     = new Visualizer_Source_Query( stripslashes( $query ), $chart_id, $params );
 			$source->fetch( false );
 			$error      = $source->get_error();
 			if ( empty( $error ) ) {
-				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, stripslashes( $params['query'] ) );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_QUERY, stripslashes( $query ) );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, $hours );

@@ -76,11 +76,38 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->_addAction( 'visualizer_chart_languages', 'addMultilingualSupport' );
 
+		$this->_addFilter( 'admin_footer_text', 'render_review_notice' );
+
 		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
 
 	}
+	/**
+	 * Display review notice.
+	 */
+	public function render_review_notice( $footer_text ) {
+		$current_screen = get_current_screen();
+
+		$visualizer_page_ids = ['toplevel_page_visualizer', 'visualizer_page_viz-support', 'visualizer_page_ti-about-visualizer' ];
+
+		if ( ! empty( $current_screen ) && isset( $current_screen->id ) ) {
+			foreach ( $visualizer_page_ids as $page_to_check ) {
+				if ( strpos( $current_screen->id, $page_to_check ) !== false ) {
+					$footer_text = sprintf(
+						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
+						'<b>Visualizer</b>',
+						esc_html__( 'You can help us by leaving a', 'visualizer' ),
+						'<a href="https://wordpress.org/support/plugin/visualizer/reviews/" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
+					);
+					break;
+				}
+			}
+		}
+
+		return $footer_text;
+	}
+
 
 	/**
 	 * Define the hooks that are needed for cypress.
@@ -114,28 +141,21 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			return;
 		}
 
-		$license = __( 'PRO', 'visualizer' );
-		if ( Visualizer_Module::is_pro() ) {
-			switch ( $plan ) {
-				case 1:
-					$license = __( 'Developer', 'visualizer' );
-					break;
-			}
-		}
+		$is_new_personal = apply_filters( 'visualizer_is_new_personal', false );
 
 		$hours = array(
-			'0' => __( 'Live', 'visualizer' ),
-			'1'  => __( 'Each hour', 'visualizer' ),
-			'12' => __( 'Each 12 hours', 'visualizer' ),
-			'24' => __( 'Each day', 'visualizer' ),
-			'72' => __( 'Each 3 days', 'visualizer' ),
+			'0.16' => __( '10 minutes', 'visualizer' ),
+			'1'    => __( 'Each hour', 'visualizer' ),
+			'12'   => __( 'Each 12 hours', 'visualizer' ),
+			'24'   => __( 'Each day', 'visualizer' ),
+			'72'   => __( 'Each 3 days', 'visualizer' ),
 		);
 
 		switch ( $feature ) {
 			case 'json':
 			case 'csv':
 				// no more schedules if pro is already active.
-				if ( Visualizer_Module::is_pro() ) {
+				if ( Visualizer_Module::is_pro() && ! $is_new_personal ) {
 					return;
 				}
 				break;
@@ -147,7 +167,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				return;
 		}
 
-		echo '<optgroup disabled label="' . sprintf( __( 'More in the %s version', 'visualizer' ), $license ) . '">';
+		echo '<optgroup disabled label="' . __( 'Upgrade required', 'visualizer' ) . '">';
 		foreach ( $hours as $hour => $desc ) {
 			echo '<option disabled>' . $desc . '</option>';
 		}
@@ -404,12 +424,12 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'pie'         => array(
 					'name'    => esc_html__( 'Pie/Donut', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => $enabled ? array( 'Google Charts', 'ChartJS' ) : array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'line'        => array(
 					'name'    => esc_html__( 'Line', 'visualizer' ),
 					'enabled' => true,
-					'supports'  => $enabled ? array( 'Google Charts', 'ChartJS' ) : array( 'Google Charts' ),
+					'supports'  => array( 'Google Charts', 'ChartJS' ),
 				),
 				'bar'         => array(
 					'name'    => esc_html__( 'Bar', 'visualizer' ),
@@ -1037,6 +1057,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'copied'        => __( 'The shortcode has been copied to your clipboard. Hit Ctrl-V/Cmd-V to paste it.', 'visualizer' ),
 					'conflict' => __( 'We have detected a potential conflict with another component that prevents Visualizer from functioning properly. Please disable any of the following components if they are activated on your instance: Modern Events Calendar plugin, Acronix plugin. In case the aforementioned components are not activated or you continue to see this error message, please disable all other plugins and enable them one by one to find out the component that is causing the conflict.', 'visualizer' ),
 				),
+				'is_pro_user' => Visualizer_Module::is_pro(),
 			)
 		);
 		// render library page
@@ -1221,14 +1242,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$user_id = 'visualizer_' . preg_replace( '/[^\w\d]*/', '', get_site_url() ); // Use a normalized version of the site URL as a user ID.
 
 		$license_data = get_option( 'visualizer_pro_license_data', false );
-		if ( false !== $license_data ) {
+		if ( false !== $license_data && isset( $license_data->key ) ) {
 			$user_id = 'visualizer_' . $license_data->key;
 		}
 
 		return array(
 			'userId' => $user_id,
 			'attributes' => array(
-				'days_since_install' => $install_category,
+				'days_since_install' => strval( $install_category ),
 				'free_version'       => $plugin_version,
 				'pro_version'        => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
 				'license_status'     => apply_filters( 'product_visualizer_license_status', 'invalid' ),

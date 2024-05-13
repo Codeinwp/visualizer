@@ -28,6 +28,13 @@
 class Visualizer_Render_Layout extends Visualizer_Render {
 
 	/**
+	 * Fallback time for live update option.
+	 *
+	 * @var float
+	 */
+	public static $live_option_fallback_hour = 0.16; // 10 minutes
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 1.0.0
@@ -54,7 +61,17 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 * @access public
 	 */
 	public static function _renderDbQuery( $args ) {
+		global $wpdb;
 		$query      = $args[1];
+		if ( ! $query ) {
+			$query = '
+/* List Posts published per. month */
+SELECT CONCAT( YEAR(post_date), "/", MONTH(post_date) ) as date, COUNT(*) AS post_count
+FROM ' . $wpdb->prefix . 'posts
+WHERE post_type = "post" AND post_status = "publish"
+GROUP BY YEAR(post_date), MONTH(post_date)
+ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
+		}
 		?>
 		<div id='visualizer-db-query' style="display: none">
 			<div class="visualizer-db-query-form">
@@ -72,8 +89,9 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			</div>
 			<div class='db-wizard-hints'>
 				<ul>
+					<li><?php echo __( 'Your database prefix is:', 'visualizer' ); ?> <span class="visualizer-emboss"><?php echo $wpdb->prefix; ?></span></li>
 					<li><?php echo sprintf( __( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
-					<li><?php echo sprintf( __( 'Use %1$sControl+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
+					<li><?php echo sprintf( __( 'Use %1$sShift+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
 					<?php do_action( 'visualizer_db_query_add_hints', $args ); ?>
 				</ul>
 			</div>
@@ -583,7 +601,12 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 	 * @access public
 	 */
 	public static function _renderTabAdvanced( $args ) {
-		$sidebar = $args[2];
+		$chart_id = $args[1];
+		$sidebar  = $args[2];
+
+		$chart_options = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+		$backend_title = isset( $chart_options['backend-title'] ) && ! empty( $chart_options['backend-title'] ) ? $chart_options['backend-title'] : '';
+
 		?>
 			<ul class="viz-group-wrapper full-height">
 				<li class="viz-group open" id="vz-chart-settings">
@@ -591,6 +614,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 						<ul class="viz-group-wrapper">
 						<form id="settings-form" action="<?php echo esc_url( add_query_arg( 'nonce', wp_create_nonce() ) ); ?>" method="post">
 							<input type="hidden" id="chart-img" name="chart-img">
+							<input type="hidden" id="backend-title" name="backend-title" value="<?php echo esc_html( $backend_title ); ?>">
 							<?php echo $sidebar; ?>
 							<?php self::_renderPermissions( $args ); ?>
 							<input type="hidden" name="save" value="1">
@@ -686,7 +710,10 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			$source_of_chart .= '_wp';
 		}
 		$editor_type    = get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, true );
-		if ( $editor_type ) {
+		if (
+			$editor_type ||
+			! Visualizer_Module::is_pro() // Use Manual Source for non-pro users since it is the only unlocked source.
+		) {
 			$source_of_chart = 'visualizer_source_manual';
 		}
 
@@ -697,123 +724,177 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 				<li class="viz-group open" id="vz-chart-source">
 					<ul class="viz-group-content">
 						<ul class="viz-group-wrapper">
-							<!-- import from file -->
-							<li class="viz-group visualizer_source_csv">
-								<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?></h2>
-								<div class="viz-group-content">
-									<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
-									<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">', $type, '.csv</a>' ); ?></b></p>
-									<form id="vz-csv-file-form" action="<?php echo $upload_link; ?>" method="post"
-										  target="thehole" enctype="multipart/form-data">
-										<input type="hidden" id="remote-data" name="remote_data">
-										<div class="">
-											<input type="file" id="csv-file" name="local_data">
+							<!-- manual -->
+							<li class="viz-group visualizer_source_manual">
+								<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?></h2>
+								<div class="viz-group-content edit-data-content">
+									<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
+										<input type="hidden" id="chart-data" name="chart_data">
+										<input type="hidden" id="chart-data-src" name="chart_data_src">
+
+										<?php if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) { ?>
+										<div>
+											<p class="viz-group-description viz-editor-selection">
+												<?php _e( 'Use the', 'visualizer' ); ?>
+												<select name="editor-type" id="viz-editor-type">
+													<?php
+													if ( empty( $editor_type ) ) {
+														$editor_type = Visualizer_Module::is_pro() ? 'excel' : 'text';
+													}
+													foreach ( apply_filters( 'visualizer_editors', array( 'text' => __( 'Text', 'visualizer' ), 'table' => __( 'Simple', 'visualizer' ) ) ) as $e_type => $e_label ) {
+														?>
+													<option value="<?php echo $e_type; ?>" <?php selected( $editor_type, $e_type ); ?> ><?php echo $e_label; ?></option>
+													<?php } ?>
+												</select>
+												<?php _e( 'editor to manually edit the chart data.', 'visualizer' ); ?>
+											</p>
+											<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
+											<input type="button" id="editor-button" class="button button-primary "
+												   value="<?php _e( 'Edit Data', 'visualizer' ); ?>" data-current="chart"
+												   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+												   data-t-chart="<?php _e( 'Edit Data', 'visualizer' ); ?>"
+											>
+											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 										</div>
-										<input type="button" class="button button-primary" id="vz-import-file"
-											   value="<?php _e( 'Import', 'visualizer' ); ?>">
+										<?php } else { ?>
+											<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
+											<input type="button" id="editor-chart-button" class="button button-primary "
+												   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
+												   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+												   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>"
+											>
+											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
+										<?php } ?>
 									</form>
 								</div>
 							</li>
+
+							<!-- import from file -->
+							<li class="viz-group visualizer_source_csv <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-file' ); ?> ">
+								<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
+								<div class="viz-group-content">
+									<div>
+										<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
+										<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">', $type, '.csv</a>' ); ?></b></p>
+										<form id="vz-csv-file-form" action="<?php echo $upload_link; ?>" method="post"
+											target="thehole" enctype="multipart/form-data">
+											<input type="hidden" id="remote-data" name="remote_data">
+											<div class="">
+												<input type="file" id="csv-file" name="local_data">
+											</div>
+											<input type="button" class="button button-primary" id="vz-import-file"
+												value="<?php _e( 'Import', 'visualizer' ); ?>">
+										</form>
+										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-file' ); ?>
+									</div>
+								</div>
+							</li>
 							<!-- import from url -->
-							<li class="viz-group visualizer-import-url visualizer_source_csv_remote visualizer_source_json">
-								<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' ); ?></h2>
+							<li class="viz-group visualizer-import-url visualizer_source_csv_remote visualizer_source_json <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-url' ); ?> ">
+								<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
 								<ul class="viz-group-content">
 									<!-- import from csv url -->
 									<li class="viz-subsection">
 										<span class="viz-section-title"><?php _e( 'Import from CSV', 'visualizer' ); ?></span>
-										<div class="viz-section-items section-items">
-											<p class="viz-group-description"><?php echo sprintf( __( 'You can use this to import data from a remote CSV file or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >', '</a>' ); ?> </p>
-											<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">', $type, '.csv</a>' ); ?></b></p>
-											<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
-												  target="thehole" enctype="multipart/form-data">
-												<div class="remote-file-section">
-													<input type="url" id="vz-schedule-url" name="remote_data" value="<?php echo esc_attr( get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_URL, true ) ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
-												</div>
-												<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
-												<?php
-												$hours     = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
-												$schedules = apply_filters(
-													'visualizer_chart_schedules', array(
-														'-1' => __( 'One-time', 'visualizer' ),
-													),
-													'csv',
-													$chart_id
-												);
-												foreach ( $schedules as $num => $name ) {
-													// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-													$extra = $num == $hours ? 'selected' : '';
-													?>
-													<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+										<div class="only-pro-anchor">	
+											<div class="viz-section-items section-items">
+												<p class="viz-group-description"><?php echo sprintf( __( 'You can use this to import data from a remote CSV file or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >', '</a>' ); ?> </p>
+												<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">', $type, '.csv</a>' ); ?></b></p>
+												<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
+													target="thehole" enctype="multipart/form-data">
+													<div class="remote-file-section">
+														<input type="url" id="vz-schedule-url" name="remote_data" value="<?php echo esc_attr( get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_URL, true ) ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
+													</div>
+													<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
 													<?php
-												}
-													do_action( 'visualizer_chart_schedules_spl', 'csv', $chart_id, 1 );
-												?>
-												</select>
+													$hours     = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_SCHEDULE, true );
+													$schedules = apply_filters(
+														'visualizer_chart_schedules', array(
+															'-1' => __( 'One-time', 'visualizer' ),
+														),
+														'csv',
+														$chart_id
+													);
+													foreach ( $schedules as $num => $name ) {
+														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+														$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
+														?>
+														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+														<?php
+													}
+														do_action( 'visualizer_chart_schedules_spl', 'csv', $chart_id, 1 );
+													?>
+													</select>
 
-												<?php
-												if ( ! Visualizer_Module::is_pro() ) {
-													?>
-													<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' ); ?>">
 													<?php
-												} else {
+													if ( ! Visualizer_Module::is_pro() ) {
+														?>
+														<input type="button" id="view-remote-file" class="button button-primary" value="<?php _e( 'Import', 'visualizer' ); ?>">
+														<?php
+													} else {
+														?>
+													<input type="button" id="vz-save-schedule" class="button button-primary" value="<?php _e( 'Import & Save schedule', 'visualizer' ); ?>">
+														<?php
+													}
 													?>
-												<input type="button" id="vz-save-schedule" class="button button-primary" value="<?php _e( 'Import & Save schedule', 'visualizer' ); ?>">
-													<?php
-												}
-												?>
-											</form>
+													<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-url' ); ?>
+												</form>
+											</div>
 										</div>
 									</li>
 									<!-- import from json url -->
 									<li class="viz-subsection">
-									<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?></span>
-										<div class="viz-section-items section-items">
-											<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
-											<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
-												<div class="remote-file-section">
-														<?php
-														$bttn_label = 'visualizer_source_json' === $source_of_chart ? __( 'Modify Parameters', 'visualizer' ) : __( 'Create Parameters', 'visualizer' );
-														if ( Visualizer_Module::is_pro() ) {
-															?>
-													<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
-													<select name="time" id="vz-json-time" class="visualizer-select json-form-element" data-chart="<?php echo $chart_id; ?>">
+										<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?></span>
+										<div class="only-pro-anchor">	
+											<div class="viz-section-items section-items">
+												<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
+												<form id="vz-import-json" action="<?php echo $upload_link; ?>" method="post" target="thehole" enctype="multipart/form-data">
+													<div class="remote-file-section">
 															<?php
-															$hours     = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
-															$schedules = apply_filters(
-																'visualizer_chart_schedules', array(
-																	'-1' => __( 'One-time', 'visualizer' ),
-																),
-																'json',
-																$chart_id
-															);
-															foreach ( $schedules as $num => $name ) {
-																// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-																$extra = $num == $hours ? 'selected' : '';
+															$bttn_label = 'visualizer_source_json' === $source_of_chart ? __( 'Modify Parameters', 'visualizer' ) : __( 'Create Parameters', 'visualizer' );
+															if ( Visualizer_Module::is_pro() ) {
 																?>
-																<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+														<p class="viz-group-description"><?php _e( 'How often do you want to check the URL', 'visualizer' ); ?></p>
+														<select name="time" id="vz-json-time" class="visualizer-select json-form-element" data-chart="<?php echo $chart_id; ?>">
+																<?php
+																$hours     = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true );
+																$schedules = apply_filters(
+																	'visualizer_chart_schedules', array(
+																		'-1' => __( 'One-time', 'visualizer' ),
+																	),
+																	'json',
+																	$chart_id
+																);
+																foreach ( $schedules as $num => $name ) {
+																	// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+																	$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
+																	?>
+																	<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+																	<?php
+																}
+																do_action( 'visualizer_chart_schedules_spl', 'json', $chart_id, 1 );
+																?>
+															</select>
 																<?php
 															}
-															do_action( 'visualizer_chart_schedules_spl', 'json', $chart_id, 1 );
 															?>
-														</select>
-															<?php
-														}
-														?>
-												</div>
+													</div>
 
-												<input type="button" id="json-chart-button" class="button button-secondary show-chart-toggle"
-												value="<?php echo $bttn_label; ?>" data-current="chart"
-												data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-												data-t-chart="<?php echo $bttn_label; ?>">
-												<?php
-												if ( Visualizer_Module::is_pro() ) {
-													?>
-												<input type="button" id="json-chart-save-button" class="button button-primary "
-												value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+													<input type="button" id="json-chart-button" class="button button-secondary show-chart-toggle"
+													value="<?php echo $bttn_label; ?>" data-current="chart"
+													data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+													data-t-chart="<?php echo $bttn_label; ?>">
 													<?php
-												}
-												?>
-											</form>
+													if ( Visualizer_Module::is_pro() ) {
+														?>
+													<input type="button" id="json-chart-save-button" class="button button-primary "
+													value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+														<?php
+													}
+													?>
+													<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-url' ); ?>
+												</form>
+											</div>
 										</div>
 									</li>
 								</ul>
@@ -913,8 +994,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 												$chart_id
 											);
 											foreach ( $schedules as $num => $name ) {
-												// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-												$extra = $num == $hours ? 'selected' : '';
+												$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 												?>
 												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 													<?php
@@ -991,8 +1071,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 															$chart_id
 														);
 														foreach ( $schedules as $num => $name ) {
-																// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-															$extra = $num == $hours ? 'selected' : '';
+															$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 															?>
 															<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 															<?php
@@ -1061,8 +1140,7 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 										$chart_id
 									);
 									foreach ( $schedules as $num => $name ) {
-										// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-										$extra = $num == $hours ? 'selected' : '';
+										$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 										?>
 										<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
 											<?php
@@ -1079,58 +1157,6 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 							</div>
 							</div>
 							</li>
-
-							<!-- manual -->
-							<li class="viz-group visualizer_source_manual <?php echo ! Visualizer_Module_Admin::proFeaturesLocked() ? apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ) : ''; ?>">
-								<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?>
-									<span class="dashicons dashicons-lock"></span>
-								</h2>
-								<div class="viz-group-content edit-data-content">
-									<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
-										<input type="hidden" id="chart-data" name="chart_data">
-										<input type="hidden" id="chart-data-src" name="chart_data_src">
-
-										<?php if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) { ?>
-										<div>
-											<p class="viz-group-description viz-editor-selection">
-												<?php _e( 'Use the', 'visualizer' ); ?>
-												<select name="editor-type" id="viz-editor-type">
-													<?php
-													if ( empty( $editor_type ) ) {
-														$editor_type = Visualizer_Module::is_pro() ? 'excel' : 'text';
-													}
-													foreach ( apply_filters( 'visualizer_editors', array( 'text' => __( 'Text', 'visualizer' ), 'table' => __( 'Simple', 'visualizer' ) ) ) as $e_type => $e_label ) {
-														?>
-													<option value="<?php echo $e_type; ?>" <?php selected( $editor_type, $e_type ); ?> ><?php echo $e_label; ?></option>
-													<?php } ?>
-												</select>
-												<?php _e( 'editor to manually edit the chart data.', 'visualizer' ); ?>
-											</p>
-											<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
-											<input type="button" id="editor-button" class="button button-primary "
-												   value="<?php _e( 'Edit Data', 'visualizer' ); ?>" data-current="chart"
-												   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-												   data-t-chart="<?php _e( 'Edit Data', 'visualizer' ); ?>"
-											>
-											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
-										</div>
-										<?php } else { ?>
-											<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
-											<input type="button" id="editor-chart-button" class="button button-primary "
-												   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
-												   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-												   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>"
-											>
-											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
-										<?php } ?>
-										<?php
-										if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
-											echo apply_filters( 'visualizer_pro_upsell', '', 'manual-data' );
-										}
-										?>
-									</form>
-								</div>
-							</li>
 						</ul>
 						</li>
 					</ul>
@@ -1139,5 +1165,40 @@ class Visualizer_Render_Layout extends Visualizer_Render {
 			<span id="visualizer-chart-id" data-id="<?php echo $chart_id; ?>" data-chart-source="<?php echo esc_attr( $source_of_chart ); ?>" data-chart-type="<?php echo esc_attr( $type ); ?>" data-chart-lib="<?php echo esc_attr( $lib ); ?>"></span>
 			<iframe id="thehole" name="thehole"></iframe>
 		<?php
+	}
+
+	/**
+	 * Check if the given hour is selected.
+	 *
+	 * @param int|float|string $hour The hour.
+	 * @param int|float|string $reference The number.
+	 *
+	 * @return bool
+	 */
+	public static function is_hour_selected( $hour, $reference ) {
+
+		if ( ! is_numeric( $hour ) || ! is_numeric( $reference ) ) {
+			return false;
+		}
+
+		$hour      = floatval( $hour );
+		$reference = floatval( $reference );
+
+		if ( self::is_live_update_option( $reference ) ) {
+			$reference = self::$live_option_fallback_hour;
+		}
+
+		return abs( $hour - $reference ) < 0.000001;
+	}
+
+	/**
+	 * Check if the reference option is deprecated live update option.
+	 *
+	 * @param float $reference_hour The reference hour.
+	 *
+	 * @return bool
+	 */
+	public static function is_live_update_option( $reference_hour ) {
+		return abs( $reference_hour ) < 0.000001;
 	}
 }

@@ -9,9 +9,7 @@
 (function ($) {
     $(window).on('load', function(){
         // scroll to the selected chart type.
-        if($('label.type-label.type-label-selected').length > 0) {
-            $('label.type-label.type-label-selected')[0].scrollIntoView();
-        }
+        $('#chart-select').scrollIntoView();
     });
 
     $(document).ready(function () {
@@ -145,7 +143,7 @@
             $('#cancel-form').submit();
         });
 
-        init_type_vs_library();
+        init_available_chart_list();
 
         $('.viz-abort').on('click', function(e){
             e.preventDefault();
@@ -154,15 +152,107 @@
 
     }
 
-    function init_type_vs_library() {
-        var $data = $('select.viz-select-library').attr('data-type-vs-library');
-        if(typeof $data === 'undefined' || $data.length === 0){
+    /**
+     * Initialize/Update the available chart list based on their supported renderer libraries.
+     * 
+     * @returns {void}
+     */
+    function init_available_chart_list() {
+        const rendererSelect = document.querySelector('select.viz-select-library');
+        if ( ! rendererSelect ) {
             return;
         }
-        var $typeVsLibrary = JSON.parse( $('select.viz-select-library').attr('data-type-vs-library') );
-        // disable all unsupported libraries for the chart type.
-        $('input.type-radio').on('click', function(){
-            enable_libraries_for($(this).val(), $typeVsLibrary);
+
+        const rendererTypesMappingData = rendererSelect?.getAttribute('data-type-vs-library');
+        if( ! rendererTypesMappingData ) {
+            return;
+        }
+
+        /** @type {Record<string, ('GoogleCharts' | 'ChartJS' | 'DataTable')[]>} */
+        const rendererTypesMapping = JSON.parse( rendererTypesMappingData );
+
+        document.querySelectorAll('input.type-radio').forEach( chartTypeRadio => {
+            
+            // Init the lib based on the default selected chart type.
+            if ( chartTypeRadio.checked ) {
+                const chartType = chartTypeRadio.value;
+                if ( ! chartType ) {
+                    return;
+                }
+
+                const selectedRenderer = rendererSelect.value;
+                if ( ! rendererTypesMapping[chartType]?.includes( selectedRenderer ) ) {
+                    disable_renderer_select_placeholder();
+                    rendererSelect.value = rendererTypesMapping[chartType][0]
+                }
+            }
+
+            chartTypeRadio.addEventListener('click', (event) => {
+                // Check if the chart type is supported by the selected renderer. If not, select the first supported renderer.
+                const chartType = event.target.value;
+                if ( ! chartType ) {
+                    return;
+                }
+
+                const selectedRenderer = rendererSelect.value;
+                if ( ! rendererTypesMapping[chartType]?.includes( selectedRenderer ) ) {
+                    disable_renderer_select_placeholder();
+                    rendererSelect.value = rendererTypesMapping[chartType][0]
+                }
+            });
+        });
+       
+        // Update the chart list on user interaction.
+        rendererSelect.addEventListener('change', (event) => {
+            disable_renderer_select_placeholder();
+            toggle_renderer_type( event.target.value );
+            toggle_chart_types_by_render( event.target.value );
+        });
+        
+    }
+
+    /**
+     * Disable the placeholder option in the renderer select.
+     */
+    function disable_renderer_select_placeholder() {
+        const placeholderOption = document.querySelector('#library-select-placeholder');
+        if ( placeholderOption && placeholderOption.disabled === false ) {
+            placeholderOption.disabled = true;
+        }
+    }
+
+    /**
+     * Toggle the renderer type class based on the given renderer type.
+     * 
+     * The class is used to style the chart type picker based on the given renderer library.
+     * 
+     * @param {('GoogleCharts' | 'ChartJS' | 'DataTable')} rendererType The renderer type to toggle the class.
+     */
+    function toggle_renderer_type( rendererType ) {
+        const typePicker = document.querySelector('#type-picker');
+        if ( ! typePicker ) {
+            return;
+        }
+        
+        typePicker.classList.remove('lib-GoogleCharts', 'lib-ChartJS', 'lib-DataTable');
+        typePicker.classList.add(`lib-${rendererType}`);
+    }
+
+    /**
+     * Toggle chart types based on the given renderer type.
+     * 
+     * @param {('GoogleCharts' | 'ChartJS' | 'DataTable')} rendererType The renderer type to filter the chart types.
+     */
+    function toggle_chart_types_by_render( rendererType ) {
+        document.querySelectorAll('.type-box').forEach( typeBox => {
+            const hasLib = typeBox.classList.contains(`type-lib-${rendererType}`);
+            typeBox.classList.toggle('viz-hidden', ! hasLib );
+
+            // Reset unavailable chart type selection.
+            const chartOption = typeBox.querySelector('input[type="radio"]');
+            if ( ! hasLib && chartOption?.checked ) {
+                chartOption.checked = false;
+            }
         });
 
         enable_libraries_for($('input.type-radio:checked').val(), $typeVsLibrary);
@@ -170,9 +260,12 @@
 
     function enable_libraries_for($type, $typeVsLibrary) {
         $('select.viz-select-library option').addClass('disabled').attr('disabled', 'disabled');
+        $('select.viz-select-library option .premium-label').remove();
+        $('select.viz-select-library option').append('<span class="premium-label"> (PREMIUM)</span>');
         var $libs = $typeVsLibrary[$type];
         $.each($libs, function( i, $lib ) {
             $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
+            $('select.viz-select-library option[value="' + $lib + '"] .premium-label').remove();
         });
         $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
     }
@@ -182,7 +275,7 @@
             width               : '50%',
             search_contains     : true
         });
-        
+
         $('.visualizer-permission-type').each(function(x, y){
             var type    = $(y).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -191,7 +284,7 @@
                 return;
             }
         });
-        
+
         $('.visualizer-permission-type').on('change', function(evt, params) {
             var type    = $(this).attr('data-visualizer-permission-type');
             var child   = $('.visualizer-permission-' + type + '-specific');
@@ -236,7 +329,7 @@
                     dragDrop: false,
                     matchBrackets: true,
                     autoCloseBrackets: true,
-                    extraKeys: {"Ctrl-Space": "autocomplete"},
+                    extraKeys: {"Shift-Space": "autocomplete"},
                     hintOptions: { tables: table_columns }
         });
 
@@ -246,7 +339,7 @@
         });
 
         cm.focus();
-        
+
         // update text area.
         cm.on('inputRead', function(x, y){
             cm.save();
@@ -257,7 +350,7 @@
         $('body').on('visualizer:db:query:update', function(event, data){
             cm.save();
         });
-        
+
         // clear the editor.
         $('body').on('visualizer:db:query:setvalue', function(event, data){
             cm.setValue(data.value);
@@ -288,7 +381,7 @@
             if($('.visualizer-db-query').val() === ''){
                 return;
             }
-            
+
             start_ajax($('#visualizer-db-query'));
             $('.db-wizard-results').empty();
             $('.db-wizard-error').empty();
@@ -327,7 +420,7 @@
                 $( '#canvas' ).css("z-index", "1").show();
             });
 
-            $('#content').css('width', 'calc(100% - 300px)');
+            $('#content').css('width', 'calc(100% - 350px)');
             if( $(this).attr( 'data-current' ) === 'chart'){
                 $(this).val( $(this).attr( 'data-t-filter' ) );
                 $(this).html( $(this).attr( 'data-t-filter' ) );
@@ -376,7 +469,7 @@
             active: false,
             collapsible: true
         });
-        
+
         // open the accordions by default if they are indicated with the 'open' class.
         $('.visualizer-json-subform .viz-substep.open').each(function(i, e){
             $('.visualizer-json-subform').accordion( "option", "active", i );
@@ -597,7 +690,7 @@
 
         // show column visibility button only when more than 6 columns are found (including the Label column)
         if($(element + ' table.viz-editor-table thead tr th').length > 6){
-            $.extend( settings, { 
+            $.extend( settings, {
                 dom: 'Bt',
                 buttons: [
                     {
@@ -680,4 +773,106 @@
 
         return $(this);
     };
+
+    // Telemetry
+    function getChartID() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('chart') ?? '';
+    }
+
+    const groupId = getChartID();
+
+    const chartTypes = document.querySelector('#viz-types-form')
+    if( chartTypes ) {
+        document.querySelector('.push-right[type=submit]')?.addEventListener('click', async function (event) {
+            if ( typeof window.tiTrk !== 'undefined' ) {
+                event.preventDefault();    
+                try {
+                    const formData = new FormData(document.querySelector('#viz-types-form'));
+                    const savedData = Object.fromEntries(formData);
+                
+                    tiTrk?.with('visualizer')?.add({
+                        feature: 'chart-create',
+                        featureComponent: 'saved-data',
+                        featureData: {
+                            type: savedData?.['type'],
+                            library: savedData?.['chart-library']
+                        },
+                        groupId
+                    });
+                   
+                    // Do not make the user to wait too long for the event to be uploaded.
+                    const timer = new Promise((resolve) => setTimeout(resolve, 500));
+                    await Promise.race([timer, tiTrk?.uploadEvents()]);
+                } catch (e) {
+                    console.warn(e);
+                }
+                $('#viz-types-form').submit();
+            }
+        });
+    }
+
+    [
+        {
+            selector: '#editor-button',
+            featureComponent: 'source-manual-data'
+        },
+        {
+            selector: '#vz-import-file',
+            featureComponent: 'source-import-csv-file'
+        },
+        {
+            selector: '#vz-save-schedule',
+            featureComponent: 'source-import-csv-remote'
+        },
+        {
+            selector: '#visualizer-json-fetch',
+            featureComponent: 'source-import-json-remote'
+        },
+        {
+            selector: '#existing-chart',
+            featureComponent: 'source-import-chart'
+        },
+        {
+            selector: '#filter-chart-button',
+            featureComponent: 'source-import-wordpress',
+        },
+        {
+            selector: '#woo-chart-button',
+            featureComponent: 'source-import-woocommerce'
+        },
+        {
+            selector: '#db-chart-button',
+            featureComponent: 'source-import-database'
+        }
+    ].forEach(({ selector, featureComponent }) => {
+        document.querySelector(selector)?.addEventListener('click', function () {
+            window?.tiTrk?.with('visualizer')?.set('used-source',{
+                feature: 'chart-edit-used-source',
+                featureComponent,
+                groupId
+            });
+        });
+    });
 })(jQuery);
+
+
+document.querySelector('#viz-copy-shortcode')?.addEventListener('click', function() {
+    var copyText = document.querySelector('#viz-shortcode')?.value;
+    if ( !copyText ) {
+        return;
+    }
+
+    navigator.clipboard.writeText(copyText);
+    alert(visualizer.l10n.copied);
+});
+
+// Connect Chart Backend Title Info Panel with the field from the settings form.
+const interactiveBackendTitleField = document.querySelector( '#viz-backend-name' );
+const backendTitleSave = document.querySelector( '#settings-form input[name="backend-title"]' );
+
+if ( interactiveBackendTitleField && backendTitleSave ) {
+    interactiveBackendTitleField.addEventListener('input', function() {
+        backendTitleSave.value = this.value;
+    });
+}

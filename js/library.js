@@ -33,6 +33,65 @@
     });
 })(wp.media.view);
 
+function createPopupProBlocker() {
+
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
+    document.head.appendChild(link);
+
+    var overlay = document.createElement('div');
+    overlay.classList.add('vizualizer-renew-notice-overlay');
+    overlay.id = 'overlay-visualizer';
+    document.body.appendChild(overlay);
+
+    var popup = document.createElement('div');
+    popup.classList.add('vizualizer-renew-notice-popup');
+
+    var closeIcon = document.createElement('i');
+    closeIcon.classList.add('fas', 'fa-times', 'vizualizer-renew-notice-close-icon');
+    closeIcon.addEventListener('click', function() {
+        document.body.removeChild(overlay);
+        popup.style.display = 'none';
+    });
+    popup.appendChild(closeIcon);
+
+    var heading = document.createElement('h1');
+    heading.textContent = 'Alert!';
+    heading.classList.add('vizualizer-renew-notice-heading');
+    popup.appendChild(heading);
+
+    var message = document.createElement('p');
+    message.textContent = 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.';
+    message.classList.add('vizualizer-renew-notice-message');
+    popup.appendChild(message);
+
+    var buttonsContainer = document.createElement('div');
+    buttonsContainer.classList.add('vizualizer-renew-notice-buttons-container');
+
+    var link1 = document.createElement('a');
+    link1.href = 'https://store.themeisle.com/';
+    link1.target = '_blank';
+    var button1 = document.createElement('button');
+    button1.innerHTML = '<span class="fas fa-shopping-cart"></span> Renew License';
+    button1.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-renew-button');
+    link1.appendChild(button1);
+    buttonsContainer.appendChild(link1);
+
+    var link2 = document.createElement('a');
+    link2.href = '/wp-admin/options-general.php#visualizer_pro_license';
+    var button2 = document.createElement('button');
+    button2.innerHTML = '<span class="fas fa-key"></span> Activate License';
+    button2.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-activate-button');
+    link2.appendChild(button2);
+    buttonsContainer.appendChild(link2);
+
+    popup.appendChild(buttonsContainer);
+
+    document.body.appendChild(popup);
+
+}
+
 (function ($, vmv, vu) {
     var resizeTimeout;
 
@@ -77,6 +136,14 @@
         });
 
         $('.visualizer-chart-shortcode').click(function (e) {
+
+            if ( ! visualizer.is_pro_user && e.target.classList.contains('viz-is-pro-chart') ) {
+                createPopupProBlocker();
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+
             var range, selection;
 
             if (window.getSelection && document.createRange) {
@@ -126,7 +193,13 @@
             return false;
         });
 
-        $('.visualizer-chart-edit').click(function () {
+        $('.visualizer-chart-edit').click(function (event) {
+
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
+                createPopupProBlocker();
+                return;
+            }
+
             var wnd = window;
             var view = new vmv.Chart( {
                 action: vu.edit.indexOf('&chart') != -1 ? vu.edit : vu.edit + '&chart=' + $(this).attr('data-chart')
@@ -141,8 +214,20 @@
 
             return false;
         });
+        $(".visualizer-chart-clone").on("click", function ( event ) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
+                createPopupProBlocker();
+                event.preventDefault();
+            }
+        });
 
-        $(".visualizer-chart-export").on("click", function () {
+        $(".visualizer-chart-export").on("click", function (event) {
+
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
+                createPopupProBlocker();
+                return;
+            }
+
             $.ajax({
                 url: $(this).attr("data-chart"),
                 method: "get",
@@ -163,7 +248,11 @@
             return false;
         });
 
-        $(".visualizer-chart-image").on("click", function () {
+        $(".visualizer-chart-image").on("click", function (event) {
+            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
+                createPopupProBlocker();
+                return;
+            }
             $('body').trigger('visualizer:action:specificchart', {action: 'image', id: $(this).attr("data-chart"), data: null, dataObj: {name: $(this).attr("data-chart-title")}});
             return false;
         });
@@ -171,6 +260,12 @@
         // if vaction=addnew is found as a GET request parameter, show the modal.
         if(location.href.indexOf('vaction=addnew') !== -1){
             $('.add-new-chart').first().trigger('click');
+        }
+
+        //if vaction=edit is found as a GET request parameter, show the modal.
+        if(location.href.indexOf('vaction=edit') !== -1 && location.href.indexOf('chart=') !== -1){
+            const chartId = location.href.split('chart=')[1].split('&')[0];
+            $('.visualizer-chart-edit').attr('data-chart', chartId).trigger('click');
         }
 
         $(window).resize(function () {
@@ -186,3 +281,28 @@
         $('.visualizer-chart:not(.visualizer-chart-display), .visualizer-library-pagination').fadeIn(500);
     });
 })(jQuery, visualizer.media.view, visualizer.urls);
+
+
+document.querySelectorAll('.visualizer-chart').forEach(function (chart) {
+    const translatable = chart.querySelector('.visualizer-languages-list');
+    if ( ! translatable ) {
+        return;
+    }
+
+    const chartId = chart.querySelector('.visualizer-chart-canvas')?.id?.replace('visualizer-', '');
+
+    if ( ! chartId ) {
+        return;
+    }
+
+    const translatableActions = translatable.querySelectorAll('[data-lang_code]');
+    translatableActions.forEach(function (action) {
+        action.addEventListener('click', function () {
+            window?.tiTrk?.with('visualizer')?.add({
+                feature: 'chart-library',
+                featureComponent: 'chart-language-translations-used',
+                groupId: chartId,
+            });
+        });
+    });
+});

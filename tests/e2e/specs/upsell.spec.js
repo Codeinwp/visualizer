@@ -21,9 +21,9 @@ test.describe( 'Upsell', () => {
         await page.waitForSelector('h1:text("Visualizer")');
 
         expect( await page.frameLocator('iframe').locator('.pro-upsell').count() ).toBe( 11 );
-       
+
         const proUpsellElements = await page.frameLocator('iframe').locator('a.pro-upsell').all();
-        
+
         for (const element of proUpsellElements) {
             const href = await element.getAttribute('href');
             const searchParams = new URLSearchParams(href);
@@ -39,27 +39,39 @@ test.describe( 'Upsell', () => {
 
         await expect( page.frameLocator('iframe').locator( '#viz-tabs' ) ).toBeVisible();
 
-        expect( await page.frameLocator('iframe').locator('#vz-chart-source .viz-group-title .dashicons-lock').count() ).toBe( 4 );
+        expect( await page.frameLocator('iframe').locator('#vz-chart-source .viz-group-title .dashicons-lock').count() ).toBe( 5 );
+
+
+        const uploadFileUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_csv .only-pro-inner a');
+        let href = await uploadFileUpsell.getAttribute('href');
+        let searchParams = new URLSearchParams(href);
+        expect( searchParams.get('utm_campaign') ).toBe('import-file');
+
+        const remoteImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_json .only-pro-inner a').first();
+        href = await remoteImportUpsell.getAttribute('href');
+        searchParams = new URLSearchParams(href);
+        expect( searchParams.get('utm_campaign') ).toBe('import-url');
 
         const otherChartUpsell = page.frameLocator('iframe').locator('#vz-chart-source .viz-import-from-other .only-pro-inner a');
-        let href = await otherChartUpsell.getAttribute('href');
-        let searchParams = new URLSearchParams(href);
+        href = await otherChartUpsell.getAttribute('href');
+        searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('import-chart');
 
         const wpImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query_wp .only-pro-inner a');
         href = await wpImportUpsell.getAttribute('href');
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('import-wp');
+        await page.frameLocator('iframe').getByRole('heading', { name: /Import from WordPress/ }).click();
+        await expect(page.frameLocator('iframe').locator('#vz-chart-source')).toContainText('Upgrade to PRO to activate this feature!');
 
         const dbImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query .only-pro-inner a');
         href = await dbImportUpsell.getAttribute('href');
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('db-query');
 
-        const manualDataUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_manual .only-pro-inner a');
-        href = await manualDataUpsell.getAttribute('href');
-        searchParams = new URLSearchParams(href);
-        expect( searchParams.get('utm_campaign') ).toBe('manual-data');
+        await page.frameLocator('iframe').getByRole('heading', { name: /Import from database/ }).click();
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade to Developer plan to activate this feature!');
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade Now');
 
         await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
 
@@ -77,6 +89,9 @@ test.describe( 'Upsell', () => {
         href = await chartPermissionsUpsell.getAttribute('href');
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('chart-permissions');
+        await page.frameLocator('iframe').getByRole('heading', { name: /Permissions/ }).click();
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade to Developer plan to activate this feature!');
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade Now');
     });
 
     test( 'featured tab in Install Plugin (SDK)', async ( { admin, page } ) => {

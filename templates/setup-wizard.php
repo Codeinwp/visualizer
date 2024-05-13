@@ -84,9 +84,9 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 							<div class="vz-accordion-item__title">
 								<div class="vz-accordion-item__button">
 									<h2 class="h2 pb-8">
-										<?php esc_html_e( 'Select chart from the below available options', 'visualizer' ); ?></h2>
+										<?php esc_html_e( 'Select a chart from the options available below', 'visualizer' ); ?></h2>
 									<p class="p">
-										<?php esc_html_e( 'Pro tip: Keep your requirements in mind and select best chart for it', 'visualizer' ); ?>
+										<?php esc_html_e( 'Pro tip: Keep your requirements in mind and choose the best chart to meet them.', 'visualizer' ); ?>
 									</p>
 								</div>
 							</div>
@@ -176,7 +176,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 							<div class="vz-accordion-item__title">
 								<div class="vz-accordion-item__button">
 									<h2 class="h2 pb-8"><?php esc_html_e( 'You\'re almost done!', 'visualizer' ); ?></h2>
-									<p class="p"><?php esc_html_e( 'We use demo data during the import process, don&#x92;t worry you can customize it later', 'visualizer' ); ?></p>
+									<p class="p"><?php esc_html_e( 'We use demo data during the import process, but don\'t worry; you can customize it later.', 'visualizer' ); ?></p>
 								</div>
 							</div>
 							<div class="vz-accordion-item__content">
@@ -191,7 +191,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 													</div>
 													<div class="txt" style="width: 100%;">
 														<h4 class="h4 pb-4"><?php esc_html_e( 'Importing demo data', 'visualizer' ); ?></h4>
-														<p class="p" data-import_message="<?php esc_attr_e( 'Done! Demo data imported successfully.', 'visualizer' ); ?>"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
+														<p class="p" data-import_message="<?php esc_attr_e( 'Done! Demo data has been successfully imported.', 'visualizer' ); ?>"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
 													<div class="vz-progress" style="margin-top: 4px;">
 														<div class="vz-progress-bar"></div>
 													</div>
@@ -199,7 +199,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 												</div>
 											</div>
 										</div>
-										<p class="help-text help-text-primary pb-16"><?php esc_html_e( 'Import data from other Charts, WordPress, DataBase, or Manual Data with Visualizer', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Premium version', 'visualizer' ); ?></a></p>
+										<p class="help-text help-text-primary pb-16"><?php esc_html_e( 'Import data from other charts, WordPress, databases, or manual data entries using Visualizer', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Premium version', 'visualizer' ); ?></a></p>
 									</div>
 									<div class="form-block"><button class="btn btn-primary disabled" data-step_number="3"><?php esc_html_e( 'Continue', 'visualizer' ); ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
 									</div>
@@ -211,8 +211,8 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 						<div class="vz-accordion-item">
 							<div class="vz-accordion-item__title">
 								<div class="vz-accordion-item__button">
-									<h2 class="h2 pb-8"><?php esc_html_e( 'Insert chart into the draft page', 'visualizer' ); ?></h2>
-									<p class="p"><?php esc_html_e( 'Create a draft page with a Visualizer chart with just one click', 'visualizer' ); ?></p>
+									<h2 class="h2 pb-8"><?php esc_html_e( 'Insert a chart into the draft page', 'visualizer' ); ?></h2>
+									<p class="p"><?php esc_html_e( 'Create a draft page featuring a Visualizer chart with just one click.', 'visualizer' ); ?></p>
 								</div>
 							</div>
 							<div class="vz-accordion-item__content border-top">
@@ -234,7 +234,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 													</div>
 													<div class="vz-accordion-item__content">
 														<div class="vz-shortcode-preview-content">
-															<?php $shortcode = '[visualizer id="{{chart_id}}" lazy="" class=""]'; ?>
+															<?php $shortcode = '[visualizer id="{{chart_id}}" class=""]'; ?>
 															<?php if ( $is_live_preview ) { ?>
 																<p class="pb-16"><?php esc_html_e( 'Charts are added in the page/post via Gutenberg Blocks.', 'visualizer' ); ?></p>
 																<p class="pb-16"><?php esc_html_e( 'Alternatively, you can use a shortcode with the following structure:', 'visualizer' ); ?></p>
@@ -274,7 +274,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 								<div class="vz-accordion-item__title">
 									<div class="vz-accordion-item__button">
 										<h2 class="h2 pb-8"><?php esc_html_e( 'Extra Features', 'visualizer' ); ?></h2>
-										<p class="p"><?php esc_html_e( 'We\'re confident you\'ll see the improvements. Otherwise, you can remove it anytime', 'visualizer' ); ?></p>
+										<p class="p"><?php esc_html_e( 'We\'re confident you\'ll appreciate the improvements. If not, you can remove them at any time.', 'visualizer' ); ?></p>
 									</div>
 								</div>
 								<div class="vz-accordion-item__content border-top">
@@ -289,7 +289,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 														</div>
 														<button type="button" class="vz-accordion-item__button">
 															<div class="vz-accordion__step-title h4 pb-4"><?php esc_html_e( 'Enable perfomance features for your website.', 'visualizer' ); ?></div>
-															<p class="help-text"><?php esc_html_e( 'Optimise and speed up your site with our trusted addon - It&#x92;s Free', 'visualizer' ); ?></p>
+															<p class="help-text"><?php esc_html_e( 'Optimize and speed up your site with our trusted add-on—it\'s free!', 'visualizer' ); ?></p>
 															<div class="vz-accordion__icon"><span class="dashicons dashicons-arrow-down-alt2"></span>
 															</div>
 														</button>
@@ -327,8 +327,8 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 							<div class="vz-accordion-item">
 								<div class="vz-accordion-item__title">
 									<div class="vz-accordion-item__button">
-										<h2 class="h2 pb-8"><?php esc_html_e( 'Updates, tutorials, special offers & more', 'visualizer' ); ?></h2>
-										<p class="p"><?php esc_html_e( 'Get exclusive access of Visualizer newsletter', 'visualizer' ); ?></p>
+										<h2 class="h2 pb-8"><?php esc_html_e( 'Updates, tutorials, special offers, and more', 'visualizer' ); ?></h2>
+										<p class="p"><?php esc_html_e( 'Get exclusive access to the Visualizer newsletter.', 'visualizer' ); ?></p>
 									</div>
 								</div>
 								<div class="vz-accordion-item__content border-top">
@@ -336,7 +336,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 										<div class="form-block">
 											<div class="vz-newsletter-wrap">
 												<div class="vz-newsletter">
-													<p class="p pb-30"><?php esc_html_e( 'Let us know your email so that we can send you product updates, helpful tutorials, exclusive offers and more useful stuff.', 'visualizer' ); ?></p>
+													<p class="p pb-30"><?php esc_html_e( 'Share your email with us! That way, we can keep you updated with exciting product news, handy tutorials, exclusive offers, and lots more awesome content.', 'visualizer' ); ?></p>
 													<div class="vz-form-group">
 														<input type="email" class="form-control" id="vz_subscribe_email" placeholder="<?php echo esc_attr( get_bloginfo( 'admin_email' ) ); ?>">
 													</div>

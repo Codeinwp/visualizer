@@ -78,7 +78,24 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderSidebarContent() {
+
+		$chartSettings = get_post_meta( $this->chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+		$hasTitle = isset( $chartSettings['backend-title'] ) && '' !== $chartSettings['backend-title'];
+
 		?>
+		<div class="viz-info-panel">
+			<div class="viz-info-item">
+				<label for="viz-shortcode"><?php _e( 'Shortcode', 'visualizer' ); ?></label>
+				<div class="viz-info-row">
+					<input type="text" id="viz-shortcode" value="[visualizer id=&quot;<?php echo $this->chart->ID; ?>&quot; class='']" readonly>
+					<button class="button" id="viz-copy-shortcode"><?php _e( 'Copy', 'visualizer' ); ?></button>
+				</div>
+			</div>
+			<div class="viz-info-item">
+				<label for="viz-backend-name"><?php _e( 'Backend chart title for internal usage', 'visualizer' ); ?></label>
+				<input type="text" id="viz-backend-name" value="<?php echo  $hasTitle ? $chartSettings['backend-title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>">
+			</div>
+		</div>
 		<div id="viz-tabs">
 			<ul>
 				<li><a href="#viz-tab-basic-content" id="viz-tab-basic"><?php _e( 'Source', 'visualizer' ); ?></a></li>

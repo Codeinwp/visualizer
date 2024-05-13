@@ -395,6 +395,37 @@ div.viz-group-content .viz-group-description {
 #viz-tabs .wp-color-picker {
   width: 4rem !important;
 }
+
+.viz-info-panel {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	gap: 10px;
+}
+
+.viz-info-panel label {
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+}
+
+.viz-info-panel input {
+	flex: 1;
+}
+
+.viz-info-panel .viz-info-item {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 3px;
+}
+
+.viz-info-panel .viz-info-row {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+}
+
 /******************************************************************************/
 /********************************  TOOLBAR  ***********************************/
 /******************************************************************************/
@@ -431,6 +462,18 @@ div.viz-group-content .viz-group-description {
 	float: left;
 	width: 30%;
 	vertical-align: top;
+}
+
+#chart-select {
+	display: flex;
+	padding: 12px 8px;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+}
+
+#chart-select label {
+	font-weight: bold;
 }
 
 /******************************************************************************/
@@ -471,7 +514,15 @@ div.viz-group-content .viz-group-description {
 	box-shadow: 0 0 8px #ddd;
 }
 
-.type-box:nth-child(3n+3) {
+.type-box.viz-hidden {
+	display: none;
+}
+
+.type-box.viz-hidden {
+	display: none;
+}
+
+.type-box:nth-child(3n+1) {
 	margin-right: 0;
 }
 
@@ -500,6 +551,15 @@ div.viz-group-content .viz-group-description {
 	background-position: center center;
 	background-size: 900px 1150px;
 	filter: grayscale(100%);
+	cursor: pointer;
+}
+
+#type-picker.lib-ChartJS .type-label {
+	background-image: url(../images/chart_types_chartjs.png);
+}
+
+#type-picker.lib-DataTable .type-label {
+	background-image: url(../images/chart_types_datatable.png);
 }
 
 .type-label-selected,
@@ -832,7 +892,7 @@ button#editor-chart-button {
 .viz-select-library {
 	color: #0085ba;
 }
-.viz-select-library.viz-hide-libary {
+.viz-select-library.viz-hide-library {
 	display: none;
 }
 
@@ -1062,14 +1122,18 @@ button#editor-chart-button {
 }
 
 .only-pro-container {
-	display: table;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
 }
 
 .only-pro-inner {
-	display: table-cell;
-	vertical-align: middle;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .only-pro-content p {
@@ -1096,6 +1160,10 @@ button#editor-chart-button {
 
 .only-pro-content a:hover {
 	background: #2D419B;
+}
+
+.only-pro-anchor {
+	position: relative;
 }
 
 #sidebar::-webkit-scrollbar {
@@ -1327,13 +1395,6 @@ span.viz-section-error {
 	background-color: #ff0d00;
 }
 
-#db-query-form .CodeMirror-scroll {
-	overflow: hidden !important;
-	height: 50%;
-	margin: 0;
-	padding: 0;
-}
-
 #db-query-form .CodeMirror-wrap {
 	height: 200px;
 	padding: 15px;
@@ -1355,7 +1416,11 @@ span.viz-section-error {
 }
 
 #db-query-form .CodeMirror-wrap pre .cm-keyword {
-	color: #f92472 !important;
+	color: #FF6188 !important;
+}
+
+#db-query-form .CodeMirror-wrap pre .cm-builtin {
+	color: #78DCE8 !important;
 }
 
 #db-query-form .CodeMirror-wrap pre .cm-comment {
@@ -1364,7 +1429,7 @@ span.viz-section-error {
 
 #db-query-form .CodeMirror-wrap pre .cm-number,
 #db-query-form .CodeMirror-wrap pre .cm-string {
-	color: #fff !important;
+	color: #A9DC76 !important;
 }
 
 .visualizer-db-query-form > div {
@@ -1384,6 +1449,7 @@ span.viz-section-error {
 
 .db-wizard-error {
 	color: #f00;
+	padding: 16px 0;
 }
 
 .db-wizard-hints,
@@ -1405,6 +1471,7 @@ span.viz-section-error {
 .html-table-editor-hints ul,
 .json-wizard-hints ul {
 	list-style: square;
+	padding: 0 16px;
 }
 
 .db-wizard-results .dataTables_wrapper .dataTables_info {
