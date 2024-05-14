@@ -8,8 +8,11 @@
 
 (function ($) {
     $(window).on('load', function(){
-        // scroll to the selected chart type.
-        $('#chart-select').scrollIntoView();
+        let chart_select = $('#chart-select');
+        if(chart_select.length > 0){
+            // scroll to the selected chart type.
+            $('#chart-select')[0].scrollIntoView();
+        }
     });
 
     $(document).ready(function () {
@@ -154,7 +157,7 @@
 
     /**
      * Initialize/Update the available chart list based on their supported renderer libraries.
-     * 
+     *
      * @returns {void}
      */
     function init_available_chart_list() {
@@ -172,7 +175,7 @@
         const rendererTypesMapping = JSON.parse( rendererTypesMappingData );
 
         document.querySelectorAll('input.type-radio').forEach( chartTypeRadio => {
-            
+
             // Init the lib based on the default selected chart type.
             if ( chartTypeRadio.checked ) {
                 const chartType = chartTypeRadio.value;
@@ -201,14 +204,14 @@
                 }
             });
         });
-       
+
         // Update the chart list on user interaction.
         rendererSelect.addEventListener('change', (event) => {
             disable_renderer_select_placeholder();
             toggle_renderer_type( event.target.value );
             toggle_chart_types_by_render( event.target.value );
         });
-        
+
     }
 
     /**
@@ -223,9 +226,9 @@
 
     /**
      * Toggle the renderer type class based on the given renderer type.
-     * 
+     *
      * The class is used to style the chart type picker based on the given renderer library.
-     * 
+     *
      * @param {('GoogleCharts' | 'ChartJS' | 'DataTable')} rendererType The renderer type to toggle the class.
      */
     function toggle_renderer_type( rendererType ) {
@@ -233,14 +236,14 @@
         if ( ! typePicker ) {
             return;
         }
-        
+
         typePicker.classList.remove('lib-GoogleCharts', 'lib-ChartJS', 'lib-DataTable');
         typePicker.classList.add(`lib-${rendererType}`);
     }
 
     /**
      * Toggle chart types based on the given renderer type.
-     * 
+     *
      * @param {('GoogleCharts' | 'ChartJS' | 'DataTable')} rendererType The renderer type to filter the chart types.
      */
     function toggle_chart_types_by_render( rendererType ) {
@@ -786,11 +789,11 @@
     if( chartTypes ) {
         document.querySelector('.push-right[type=submit]')?.addEventListener('click', async function (event) {
             if ( typeof window.tiTrk !== 'undefined' ) {
-                event.preventDefault();    
+                event.preventDefault();
                 try {
                     const formData = new FormData(document.querySelector('#viz-types-form'));
                     const savedData = Object.fromEntries(formData);
-                
+
                     tiTrk?.with('visualizer')?.add({
                         feature: 'chart-create',
                         featureComponent: 'saved-data',
@@ -800,7 +803,7 @@
                         },
                         groupId
                     });
-                   
+
                     // Do not make the user to wait too long for the event to be uploaded.
                     const timer = new Promise((resolve) => setTimeout(resolve, 500));
                     await Promise.race([timer, tiTrk?.uploadEvents()]);
