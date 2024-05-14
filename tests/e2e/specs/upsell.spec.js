@@ -90,7 +90,7 @@ test.describe( 'Upsell', () => {
         searchParams = new URLSearchParams(href);
         expect( searchParams.get('utm_campaign') ).toBe('chart-permissions');
         await page.frameLocator('iframe').getByRole('heading', { name: /Permissions/ }).click();
-        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).not.toContainText('Upgrade to Plus plan to activate this feature!');
+        await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade to Plus plan to activate this feature!');
         await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade Now');
     });
 
