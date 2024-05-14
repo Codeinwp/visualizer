@@ -1,3 +1,7 @@
+##### [Version 3.11.1](https://github.com/Codeinwp/visualizer/compare/v3.11.0...v3.11.1) (2024-05-14)
+
+- Fixed the permissions of the plans
+
 #### [Version 3.11.0](https://github.com/Codeinwp/visualizer/compare/v3.10.15...v3.11.0) (2024-05-13)
 
 #### Enhancements
