@@ -738,11 +738,20 @@ class Visualizer_Module {
 	 * Gets the features for the provided license type.
 	 */
 	public static final function get_features_for_license( $plan ) {
+		$is_new_personal = apply_filters( 'visualizer_is_new_personal', false );
 		switch ( $plan ) {
 			case 1:
-				return array( 'import-wp', 'import-wc-report', 'import-file', 'import-url' );
+				$features = array( 'import-wp', 'import-wc-report', 'import-file', 'import-url' );
+				if ( ! $is_new_personal ) {
+					$features[] = 'db-query';
+				}
+				return $features;
 			case 2:
-				return array( 'db-query', 'schedule-chart', 'chart-permissions', 'import-chart', 'data-filter-configuration', 'frontend-actions' );
+				$features = array( 'schedule-chart', 'chart-permissions', 'import-chart', 'data-filter-configuration', 'frontend-actions' );
+				if ( $is_new_personal ) {
+					$features[] = 'db-query';
+				}
+				return $features;
 		}
 	}
 
