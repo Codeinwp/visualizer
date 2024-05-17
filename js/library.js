@@ -43,14 +43,6 @@ function createPopupProBlocker() {
     var popup = document.createElement('div');
     popup.classList.add('vizualizer-renew-notice-popup');
 
-    var closeIcon = document.createElement('i');
-    closeIcon.classList.add('dashicons', 'dashicons-no', 'vizualizer-renew-notice-close-icon');
-    closeIcon.addEventListener('click', function() {
-        document.body.removeChild(overlay);
-        popup.style.display = 'none';
-    });
-    popup.appendChild(closeIcon);
-
     var heading = document.createElement('h1');
     heading.textContent = 'Alert!';
     heading.classList.add('vizualizer-renew-notice-heading');
@@ -82,6 +74,17 @@ function createPopupProBlocker() {
     buttonsContainer.appendChild(link2);
 
     popup.appendChild(buttonsContainer);
+
+    var closeIcon = document.createElement('i');
+
+    closeIcon.classList.add('dashicons', 'dashicons-no', 'vizualizer-renew-notice-close-icon');
+
+    closeIcon.addEventListener('click', function() {
+        document.body.removeChild(overlay);
+        document.body.removeChild(popup);
+    });
+
+    popup.appendChild(closeIcon);
 
     document.body.appendChild(popup);
 
