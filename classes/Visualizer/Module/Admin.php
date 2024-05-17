@@ -1019,6 +1019,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
+		$license = get_option( 'visualizer_pro_license_data', 'free' );
+		$license_key = '';
+		$download_id = '';
+		if ( ! empty( $license ) && is_object( $license ) ) {
+			$license_key = $license->key;
+			$download_id = $license->download_id;
+		}
 		wp_localize_script(
 			'visualizer-library',
 			'visualizer',
@@ -1058,6 +1065,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'conflict' => __( 'We have detected a potential conflict with another component that prevents Visualizer from functioning properly. Please disable any of the following components if they are activated on your instance: Modern Events Calendar plugin, Acronix plugin. In case the aforementioned components are not activated or you continue to see this error message, please disable all other plugins and enable them one by one to find out the component that is causing the conflict.', 'visualizer' ),
 				),
 				'is_pro_user' => Visualizer_Module::is_pro(),
+				'admin_license_url' => admin_url('options-general.php#visualizer_pro_license'),
+				'renew_license_url' => tsdk_utmify( Visualizer_Plugin::STORE_URL . '?edd_license_key=' . $license_key . '&download_id=' .$download_id, 'visualizer_license_block' ),
 			)
 		);
 		// render library page

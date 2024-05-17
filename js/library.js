@@ -57,7 +57,7 @@ function createPopupProBlocker() {
     buttonsContainer.classList.add('vizualizer-renew-notice-buttons-container');
 
     var link1 = document.createElement('a');
-    link1.href = 'https://store.themeisle.com/';
+    link1.href = visualizer.renew_license_url;
     link1.target = '_blank';
     var button1 = document.createElement('button');
     button1.innerHTML = '<span class="dashicons dashicons-cart"></span> Renew License';
@@ -66,7 +66,7 @@ function createPopupProBlocker() {
     buttonsContainer.appendChild(link1);
 
     var link2 = document.createElement('a');
-    link2.href = '/wp-admin/options-general.php#visualizer_pro_license';
+    link2.href = visualizer.admin_license_url;
     var button2 = document.createElement('button');
     button2.innerHTML = '<span class="dashicons dashicons-unlock"></span> Activate License';
     button2.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-activate-button');
