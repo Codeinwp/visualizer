@@ -35,11 +35,6 @@
 
 function createPopupProBlocker() {
 
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
-    document.head.appendChild(link);
-
     var overlay = document.createElement('div');
     overlay.classList.add('vizualizer-renew-notice-overlay');
     overlay.id = 'overlay-visualizer';
@@ -49,7 +44,7 @@ function createPopupProBlocker() {
     popup.classList.add('vizualizer-renew-notice-popup');
 
     var closeIcon = document.createElement('i');
-    closeIcon.classList.add('fas', 'fa-times', 'vizualizer-renew-notice-close-icon');
+    closeIcon.classList.add('dashicons', 'dashicons-no', 'vizualizer-renew-notice-close-icon');
     closeIcon.addEventListener('click', function() {
         document.body.removeChild(overlay);
         popup.style.display = 'none';
@@ -73,7 +68,7 @@ function createPopupProBlocker() {
     link1.href = 'https://store.themeisle.com/';
     link1.target = '_blank';
     var button1 = document.createElement('button');
-    button1.innerHTML = '<span class="fas fa-shopping-cart"></span> Renew License';
+    button1.innerHTML = '<span class="dashicons dashicons-cart"></span> Renew License';
     button1.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-renew-button');
     link1.appendChild(button1);
     buttonsContainer.appendChild(link1);
@@ -81,7 +76,7 @@ function createPopupProBlocker() {
     var link2 = document.createElement('a');
     link2.href = '/wp-admin/options-general.php#visualizer_pro_license';
     var button2 = document.createElement('button');
-    button2.innerHTML = '<span class="fas fa-key"></span> Activate License';
+    button2.innerHTML = '<span class="dashicons dashicons-unlock"></span> Activate License';
     button2.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-activate-button');
     link2.appendChild(button2);
     buttonsContainer.appendChild(link2);
