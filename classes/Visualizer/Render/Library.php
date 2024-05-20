@@ -206,15 +206,12 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		</form>
 		</div>';
 	}
-
 	/**
-	 * Renders library content.
-	 *
-	 * @since 1.0.0
+	 * Renders pro charts blocker.
 	 *
 	 * @access private
 	 */
-	private function _renderLibrary() {
+	private function _renderProPopupBlocker () {
 		$license = get_option( 'visualizer_pro_license_data', 'free' );
 		$license_key = '';
 		$download_id = '';
@@ -224,10 +221,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		$admin_license_url = admin_url( 'options-general.php#visualizer_pro_license' );
 		$renew_license_url = tsdk_utmify( Visualizer_Plugin::STORE_URL . '?edd_license_key=' . $license_key . '&download_id=' . $download_id, 'visualizer_license_block' );
-		// Added by Ash/Upwork
-		$filterBy = ! empty( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		// Added by Ash/Upwork
-		echo $this->custom_css;
+
 		if ( ! Visualizer_Module::is_pro() ) {
 			echo '
 				<div class="vizualizer-renew-notice-overlay" id="overlay-visualizer"></div>
@@ -257,6 +251,23 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				});
 				</script>';
 		}
+	}
+	/**
+	 * Renders library content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access private
+	 */
+	private function _renderLibrary() {
+
+		// Added by Ash/Upwork
+		$filterBy = ! empty( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// Added by Ash/Upwork
+		echo $this->custom_css;
+
+		$this->_renderProPopupBlocker();
+
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 		echo '<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><symbol id="list-icon" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0ZM7.385 12.66H6.045L2.805 8.12L4.146 6.87L6.715 9.27L11.856 3.339L13.196 4.279L7.385 12.66Z"/></symbol></svg>';
 		$this->getDisplayForm();
