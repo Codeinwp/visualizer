@@ -522,6 +522,7 @@ div#visualizer-types ul, div#visualizer-types form p {
 
 
 .vizualizer-renew-notice-overlay {
+	display: none;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -532,7 +533,7 @@ div#visualizer-types ul, div#visualizer-types form p {
 }
 
 .vizualizer-renew-notice-popup {
-	display: block;
+	display: none;
 	position: fixed;
 	top: 50%;
 	left: 50%;

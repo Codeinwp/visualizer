@@ -215,10 +215,48 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 */
 	private function _renderLibrary() {
+		$license = get_option( 'visualizer_pro_license_data', 'free' );
+		$license_key = '';
+		$download_id = '';
+		if ( ! empty( $license ) && is_object( $license ) ) {
+			$license_key = $license->key;
+			$download_id = $license->download_id;
+		}
+		$admin_license_url = admin_url('options-general.php#visualizer_pro_license');
+		$renew_license_url = tsdk_utmify( Visualizer_Plugin::STORE_URL . '?edd_license_key=' . $license_key . '&download_id=' .$download_id, 'visualizer_license_block' );
 		// Added by Ash/Upwork
 		$filterBy = ! empty( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		// Added by Ash/Upwork
 		echo $this->custom_css;
+		if ( ! Visualizer_Module::is_pro() ) {
+			echo '
+				<div class="vizualizer-renew-notice-overlay" id="overlay-visualizer"></div>
+				<div class="vizualizer-renew-notice-popup">
+					<h1 class="vizualizer-renew-notice-heading">Alert!</h1>
+					<p class="vizualizer-renew-notice-message">' . esc_html__( 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.', 'visualizer' ) . '	</p>
+					<div class="vizualizer-renew-notice-buttons-container">
+						<a href="' . esc_url($renew_license_url) . '" target="_blank">
+							<button class="vizualizer-renew-notice-button vizualizer-renew-notice-renew-button">
+								<span class="dashicons dashicons-cart"></span>' . esc_html__( 'Renew License', 'visualizer' ) . ' 
+							</button>
+						</a>
+						<a href="' . esc_url($admin_license_url) . '">
+							<button class="vizualizer-renew-notice-button vizualizer-renew-notice-activate-button">
+								<span class="dashicons dashicons-unlock"></span> ' . esc_html__( 'Activate License', 'visualizer' ) . ' 
+							</button>
+						</a>
+					</div>
+					<i class="dashicons dashicons-no vizualizer-renew-notice-close-icon"></i>
+				</div>
+				<script>
+				jQuery(document).ready(function($) {
+					$(".vizualizer-renew-notice-close-icon").on("click", function() {
+						$("#overlay-visualizer").css("display", "none");
+						$(".vizualizer-renew-notice-popup").css("display", "none");
+					});
+				});
+				</script>';
+		}
 		echo '<div id="visualizer-types" class="visualizer-clearfix">';
 		echo '<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><symbol id="list-icon" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0ZM7.385 12.66H6.045L2.805 8.12L4.146 6.87L6.715 9.27L11.856 3.339L13.196 4.279L7.385 12.66Z"/></symbol></svg>';
 		$this->getDisplayForm();
@@ -251,6 +289,26 @@ class Visualizer_Render_Library extends Visualizer_Render {
 				$this->_renderSidebar();
 			}
 			echo '</div>';
+
+//            echo '
+//
+//            <h1 class="vizualizer-renew-notice-heading">Alert!</h1>
+//                <p class="vizualizer-renew-notice-message">
+//                    In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.
+//                </p>
+//                <div class="vizualizer-renew-notice-buttons-container">
+//                    <a href="${visualizer.renew_license_url}" target="_blank">
+//                        <button class="vizualizer-renew-notice-button vizualizer-renew-notice-renew-button">
+//                            <span class="dashicons dashicons-cart"></span> Renew License
+//                    </button>
+//                    </a>
+//                    <a href="${visualizer.admin_license_url}">
+//                        <button class="vizualizer-renew-notice-button vizualizer-renew-notice-activate-button">
+//                            <span class="dashicons dashicons-unlock"></span> Activate License
+//                    </button>
+//                    </a>
+//                </div>
+//                <i class="dashicons dashicons-no vizualizer-renew-notice-close-icon"></i> ';
 		} else {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 			echo '<div class="items"><div class="visualizer-chart">';

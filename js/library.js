@@ -33,61 +33,13 @@
     });
 })(wp.media.view);
 
-function createPopupProBlocker() {
-
-    var overlay = document.createElement('div');
-    overlay.classList.add('vizualizer-renew-notice-overlay');
-    overlay.id = 'overlay-visualizer';
-    document.body.appendChild(overlay);
-
-    var popup = document.createElement('div');
-    popup.classList.add('vizualizer-renew-notice-popup');
-
-    var heading = document.createElement('h1');
-    heading.textContent = 'Alert!';
-    heading.classList.add('vizualizer-renew-notice-heading');
-    popup.appendChild(heading);
-
-    var message = document.createElement('p');
-    message.textContent = 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.';
-    message.classList.add('vizualizer-renew-notice-message');
-    popup.appendChild(message);
-
-    var buttonsContainer = document.createElement('div');
-    buttonsContainer.classList.add('vizualizer-renew-notice-buttons-container');
-
-    var link1 = document.createElement('a');
-    link1.href = visualizer.renew_license_url;
-    link1.target = '_blank';
-    var button1 = document.createElement('button');
-    button1.innerHTML = '<span class="dashicons dashicons-cart"></span> Renew License';
-    button1.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-renew-button');
-    link1.appendChild(button1);
-    buttonsContainer.appendChild(link1);
-
-    var link2 = document.createElement('a');
-    link2.href = visualizer.admin_license_url;
-    var button2 = document.createElement('button');
-    button2.innerHTML = '<span class="dashicons dashicons-unlock"></span> Activate License';
-    button2.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-activate-button');
-    link2.appendChild(button2);
-    buttonsContainer.appendChild(link2);
-
-    popup.appendChild(buttonsContainer);
-
-    var closeIcon = document.createElement('i');
-
-    closeIcon.classList.add('dashicons', 'dashicons-no', 'vizualizer-renew-notice-close-icon');
-
-    closeIcon.addEventListener('click', function() {
-        document.body.removeChild(overlay);
-        document.body.removeChild(popup);
-    });
-
-    popup.appendChild(closeIcon);
-
-    document.body.appendChild(popup);
-
+function createPopupProBlocker( $ , e ) {
+    if ( ! visualizer.is_pro_user && e.target.classList.contains('viz-is-pro-chart') ) {
+        $("#overlay-visualizer").css("display", "block");
+        $(".vizualizer-renew-notice-popup").css("display", "block");
+        return true;
+    }
+    return false;
 }
 
 (function ($, vmv, vu) {
@@ -135,8 +87,7 @@ function createPopupProBlocker() {
 
         $('.visualizer-chart-shortcode').click(function (e) {
 
-            if ( ! visualizer.is_pro_user && e.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, e ) ) {
                 e.preventDefault();
                 e.stopPropagation();
                 return;
@@ -193,8 +144,7 @@ function createPopupProBlocker() {
 
         $('.visualizer-chart-edit').click(function (event) {
 
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 return;
             }
 
@@ -213,16 +163,14 @@ function createPopupProBlocker() {
             return false;
         });
         $(".visualizer-chart-clone").on("click", function ( event ) {
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 event.preventDefault();
             }
         });
 
         $(".visualizer-chart-export").on("click", function (event) {
 
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 return;
             }
 
@@ -247,8 +195,7 @@ function createPopupProBlocker() {
         });
 
         $(".visualizer-chart-image").on("click", function (event) {
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 return;
             }
             $('body').trigger('visualizer:action:specificchart', {action: 'image', id: $(this).attr("data-chart"), data: null, dataObj: {name: $(this).attr("data-chart-title")}});
