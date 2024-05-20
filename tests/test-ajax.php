@@ -66,6 +66,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	public function test_ajax_response_get_query_data_valid_query() {
 		$this->_setRole( 'administrator' );
 
+		$this->enable_pro();
+
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
 
 		global $wpdb;
@@ -93,6 +95,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	public function test_ajax_response_get_query_data_invalid_query() {
 		$this->_setRole( 'administrator' );
 
+		$this->enable_pro();
+
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
 
 		$_POST['params'] = array(
@@ -119,6 +123,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_ajax_response_get_query_data_valid_query_with_filtered_columns() {
 		$this->_setRole( 'administrator' );
+
+		$this->enable_pro();
 
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
 
@@ -203,6 +209,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	public function test_ajax_response_get_query_data_invalid_query_subquery() {
 		$this->_setRole( 'administrator' );
 
+		$this->enable_pro();
+
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
 
 		$_POST['params'] = array(
@@ -229,6 +237,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_ajax_response_get_query_data_invalid_query_comment() {
 		$this->_setRole( 'administrator' );
+
+		$this->enable_pro();
 
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
 
@@ -263,5 +273,67 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$source = new Visualizer_Source_Query( "/* SELECT */ DELETE * FROM test_table /* WHERE post_type = 'post' */");
 		$this->assertEquals( 'DELETE * FROM test_table', $source->get_query() );
+	}
+
+	/**
+	 * Test Save Query not allowed for subscriber.
+	 */
+	public function test_sql_save_chart_subscriber() {
+		$this->_setRole( 'subscriber' );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION );
+		$_GET['chart']    = '1';
+
+		$_POST['params'] = array(
+			'query' => "SELECT * FROM wp_posts LIMIT 1",
+		);
+		try {
+			// Trigger the AJAX action
+			$this->_handleAjax( Visualizer_Plugin::ACTION_SAVE_DB_QUERY );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertObjectHasAttribute( 'success', $response );
+		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertEquals( 'Action not allowed for this user.', $response->data->msg );
+		$this->assertFalse( $response->success );
+	}
+
+	/**
+	 * Test Save Query not allowed if not pro.
+	 */
+	public function test_sql_save_chart_admin() {
+		wp_set_current_user( $this->admin_user_id );
+		$this->_setRole( 'administrator' );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION );
+		$_GET['chart']    = '1';
+
+		$_POST['params'] = array(
+			'query' => "SELECT * FROM wp_posts LIMIT 1",
+		);
+		try {
+			// Trigger the AJAX action
+			$this->_handleAjax( Visualizer_Plugin::ACTION_SAVE_DB_QUERY );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertObjectHasAttribute( 'success', $response );
+		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertEquals( 'Feature is not available.', $response->data->msg );
+		$this->assertFalse( $response->success );
+	}
+
+	/**
+	 * Utility method to mock pro version.
+	 */
+	private function enable_pro() {
+		add_filter( 'visualizer_is_pro', '__return_true' );
 	}
 }
