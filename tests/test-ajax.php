@@ -285,7 +285,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$_GET['chart']    = '1';
 
 		$_POST['params'] = array(
-			'query' => "SELECT * FROM wp_posts LIMIT 1",
+			'query' => 'SELECT * FROM wp_posts LIMIT 1',
 		);
 		try {
 			// Trigger the AJAX action
@@ -313,7 +313,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$_GET['chart']    = '1';
 
 		$_POST['params'] = array(
-			'query' => "SELECT * FROM wp_posts LIMIT 1",
+			'query' => 'SELECT * FROM wp_posts LIMIT 1',
 		);
 		try {
 			// Trigger the AJAX action
