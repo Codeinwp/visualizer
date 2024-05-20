@@ -235,7 +235,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 					<h1 class="vizualizer-renew-notice-heading">Alert!</h1>
 					<p class="vizualizer-renew-notice-message">' . esc_html__( 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.', 'visualizer' ) . '	</p>
 					<div class="vizualizer-renew-notice-buttons-container">
-						<a href="' . esc_url( $renew_license_url)  . '" target="_blank">
+						<a href="' . esc_url( $renew_license_url) . '" target="_blank">
 							<button class="vizualizer-renew-notice-button vizualizer-renew-notice-renew-button">
 								<span class="dashicons dashicons-cart"></span>' . esc_html__( 'Renew License', 'visualizer' ) . ' 
 							</button>
