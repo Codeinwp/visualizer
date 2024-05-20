@@ -211,7 +211,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 *
 	 * @access private
 	 */
-	private function _renderProPopupBlocker () {
+	private function _renderProPopupBlocker() {
 		$license = get_option( 'visualizer_pro_license_data', 'free' );
 		$license_key = '';
 		$download_id = '';
