@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "codeinwp/themeisle-sdk",
-            "version": "3.3.21",
+            "version": "3.3.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeinwp/themeisle-sdk.git",
-                "reference": "c73f9f8e32ccfa933ef244eb284dd58e0dace8eb"
+                "reference": "1754febc3c25c4c884424e72801c4d3f2ec7097e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/c73f9f8e32ccfa933ef244eb284dd58e0dace8eb",
-                "reference": "c73f9f8e32ccfa933ef244eb284dd58e0dace8eb",
+                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/1754febc3c25c4c884424e72801c4d3f2ec7097e",
+                "reference": "1754febc3c25c4c884424e72801c4d3f2ec7097e",
                 "shasum": ""
             },
             "require-dev": {
@@ -42,9 +42,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeinwp/themeisle-sdk/issues",
-                "source": "https://github.com/Codeinwp/themeisle-sdk/tree/v3.3.21"
+                "source": "https://github.com/Codeinwp/themeisle-sdk/tree/v3.3.22"
             },
-            "time": "2024-04-29T13:20:44+00:00"
+            "time": "2024-05-17T15:04:51+00:00"
         },
         {
             "name": "markbaker/complex",
