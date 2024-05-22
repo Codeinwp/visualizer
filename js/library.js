@@ -85,11 +85,11 @@ function createPopupProBlocker( $ , e ) {
             $(this).parent('form').submit();
         });
 
-        $('.visualizer-chart-shortcode').click(function (e) {
+        $('.visualizer-chart-shortcode').click(function (event) {
 
-            if ( createPopupProBlocker( $, e ) ) {
-                e.preventDefault();
-                e.stopPropagation();
+            if ( createPopupProBlocker( $, event ) ) {
+                event.preventDefault();
+                event.stopPropagation();
                 return;
             }
 
@@ -98,12 +98,12 @@ function createPopupProBlocker( $ , e ) {
             if (window.getSelection && document.createRange) {
                 selection = window.getSelection();
                 range = document.createRange();
-                range.selectNodeContents(e.target);
+                range.selectNodeContents(event.target);
                 selection.removeAllRanges();
                 selection.addRange(range);
             } else if (document.selection && document.body.createTextRange) {
                 range = document.body.createTextRange();
-                range.moveToElementText(e.target);
+                range.moveToElementText(event.target);
                 range.select();
             }
         });

@@ -212,6 +212,9 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 */
 	private function _renderProPopupBlocker() {
+		if (  Visualizer_Module::is_pro() ) {
+			return;
+		}
 		$license = get_option( 'visualizer_pro_license_data', 'free' );
 		$license_key = '';
 		$download_id = '';
@@ -221,13 +224,11 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		$admin_license_url = admin_url( 'options-general.php#visualizer_pro_license' );
 		$renew_license_url = tsdk_utmify( Visualizer_Plugin::STORE_URL . '?edd_license_key=' . $license_key . '&download_id=' . $download_id, 'visualizer_license_block' );
-
-		if ( ! Visualizer_Module::is_pro() ) {
-			echo '
+		echo '
 				<div class="vizualizer-renew-notice-overlay" id="overlay-visualizer"></div>
 				<div class="vizualizer-renew-notice-popup">
 					<h1 class="vizualizer-renew-notice-heading">Alert!</h1>
-					<p class="vizualizer-renew-notice-message">' . esc_html__( 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.', 'visualizer' ) . '	</p>
+					<p class="vizualizer-renew-notice-message">' . esc_html__( 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.', 'visualizer' ) . '</p>
 					<div class="vizualizer-renew-notice-buttons-container">
 						<a href="' . esc_url( $renew_license_url) . '" target="_blank">
 							<button class="vizualizer-renew-notice-button vizualizer-renew-notice-renew-button">
@@ -239,18 +240,20 @@ class Visualizer_Render_Library extends Visualizer_Render {
 								<span class="dashicons dashicons-unlock"></span> ' . esc_html__( 'Activate License', 'visualizer' ) . ' 
 							</button>
 						</a>
+						<button class="vizualizer-renew-notice-button vizualizer-renew-notice-close-icon" aria-label="Close" onclick="closePopup()">
+							<i class="dashicons dashicons-no"></i>
+						</button>
 					</div>
-					<i class="dashicons dashicons-no vizualizer-renew-notice-close-icon"></i>
 				</div>
 				<script>
-				jQuery(document).ready(function($) {
-					$(".vizualizer-renew-notice-close-icon").on("click", function() {
-						$("#overlay-visualizer").css("display", "none");
-						$(".vizualizer-renew-notice-popup").css("display", "none");
-					});
-				});
+				function closePopup() {
+					var overlay = document.getElementById("overlay-visualizer");
+					var popup = document.querySelector(".vizualizer-renew-notice-popup");
+					overlay.style.display = "none";
+					popup.style.display = "none";
+				}
 				</script>';
-		}
+
 	}
 	/**
 	 * Renders library content.
