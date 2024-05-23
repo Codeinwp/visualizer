@@ -31,7 +31,7 @@ test.describe( 'Charts with Gutenberg Editor', () => {
     test('new chart creation', async ( { admin, editor, page } ) => {
         await admin.createNewPost();
         await editor.insertBlock( { name: 'visualizer/chart'} );
-        
+
         await expect( page.getByText('Make a new chart or display') ).toBeVisible();
         await expect( page.getByLabel('Editor content').locator('a') ).toBeVisible();
 
@@ -40,7 +40,7 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         // Create chart via popup.
         await page.frameLocator('iframe').getByRole('button', { name: 'Next' }).click();
         await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
-        
+
         await expect( page.getByRole('button', { name: 'Save', exact: true }) ).toBeVisible();
         await page.getByRole('button', { name: 'Save', exact: true }).click();
         await expect( page.getByRole('button', { name: 'Done' }) ).toBeVisible();
@@ -98,7 +98,7 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await page.getByRole('button', { name: 'Import from other chart' }).click();
 
         await page.getByRole('button', { name: 'Import data from database' }).click();
-        
+
         const upgradeLinks = await page.locator('a').filter({ hasText: 'Upgrade Now' }).count();
         expect( upgradeLinks ).toBe( 6 );
 
@@ -130,5 +130,22 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         //await page.goto('http://localhost:8889/wp-admin/post.php?post=29&action=edit');
         await expect(page.getByLabel('Visualizer', { exact: true }).locator('h1')).toContainText('Visualizer');
         await page.getByRole('button', { name: ' Close dialog' }).click();
+    } );
+
+    test( 'check widgets', async ( { admin, editor, page } ) => {
+        await createChartWithAdmin( admin, page );
+
+        await admin.visitAdminPage( 'widgets.php' );
+
+        await page.getByLabel('Close', { exact: true }).click();
+        await page.getByLabel('Toggle block inserter').click();
+        await page.getByPlaceholder('Search').fill('visuali');
+        await page.getByRole('option', { name: ' Visualizer Chart' }).click();
+        await page.locator('div').filter({ hasText: /^Display an existing chart$/ }).click();
+        await page.getByTitle('Insert Chart').first().click();
+
+        await expect(page.getByLabel('Block: Visualizer Chart')).toContainText('Visualizer');
+        await expect(page.locator('rect').first()).toBeVisible();
+
     } );
 } );
