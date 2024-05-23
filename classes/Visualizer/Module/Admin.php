@@ -53,6 +53,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		parent::__construct( $plugin );
 		$this->_addAction( 'load-post.php', 'enqueueMediaScripts' );
 		$this->_addAction( 'load-post-new.php', 'enqueueMediaScripts' );
+		$this->_addAction( 'enqueue_block_editor_assets', 'enqueueMediaScripts' );
 		$this->_addAction( 'admin_footer', 'renderTemplates' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts', null, 0 );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
@@ -330,7 +331,9 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function enqueueMediaScripts() {
 		global $typenow;
-		if ( post_type_supports( $typenow, 'editor' ) ) {
+		global $current_screen;
+
+		if ( post_type_supports( $typenow, 'editor' ) || $current_screen->id === 'widgets' ) {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
 
 			// Load all the assets for the different libraries we support.
@@ -1019,6 +1022,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
+
 		wp_localize_script(
 			'visualizer-library',
 			'visualizer',
