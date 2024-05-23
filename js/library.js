@@ -33,63 +33,13 @@
     });
 })(wp.media.view);
 
-function createPopupProBlocker() {
-
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
-    document.head.appendChild(link);
-
-    var overlay = document.createElement('div');
-    overlay.classList.add('vizualizer-renew-notice-overlay');
-    overlay.id = 'overlay-visualizer';
-    document.body.appendChild(overlay);
-
-    var popup = document.createElement('div');
-    popup.classList.add('vizualizer-renew-notice-popup');
-
-    var closeIcon = document.createElement('i');
-    closeIcon.classList.add('fas', 'fa-times', 'vizualizer-renew-notice-close-icon');
-    closeIcon.addEventListener('click', function() {
-        document.body.removeChild(overlay);
-        popup.style.display = 'none';
-    });
-    popup.appendChild(closeIcon);
-
-    var heading = document.createElement('h1');
-    heading.textContent = 'Alert!';
-    heading.classList.add('vizualizer-renew-notice-heading');
-    popup.appendChild(heading);
-
-    var message = document.createElement('p');
-    message.textContent = 'In order to edit premium charts, benefit from updates and support for Visualizer Premium plugin, please renew your license code or activate it.';
-    message.classList.add('vizualizer-renew-notice-message');
-    popup.appendChild(message);
-
-    var buttonsContainer = document.createElement('div');
-    buttonsContainer.classList.add('vizualizer-renew-notice-buttons-container');
-
-    var link1 = document.createElement('a');
-    link1.href = 'https://store.themeisle.com/';
-    link1.target = '_blank';
-    var button1 = document.createElement('button');
-    button1.innerHTML = '<span class="fas fa-shopping-cart"></span> Renew License';
-    button1.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-renew-button');
-    link1.appendChild(button1);
-    buttonsContainer.appendChild(link1);
-
-    var link2 = document.createElement('a');
-    link2.href = '/wp-admin/options-general.php#visualizer_pro_license';
-    var button2 = document.createElement('button');
-    button2.innerHTML = '<span class="fas fa-key"></span> Activate License';
-    button2.classList.add('vizualizer-renew-notice-button', 'vizualizer-renew-notice-activate-button');
-    link2.appendChild(button2);
-    buttonsContainer.appendChild(link2);
-
-    popup.appendChild(buttonsContainer);
-
-    document.body.appendChild(popup);
-
+function createPopupProBlocker( $ , e ) {
+    if ( ! visualizer.is_pro_user && e.target.classList.contains('viz-is-pro-chart') ) {
+        $("#overlay-visualizer").css("display", "block");
+        $(".vizualizer-renew-notice-popup").css("display", "block");
+        return true;
+    }
+    return false;
 }
 
 (function ($, vmv, vu) {
@@ -135,12 +85,11 @@ function createPopupProBlocker() {
             $(this).parent('form').submit();
         });
 
-        $('.visualizer-chart-shortcode').click(function (e) {
+        $('.visualizer-chart-shortcode').click(function (event) {
 
-            if ( ! visualizer.is_pro_user && e.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
-                e.preventDefault();
-                e.stopPropagation();
+            if ( createPopupProBlocker( $, event ) ) {
+                event.preventDefault();
+                event.stopPropagation();
                 return;
             }
 
@@ -149,12 +98,12 @@ function createPopupProBlocker() {
             if (window.getSelection && document.createRange) {
                 selection = window.getSelection();
                 range = document.createRange();
-                range.selectNodeContents(e.target);
+                range.selectNodeContents(event.target);
                 selection.removeAllRanges();
                 selection.addRange(range);
             } else if (document.selection && document.body.createTextRange) {
                 range = document.body.createTextRange();
-                range.moveToElementText(e.target);
+                range.moveToElementText(event.target);
                 range.select();
             }
         });
@@ -195,8 +144,7 @@ function createPopupProBlocker() {
 
         $('.visualizer-chart-edit').click(function (event) {
 
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 return;
             }
 
@@ -215,16 +163,14 @@ function createPopupProBlocker() {
             return false;
         });
         $(".visualizer-chart-clone").on("click", function ( event ) {
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 event.preventDefault();
             }
         });
 
         $(".visualizer-chart-export").on("click", function (event) {
 
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 return;
             }
 
@@ -249,8 +195,7 @@ function createPopupProBlocker() {
         });
 
         $(".visualizer-chart-image").on("click", function (event) {
-            if ( ! visualizer.is_pro_user && event.target.classList.contains('viz-is-pro-chart') ) {
-                createPopupProBlocker();
+            if ( createPopupProBlocker( $, event ) ) {
                 return;
             }
             $('body').trigger('visualizer:action:specificchart', {action: 'image', id: $(this).attr("data-chart"), data: null, dataObj: {name: $(this).attr("data-chart-title")}});

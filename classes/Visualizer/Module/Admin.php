@@ -1022,6 +1022,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
+
 		wp_localize_script(
 			'visualizer-library',
 			'visualizer',

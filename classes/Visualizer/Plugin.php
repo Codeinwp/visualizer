@@ -57,6 +57,8 @@ class Visualizer_Plugin {
 	const ACTION_UPLOAD_DATA = 'visualizer-upload-data';
 	const ACTION_EXPORT_DATA = 'visualizer-export-data';
 
+	const STORE_URL = 'https://store.themeisle.com/';
+
 	/**
 	 *Action used for fetching specific users/roles for permissions.
 	 */
