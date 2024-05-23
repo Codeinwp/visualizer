@@ -1431,6 +1431,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
 		}
 
+		if ( ! Visualizer_Module::is_pro() ) {
+			wp_send_json_error( array( 'msg' => __( 'Feature is not available.', 'visualizer' ) ) );
+		}
+
 		$params     = wp_parse_args( $_POST['params'] );
 		$chart_id   = filter_var( $params['chart_id'], FILTER_VALIDATE_INT );
 		$query      = trim( $params['query'], ';' );
@@ -1451,6 +1455,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function saveQuery() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_SAVE_DB_QUERY . Visualizer_Plugin::VERSION, 'security' );
+
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
+		}
+		if ( ! is_super_admin() ) {
+			wp_send_json_error( array( 'msg' => __( 'Action not allowed for this user.', 'visualizer' ) ) );
+		}
+
+		if ( ! Visualizer_Module::is_pro() ) {
+			wp_send_json_error( array( 'msg' => __( 'Feature is not available.', 'visualizer' ) ) );
+		}
 
 		$chart_id   = filter_input(
 			INPUT_GET,
