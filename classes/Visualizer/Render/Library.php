@@ -212,7 +212,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 * @access private
 	 */
 	private function _renderProPopupBlocker() {
-		if (  Visualizer_Module::is_pro() ) {
+		if ( Visualizer_Module::is_pro() ) {
 			return;
 		}
 		$license = get_option( 'visualizer_pro_license_data', 'free' );
