@@ -148,4 +148,22 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await expect(page.locator('rect').first()).toBeVisible();
 
     } );
+
+    test( 'check widgets in the Customizer', async ( { admin, editor, page } ) => {
+        await createChartWithAdmin( admin, page );
+
+        await admin.visitAdminPage( 'customize.php' );
+
+        await page.getByRole('heading', { name: 'Widgets' }).click();
+        await page.getByRole('heading', { name: 'Footer' }).click();
+        await page.getByRole('button', { name: 'Got it' }).click();
+        await page.getByLabel('Document tools').getByLabel('Add block').click();
+        await page.getByPlaceholder('Search', { exact: true }).fill('visualizer');
+        await page.getByRole('option', { name: ' Visualizer Chart' }).click();
+        await page.getByText('Display an existing chart').click();
+        await page.locator('.visualizer-settings__charts-controls').first().click();
+        await expect(page.getByLabel('Block: Visualizer Chart')).toContainText('Visualizer');
+        await expect(page.locator('rect').first()).toBeVisible();
+
+    } );
 } );
