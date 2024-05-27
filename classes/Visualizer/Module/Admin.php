@@ -333,7 +333,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		global $typenow;
 		global $current_screen;
 
-		if ( post_type_supports( $typenow, 'editor' ) || $current_screen->id === 'widgets' ) {
+		if ( post_type_supports( $typenow, 'editor' ) || $current_screen->id === 'widgets' || $current_screen->id === 'customize' ) {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
 
 			// Load all the assets for the different libraries we support.
