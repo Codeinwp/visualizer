@@ -226,6 +226,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.11.3](https://github.com/Codeinwp/visualizer/compare/v3.11.2...v3.11.3) (2024-05-27)
+
+- Fixed the rendering of Visualizer widgets in the Customizer
+
+
+
+
 ##### [Version 3.11.2](https://github.com/Codeinwp/visualizer/compare/v3.11.1...v3.11.2) (2024-05-23)
 
 - Fixed Visualizer block widget not loading
