@@ -227,19 +227,28 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * Testing the cron job for refreshing the charts.
+	 * Testing cron custom schedule.
+	 *
+	 * @return void
+	 */
+	public function test_custom_cron_schedule() {
+		// Check custom schedule.
+		$schedules = wp_get_schedules();
+		$this->assertArrayHasKey( 'visualizer_ten_minutes', $schedules );
+	}
+
+	/**
+	 * Testing if the cron job is scheduled for charts data refresh.
 	 *
 	 * @return void
 	 */
 	public function test_chart_refresh_cron() {
-		// Check custom schedule.
-		$schedules = wp_get_schedules();
-		$this->assertArrayHasKey( 'visualizer_ten_minutes', $schedules );
-
-		// Check if the cron job is scheduled for charts data refresh.
 		$cron_jobs     = _get_cron_array();
 		$has_schedule  = false;
 		$schedule_data = array();
+
+		print_r( $cron_jobs);
+
 		foreach ( $cron_jobs as $time => $jobs ) {
 			foreach ( $jobs as $job => $data ) {
 				if ( 'visualizer_schedule_refresh_db' === $job ) {
