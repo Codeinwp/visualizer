@@ -63,7 +63,7 @@ class MapSettings extends Component {
 						<li>
 							{ __( 'A continent or a sub-continent, specified by its 3-digit code, e.g., \'011\' for Western Africa. ' ) }
 							<ExternalLink
-								href="https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart#Continent_Hierarchy"
+								href="https://developers.google.com/chart/interactive/docs/gallery/geochart#continent-hierarchy-and-codes"
 							>
 								{ __( 'More info here.' ) }
 							</ExternalLink>
