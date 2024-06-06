@@ -5,8 +5,10 @@ module.exports = function (grunt) {
 	'use strict';
 	grunt.initConfig({
 		wp_readme_to_markdown: {
-			files: {
-				'readme.md': 'readme.txt'
+			plugin: {
+				files: {
+					'readme.md': 'readme.txt'
+				},
 			},
 		},
 		version: {
