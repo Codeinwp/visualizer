@@ -227,6 +227,16 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Testing cron custom schedule.
+	 *
+	 * @return void
+	 */
+	public function test_custom_cron_schedule() {
+		$schedules = wp_get_schedules();
+		$this->assertArrayHasKey( 'visualizer_ten_minutes', $schedules );
+	}
+
+	/**
 	 * Provide the fileURL for uploading the file
 	 *
 	 * @access public

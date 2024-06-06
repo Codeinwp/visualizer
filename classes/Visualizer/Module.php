@@ -138,7 +138,7 @@ class Visualizer_Module {
 	 *
 	 * @access protected
 	 * @param string $tag The name of the filter to hook the $method to.
-	 * @param type   $method The name of the method to be called when the filter is applied.
+	 * @param string $method The name of the method to be called when the filter is applied.
 	 * @param int    $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default: 10). Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action.
 	 * @param int    $accepted_args optional. The number of arguments the function accept (default 1).
 	 * @return Visualizer_Module
