@@ -392,11 +392,12 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	}
 
 	/**
-	 * Refresh the db chart.
+	 * Refresh the Database chart type.
 	 *
 	 * @access public
 	 */
 	public function refreshDbChart() {
+		// NOTE: This use a different key from normal schedule. Updated only by Database chart. Check `visualizer_schedule_import` action.
 		$chart_schedules = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
 		if ( ! $chart_schedules ) {
 			return;
