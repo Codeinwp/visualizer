@@ -226,6 +226,14 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.11.4](https://github.com/Codeinwp/visualizer/compare/v3.11.3...v3.11.4) (2024-07-09)
+
+- Fixed broken link in the Map settings of the Geo Chart
+- Fixed the default cron job sync time for data synchronization [PRO]
+
+
+
+
 ##### [Version 3.11.3](https://github.com/Codeinwp/visualizer/compare/v3.11.2...v3.11.3) (2024-05-27)
 
 - Fixed the rendering of Visualizer widgets in the Customizer

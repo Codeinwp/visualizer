@@ -47,7 +47,7 @@ These versatile data handling capabilities ensure that Visualizer Free is equipp
 
 *The above descriptions were partially taken from Google Visualization API site*
 
-### CHECK OUT A QUICK OVERVIEW OF VISUALIZER ###
+### CHECK OUT A QUICK OVERVIEW OF VISUALIZER ### 
 
 <a href="https://youtu.be/hQO_evnb_tQ?si=XvIzaU6WIvxTj8N0">WordPress Charts and Graphs: How To Create Them With Visualizer Plugin<a/>
 
@@ -88,23 +88,23 @@ These versatile data handling capabilities ensure that Visualizer Free is equipp
 
 If you’re already benefiting from Visualizer, why not take your website to the next level with more powerful tools to enhance your data visualization capabilities and keep your audience engaged longer?
 
-- **Advanced Data Synchronization:** Automatically sync your data sources to ensure your charts are always current without manual input.
+- **Advanced Data Synchronization:** Automatically sync your data sources to ensure your charts are always current without manual input.  
 **USE CASE:** 🔍 Sarah, a market analyst, leverages Advanced Data Synchronization to streamline her workflow. She sets her data sources to auto-update, ensuring her market trend charts are always accurate, saving her hours each week and enhancing her reports' credibility.
 
-- **Multi-Language Support:** Automatically translate your charts and data presentations into multiple languages, broadening your audience reach.
+- **Multi-Language Support:** Automatically translate your charts and data presentations into multiple languages, broadening your audience reach.  
 **USE CASE:** 🌍 Elena, who manages a multilingual educational platform, uses Multi-Language Support to provide data visualizations in several languages, effectively increasing her site's global usability and accessibility.
 
-- **Advanced User Permissions:** Control who can view or edit your charts, perfect for teams needing to manage access at various levels.
+- **Advanced User Permissions:** Control who can view or edit your charts, perfect for teams needing to manage access at various levels.  
 **USE CASE:** 🛠️ Rachel, a project manager, configures user permissions to ensure that only relevant team members can edit financial forecasts, maintaining data integrity and security.
 
 - **Import from Other Charts:** Seamlessly integrate data from other charts into new visualizations, facilitating easy data consolidation and comparison.
 
-- **Import from WordPress:** Directly pull data from your WordPress posts, pages, or custom post types to create dynamic charts that automatically update as your content changes.
+- **Import from WordPress:** Directly pull data from your WordPress posts, pages, or custom post types to create dynamic charts that automatically update as your content changes.  
 **USE CASE:** ✍️ Benjamin, a digital marketing manager, uses this feature to track engagement across blog posts in real-time. He creates charts that update automatically with views and social shares, helping him quickly adjust content strategies based on what resonates with audiences.
 
 - **Import from Database:** Connect directly to your database to fetch data, ensuring your visualizations reflect the most up-to-date information available.
 
-- **Data Filter:** Apply filters to your data within Visualizer, enabling viewers to interact with and explore data in a more focused manner.
+- **Data Filter:** Apply filters to your data within Visualizer, enabling viewers to interact with and explore data in a more focused manner.  
 **USE CASE:** 🕵️‍♂️ Tom, a market researcher, implements data filters on his demographic analysis charts, allowing users to select specific variables such as age and income, thereby drilling down into personalized data insights.
 
 - **Priority Support:** Have access to our dedicated support team to help you resolve any technical issues swiftly, ensuring your visualizations are always performing optimally.
@@ -225,6 +225,14 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 7. Block editor - Chart Library
 
 ## Changelog ##
+
+##### [Version 3.11.4](https://github.com/Codeinwp/visualizer/compare/v3.11.3...v3.11.4) (2024-07-09)
+
+- Fixed broken link in the Map settings of the Geo Chart
+- Fixed the default cron job sync time for data synchronization [PRO]
+
+
+
 
 ##### [Version 3.11.3](https://github.com/Codeinwp/visualizer/compare/v3.11.2...v3.11.3) (2024-05-27)
 
