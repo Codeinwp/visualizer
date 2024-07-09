@@ -49,6 +49,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		$this->_addAction( 'admin_init', 'adminInit' );
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
+		$this->_addFilter( 'cron_schedules', 'custom_cron_schedules' );
 		$this->_addAction( 'plugins_loaded', 'loadTextDomain' );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_get_chart_counts', 'getUsage', 10, 2 );
@@ -209,7 +210,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 */
 	private function activate_on_site() {
 		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
-		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, apply_filters( 'visualizer_chart_schedule_interval', 'hourly' ), 'visualizer_schedule_refresh_db' );
+		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' ), 'visualizer_schedule_refresh_db' );
 		add_option( 'visualizer-activated', true );
 		$is_fresh_install  = get_option( 'visualizer_fresh_install', false );
 		if ( ! defined( 'TI_CYPRESS_TESTING' ) && false === $is_fresh_install ) {
@@ -281,9 +282,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	/**
 	 * Refresh the specific chart from the db.
 	 *
-	 * @param WP_Post $chart The chart object.
-	 * @param int     $chart_id The chart id.
-	 * @param bool    $force If this is true, then the chart data will be force refreshed. If false, data will be refreshed only if the chart requests live data.
+	 * @param WP_Post|null $chart The chart object.
+	 * @param int          $chart_id The chart id.
+	 * @param bool         $force If this is true, then the chart data will be force refreshed. If false, data will be refreshed only if the chart requests live data.
 	 *
 	 * @access public
 	 */
@@ -391,15 +392,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	}
 
 	/**
-	 * Refresh the db chart.
+	 * Refresh the Database chart type.
 	 *
 	 * @access public
 	 */
 	public function refreshDbChart() {
-		$schedules = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
-		if ( ! $schedules ) {
+		// NOTE: This use a different key from normal schedule. Updated only by Database chart. Check `visualizer_schedule_import` action.
+		$chart_schedules = get_option( Visualizer_Plugin::CF_DB_SCHEDULE, array() );
+		if ( ! $chart_schedules ) {
 			return;
 		}
+
 		if ( ! defined( 'VISUALIZER_DO_NOT_DIE' ) ) {
 			// define this so that the ajax call does not die
 			// this means that if the new version of pro and the old version of free are installed, only the first chart will be updated
@@ -407,22 +410,31 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		}
 
 		$new_schedules = array();
-		$now           = time();
-		foreach ( $schedules as $chart_id => $time ) {
-			$new_schedules[ $chart_id ] = $time;
-			if ( $time > $now ) {
+		$current_time  = time();
+		foreach ( $chart_schedules as $chart_id => $scheduled_time ) {
+
+			// Skip deleted charts.
+			if ( false === get_post_status( $chart_id ) ) {
 				continue;
 			}
 
-			// if the time is nigh, we force an update.
+			$new_schedules[ $chart_id ] = $scheduled_time;
+
+			// Should we do an update?
+			if ( $scheduled_time > $current_time ) {
+				continue;
+			}
+
 			$this->refresh_db_for_chart( null, $chart_id, true );
+
 			// Clear existing chart cache.
 			$cache_key = Visualizer_Plugin::CF_CHART_CACHE . '_' . $chart_id;
 			if ( get_transient( $cache_key ) ) {
 				delete_transient( $cache_key );
 			}
-			$hours                      = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-			$new_schedules[ $chart_id ] = time() + $hours * HOUR_IN_SECONDS;
+
+			$scheduled_hours            = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+			$new_schedules[ $chart_id ] = $current_time + $scheduled_hours * HOUR_IN_SECONDS;
 		}
 		update_option( Visualizer_Plugin::CF_DB_SCHEDULE, $new_schedules );
 	}
@@ -443,4 +455,18 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		}
 	}
 
+	/**
+	 * Add custom cron schedules.
+	 *
+	 * @param array $schedules The current schedules options.
+	 * @return array The modified schedules options.
+	 */
+	public function custom_cron_schedules( $schedules ) {
+		$schedules['visualizer_ten_minutes'] = array(
+			'interval' => 600,
+			'display'  => __( 'Every 10 minutes', 'visualizer' ),
+		);
+
+		return $schedules;
+	}
 }
