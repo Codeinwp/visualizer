@@ -389,6 +389,7 @@ input:checked + .visualizer-slider:before {
 #visualizer-sidebar .visualizer-sidebar-box p.vz-sidebar-box-action {
 	display: flex;
 	gap: 20px;
+	margin-top: 25px;
 }
 #visualizer-sidebar .visualizer-sidebar-box p.vz-sidebar-box-action .button{
 	width: 100%;

@@ -742,7 +742,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				font-weight: 600;
 				color: #fff;
 			}
-			#toplevel_page_visualizer ul.wp-submenu li:last-child > a {
+			#toplevel_page_visualizer ul.wp-submenu li:last-child > a > span {
 				color: #fff !important;
 			}
 			#toplevel_page_visualizer ul.wp-submenu li:last-child > a:hover {

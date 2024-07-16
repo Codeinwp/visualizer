@@ -66,7 +66,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 				echo '<div class="pro-upsell">';
 				echo "<span class='visualizder-pro-label'>" . __( 'PREMIUM', 'visualizer' ) . '</span>';
 				echo '<div class="pro-upsell-overlay">';
-				echo '<div class="pro-upsell-action"><a href="' . esc_url( $demo_url ) . '" target="_blank" class="button button-secondary">' . __( 'View Demo', 'visualizer' ) . '</a><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' ) . '" target="_blank" class="button button-primary">' . __( 'Upgrade Now', 'visualizer' ) . '</a></div>';
+				echo '<div class="pro-upsell-action"><a href="' . esc_url( $demo_url ) . '" target="_blank" class="button button-secondary">' . __( 'View Demo', 'visualizer' ) . '</a><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'procharts', 'Addnewcharts' ) . '" target="_blank" class="button button-primary">' . __( 'Upgrade Now', 'visualizer' ) . '</a></div>';
 				echo '</div>';
 			}
 			echo '<label class="type-label', $type === $this->type ? ' type-label-selected' : '', '">';
