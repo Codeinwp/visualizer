@@ -252,6 +252,10 @@
     color: #FFFFFF;
     justify-content: center;
 }
+.visualizer-sidebar-box .button.button-secondary{
+	background: #ffffff;
+	color: #007CBA;
+}
 .visualizer-sidebar-box .we-offer{
     background-color: transparent;
     color: #007CBA;
@@ -381,6 +385,15 @@ input:checked + .visualizer-slider:before {
 }
 #visualizer-sidebar .visualizer-sidebar-box p {
 	margin-bottom: 0;
+}
+#visualizer-sidebar .visualizer-sidebar-box p.vz-sidebar-box-action {
+	display: flex;
+	gap: 20px;
+	margin-top: 25px;
+}
+#visualizer-sidebar .visualizer-sidebar-box p.vz-sidebar-box-action .button{
+	width: 100%;
+	text-align: center;
 }
 #visualizer-sidebar.one-columns {
     border-top: 5px solid #007CBA;

@@ -535,7 +535,7 @@ div.viz-group-content .viz-group-description {
 	height: 17px;
 	border: none;
 	color: #fff;
-	z-index: 1;
+	z-index: 4;
 	background: #c55555;
 }
 
@@ -1631,5 +1631,52 @@ canvas.chartjs-render-monitor {
 /********************************  Frontend Actions ***********************************/
 /******************************************************************************/
 #vz-frontend-actions .only-pro-inner, #vz-data-controls .only-pro-inner {
+	text-align: center;
+}
+
+/******************************************************************************/
+/******************************** chart type box upsell ***********************/
+/******************************************************************************/
+
+.pro-upsell .pro-upsell-overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	display: grid;
+	place-items: center;
+	background-color: rgba(255, 255, 255, 0.7);
+	z-index: 1;
+	opacity: 0;
+	visibility: hidden;
+	transition: all .3s ease-in-out;
+}
+.pro-upsell:hover .pro-upsell-overlay{
+	opacity: 1;
+	visibility: visible;
+}
+
+.pro-upsell .pro-upsell-overlay .button {
+    width: 155px;
+    height: 39px;
+    background: #007CBA;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    justify-content: center;
+}
+.pro-upsell .pro-upsell-overlay .button.button-secondary{
+	background: #ffffff;
+	color: #007CBA;
+}
+.pro-upsell .pro-upsell-overlay .pro-upsell-action {
+	display: flex;
+	gap: 20px;
+}
+.pro-upsell .pro-upsell-overlay .pro-upsell-action .button{
+	width: 100%;
 	text-align: center;
 }

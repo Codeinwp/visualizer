@@ -444,58 +444,69 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 					'enabled' => $enabled,
 					// in ChartJS, the fill option is used to make Line chart an area: https://www.chartjs.org/docs/latest/charts/area.html
 					'supports'  => array( 'Google Charts' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/area-chart/',
 				),
 				'geo'         => array(
 					'name'    => esc_html__( 'Geo', 'visualizer' ),
 					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/geo-chart/',
 				),
 				'column'      => array(
 					'name'    => esc_html__( 'Column', 'visualizer' ),
 					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts', 'ChartJS' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/column-chart/',
 				),
 				'bubble'         => array(
 					'name'    => esc_html__( 'Bubble', 'visualizer' ),
 					'enabled' => $enabled,
 					// chartjs' bubble is ugly looking (and it won't work off the default bubble.csv) so it is being excluded for the time being.
 					'supports'  => array( 'Google Charts' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/bubble-chart/',
 				),
 				'scatter'     => array(
 					'name'    => esc_html__( 'Scatter', 'visualizer' ),
 					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/scatter-chart/',
 				),
 				'gauge'       => array(
 					'name'    => esc_html__( 'Gauge', 'visualizer' ),
 					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/gauge-chart/',
 				),
 				'candlestick' => array(
 					'name'    => esc_html__( 'Candlestick', 'visualizer' ),
 					'enabled' => $enabled,
 					'supports'  => array( 'Google Charts' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/candlestick-chart/',
 				),
 				// pro types
 				'timeline'    => array(
 					'name'    => esc_html__( 'Timeline', 'visualizer' ),
 					'enabled' => false,
 					'supports'  => array( 'Google Charts', 'ChartJS' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/timeline-chart/',
 				),
 				'combo'       => array(
 					'name'    => esc_html__( 'Combo', 'visualizer' ),
 					'enabled' => false,
 					'supports'  => array( 'Google Charts' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/combo-chart/',
 				),
 				'polarArea'       => array(
 					'name'    => esc_html__( 'Polar Area', 'visualizer' ),
 					'enabled' => false,
 					'supports' => array( 'ChartJS' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/polar-area-chart/',
 				),
 				'radar'       => array(
 					'name'    => esc_html__( 'Radar/Spider', 'visualizer' ),
 					'enabled' => false,
 					'supports' => array( 'ChartJS' ),
+					'demo_url'  => 'https://demo.themeisle.com/visualizer/radar-spider-chart/',
 				),
 			)
 		);
@@ -731,7 +742,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				font-weight: 600;
 				color: #fff;
 			}
-			#toplevel_page_visualizer ul.wp-submenu li:last-child > a {
+			#toplevel_page_visualizer ul.wp-submenu li:last-child > a > span {
 				color: #fff !important;
 			}
 			#toplevel_page_visualizer ul.wp-submenu li:last-child > a:hover {
@@ -1134,7 +1145,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// flattr link
 			$plugin_meta[] = sprintf(
 				'<a style="color:red" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'pluginrow' ) . '" target="_blank">%s</a>',
-				esc_html__( 'Pro Addon', 'visualizer' )
+				esc_html__( 'Get Visualizer Pro', 'visualizer' )
 			);
 		}
 

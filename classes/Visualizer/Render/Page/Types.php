@@ -62,8 +62,12 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 			}
 			echo '<div class="type-box type-box-', $type, $lib_classes, '">';
 			if ( ! $array['enabled'] ) {
-				echo "<a class='pro-upsell' href='" . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'charttypes' ) . "' target='_blank'>";
+				$demo_url = isset( $array['demo_url'] ) ? $array['demo_url'] : '';
+				echo '<div class="pro-upsell">';
 				echo "<span class='visualizder-pro-label'>" . __( 'PREMIUM', 'visualizer' ) . '</span>';
+				echo '<div class="pro-upsell-overlay">';
+				echo '<div class="pro-upsell-action"><a href="' . esc_url( $demo_url ) . '" target="_blank" class="button button-secondary">' . __( 'View Demo', 'visualizer' ) . '</a><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'procharts', 'Addnewcharts' ) . '" target="_blank" class="button button-primary">' . __( 'Upgrade Now', 'visualizer' ) . '</a></div>';
+				echo '</div>';
 			}
 			echo '<label class="type-label', $type === $this->type ? ' type-label-selected' : '', '">';
 			echo '<span>' . $array['name'] . '</span>';
@@ -72,7 +76,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 			}
 			echo '</label>';
 			if ( ! $array['enabled'] ) {
-				echo '</a>';
+				echo '</div>';
 			}
 			echo '</div>';
 		}
