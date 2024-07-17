@@ -1,3 +1,7 @@
+##### [Version 3.11.5](https://github.com/Codeinwp/visualizer/compare/v3.11.4...v3.11.5) (2024-07-17)
+
+- Updated promotional links and buttons
+
 ##### [Version 3.11.4](https://github.com/Codeinwp/visualizer/compare/v3.11.3...v3.11.4) (2024-07-09)
 
 - Fixed broken link in the Map settings of the Geo Chart
