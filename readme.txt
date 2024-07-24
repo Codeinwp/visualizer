@@ -27,13 +27,7 @@ The plugin uses the Google Visualization API, DataTables.net, and ChartJS librar
 
 - **Diverse Chart Options:** Begin with essential chart types like line, pie, bar, and table in the free version. Elevate your data presentation with advanced chart types such as scatter, area, and geo available in the Pro version. The free version offers a comprehensive range of options that are perfect for various visualization needs.
 
-- **Flexible Data Source Options:**Visualizer Free supports a variety of accessible data input methods to suit your specific needs:
-
-- **Import Data from Files:** Upload CSV files directly into Visualizer. This feature is ideal for those who prepare data in spreadsheet tools like Microsoft Excel or Google Sheets, allowing for quick and easy data visualization.
-
-- **Import Data from URLs:** Keep your charts updated by importing data dynamically from external sources in CSV or JSON formats via URLs. This powerful feature is essential for displaying real-time or frequently updated data, reducing the need for manual updates.
-
-- **Manual Data Entry:** Input data manually for quick visualization tasks or when dealing with smaller data sets. This method provides ultimate control over the content and structure of your charts, making it simple to tailor data presentation directly within the plugin interface.
+- **Manual Data Entry:** Input data manually for quick visualization tasks. This method provides ultimate control over the content and structure of your charts, making it simple to tailor data presentation directly within the plugin interface.
 
 - **Ultimate Responsiveness:** Crafted using HTML5/SVG technology, Visualizer charts ensure flawless functionality across all devices. This commitment to responsiveness guarantees that your data is not only accessible but also optimally displayed on desktops, tablets, and smartphones, enhancing user interaction and engagement.
 
@@ -96,6 +90,10 @@ If you’re already benefiting from Visualizer, why not take your website to the
 
 - **Advanced User Permissions:** Control who can view or edit your charts, perfect for teams needing to manage access at various levels.  
 **USE CASE:** 🛠️ Rachel, a project manager, configures user permissions to ensure that only relevant team members can edit financial forecasts, maintaining data integrity and security.
+
+- **Import Data from Files:** Upload CSV files directly into Visualizer. This feature is ideal for those who prepare data in spreadsheet tools like Microsoft Excel or Google Sheets, allowing for quick and easy data visualization.
+
+- **Import Data from URLs:** Keep your charts updated by importing data dynamically from external sources in CSV or JSON formats via URLs. This powerful feature is essential for displaying real-time or frequently updated data, reducing the need for manual updates.
 
 - **Import from Other Charts:** Seamlessly integrate data from other charts into new visualizations, facilitating easy data consolidation and comparison.
 
