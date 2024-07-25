@@ -12,16 +12,16 @@ A simple yet powerful WordPress chart plugin to effortlessly create and embed re
 
 ## Description ##
 
-<p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=plugin-readme&utm_medium=visualizer&utm_campaign=description" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
+<p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=wpadmin&utm_medium=readme&utm_campaign=description" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
 
-The plugin leverages the Google Visualization API, DataTables.net, and ChartJS libraries to deliver responsive and animated charts, graphs, and tables, ensuring excellent cross-browser compatibility and a seamless mobile experience. You can fully customize all aspects of the charts and tables to suit your needs. For enhanced data management features, including importing from Excel, CSV, Google Sheets, and more, consider exploring the PRO version.
+The plugin leverages the Google Visualization API, DataTables.net, and ChartJS libraries to deliver responsive and animated charts, graphs, and tables, ensuring excellent cross-browser compatibility and a seamless mobile experience. You can fully customize all aspects of the charts and tables to suit your needs. For enhanced data management features, including importing from Excel, CSV, Google Sheets, and more, consider exploring the [PRO version](https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wpadmin&utm_medium=readme&utm_campaign=pro-cta).
 
 ### 🔗 HELPFUL LINKS ###
 
 - Want to see Visualizer in action before installing? <a href="https://demo.themeisle.com/visualizer/">View Visualizer Demo</a> [You can also try <b>Live Preview</b> button above]
 - Need any help with setup? <a href="https://docs.themeisle.com/collection/1560-visualizer-charts-and-graphs">Check Documentation</a>
 - Don’t like reading? <a href="https://youtube.com/playlist?list=PLmRasCVwuvpT0Gu1myGW-Dyt2oh-BPuci&si=S3o4BIyo3AYNh95w">Check Youtube Playlist</a>
-- Interested in Visualizer Pro? <a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/">Know more about Visualizer PRO</a>
+- Interested in Visualizer Pro? <a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wpadmin&utm_medium=readme&utm_campaign=pro-cta">Know more about Visualizer PRO</a>
 
 ### Why You’ll Love Visualizer ###
 
@@ -108,7 +108,7 @@ If you’re already benefiting from Visualizer, why not take your website to the
 
 Unlock these premium features and more with Visualizer PRO!
 
-**Still have questions?** Ask your pre-sales questions here, and we will get back to you promptly. Or, purchase with confidence and try it for yourself—we offer **a 30-day no-questions-asked 100% money-back guarantee**.
+**Still have questions?** Ask your pre-sales questions [here](https://themeisle.com/contact/?utm_source=wpadmin&utm_medium=readme&utm_campaign=pre-sales), and we will get back to you promptly. Or, purchase with confidence and try it for yourself—we offer **a 30-day no-questions-asked 100% money-back guarantee**.
 
 **WE’RE HERE FOR YOU, AND WE TAKE ALL FEEDBACK SERIOUSLY**
 
