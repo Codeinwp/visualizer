@@ -14,7 +14,7 @@ A simple yet powerful WordPress chart plugin to effortlessly create and embed re
 
 <p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=plugin-readme&utm_medium=visualizer&utm_campaign=description" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
 
-The plugin uses the Google Visualization API, DataTables.net, and ChartJS libraries to add responsive and animated charts, graphs, and tables, supporting cross-browser compatibility and perfectly displaying on mobile devices. You can greatly customize all aspects of the charts and tables, and import data from Excel, CSV, Google Sheets, and more!
+The plugin leverages the Google Visualization API, DataTables.net, and ChartJS libraries to deliver responsive and animated charts, graphs, and tables, ensuring excellent cross-browser compatibility and a seamless mobile experience. You can fully customize all aspects of the charts and tables to suit your needs. For enhanced data management features, including importing from Excel, CSV, Google Sheets, and more, consider exploring the PRO version.
 
 ### 🔗 HELPFUL LINKS ###
 
