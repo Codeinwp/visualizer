@@ -39,12 +39,11 @@ The plugin leverages the Google Visualization API, DataTables.net, and ChartJS l
 
 These versatile data handling capabilities ensure that Visualizer Free is equipped to meet a wide range of data visualization requirements right out of the box. Perfect for bloggers, educators, small businesses, and more, Visualizer helps you turn raw data into compelling, interactive charts that engage and inform your audience.
 
-*The above descriptions were partially taken from Google Visualization API site*
+*The above descriptions were partially taken from the Google Visualization API site*
 
 ### CHECK OUT A QUICK OVERVIEW OF VISUALIZER ### 
 
-<a href="https://youtu.be/hQO_evnb_tQ?si=XvIzaU6WIvxTj8N0">WordPress Charts and Graphs: How To Create Them With Visualizer Plugin<a/>
-
+https://youtu.be/hQO_evnb_tQ
 
 ### ✨ YOU SHOULD USE VISUALIZER IF: ###
 
