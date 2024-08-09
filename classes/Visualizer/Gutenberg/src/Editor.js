@@ -486,7 +486,7 @@ class Editor extends Component {
 		window.parent.addEventListener( 'message', ( event ) => {
 			if ( 'visualizer:mediaframe:close' === event.data ) {
 				createChartPopup.close();
-			} else if ( event.data.chartID ) {
+			} else if ( event.data.chartID && null === this.state.chart ) {
 				const chartID = parseInt(  event.data.chartID, 10 );
 				this.getChart( chartID );
 			}
