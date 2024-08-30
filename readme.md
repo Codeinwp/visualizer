@@ -12,28 +12,22 @@ A simple yet powerful WordPress chart plugin to effortlessly create and embed re
 
 ## Description ##
 
-<p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=plugin-readme&utm_medium=visualizer&utm_campaign=description" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
+<p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=wpadmin&utm_medium=readme&utm_campaign=description" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
 
-The plugin uses the Google Visualization API, DataTables.net, and ChartJS libraries to add responsive and animated charts, graphs, and tables, supporting cross-browser compatibility and perfectly displaying on mobile devices. You can greatly customize all aspects of the charts and tables, and import data from Excel, CSV, Google Sheets, and more!
+The plugin leverages the Google Visualization API, DataTables.net, and ChartJS libraries to deliver responsive and animated charts, graphs, and tables, ensuring excellent cross-browser compatibility and a seamless mobile experience. You can fully customize all aspects of the charts and tables to suit your needs. For enhanced data management features, including importing from Excel, CSV, Google Sheets, and more, consider exploring the [PRO version](https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wpadmin&utm_medium=readme&utm_campaign=pro-cta).
 
 ### 🔗 HELPFUL LINKS ###
 
 - Want to see Visualizer in action before installing? <a href="https://demo.themeisle.com/visualizer/">View Visualizer Demo</a> [You can also try <b>Live Preview</b> button above]
 - Need any help with setup? <a href="https://docs.themeisle.com/collection/1560-visualizer-charts-and-graphs">Check Documentation</a>
 - Don’t like reading? <a href="https://youtube.com/playlist?list=PLmRasCVwuvpT0Gu1myGW-Dyt2oh-BPuci&si=S3o4BIyo3AYNh95w">Check Youtube Playlist</a>
-- Interested in Visualizer Pro? <a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/">Know more about Visualizer PRO</a>
+- Interested in Visualizer Pro? <a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wpadmin&utm_medium=readme&utm_campaign=pro-cta">Know more about Visualizer PRO</a>
 
 ### Why You’ll Love Visualizer ###
 
 - **Diverse Chart Options:** Begin with essential chart types like line, pie, bar, and table in the free version. Elevate your data presentation with advanced chart types such as scatter, area, and geo available in the Pro version. The free version offers a comprehensive range of options that are perfect for various visualization needs.
 
-- **Flexible Data Source Options:**Visualizer Free supports a variety of accessible data input methods to suit your specific needs:
-
-- **Import Data from Files:** Upload CSV files directly into Visualizer. This feature is ideal for those who prepare data in spreadsheet tools like Microsoft Excel or Google Sheets, allowing for quick and easy data visualization.
-
-- **Import Data from URLs:** Keep your charts updated by importing data dynamically from external sources in CSV or JSON formats via URLs. This powerful feature is essential for displaying real-time or frequently updated data, reducing the need for manual updates.
-
-- **Manual Data Entry:** Input data manually for quick visualization tasks or when dealing with smaller data sets. This method provides ultimate control over the content and structure of your charts, making it simple to tailor data presentation directly within the plugin interface.
+- **Manual Data Entry:** Input data manually for quick visualization tasks. This method provides ultimate control over the content and structure of your charts, making it simple to tailor data presentation directly within the plugin interface.
 
 - **Ultimate Responsiveness:** Crafted using HTML5/SVG technology, Visualizer charts ensure flawless functionality across all devices. This commitment to responsiveness guarantees that your data is not only accessible but also optimally displayed on desktops, tablets, and smartphones, enhancing user interaction and engagement.
 
@@ -45,12 +39,11 @@ The plugin uses the Google Visualization API, DataTables.net, and ChartJS librar
 
 These versatile data handling capabilities ensure that Visualizer Free is equipped to meet a wide range of data visualization requirements right out of the box. Perfect for bloggers, educators, small businesses, and more, Visualizer helps you turn raw data into compelling, interactive charts that engage and inform your audience.
 
-*The above descriptions were partially taken from Google Visualization API site*
+*The above descriptions were partially taken from the Google Visualization API site*
 
 ### CHECK OUT A QUICK OVERVIEW OF VISUALIZER ### 
 
-<a href="https://youtu.be/hQO_evnb_tQ?si=XvIzaU6WIvxTj8N0">WordPress Charts and Graphs: How To Create Them With Visualizer Plugin<a/>
-
+https://youtu.be/hQO_evnb_tQ
 
 ### ✨ YOU SHOULD USE VISUALIZER IF: ###
 
@@ -75,7 +68,7 @@ These versatile data handling capabilities ensure that Visualizer Free is equipp
 - **Area Chart [PRO]:** You can visually display quantitative data using the area chart. [Click here to see demo](https://demo.themeisle.com/visualizer/area-chart/).
 - **Geo Chart [PRO]:** You can display a map of countries, continents, or regions with areas identified by the values you specify. [Click here to see demo](https://demo.themeisle.com/visualizer/geo-chart/).
 - **Column Chart [PRO]:** You can use a column chart to show comparisons among different categories. [Click here to see demo](https://demo.themeisle.com/visualizer/column-chart/).
-- **Bubble Chart [PRO]:** A bubble chart is a type of chart that displays three dimensions of data. Bubble charts can be considered a variation of the scatter plot, where data points are replaced with bubbles. [Click here to see demo](https://demo.themeisle.com/visualizer/radar-spider-chart/).
+- **Bubble Chart [PRO]:** A bubble chart is a type of chart that displays three dimensions of data. Bubble charts can be considered a variation of the scatter plot, where data points are replaced with bubbles. [Click here to see demo](https://demo.themeisle.com/visualizer/bubble-chart/).
 - **Scatter Chart [PRO]:** You can display values in Cartesian coordinates using the scatter chart. [Click here to see demo](https://demo.themeisle.com/visualizer/scatter-chart/).
 - **Gauge Chart [PRO]:** You can build different gauge charts to indicate metrics like speed, performance, progress, or similar measures. [Click here to see demo](https://demo.themeisle.com/visualizer/gauge-chart/).
 - **Candlestick Chart [PRO]:** A candlestick chart is a style of financial chart used to describe price movements of a security, derivative, or currency. [Click here to see demo](https://demo.themeisle.com/visualizer/candlestick-chart/).
@@ -97,6 +90,10 @@ If you’re already benefiting from Visualizer, why not take your website to the
 - **Advanced User Permissions:** Control who can view or edit your charts, perfect for teams needing to manage access at various levels.  
 **USE CASE:** 🛠️ Rachel, a project manager, configures user permissions to ensure that only relevant team members can edit financial forecasts, maintaining data integrity and security.
 
+- **Import Data from Files:** Upload CSV files directly into Visualizer. This feature is ideal for those who prepare data in spreadsheet tools like Microsoft Excel or Google Sheets, allowing for quick and easy data visualization.
+
+- **Import Data from URLs:** Keep your charts updated by importing data dynamically from external sources in CSV or JSON formats via URLs. This powerful feature is essential for displaying real-time or frequently updated data, reducing the need for manual updates.
+
 - **Import from Other Charts:** Seamlessly integrate data from other charts into new visualizations, facilitating easy data consolidation and comparison.
 
 - **Import from WordPress:** Directly pull data from your WordPress posts, pages, or custom post types to create dynamic charts that automatically update as your content changes.  
@@ -111,7 +108,7 @@ If you’re already benefiting from Visualizer, why not take your website to the
 
 Unlock these premium features and more with Visualizer PRO!
 
-**Still have questions?** Ask your pre-sales questions here, and we will get back to you promptly. Or, purchase with confidence and try it for yourself—we offer **a 30-day no-questions-asked 100% money-back guarantee**.
+**Still have questions?** Ask your pre-sales questions [here](https://themeisle.com/contact/?utm_source=wpadmin&utm_medium=readme&utm_campaign=pre-sales), and we will get back to you promptly. Or, purchase with confidence and try it for yourself—we offer **a 30-day no-questions-asked 100% money-back guarantee**.
 
 **WE’RE HERE FOR YOU, AND WE TAKE ALL FEEDBACK SERIOUSLY**
 
@@ -225,6 +222,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 7. Block editor - Chart Library
 
 ## Changelog ##
+
+##### [Version 3.11.6](https://github.com/Codeinwp/visualizer/compare/v3.11.5...v3.11.6) (2024-08-30)
+
+- Fixed chart overlapping issue with the Gutenberg editor
+
+
+
 
 ##### [Version 3.11.5](https://github.com/Codeinwp/visualizer/compare/v3.11.4...v3.11.5) (2024-07-17)
 
