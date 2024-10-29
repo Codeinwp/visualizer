@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1c4972cf7a69e915c83661005512e70",
+    "content-hash": "023ae62618523d93ccf0f96482de57a2",
     "packages": [
         {
             "name": "codeinwp/themeisle-sdk",
@@ -340,6 +340,10 @@
                 "xls",
                 "xlsx"
             ],
+            "support": {
+                "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.8.2"
+            },
             "time": "2019-07-08T21:21:25+00:00"
         },
         {
@@ -807,5 +811,5 @@
     "platform-overrides": {
         "php": "5.6"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
