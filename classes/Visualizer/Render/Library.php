@@ -266,6 +266,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 
 		// Added by Ash/Upwork
 		$filterBy = ! empty( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
 		// Added by Ash/Upwork
 		echo $this->custom_css;
 
@@ -276,6 +277,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		$this->getDisplayForm();
 		echo '</div>';
 		echo '<div id="visualizer-content-wrapper">';
+		echo '<div id="tsdk_banner" class="visualizer-banner"></div>';
 		if ( ! empty( $this->charts ) ) {
 			echo '<div id="visualizer-library" class="visualizer-clearfix">';
 			$count = 0;
