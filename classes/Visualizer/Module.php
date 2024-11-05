@@ -235,7 +235,6 @@ class Visualizer_Module {
 			}
 
 			$filename   = $title;
-
 			switch ( $type ) {
 				case 'csv':
 					$final   = $this->_getCSV( $rows, $filename, false );
@@ -324,9 +323,9 @@ class Visualizer_Module {
 	 * @param string $filename The name of the file to use.
 	 */
 	private function _getExcel( $rows, $filename ) {
-		// PHPExcel did not like sheet names longer than 31 characters and we will assume the same with PhpSpreadsheet
-		$chart      = substr( $filename, 0, 30 );
-		$filename   .= '.xlsx';
+		// OpenSpout allows for long sheet names, but let's keep the same limit for compatibility.
+		$chart     = substr( $filename, 0, 30 );
+		$filename .= '.xlsx';
 		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
 			unset( $rows[1] );
 			$rows = array_values( $rows );
@@ -339,22 +338,32 @@ class Visualizer_Module {
 		}
 		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 		if ( is_readable( $vendor_file ) ) {
-			include_once( $vendor_file );
+			include_once $vendor_file;
 		}
-		$xlsData    = '';
-		if ( class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) ) {
-			$doc        = new PhpOffice\PhpSpreadsheet\Spreadsheet();
-			$doc->getActiveSheet()->fromArray( $rows, null, 'A1' );
-			$doc->getActiveSheet()->setTitle( sanitize_title( $chart ) );
-			$doc        = apply_filters( 'visualizer_excel_doc', $doc );
-			$writer = PhpOffice\PhpSpreadsheet\IOFactory::createWriter( $doc, 'Xlsx' );
-			ob_start();
-			$writer->save( 'php://output' );
-			$xlsData = ob_get_contents();
-			ob_end_clean();
+		$xlsData = '';
+		if ( class_exists( 'OpenSpout\Writer\Common\Creator\WriterEntityFactory' ) ) {
+			try {
+				// Use OpenSpout to create the XLSX file in memory.
+				$writer = \OpenSpout\Writer\Common\Creator\WriterEntityFactory::createXLSXWriter();
+				$writer->openToFile( 'php://output' ); // Open to output instead of a file.
+				$writer->getCurrentSheet()->setName( sanitize_title( $chart ) );
+
+				// Write rows.
+				foreach ( $rows as $row ) {
+					$rowFromValues = \OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray( $row );
+					$writer->addRow( $rowFromValues );
+				}
+
+				ob_start();
+				$writer->close(); // Saves and closes the file in the output buffer.
+				$xlsData = ob_get_clean();
+			} catch ( Exception $e ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'OpenSpout writer error: ' . $e->getMessage(), 'error', __FILE__, __LINE__ );
+				error_log( 'OpenSpout writer error: ' . $e->getMessage() );
+			}
 		} else {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!', 'error', __FILE__, __LINE__ );
-			error_log( 'Class PhpOffice\PhpSpreadsheet\Spreadsheet does not exist!' );
+			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Class OpenSpout\Writer\Common\Creator\WriterEntityFactory does not exist!', 'error', __FILE__, __LINE__ );
+			error_log( 'Class OpenSpout\Writer\Common\Creator\WriterEntityFactory does not exist!' );
 		}
 		return array(
 			'csv'  => 'data:application/vnd.ms-excel;base64,' . base64_encode( $xlsData ),

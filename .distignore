@@ -17,8 +17,9 @@ artifact
 composer.json
 composer.lock
 package-lock.json
-vendor/phpoffice/phpspreadsheet/samples
-vendor/phpoffice/phpspreadsheet/docs
+vendor/openspout/openspout/LICENSE-for-*
+vendor/openspout/openspout/UPGRADE-3.0.md
+vendor/openspout/openspout/README.md
 cypress
 cypress.json
 .github
