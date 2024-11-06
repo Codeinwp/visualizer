@@ -270,7 +270,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			return false;
 		}
 
-		return class_exists( 'PhpOffice\PhpSpreadsheet\Spreadsheet' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && extension_loaded( 'fileinfo' );
+		return class_exists( 'OpenSpout\Writer\Common\Creator\WriterEntityFactory' ) && extension_loaded( 'zip' ) && extension_loaded( 'xml' ) && extension_loaded( 'fileinfo' );
 	}
 
 	/**

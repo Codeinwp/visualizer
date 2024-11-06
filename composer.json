@@ -22,13 +22,12 @@
   },
   "require": {
     "codeinwp/themeisle-sdk": "^3.3",
-    "phpoffice/phpspreadsheet": "1.8.2",
-    "neitanod/forceutf8": "~2.0"
+    "neitanod/forceutf8": "~2.0",
+    "openspout/openspout": "^3.7"
   },
   "autoload": {
     "files": [
-      "vendor/codeinwp/themeisle-sdk/load.php",
-      "vendor/phpoffice/phpspreadsheet/src/Bootstrap.php"
+      "vendor/codeinwp/themeisle-sdk/load.php"
     ]
   },
   "scripts": {
@@ -40,7 +39,7 @@
   "config": {
     "optimize-autoloader": true,
     "platform": {
-      "php": "5.6"
+      "php": "7.4"
     },
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
