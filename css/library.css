@@ -34,6 +34,11 @@
 #visualizer-content-wrapper {
     padding: 0;
 }
+
+.visualizer-banner {
+	margin: 40px 0;
+}
+
 #visualizer-library {
 	width: auto;
 	margin: 20px -10px;
