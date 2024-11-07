@@ -1093,6 +1093,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->load_survey();
 
+		if ( ! apply_filters( 'visualizer_is_business', false ) ) {
+			do_action( 'themeisle_sdk_load_banner', 'visualizer' );
+		}
+
 		$render->render();
 	}
 
