@@ -1,3 +1,8 @@
+##### [Version 3.11.7](https://github.com/Codeinwp/visualizer/compare/v3.11.6...v3.11.7) (2024-11-07)
+
+- Updated dependencies
+- Enhanced security
+
 ##### [Version 3.11.6](https://github.com/Codeinwp/visualizer/compare/v3.11.5...v3.11.6) (2024-08-30)
 
 - Fixed chart overlapping issue with the Gutenberg editor
