@@ -2,7 +2,7 @@
 **Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [themeisle](https://profiles.wordpress.org/themeisle), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [rozroz](https://profiles.wordpress.org/rozroz), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle)  
 **Tags:** tables, charts, pie, visualization, graphs  
 **Requires at least:** 5.2  
-**Tested up to:** 6.6  
+**Tested up to:** 6.7  
 **Requires PHP:** 7.4  
 **Stable tag:** trunk  
 **License:** GPL v2.0 or later  
@@ -20,7 +20,7 @@ The plugin leverages the Google Visualization API, DataTables.net, and ChartJS l
 
 - Want to see Visualizer in action before installing? <a href="https://demo.themeisle.com/visualizer/">View Visualizer Demo</a> [You can also try <b>Live Preview</b> button above]
 - Need any help with setup? <a href="https://docs.themeisle.com/collection/1560-visualizer-charts-and-graphs">Check Documentation</a>
-- Don’t like reading? <a href="https://youtube.com/playlist?list=PLmRasCVwuvpT0Gu1myGW-Dyt2oh-BPuci&si=S3o4BIyo3AYNh95w">Check Youtube Playlist</a>
+- Don’t like reading? <a href="https://youtube.com/playlist?list=PLmRasCVwuvpT0Gu1myGW-Dyt2oh-BPuci&si=S3o4BIyo3AYNh95w">Check YouTube Playlist</a>
 - Interested in Visualizer Pro? <a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wpadmin&utm_medium=readme&utm_campaign=pro-cta">Know more about Visualizer PRO</a>
 
 ### Why You’ll Love Visualizer ###
@@ -222,6 +222,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 7. Block editor - Chart Library
 
 ## Changelog ##
+
+##### [Version 3.11.8](https://github.com/Codeinwp/visualizer/compare/v3.11.7...v3.11.8) (2024-11-13)
+
+- Updated WordPress core tested up to version
+
+
+
 
 ##### [Version 3.11.7](https://github.com/Codeinwp/visualizer/compare/v3.11.6...v3.11.7) (2024-11-07)
 

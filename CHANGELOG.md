@@ -1,3 +1,7 @@
+##### [Version 3.11.8](https://github.com/Codeinwp/visualizer/compare/v3.11.7...v3.11.8) (2024-11-13)
+
+- Updated WordPress core tested up to version
+
 ##### [Version 3.11.7](https://github.com/Codeinwp/visualizer/compare/v3.11.6...v3.11.7) (2024-11-07)
 
 - Updated dependencies
