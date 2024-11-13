@@ -6,8 +6,6 @@
 	Version: 3.11.7
 	Author: Themeisle
 	Author URI: http://themeisle.com
-	Requires at least: 5.2
-	Tested up to:      6.7
 	License: GPL v2.0 or later
 	WordPress Available:  yes
 	Requires License:    no
