@@ -14,7 +14,7 @@ jobs:
       DOCKER_FILE: docker-compose.ci.yml
     strategy:
       fail-fast: false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
