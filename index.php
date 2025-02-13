@@ -69,6 +69,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
 	define( 'VISUALIZER_DIRNAME', basename( VISUALIZER_ABSPATH ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
+	define( 'VISUALIZER_PRODUCT_SLUG', VISUALIZER_DIRNAME );
 	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
 	// this is also used in Block.php
 	if ( ! defined( 'VISUALIZER_TEST_JS_CUSTOMIZATION' ) ) {

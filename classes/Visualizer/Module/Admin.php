@@ -79,6 +79,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->_addFilter( 'admin_footer_text', 'render_review_notice' );
 
+		if ( ! defined( 'TI_CYPRESS_TESTING' ) ) {
+			$this->_addFilter( 'themeisle-sdk/survey/' . VISUALIZER_PRODUCT_SLUG, 'get_survey_metadata', 10, 2 );
+		}
+
 		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
@@ -934,7 +938,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderSupportPage() {
 		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
-		$this->load_survey();
+		do_action( 'themeisle_internal_page', VISUALIZER_PRODUCT_SLUG, 'support' );
 		include_once VISUALIZER_ABSPATH . '/templates/support.php';
 	}
 
@@ -1091,7 +1095,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			)
 		);
 
-		$this->load_survey();
+		do_action( 'themeisle_internal_page', VISUALIZER_PRODUCT_SLUG, 'library' );
 
 		if ( ! apply_filters( 'visualizer_is_business', false ) ) {
 			do_action( 'themeisle_sdk_load_banner', 'visualizer' );
@@ -1229,28 +1233,30 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 	/**
 	 * Get the survey metadata.
+	 * 
+	 * @param array $data The data for survey in Formbricks format.
+	 * @param string $page_slug The slug of the loaded page.
 	 *
 	 * @return array The survey metadata.
 	 */
-	private function get_survey_metadata() {
-		$install_date     = get_option( 'visualizer_install', false );
-		$install_category = 0;
+	public function get_survey_metadata( $data, $page_slug ) {
+		$install_date        = get_option( 'visualizer_install', time() );
+		$install_category    = 0;
+		
+		$install_days_number = intval( ( time() - $install_date ) / DAY_IN_SECONDS );
 
-		if ( false !== $install_date ) {
-			$days_since_install = round( ( time() - $install_date ) / DAY_IN_SECONDS );
-
-			if ( 0 === $days_since_install || 1 === $days_since_install ) {
-				$install_category = 0;
-			} elseif ( 1 < $days_since_install && 8 > $days_since_install ) {
-				$install_category = 7;
-			} elseif ( 8 <= $days_since_install && 31 > $days_since_install ) {
-				$install_category = 30;
-			} elseif ( 30 < $days_since_install && 90 > $days_since_install ) {
-				$install_category = 90;
-			} elseif ( 90 <= $days_since_install ) {
-				$install_category = 91;
-			}
+		if ( 0 === $install_days_number || 1 === $install_days_number ) {
+			$install_category = 0;
+		} elseif ( 1 < $install_days_number && 8 > $install_days_number ) {
+			$install_category = 7;
+		} elseif ( 8 <= $install_days_number && 31 > $install_days_number ) {
+			$install_category = 30;
+		} elseif ( 30 < $install_days_number && 90 > $install_days_number ) {
+			$install_category = 90;
+		} elseif ( 90 <= $install_days_number ) {
+			$install_category = 91;
 		}
+		
 
 		$plugin_data    = get_plugin_data( VISUALIZER_BASEFILE, false, false );
 		$plugin_version = '';
@@ -1258,43 +1264,22 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$plugin_version = $plugin_data['Version'];
 		}
 
-		$user_id = 'visualizer_' . preg_replace( '/[^\w\d]*/', '', get_site_url() ); // Use a normalized version of the site URL as a user ID.
-
-		$license_data = get_option( 'visualizer_pro_license_data', false );
-		if ( false !== $license_data && isset( $license_data->key ) ) {
-			$user_id = 'visualizer_' . $license_data->key;
-		}
-
-		return array(
-			'userId' => $user_id,
+		$data = array(
+			'environmentId' => 'cltef8cut1s7wyyfxy3rlxzs5',
 			'attributes' => array(
-				'days_since_install' => strval( $install_category ),
-				'free_version'       => $plugin_version,
-				'pro_version'        => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
-				'license_status'     => apply_filters( 'product_visualizer_license_status', 'invalid' ),
+				'days_since_install'  => strval( $install_category ),
+				'free_version'        => $plugin_version,
+				'pro_version'         => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
+				'license_status'      => apply_filters( 'product_visualizer_license_status', 'invalid' ),
+				'install_days_number' => $install_days_number,
 			),
 		);
-	}
 
-	/**
-	 * Load the survey.
-	 */
-	private function load_survey() {
-
-		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
-			return;
+		$license_data = get_option( 'visualizer_pro_license_data', false );
+		if ( isset( $license_data->key ) ) {
+			$data['attributes']['license_key'] = apply_filters( 'themeisle_sdk_secret_masking', $license_data->key );
 		}
 
-		$survey_handler = apply_filters( 'themeisle_sdk_dependency_script_handler', 'survey' );
-
-		if ( empty( $survey_handler ) ) {
-			return;
-		}
-
-		$metadata = $this->get_survey_metadata();
-
-		do_action( 'themeisle_sdk_dependency_enqueue_script', 'survey' );
-		wp_enqueue_script( 'visualizer_chart_survey', VISUALIZER_ABSURL . 'js/survey.js', array( $survey_handler ), $metadata['attributes']['free_version'], true );
-		wp_localize_script( 'visualizer_chart_survey', 'visualizerSurveyData', $metadata );
+		return $data;
 	}
 }
