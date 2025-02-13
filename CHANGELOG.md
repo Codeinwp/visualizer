@@ -1,3 +1,8 @@
+##### [Version 3.11.9](https://github.com/Codeinwp/visualizer/compare/v3.11.8...v3.11.9) (2025-02-13)
+
+- Enhanced security
+- Fixed extra column issue with a simple editor
+
 ##### [Version 3.11.8](https://github.com/Codeinwp/visualizer/compare/v3.11.7...v3.11.8) (2024-11-13)
 
 - Updated WordPress core tested up to version
