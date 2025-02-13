@@ -90,6 +90,7 @@
             $( '#canvas' ).css("z-index", "-100").hide();
         }else{
             $('#canvas').lock();
+            jQuery('.dataTables_scrollBody .sorting_disabled input').attr('disabled', true);
             $('#table-editor-form').submit();
 
             // showing the chart
