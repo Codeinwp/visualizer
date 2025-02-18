@@ -1241,22 +1241,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function get_survey_metadata( $data, $page_slug ) {
 		$install_date        = get_option( 'visualizer_install', time() );
-		$install_category    = 0;
 		
 		$install_days_number = intval( ( time() - $install_date ) / DAY_IN_SECONDS );
-
-		if ( 0 === $install_days_number || 1 === $install_days_number ) {
-			$install_category = 0;
-		} elseif ( 1 < $install_days_number && 8 > $install_days_number ) {
-			$install_category = 7;
-		} elseif ( 8 <= $install_days_number && 31 > $install_days_number ) {
-			$install_category = 30;
-		} elseif ( 30 < $install_days_number && 90 > $install_days_number ) {
-			$install_category = 90;
-		} elseif ( 90 <= $install_days_number ) {
-			$install_category = 91;
-		}
-		
 
 		$plugin_data    = get_plugin_data( VISUALIZER_BASEFILE, false, false );
 		$plugin_version = '';
@@ -1267,7 +1253,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$data = array(
 			'environmentId' => 'cltef8cut1s7wyyfxy3rlxzs5',
 			'attributes' => array(
-				'days_since_install'  => strval( $install_category ),
 				'free_version'        => $plugin_version,
 				'pro_version'         => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
 				'license_status'      => apply_filters( 'product_visualizer_license_status', 'invalid' ),
