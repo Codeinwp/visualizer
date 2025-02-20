@@ -1233,19 +1233,23 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 	/**
 	 * Get the survey metadata.
-	 * 
-	 * @param array $data The data for survey in Formbricks format.
+	 *
+	 * @param array  $data The data for survey in Formbricks format.
 	 * @param string $page_slug The slug of the loaded page.
 	 *
 	 * @return array The survey metadata.
 	 */
 	public function get_survey_metadata( $data, $page_slug ) {
 		$install_date        = get_option( 'visualizer_install', time() );
-		
 		$install_days_number = intval( ( time() - $install_date ) / DAY_IN_SECONDS );
+
+		$license_status = apply_filters( 'product_visualizer_license_status', 'invalid' );
+		$license_plan   = apply_filters( 'product_visualizer_license_plan', false );
+		$license_key    = apply_filters( 'product_visualizer_license_key', false );
 
 		$plugin_data    = get_plugin_data( VISUALIZER_BASEFILE, false, false );
 		$plugin_version = '';
+
 		if ( ! empty( $plugin_data['Version'] ) ) {
 			$plugin_version = $plugin_data['Version'];
 		}
@@ -1255,14 +1259,17 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'attributes' => array(
 				'free_version'        => $plugin_version,
 				'pro_version'         => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
-				'license_status'      => apply_filters( 'product_visualizer_license_status', 'invalid' ),
+				'license_status'      => $license_status,
 				'install_days_number' => $install_days_number,
 			),
 		);
 
-		$license_data = get_option( 'visualizer_pro_license_data', false );
-		if ( isset( $license_data->key ) ) {
-			$data['attributes']['license_key'] = apply_filters( 'themeisle_sdk_secret_masking', $license_data->key );
+		if ( ! empty( $license_plan ) ) {
+			$data['attributes']['plan'] = $license_plan;
+		}
+
+		if ( ! empty( $license_key ) ) {
+			$data['attributes']['license_key'] = apply_filters( 'themeisle_sdk_secret_masking', $license_key );
 		}
 
 		return $data;
