@@ -80,7 +80,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'admin_footer_text', 'render_review_notice' );
 
 		if ( ! defined( 'TI_CYPRESS_TESTING' ) ) {
-			$this->_addFilter( 'themeisle-sdk/survey/' . VISUALIZER_PRODUCT_SLUG, 'get_survey_metadata', 10, 2 );
+			$this->_addFilter( 'themeisle-sdk/survey/' . VISUALIZER_DIRNAME, 'get_survey_metadata', 10, 2 );
 		}
 
 		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
@@ -938,7 +938,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderSupportPage() {
 		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
-		do_action( 'themeisle_internal_page', VISUALIZER_PRODUCT_SLUG, 'support' );
+		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'support' );
 		include_once VISUALIZER_ABSPATH . '/templates/support.php';
 	}
 
@@ -1095,7 +1095,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			)
 		);
 
-		do_action( 'themeisle_internal_page', VISUALIZER_PRODUCT_SLUG, 'library' );
+		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'library' );
 
 		if ( ! apply_filters( 'visualizer_is_business', false ) ) {
 			do_action( 'themeisle_sdk_load_banner', 'visualizer' );
