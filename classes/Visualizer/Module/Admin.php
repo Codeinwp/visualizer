@@ -1254,6 +1254,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$plugin_version = $plugin_data['Version'];
 		}
 
+		$count_charts_cache_key = 'visualizer_count_charts';
+		$charts_number          = get_transient( $count_charts_cache_key );
+
+		if ( false === $charts_number ) {
+			$charts_number = $this->count_charts( 100 );
+			set_transient( $count_charts_cache_key, $charts_number, 100 === $charts_number ? WEEK_IN_SECONDS : 6 * HOUR_IN_SECONDS );
+		} else {
+			$charts_number = strval( $charts_number );
+		}
+
 		$data = array(
 			'environmentId' => 'cltef8cut1s7wyyfxy3rlxzs5',
 			'attributes' => array(
@@ -1261,6 +1271,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'pro_version'         => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
 				'license_status'      => $license_status,
 				'install_days_number' => $install_days_number,
+				'charts_number'       => $charts_number,
 			),
 		);
 
@@ -1273,5 +1284,24 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Count the charts.
+	 *
+	 * @param int $limit The count limit (optional).
+	 *
+	 * @return int The number of charts.
+	 */
+	public function count_charts( $limit = -1 ) {
+		$args = array(
+			'post_type' => Visualizer_Plugin::CPT_VISUALIZER,
+			'post_status' => 'publish',
+			'posts_per_page' => $limit,
+			'fields' => 'ids',
+		);
+
+		$query = new WP_Query( $args);
+		return $query->post_count;
 	}
 }
