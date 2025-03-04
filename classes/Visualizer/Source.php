@@ -429,7 +429,7 @@ abstract class Visualizer_Source {
 			foreach ( $headers as $header ) {
 				if ( ! empty( $types[ $header ] ) ) {
 					$this->_series[] = array(
-						'label' => esc_html( wp_strip_all_tags( $header ) ),
+						'label' => sanitize_text_field( wp_strip_all_tags( $header ) ),
 						'type'  => $types[ $header ],
 					);
 				}
