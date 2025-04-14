@@ -97,7 +97,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 			$labels[ $i ] = $this->toUTF8( $labels[ $i ] );
 
 			$this->_series[] = array(
-				'label' => esc_html( wp_strip_all_tags( $labels[ $i ] ) ),
+				'label' => sanitize_text_field( wp_strip_all_tags( $labels[ $i ] ) ),
 				'type'  => isset( $types[ $i ] ) ? $types[ $i ] : $default_type,
 			);
 		}
