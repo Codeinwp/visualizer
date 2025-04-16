@@ -1,3 +1,8 @@
+##### [Version 3.11.10](https://github.com/Codeinwp/visualizer/compare/v3.11.9...v3.11.10) (2025-04-16)
+
+- Fixed special characters not rendering correctly in Legend labels
+- Updated dependencies
+
 ##### [Version 3.11.9](https://github.com/Codeinwp/visualizer/compare/v3.11.8...v3.11.9) (2025-02-13)
 
 - Enhanced security
