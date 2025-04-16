@@ -79,6 +79,10 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->_addFilter( 'admin_footer_text', 'render_review_notice' );
 
+		if ( ! defined( 'TI_CYPRESS_TESTING' ) ) {
+			$this->_addFilter( 'themeisle-sdk/survey/' . VISUALIZER_DIRNAME, 'get_survey_metadata', 10, 2 );
+		}
+
 		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
@@ -934,7 +938,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderSupportPage() {
 		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
-		$this->load_survey();
+		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'support' );
 		include_once VISUALIZER_ABSPATH . '/templates/support.php';
 	}
 
@@ -1091,7 +1095,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			)
 		);
 
-		$this->load_survey();
+		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'library' );
 
 		if ( ! apply_filters( 'visualizer_is_business', false ) ) {
 			do_action( 'themeisle_sdk_load_banner', 'visualizer' );
@@ -1230,71 +1234,74 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	/**
 	 * Get the survey metadata.
 	 *
+	 * @param array  $data The data for survey in Formbricks format.
+	 * @param string $page_slug The slug of the loaded page.
+	 *
 	 * @return array The survey metadata.
 	 */
-	private function get_survey_metadata() {
-		$install_date     = get_option( 'visualizer_install', false );
-		$install_category = 0;
+	public function get_survey_metadata( $data, $page_slug ) {
+		$install_date        = get_option( 'visualizer_install', time() );
+		$install_days_number = intval( ( time() - $install_date ) / DAY_IN_SECONDS );
 
-		if ( false !== $install_date ) {
-			$days_since_install = round( ( time() - $install_date ) / DAY_IN_SECONDS );
-
-			if ( 0 === $days_since_install || 1 === $days_since_install ) {
-				$install_category = 0;
-			} elseif ( 1 < $days_since_install && 8 > $days_since_install ) {
-				$install_category = 7;
-			} elseif ( 8 <= $days_since_install && 31 > $days_since_install ) {
-				$install_category = 30;
-			} elseif ( 30 < $days_since_install && 90 > $days_since_install ) {
-				$install_category = 90;
-			} elseif ( 90 <= $days_since_install ) {
-				$install_category = 91;
-			}
-		}
+		$license_status = apply_filters( 'product_visualizer_license_status', 'invalid' );
+		$license_plan   = apply_filters( 'product_visualizer_license_plan', false );
+		$license_key    = apply_filters( 'product_visualizer_license_key', false );
 
 		$plugin_data    = get_plugin_data( VISUALIZER_BASEFILE, false, false );
 		$plugin_version = '';
+
 		if ( ! empty( $plugin_data['Version'] ) ) {
 			$plugin_version = $plugin_data['Version'];
 		}
 
-		$user_id = 'visualizer_' . preg_replace( '/[^\w\d]*/', '', get_site_url() ); // Use a normalized version of the site URL as a user ID.
+		$count_charts_cache_key = 'visualizer_count_charts';
+		$charts_number          = get_transient( $count_charts_cache_key );
 
-		$license_data = get_option( 'visualizer_pro_license_data', false );
-		if ( false !== $license_data && isset( $license_data->key ) ) {
-			$user_id = 'visualizer_' . $license_data->key;
+		if ( false === $charts_number ) {
+			$charts_number = $this->count_charts( 100 );
+			set_transient( $count_charts_cache_key, $charts_number, 100 === $charts_number ? WEEK_IN_SECONDS : 6 * HOUR_IN_SECONDS );
+		} else {
+			$charts_number = strval( $charts_number );
 		}
 
-		return array(
-			'userId' => $user_id,
+		$data = array(
+			'environmentId' => 'cltef8cut1s7wyyfxy3rlxzs5',
 			'attributes' => array(
-				'days_since_install' => strval( $install_category ),
-				'free_version'       => $plugin_version,
-				'pro_version'        => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
-				'license_status'     => apply_filters( 'product_visualizer_license_status', 'invalid' ),
+				'free_version'        => $plugin_version,
+				'pro_version'         => defined( 'VISUALIZER_PRO_VERSION' ) ? VISUALIZER_PRO_VERSION : '',
+				'license_status'      => $license_status,
+				'install_days_number' => $install_days_number,
+				'charts_number'       => $charts_number,
 			),
 		);
+
+		if ( ! empty( $license_plan ) ) {
+			$data['attributes']['plan'] = $license_plan;
+		}
+
+		if ( ! empty( $license_key ) ) {
+			$data['attributes']['license_key'] = apply_filters( 'themeisle_sdk_secret_masking', $license_key );
+		}
+
+		return $data;
 	}
 
 	/**
-	 * Load the survey.
+	 * Count the charts.
+	 *
+	 * @param int $limit The count limit (optional).
+	 *
+	 * @return int The number of charts.
 	 */
-	private function load_survey() {
+	public function count_charts( $limit = -1 ) {
+		$args = array(
+			'post_type' => Visualizer_Plugin::CPT_VISUALIZER,
+			'post_status' => 'publish',
+			'posts_per_page' => $limit,
+			'fields' => 'ids',
+		);
 
-		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
-			return;
-		}
-
-		$survey_handler = apply_filters( 'themeisle_sdk_dependency_script_handler', 'survey' );
-
-		if ( empty( $survey_handler ) ) {
-			return;
-		}
-
-		$metadata = $this->get_survey_metadata();
-
-		do_action( 'themeisle_sdk_dependency_enqueue_script', 'survey' );
-		wp_enqueue_script( 'visualizer_chart_survey', VISUALIZER_ABSURL . 'js/survey.js', array( $survey_handler ), $metadata['attributes']['free_version'], true );
-		wp_localize_script( 'visualizer_chart_survey', 'visualizerSurveyData', $metadata );
+		$query = new WP_Query( $args);
+		return $query->post_count;
 	}
 }
