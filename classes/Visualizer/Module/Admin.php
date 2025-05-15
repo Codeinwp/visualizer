@@ -110,6 +110,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			foreach ( $visualizer_page_ids as $page_to_check ) {
 				if ( strpos( $current_screen->id, $page_to_check ) !== false ) {
 					$footer_text = sprintf(
+						// translators: %1$s - the name of the plugin (Visualizer), %2$s - message (You can help us by leaving a), %3$s - HTML entity code.
 						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
 						'<b>Visualizer</b>',
 						esc_html__( 'You can help us by leaving a', 'visualizer' ),
@@ -1335,7 +1336,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$config = $configs['default'];
 
 		// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-		$message_template = __( 'Our biggest sale of the year: %1$sup to %2$s OFF%3$s on %4$s. Don\'t miss this limited-time offer.', 'wp-cloudflare-page-cache' );
+		$message_template = __( 'Our biggest sale of the year: %1$sup to %2$s OFF%3$s on %4$s. Don\'t miss this limited-time offer.', 'visualizer' );
 		$product_label    = 'Visualizer';
 		$discount         = '70%';
 
@@ -1345,7 +1346,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		if ( $is_pro ) {
 			// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-			$message_template = __( 'Get %1$sup to %2$s off%3$s when you upgrade your %4$s plan or renew early.', 'wp-cloudflare-page-cache' );
+			$message_template = __( 'Get %1$sup to %2$s off%3$s when you upgrade your %4$s plan or renew early.', 'visualizer' );
 			$product_label    = 'Visualizer Pro';
 			$discount         = '30%';
 		}

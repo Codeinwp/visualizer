@@ -61,7 +61,11 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( ! filter_var( ini_get( 'allow_url_fopen' ), FILTER_VALIDATE_BOOLEAN ) ) {
 			echo '<div class="updated error">';
 			echo '<p>';
-			printf( esc_html__( '%s option is disabled in your php.ini config. Please, enable it by change its value to 1. This option increases the speed of remote CSV uploading.', 'visualizer' ), '<b>allow_url_fopen</b>' );
+			printf(
+				// translators: %s - the name of the option.
+				esc_html__( '%s option is disabled in your php.ini config. Please, enable it by change its value to 1. This option increases the speed of remote CSV uploading.', 'visualizer' ),
+				'<b>allow_url_fopen</b>'
+			);
 			echo '</p>';
 			echo '</div>';
 		}

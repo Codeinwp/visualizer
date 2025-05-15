@@ -152,7 +152,14 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 				'tooltip' => esc_html__( 'Tooltip', 'visualizer' ),
 				'interval' => esc_html__( 'Interval', 'visualizer' ),
 			),
-			sprintf( esc_html__( 'Determines whether the series has to be used for a special role as mentioned in %1$shere%2$s. You can view a few examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/roles#what-roles-are-available" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/1160-roles-for-series-visualizer" target="_blank">', '</a>' )
+			sprintf(
+				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag, %3$s - HTML link tag, %4$s - HTML closing link tag
+				esc_html__( 'Determines whether the series has to be used for a special role as mentioned in %1$shere%2$s. You can view a few examples %3$shere%4$s.', 'visualizer' ),
+				'<a href="https://developers.google.com/chart/interactive/docs/roles#what-roles-are-available" target="_blank">',
+				'</a>',
+				'<a href="https://docs.themeisle.com/article/1160-roles-for-series-visualizer" target="_blank">',
+				'</a>'
+			)
 		);
 	}
 

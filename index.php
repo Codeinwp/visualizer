@@ -154,7 +154,7 @@ function visualizer_launch() {
 				'logo'             => esc_url( VISUALIZER_ABSURL . 'images/visualizer-logo.svg' ),
 				'location'         => 'visualizer',
 				'has_upgrade_menu' => ! Visualizer_Module::is_pro(),
-				'upgrade_text'     => esc_html__( 'Get Visualizer Pro', 'feedzy-rss-feeds' ),
+				'upgrade_text'     => esc_html__( 'Get Visualizer Pro', 'visualizer' ),
 				'upgrade_link'     => esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' ) ),
 			);
 		}

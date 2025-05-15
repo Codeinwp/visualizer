@@ -180,7 +180,12 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			esc_html__( 'Chart Description', 'visualizer' ),
 			'description',
 			$this->description,
-			sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+			sprintf(
+				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+				esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ),
+				'<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">',
+				'</a>'
+			)
 		);
 
 	}
@@ -387,7 +392,16 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	 */
 	protected function _renderManualConfigDescription() {
 		self::_renderSectionStart();
-			self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sChartJS API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://www.chartjs.org/docs/latest/configuration/" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
+			self::_renderSectionDescription(
+				'<span class="viz-gvlink">' . sprintf(
+					// translators: %1$s - HTML link tag, %2$s - HTML closing link tag, %3$s - HTML link tag, %4$s - HTML closing link tag.
+					__( 'Configure the graph by providing configuration variables right from the %1$sChartJS API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ),
+					'<a href="https://www.chartjs.org/docs/latest/configuration/" target="_blank">',
+					'</a>',
+					'<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">',
+					'</a>'
+				) . '</span>'
+			);
 	}
 
 	/**

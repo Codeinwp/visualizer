@@ -138,7 +138,9 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			( in_array( $feature, $biz_features, true ) && ! apply_filters( 'visualizer_is_business', false ) ) ||
 			( in_array( $feature, $pro_features, true ) && ! Visualizer_Module::is_pro() )
 		) {
+			// translators: $s - the name of the plan (PRO).
 			$msg = sprintf( __( 'Upgrade to %s to activate this feature!', 'visualizer' ), 'PRO' );
+			// translators: $s - the name of the plan (Plus).
 			$plus_msg = sprintf( __( 'Upgrade to %s plan to activate this feature!', 'visualizer' ), 'Plus' );
 			if ( in_array( $feature, $biz_features, true ) && Visualizer_Module::is_pro() ) {
 				$msg = $plus_msg;

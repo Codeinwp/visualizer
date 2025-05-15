@@ -68,7 +68,12 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 					esc_html__( 'Chart Description', 'visualizer' ),
 					'description',
 					$this->description,
-					sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ),
+						'<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">',
+						'</a>'
+					)
 				);
 			self::_renderSectionEnd();
 
@@ -104,7 +109,12 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 
 			self::_renderSectionStart( esc_html__( 'API', 'visualizer' ), false );
 				self::_renderSectionDescription(
-					sprintf( esc_html__( 'Add the Google Maps API key (Click %1$shere%2$s to get the key)', 'visualizer' ), '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">', '</a>' )
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Add the Google Maps API key (Click %1$shere%2$s to get the key)', 'visualizer' ),
+						'<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">',
+						'</a>'
+					)
 				);
 
 				self::_renderTextItem(
@@ -122,9 +132,21 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 					esc_html__( 'Configure the region area to display on the map. (Surrounding areas will be displayed as well.) Can be one of the following:', 'visualizer' ) .
 					'<ul>' .
 						'<li>' . esc_html__( "'world' - A map of the entire world.", 'visualizer' ) . '</li>' .
-						'<li>' . sprintf( esc_html__( "A continent or a sub-continent, specified by its %s code, e.g., '011' for Western Africa.", 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/geochart#continent-hierarchy-and-codes" target="_blank">3-digit</a>' ) . '</li>' .
-						'<li>' . sprintf( esc_html__( "A country, specified by its %s code, e.g., 'AU' for Australia.", 'visualizer' ), '<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">ISO 3166-1 alpha-2</a>' ) . '</li>' .
-						'<li>' . sprintf( esc_html__( "A state in the United States, specified by its %s code, e.g., 'US-AL' for Alabama. Note that the resolution option must be set to either 'provinces' or 'metros'.", 'visualizer' ), '<a href="http://en.wikipedia.org/wiki/ISO_3166-2:US" target="_blank">ISO 3166-2:US</a>' ) . '</li>' .
+						'<li>' . sprintf(
+							// translators: %s - the format of the code (3-digit).
+							esc_html__( "A continent or a sub-continent, specified by its %s code, e.g., '011' for Western Africa.", 'visualizer' ),
+							'<a href="https://developers.google.com/chart/interactive/docs/gallery/geochart#continent-hierarchy-and-codes" target="_blank">3-digit</a>'
+						) . '</li>' .
+						'<li>' . sprintf(
+							// translators: %s - the format of the code (ISO 3166-1 alpha-2).
+							esc_html__( "A country, specified by its %s code, e.g., 'AU' for Australia.", 'visualizer' ),
+							'<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">ISO 3166-1 alpha-2</a>'
+						) . '</li>' .
+						'<li>' . sprintf(
+							// translators: %s - the format of the code (ISO 3166-2:US).
+							esc_html__( "A state in the United States, specified by its %s code, e.g., 'US-AL' for Alabama. Note that the resolution option must be set to either 'provinces' or 'metros'.", 'visualizer' ),
+							'<a href="http://en.wikipedia.org/wiki/ISO_3166-2:US" target="_blank">ISO 3166-2:US</a>'
+						) . '</li>' .
 					'</ul>'
 				);
 

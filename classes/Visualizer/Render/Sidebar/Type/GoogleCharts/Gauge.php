@@ -83,7 +83,12 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 					esc_html__( 'Chart Description', 'visualizer' ),
 					'description',
 					$this->description,
-					sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ),
+						'<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">',
+						'</a>'
+					)
 				);
 			self::_renderSectionEnd();
 

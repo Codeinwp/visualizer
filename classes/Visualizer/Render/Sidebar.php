@@ -125,7 +125,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			esc_html__( 'Chart Description', 'visualizer' ),
 			'description',
 			$this->description,
-			sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+			sprintf(
+				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+				esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ),
+				'<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">',
+				'</a>'
+			)
 		);
 	}
 
@@ -134,7 +139,15 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function _renderManualConfigDescription() {
 		self::_renderSectionStart();
-			self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">', '</a>', '<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">', '</a>' ) . '</span>' );
+			self::_renderSectionDescription(
+				'<span class="viz-gvlink">' . sprintf(
+				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag, %3$s - HTML link tag, %4$s - HTML closing link tag.
+					__( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">',
+					'</a>',
+					'<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">',
+					'</a>'
+				) . '</span>'
+			);
 	}
 
 	/**
@@ -185,6 +198,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'manual',
 				$this->manual,
 				sprintf(
+					// translators: %s - the format.
 					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ),
 					'<br><code>' . $this->_renderManualConfigExample() . '</code>'
 				),
@@ -461,7 +475,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					esc_html__( 'Number Format', 'visualizer' ),
 					'series[' . $index . '][format]',
 					isset( $this->series[ $index ]['format'] ) ? $this->series[ $index ]['format'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, or $# to add dollar sign before digits. Pay attention that if you use &#37; percentage format then your values will be multiplied by 100.', 'visualizer' ), '<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">', '</a>' ),
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, or $# to add dollar sign before digits. Pay attention that if you use &#37; percentage format then your values will be multiplied by 100.', 'visualizer' ),
+						'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
+						'</a>'
+					),
 					'#,###.##'
 				);
 				break;
@@ -472,7 +491,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					esc_html__( 'Date Format', 'visualizer' ),
 					'series[' . $index . '][format]',
 					isset( $this->series[ $index ]['format'] ) ? $this->series[ $index ]['format'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU date and time format%2$s.', 'visualizer' ), '<a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax" target="_blank">', '</a>' ),
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU date and time format%2$s.', 'visualizer' ),
+						'<a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax" target="_blank">',
+						'</a>'
+					),
 					'eeee, dd LLLL yyyy'
 				);
 				break;
@@ -588,7 +612,14 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			echo '<div style="position: relative">';
 		}
 		self::_renderSectionStart();
-		self::_renderSectionDescription( '<span class="viz-gvlink">' . sprintf( __( 'Configure the data filter controls by providing configuration variables right from the %1$sChart Controls API%2$s. ', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/controls#controls-gallery" target="_blank">', '</a>' ) . '</span>' );
+		self::_renderSectionDescription(
+			'<span class="viz-gvlink">' . sprintf(
+			// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+				__( 'Configure the data filter controls by providing configuration variables right from the %1$sChart Controls API%2$s. ', 'visualizer' ),
+				'<a href="https://developers.google.com/chart/interactive/docs/gallery/controls#controls-gallery" target="_blank">',
+				'</a>'
+			) . '</span>'
+		);
 		self::_renderSectionEnd();
 		$this->_renderChartControlsSettings();
 		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
@@ -632,7 +663,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				$column_type            = isset( $column['type'] ) ? $column['type'] : '';
 				$label                  = isset( $column['label'] ) ? $column['label'] : '';
 				$column_label[ $label ] = $label;
-				$column_index[ $key ]   = sprintf( __( '%1$d — Column Type: %2$s ', 'visualizer' ), $key, ucfirst( $column_type ) );
+				$column_index[ $key ]   = sprintf(
+					// translators: %1$d - the column key, %2$s - the column type.
+					__( '%1$d — Column Type: %2$s ', 'visualizer' ),
+					$key,
+					ucfirst( $column_type )
+				);
 			}
 		}
 
