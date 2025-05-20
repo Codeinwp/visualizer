@@ -699,6 +699,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			?>
 		<script type="text/javascript">
 			var visualizerUserInteractionEvents = [
+				"scroll",
 				"mouseover",
 				"keydown",
 				"touchmove",
