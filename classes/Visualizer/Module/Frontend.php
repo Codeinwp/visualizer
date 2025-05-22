@@ -47,7 +47,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	 * @access private
 	 * @var bool
 	 */
-	private $lazy_render_script = false;
+	private $lazy_render_script = true;
 
 	/**
 	 * Constructor.
@@ -383,8 +383,9 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$lazy_load = isset( $settings['lazy_load_chart'] ) ? $settings['lazy_load_chart'] : false;
 		$lazy_load = apply_filters( 'visualizer_lazy_load_chart', $lazy_load, $chart->ID );
 		$container_class = 'visualizer-front-container';
-		if ( $lazy_load ) {
-			$this->lazy_render_script = true;
+		if ( ! $lazy_load ) {
+			$this->lazy_render_script = false;
+		} else {
 			$container_class .= ' visualizer-lazy-render';
 		}
 
