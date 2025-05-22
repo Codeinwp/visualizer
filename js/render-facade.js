@@ -131,12 +131,12 @@ var vizClipboard1=null;
         $(window).on('scroll', function() {
             $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error):empty').each(function(index, element){
                 // Do not render charts that are intentionally hidden.
-                var style = window.getComputedStyle(element);
+                const style = window.getComputedStyle(element);
                 if (style.display === 'none' || style.visibility === 'hidden') {
                     return;
                 }
 
-                var id = $(element).addClass('viz-facade-loaded').attr('id');
+                const id = $(element).addClass('viz-facade-loaded').attr('id');
                 setTimeout(function(){
                     // Add a short delay between each chart to avoid overloading the browser event loop.
                     showChart(id);
@@ -146,12 +146,12 @@ var vizClipboard1=null;
 
         $('div.visualizer-front-container:not(.visualizer-lazy-render)').each(function(index, element){
             // Do not render charts that are intentionally hidden.
-            var style = window.getComputedStyle($(element).find('.visualizer-front')[0]);
+            const style = window.getComputedStyle($(element).find('.visualizer-front')[0]);
             if (style.display === 'none' || style.visibility === 'hidden') {
                 return;
             }
 
-            var id = $(element).find('.visualizer-front').addClass('viz-facade-loaded').attr('id');
+            const id = $(element).find('.visualizer-front').addClass('viz-facade-loaded').attr('id');
             setTimeout(function(){
                 // Add a short delay between each chart to avoid overloading the browser event loop.
                 showChart(id);
