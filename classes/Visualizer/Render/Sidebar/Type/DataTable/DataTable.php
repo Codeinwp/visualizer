@@ -145,7 +145,12 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					esc_html__( 'Chart Description', 'visualizer' ),
 					'description',
 					$this->description,
-					sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ),
+						'<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">',
+						'</a>'
+					)
 				);
 
 			self::_renderSectionEnd();
@@ -473,14 +478,22 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					esc_html__( 'Display Date Format', 'visualizer' ),
 					'series[' . $index . '][format][to]',
 					isset( $this->series[ $index ]['format']['to'] ) ? $this->series[ $index ]['format']['to'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>' ),
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sdate and time formats here%2$s.', 'visualizer' ),
+						'<a href="https://momentjs.com/docs/#/displaying/" target="_blank">',
+						'</a>'
+					),
 					'Do MMM YYYY'
 				);
 				self::_renderTextItem(
 					esc_html__( 'Source Date Format', 'visualizer' ),
 					'series[' . $index . '][format][from]',
 					isset( $this->series[ $index ]['format']['from'] ) ? $this->series[ $index ]['format']['from'] : '',
-					sprintf( esc_html__( 'What format is the source date in? Similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>' ),
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'What format is the source date in? Similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>'
+					),
 					'YYYY-MM-DD'
 				);
 				break;
@@ -489,14 +502,22 @@ class Visualizer_Render_Sidebar_Type_DataTable_DataTable extends Visualizer_Rend
 					esc_html__( 'Truthy value', 'visualizer' ),
 					'series[' . $index . '][format][truthy]',
 					isset( $this->series[ $index ]['format']['truthy'] ) ? $this->series[ $index ]['format']['truthy'] : '',
-					sprintf( esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is true. e.g. %1$s (Code: %2$s) instead of true', 'visualizer' ), '&#10004;', '&amp;#10004;' ),
+					sprintf(
+						// translators: %1$s - HTML entity code, %2$s - HTML entity code.
+						esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is true. e.g. %1$s (Code: %2$s) instead of true', 'visualizer' ), '&#10004;', '&amp;#10004;'
+					),
 					''
 				);
 				self::_renderTextItem(
 					esc_html__( 'Falsy value', 'visualizer' ),
 					'series[' . $index . '][format][falsy]',
 					isset( $this->series[ $index ]['format']['falsy'] ) ? $this->series[ $index ]['format']['falsy'] : '',
-					sprintf( esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is false. e.g. %1$s (Code: %2$s) instead of false', 'visualizer' ), '&#10006;', '&amp;#10006;' ),
+					sprintf(
+						// translators: %1$s - HTML entity code, %2$s - HTML entity code.
+						esc_html__( 'Provide the HTML entity code for the value the table should display when the value of the column is false. e.g. %1$s (Code: %2$s) instead of false', 'visualizer' ),
+						'&#10006;',
+						'&amp;#10006;'
+					),
 					''
 				);
 				break;

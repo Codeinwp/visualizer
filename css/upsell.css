@@ -174,3 +174,8 @@
 	width: 100%;
 	background: #fff;
 }
+
+div.notice.themeisle-sale {
+	margin-left: 10px;
+	margin-right: 10px;
+}

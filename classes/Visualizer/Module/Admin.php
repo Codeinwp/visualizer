@@ -41,6 +41,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	private $_libraryPage;
 
 	/**
+	 * Support page suffix.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $_supportPage;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -56,12 +64,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'enqueue_block_editor_assets', 'enqueueMediaScripts' );
 		$this->_addAction( 'admin_footer', 'renderTemplates' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts', null, 0 );
+		$this->_addAction( 'admin_enqueue_scripts', 'enqueue_support_page' );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
 		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
+		$this->_addFilter( 'themeisle_sdk_blackfriday_data', 'add_black_friday_data' );
 
 		// screen pagination
 		$this->_addFilter( 'set-screen-option', 'setScreenOptions', 10, 3 );
@@ -100,6 +110,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			foreach ( $visualizer_page_ids as $page_to_check ) {
 				if ( strpos( $current_screen->id, $page_to_check ) !== false ) {
 					$footer_text = sprintf(
+						// translators: %1$s - the name of the plugin (Visualizer), %2$s - message (You can help us by leaving a), %3$s - HTML entity code.
 						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
 						'<b>Visualizer</b>',
 						esc_html__( 'You can help us by leaving a', 'visualizer' ),
@@ -639,40 +650,56 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @param string $suffix The current page suffix.
 	 */
 	public function enqueueLibraryScripts( $suffix ) {
-		if ( $suffix === $this->_libraryPage ) {
-			wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
-			$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
-			wp_enqueue_media();
+		if ( $suffix !== $this->_libraryPage ) {
+			return;
+		}
+
+		wp_enqueue_style( 'visualizer-library', VISUALIZER_ABSURL . 'css/library.css', array(), Visualizer_Plugin::VERSION );
+		$this->_addFilter( 'media_upload_tabs', 'setupVisualizerTab' );
+		wp_enqueue_media();
+		wp_enqueue_script(
+			'visualizer-library',
+			VISUALIZER_ABSURL . 'js/library.js',
+			array(
+				'jquery',
+				'media-views',
+				'clipboard',
+			),
+			Visualizer_Plugin::VERSION,
+			true
+		);
+
+		wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
+
+		$query = $this->getQuery();
+		while ( $query->have_posts() ) {
+			$chart = $query->next_post();
+			$library = $this->load_chart_type( $chart->ID );
+			if ( is_null( $library ) ) {
+				continue;
+			}
 			wp_enqueue_script(
-				'visualizer-library',
-				VISUALIZER_ABSURL . 'js/library.js',
-				array(
-					'jquery',
-					'media-views',
-					'clipboard',
-				),
+				"visualizer-render-$library",
+				VISUALIZER_ABSURL . 'js/render-facade.js',
+				apply_filters( 'visualizer_assets_render', array( 'visualizer-library', 'visualizer-customization' ), true ),
 				Visualizer_Plugin::VERSION,
 				true
 			);
-
-			wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
-
-			$query = $this->getQuery();
-			while ( $query->have_posts() ) {
-				$chart = $query->next_post();
-				$library = $this->load_chart_type( $chart->ID );
-				if ( is_null( $library ) ) {
-					continue;
-				}
-				wp_enqueue_script(
-					"visualizer-render-$library",
-					VISUALIZER_ABSURL . 'js/render-facade.js',
-					apply_filters( 'visualizer_assets_render', array( 'visualizer-library', 'visualizer-customization' ), true ),
-					Visualizer_Plugin::VERSION,
-					true
-				);
-			}
 		}
+
+		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'library' );
+	}
+
+	/**
+	 * Enqueue script for support page.
+	 *
+	 * @param string $hook_suffix Current hook.
+	 */
+	public function enqueue_support_page( $hook_suffix ) {
+		if ( $this->_supportPage !== $hook_suffix ) {
+			return;
+		}
+		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'support' );
 	}
 
 	/**
@@ -718,7 +745,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'edit_posts',
 			'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew'
 		);
-		add_submenu_page(
+
+		$this->_supportPage = add_submenu_page(
 			Visualizer_Plugin::NAME,
 			__( 'Support', 'visualizer' ),
 			__( 'Support', 'visualizer' ) . '<span class="dashicons dashicons-editor-help more-features-icon" style="width: 17px; height: 17px; margin-left: 4px; color: #ffca54; font-size: 17px; vertical-align: -3px;"></span>',
@@ -938,7 +966,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 */
 	public function renderSupportPage() {
 		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
-		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'support' );
 		include_once VISUALIZER_ABSPATH . '/templates/support.php';
 	}
 
@@ -1094,12 +1121,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'type'    => 'array',
 			)
 		);
-
-		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'library' );
-
-		if ( ! apply_filters( 'visualizer_is_business', false ) ) {
-			do_action( 'themeisle_sdk_load_banner', 'visualizer' );
-		}
 
 		$render->render();
 	}
@@ -1303,5 +1324,47 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$query = new WP_Query( $args);
 		return $query->post_count;
+	}
+
+	/**
+	 * Set the black friday data.
+	 *
+	 * @param array $configs The configuration array for the loaded products.
+	 * @return array
+	 */
+	public function add_black_friday_data( $configs ) {
+		$config = $configs['default'];
+
+		// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
+		$message_template = __( 'Our biggest sale of the year: %1$sup to %2$s OFF%3$s on %4$s. Don\'t miss this limited-time offer.', 'visualizer' );
+		$product_label    = 'Visualizer';
+		$discount         = '70%';
+
+		$plan    = apply_filters( 'product_visualizer_license_plan', 0 );
+		$license = apply_filters( 'product_visualizer_license_key', false );
+		$is_pro  = 0 < $plan;
+
+		if ( $is_pro ) {
+			// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
+			$message_template = __( 'Get %1$sup to %2$s off%3$s when you upgrade your %4$s plan or renew early.', 'visualizer' );
+			$product_label    = 'Visualizer Pro';
+			$discount         = '30%';
+		}
+
+		$product_label = sprintf( '<strong>%s</strong>', $product_label );
+		$url_params    = array(
+			'utm_term' => $is_pro ? 'plan-' . $plan : 'free',
+			'lkey'     => ! empty( $license ) ? $license : false,
+		);
+
+		$config['message']  = sprintf( $message_template, '<strong>', $discount, '</strong>', $product_label );
+		$config['sale_url'] = add_query_arg(
+			$url_params,
+			tsdk_translate_link( tsdk_utmify( 'https://themeisle.link/vizualizer-bf', 'bfcm', 'visualizer' ) )
+		);
+
+		$configs[ VISUALIZER_DIRNAME ] = $config;
+
+		return $configs;
 	}
 }
