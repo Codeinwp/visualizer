@@ -818,7 +818,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											echo sprintf(
 												// translators: $s - the chart type with the link attached.
 												__( 'If you are unsure about how to format your data CSV then please take a look at this sample: %s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ),
-												'<a href="' . VISUALIZER_ASURL . 'samples/' . $type . '.csv" target="_blank">' . $type . '.csv</a>'
+												'<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">' . $type . '.csv</a>'
 											);
 											?>
 											</b>
