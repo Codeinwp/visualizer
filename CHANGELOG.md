@@ -1,3 +1,8 @@
+##### [Version 3.11.11](https://github.com/Codeinwp/visualizer/compare/v3.11.10...v3.11.11) (2025-05-27)
+
+- Fixed chart rendering on page load with multiple charts
+- Updated dependencies
+
 ##### [Version 3.11.10](https://github.com/Codeinwp/visualizer/compare/v3.11.9...v3.11.10) (2025-04-16)
 
 - Fixed special characters not rendering correctly in Legend labels
