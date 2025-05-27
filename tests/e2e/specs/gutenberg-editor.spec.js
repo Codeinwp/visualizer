@@ -138,7 +138,7 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await admin.visitAdminPage( 'widgets.php' );
 
         await page.getByLabel('Close', { exact: true }).click();
-        await page.getByLabel('Toggle block inserter').click();
+        await page.getByLabel('Block Inserter').click();
         await page.getByPlaceholder('Search').fill('visuali');
         await page.getByRole('option', { name: ' Visualizer Chart' }).click();
         await page.locator('div').filter({ hasText: /^Display an existing chart$/ }).click();

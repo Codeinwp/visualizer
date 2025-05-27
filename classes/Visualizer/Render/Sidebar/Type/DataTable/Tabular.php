@@ -143,7 +143,12 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 					esc_html__( 'Chart Description', 'visualizer' ),
 					'description',
 					$this->description,
-					sprintf( esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ), '<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">', '</a>' )
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Description to display in the structured data schema as explained %1$shere%2$s', 'visualizer' ),
+						'<a href="https://developers.google.com/search/docs/data-types/dataset#dataset" target="_blank">',
+						'</a>'
+					)
 				);
 
 			self::_renderSectionEnd();
@@ -471,14 +476,24 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 					esc_html__( 'Display Date Format', 'visualizer' ),
 					'series[' . $index . '][format][to]',
 					isset( $this->series[ $index ]['format']['to'] ) ? $this->series[ $index ]['format']['to'] : '',
-					sprintf( esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>' ),
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sdate and time formats here%2$s.', 'visualizer' ),
+						'<a href="https://momentjs.com/docs/#/displaying/" target="_blank">',
+						'</a>'
+					),
 					'Do MMM YYYY'
 				);
 				self::_renderTextItem(
 					esc_html__( 'Source Date Format', 'visualizer' ),
 					'series[' . $index . '][format][from]',
 					isset( $this->series[ $index ]['format']['from'] ) ? $this->series[ $index ]['format']['from'] : '',
-					sprintf( esc_html__( 'What format is the source date in? Similar to the %1$sdate and time formats here%2$s.', 'visualizer' ), '<a href="https://momentjs.com/docs/#/displaying/" target="_blank">', '</a>' ),
+					sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						esc_html__( 'What format is the source date in? Similar to the %1$sdate and time formats here%2$s.', 'visualizer' ),
+						'<a href="https://momentjs.com/docs/#/displaying/" target="_blank">',
+						'</a>'
+					),
 					'YYYY-MM-DD'
 				);
 				break;

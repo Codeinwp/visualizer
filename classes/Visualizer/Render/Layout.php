@@ -90,8 +90,26 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			<div class='db-wizard-hints'>
 				<ul>
 					<li><?php echo __( 'Your database prefix is:', 'visualizer' ); ?> <span class="visualizer-emboss"><?php echo $wpdb->prefix; ?></span></li>
-					<li><?php echo sprintf( __( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ), '<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">', '</a>' ); ?></li>
-					<li><?php echo sprintf( __( 'Use %1$sShift+Space%2$s for autocompleting keywords or table names.', 'visualizer' ), '<span class="visualizer-emboss">', '</span>' ); ?></li>
+					<li>
+					<?php
+					echo sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						__( 'For examples of queries and links to resources that you can use with this feature, please click %1$shere%2$s', 'visualizer' ),
+						'<a href="' . VISUALIZER_DB_QUERY_DOC_URL . '" target="_blank">',
+						'</a>'
+					);
+					?>
+					</li>
+					<li>
+					<?php
+					echo sprintf(
+						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+						__( 'Use %1$sShift+Space%2$s for autocompleting keywords or table names.', 'visualizer' ),
+						'<span class="visualizer-emboss">',
+						'</span>'
+					);
+					?>
+					</li>
 					<?php do_action( 'visualizer_db_query_add_hints', $args ); ?>
 				</ul>
 			</div>
@@ -180,7 +198,16 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 					<form id="json-endpoint-form">
 						<div class="json-wizard-hints">
 							<ul class="info">
-								<li><?php echo sprintf( __( 'If you want to add authentication or headers to the endpoint or change the request in any way, please refer to our document %1$shere%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/1043-visualizer-how-to-extend-rest-endpoints-with-json-response" target="_blank">', '</a>' ); ?></li>
+								<li>
+								<?php
+								echo sprintf(
+									// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+									__( 'If you want to add authentication or headers to the endpoint or change the request in any way, please refer to our document %1$shere%2$s.', 'visualizer' ),
+									'<a href="https://docs.themeisle.com/article/1043-visualizer-how-to-extend-rest-endpoints-with-json-response" target="_blank">',
+									'</a>'
+								);
+								?>
+								</li>
 							</ul>
 						</div>
 
@@ -662,10 +689,20 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 				<h4><span class="dashicons dashicons-media-code"></span><a href="<?php echo VISUALIZER_CODE_SNIPPETS_URL; ?>" target="_blank"><?php _e( 'Custom code snippets', 'visualizer' ); ?></a></h4>
 		<?php
 			Visualizer_Render_Sidebar::_renderSectionEnd();
+			// translators: %s - the chart type.
 			Visualizer_Render_Sidebar::_renderSectionStart( sprintf( __( '%s chart', 'visualizer' ), ucwords( $displayType ) ), true );
 		?>
 				<h4><span class="dashicons dashicons-video-alt2"></span>&nbsp;<a href="<?php echo str_replace( '#', "$type-chart", VISUALIZER_DEMO_URL ); ?>" target="_blank"><?php _e( 'View demo', 'visualizer' ); ?></a></h4>
-				<h4><span class="dashicons dashicons-search"></span><a href="<?php echo str_replace( '#', $type, VISUALIZER_DOC_COLLECTION ); ?>" target="_blank"><?php echo sprintf( __( 'Articles containing "%s"', 'visualizer' ), $displayType ); ?></a></h4>
+				<h4><span class="dashicons dashicons-search"></span><a href="<?php echo str_replace( '#', $type, VISUALIZER_DOC_COLLECTION ); ?>" target="_blank">
+					<?php
+					echo sprintf(
+						// translators: %s - the chart type.
+						__( 'Articles containing "%s"', 'visualizer' ),
+						$displayType
+					);
+					?>
+					</a>
+				</h4>
 		<?php
 			Visualizer_Render_Sidebar::_renderSectionEnd();
 		Visualizer_Render_Sidebar::_renderGroupEnd();
@@ -775,7 +812,17 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								<div class="viz-group-content">
 									<div>
 										<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
-										<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">', $type, '.csv</a>' ); ?></b></p>
+										<p class="viz-group-description viz-info-msg">
+											<b>
+											<?php
+											echo sprintf(
+												// translators: $s - the chart type with the link attached.
+												__( 'If you are unsure about how to format your data CSV then please take a look at this sample: %s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ),
+												'<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">' . $type . '.csv</a>'
+											);
+											?>
+											</b>
+										</p>
 										<form id="vz-csv-file-form" action="<?php echo $upload_link; ?>" method="post"
 											target="thehole" enctype="multipart/form-data">
 											<input type="hidden" id="remote-data" name="remote_data">
@@ -798,8 +845,27 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 										<span class="viz-section-title"><?php _e( 'Import from CSV', 'visualizer' ); ?></span>
 										<div class="only-pro-anchor">	
 											<div class="viz-section-items section-items">
-												<p class="viz-group-description"><?php echo sprintf( __( 'You can use this to import data from a remote CSV file or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ), '<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >', '</a>' ); ?> </p>
-												<p class="viz-group-description viz-info-msg"><b><?php echo sprintf( __( 'If you are unsure about how to format your data CSV then please take a look at this sample: %1$s %2$s%3$s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ), '<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">', $type, '.csv</a>' ); ?></b></p>
+												<p class="viz-group-description">
+													<?php
+													echo sprintf(
+														// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+														__( 'You can use this to import data from a remote CSV file or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ),
+														'<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >',
+														'</a>'
+													);
+													?>
+												</p>
+												<p class="viz-group-description viz-info-msg">
+													<b>
+														<?php
+														echo sprintf(
+															// translators: %s - the chart type with the link attached.
+															__( 'If you are unsure about how to format your data CSV then please take a look at this sample: %s. If you are using non-English characters, please make sure you save the file in UTF-8 encoding.', 'visualizer' ),
+															'<a href="' . VISUALIZER_ABSURL . 'samples/' . $type . '.csv" target="_blank">' . $type . '.csv</a>'
+														);
+														?>
+													</b>
+												</p>
 												<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 													target="thehole" enctype="multipart/form-data">
 													<div class="remote-file-section">
