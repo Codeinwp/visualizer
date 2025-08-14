@@ -352,19 +352,14 @@ var isResizeRequest = false;
                     }
                     break;
                 default:
-                    for (i = 0; i < settings.series.length; i++) {
-                        if (!series[i + 1] || typeof settings.series[i] === 'undefined') {
-                            continue;
-                        }
-                        var seriesIndexToUse = i + 1;
-
-                        // if an annotation "swallowed" a series, use the following one.
-                        if(series_annotations.includes(i)){
-                            seriesIndexToUse++;
-                        }
-                        if ( series[seriesIndexToUse] ) {
-                            format_data(id, table, series[seriesIndexToUse].type, settings.series[i].format, seriesIndexToUse);
-                        }
+                    // Single-pass: walk columns, skip annotation/helper roles, apply formats in order.
+                    var k = 0; // index into settings.series (visible series)
+                    for (var c = 1; c < series.length && k < settings.series.length; c++) { // skip label at 0
+                        if (table.getColumnProperty(c, 'role')) continue; // helper/annotation column
+                        var s = settings.series[k++];
+                        if (!s || !s.format) continue;
+                        if (!series[c]) continue;
+                        format_data(id, table, series[c].type, s.format, c);
                     }
                     break;
             }
