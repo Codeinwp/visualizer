@@ -19,6 +19,18 @@ parameters:
 			path: classes/Visualizer/Gutenberg/Block.php
 
 		-
+			message: '#^Constant VISUALIZER_ABSPATH not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: classes/Visualizer/Gutenberg/Block.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 7
+			path: classes/Visualizer/Gutenberg/Block.php
+
+		-
 			message: '#^If condition is always false\.$#'
 			identifier: if.alwaysFalse
 			count: 1
@@ -209,6 +221,18 @@ parameters:
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSPATH not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: classes/Visualizer/Module.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: classes/Visualizer/Module.php
 
 		-
 			message: '#^Constant VISUALIZER_PRO_VERSION not found\.$#'
@@ -487,12 +511,6 @@ parameters:
 			path: classes/Visualizer/Module.php
 
 		-
-			message: '#^Path in include_once\(\) "/Users/robert/Local Sites/redirection\-phpstan/app/public/wp\-content/plugins/visualizer/tests/php/static\-analysis\-stubs/vendor/autoload\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: classes/Visualizer/Module.php
-
-		-
 			message: '#^Variable \$chart might not be defined\.$#'
 			identifier: variable.undefined
 			count: 2
@@ -604,6 +622,30 @@ parameters:
 			message: '#^Class SitePress not found\.$#'
 			identifier: class.notFound
 			count: 2
+			path: classes/Visualizer/Module/Admin.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSPATH not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: classes/Visualizer/Module/Admin.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 12
+			path: classes/Visualizer/Module/Admin.php
+
+		-
+			message: '#^Constant VISUALIZER_BASEFILE not found\.$#'
+			identifier: constant.notFound
+			count: 3
+			path: classes/Visualizer/Module/Admin.php
+
+		-
+			message: '#^Constant VISUALIZER_DIRNAME not found\.$#'
+			identifier: constant.notFound
+			count: 4
 			path: classes/Visualizer/Module/Admin.php
 
 		-
@@ -1021,12 +1063,6 @@ parameters:
 			path: classes/Visualizer/Module/Admin.php
 
 		-
-			message: '#^Path in include_once\(\) "/Users/robert/Local Sites/redirection\-phpstan/app/public/wp\-content/plugins/visualizer/tests/php/static\-analysis\-stubs/templates/support\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: classes/Visualizer/Module/Admin.php
-
-		-
 			message: '#^Property WP_Screen\:\:\$id \(string\) in isset\(\) is not nullable\.$#'
 			identifier: isset.property
 			count: 1
@@ -1162,6 +1198,18 @@ parameters:
 			message: '#^Class SitePress not found\.$#'
 			identifier: class.notFound
 			count: 1
+			path: classes/Visualizer/Module/Chart.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSPATH not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: classes/Visualizer/Module/Chart.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 10
 			path: classes/Visualizer/Module/Chart.php
 
 		-
@@ -1447,6 +1495,12 @@ parameters:
 			path: classes/Visualizer/Module/Frontend.php
 
 		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: classes/Visualizer/Module/Frontend.php
+
+		-
 			message: '#^Function icl_get_current_language not found\.$#'
 			identifier: function.notFound
 			count: 1
@@ -1630,6 +1684,12 @@ parameters:
 			message: '#^Call to function is_null\(\) with array\{''administrator''\} will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 1
+			path: classes/Visualizer/Module/Setup.php
+
+		-
+			message: '#^Constant VISUALIZER_BASEFILE not found\.$#'
+			identifier: constant.notFound
+			count: 3
 			path: classes/Visualizer/Module/Setup.php
 
 		-
@@ -1981,6 +2041,18 @@ parameters:
 			path: classes/Visualizer/Module/Wizard.php
 
 		-
+			message: '#^Constant VISUALIZER_ABSPATH not found\.$#'
+			identifier: constant.notFound
+			count: 4
+			path: classes/Visualizer/Module/Wizard.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 6
+			path: classes/Visualizer/Module/Wizard.php
+
+		-
 			message: '#^Method Visualizer_Module_Wizard\:\:registerAdminMenu\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -2215,6 +2287,12 @@ parameters:
 			path: classes/Visualizer/Render/Layout.php
 
 		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: classes/Visualizer/Render/Layout.php
+
+		-
 			message: '#^Method Visualizer_Render_Layout\:\:_renderDbQuery\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -2383,6 +2461,12 @@ parameters:
 			path: classes/Visualizer/Render/Library.php
 
 		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: classes/Visualizer/Render/Library.php
+
+		-
 			message: '#^Method Visualizer_Render_Library\:\:_renderChartBox\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -2485,6 +2569,12 @@ parameters:
 			path: classes/Visualizer/Render/Page/Data.php
 
 		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: classes/Visualizer/Render/Page/Data.php
+
+		-
 			message: '#^Left side of && is always true\.$#'
 			identifier: booleanAnd.leftAlwaysTrue
 			count: 1
@@ -2541,6 +2631,12 @@ parameters:
 		-
 			message: '#^Access to an undefined property Visualizer_Render_Page_Settings\:\:\$sidebar\.$#'
 			identifier: property.notFound
+			count: 1
+			path: classes/Visualizer/Render/Page/Settings.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
 			count: 1
 			path: classes/Visualizer/Render/Page/Settings.php
 
@@ -2709,6 +2805,18 @@ parameters:
 		-
 			message: '#^Call to function is_null\(\) with string will always evaluate to false\.$#'
 			identifier: function.impossibleType
+			count: 1
+			path: classes/Visualizer/Render/Sidebar.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSPATH not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: classes/Visualizer/Render/Sidebar.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
 			count: 1
 			path: classes/Visualizer/Render/Sidebar.php
 
@@ -2983,12 +3091,6 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar.php
 
 		-
-			message: '#^Path in include_once\(\) "/Users/robert/Local Sites/redirection\-phpstan/app/public/wp\-content/plugins/visualizer/tests/php/static\-analysis\-stubs/vendor/autoload\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar.php
-
-		-
 			message: '#^Property Visualizer_Render_Sidebar\:\:\$_fontFamilies type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -3076,6 +3178,12 @@ parameters:
 			message: '#^Call to an undefined method Visualizer_Render_Sidebar_ChartJS\:\:_renderAxesSettings\(\)\.$#'
 			identifier: method.notFound
 			count: 1
+			path: classes/Visualizer/Render/Sidebar/ChartJS.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 2
 			path: classes/Visualizer/Render/Sidebar/ChartJS.php
 
 		-
@@ -3262,6 +3370,12 @@ parameters:
 			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Google\:\:\$width\.$#'
 			identifier: property.notFound
 			count: 1
+			path: classes/Visualizer/Render/Sidebar/Google.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 3
 			path: classes/Visualizer/Render/Sidebar/Google.php
 
 		-
@@ -3805,6 +3919,12 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
 
 		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 6
+			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
+
+		-
 			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:__construct\(\) has parameter \$data with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -3964,6 +4084,12 @@ parameters:
 			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_Tabular\:\:\$title\.$#'
 			identifier: property.notFound
 			count: 1
+			path: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php
+
+		-
+			message: '#^Constant VISUALIZER_ABSURL not found\.$#'
+			identifier: constant.notFound
+			count: 6
 			path: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php
 
 		-
@@ -5345,3 +5471,87 @@ parameters:
 			identifier: deadCode.unreachable
 			count: 1
 			path: classes/Visualizer/Source/Query/Params.php
+
+		-
+			message: '#^Constant VISUALIZER_BASEFILE not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_launch\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_register_parrot\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_register_parrot\(\) has parameter \$plugins with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_register_sdk\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_register_sdk\(\) has parameter \$products with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_themeisle_log_event\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_themeisle_log_event\(\) has parameter \$file with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_themeisle_log_event\(\) has parameter \$line with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_themeisle_log_event\(\) has parameter \$msg with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_themeisle_log_event\(\) has parameter \$name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Function visualizer_themeisle_log_event\(\) has parameter \$type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: index.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Parameter \#1 \$autoload_function of function spl_autoload_register expects callable\(string\)\: void, ''visualizer…'' given\.$#'
+			identifier: argument.type
+			count: 1
+			path: index.php
