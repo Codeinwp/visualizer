@@ -2,8 +2,6 @@ parameters:
 	level: 6
 	paths:
 		- %currentWorkingDirectory%/classes
-	scanFiles:
-	    - %currentWorkingDirectory%/index.php
 	bootstrapFiles:
 		- %currentWorkingDirectory%/tests/php/static-analysis-stubs/symbols.php
 	scanDirectories:

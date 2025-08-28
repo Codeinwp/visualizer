@@ -37,3 +37,4 @@ define( 'VISUALIZER_SUBSCRIBE_API', 'https://api.themeisle.com/tracking/subscrib
 // to redirect all themeisle_log_event to error log.
 define( 'VISUALIZER_LOCAL_DEBUG', false );
 define( 'VISUALIZER_SURVEY', true );
+define( 'VISUALIZER_PRO', true );
