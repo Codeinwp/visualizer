@@ -12,7 +12,6 @@ parameters:
 	ignoreErrors:
 		-
 			identifiers:
-				- include.fileNotFound
 				- requireOnce.fileNotFound
 includes:
 	- %currentWorkingDirectory%/vendor/szepeviktor/phpstan-wordpress/extension.neon

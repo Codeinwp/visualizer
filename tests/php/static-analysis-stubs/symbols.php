@@ -1,4 +1,10 @@
 <?php
+
+define( 'VISUALIZER_BASEFILE', dirname( __FILE__, 4 ) . '/index.php' );
+define( 'VISUALIZER_BASENAME', plugin_basename( VISUALIZER_BASEFILE ) );
+define( 'VISUALIZER_ABSURL', plugins_url( '/', VISUALIZER_BASEFILE ) );
+define( 'VISUALIZER_ABSPATH', dirname( VISUALIZER_BASEFILE ) );
+define( 'VISUALIZER_DIRNAME', basename( VISUALIZER_ABSPATH ) );
 define( 'VISUALIZER_REST_VERSION', 1 );
 // if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
 // this is also used in Block.php
