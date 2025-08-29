@@ -29,3 +29,5 @@ cypress.json
 docker-compose.ci.yml
 CONTRIBUTING.md
 artifacts
+phpstan.neon
+phpstan-baseline.neon
