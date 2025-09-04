@@ -223,6 +223,14 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 ## Changelog ##
 
+##### [Version 3.11.12](https://github.com/Codeinwp/visualizer/compare/v3.11.11...v3.11.12) (2025-09-04)
+
+- Updated dependencies
+- Fixed issue with the number format not being applied properly to the last value of the Google chart
+
+
+
+
 ##### [Version 3.11.11](https://github.com/Codeinwp/visualizer/compare/v3.11.10...v3.11.11) (2025-05-27)
 
 - Fixed chart rendering on page load with multiple charts
