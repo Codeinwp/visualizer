@@ -492,7 +492,7 @@ class Visualizer_Gutenberg_Block {
 	 * @access public
 	 */
 	public function get_query_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'administrator' ) ) {
 			return false;
 		}
 
