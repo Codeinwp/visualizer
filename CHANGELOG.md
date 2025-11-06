@@ -1,3 +1,7 @@
+##### [Version 3.11.13](https://github.com/Codeinwp/visualizer/compare/v3.11.12...v3.11.13) (2025-11-06)
+
+- Enhanced security
+
 ##### [Version 3.11.12](https://github.com/Codeinwp/visualizer/compare/v3.11.11...v3.11.12) (2025-09-04)
 
 - Updated dependencies
