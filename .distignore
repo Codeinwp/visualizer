@@ -31,3 +31,4 @@ CONTRIBUTING.md
 artifacts
 phpstan.neon
 phpstan-baseline.neon
+AGENTS.md
