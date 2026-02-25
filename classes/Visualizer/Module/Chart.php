@@ -375,11 +375,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @access private
 	 *
-	 * @param WP_Post $chart The chart object.
+	 * @param WP_Post|null $chart The chart object.
 	 *
 	 * @return array The array of chart data.
 	 */
-	private function _getChartArray( WP_Post $chart = null ) {
+	private function _getChartArray( ?WP_Post $chart = null ) {
 		if ( is_null( $chart ) ) {
 			$chart = $this->_chart;
 		}
