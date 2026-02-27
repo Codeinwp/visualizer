@@ -597,8 +597,8 @@ class Visualizer_Gutenberg_Block {
 			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
 			$source_type = sanitize_text_field( $data['visualizer-source'] );
 			$default_data  = (int) $data['visualizer-default-data'];
-			$series_data   = map_deep( $data['visualizer-series'], 'sanitize_text_field' );
-			$settings_data = map_deep( $data['visualizer-settings'], 'sanitize_text_field' );
+			$series_data   = map_deep( $data['visualizer-series'], array( $this, 'sanitize_value' ) );
+			$settings_data = map_deep( $data['visualizer-settings'], array( $this, 'sanitize_value' ) );
 
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $source_type );
@@ -667,7 +667,7 @@ class Visualizer_Gutenberg_Block {
 			}
 
 			if ( Visualizer_Module::is_pro() ) {
-				$permissions_data = map_deep( $data['visualizer-permissions'], 'sanitize_text_field' );
+				$permissions_data = map_deep( $data['visualizer-permissions'], array( $this, 'sanitize_value' ) );
 				update_post_meta( $data['id'], Visualizer_PRO::CF_PERMISSIONS, $permissions_data );
 			}
 
@@ -866,5 +866,19 @@ class Visualizer_Gutenberg_Block {
 			);
 		}
 		return $args;
+	}
+
+	/**
+	 * Sanitize value.
+	 *
+	 * @param mixed $value The value to sanitize.
+	 * @return mixed Sanitized value.
+	 */
+	private function sanitize_value( $value ) {
+		if ( is_string( $value ) ) {
+			return sanitize_text_field( $value );
+		}
+
+		return $value;
 	}
 }
