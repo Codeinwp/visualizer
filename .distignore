@@ -20,8 +20,6 @@ package-lock.json
 vendor/openspout/openspout/LICENSE-for-*
 vendor/openspout/openspout/UPGRADE-3.0.md
 vendor/openspout/openspout/README.md
-cypress
-cypress.json
 .github
 .idea
 .wordpress-org

@@ -213,7 +213,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' ), 'visualizer_schedule_refresh_db' );
 		add_option( 'visualizer-activated', true );
 		$is_fresh_install  = get_option( 'visualizer_fresh_install', false );
-		if ( ! defined( 'TI_CYPRESS_TESTING' ) && false === $is_fresh_install ) {
+		if ( ! defined( 'TI_E2E_TESTING' ) && false === $is_fresh_install ) {
 			update_option( 'visualizer_fresh_install', '1' );
 		}
 	}

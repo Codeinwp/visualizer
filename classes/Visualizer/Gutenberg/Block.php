@@ -111,7 +111,7 @@ class Visualizer_Gutenberg_Block {
 			'adminPage' => menu_page_url( 'visualizer', false ),
 			'createChart' => add_query_arg( array( 'action' => 'visualizer-create-chart', 'library' => 'yes', 'type' => '', 'chart-library' => '', 'tab' => 'visualizer' ), admin_url( 'admin-ajax.php' ) ),
 			'sqlTable'  => $table_col_mapping,
-			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
+			'chartsPerPage' => defined( 'TI_E2E_TESTING' ) ? 20 : 6,
 			'proFeaturesLocked' => Visualizer_Module_Admin::proFeaturesLocked(),
 			'isFullSiteEditor'  => 'site-editor.php' === $pagenow,
 			'legacyBlockEdit'   => apply_filters( 'visualizer_legacy_block_edit', false ),
