@@ -379,7 +379,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @return array The array of chart data.
 	 */
-	private function _getChartArray( ?WP_Post $chart = null ) {
+	private function _getChartArray( $chart = null ) {
 		if ( is_null( $chart ) ) {
 			$chart = $this->_chart;
 		}
@@ -1139,7 +1139,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
 
 		// validate nonce
-		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
+		if (
+			! isset( $_GET['nonce'] ) ||
+			! wp_verify_nonce( $_GET['nonce'], 'visualizer-upload-data' ) ||
+			! current_user_can( 'edit_posts' )
+		) {
 			if ( ! $can_die ) {
 				return;
 			}
@@ -1150,7 +1154,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
+		if (
+			! $chart_id ||
+			! ( $chart = get_post( $chart_id ) ) ||
+			$chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ||
+			! current_user_can( 'edit_post', $chart_id )
+		) {
 			if ( ! $can_die ) {
 				return;
 			}
