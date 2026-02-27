@@ -3,8 +3,8 @@
 wp  --allow-root core install --url="http://localhost:8889" --admin_user="admin" --admin_password="password" --admin_email="test1@xx.com" --title="test" --skip-email
 mkdir -p /var/www/html/wp-content/uploads
 chmod -R 777 /var/www/html/wp-content/uploads/*
-wp  --allow-root  plugin install classic-editor
-wp  --allow-root  theme install twentytwentyone
+wp  --allow-root  plugin install /var/www/html/bin/plugins/classic-editor.zip
+wp  --allow-root  theme install /var/www/html/bin/themes/twentytwentyone.zip
 
 # activate
 wp  --allow-root plugin activate visualizer

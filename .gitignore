@@ -7,3 +7,5 @@ vendor
 .DS_Store
 artifacts
 .phpunit.result.cache
+bin/plugins/
+bin/themes/
