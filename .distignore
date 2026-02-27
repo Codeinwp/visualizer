@@ -32,3 +32,6 @@ artifacts
 phpstan.neon
 phpstan-baseline.neon
 AGENTS.md
+.wp-env.json
+.claude
+
