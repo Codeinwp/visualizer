@@ -524,6 +524,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function renderChartPages() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_die( __( 'You do not have permission to access this page.', 'visualizer' ) );
+		}
+
 		defined( 'IFRAME_REQUEST' ) || define( 'IFRAME_REQUEST', 1 );
 		if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) && function_exists( 'et_get_theme_version' ) ) {
 			define( 'ET_BUILDER_PRODUCT_VERSION', et_get_theme_version() );
