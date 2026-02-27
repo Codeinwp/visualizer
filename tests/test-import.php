@@ -89,7 +89,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 			'remote_data' => $url,
 		);
 		$_GET  = array(
-			'nonce' => wp_create_nonce(),
+			'nonce' => wp_create_nonce( 'visualizer-upload-data' ),
 			'chart' => $this->chart,
 		);
 		// swallow the output
@@ -163,7 +163,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 			),
 		);
 		$_GET   = array(
-			'nonce' => wp_create_nonce(),
+			'nonce' => wp_create_nonce( 'visualizer-upload-data' ),
 			'chart' => $this->chart,
 		);
 		// swallow the output
