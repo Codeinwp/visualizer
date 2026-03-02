@@ -52,6 +52,25 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
+		// CSS to prevent layout shift - ensure page starts at top
+		echo '<style>';
+		echo 'html { scroll-behavior: auto !important; }';
+		echo 'body { overflow-x: hidden; }';
+		echo '#type-picker { min-height: 100vh; }';
+		echo '</style>';
+
+		// Script to scroll to top AFTER content fully loads (fixes CSS layout shift)
+		echo '<script>';
+		echo 'document.addEventListener("DOMContentLoaded", function() {';
+		echo '  window.scrollTo(0, 0);';
+		echo '  document.documentElement.scrollTop = 0;';
+		echo '  document.body.scrollTop = 0;';
+		echo '});';
+		echo 'window.addEventListener("load", function() {';
+		echo '  window.scrollTo(0, 0);';
+		echo '});';
+		echo '</script>';
+
 		echo '<div id="type-picker">';
 
 		// AI Image Upload Section
@@ -169,57 +188,6 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 			echo '</div>';
 		}
 		echo '</div>';
-
-		// NUCLEAR OPTION: Block ALL scroll attempts at the API level
-		echo '<script type="text/javascript">';
-		echo '(function() {';
-		echo '  var scrollBlocked = true;';
-		echo '  var originalScrollTo = window.scrollTo;';
-		echo '  var originalScroll = window.scroll;';
-		echo '  var savedScrollTop = {};';
-		echo '  ';
-		echo '  console.log("[Visualizer] Scroll blocker activated");';
-		echo '  ';
-		echo '  // Block window.scrollTo and window.scroll completely';
-		echo '  window.scrollTo = window.scroll = function() {';
-		echo '    if (scrollBlocked) {';
-		echo '      console.log("[Visualizer] Blocked scroll attempt via window.scrollTo/scroll");';
-		echo '      return;';
-		echo '    }';
-		echo '    return originalScrollTo.apply(this, arguments);';
-		echo '  };';
-		echo '  ';
-		echo '  // Save original scrollTop descriptors';
-		echo '  var htmlDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, "scrollTop");';
-		echo '  ';
-		echo '  // Override scrollTop setter globally on Element.prototype';
-		echo '  if (htmlDescriptor && htmlDescriptor.set) {';
-		echo '    Object.defineProperty(Element.prototype, "scrollTop", {';
-		echo '      get: function() {';
-		echo '        return htmlDescriptor.get.call(this);';
-		echo '      },';
-		echo '      set: function(value) {';
-		echo '        if (scrollBlocked && value > 0) {';
-		echo '          console.log("[Visualizer] Blocked scrollTop set to", value);';
-		echo '          return;';
-		echo '        }';
-		echo '        htmlDescriptor.set.call(this, value);';
-		echo '      }';
-		echo '    });';
-		echo '  }';
-		echo '  ';
-		echo '  // Unblock after WordPress scripts finish loading';
-		echo '  setTimeout(function() {';
-		echo '    scrollBlocked = false;';
-		echo '    window.scrollTo = originalScrollTo;';
-		echo '    window.scroll = originalScroll;';
-		echo '    if (htmlDescriptor) {';
-		echo '      Object.defineProperty(Element.prototype, "scrollTop", htmlDescriptor);';
-		echo '    }';
-		echo '    console.log("[Visualizer] Scroll blocker deactivated");';
-		echo '  }, 3000);';
-		echo '})();';
-		echo '</script>';
 	}
 
 	/**
@@ -262,8 +230,8 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		$select = '';
 		if ( ! empty( $libraries ) ) {
-			$select .= '<label>' . __( 'Select Library for charts', 'visualizer' ) . '</label>';
-			$select .= '<select name="chart-library" class="viz-select-library" data-type-vs-library="' . esc_attr( json_encode( $type_vs_library ) ) . '" tabindex="-1">';
+			$select .= '<label for="chart-library">' . __( 'Select Library for charts', 'visualizer' ) . '</label>';
+			$select .= '<select name="chart-library" class="viz-select-library" data-type-vs-library="' . esc_attr( json_encode( $type_vs_library ) ) . '">';
 			foreach ( $libraries as $library ) {
 				$select .= '<option value="' . $this->_removeSpaceFromLibrary( $library ) . '">' . $library . '</option>';
 			}
