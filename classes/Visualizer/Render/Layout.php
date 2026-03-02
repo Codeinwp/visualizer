@@ -980,7 +980,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 													add_query_arg(
 														array(
 															'action' => Visualizer_Module::is_pro() ? Visualizer_Pro::ACTION_FETCH_DATA : '',
-															'nonce'  => wp_create_nonce(),
+															'nonce'  => wp_create_nonce( Visualizer_Pro::ACTION_FETCH_DATA ),
 														),
 														admin_url( 'admin-ajax.php' )
 													)
