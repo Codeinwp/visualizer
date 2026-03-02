@@ -181,11 +181,11 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 *
 	 * @access private
 	 *
-	 * @param string                $model The AI model to use.
-	 * @param string                $prompt The user prompt.
-	 * @param string                $chart_type The chart type.
-	 * @param array<string, mixed>  $chat_history Previous conversation history.
-	 * @param string                $current_config Current manual configuration.
+	 * @param string               $model The AI model to use.
+	 * @param string               $prompt The user prompt.
+	 * @param string               $chart_type The chart type.
+	 * @param array<string, mixed> $chat_history Previous conversation history.
+	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
@@ -321,10 +321,10 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @access private
 	 *
-	 * @param string                $prompt The user prompt.
-	 * @param string                $chart_type The chart type.
-	 * @param array<string, mixed>  $chat_history Previous conversation history.
-	 * @param string                $current_config Current manual configuration.
+	 * @param string               $prompt The user prompt.
+	 * @param string               $chart_type The chart type.
+	 * @param array<string, mixed> $chat_history Previous conversation history.
+	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
@@ -423,10 +423,10 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @access private
 	 *
-	 * @param string                $prompt The user prompt.
-	 * @param string                $chart_type The chart type.
-	 * @param array<string, mixed>  $chat_history Previous conversation history.
-	 * @param string                $current_config Current manual configuration.
+	 * @param string               $prompt The user prompt.
+	 * @param string               $chart_type The chart type.
+	 * @param array<string, mixed> $chat_history Previous conversation history.
+	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
@@ -501,10 +501,10 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @access private
 	 *
-	 * @param string                $prompt The user prompt.
-	 * @param string                $chart_type The chart type.
-	 * @param array<string, mixed>  $chat_history Previous conversation history.
-	 * @param string                $current_config Current manual configuration.
+	 * @param string               $prompt The user prompt.
+	 * @param string               $chart_type The chart type.
+	 * @param array<string, mixed> $chat_history Previous conversation history.
+	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
