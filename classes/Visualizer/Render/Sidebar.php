@@ -864,7 +864,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			sprintf(
 				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
 				esc_html__( 'Chat with AI to customize your chart. Ask questions, get suggestions, or describe what you want. The AI understands your chart type and current configuration. %1$sConfigure API keys%2$s', 'visualizer' ),
-				'<a href="' . admin_url( 'admin.php?page=viz-ai-settings' ) . '" target="_blank">',
+				'<a href="' . admin_url( 'admin.php?page=visualizer-ai-settings' ) . '" target="_blank">',
 				'</a>'
 			)
 		);

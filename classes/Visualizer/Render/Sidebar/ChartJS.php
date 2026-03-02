@@ -198,6 +198,9 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	 * @access protected
 	 */
 	protected function _renderGeneralSettings() {
+		// AI Configuration Group - render first
+		$this->_renderAIConfigurationGroup();
+
 		self::_renderGroupStart( esc_html__( 'General Settings', 'visualizer' ) );
 			self::_renderSectionStart();
 				self::_renderSectionDescription( esc_html__( 'Configure title, font styles, tooltip, legend and else settings for the chart.', 'visualizer' ) );

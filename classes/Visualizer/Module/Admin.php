@@ -746,6 +746,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew'
 		);
 
+		// Add AI Settings submenu
+		add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'AI Settings', 'visualizer' ),
+			__( 'AI Settings', 'visualizer' ),
+			'edit_posts',
+			'visualizer-ai-settings',
+			array( $this, 'renderAISettingsPage' )
+		);
+
 		$this->_supportPage = add_submenu_page(
 			Visualizer_Plugin::NAME,
 			__( 'Support', 'visualizer' ),
@@ -967,6 +977,19 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function renderSupportPage() {
 		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
 		include_once VISUALIZER_ABSPATH . '/templates/support.php';
+	}
+
+	/**
+	 * Renders AI Settings page.
+	 *
+	 * @since 3.12.0
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function renderAISettingsPage() {
+		$render = new Visualizer_Render_Page_AISettings();
+		$render->render();
 	}
 
 	/**

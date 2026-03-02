@@ -83,7 +83,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 			echo '<span class="dashicons dashicons-lock" style="font-size: 48px; color: #999; margin-bottom: 10px;"></span>';
 			echo '<h3 style="margin: 10px 0; color: #666;">' . esc_html__( 'AI Features - API Key Required', 'visualizer' ) . '</h3>';
 			echo '<p style="margin: 10px 0; color: #666;">' . esc_html__( 'Configure your AI API key to use AI-powered chart creation from images.', 'visualizer' ) . '</p>';
-			echo '<a href="' . admin_url( 'admin.php?page=viz-ai-settings' ) . '" class="button button-primary" style="margin-top: 10px;">';
+			echo '<a href="' . admin_url( 'admin.php?page=visualizer-ai-settings' ) . '" class="button button-primary" style="margin-top: 10px;">';
 			echo esc_html__( 'Configure AI Settings', 'visualizer' );
 			echo '</a>';
 			echo '</div>';
