@@ -221,7 +221,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		$disable_actions    = version_compare( $wp_version, '4.7.0', '<' );
 		// default open this section when not testing through cypress because cypress expects to click and open each section
 		// and may not like finding a section is already open.
-		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), ! defined( 'TI_CYPRESS_TESTING' ) );
+		self::_renderSectionStart( esc_html__( 'Actions', 'visualizer' ), ! defined( 'TI_E2E_TESTING' ) );
 			self::_renderCheckboxItem(
 				esc_html__( 'Print', 'visualizer' ),
 				'actions[]',
