@@ -457,6 +457,17 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 		}
 
+		// Check if this is a WooCommerce endpoint request and add verification token.
+		if ( $this->is_woocommerce_request( $url ) ) {
+			// Generate a unique token for this specific request.
+			$token = wp_generate_password( 32, false );
+			set_transient( 'visualizer_wc_token_' . $token, time(), 60 );
+			if ( ! isset( $args['headers'] ) ) {
+				$args['headers'] = array();
+			}
+			$args['headers']['X-Visualizer-Token'] = $token;
+		}
+
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Connecting to %s with args = %s ', $url, print_r( $args, true ) ), 'debug', __FILE__, __LINE__ );
 		return wp_remote_request( $url, $args );
 	}
@@ -486,6 +497,31 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		}
 		$this->_data = $data;
 		return true;
+	}
+
+	/**
+	 * Check if the URL is a WooCommerce endpoint request.
+	 *
+	 * @access private
+	 * @param string $url The URL to check.
+	 * @return bool True if it's a WooCommerce request, false otherwise.
+	 */
+	private function is_woocommerce_request( $url ) {
+		// Check if the URL contains WooCommerce API patterns.
+		$wc_patterns = array(
+			'/wp-json/wc/',
+			'/wc-analytics/',
+			'/wc/v',
+			'/reports/',
+		);
+
+		foreach ( $wc_patterns as $pattern ) {
+			if ( strpos( $url, $pattern ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
