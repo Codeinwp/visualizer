@@ -58,6 +58,7 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 	 * @since 3.12.0
 	 *
 	 * @access protected
+	 * @return void
 	 */
 	protected function _renderContent() {
 		echo '<div class="wrap">';
@@ -199,6 +200,7 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 	 * @since 3.12.0
 	 *
 	 * @access private
+	 * @return void
 	 */
 	private function _saveSettings() {
 		if ( isset( $_POST['visualizer_openai_api_key'] ) ) {

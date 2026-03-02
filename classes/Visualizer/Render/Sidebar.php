@@ -844,6 +844,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * Renders AI Configuration group.
 	 *
 	 * @access protected
+	 * @return void
 	 */
 	protected function _renderAIConfigurationGroup() {
 		// Check if PRO features are locked

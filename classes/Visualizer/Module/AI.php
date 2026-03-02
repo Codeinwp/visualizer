@@ -55,10 +55,11 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @since 3.12.0
 	 *
 	 * @access public
+	 * @return void
 	 */
 	public function suppressAjaxWarnings() {
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			@ini_set( 'display_errors', '0' );
+		if ( wp_doing_ajax() ) {
+			ini_set( 'display_errors', '0' );
 		}
 	}
 
@@ -68,6 +69,7 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @since 3.12.0
 	 *
 	 * @access public
+	 * @return void
 	 */
 	public function generateConfiguration() {
 		error_log( 'Visualizer AI: generateConfiguration called' );
@@ -119,10 +121,11 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @since 3.12.0
 	 *
 	 * @access public
+	 * @return void
 	 */
 	public function analyzeChartImage() {
 		// Prevent any output before JSON response
-		@ini_set( 'display_errors', 0 );
+		ini_set( 'display_errors', '0' );
 		while ( ob_get_level() ) {
 			ob_end_clean();
 		}
@@ -178,13 +181,13 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 *
 	 * @access private
 	 *
-	 * @param string $model The AI model to use.
-	 * @param string $prompt The user prompt.
-	 * @param string $chart_type The chart type.
-	 * @param array  $chat_history Previous conversation history.
-	 * @param string $current_config Current manual configuration.
+	 * @param string                $model The AI model to use.
+	 * @param string                $prompt The user prompt.
+	 * @param string                $chart_type The chart type.
+	 * @param array<string, mixed>  $chat_history Previous conversation history.
+	 * @param string                $current_config Current manual configuration.
 	 *
-	 * @return array|WP_Error The response with message and optional configuration.
+	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
 	private function _callAIModel( $model, $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
 		switch ( $model ) {
@@ -318,12 +321,12 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @access private
 	 *
-	 * @param string $prompt The user prompt.
-	 * @param string $chart_type The chart type.
-	 * @param array  $chat_history Previous conversation history.
-	 * @param string $current_config Current manual configuration.
+	 * @param string                $prompt The user prompt.
+	 * @param string                $chart_type The chart type.
+	 * @param array<string, mixed>  $chat_history Previous conversation history.
+	 * @param string                $current_config Current manual configuration.
 	 *
-	 * @return array|WP_Error The response with message and optional configuration.
+	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
 	private function _callOpenAI( $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
 		error_log( 'Visualizer AI: Calling OpenAI API' );
@@ -420,12 +423,12 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @access private
 	 *
-	 * @param string $prompt The user prompt.
-	 * @param string $chart_type The chart type.
-	 * @param array  $chat_history Previous conversation history.
-	 * @param string $current_config Current manual configuration.
+	 * @param string                $prompt The user prompt.
+	 * @param string                $chart_type The chart type.
+	 * @param array<string, mixed>  $chat_history Previous conversation history.
+	 * @param string                $current_config Current manual configuration.
 	 *
-	 * @return array|WP_Error The response with message and optional configuration.
+	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
 	private function _callGemini( $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
 		$api_key = get_option( 'visualizer_gemini_api_key', '' );
@@ -498,12 +501,12 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @access private
 	 *
-	 * @param string $prompt The user prompt.
-	 * @param string $chart_type The chart type.
-	 * @param array  $chat_history Previous conversation history.
-	 * @param string $current_config Current manual configuration.
+	 * @param string                $prompt The user prompt.
+	 * @param string                $chart_type The chart type.
+	 * @param array<string, mixed>  $chat_history Previous conversation history.
+	 * @param string                $current_config Current manual configuration.
 	 *
-	 * @return array|WP_Error The response with message and optional configuration.
+	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
 	private function _callClaude( $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
 		$api_key = get_option( 'visualizer_claude_api_key', '' );
@@ -583,7 +586,7 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @param string $text The AI response text.
 	 *
-	 * @return array The parsed response with message and optional configuration.
+	 * @return array<string, mixed> The parsed response with message and optional configuration.
 	 */
 	private function _parseResponse( $text ) {
 		error_log( 'Visualizer AI: Parsing response: ' . substr( $text, 0, 200 ) . '...' );
@@ -661,7 +664,7 @@ Remember: Be conversational, provide context, and only include the properties th
 	 * @param string $model The AI model to use.
 	 * @param string $image_data Base64 encoded image data.
 	 *
-	 * @return array|WP_Error The analysis result or WP_Error on failure.
+	 * @return array<string, mixed>|WP_Error The analysis result or WP_Error on failure.
 	 */
 	private function _analyzeChartImageWithAI( $model, $image_data ) {
 		error_log( 'Visualizer AI: Analyzing image with model: ' . $model );
@@ -687,7 +690,7 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @param string $image_data Base64 encoded image data.
 	 *
-	 * @return array|WP_Error The analysis result or WP_Error on failure.
+	 * @return array<string, mixed>|WP_Error The analysis result or WP_Error on failure.
 	 */
 	private function _analyzeImageWithOpenAI( $image_data ) {
 		error_log( 'Visualizer AI: Analyzing image with OpenAI Vision' );
@@ -806,7 +809,7 @@ Be precise with the data values and ensure the data types row is correctly forma
 	 *
 	 * @param string $image_data Base64 encoded image data.
 	 *
-	 * @return array|WP_Error The analysis result or WP_Error on failure.
+	 * @return array<string, mixed>|WP_Error The analysis result or WP_Error on failure.
 	 */
 	private function _analyzeImageWithGemini( $image_data ) {
 		error_log( 'Visualizer AI: Analyzing image with Gemini Vision' );
@@ -920,7 +923,7 @@ Be precise with the data values and ensure the data types row is correctly forma
 	 *
 	 * @param string $image_data Base64 encoded image data.
 	 *
-	 * @return array|WP_Error The analysis result or WP_Error on failure.
+	 * @return array<string, mixed>|WP_Error The analysis result or WP_Error on failure.
 	 */
 	private function _analyzeImageWithClaude( $image_data ) {
 		error_log( 'Visualizer AI: Analyzing image with Claude Vision' );
@@ -937,7 +940,7 @@ Be precise with the data values and ensure the data types row is correctly forma
 
 		// Detect media type from data URL
 		$media_type = 'image/jpeg';
-		if ( isset( $image_parts[0] ) && preg_match( '/data:(image\/[^;]+)/', $image_parts[0], $matches ) ) {
+		if ( preg_match( '/data:(image\/[^;]+)/', $image_parts[0], $matches ) ) {
 			$media_type = $matches[1];
 		}
 
@@ -1050,7 +1053,7 @@ Be precise with the data values and ensure the data types row is correctly forma
 	 *
 	 * @param string $text The AI response text.
 	 *
-	 * @return array The parsed result with chart_type, title, csv_data, and styling.
+	 * @return array<string, mixed> The parsed result with chart_type, title, csv_data, and styling.
 	 */
 	private function _parseImageAnalysisResponse( $text ) {
 		error_log( 'Visualizer AI: Parsing image analysis response' );

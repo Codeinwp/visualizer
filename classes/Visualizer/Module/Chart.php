@@ -1194,7 +1194,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function uploadData() {
 		// Prevent any PHP warnings/errors from contaminating the response
-		@ini_set( 'display_errors', '0' );
+		ini_set( 'display_errors', '0' );
 
 		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
 		// otherwise, assume this is a normal web request.
