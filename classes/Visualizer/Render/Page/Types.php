@@ -74,7 +74,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		echo '<div class="' . $wrapper_class . '">';
 		echo '<div style="position: relative;">';
-		echo '<div id="ai-chart-from-image" style="background: #f8f9fa; border: 2px dashed ' . ( ! $show_api_lock && ! $show_pro_lock ? '#0073aa' : '#ddd' ) . '; border-radius: 8px; padding: 20px; margin-bottom: 25px;">';
+		echo '<div id="ai-chart-from-image" style="background: #f8f9fa; border: 2px dashed #0073aa; border-radius: 8px; padding: 20px; margin-bottom: 25px;">';
 
 		if ( $show_api_lock ) {
 			// Show API key configuration lock (for PRO users without API keys)
