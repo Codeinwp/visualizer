@@ -78,12 +78,12 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		if ( $show_api_lock ) {
 			// Show API key configuration lock (for PRO users without API keys)
-			echo '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); border-radius: 8px; display: flex; align-items: center; justify-content: center; z-index: 10;">';
+			echo '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); border-radius: 8px; z-index: 10; padding-top: 40px;">';
 			echo '<div style="text-align: center; padding: 20px;">';
-			echo '<span class="dashicons dashicons-lock" style="font-size: 48px; color: #999; margin-bottom: 10px;"></span>';
+			echo '<span class="dashicons dashicons-lock" style="font-size: 48px; color: #999; margin-bottom: 10px; display: block;"></span>';
 			echo '<h3 style="margin: 10px 0; color: #666;">' . esc_html__( 'AI Features - API Key Required', 'visualizer' ) . '</h3>';
 			echo '<p style="margin: 10px 0; color: #666;">' . esc_html__( 'Configure your AI API key to use AI-powered chart creation from images.', 'visualizer' ) . '</p>';
-			echo '<a href="' . admin_url( 'admin.php?page=visualizer-ai-settings' ) . '" class="button button-primary" style="margin-top: 10px;">';
+			echo '<a href="' . admin_url( 'admin.php?page=visualizer-ai-settings' ) . '" class="button button-primary" style="margin-top: 10px;" onclick="if(window.parent !== window) { window.parent.location.href = this.href; return false; }">';
 			echo esc_html__( 'Configure AI Settings', 'visualizer' );
 			echo '</a>';
 			echo '</div>';

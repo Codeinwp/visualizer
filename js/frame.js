@@ -8,11 +8,12 @@
 
 (function ($) {
     $(window).on('load', function(){
-        let chart_select = $('#chart-select');
-        if(chart_select.length > 0){
-            // scroll to the selected chart type.
-            $('#chart-select')[0].scrollIntoView();
-        }
+        // Removed auto-scroll to chart-select to keep the image upload section visible
+        // let chart_select = $('#chart-select');
+        // if(chart_select.length > 0){
+        //     // scroll to the selected chart type.
+        //     $('#chart-select')[0].scrollIntoView();
+        // }
     });
 
     $(document).ready(function () {

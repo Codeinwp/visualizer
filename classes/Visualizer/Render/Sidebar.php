@@ -864,18 +864,19 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			sprintf(
 				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
 				esc_html__( 'Chat with AI to customize your chart. Ask questions, get suggestions, or describe what you want. The AI understands your chart type and current configuration. %1$sConfigure API keys%2$s', 'visualizer' ),
-				'<a href="' . admin_url( 'admin.php?page=visualizer-ai-settings' ) . '" target="_blank">',
+				'<a href="' . admin_url( 'admin.php?page=visualizer-ai-settings' ) . '" onclick="if(window.parent !== window) { window.parent.location.href = this.href; return false; }">',
 				'</a>'
 			)
 		);
 		self::_renderSectionEnd();
 
-		self::_renderSectionStart( esc_html__( 'Settings', 'visualizer' ), false );
-
 		// Check if any AI API key is configured
 		$has_openai = ! empty( get_option( 'visualizer_openai_api_key', '' ) );
 		$has_gemini = ! empty( get_option( 'visualizer_gemini_api_key', '' ) );
 		$has_claude = ! empty( get_option( 'visualizer_claude_api_key', '' ) );
+		$has_any_api_key = $has_openai || $has_gemini || $has_claude;
+
+		self::_renderSectionStart( esc_html__( 'Settings', 'visualizer' ), $has_any_api_key );
 
 		$ai_models = array();
 		if ( $has_openai ) {
@@ -904,7 +905,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'<span style="color: #d63638;">' . sprintf(
 					// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
 					esc_html__( 'No AI API keys configured. %1$sConfigure your API keys%2$s to use AI features.', 'visualizer' ),
-					'<a href="' . admin_url( 'admin.php?page=viz-ai-settings' ) . '" target="_blank">',
+					'<a href="' . admin_url( 'admin.php?page=visualizer-ai-settings' ) . '" onclick="if(window.parent !== window) { window.parent.location.href = this.href; return false; }">',
 					'</a>'
 				) . '</span>'
 			);
@@ -912,7 +913,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderSectionEnd();
 
-		self::_renderSectionStart( esc_html__( 'AI Chat', 'visualizer' ), true );
+		self::_renderSectionStart( esc_html__( 'AI Chat', 'visualizer' ), $has_any_api_key );
+
+		if ( ! $has_any_api_key ) {
+			echo '<div style="opacity: 0.5; pointer-events: none;">';
+		}
 
 		echo '<div class="viz-section-item">';
 		echo '<div id="visualizer-ai-chat-container" style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; padding: 15px; max-height: 400px; overflow-y: auto; margin-bottom: 10px;">';
@@ -942,6 +947,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '</div>';
 
 		echo '</div>';
+
+		if ( ! $has_any_api_key ) {
+			echo '</div>';
+		}
 
 		self::_renderSectionEnd();
 
