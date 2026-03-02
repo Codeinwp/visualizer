@@ -1196,27 +1196,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// Prevent any PHP warnings/errors from contaminating the response
 		@ini_set( 'display_errors', '0' );
 
-		// Immediate logging before ANYTHING else
-		error_log( '=== VISUALIZER UPLOAD START ===' );
-		error_log( 'Visualizer uploadData: Function called' );
-
-		// Write to temp directory since WP debug log isn't working
-		$log_file = sys_get_temp_dir() . '/visualizer-upload-debug.log';
-		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] === UPLOAD STARTED ===\n", FILE_APPEND );
-		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] uploadData: Called\n", FILE_APPEND );
-		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] POST data: " . print_r( $_POST, true ) . "\n", FILE_APPEND );
-		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] GET data: " . print_r( $_GET, true ) . "\n", FILE_APPEND );
-
-		error_log( 'Visualizer uploadData: POST data = ' . print_r( $_POST, true ) );
-		error_log( 'Visualizer uploadData: GET data = ' . print_r( $_GET, true ) );
-
 		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
 		// otherwise, assume this is a normal web request.
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
 
 		// validate nonce
 		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
-			error_log( 'Visualizer uploadData: Nonce verification failed' );
 			if ( ! $can_die ) {
 				return;
 			}
@@ -1284,25 +1269,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			$log_file = sys_get_temp_dir() . '/visualizer-upload-debug.log';
-			try {
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Processing chart_data, editor-type=" . $_POST['editor-type'] . "\n", FILE_APPEND );
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] chart_data length: " . strlen( $_POST['chart_data'] ) . "\n", FILE_APPEND );
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] chart_data: " . $_POST['chart_data'] . "\n", FILE_APPEND );
-
-				$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
-
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] handleCSVasString completed successfully\n", FILE_APPEND );
-				update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
-			} catch ( Exception $e ) {
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] EXCEPTION in handleCSVasString: " . $e->getMessage() . "\n", FILE_APPEND );
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Stack trace: " . $e->getTraceAsString() . "\n", FILE_APPEND );
-				throw $e;
-			} catch ( Error $e ) {
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] ERROR in handleCSVasString: " . $e->getMessage() . "\n", FILE_APPEND );
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Stack trace: " . $e->getTraceAsString() . "\n", FILE_APPEND );
-				throw $e;
-			}
+			$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
 		} elseif ( isset( $_POST['table_data'] ) && 'yes' === $_POST['table_data'] ) {
 			$source = $this->handleTabularData();
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
@@ -1315,10 +1283,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploaded data for chart %d with source %s', $chart_id, print_r( $source, true ) ), 'debug', __FILE__, __LINE__ );
 
 		if ( $source ) {
-			$log_file = sys_get_temp_dir() . '/visualizer-upload-debug.log';
-			@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Source created, calling fetch()\n", FILE_APPEND );
 			if ( $source->fetch() ) {
-				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] fetch() successful\n", FILE_APPEND );
 				$content    = $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 				$populate   = true;
 				if ( is_string( $content ) && is_array( unserialize( $content ) ) ) {

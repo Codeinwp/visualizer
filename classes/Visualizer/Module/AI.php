@@ -438,7 +438,7 @@ Remember: Be conversational, provide context, and only include the properties th
 		$full_prompt = $this->_createSystemPrompt( $chart_type ) . "\n\n";
 
 		if ( ! empty( $current_config ) ) {
-			$full_prompt .= "Current configuration: " . $current_config . "\n\n";
+			$full_prompt .= 'Current configuration: ' . $current_config . "\n\n";
 		}
 
 		if ( ! empty( $chat_history ) ) {

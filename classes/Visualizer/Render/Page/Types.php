@@ -56,8 +56,8 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		// AI Image Upload Section
 		$has_ai_keys = ! empty( get_option( 'visualizer_openai_api_key', '' ) ) ||
-		               ! empty( get_option( 'visualizer_gemini_api_key', '' ) ) ||
-		               ! empty( get_option( 'visualizer_claude_api_key', '' ) );
+			! empty( get_option( 'visualizer_gemini_api_key', '' ) ) ||
+			! empty( get_option( 'visualizer_claude_api_key', '' ) );
 
 		// Check if PRO features are locked
 		$is_pro_locked = ! Visualizer_Module_Admin::proFeaturesLocked();
