@@ -172,8 +172,15 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		// Ensure the view scrolls to top when loaded (keep AI image upload section visible)
 		echo '<script type="text/javascript">';
-		echo 'window.addEventListener("DOMContentLoaded", function() { window.scrollTo(0, 0); });';
-		echo 'window.addEventListener("load", function() { window.scrollTo(0, 0); });';
+		echo '(function() {';
+		echo '  function scrollToTop() { window.scrollTo(0, 0); if (window.parent !== window) { window.parent.scrollTo(0, 0); } }';
+		echo '  window.addEventListener("DOMContentLoaded", scrollToTop);';
+		echo '  window.addEventListener("load", scrollToTop);';
+		echo '  setTimeout(scrollToTop, 100);';
+		echo '  setTimeout(scrollToTop, 300);';
+		echo '  setTimeout(scrollToTop, 500);';
+		echo '  setTimeout(scrollToTop, 1000);';
+		echo '})();';
 		echo '</script>';
 	}
 

@@ -102,10 +102,10 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		$gemini_key = get_option( 'visualizer_gemini_api_key', '' );
 		$claude_key = get_option( 'visualizer_claude_api_key', '' );
 
-		// Mask the keys for display (but allow full editing)
-		$openai_key_display = $this->_maskAPIKey( $openai_key );
-		$gemini_key_display = $this->_maskAPIKey( $gemini_key );
-		$claude_key_display = $this->_maskAPIKey( $claude_key );
+		// Check if keys exist (for placeholder text)
+		$has_openai_key = ! empty( $openai_key );
+		$has_gemini_key = ! empty( $gemini_key );
+		$has_claude_key = ! empty( $claude_key );
 
 		echo '<form method="post" action="">';
 		wp_nonce_field( 'visualizer_ai_settings', 'visualizer_ai_settings_nonce' );
@@ -116,7 +116,12 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		echo '<tr>';
 		echo '<th scope="row"><label for="visualizer_openai_api_key">' . esc_html__( 'OpenAI API Key (ChatGPT)', 'visualizer' ) . '</label></th>';
 		echo '<td>';
-		echo '<input type="text" id="visualizer_openai_api_key" name="visualizer_openai_api_key" value="' . esc_attr( $openai_key ) . '" class="regular-text visualizer-api-key-input" data-masked="' . esc_attr( $openai_key_display ) . '" data-full="' . esc_attr( $openai_key ) . '" />';
+		echo '<div style="position: relative; display: inline-block; width: 100%;">';
+		echo '<input type="password" id="visualizer_openai_api_key" name="visualizer_openai_api_key" value="' . esc_attr( $openai_key ) . '" class="regular-text visualizer-api-key-input" placeholder="' . ( $has_openai_key ? esc_attr__( 'API key is set (enter new key to replace)', 'visualizer' ) : '' ) . '" autocomplete="off" />';
+		echo '<button type="button" class="button visualizer-toggle-key" data-target="visualizer_openai_api_key" style="margin-left: 5px; vertical-align: top;">';
+		echo '<span class="dashicons dashicons-visibility" style="margin-top: 3px;"></span>';
+		echo '</button>';
+		echo '</div>';
 		echo '<p class="description">' . esc_html__( 'Enter your OpenAI API key to enable ChatGPT integration.', 'visualizer' ) . ' <a href="https://platform.openai.com/api-keys" target="_blank">' . esc_html__( 'Get API Key', 'visualizer' ) . '</a></p>';
 		echo '</td>';
 		echo '</tr>';
@@ -125,7 +130,12 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		echo '<tr>';
 		echo '<th scope="row"><label for="visualizer_gemini_api_key">' . esc_html__( 'Google Gemini API Key', 'visualizer' ) . '</label></th>';
 		echo '<td>';
-		echo '<input type="text" id="visualizer_gemini_api_key" name="visualizer_gemini_api_key" value="' . esc_attr( $gemini_key ) . '" class="regular-text visualizer-api-key-input" data-masked="' . esc_attr( $gemini_key_display ) . '" data-full="' . esc_attr( $gemini_key ) . '" />';
+		echo '<div style="position: relative; display: inline-block; width: 100%;">';
+		echo '<input type="password" id="visualizer_gemini_api_key" name="visualizer_gemini_api_key" value="' . esc_attr( $gemini_key ) . '" class="regular-text visualizer-api-key-input" placeholder="' . ( $has_gemini_key ? esc_attr__( 'API key is set (enter new key to replace)', 'visualizer' ) : '' ) . '" autocomplete="off" />';
+		echo '<button type="button" class="button visualizer-toggle-key" data-target="visualizer_gemini_api_key" style="margin-left: 5px; vertical-align: top;">';
+		echo '<span class="dashicons dashicons-visibility" style="margin-top: 3px;"></span>';
+		echo '</button>';
+		echo '</div>';
 		echo '<p class="description">' . esc_html__( 'Enter your Google Gemini API key.', 'visualizer' ) . ' <a href="https://makersuite.google.com/app/apikey" target="_blank">' . esc_html__( 'Get API Key', 'visualizer' ) . '</a></p>';
 		echo '</td>';
 		echo '</tr>';
@@ -134,7 +144,12 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		echo '<tr>';
 		echo '<th scope="row"><label for="visualizer_claude_api_key">' . esc_html__( 'Anthropic Claude API Key', 'visualizer' ) . '</label></th>';
 		echo '<td>';
-		echo '<input type="text" id="visualizer_claude_api_key" name="visualizer_claude_api_key" value="' . esc_attr( $claude_key ) . '" class="regular-text visualizer-api-key-input" data-masked="' . esc_attr( $claude_key_display ) . '" data-full="' . esc_attr( $claude_key ) . '" />';
+		echo '<div style="position: relative; display: inline-block; width: 100%;">';
+		echo '<input type="password" id="visualizer_claude_api_key" name="visualizer_claude_api_key" value="' . esc_attr( $claude_key ) . '" class="regular-text visualizer-api-key-input" placeholder="' . ( $has_claude_key ? esc_attr__( 'API key is set (enter new key to replace)', 'visualizer' ) : '' ) . '" autocomplete="off" />';
+		echo '<button type="button" class="button visualizer-toggle-key" data-target="visualizer_claude_api_key" style="margin-left: 5px; vertical-align: top;">';
+		echo '<span class="dashicons dashicons-visibility" style="margin-top: 3px;"></span>';
+		echo '</button>';
+		echo '</div>';
 		echo '<p class="description">' . esc_html__( 'Enter your Anthropic Claude API key.', 'visualizer' ) . ' <a href="https://console.anthropic.com/account/keys" target="_blank">' . esc_html__( 'Get API Key', 'visualizer' ) . '</a></p>';
 		echo '</td>';
 		echo '</tr>';
@@ -147,39 +162,23 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 
 		echo '</form>';
 
-		// Add JavaScript to handle API key masking
+		// Add JavaScript to handle show/hide toggle
 		?>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
-			$('.visualizer-api-key-input').each(function() {
-				var $input = $(this);
-				var masked = $input.attr('data-masked');
-				var full = $input.attr('data-full');
+			$('.visualizer-toggle-key').on('click', function() {
+				var $button = $(this);
+				var targetId = $button.attr('data-target');
+				var $input = $('#' + targetId);
+				var $icon = $button.find('.dashicons');
 
-				// Show masked value initially if key exists
-				if (full && masked) {
-					$input.val(masked);
+				if ($input.attr('type') === 'password') {
 					$input.attr('type', 'text');
+					$icon.removeClass('dashicons-visibility').addClass('dashicons-hidden');
+				} else {
+					$input.attr('type', 'password');
+					$icon.removeClass('dashicons-hidden').addClass('dashicons-visibility');
 				}
-
-				// On focus, show full key for editing
-				$input.on('focus', function() {
-					if ($input.val() === masked && full) {
-						$input.val(full);
-						$input.select();
-					}
-				});
-
-				// On blur, mask again if unchanged
-				$input.on('blur', function() {
-					var currentVal = $input.val();
-					if (currentVal === full && masked) {
-						$input.val(masked);
-					} else if (currentVal !== full && currentVal !== masked && currentVal !== '') {
-						// New value entered, update full value
-						$input.attr('data-full', currentVal);
-					}
-				});
 			});
 		});
 		</script>
