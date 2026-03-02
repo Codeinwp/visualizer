@@ -52,7 +52,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
-		echo '<div id="type-picker">';
+		echo '<div id="type-picker" style="scroll-margin-top: 0; scroll-padding-top: 0;">';
 
 		// AI Image Upload Section
 		$has_ai_keys = ! empty( get_option( 'visualizer_openai_api_key', '' ) ) ||
@@ -170,42 +170,55 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		}
 		echo '</div>';
 
-		// Ensure the view scrolls to top when loaded (keep AI image upload section visible)
-		// Aggressive scroll prevention to override any auto-scroll behavior
+		// Prevent browser from auto-scrolling to checked radio buttons
 		echo '<script type="text/javascript">';
 		echo '(function() {';
+		echo '  // Prevent autoscroll to checked radio by temporarily unchecking all radios during page load';
+		echo '  var checkedRadio = null;';
+		echo '  var radios = document.querySelectorAll("input.type-radio[checked]");';
+		echo '  if (radios.length > 0) {';
+		echo '    checkedRadio = radios[0];';
+		echo '    checkedRadio.removeAttribute("checked");';
+		echo '  }';
+		echo '  ';
+		echo '  // Force scroll to top immediately and continuously';
 		echo '  var scrollLocked = true;';
-		echo '  var scrollAttempts = 0;';
 		echo '  function forceScrollToTop() {';
 		echo '    if (scrollLocked) {';
-		echo '      scrollAttempts++;';
 		echo '      window.scrollTo(0, 0);';
 		echo '      document.documentElement.scrollTop = 0;';
 		echo '      document.body.scrollTop = 0;';
-		echo '      if (window.parent !== window && window.parent.scrollTo) {';
-		echo '        try { ';
+		echo '      try { ';
+		echo '        if (window.parent !== window) {';
 		echo '          window.parent.scrollTo(0, 0); ';
 		echo '          window.parent.document.documentElement.scrollTop = 0;';
 		echo '          window.parent.document.body.scrollTop = 0;';
-		echo '        } catch(e) {}';
-		echo '      }';
+		echo '        }';
+		echo '      } catch(e) {}';
 		echo '    }';
 		echo '  }';
+		echo '  ';
+		echo '  // Immediate execution';
+		echo '  forceScrollToTop();';
+		echo '  ';
+		echo '  // Listen to all scroll events';
 		echo '  document.addEventListener("scroll", forceScrollToTop, true);';
 		echo '  window.addEventListener("scroll", forceScrollToTop, true);';
-		echo '  document.addEventListener("DOMContentLoaded", forceScrollToTop);';
-		echo '  window.addEventListener("load", forceScrollToTop);';
-		echo '  if (document.readyState === "loading") {';
-		echo '    document.addEventListener("readystatechange", forceScrollToTop);';
-		echo '  }';
-		echo '  var intervals = [0, 10, 50, 100, 150, 200, 250, 300, 400, 500, 600, 800, 1000, 1200, 1500, 2000, 2500];';
-		echo '  intervals.forEach(function(delay) {';
-		echo '    setTimeout(forceScrollToTop, delay);';
+		echo '  ';
+		echo '  // On DOM ready, restore the checked radio without scrolling';
+		echo '  document.addEventListener("DOMContentLoaded", function() {';
+		echo '    forceScrollToTop();';
+		echo '    if (checkedRadio) {';
+		echo '      checkedRadio.checked = true;';
+		echo '    }';
 		echo '  });';
-		echo '  setTimeout(function() { ';
-		echo '    scrollLocked = false; ';
-		echo '    console.log("Visualizer: Scroll lock released after " + scrollAttempts + " forced resets");';
-		echo '  }, 3000);';
+		echo '  ';
+		echo '  // Keep forcing scroll to top at intervals';
+		echo '  var intervals = [0, 10, 50, 100, 150, 200, 300, 500, 800, 1000, 1500, 2000];';
+		echo '  intervals.forEach(function(delay) { setTimeout(forceScrollToTop, delay); });';
+		echo '  ';
+		echo '  // Release lock after 2 seconds';
+		echo '  setTimeout(function() { scrollLocked = false; }, 2000);';
 		echo '})();';
 		echo '</script>';
 	}
