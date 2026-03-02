@@ -53,6 +53,94 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 */
 	protected function _renderContent() {
 		echo '<div id="type-picker">';
+
+		// AI Image Upload Section
+		$has_ai_keys = ! empty( get_option( 'visualizer_openai_api_key', '' ) ) ||
+		               ! empty( get_option( 'visualizer_gemini_api_key', '' ) ) ||
+		               ! empty( get_option( 'visualizer_claude_api_key', '' ) );
+
+		// Check if PRO features are locked
+		$is_pro_locked = ! Visualizer_Module_Admin::proFeaturesLocked();
+
+		// Determine what kind of lock to show
+		$show_api_lock = ! $has_ai_keys && ! $is_pro_locked; // No API keys but has PRO
+		$show_pro_lock = $is_pro_locked; // Free version - needs PRO upgrade
+
+		// Build the wrapper with appropriate classes for PRO upsell
+		$wrapper_class = '';
+		if ( $show_pro_lock ) {
+			$wrapper_class = apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-from-image' );
+		}
+
+		echo '<div class="' . $wrapper_class . '">';
+		echo '<div style="position: relative;">';
+		echo '<div id="ai-chart-from-image" style="background: #f8f9fa; border: 2px dashed ' . ( ! $show_api_lock && ! $show_pro_lock ? '#0073aa' : '#ddd' ) . '; border-radius: 8px; padding: 20px; margin-bottom: 25px;">';
+
+		if ( $show_api_lock ) {
+			// Show API key configuration lock (for PRO users without API keys)
+			echo '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); border-radius: 8px; display: flex; align-items: center; justify-content: center; z-index: 10;">';
+			echo '<div style="text-align: center; padding: 20px;">';
+			echo '<span class="dashicons dashicons-lock" style="font-size: 48px; color: #999; margin-bottom: 10px;"></span>';
+			echo '<h3 style="margin: 10px 0; color: #666;">' . esc_html__( 'AI Features - API Key Required', 'visualizer' ) . '</h3>';
+			echo '<p style="margin: 10px 0; color: #666;">' . esc_html__( 'Configure your AI API key to use AI-powered chart creation from images.', 'visualizer' ) . '</p>';
+			echo '<a href="' . admin_url( 'admin.php?page=viz-ai-settings' ) . '" class="button button-primary" style="margin-top: 10px;">';
+			echo esc_html__( 'Configure AI Settings', 'visualizer' );
+			echo '</a>';
+			echo '</div>';
+			echo '</div>';
+		}
+
+		echo '<h3 style="margin-top: 0; color: ' . ( $has_ai_keys ? '#0073aa' : '#999' ) . ';">' . esc_html__( 'Create Chart from Image', 'visualizer' ) . '</h3>';
+		echo '<p style="margin-bottom: 15px; color: ' . ( $has_ai_keys ? '#333' : '#999' ) . ';">' . esc_html__( 'Upload or drag & drop an image of a chart and AI will detect the chart type, extract data, and recreate it for you.', 'visualizer' ) . '</p>';
+
+		// Drag and drop zone
+		echo '<div id="ai-image-drop-zone" style="border: 2px dashed #ddd; border-radius: 4px; padding: 40px 20px; text-align: center; background: #fafafa; margin-bottom: 15px; transition: all 0.3s;">';
+		echo '<span class="dashicons dashicons-cloud-upload" style="font-size: 48px; color: #ccc; display: block; margin-bottom: 10px;"></span>';
+		echo '<p style="margin: 0 0 10px 0; color: #666;">' . esc_html__( 'Drag & drop your chart image here', 'visualizer' ) . '</p>';
+		echo '<p style="margin: 0; color: #999; font-size: 13px;">' . esc_html__( 'or', 'visualizer' ) . '</p>';
+		echo '<input type="file" id="ai-chart-image-upload" accept="image/*" style="display: none;">';
+		echo '<button type="button" class="button button-secondary" id="ai-upload-chart-image-btn" style="margin-top: 10px;">';
+		echo esc_html__( 'Choose Image', 'visualizer' );
+		echo '</button>';
+		echo '</div>';
+
+		echo '<div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">';
+		echo '<span id="ai-selected-filename" style="color: #666;"></span>';
+		echo '<button type="button" class="button button-primary" id="ai-generate-from-image-btn" style="display: none;">';
+		echo esc_html__( 'Generate Chart', 'visualizer' );
+		echo '</button>';
+		echo '<span id="ai-image-loading" style="display: none;">';
+		echo '<span class="spinner is-active" style="float: none; margin: 0;"></span>';
+		echo '<span style="margin-left: 5px;">' . esc_html__( 'Analyzing image...', 'visualizer' ) . '</span>';
+		echo '</span>';
+		echo '</div>';
+
+		echo '<div id="ai-image-preview" style="margin-top: 15px; display: none;">';
+		echo '<img id="ai-preview-img" src="" alt="Preview" style="max-width: 300px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;">';
+		echo '</div>';
+
+		echo '<div id="ai-image-error" style="display: none; margin-top: 15px; padding: 10px; background: #dc3232; color: white; border-radius: 4px;"></div>';
+		echo '<div id="ai-image-success" style="display: none; margin-top: 15px; padding: 10px; background: #46b450; color: white; border-radius: 4px;"></div>';
+		echo '</div>'; // End #ai-chart-from-image
+
+		// Add PRO upsell overlay if locked (free version)
+		if ( $show_pro_lock ) {
+			// Add the upgrade overlay HTML
+			echo '<div class="only-pro-content">';
+			echo '<div class="only-pro-container">';
+			echo '<div class="only-pro-inner">';
+			echo '<p>' . esc_html__( 'Upgrade to PRO to activate this feature!', 'visualizer' ) . '</p>';
+			echo '<a target="_blank" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'chart-from-image' ) . '" title="' . esc_attr__( 'Upgrade Now', 'visualizer' ) . '">' . esc_html__( 'Upgrade Now', 'visualizer' ) . '</a>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+		}
+
+		echo '</div>'; // End position: relative wrapper
+		echo '</div>'; // End only-pro-feature wrapper
+
+		echo '<div style="text-align: center; margin: 20px 0; color: #666; font-weight: 500;">' . esc_html__( '— OR —', 'visualizer' ) . '</div>';
+
 		echo '<div id="chart-select">' . $this->render_chart_selection() . '</div>';
 		foreach ( $this->types as $type => $array ) {
 			// add classes to each box that identifies the libraries this chart type supports.

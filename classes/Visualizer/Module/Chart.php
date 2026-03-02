@@ -375,11 +375,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @access private
 	 *
-	 * @param WP_Post|null $chart The chart object.
+	 * @param WP_Post $chart The chart object.
 	 *
 	 * @return array The array of chart data.
 	 */
-	private function _getChartArray( ?WP_Post $chart = null ) {
+	private function _getChartArray( WP_Post $chart = null ) {
 		if ( is_null( $chart ) ) {
 			$chart = $this->_chart;
 		}
@@ -636,6 +636,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen', 'jquery-ui-accordion', 'jquery-ui-tabs' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-ai-config', VISUALIZER_ABSURL . 'js/ai-config.js', array( 'jquery', 'visualizer-frame' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-ai-chart-from-image', VISUALIZER_ABSURL . 'js/ai-chart-from-image.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-ai-chart-data-populate', VISUALIZER_ABSURL . 'js/ai-chart-data-populate.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 		wp_register_script(
 			'visualizer-render',
@@ -851,6 +854,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-preview' );
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
+		wp_enqueue_script( 'visualizer-ai-config' );
+		wp_enqueue_script( 'visualizer-ai-chart-data-populate' );
 
 		if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) {
 			wp_enqueue_script( 'visualizer-editor-simple' );
@@ -918,6 +923,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
+		wp_localize_script(
+			'visualizer-ai-config',
+			'visualizerAI',
+			array(
+				'nonce'      => wp_create_nonce( 'visualizer-ai-generate' ),
+				'chart_type' => $data['type'],
+				'ajaxurl'    => admin_url( 'admin-ajax.php' ),
+			)
+		);
+
 		$render          = new Visualizer_Render_Page_Data();
 		$render->chart   = $this->_chart;
 		$render->type    = $data['type'];
@@ -956,10 +971,19 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			$library = filter_input( INPUT_POST, 'chart-library' );
+			error_log( 'Visualizer: Type received: ' . $type );
+			error_log( 'Visualizer: Library received: ' . $library );
 			if ( Visualizer_Module_Admin::checkChartStatus( $type ) ) {
 				if ( empty( $library ) ) {
 					// library cannot be empty.
+					error_log( 'Visualizer: Library is empty! Available POST data: ' . print_r( $_POST, true ) );
 					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Chart library empty while creating the chart! Aborting...', 'error', __FILE__, __LINE__ );
+					// Show error message instead of blank screen
+					echo '<div style="padding: 20px; color: red;">';
+					echo '<h2>Error: Chart Library Not Selected</h2>';
+					echo '<p>Please select a chart library and try again.</p>';
+					echo '<p><a href="javascript:history.back()">Go Back</a></p>';
+					echo '</div>';
 					return;
 				}
 
@@ -979,9 +1003,23 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 				// redirect to next tab
 				// changed by Ash/Upwork
-				wp_redirect( esc_url_raw( add_query_arg( 'tab', 'settings' ) ) );
-
+				error_log( 'Visualizer: Redirecting to settings tab' );
+				$redirect_url = esc_url_raw( add_query_arg( 'tab', 'settings' ) );
+				error_log( 'Visualizer: Redirect URL: ' . $redirect_url );
+				wp_redirect( $redirect_url );
+				exit;
+			} else {
+				error_log( 'Visualizer: checkChartStatus returned false for type: ' . $type );
+				echo '<div style="padding: 20px; color: red;">';
+				echo '<h2>Error: Invalid Chart Type</h2>';
+				echo '<p>The selected chart type is not available.</p>';
+				echo '<p><a href="javascript:history.back()">Go Back</a></p>';
+				echo '</div>';
 				return;
+			}
+		} else {
+			if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+				error_log( 'Visualizer: POST request but nonce verification failed' );
 			}
 		}
 		$render        = new Visualizer_Render_Page_Types();
@@ -990,6 +1028,27 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->chart = $this->_chart;
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-frame' );
+		wp_enqueue_script( 'visualizer-ai-chart-from-image' );
+
+		// Localize script for AI image analysis
+		$has_openai = ! empty( get_option( 'visualizer_openai_api_key', '' ) );
+		$has_gemini = ! empty( get_option( 'visualizer_gemini_api_key', '' ) );
+		$has_claude = ! empty( get_option( 'visualizer_claude_api_key', '' ) );
+
+		wp_localize_script(
+			'visualizer-ai-chart-from-image',
+			'visualizerAI',
+			array(
+				'nonce_image'   => wp_create_nonce( 'visualizer-ai-image' ),
+				'ajaxurl'       => admin_url( 'admin-ajax.php' ),
+				'has_openai'    => $has_openai,
+				'has_gemini'    => $has_gemini,
+				'has_claude'    => $has_claude,
+				'chart_types'   => Visualizer_Module_Admin::_getChartTypesLocalized( false, false, false, 'types' ),
+				'pro_url'       => tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'aichartimage', 'chartfromimage' ),
+			)
+		);
+
 		wp_iframe( array( $render, 'render' ) );
 	}
 
@@ -1134,12 +1193,30 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function uploadData() {
+		// Prevent any PHP warnings/errors from contaminating the response
+		@ini_set( 'display_errors', '0' );
+
+		// Immediate logging before ANYTHING else
+		error_log( '=== VISUALIZER UPLOAD START ===' );
+		error_log( 'Visualizer uploadData: Function called' );
+
+		// Write to temp directory since WP debug log isn't working
+		$log_file = sys_get_temp_dir() . '/visualizer-upload-debug.log';
+		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] === UPLOAD STARTED ===\n", FILE_APPEND );
+		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] uploadData: Called\n", FILE_APPEND );
+		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] POST data: " . print_r( $_POST, true ) . "\n", FILE_APPEND );
+		@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] GET data: " . print_r( $_GET, true ) . "\n", FILE_APPEND );
+
+		error_log( 'Visualizer uploadData: POST data = ' . print_r( $_POST, true ) );
+		error_log( 'Visualizer uploadData: GET data = ' . print_r( $_GET, true ) );
+
 		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
 		// otherwise, assume this is a normal web request.
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
 
 		// validate nonce
 		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
+			error_log( 'Visualizer uploadData: Nonce verification failed' );
 			if ( ! $can_die ) {
 				return;
 			}
@@ -1207,8 +1284,25 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
-			$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
+			$log_file = sys_get_temp_dir() . '/visualizer-upload-debug.log';
+			try {
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Processing chart_data, editor-type=" . $_POST['editor-type'] . "\n", FILE_APPEND );
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] chart_data length: " . strlen( $_POST['chart_data'] ) . "\n", FILE_APPEND );
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] chart_data: " . $_POST['chart_data'] . "\n", FILE_APPEND );
+
+				$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
+
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] handleCSVasString completed successfully\n", FILE_APPEND );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
+			} catch ( Exception $e ) {
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] EXCEPTION in handleCSVasString: " . $e->getMessage() . "\n", FILE_APPEND );
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Stack trace: " . $e->getTraceAsString() . "\n", FILE_APPEND );
+				throw $e;
+			} catch ( Error $e ) {
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] ERROR in handleCSVasString: " . $e->getMessage() . "\n", FILE_APPEND );
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Stack trace: " . $e->getTraceAsString() . "\n", FILE_APPEND );
+				throw $e;
+			}
 		} elseif ( isset( $_POST['table_data'] ) && 'yes' === $_POST['table_data'] ) {
 			$source = $this->handleTabularData();
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
@@ -1221,7 +1315,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploaded data for chart %d with source %s', $chart_id, print_r( $source, true ) ), 'debug', __FILE__, __LINE__ );
 
 		if ( $source ) {
+			$log_file = sys_get_temp_dir() . '/visualizer-upload-debug.log';
+			@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] Source created, calling fetch()\n", FILE_APPEND );
 			if ( $source->fetch() ) {
+				@file_put_contents( $log_file, "[" . date('Y-m-d H:i:s') . "] fetch() successful\n", FILE_APPEND );
 				$content    = $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 				$populate   = true;
 				if ( is_string( $content ) && is_array( unserialize( $content ) ) ) {

@@ -203,7 +203,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					'<br><code>' . $this->_renderManualConfigExample() . '</code>'
 				),
 				'',
-				array( 'rows' => 5 )
+				array( 'rows' => 5, 'id' => 'visualizer-manual-config' )
 			);
 
 		self::_renderSectionEnd();
@@ -838,5 +838,126 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			false
 		);
 		self::_renderSectionEnd();
+	}
+
+	/**
+	 * Renders AI Configuration group.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAIConfigurationGroup() {
+		// Check if PRO features are locked
+		// proFeaturesLocked() returns TRUE when PRO is active (unlocked)
+		// proFeaturesLocked() returns FALSE when free version (locked)
+		if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
+			// PRO version - render normally without lock
+			self::_renderGroupStart( esc_html__( 'AI Configuration Assistant', 'visualizer' ) );
+		} else {
+			// Free version - render with lock icon and wrapper
+			self::_renderGroupStart( esc_html__( 'AI Configuration Assistant', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-ai-configuration' ), 'vz-ai-configuration' );
+			echo '<div style="position: relative">';
+		}
+
+		self::_renderSectionStart();
+		self::_renderSectionDescription(
+			sprintf(
+				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+				esc_html__( 'Chat with AI to customize your chart. Ask questions, get suggestions, or describe what you want. The AI understands your chart type and current configuration. %1$sConfigure API keys%2$s', 'visualizer' ),
+				'<a href="' . admin_url( 'admin.php?page=viz-ai-settings' ) . '" target="_blank">',
+				'</a>'
+			)
+		);
+		self::_renderSectionEnd();
+
+		self::_renderSectionStart( esc_html__( 'Settings', 'visualizer' ), false );
+
+		// Check if any AI API key is configured
+		$has_openai = ! empty( get_option( 'visualizer_openai_api_key', '' ) );
+		$has_gemini = ! empty( get_option( 'visualizer_gemini_api_key', '' ) );
+		$has_claude = ! empty( get_option( 'visualizer_claude_api_key', '' ) );
+
+		$ai_models = array();
+		if ( $has_openai ) {
+			$ai_models['openai'] = esc_html__( 'ChatGPT (OpenAI)', 'visualizer' );
+		}
+		if ( $has_gemini ) {
+			$ai_models['gemini'] = esc_html__( 'Google Gemini', 'visualizer' );
+		}
+		if ( $has_claude ) {
+			$ai_models['claude'] = esc_html__( 'Anthropic Claude', 'visualizer' );
+		}
+
+		if ( ! empty( $ai_models ) ) {
+			self::_renderSelectItem(
+				esc_html__( 'AI Model', 'visualizer' ),
+				'ai_model',
+				'openai',
+				$ai_models,
+				'',
+				false,
+				array( 'visualizer-ai-model-select' )
+			);
+		} else {
+			// No API keys configured - show message
+			self::_renderSectionDescription(
+				'<span style="color: #d63638;">' . sprintf(
+					// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
+					esc_html__( 'No AI API keys configured. %1$sConfigure your API keys%2$s to use AI features.', 'visualizer' ),
+					'<a href="' . admin_url( 'admin.php?page=viz-ai-settings' ) . '" target="_blank">',
+					'</a>'
+				) . '</span>'
+			);
+		}
+
+		self::_renderSectionEnd();
+
+		self::_renderSectionStart( esc_html__( 'AI Chat', 'visualizer' ), true );
+
+		echo '<div class="viz-section-item">';
+		echo '<div id="visualizer-ai-chat-container" style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; padding: 15px; max-height: 400px; overflow-y: auto; margin-bottom: 10px;">';
+		echo '<div id="visualizer-ai-messages"></div>';
+		echo '</div>';
+
+		echo '<div style="display: flex; gap: 10px; margin-bottom: 10px;">';
+		echo '<textarea id="visualizer-ai-prompt" class="control-text" rows="4" style="flex: 1; resize: vertical;" placeholder="' . esc_attr__( 'Ask me anything about customizing this chart...', 'visualizer' ) . '"></textarea>';
+		echo '</div>';
+
+		echo '<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">';
+		echo '<button type="button" class="button button-primary" id="visualizer-ai-send-message">';
+		echo esc_html__( 'Send', 'visualizer' );
+		echo '</button>';
+		echo '<button type="button" class="button" id="visualizer-ai-clear-chat">';
+		echo esc_html__( 'Clear Chat', 'visualizer' );
+		echo '</button>';
+		echo '<span class="visualizer-ai-loading" style="display:none; margin-left: 10px;">';
+		echo '<span class="spinner is-active" style="float:none;"></span>';
+		echo '</span>';
+		echo '</div>';
+
+		echo '<div>';
+		echo '<button type="button" class="button button-link" id="visualizer-ai-show-suggestions">';
+		echo esc_html__( 'Show me what I can customize', 'visualizer' );
+		echo '</button>';
+		echo '</div>';
+
+		echo '</div>';
+
+		self::_renderSectionEnd();
+
+		// Add upsell overlay if locked (free version)
+		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+			// Add the upgrade overlay HTML
+			echo '<div class="only-pro-content">';
+			echo '<div class="only-pro-container">';
+			echo '<div class="only-pro-inner">';
+			echo '<p>' . esc_html__( 'Upgrade to PRO to activate this feature!', 'visualizer' ) . '</p>';
+			echo '<a target="_blank" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'ai-configuration' ) . '" title="' . esc_attr__( 'Upgrade Now', 'visualizer' ) . '">' . esc_html__( 'Upgrade Now', 'visualizer' ) . '</a>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>'; // End position: relative wrapper
+		}
+
+		self::_renderGroupEnd();
 	}
 }
