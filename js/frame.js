@@ -7,14 +7,7 @@
 /* global vizHaveSettingsChanged */
 
 (function ($) {
-    $(window).on('load', function(){
-        // Removed auto-scroll to chart-select to keep the image upload section visible
-        // let chart_select = $('#chart-select');
-        // if(chart_select.length > 0){
-        //     // scroll to the selected chart type.
-        //     $('#chart-select')[0].scrollIntoView();
-        // }
-    });
+    // Auto-scroll removed - scroll position is now managed in Types.php to keep AI image upload visible
 
     $(document).ready(function () {
         onReady();

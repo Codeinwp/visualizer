@@ -78,7 +78,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		if ( $show_api_lock ) {
 			// Show API key configuration lock (for PRO users without API keys)
-			echo '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); border-radius: 8px; z-index: 10; padding-top: 40px;">';
+			echo '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); border-radius: 8px; z-index: 10; display: flex; align-items: flex-start; justify-content: center; padding-top: 60px;">';
 			echo '<div style="text-align: center; padding: 20px;">';
 			echo '<span class="dashicons dashicons-lock" style="font-size: 48px; color: #999; margin-bottom: 10px; display: block;"></span>';
 			echo '<h3 style="margin: 10px 0; color: #666;">' . esc_html__( 'AI Features - API Key Required', 'visualizer' ) . '</h3>';
@@ -169,6 +169,12 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 			echo '</div>';
 		}
 		echo '</div>';
+
+		// Ensure the view scrolls to top when loaded (keep AI image upload section visible)
+		echo '<script type="text/javascript">';
+		echo 'window.addEventListener("DOMContentLoaded", function() { window.scrollTo(0, 0); });';
+		echo 'window.addEventListener("load", function() { window.scrollTo(0, 0); });';
+		echo '</script>';
 	}
 
 	/**
