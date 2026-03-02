@@ -175,22 +175,37 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		echo '<script type="text/javascript">';
 		echo '(function() {';
 		echo '  var scrollLocked = true;';
+		echo '  var scrollAttempts = 0;';
 		echo '  function forceScrollToTop() {';
 		echo '    if (scrollLocked) {';
+		echo '      scrollAttempts++;';
 		echo '      window.scrollTo(0, 0);';
+		echo '      document.documentElement.scrollTop = 0;';
+		echo '      document.body.scrollTop = 0;';
 		echo '      if (window.parent !== window && window.parent.scrollTo) {';
-		echo '        try { window.parent.scrollTo(0, 0); } catch(e) {}';
+		echo '        try { ';
+		echo '          window.parent.scrollTo(0, 0); ';
+		echo '          window.parent.document.documentElement.scrollTop = 0;';
+		echo '          window.parent.document.body.scrollTop = 0;';
+		echo '        } catch(e) {}';
 		echo '      }';
 		echo '    }';
 		echo '  }';
+		echo '  document.addEventListener("scroll", forceScrollToTop, true);';
 		echo '  window.addEventListener("scroll", forceScrollToTop, true);';
-		echo '  window.addEventListener("DOMContentLoaded", forceScrollToTop);';
+		echo '  document.addEventListener("DOMContentLoaded", forceScrollToTop);';
 		echo '  window.addEventListener("load", forceScrollToTop);';
-		echo '  var intervals = [0, 50, 100, 200, 300, 500, 800, 1000, 1500, 2000];';
+		echo '  if (document.readyState === "loading") {';
+		echo '    document.addEventListener("readystatechange", forceScrollToTop);';
+		echo '  }';
+		echo '  var intervals = [0, 10, 50, 100, 150, 200, 250, 300, 400, 500, 600, 800, 1000, 1200, 1500, 2000, 2500];';
 		echo '  intervals.forEach(function(delay) {';
 		echo '    setTimeout(forceScrollToTop, delay);';
 		echo '  });';
-		echo '  setTimeout(function() { scrollLocked = false; }, 2500);';
+		echo '  setTimeout(function() { ';
+		echo '    scrollLocked = false; ';
+		echo '    console.log("Visualizer: Scroll lock released after " + scrollAttempts + " forced resets");';
+		echo '  }, 3000);';
 		echo '})();';
 		echo '</script>';
 	}
@@ -235,8 +250,8 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 
 		$select = '';
 		if ( ! empty( $libraries ) ) {
-			$select .= '<label for="chart-library">' . __( 'Select Library for charts', 'visualizer' ) . '</label>';
-			$select .= '<select name="chart-library" class="viz-select-library" data-type-vs-library="' . esc_attr( json_encode( $type_vs_library ) ) . '">';
+			$select .= '<label>' . __( 'Select Library for charts', 'visualizer' ) . '</label>';
+			$select .= '<select name="chart-library" class="viz-select-library" data-type-vs-library="' . esc_attr( json_encode( $type_vs_library ) ) . '" tabindex="-1">';
 			foreach ( $libraries as $library ) {
 				$select .= '<option value="' . $this->_removeSpaceFromLibrary( $library ) . '">' . $library . '</option>';
 			}
