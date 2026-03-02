@@ -171,15 +171,26 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 		echo '</div>';
 
 		// Ensure the view scrolls to top when loaded (keep AI image upload section visible)
+		// Aggressive scroll prevention to override any auto-scroll behavior
 		echo '<script type="text/javascript">';
 		echo '(function() {';
-		echo '  function scrollToTop() { window.scrollTo(0, 0); if (window.parent !== window) { window.parent.scrollTo(0, 0); } }';
-		echo '  window.addEventListener("DOMContentLoaded", scrollToTop);';
-		echo '  window.addEventListener("load", scrollToTop);';
-		echo '  setTimeout(scrollToTop, 100);';
-		echo '  setTimeout(scrollToTop, 300);';
-		echo '  setTimeout(scrollToTop, 500);';
-		echo '  setTimeout(scrollToTop, 1000);';
+		echo '  var scrollLocked = true;';
+		echo '  function forceScrollToTop() {';
+		echo '    if (scrollLocked) {';
+		echo '      window.scrollTo(0, 0);';
+		echo '      if (window.parent !== window && window.parent.scrollTo) {';
+		echo '        try { window.parent.scrollTo(0, 0); } catch(e) {}';
+		echo '      }';
+		echo '    }';
+		echo '  }';
+		echo '  window.addEventListener("scroll", forceScrollToTop, true);';
+		echo '  window.addEventListener("DOMContentLoaded", forceScrollToTop);';
+		echo '  window.addEventListener("load", forceScrollToTop);';
+		echo '  var intervals = [0, 50, 100, 200, 300, 500, 800, 1000, 1500, 2000];';
+		echo '  intervals.forEach(function(delay) {';
+		echo '    setTimeout(forceScrollToTop, delay);';
+		echo '  });';
+		echo '  setTimeout(function() { scrollLocked = false; }, 2500);';
 		echo '})();';
 		echo '</script>';
 	}
