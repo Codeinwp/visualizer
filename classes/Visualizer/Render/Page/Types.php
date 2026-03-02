@@ -52,25 +52,6 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
-		// CSS to prevent layout shift - ensure page starts at top
-		echo '<style>';
-		echo 'html { scroll-behavior: auto !important; }';
-		echo 'body { overflow-x: hidden; }';
-		echo '#type-picker { min-height: 100vh; }';
-		echo '</style>';
-
-		// Script to scroll to top AFTER content fully loads (fixes CSS layout shift)
-		echo '<script>';
-		echo 'document.addEventListener("DOMContentLoaded", function() {';
-		echo '  window.scrollTo(0, 0);';
-		echo '  document.documentElement.scrollTop = 0;';
-		echo '  document.body.scrollTop = 0;';
-		echo '});';
-		echo 'window.addEventListener("load", function() {';
-		echo '  window.scrollTo(0, 0);';
-		echo '});';
-		echo '</script>';
-
 		echo '<div id="type-picker">';
 
 		// AI Image Upload Section
