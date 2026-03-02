@@ -701,41 +701,206 @@ Remember: Be conversational, provide context, and only include the properties th
 			return new WP_Error( 'no_api_key', esc_html__( 'OpenAI API key is not configured.', 'visualizer' ) );
 		}
 
-		$prompt = 'Analyze this chart image and extract all information needed to recreate it. Provide the following:
+		$prompt = 'You are a data visualization expert helping to extract and recreate chart data. Analyze this chart image to extract all information needed to recreate it accurately.
 
-1. Chart Type (e.g., pie, line, bar, column, area, scatter, geo, gauge, candlestick, histogram, etc.)
-2. Chart Title
-3. Data extracted from the chart in CSV format
+Your task is to analyze the visual chart and provide structured data that can be used to recreate it. This is for data extraction and visualization purposes.
 
-IMPORTANT: The CSV data MUST follow this exact format:
+IMPORTANT: Pay careful attention to extracting accurate data values. Study the Y-axis scale and gridlines carefully. If a bar or line point falls between gridlines, INTERPOLATE the value - do not round to the nearest gridline. Example: If gridlines are at 10 and 20, and a bar reaches 60% between them, the value is 16.
+
+STEP 1: IDENTIFY CHART TYPE
+Examine the chart carefully to determine the correct type.
+
+SUPPORTED CHART TYPES:
+- tabular (table with rows and columns of data)
+- pie (circular chart with slices, can be donut with hole in center)
+- line (data points connected by lines)
+- bar (horizontal bars)
+- column (vertical bars/columns)
+- area (filled area under line)
+- scatter (individual data points, no connecting lines)
+- bubble (scatter with varying point sizes)
+- geo (geographic/map visualization)
+- gauge (meter/speedometer style)
+- candlestick (financial chart with open/high/low/close)
+- timeline (horizontal timeline events)
+- combo (CRITICAL: chart with MULTIPLE visualization types - e.g., columns AND lines together)
+- radar (spider/radar chart)
+- polarArea (polar area chart)
+
+CRITICAL - COMBO CHART DETECTION:
+If you see BOTH columns/bars AND lines in the SAME chart, this is a COMBO chart, NOT a column or line chart!
+Example: Sales shown as columns + Average shown as a line = COMBO chart
+Look for: Multiple data series displayed with different visual types (some as bars, some as lines)
+
+STEP 2: VISUAL LAYOUT ANALYSIS
+
+Look carefully at WHERE the legend is located (right/bottom/top/left/none) and extract the exact title text.
+
+STEP 3: CHART-TYPE-SPECIFIC ANALYSIS
+
+For PIE CHARTS:
+- Extract colors for each slice in order
+- Check if percentages or labels shown on slices
+- Detect 2D vs 3D, donut style
+- Note legend position
+
+For COMBO CHARTS:
+- CRITICAL: Identify which data series should be columns and which should be lines
+- Set "seriesType": "bars" as default
+- Use "series": {1: {"type": "line"}} to specify which series differ from default
+- Example: First series columns, second series line
+
+For BAR/COLUMN/LINE CHARTS:
+- Extract colors for each data series
+- Note axis titles and gridline visibility
+- Check for data labels on bars or points
+
+STEP 4: COLOR EXTRACTION
+Extract colors in exact order. Use hex codes (e.g., #3366CC, #DC3912, #FF9900).
+
+STEP 5: DATA EXTRACTION
+
+Extract data values CAREFULLY by reading the Y-axis scale and gridlines. INTERPOLATE values between gridlines - do not round. Example: If gridlines are at 10 and 20, and a bar reaches 60% between them, use 16 not 10 or 20. Values should be accurate within 5-10% of visual appearance.
+
+CSV DATA FORMAT (MANDATORY):
 - Row 1: Column headers
-- Row 2: Data types (use: string, number, date, datetime, boolean, timeofday)
+- Row 2: Data types (string, number, date, datetime, boolean, timeofday)
 - Row 3+: Actual data values
 
-Example CSV format:
-Month,Sales,Profit
+Example for PIE:
+Category,Value
+string,number
+Product A,35
+Product B,25
+Product C,40
+
+Example for LINE/COLUMN:
+Month,Sales,Expenses
 string,number,number
-January,1000,200
-February,1500,300
+Jan,1000,800
+Feb,1200,900
 
-Data type rules:
-- Use "string" for text/labels (months, categories, names)
-- Use "number" for numeric values (sales, quantities, percentages)
-- Use "date" for dates
-- Use "datetime" for timestamps
-- Use "boolean" for true/false values
+Example for COMBO (columns + lines):
+Month,Sales,Average
+string,number,number
+Jan,1000,850
+Feb,1200,900
+(Note: In styling, specify which series is line vs column using "series" property)
 
-Format your response as follows:
-CHART_TYPE: [type]
-TITLE: [title]
+Example with ANNOTATIONS (data labels on points):
+Month,Sales,Annotation
+string,number,string
+Jan,1000,Peak
+Feb,800,null
+Mar,1200,Record
+
+
+STEP 6: FORMAT YOUR RESPONSE
+
+FORMAT YOUR RESPONSE EXACTLY AS FOLLOWS:
+CHART_TYPE: [pie/line/bar/column/area/scatter/etc]
+TITLE: [exact title text or "Untitled" if none]
 CSV_DATA:
 [csv data with headers, data types on row 2, then actual data]
 STYLING:
-[VALID JSON ONLY - use double quotes, no single quotes, no trailing commas. Include colors array, legend position, axis titles if visible in the image. Example: {"colors": ["#e74c3c", "#3498db"], "legend": {"position": "bottom"}}]
+[VALID JSON - see structure below]
 
-CRITICAL: The STYLING section MUST be valid JSON with double quotes around all keys and string values. Do not use JavaScript object notation.
+STYLING JSON - INCLUDE ALL APPLICABLE PROPERTIES:
 
-Be precise with the data values and ensure the data types row is correctly formatted.';
+For PIE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2", "#color3"],
+  "legend": {"position": "bottom"},
+  "pieSliceText": "percentage",
+  "pieSliceTextStyle": {"fontSize": 12},
+  "pieHole": 0,
+  "is3D": false,
+  "chartArea": {"width": "90%", "height": "80%"}
+}
+
+For BAR/COLUMN CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "top"},
+  "vAxis": {"title": "Y Axis Title", "gridlines": {"color": "#e0e0e0"}},
+  "hAxis": {"title": "X Axis Title"},
+  "isStacked": false,
+  "chartArea": {"width": "70%", "height": "70%"}
+}
+
+For LINE/AREA CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "right"},
+  "vAxis": {"title": "Y Axis Title"},
+  "hAxis": {"title": "X Axis Title"},
+  "lineWidth": 2,
+  "pointSize": 5,
+  "chartArea": {"width": "80%", "height": "70%"}
+}
+
+For COMBO CHARTS (columns + lines together):
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "bottom"},
+  "seriesType": "bars",
+  "series": {
+    "1": {"type": "line", "lineWidth": 2, "pointSize": 4}
+  },
+  "vAxis": {"title": "Y Axis Title"},
+  "hAxis": {"title": "X Axis Title"},
+  "chartArea": {"width": "80%", "height": "70%"}
+}
+
+For BUBBLE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1"],
+  "legend": {"position": "right"},
+  "bubble": {"textStyle": {"fontSize": 11}},
+  "vAxis": {"title": "Y Axis"},
+  "hAxis": {"title": "X Axis"}
+}
+
+For GEO CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colorAxis": {"colors": ["#e0e0e0", "#0066cc"]},
+  "region": "world"
+}
+
+For GAUGE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "redFrom": 90,
+  "redTo": 100,
+  "yellowFrom": 75,
+  "yellowTo": 90,
+  "greenFrom": 0,
+  "greenTo": 75,
+  "minorTicks": 5
+}
+
+For SCATTER CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1"],
+  "pointSize": 3,
+  "vAxis": {"title": "Y Axis"},
+  "hAxis": {"title": "X Axis"}
+}
+
+CRITICAL RULES:
+1. CHART TYPE: If you see columns AND lines together, use "combo" not "column"!
+2. DATA VALUES: Interpolate between gridlines, do not round. Must be accurate within 5-10%.
+3. LEGEND POSITION: Check carefully - right/left/top/bottom?
+4. COLORS: Extract in exact order, use hex codes
+5. STYLING must be valid JSON with double quotes
+6. For combo charts: Use "seriesType" and "series" object to specify types';
 
 		$messages = array(
 			array(
@@ -824,41 +989,206 @@ Be precise with the data values and ensure the data types row is correctly forma
 		$image_parts = explode( ',', $image_data );
 		$base64_image = isset( $image_parts[1] ) ? $image_parts[1] : $image_data;
 
-		$prompt = 'Analyze this chart image and extract all information needed to recreate it. Provide the following:
+		$prompt = 'You are a data visualization expert helping to extract and recreate chart data. Analyze this chart image to extract all information needed to recreate it accurately.
 
-1. Chart Type (e.g., pie, line, bar, column, area, scatter, geo, gauge, candlestick, histogram, etc.)
-2. Chart Title
-3. Data extracted from the chart in CSV format
+Your task is to analyze the visual chart and provide structured data that can be used to recreate it. This is for data extraction and visualization purposes.
 
-IMPORTANT: The CSV data MUST follow this exact format:
+IMPORTANT: Pay careful attention to extracting accurate data values. Study the Y-axis scale and gridlines carefully. If a bar or line point falls between gridlines, INTERPOLATE the value - do not round to the nearest gridline. Example: If gridlines are at 10 and 20, and a bar reaches 60% between them, the value is 16.
+
+STEP 1: IDENTIFY CHART TYPE
+Examine the chart carefully to determine the correct type.
+
+SUPPORTED CHART TYPES:
+- tabular (table with rows and columns of data)
+- pie (circular chart with slices, can be donut with hole in center)
+- line (data points connected by lines)
+- bar (horizontal bars)
+- column (vertical bars/columns)
+- area (filled area under line)
+- scatter (individual data points, no connecting lines)
+- bubble (scatter with varying point sizes)
+- geo (geographic/map visualization)
+- gauge (meter/speedometer style)
+- candlestick (financial chart with open/high/low/close)
+- timeline (horizontal timeline events)
+- combo (CRITICAL: chart with MULTIPLE visualization types - e.g., columns AND lines together)
+- radar (spider/radar chart)
+- polarArea (polar area chart)
+
+CRITICAL - COMBO CHART DETECTION:
+If you see BOTH columns/bars AND lines in the SAME chart, this is a COMBO chart, NOT a column or line chart!
+Example: Sales shown as columns + Average shown as a line = COMBO chart
+Look for: Multiple data series displayed with different visual types (some as bars, some as lines)
+
+STEP 2: VISUAL LAYOUT ANALYSIS
+
+Look carefully at WHERE the legend is located (right/bottom/top/left/none) and extract the exact title text.
+
+STEP 3: CHART-TYPE-SPECIFIC ANALYSIS
+
+For PIE CHARTS:
+- Extract colors for each slice in order
+- Check if percentages or labels shown on slices
+- Detect 2D vs 3D, donut style
+- Note legend position
+
+For COMBO CHARTS:
+- CRITICAL: Identify which data series should be columns and which should be lines
+- Set "seriesType": "bars" as default
+- Use "series": {1: {"type": "line"}} to specify which series differ from default
+- Example: First series columns, second series line
+
+For BAR/COLUMN/LINE CHARTS:
+- Extract colors for each data series
+- Note axis titles and gridline visibility
+- Check for data labels on bars or points
+
+STEP 4: COLOR EXTRACTION
+Extract colors in exact order. Use hex codes (e.g., #3366CC, #DC3912, #FF9900).
+
+STEP 5: DATA EXTRACTION
+
+Extract data values CAREFULLY by reading the Y-axis scale and gridlines. INTERPOLATE values between gridlines - do not round. Example: If gridlines are at 10 and 20, and a bar reaches 60% between them, use 16 not 10 or 20. Values should be accurate within 5-10% of visual appearance.
+
+CSV DATA FORMAT (MANDATORY):
 - Row 1: Column headers
-- Row 2: Data types (use: string, number, date, datetime, boolean, timeofday)
+- Row 2: Data types (string, number, date, datetime, boolean, timeofday)
 - Row 3+: Actual data values
 
-Example CSV format:
-Month,Sales,Profit
+Example for PIE:
+Category,Value
+string,number
+Product A,35
+Product B,25
+Product C,40
+
+Example for LINE/COLUMN:
+Month,Sales,Expenses
 string,number,number
-January,1000,200
-February,1500,300
+Jan,1000,800
+Feb,1200,900
 
-Data type rules:
-- Use "string" for text/labels (months, categories, names)
-- Use "number" for numeric values (sales, quantities, percentages)
-- Use "date" for dates
-- Use "datetime" for timestamps
-- Use "boolean" for true/false values
+Example for COMBO (columns + lines):
+Month,Sales,Average
+string,number,number
+Jan,1000,850
+Feb,1200,900
+(Note: In styling, specify which series is line vs column using "series" property)
 
-Format your response as follows:
-CHART_TYPE: [type]
-TITLE: [title]
+Example with ANNOTATIONS (data labels on points):
+Month,Sales,Annotation
+string,number,string
+Jan,1000,Peak
+Feb,800,null
+Mar,1200,Record
+
+
+STEP 6: FORMAT YOUR RESPONSE
+
+FORMAT YOUR RESPONSE EXACTLY AS FOLLOWS:
+CHART_TYPE: [pie/line/bar/column/area/scatter/etc]
+TITLE: [exact title text or "Untitled" if none]
 CSV_DATA:
 [csv data with headers, data types on row 2, then actual data]
 STYLING:
-[VALID JSON ONLY - use double quotes, no single quotes, no trailing commas. Include colors array, legend position, axis titles if visible in the image. Example: {"colors": ["#e74c3c", "#3498db"], "legend": {"position": "bottom"}}]
+[VALID JSON - see structure below]
 
-CRITICAL: The STYLING section MUST be valid JSON with double quotes around all keys and string values. Do not use JavaScript object notation.
+STYLING JSON - INCLUDE ALL APPLICABLE PROPERTIES:
 
-Be precise with the data values and ensure the data types row is correctly formatted.';
+For PIE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2", "#color3"],
+  "legend": {"position": "bottom"},
+  "pieSliceText": "percentage",
+  "pieSliceTextStyle": {"fontSize": 12},
+  "pieHole": 0,
+  "is3D": false,
+  "chartArea": {"width": "90%", "height": "80%"}
+}
+
+For BAR/COLUMN CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "top"},
+  "vAxis": {"title": "Y Axis Title", "gridlines": {"color": "#e0e0e0"}},
+  "hAxis": {"title": "X Axis Title"},
+  "isStacked": false,
+  "chartArea": {"width": "70%", "height": "70%"}
+}
+
+For LINE/AREA CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "right"},
+  "vAxis": {"title": "Y Axis Title"},
+  "hAxis": {"title": "X Axis Title"},
+  "lineWidth": 2,
+  "pointSize": 5,
+  "chartArea": {"width": "80%", "height": "70%"}
+}
+
+For COMBO CHARTS (columns + lines together):
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "bottom"},
+  "seriesType": "bars",
+  "series": {
+    "1": {"type": "line", "lineWidth": 2, "pointSize": 4}
+  },
+  "vAxis": {"title": "Y Axis Title"},
+  "hAxis": {"title": "X Axis Title"},
+  "chartArea": {"width": "80%", "height": "70%"}
+}
+
+For BUBBLE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1"],
+  "legend": {"position": "right"},
+  "bubble": {"textStyle": {"fontSize": 11}},
+  "vAxis": {"title": "Y Axis"},
+  "hAxis": {"title": "X Axis"}
+}
+
+For GEO CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colorAxis": {"colors": ["#e0e0e0", "#0066cc"]},
+  "region": "world"
+}
+
+For GAUGE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "redFrom": 90,
+  "redTo": 100,
+  "yellowFrom": 75,
+  "yellowTo": 90,
+  "greenFrom": 0,
+  "greenTo": 75,
+  "minorTicks": 5
+}
+
+For SCATTER CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1"],
+  "pointSize": 3,
+  "vAxis": {"title": "Y Axis"},
+  "hAxis": {"title": "X Axis"}
+}
+
+CRITICAL RULES:
+1. CHART TYPE: If you see columns AND lines together, use "combo" not "column"!
+2. DATA VALUES: Interpolate between gridlines, do not round. Must be accurate within 5-10%.
+3. LEGEND POSITION: Check carefully - right/left/top/bottom?
+4. COLORS: Extract in exact order, use hex codes
+5. STYLING must be valid JSON with double quotes
+6. For combo charts: Use "seriesType" and "series" object to specify types';
 
 		$request_body = array(
 			'contents' => array(
@@ -944,41 +1274,206 @@ Be precise with the data values and ensure the data types row is correctly forma
 			$media_type = $matches[1];
 		}
 
-		$prompt = 'Analyze this chart image and extract all information needed to recreate it. Provide the following:
+		$prompt = 'You are a data visualization expert helping to extract and recreate chart data. Analyze this chart image to extract all information needed to recreate it accurately.
 
-1. Chart Type (e.g., pie, line, bar, column, area, scatter, geo, gauge, candlestick, histogram, etc.)
-2. Chart Title
-3. Data extracted from the chart in CSV format
+Your task is to analyze the visual chart and provide structured data that can be used to recreate it. This is for data extraction and visualization purposes.
 
-IMPORTANT: The CSV data MUST follow this exact format:
+IMPORTANT: Pay careful attention to extracting accurate data values. Study the Y-axis scale and gridlines carefully. If a bar or line point falls between gridlines, INTERPOLATE the value - do not round to the nearest gridline. Example: If gridlines are at 10 and 20, and a bar reaches 60% between them, the value is 16.
+
+STEP 1: IDENTIFY CHART TYPE
+Examine the chart carefully to determine the correct type.
+
+SUPPORTED CHART TYPES:
+- tabular (table with rows and columns of data)
+- pie (circular chart with slices, can be donut with hole in center)
+- line (data points connected by lines)
+- bar (horizontal bars)
+- column (vertical bars/columns)
+- area (filled area under line)
+- scatter (individual data points, no connecting lines)
+- bubble (scatter with varying point sizes)
+- geo (geographic/map visualization)
+- gauge (meter/speedometer style)
+- candlestick (financial chart with open/high/low/close)
+- timeline (horizontal timeline events)
+- combo (CRITICAL: chart with MULTIPLE visualization types - e.g., columns AND lines together)
+- radar (spider/radar chart)
+- polarArea (polar area chart)
+
+CRITICAL - COMBO CHART DETECTION:
+If you see BOTH columns/bars AND lines in the SAME chart, this is a COMBO chart, NOT a column or line chart!
+Example: Sales shown as columns + Average shown as a line = COMBO chart
+Look for: Multiple data series displayed with different visual types (some as bars, some as lines)
+
+STEP 2: VISUAL LAYOUT ANALYSIS
+
+Look carefully at WHERE the legend is located (right/bottom/top/left/none) and extract the exact title text.
+
+STEP 3: CHART-TYPE-SPECIFIC ANALYSIS
+
+For PIE CHARTS:
+- Extract colors for each slice in order
+- Check if percentages or labels shown on slices
+- Detect 2D vs 3D, donut style
+- Note legend position
+
+For COMBO CHARTS:
+- CRITICAL: Identify which data series should be columns and which should be lines
+- Set "seriesType": "bars" as default
+- Use "series": {1: {"type": "line"}} to specify which series differ from default
+- Example: First series columns, second series line
+
+For BAR/COLUMN/LINE CHARTS:
+- Extract colors for each data series
+- Note axis titles and gridline visibility
+- Check for data labels on bars or points
+
+STEP 4: COLOR EXTRACTION
+Extract colors in exact order. Use hex codes (e.g., #3366CC, #DC3912, #FF9900).
+
+STEP 5: DATA EXTRACTION
+
+Extract data values CAREFULLY by reading the Y-axis scale and gridlines. INTERPOLATE values between gridlines - do not round. Example: If gridlines are at 10 and 20, and a bar reaches 60% between them, use 16 not 10 or 20. Values should be accurate within 5-10% of visual appearance.
+
+CSV DATA FORMAT (MANDATORY):
 - Row 1: Column headers
-- Row 2: Data types (use: string, number, date, datetime, boolean, timeofday)
+- Row 2: Data types (string, number, date, datetime, boolean, timeofday)
 - Row 3+: Actual data values
 
-Example CSV format:
-Month,Sales,Profit
+Example for PIE:
+Category,Value
+string,number
+Product A,35
+Product B,25
+Product C,40
+
+Example for LINE/COLUMN:
+Month,Sales,Expenses
 string,number,number
-January,1000,200
-February,1500,300
+Jan,1000,800
+Feb,1200,900
 
-Data type rules:
-- Use "string" for text/labels (months, categories, names)
-- Use "number" for numeric values (sales, quantities, percentages)
-- Use "date" for dates
-- Use "datetime" for timestamps
-- Use "boolean" for true/false values
+Example for COMBO (columns + lines):
+Month,Sales,Average
+string,number,number
+Jan,1000,850
+Feb,1200,900
+(Note: In styling, specify which series is line vs column using "series" property)
 
-Format your response as follows:
-CHART_TYPE: [type]
-TITLE: [title]
+Example with ANNOTATIONS (data labels on points):
+Month,Sales,Annotation
+string,number,string
+Jan,1000,Peak
+Feb,800,null
+Mar,1200,Record
+
+
+STEP 6: FORMAT YOUR RESPONSE
+
+FORMAT YOUR RESPONSE EXACTLY AS FOLLOWS:
+CHART_TYPE: [pie/line/bar/column/area/scatter/etc]
+TITLE: [exact title text or "Untitled" if none]
 CSV_DATA:
 [csv data with headers, data types on row 2, then actual data]
 STYLING:
-[VALID JSON ONLY - use double quotes, no single quotes, no trailing commas. Include colors array, legend position, axis titles if visible in the image. Example: {"colors": ["#e74c3c", "#3498db"], "legend": {"position": "bottom"}}]
+[VALID JSON - see structure below]
 
-CRITICAL: The STYLING section MUST be valid JSON with double quotes around all keys and string values. Do not use JavaScript object notation.
+STYLING JSON - INCLUDE ALL APPLICABLE PROPERTIES:
 
-Be precise with the data values and ensure the data types row is correctly formatted.';
+For PIE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2", "#color3"],
+  "legend": {"position": "bottom"},
+  "pieSliceText": "percentage",
+  "pieSliceTextStyle": {"fontSize": 12},
+  "pieHole": 0,
+  "is3D": false,
+  "chartArea": {"width": "90%", "height": "80%"}
+}
+
+For BAR/COLUMN CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "top"},
+  "vAxis": {"title": "Y Axis Title", "gridlines": {"color": "#e0e0e0"}},
+  "hAxis": {"title": "X Axis Title"},
+  "isStacked": false,
+  "chartArea": {"width": "70%", "height": "70%"}
+}
+
+For LINE/AREA CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "right"},
+  "vAxis": {"title": "Y Axis Title"},
+  "hAxis": {"title": "X Axis Title"},
+  "lineWidth": 2,
+  "pointSize": 5,
+  "chartArea": {"width": "80%", "height": "70%"}
+}
+
+For COMBO CHARTS (columns + lines together):
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1", "#color2"],
+  "legend": {"position": "bottom"},
+  "seriesType": "bars",
+  "series": {
+    "1": {"type": "line", "lineWidth": 2, "pointSize": 4}
+  },
+  "vAxis": {"title": "Y Axis Title"},
+  "hAxis": {"title": "X Axis Title"},
+  "chartArea": {"width": "80%", "height": "70%"}
+}
+
+For BUBBLE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1"],
+  "legend": {"position": "right"},
+  "bubble": {"textStyle": {"fontSize": 11}},
+  "vAxis": {"title": "Y Axis"},
+  "hAxis": {"title": "X Axis"}
+}
+
+For GEO CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colorAxis": {"colors": ["#e0e0e0", "#0066cc"]},
+  "region": "world"
+}
+
+For GAUGE CHARTS:
+{
+  "title": "Exact Title From Image",
+  "redFrom": 90,
+  "redTo": 100,
+  "yellowFrom": 75,
+  "yellowTo": 90,
+  "greenFrom": 0,
+  "greenTo": 75,
+  "minorTicks": 5
+}
+
+For SCATTER CHARTS:
+{
+  "title": "Exact Title From Image",
+  "colors": ["#color1"],
+  "pointSize": 3,
+  "vAxis": {"title": "Y Axis"},
+  "hAxis": {"title": "X Axis"}
+}
+
+CRITICAL RULES:
+1. CHART TYPE: If you see columns AND lines together, use "combo" not "column"!
+2. DATA VALUES: Interpolate between gridlines, do not round. Must be accurate within 5-10%.
+3. LEGEND POSITION: Check carefully - right/left/top/bottom?
+4. COLORS: Extract in exact order, use hex codes
+5. STYLING must be valid JSON with double quotes
+6. For combo charts: Use "seriesType" and "series" object to specify types';
 
 		$request_body = array(
 			'model' => 'claude-3-5-sonnet-20241022',
@@ -1081,6 +1576,13 @@ Be precise with the data values and ensure the data types row is correctly forma
 				'candlestick' => 'candlestick',
 				'histogram' => 'histogram',
 				'table' => 'table',
+				'tabular' => 'tabular',
+				'combo' => 'combo',
+				'bubble' => 'bubble',
+				'timeline' => 'timeline',
+				'radar' => 'radar',
+				'polararea' => 'polarArea',
+				'polar area' => 'polarArea',
 			);
 			$result['chart_type'] = isset( $type_map[ $chart_type ] ) ? $type_map[ $chart_type ] : 'column';
 		}
