@@ -507,16 +507,36 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @return bool True if it's a WooCommerce request, false otherwise.
 	 */
 	private function is_woocommerce_request( $url ) {
-		// Check if the URL contains WooCommerce API patterns.
+		if ( empty( $url ) || ! is_string( $url ) ) {
+			return false;
+		}
+
+		$parsed_url = function_exists( 'wp_parse_url' ) ? wp_parse_url( $url ) : parse_url( $url );
+		if ( empty( $parsed_url ) || empty( $parsed_url['host'] ) || empty( $parsed_url['path'] ) ) {
+			return false;
+		}
+
+		$site_url   = function_exists( 'home_url' ) ? home_url() : ( function_exists( 'site_url' ) ? site_url() : '' );
+		$site_parts = $site_url ? ( function_exists( 'wp_parse_url' ) ? wp_parse_url( $site_url ) : parse_url( $site_url ) ) : array();
+		if ( empty( $site_parts['host'] ) ) {
+			return false;
+		}
+
+		$target_host = strtolower( $parsed_url['host'] );
+		$site_host   = strtolower( $site_parts['host'] );
+		if ( $target_host !== $site_host ) {
+			return false;
+		}
+
+		$path        = '/' . ltrim( $parsed_url['path'], '/' );
 		$wc_patterns = array(
 			'/wp-json/wc/',
+			'/wp-json/wc-analytics/',
 			'/wc-analytics/',
-			'/wc/v',
-			'/reports/',
 		);
 
 		foreach ( $wc_patterns as $pattern ) {
-			if ( strpos( $url, $pattern ) !== false ) {
+			if ( strpos( $path, $pattern ) !== false ) {
 				return true;
 			}
 		}
