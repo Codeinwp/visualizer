@@ -529,50 +529,53 @@ class Visualizer_Module {
 			return $default;
 		}
 
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		WP_Filesystem();
-		global $wp_filesystem;
-		if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base' ) ) {
-			$creds = request_filesystem_credentials( site_url() );
-			wp_filesystem( $creds );
-		}
+		try {
+			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			WP_Filesystem();
+			global $wp_filesystem;
+			if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base' ) ) {
+				return $default;
+			}
 
-		$multisite_arg = '/';
-		if ( is_multisite() && ! is_main_site() ) {
-			$multisite_arg = '/sites/' . get_current_blog_id() . '/';
-		}
+			$multisite_arg = '/';
+			if ( is_multisite() && ! is_main_site() ) {
+				$multisite_arg = '/sites/' . get_current_blog_id() . '/';
+			}
 
-		$dir    = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer';
-		$file   = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer/customization.js';
+			$dir    = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer';
+			$file   = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer/customization.js';
 
-		if ( $wp_filesystem->is_readable( $file ) ) {
+			if ( $wp_filesystem->is_readable( $file ) ) {
+				return $specific;
+			}
+
+			if ( $wp_filesystem->exists( $file ) && ! $wp_filesystem->is_readable( $file ) ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to read file %s', $file ), 'error', __FILE__, __LINE__ );
+				return $default;
+			}
+
+			if ( ! $wp_filesystem->exists( $dir ) ) {
+				// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
+				if ( ( $done = $wp_filesystem->mkdir( $dir ) ) === false ) {
+					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
+					return $default;
+				}
+			}
+
+			// if file does not exist, copy.
+			if ( ! $wp_filesystem->exists( $file ) ) {
+				$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
+				// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
+				if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
+					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
+					return $default;
+				}
+			}
+
 			return $specific;
-		}
-
-		if ( $wp_filesystem->exists( $file ) && ! $wp_filesystem->is_readable( $file ) ) {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to read file %s', $file ), 'error', __FILE__, __LINE__ );
+		} catch ( \Throwable $e ) {
 			return $default;
 		}
-
-		if ( ! $wp_filesystem->exists( $dir ) ) {
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
-			if ( ( $done = $wp_filesystem->mkdir( $dir ) ) === false ) {
-				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
-				return $default;
-			}
-		}
-
-		// if file does not exist, copy.
-		if ( ! $wp_filesystem->exists( $file ) ) {
-			$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
-			if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
-				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
-				return $default;
-			}
-		}
-
-		return $specific;
 	}
 
 	/**
