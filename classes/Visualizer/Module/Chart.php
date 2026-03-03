@@ -379,7 +379,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @return array The array of chart data.
 	 */
-	private function _getChartArray( $chart = null ) {
+	private function _getChartArray( ?WP_Post $chart = null ) {
 		if ( is_null( $chart ) ) {
 			$chart = $this->_chart;
 		}
