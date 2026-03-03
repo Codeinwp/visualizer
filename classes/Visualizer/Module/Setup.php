@@ -123,7 +123,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			}
 
 			if ( Visualizer_Module::is_pro() ) {
-				$permissions = get_post_meta( $chart_id, Visualizer_PRO::CF_PERMISSIONS, true );
+				$permissions = get_post_meta( $chart_id, Visualizer_Pro::CF_PERMISSIONS, true );
 				if ( empty( $permissions ) ) {
 					continue;
 				}

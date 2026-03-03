@@ -469,7 +469,7 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		if ( Visualizer_Module::is_pro() ) {
-			$permissions = get_post_meta( $post_id, Visualizer_PRO::CF_PERMISSIONS, true );
+			$permissions = get_post_meta( $post_id, Visualizer_Pro::CF_PERMISSIONS, true );
 
 			if ( empty( $permissions ) ) {
 				$permissions = array( 'permissions' => array(
@@ -664,7 +664,7 @@ class Visualizer_Gutenberg_Block {
 			}
 
 			if ( Visualizer_Module::is_pro() ) {
-				update_post_meta( $data['id'], Visualizer_PRO::CF_PERMISSIONS, $data['visualizer-permissions'] );
+				update_post_meta( $data['id'], Visualizer_Pro::CF_PERMISSIONS, $data['visualizer-permissions'] );
 			}
 
 			if ( $data['visualizer-chart-url'] ) {
