@@ -39,7 +39,7 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 */
 	protected function _toHTML() {
 		echo '<form method="post" id="viz-types-form">';
-			echo '<input type="hidden" name="nonce" value="', wp_create_nonce(), '">';
+			echo '<input type="hidden" name="nonce" value="', wp_create_nonce( 'visualizer-upload-data' ), '">';
 			parent::_toHTML();
 		echo '</form>';
 	}
