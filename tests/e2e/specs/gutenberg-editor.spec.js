@@ -129,7 +129,7 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await page.getByRole('button', { name: 'Edit Chart' }).click();
         //await page.goto('http://localhost:8889/wp-admin/post.php?post=29&action=edit');
         await expect(page.getByLabel('Visualizer', { exact: true }).locator('h1')).toContainText('Visualizer');
-        await page.getByRole('button', { name: ' Close dialog' }).click();
+        await page.getByRole('button', { name: 'Close dialog' }).click();
     } );
 
     test( 'check widgets', async ( { admin, editor, page } ) => {

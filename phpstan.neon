@@ -5,6 +5,7 @@ parameters:
 		- %currentWorkingDirectory%/classes
 	bootstrapFiles:
 		- %currentWorkingDirectory%/tests/php/static-analysis-stubs/symbols.php
+		- %currentWorkingDirectory%/tests/php/static-analysis-stubs/visualizer-pro.php
 	scanDirectories:
 		- %currentWorkingDirectory%/vendor/neitanod/forceutf8
 		- %currentWorkingDirectory%/vendor/openspout/openspout
