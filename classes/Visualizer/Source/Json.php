@@ -507,7 +507,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @return bool True if it's a WooCommerce request, false otherwise.
 	 */
 	private function is_woocommerce_request( $url ) {
-		if ( empty( $url ) || ! is_string( $url ) ) {
+		if ( empty( $url ) ) {
 			return false;
 		}
 
