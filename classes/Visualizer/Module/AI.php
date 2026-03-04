@@ -93,10 +93,14 @@ class Visualizer_Module_AI extends Visualizer_Module {
 		$chat_history = isset( $_POST['chat_history'] ) ? json_decode( stripslashes( $_POST['chat_history'] ), true ) : array();
 		$current_config = isset( $_POST['current_config'] ) ? sanitize_textarea_field( $_POST['current_config'] ) : '';
 
+		error_log( '=== Visualizer AI Request ===' );
 		error_log( 'Visualizer AI: Model: ' . $model );
 		error_log( 'Visualizer AI: Prompt: ' . $prompt );
 		error_log( 'Visualizer AI: Chart Type: ' . $chart_type );
-		error_log( 'Visualizer AI: Chart Library: ' . $chart_library );
+		error_log( 'Visualizer AI: Chart Library RAW from POST: ' . ( isset( $_POST['chart_library'] ) ? $_POST['chart_library'] : 'NOT SET' ) );
+		error_log( 'Visualizer AI: Chart Library (sanitized): ' . $chart_library );
+		error_log( 'Visualizer AI: Chart Library (lowercase check): ' . strtolower( $chart_library ) );
+		error_log( 'Visualizer AI: Is ChartJS?: ' . ( strtolower( $chart_library ) === 'chartjs' ? 'YES' : 'NO' ) );
 		error_log( 'Visualizer AI: Chat History Items: ' . count( $chat_history ) );
 
 		if ( empty( $prompt ) ) {

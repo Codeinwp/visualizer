@@ -252,7 +252,19 @@
             }
         });
 
-        enable_libraries_for($('input.type-radio:checked').val(), $typeVsLibrary);
+        // Get type vs library mapping from the select element
+        const rendererSelect = document.querySelector('select.viz-select-library');
+        if (rendererSelect) {
+            const mappingData = rendererSelect.getAttribute('data-type-vs-library');
+            if (mappingData) {
+                try {
+                    const typeVsLibrary = JSON.parse(mappingData);
+                    enable_libraries_for($('input.type-radio:checked').val(), typeVsLibrary);
+                } catch (e) {
+                    console.error('Error parsing type-vs-library data:', e);
+                }
+            }
+        }
     }
 
     function enable_libraries_for($type, $typeVsLibrary) {
