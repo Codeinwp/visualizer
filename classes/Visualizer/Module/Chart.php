@@ -925,11 +925,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		error_log( 'Localizing visualizerAI for ai-config script' );
-		error_log( 'Chart type: ' . $data['type'] );
-		error_log( 'Chart library from $data: ' . ( isset( $data['library'] ) ? $data['library'] : 'NOT SET' ) );
-		error_log( 'Full $data keys: ' . implode( ', ', array_keys( $data ) ) );
-
 		wp_localize_script(
 			'visualizer-ai-config',
 			'visualizerAI',
@@ -979,8 +974,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ), 'visualizer-upload-data' ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			$library = filter_input( INPUT_POST, 'chart-library' );
-			error_log( 'Visualizer: Type received: ' . $type );
-			error_log( 'Visualizer: Library received: ' . $library );
 			if ( Visualizer_Module_Admin::checkChartStatus( $type ) ) {
 				if ( empty( $library ) ) {
 					// library cannot be empty.
@@ -1010,24 +1003,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				Visualizer_Module_Utility::set_defaults( $this->_chart );
 
 				// redirect to next tab
-				// changed by Ash/Upwork
-				error_log( 'Visualizer: Redirecting to settings tab' );
 				$redirect_url = esc_url_raw( add_query_arg( 'tab', 'settings' ) );
-				error_log( 'Visualizer: Redirect URL: ' . $redirect_url );
 				wp_redirect( $redirect_url );
 				exit;
 			} else {
-				error_log( 'Visualizer: checkChartStatus returned false for type: ' . $type );
 				echo '<div style="padding: 20px; color: red;">';
 				echo '<h2>Error: Invalid Chart Type</h2>';
 				echo '<p>The selected chart type is not available.</p>';
 				echo '<p><a href="javascript:history.back()">Go Back</a></p>';
 				echo '</div>';
 				return;
-			}
-		} else {
-			if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
-				error_log( 'Visualizer: POST request but nonce verification failed' );
 			}
 		}
 		$render        = new Visualizer_Render_Page_Types();

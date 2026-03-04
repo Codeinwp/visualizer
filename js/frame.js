@@ -276,7 +276,16 @@
             $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
             $('select.viz-select-library option[value="' + $lib + '"] .premium-label').remove();
         });
-        $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
+
+        // Only change the selected value if the current selection is disabled or empty
+        var $select = $('select.viz-select-library');
+        var currentVal = $select.val();
+        var $currentOption = $select.find('option[value="' + currentVal + '"]');
+
+        // If current value is empty, disabled, or not in the enabled list, change to first enabled option
+        if (!currentVal || $currentOption.hasClass('disabled') || $currentOption.attr('disabled')) {
+            $select.val( $select.find('option:not(.disabled)').val() );
+        }
     }
 
     function init_permissions(){

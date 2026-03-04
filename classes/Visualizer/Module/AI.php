@@ -72,8 +72,6 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @return void
 	 */
 	public function generateConfiguration() {
-		error_log( 'Visualizer AI: generateConfiguration called' );
-
 		// Verify nonce
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'visualizer-ai-generate' ) ) {
 			error_log( 'Visualizer AI: Invalid nonce' );
@@ -93,23 +91,12 @@ class Visualizer_Module_AI extends Visualizer_Module {
 		$chat_history = isset( $_POST['chat_history'] ) ? json_decode( stripslashes( $_POST['chat_history'] ), true ) : array();
 		$current_config = isset( $_POST['current_config'] ) ? sanitize_textarea_field( $_POST['current_config'] ) : '';
 
-		error_log( '=== Visualizer AI Request ===' );
-		error_log( 'Visualizer AI: Model: ' . $model );
-		error_log( 'Visualizer AI: Prompt: ' . $prompt );
-		error_log( 'Visualizer AI: Chart Type: ' . $chart_type );
-		error_log( 'Visualizer AI: Chart Library RAW from POST: ' . ( isset( $_POST['chart_library'] ) ? $_POST['chart_library'] : 'NOT SET' ) );
-		error_log( 'Visualizer AI: Chart Library (sanitized): ' . $chart_library );
-		error_log( 'Visualizer AI: Chart Library (lowercase check): ' . strtolower( $chart_library ) );
-		error_log( 'Visualizer AI: Is ChartJS?: ' . ( strtolower( $chart_library ) === 'chartjs' ? 'YES' : 'NO' ) );
-		error_log( 'Visualizer AI: Chat History Items: ' . count( $chat_history ) );
-
 		if ( empty( $prompt ) ) {
 			error_log( 'Visualizer AI: Empty prompt' );
 			wp_send_json_error( array( 'message' => esc_html__( 'Please provide a prompt.', 'visualizer' ) ) );
 		}
 
 		// Generate configuration based on selected model
-		error_log( 'Visualizer AI: Calling AI model' );
 		$result = $this->_callAIModel( $model, $prompt, $chart_type, $chart_library, $chat_history, $current_config );
 
 		if ( is_wp_error( $result ) ) {
@@ -117,7 +104,6 @@ class Visualizer_Module_AI extends Visualizer_Module {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		error_log( 'Visualizer AI: Success' );
 		wp_send_json_success( $result );
 	}
 
@@ -136,8 +122,6 @@ class Visualizer_Module_AI extends Visualizer_Module {
 			ob_end_clean();
 		}
 		ob_start();
-
-		error_log( 'Visualizer AI: analyzeChartImage called' );
 
 		// Verify nonce
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'visualizer-ai-image' ) ) {
@@ -222,13 +206,10 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @return string The system prompt.
 	 */
 	private function _createSystemPrompt( $chart_type, $chart_library = 'Google Charts' ) {
-		error_log( 'Creating system prompt for library: ' . $chart_library . ' (lowercase: ' . strtolower( $chart_library ) . ')' );
-
 		$chart_options = $this->_getChartTypeOptions( $chart_type, $chart_library );
 		$library_name = strtolower( $chart_library ) === 'chartjs' ? 'Chart.js' : 'Google Charts';
 
 		if ( strtolower( $chart_library ) === 'chartjs' ) {
-			error_log( 'Using ChartJS prompt!' );
 			return 'You are a helpful Chart.js (ChartJS) v3+ API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
 
 IMPORTANT CHARTJS STRUCTURE:
@@ -271,7 +252,6 @@ JSON_END
 Remember: Be conversational, provide context, and only include the properties that need to change!';
 		}
 
-		error_log( 'Using Google Charts prompt!' );
 		return 'You are a helpful ' . $library_name . ' API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
 
 IMPORTANT INSTRUCTIONS:
@@ -481,8 +461,6 @@ Same as bar chart. Use {"indexAxis": "y"} to make bars horizontal.',
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
 	private function _callOpenAI( $prompt, $chart_type, $chart_library = 'Google Charts', $chat_history = array(), $current_config = '' ) {
-		error_log( 'Visualizer AI: Calling OpenAI API' );
-
 		$api_key = get_option( 'visualizer_openai_api_key', '' );
 
 		if ( empty( $api_key ) ) {

@@ -5,13 +5,7 @@
     var currentConfig = null;
 
     $(document).ready(function() {
-        console.log('Visualizer AI Config loaded');
-
         if (typeof visualizerAI !== 'undefined') {
-            console.log('visualizerAI data:', visualizerAI);
-            console.log('Chart Library:', visualizerAI.chart_library);
-            console.log('Chart Type:', visualizerAI.chart_type);
-
             // Show welcome message with animation
             var libraryName = visualizerAI.chart_library && visualizerAI.chart_library.toLowerCase() === 'chartjs' ? 'Chart.js' : 'Google Charts';
             setTimeout(function() {
@@ -82,8 +76,6 @@
         var prompt = $('#visualizer-ai-prompt').val().trim();
         var model = $('.visualizer-ai-model-select').val();
 
-        console.log('Sending message:', prompt);
-
         if (!prompt) {
             return;
         }
@@ -112,15 +104,11 @@
             current_config: currentManualConfig
         };
 
-        console.log('Request data:', requestData);
-        console.log('Sending chart_library:', requestData.chart_library);
-
         $.ajax({
             url: visualizerAI.ajaxurl,
             type: 'POST',
             data: requestData,
             success: function(response) {
-                console.log('Response:', response);
                 $('.visualizer-ai-loading').hide();
                 $('#visualizer-ai-send-message').prop('disabled', false);
 
@@ -134,7 +122,6 @@
                     if (data.configuration) {
                         currentConfig = data.configuration;
 
-                        console.log('Configuration received - auto-applying');
                         addConfigPreview(data.configuration);
 
                         // Auto-apply immediately
@@ -294,8 +281,6 @@
                 // Also trigger on the name selector that preview.js uses
                 $('textarea[name="manual"]').trigger('change');
                 $('textarea[name="manual"]').trigger('keyup');
-
-                console.log('Triggered preview update events');
             }, 100);
 
             // Don't scroll if we're auto-applying
