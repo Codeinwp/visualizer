@@ -972,22 +972,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function _handleTypesPage() {
 		// process post request
-		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ), 'visualizer-upload-data' ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			$library = filter_input( INPUT_POST, 'chart-library' );
-			error_log( 'Visualizer: Type received: ' . $type );
-			error_log( 'Visualizer: Library received: ' . $library );
 			if ( Visualizer_Module_Admin::checkChartStatus( $type ) ) {
 				if ( empty( $library ) ) {
 					// library cannot be empty.
-					error_log( 'Visualizer: Library is empty! Available POST data: ' . print_r( $_POST, true ) );
 					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Chart library empty while creating the chart! Aborting...', 'error', __FILE__, __LINE__ );
-					// Show error message instead of blank screen
-					echo '<div style="padding: 20px; color: red;">';
-					echo '<h2>Error: Chart Library Not Selected</h2>';
-					echo '<p>Please select a chart library and try again.</p>';
-					echo '<p><a href="javascript:history.back()">Go Back</a></p>';
-					echo '</div>';
 					return;
 				}
 
@@ -1007,23 +998,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 				// redirect to next tab
 				// changed by Ash/Upwork
-				error_log( 'Visualizer: Redirecting to settings tab' );
-				$redirect_url = esc_url_raw( add_query_arg( 'tab', 'settings' ) );
-				error_log( 'Visualizer: Redirect URL: ' . $redirect_url );
-				wp_redirect( $redirect_url );
-				exit;
-			} else {
-				error_log( 'Visualizer: checkChartStatus returned false for type: ' . $type );
-				echo '<div style="padding: 20px; color: red;">';
-				echo '<h2>Error: Invalid Chart Type</h2>';
-				echo '<p>The selected chart type is not available.</p>';
-				echo '<p><a href="javascript:history.back()">Go Back</a></p>';
-				echo '</div>';
+				wp_redirect( esc_url_raw( add_query_arg( 'tab', 'settings' ) ) );
+
 				return;
-			}
-		} else {
-			if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
-				error_log( 'Visualizer: POST request but nonce verification failed' );
 			}
 		}
 		$render        = new Visualizer_Render_Page_Types();
@@ -1197,15 +1174,16 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function uploadData() {
-		// Prevent any PHP warnings/errors from contaminating the response
-		ini_set( 'display_errors', '0' );
-
 		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
 		// otherwise, assume this is a normal web request.
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
 
 		// validate nonce
-		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
+		if (
+			! isset( $_GET['nonce'] ) ||
+			! wp_verify_nonce( $_GET['nonce'], 'visualizer-upload-data' ) ||
+			! current_user_can( 'edit_posts' )
+		) {
 			if ( ! $can_die ) {
 				return;
 			}
@@ -1216,7 +1194,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
+		if (
+			! $chart_id ||
+			! ( $chart = get_post( $chart_id ) ) ||
+			$chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ||
+			! current_user_can( 'edit_post', $chart_id )
+		) {
 			if ( ! $can_die ) {
 				return;
 			}
