@@ -360,7 +360,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			add_query_arg(
 				array(
 					'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
-					'nonce'  => wp_create_nonce(),
+					'nonce'  => wp_create_nonce( 'visualizer-upload-data' ),
 					'chart'  => $chart_id,
 				),
 				admin_url( 'admin-ajax.php' )
@@ -726,7 +726,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			add_query_arg(
 				array(
 					'action' => Visualizer_Plugin::ACTION_UPLOAD_DATA,
-					'nonce'  => wp_create_nonce(),
+					'nonce'  => wp_create_nonce( 'visualizer-upload-data' ),
 					'chart'  => $chart_id,
 				),
 				admin_url( 'admin-ajax.php' )
@@ -980,7 +980,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 													add_query_arg(
 														array(
 															'action' => Visualizer_Module::is_pro() ? Visualizer_Pro::ACTION_FETCH_DATA : '',
-															'nonce'  => wp_create_nonce(),
+															'nonce'  => Visualizer_Module::is_pro() ? wp_create_nonce( Visualizer_Pro::ACTION_FETCH_DATA ) : wp_create_nonce(),
 														),
 														admin_url( 'admin-ajax.php' )
 													)

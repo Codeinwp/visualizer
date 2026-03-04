@@ -79,7 +79,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 			),
 		);
 		$_GET   = array(
-			'nonce' => wp_create_nonce(),
+			'nonce' => wp_create_nonce( 'visualizer-upload-data' ),
 			'chart' => $this->chart,
 			'tab'   => 'type',
 		);
@@ -151,7 +151,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 			),
 		);
 		$_GET   = array(
-			'nonce' => wp_create_nonce(),
+			'nonce' => wp_create_nonce( 'visualizer-upload-data' ),
 			'chart' => $this->chart,
 			'tab'   => 'type',
 		);
@@ -218,7 +218,7 @@ class Test_Revisions extends WP_Ajax_UnitTestCase {
 			),
 		);
 		$_GET   = array(
-			'nonce' => wp_create_nonce(),
+			'nonce' => wp_create_nonce( 'visualizer-upload-data' ),
 			'chart' => $this->chart,
 			'tab'   => 'type',
 		);

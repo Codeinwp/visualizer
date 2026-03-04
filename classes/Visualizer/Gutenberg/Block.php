@@ -111,7 +111,7 @@ class Visualizer_Gutenberg_Block {
 			'adminPage' => menu_page_url( 'visualizer', false ),
 			'createChart' => add_query_arg( array( 'action' => 'visualizer-create-chart', 'library' => 'yes', 'type' => '', 'chart-library' => '', 'tab' => 'visualizer' ), admin_url( 'admin-ajax.php' ) ),
 			'sqlTable'  => $table_col_mapping,
-			'chartsPerPage' => defined( 'TI_CYPRESS_TESTING' ) ? 20 : 6,
+			'chartsPerPage' => defined( 'TI_E2E_TESTING' ) ? 20 : 6,
 			'proFeaturesLocked' => Visualizer_Module_Admin::proFeaturesLocked(),
 			'isFullSiteEditor'  => 'site-editor.php' === $pagenow,
 			'legacyBlockEdit'   => apply_filters( 'visualizer_legacy_block_edit', false ),
@@ -469,7 +469,7 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		if ( Visualizer_Module::is_pro() ) {
-			$permissions = get_post_meta( $post_id, Visualizer_PRO::CF_PERMISSIONS, true );
+			$permissions = get_post_meta( $post_id, Visualizer_Pro::CF_PERMISSIONS, true );
 
 			if ( empty( $permissions ) ) {
 				$permissions = array( 'permissions' => array(
@@ -596,12 +596,15 @@ class Visualizer_Gutenberg_Block {
 			}
 			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
 			$source_type = sanitize_text_field( $data['visualizer-source'] );
+			$default_data  = (int) $data['visualizer-default-data'];
+			$series_data   = map_deep( $data['visualizer-series'], array( $this, 'sanitize_value' ) );
+			$settings_data = map_deep( $data['visualizer-settings'], array( $this, 'sanitize_value' ) );
 
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
 			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $source_type );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_DEFAULT_DATA, $data['visualizer-default-data'] );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SERIES, $data['visualizer-series'] );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $data['visualizer-settings'] );
+			update_post_meta( $data['id'], Visualizer_Plugin::CF_DEFAULT_DATA, $default_data );
+			update_post_meta( $data['id'], Visualizer_Plugin::CF_SERIES, $series_data );
+			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $settings_data );
 
 			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] >= 0 ) {
 				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
@@ -628,8 +631,8 @@ class Visualizer_Gutenberg_Block {
 				}
 
 				if ( 'Visualizer_Source_Csv_Remote' === $source_type ) {
-					$schedule_url = $data['visualizer-chart-url'];
-					$schedule_id  = $data['visualizer-chart-schedule'];
+					$schedule_url = esc_url_raw( $data['visualizer-chart-url'] );
+					$schedule_id  = intval( $data['visualizer-chart-schedule'] );
 					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $schedule_url );
 					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_SCHEDULE, $schedule_id );
 				} else {
@@ -642,8 +645,8 @@ class Visualizer_Gutenberg_Block {
 				$json_schedule = intval( $data['visualizer-json-schedule'] );
 				$json_url = esc_url_raw( $data['visualizer-json-url'] );
 				$json_headers = esc_url_raw( $data['visualizer-json-headers'] );
-				$json_root = $data['visualizer-json-root'];
-				$json_paging = $data['visualizer-json-paging'];
+				$json_root   = sanitize_text_field( $data['visualizer-json-root'] );
+				$json_paging = sanitize_text_field( $data['visualizer-json-paging'] );
 
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE, $json_schedule );
 				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL, $json_url );
@@ -664,7 +667,8 @@ class Visualizer_Gutenberg_Block {
 			}
 
 			if ( Visualizer_Module::is_pro() ) {
-				update_post_meta( $data['id'], Visualizer_PRO::CF_PERMISSIONS, $data['visualizer-permissions'] );
+				$permissions_data = map_deep( $data['visualizer-permissions'], array( $this, 'sanitize_value' ) );
+				update_post_meta( $data['id'], Visualizer_Pro::CF_PERMISSIONS, $permissions_data );
 			}
 
 			if ( $data['visualizer-chart-url'] ) {
@@ -862,5 +866,19 @@ class Visualizer_Gutenberg_Block {
 			);
 		}
 		return $args;
+	}
+
+	/**
+	 * Sanitize value.
+	 *
+	 * @param mixed $value The value to sanitize.
+	 * @return mixed Sanitized value.
+	 */
+	private function sanitize_value( $value ) {
+		if ( is_string( $value ) ) {
+			return sanitize_text_field( $value );
+		}
+
+		return $value;
 	}
 }
