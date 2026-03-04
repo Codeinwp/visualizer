@@ -89,12 +89,14 @@ class Visualizer_Module_AI extends Visualizer_Module {
 		$model = isset( $_POST['model'] ) ? sanitize_text_field( $_POST['model'] ) : 'openai';
 		$prompt = isset( $_POST['prompt'] ) ? sanitize_textarea_field( $_POST['prompt'] ) : '';
 		$chart_type = isset( $_POST['chart_type'] ) ? sanitize_text_field( $_POST['chart_type'] ) : '';
+		$chart_library = isset( $_POST['chart_library'] ) ? sanitize_text_field( $_POST['chart_library'] ) : 'Google Charts';
 		$chat_history = isset( $_POST['chat_history'] ) ? json_decode( stripslashes( $_POST['chat_history'] ), true ) : array();
 		$current_config = isset( $_POST['current_config'] ) ? sanitize_textarea_field( $_POST['current_config'] ) : '';
 
 		error_log( 'Visualizer AI: Model: ' . $model );
 		error_log( 'Visualizer AI: Prompt: ' . $prompt );
 		error_log( 'Visualizer AI: Chart Type: ' . $chart_type );
+		error_log( 'Visualizer AI: Chart Library: ' . $chart_library );
 		error_log( 'Visualizer AI: Chat History Items: ' . count( $chat_history ) );
 
 		if ( empty( $prompt ) ) {
@@ -104,7 +106,7 @@ class Visualizer_Module_AI extends Visualizer_Module {
 
 		// Generate configuration based on selected model
 		error_log( 'Visualizer AI: Calling AI model' );
-		$result = $this->_callAIModel( $model, $prompt, $chart_type, $chat_history, $current_config );
+		$result = $this->_callAIModel( $model, $prompt, $chart_type, $chart_library, $chat_history, $current_config );
 
 		if ( is_wp_error( $result ) ) {
 			error_log( 'Visualizer AI: Error: ' . $result->get_error_message() );
@@ -184,19 +186,20 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @param string               $model The AI model to use.
 	 * @param string               $prompt The user prompt.
 	 * @param string               $chart_type The chart type.
+	 * @param string               $chart_library The chart library (Google Charts or ChartJS).
 	 * @param array<string, mixed> $chat_history Previous conversation history.
 	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
-	private function _callAIModel( $model, $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
+	private function _callAIModel( $model, $prompt, $chart_type, $chart_library = 'Google Charts', $chat_history = array(), $current_config = '' ) {
 		switch ( $model ) {
 			case 'openai':
-				return $this->_callOpenAI( $prompt, $chart_type, $chat_history, $current_config );
+				return $this->_callOpenAI( $prompt, $chart_type, $chart_library, $chat_history, $current_config );
 			case 'gemini':
-				return $this->_callGemini( $prompt, $chart_type, $chat_history, $current_config );
+				return $this->_callGemini( $prompt, $chart_type, $chart_library, $chat_history, $current_config );
 			case 'claude':
-				return $this->_callClaude( $prompt, $chart_type, $chat_history, $current_config );
+				return $this->_callClaude( $prompt, $chart_type, $chart_library, $chat_history, $current_config );
 			default:
 				return new WP_Error( 'invalid_model', esc_html__( 'Invalid AI model selected.', 'visualizer' ) );
 		}
@@ -210,13 +213,15 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @access private
 	 *
 	 * @param string $chart_type The chart type.
+	 * @param string $chart_library The chart library (Google Charts or ChartJS).
 	 *
 	 * @return string The system prompt.
 	 */
-	private function _createSystemPrompt( $chart_type ) {
-		$chart_options = $this->_getChartTypeOptions( $chart_type );
+	private function _createSystemPrompt( $chart_type, $chart_library = 'Google Charts' ) {
+		$chart_options = $this->_getChartTypeOptions( $chart_type, $chart_library );
+		$library_name = $chart_library === 'ChartJS' ? 'Chart.js' : 'Google Charts';
 
-		return 'You are a helpful Google Charts API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
+		return 'You are a helpful ' . $library_name . ' API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
 
 IMPORTANT INSTRUCTIONS:
 1. You are chatting with a user who wants to customize their chart. Be friendly, conversational, and helpful.
@@ -254,10 +259,17 @@ Remember: Be conversational, provide context, and only include the properties th
 	 * @access private
 	 *
 	 * @param string $chart_type The chart type.
+	 * @param string $chart_library The chart library.
 	 *
 	 * @return string Chart-specific options description.
 	 */
-	private function _getChartTypeOptions( $chart_type ) {
+	private function _getChartTypeOptions( $chart_type, $chart_library = 'Google Charts' ) {
+		// Return ChartJS options if using ChartJS library
+		if ( $chart_library === 'ChartJS' ) {
+			return $this->_getChartJSOptions( $chart_type );
+		}
+
+		// Return Google Charts options (default)
 		$options = array(
 			'pie' => '
    - colors: Array of colors for pie slices ["#e74c3c", "#3498db", "#2ecc71"]
@@ -315,6 +327,67 @@ Remember: Be conversational, provide context, and only include the properties th
 	}
 
 	/**
+	 * Gets Chart.js-specific customization options.
+	 *
+	 * @since 3.12.0
+	 *
+	 * @access private
+	 *
+	 * @param string $chart_type The chart type.
+	 *
+	 * @return string Chart.js-specific options description.
+	 */
+	private function _getChartJSOptions( $chart_type ) {
+		$options = array(
+			'pie' => '
+   - backgroundColor: Array of colors for pie slices ["#e74c3c", "#3498db", "#2ecc71"]
+   - borderColor: Border colors for slices
+   - borderWidth: Number (border width in pixels)
+   - plugins.legend: {display: true, position: "top", labels: {color: "#000", font: {size: 12}}}
+   - plugins.title: {display: true, text: "Chart Title", color: "#000", font: {size: 16}}
+   - cutout: "50%" for donut chart (percentage of center to cut out)
+   - radius: "90%" (size of pie chart)',
+
+			'doughnut' => '
+   - backgroundColor: Array of colors for slices ["#e74c3c", "#3498db", "#2ecc71"]
+   - borderColor: Border colors for slices
+   - borderWidth: Number (border width in pixels)
+   - plugins.legend: {display: true, position: "top", labels: {color: "#000", font: {size: 12}}}
+   - plugins.title: {display: true, text: "Chart Title"}
+   - cutout: "50%" (percentage of center to cut out)
+   - radius: "90%"',
+
+			'line' => '
+   - backgroundColor: "rgba(231, 76, 60, 0.2)" (fill color under line)
+   - borderColor: "#e74c3c" (line color)
+   - borderWidth: 2 (line thickness)
+   - tension: 0.4 (0 = straight lines, 0.4 = smooth curves)
+   - pointRadius: 3 (size of data points)
+   - pointBackgroundColor: "#e74c3c"
+   - fill: true/false (fill area under line)
+   - plugins.legend: {display: true, position: "bottom"}
+   - scales.y: {beginAtZero: true, title: {display: true, text: "Y Axis"}, grid: {color: "#ddd"}}
+   - scales.x: {title: {display: true, text: "X Axis"}}',
+
+			'bar' => '
+   - backgroundColor: Array of colors ["#e74c3c", "#3498db"]
+   - borderColor: Array of border colors
+   - borderWidth: 1
+   - borderRadius: 5 (rounded corners)
+   - plugins.legend: {display: true, position: "top"}
+   - scales.y: {beginAtZero: true, title: {display: true, text: "Values"}}
+   - scales.x: {title: {display: true, text: "Categories"}}
+   - indexAxis: "y" (for horizontal bars)',
+
+			'horizontalBar' => '
+   - Same as bar chart options
+   - indexAxis: "y" is set automatically for horizontal orientation',
+		);
+
+		return isset( $options[ $chart_type ] ) ? $options[ $chart_type ] : $options['line'];
+	}
+
+	/**
 	 * Calls OpenAI API.
 	 *
 	 * @since 3.12.0
@@ -323,12 +396,13 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @param string               $prompt The user prompt.
 	 * @param string               $chart_type The chart type.
+	 * @param string               $chart_library The chart library.
 	 * @param array<string, mixed> $chat_history Previous conversation history.
 	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
-	private function _callOpenAI( $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
+	private function _callOpenAI( $prompt, $chart_type, $chart_library = 'Google Charts', $chat_history = array(), $current_config = '' ) {
 		error_log( 'Visualizer AI: Calling OpenAI API' );
 
 		$api_key = get_option( 'visualizer_openai_api_key', '' );
@@ -342,7 +416,7 @@ Remember: Be conversational, provide context, and only include the properties th
 		$messages = array(
 			array(
 				'role'    => 'system',
-				'content' => $this->_createSystemPrompt( $chart_type ),
+				'content' => $this->_createSystemPrompt( $chart_type, $chart_library ),
 			),
 		);
 
@@ -425,12 +499,13 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @param string               $prompt The user prompt.
 	 * @param string               $chart_type The chart type.
+	 * @param string               $chart_library The chart library.
 	 * @param array<string, mixed> $chat_history Previous conversation history.
 	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
-	private function _callGemini( $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
+	private function _callGemini( $prompt, $chart_type, $chart_library = 'Google Charts', $chat_history = array(), $current_config = '' ) {
 		$api_key = get_option( 'visualizer_gemini_api_key', '' );
 
 		if ( empty( $api_key ) ) {
@@ -438,7 +513,7 @@ Remember: Be conversational, provide context, and only include the properties th
 		}
 
 		// Build the full prompt with context
-		$full_prompt = $this->_createSystemPrompt( $chart_type ) . "\n\n";
+		$full_prompt = $this->_createSystemPrompt( $chart_type, $chart_library ) . "\n\n";
 
 		if ( ! empty( $current_config ) ) {
 			$full_prompt .= 'Current configuration: ' . $current_config . "\n\n";
@@ -503,12 +578,13 @@ Remember: Be conversational, provide context, and only include the properties th
 	 *
 	 * @param string               $prompt The user prompt.
 	 * @param string               $chart_type The chart type.
+	 * @param string               $chart_library The chart library.
 	 * @param array<string, mixed> $chat_history Previous conversation history.
 	 * @param string               $current_config Current manual configuration.
 	 *
 	 * @return array<string, mixed>|WP_Error The response with message and optional configuration.
 	 */
-	private function _callClaude( $prompt, $chart_type, $chat_history = array(), $current_config = '' ) {
+	private function _callClaude( $prompt, $chart_type, $chart_library = 'Google Charts', $chat_history = array(), $current_config = '' ) {
 		$api_key = get_option( 'visualizer_claude_api_key', '' );
 
 		if ( empty( $api_key ) ) {
@@ -516,7 +592,7 @@ Remember: Be conversational, provide context, and only include the properties th
 		}
 
 		// Build system prompt with context
-		$system_prompt = $this->_createSystemPrompt( $chart_type );
+		$system_prompt = $this->_createSystemPrompt( $chart_type, $chart_library );
 		if ( ! empty( $current_config ) ) {
 			$system_prompt .= "\n\nCurrent configuration: " . $current_config;
 		}

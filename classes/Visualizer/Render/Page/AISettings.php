@@ -94,7 +94,25 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		// Check if form was submitted
 		if ( ! $is_locked && isset( $_POST['visualizer_ai_settings_nonce'] ) && wp_verify_nonce( $_POST['visualizer_ai_settings_nonce'], 'visualizer_ai_settings' ) ) {
 			$this->_saveSettings();
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved successfully.', 'visualizer' ) . '</p></div>';
+
+			// Display validation results
+			$validation_results = get_transient( 'visualizer_ai_validation_results' );
+			if ( $validation_results ) {
+				delete_transient( 'visualizer_ai_validation_results' );
+
+				foreach ( $validation_results as $provider => $result ) {
+					$notice_class = 'notice-success';
+					if ( $result['status'] === 'error' ) {
+						$notice_class = 'notice-error';
+					} elseif ( $result['status'] === 'removed' ) {
+						$notice_class = 'notice-info';
+					}
+
+					echo '<div class="notice ' . esc_attr( $notice_class ) . ' is-dismissible"><p>' . esc_html( $result['message'] ) . '</p></div>';
+				}
+			} else {
+				echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved successfully.', 'visualizer' ) . '</p></div>';
+			}
 		}
 
 		// Get saved API keys
@@ -170,29 +188,235 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		$current_gemini = get_option( 'visualizer_gemini_api_key', '' );
 		$current_claude = get_option( 'visualizer_claude_api_key', '' );
 
-		// Only update OpenAI key if a new value is provided and it's not the masked version
-		if ( isset( $_POST['visualizer_openai_api_key'] ) && ! empty( $_POST['visualizer_openai_api_key'] ) ) {
+		$validation_results = array();
+
+		// Handle OpenAI key
+		if ( isset( $_POST['visualizer_openai_api_key'] ) ) {
 			$new_key = sanitize_text_field( $_POST['visualizer_openai_api_key'] );
-			if ( $new_key !== $this->_maskAPIKey( $current_openai ) ) {
-				update_option( 'visualizer_openai_api_key', $new_key );
+
+			// Allow empty value to remove key
+			if ( empty( $new_key ) ) {
+				delete_option( 'visualizer_openai_api_key' );
+				$validation_results['openai'] = array( 'status' => 'removed', 'message' => __( 'OpenAI API key removed.', 'visualizer' ) );
+			} elseif ( $new_key !== $this->_maskAPIKey( $current_openai ) ) {
+				// Validate new key before saving
+				$validation = $this->_validateAPIKey( 'openai', $new_key );
+				if ( $validation['valid'] ) {
+					update_option( 'visualizer_openai_api_key', $new_key );
+					$validation_results['openai'] = array( 'status' => 'success', 'message' => __( 'OpenAI API key saved and validated successfully.', 'visualizer' ) );
+				} else {
+					$validation_results['openai'] = array( 'status' => 'error', 'message' => sprintf( __( 'OpenAI API key validation failed: %s', 'visualizer' ), $validation['error'] ) );
+				}
 			}
 		}
 
-		// Only update Gemini key if a new value is provided and it's not the masked version
-		if ( isset( $_POST['visualizer_gemini_api_key'] ) && ! empty( $_POST['visualizer_gemini_api_key'] ) ) {
+		// Handle Gemini key
+		if ( isset( $_POST['visualizer_gemini_api_key'] ) ) {
 			$new_key = sanitize_text_field( $_POST['visualizer_gemini_api_key'] );
-			if ( $new_key !== $this->_maskAPIKey( $current_gemini ) ) {
-				update_option( 'visualizer_gemini_api_key', $new_key );
+
+			// Allow empty value to remove key
+			if ( empty( $new_key ) ) {
+				delete_option( 'visualizer_gemini_api_key' );
+				$validation_results['gemini'] = array( 'status' => 'removed', 'message' => __( 'Gemini API key removed.', 'visualizer' ) );
+			} elseif ( $new_key !== $this->_maskAPIKey( $current_gemini ) ) {
+				// Validate new key before saving
+				$validation = $this->_validateAPIKey( 'gemini', $new_key );
+				if ( $validation['valid'] ) {
+					update_option( 'visualizer_gemini_api_key', $new_key );
+					$validation_results['gemini'] = array( 'status' => 'success', 'message' => __( 'Gemini API key saved and validated successfully.', 'visualizer' ) );
+				} else {
+					$validation_results['gemini'] = array( 'status' => 'error', 'message' => sprintf( __( 'Gemini API key validation failed: %s', 'visualizer' ), $validation['error'] ) );
+				}
 			}
 		}
 
-		// Only update Claude key if a new value is provided and it's not the masked version
-		if ( isset( $_POST['visualizer_claude_api_key'] ) && ! empty( $_POST['visualizer_claude_api_key'] ) ) {
+		// Handle Claude key
+		if ( isset( $_POST['visualizer_claude_api_key'] ) ) {
 			$new_key = sanitize_text_field( $_POST['visualizer_claude_api_key'] );
-			if ( $new_key !== $this->_maskAPIKey( $current_claude ) ) {
-				update_option( 'visualizer_claude_api_key', $new_key );
+
+			// Allow empty value to remove key
+			if ( empty( $new_key ) ) {
+				delete_option( 'visualizer_claude_api_key' );
+				$validation_results['claude'] = array( 'status' => 'removed', 'message' => __( 'Claude API key removed.', 'visualizer' ) );
+			} elseif ( $new_key !== $this->_maskAPIKey( $current_claude ) ) {
+				// Validate new key before saving
+				$validation = $this->_validateAPIKey( 'claude', $new_key );
+				if ( $validation['valid'] ) {
+					update_option( 'visualizer_claude_api_key', $new_key );
+					$validation_results['claude'] = array( 'status' => 'success', 'message' => __( 'Claude API key saved and validated successfully.', 'visualizer' ) );
+				} else {
+					$validation_results['claude'] = array( 'status' => 'error', 'message' => sprintf( __( 'Claude API key validation failed: %s', 'visualizer' ), $validation['error'] ) );
+				}
 			}
 		}
+
+		// Store validation results for display
+		set_transient( 'visualizer_ai_validation_results', $validation_results, 60 );
+	}
+
+	/**
+	 * Validates an API key by making a test request.
+	 *
+	 * @since 3.12.0
+	 *
+	 * @access private
+	 * @param string $provider The API provider ('openai', 'gemini', 'claude').
+	 * @param string $api_key The API key to validate.
+	 * @return array{valid: bool, error?: string} Validation result.
+	 */
+	private function _validateAPIKey( $provider, $api_key ) {
+		switch ( $provider ) {
+			case 'openai':
+				return $this->_validateOpenAIKey( $api_key );
+			case 'gemini':
+				return $this->_validateGeminiKey( $api_key );
+			case 'claude':
+				return $this->_validateClaudeKey( $api_key );
+			default:
+				return array( 'valid' => false, 'error' => 'Invalid provider' );
+		}
+	}
+
+	/**
+	 * Validates OpenAI API key.
+	 *
+	 * @since 3.12.0
+	 *
+	 * @access private
+	 * @param string $api_key The API key to validate.
+	 * @return array{valid: bool, error?: string} Validation result.
+	 */
+	private function _validateOpenAIKey( $api_key ) {
+		$response = wp_remote_post(
+			'https://api.openai.com/v1/chat/completions',
+			array(
+				'timeout' => 10,
+				'headers' => array(
+					'Authorization' => 'Bearer ' . $api_key,
+					'Content-Type'  => 'application/json',
+				),
+				'body' => wp_json_encode(
+					array(
+						'model'    => 'gpt-3.5-turbo',
+						'messages' => array(
+							array(
+								'role'    => 'user',
+								'content' => 'Hi',
+							),
+						),
+						'max_tokens' => 5,
+					)
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return array( 'valid' => false, 'error' => $response->get_error_message() );
+		}
+
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( $code !== 200 ) {
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			$error = isset( $body['error']['message'] ) ? $body['error']['message'] : 'Invalid API key';
+			return array( 'valid' => false, 'error' => $error );
+		}
+
+		return array( 'valid' => true );
+	}
+
+	/**
+	 * Validates Gemini API key.
+	 *
+	 * @since 3.12.0
+	 *
+	 * @access private
+	 * @param string $api_key The API key to validate.
+	 * @return array{valid: bool, error?: string} Validation result.
+	 */
+	private function _validateGeminiKey( $api_key ) {
+		$response = wp_remote_post(
+			'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' . $api_key,
+			array(
+				'timeout' => 10,
+				'headers' => array(
+					'Content-Type' => 'application/json',
+				),
+				'body' => wp_json_encode(
+					array(
+						'contents' => array(
+							array(
+								'parts' => array(
+									array(
+										'text' => 'Hi',
+									),
+								),
+							),
+						),
+					)
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return array( 'valid' => false, 'error' => $response->get_error_message() );
+		}
+
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( $code !== 200 ) {
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			$error = isset( $body['error']['message'] ) ? $body['error']['message'] : 'Invalid API key';
+			return array( 'valid' => false, 'error' => $error );
+		}
+
+		return array( 'valid' => true );
+	}
+
+	/**
+	 * Validates Claude API key.
+	 *
+	 * @since 3.12.0
+	 *
+	 * @access private
+	 * @param string $api_key The API key to validate.
+	 * @return array{valid: bool, error?: string} Validation result.
+	 */
+	private function _validateClaudeKey( $api_key ) {
+		$response = wp_remote_post(
+			'https://api.anthropic.com/v1/messages',
+			array(
+				'timeout' => 10,
+				'headers' => array(
+					'x-api-key'         => $api_key,
+					'anthropic-version' => '2023-06-01',
+					'Content-Type'      => 'application/json',
+				),
+				'body' => wp_json_encode(
+					array(
+						'model'      => 'claude-3-haiku-20240307',
+						'max_tokens' => 10,
+						'messages'   => array(
+							array(
+								'role'    => 'user',
+								'content' => 'Hi',
+							),
+						),
+					)
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return array( 'valid' => false, 'error' => $response->get_error_message() );
+		}
+
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( $code !== 200 ) {
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			$error = isset( $body['error']['message'] ) ? $body['error']['message'] : 'Invalid API key';
+			return array( 'valid' => false, 'error' => $error );
+		}
+
+		return array( 'valid' => true );
 	}
 
 }

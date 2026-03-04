@@ -929,9 +929,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer-ai-config',
 			'visualizerAI',
 			array(
-				'nonce'      => wp_create_nonce( 'visualizer-ai-generate' ),
-				'chart_type' => $data['type'],
-				'ajaxurl'    => admin_url( 'admin-ajax.php' ),
+				'nonce'         => wp_create_nonce( 'visualizer-ai-generate' ),
+				'chart_type'    => $data['type'],
+				'chart_library' => $data['library'],
+				'ajaxurl'       => admin_url( 'admin-ajax.php' ),
 			)
 		);
 

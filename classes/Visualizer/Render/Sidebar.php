@@ -847,6 +847,12 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @return void
 	 */
 	protected function _renderAIConfigurationGroup() {
+		// Don't render AI Configuration for DataTable charts
+		// DataTable charts don't use JSON configuration like other charts
+		if ( isset( $this->type ) && $this->type === 'tabular' ) {
+			return;
+		}
+
 		// Check if PRO features are locked
 		// proFeaturesLocked() returns TRUE when PRO is active (unlocked)
 		// proFeaturesLocked() returns FALSE when free version (locked)

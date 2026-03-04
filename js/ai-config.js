@@ -104,6 +104,7 @@
             prompt: prompt,
             model: model || 'openai',
             chart_type: visualizerAI.chart_type,
+            chart_library: visualizerAI.chart_library,
             chat_history: JSON.stringify(chatHistory),
             current_config: currentManualConfig
         };
