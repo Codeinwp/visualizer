@@ -925,13 +925,18 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
+		error_log( 'Localizing visualizerAI for ai-config script' );
+		error_log( 'Chart type: ' . $data['type'] );
+		error_log( 'Chart library from $data: ' . ( isset( $data['library'] ) ? $data['library'] : 'NOT SET' ) );
+		error_log( 'Full $data keys: ' . implode( ', ', array_keys( $data ) ) );
+
 		wp_localize_script(
 			'visualizer-ai-config',
 			'visualizerAI',
 			array(
 				'nonce'         => wp_create_nonce( 'visualizer-ai-generate' ),
 				'chart_type'    => $data['type'],
-				'chart_library' => $data['library'],
+				'chart_library' => isset( $data['library'] ) && ! empty( $data['library'] ) ? $data['library'] : 'Google Charts',
 				'ajaxurl'       => admin_url( 'admin-ajax.php' ),
 			)
 		);
