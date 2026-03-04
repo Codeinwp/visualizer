@@ -222,10 +222,13 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 * @return string The system prompt.
 	 */
 	private function _createSystemPrompt( $chart_type, $chart_library = 'Google Charts' ) {
+		error_log( 'Creating system prompt for library: ' . $chart_library . ' (lowercase: ' . strtolower( $chart_library ) . ')' );
+
 		$chart_options = $this->_getChartTypeOptions( $chart_type, $chart_library );
 		$library_name = strtolower( $chart_library ) === 'chartjs' ? 'Chart.js' : 'Google Charts';
 
 		if ( strtolower( $chart_library ) === 'chartjs' ) {
+			error_log( 'Using ChartJS prompt!' );
 			return 'You are a helpful Chart.js (ChartJS) v3+ API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
 
 IMPORTANT CHARTJS STRUCTURE:
@@ -268,6 +271,7 @@ JSON_END
 Remember: Be conversational, provide context, and only include the properties that need to change!';
 		}
 
+		error_log( 'Using Google Charts prompt!' );
 		return 'You are a helpful ' . $library_name . ' API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
 
 IMPORTANT INSTRUCTIONS:
