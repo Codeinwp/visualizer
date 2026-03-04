@@ -668,7 +668,7 @@ class Visualizer_Gutenberg_Block {
 
 			if ( Visualizer_Module::is_pro() ) {
 				$permissions_data = map_deep( $data['visualizer-permissions'], array( $this, 'sanitize_value' ) );
-				update_post_meta( $data['id'], Visualizer_PRO::CF_PERMISSIONS, $permissions_data );
+				update_post_meta( $data['id'], Visualizer_Pro::CF_PERMISSIONS, $permissions_data );
 			}
 
 			if ( $data['visualizer-chart-url'] ) {
