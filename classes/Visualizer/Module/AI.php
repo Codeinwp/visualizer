@@ -219,7 +219,50 @@ class Visualizer_Module_AI extends Visualizer_Module {
 	 */
 	private function _createSystemPrompt( $chart_type, $chart_library = 'Google Charts' ) {
 		$chart_options = $this->_getChartTypeOptions( $chart_type, $chart_library );
-		$library_name = $chart_library === 'ChartJS' ? 'Chart.js' : 'Google Charts';
+		$library_name = strtolower( $chart_library ) === 'chartjs' ? 'Chart.js' : 'Google Charts';
+
+		if ( strtolower( $chart_library ) === 'chartjs' ) {
+			return 'You are a helpful Chart.js (ChartJS) v3+ API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
+
+IMPORTANT CHARTJS STRUCTURE:
+Chart.js uses a specific configuration structure. You MUST follow these rules:
+
+1. PLUGINS go under "plugins" object:
+   - legend: plugins.legend
+   - title: plugins.title
+   - tooltip: plugins.tooltip
+   Example: {"plugins": {"legend": {"display": true, "position": "bottom"}}}
+
+2. SCALES go under "scales" object:
+   - y-axis: scales.y
+   - x-axis: scales.x
+   Example: {"scales": {"y": {"beginAtZero": true}}}
+
+3. DATASET PROPERTIES go at root level (these configure data appearance):
+   - backgroundColor
+   - borderColor
+   - borderWidth
+   Example: {"backgroundColor": ["#e74c3c", "#3498db"], "borderWidth": 2}
+
+RESPONSE FORMAT:
+When providing configuration, structure your response like this:
+[Your explanation here]
+
+JSON_START
+{"property": "value"}
+JSON_END
+
+Example - Configuring legend:
+I\'ll move the legend to the right side with larger red text.
+
+JSON_START
+{"plugins": {"legend": {"position": "right", "labels": {"color": "red", "font": {"size": 14}}}}}
+JSON_END
+
+' . $chart_options . '
+
+Remember: Be conversational, provide context, and only include the properties that need to change!';
+		}
 
 		return 'You are a helpful ' . $library_name . ' API expert assistant. You help users customize their ' . $chart_type . ' charts through conversation.
 
@@ -265,7 +308,7 @@ Remember: Be conversational, provide context, and only include the properties th
 	 */
 	private function _getChartTypeOptions( $chart_type, $chart_library = 'Google Charts' ) {
 		// Return ChartJS options if using ChartJS library
-		if ( $chart_library === 'ChartJS' ) {
+		if ( strtolower( $chart_library ) === 'chartjs' ) {
 			return $this->_getChartJSOptions( $chart_type );
 		}
 
@@ -340,48 +383,75 @@ Remember: Be conversational, provide context, and only include the properties th
 	private function _getChartJSOptions( $chart_type ) {
 		$options = array(
 			'pie' => '
-   - backgroundColor: Array of colors for pie slices ["#e74c3c", "#3498db", "#2ecc71"]
-   - borderColor: Border colors for slices
-   - borderWidth: Number (border width in pixels)
-   - plugins.legend: {display: true, position: "top", labels: {color: "#000", font: {size: 12}}}
-   - plugins.title: {display: true, text: "Chart Title", color: "#000", font: {size: 16}}
-   - cutout: "50%" for donut chart (percentage of center to cut out)
-   - radius: "90%" (size of pie chart)',
+COMMON CUSTOMIZATIONS FOR PIE CHARTS:
+
+Legend (goes under plugins.legend):
+{"plugins": {"legend": {"display": true, "position": "top|bottom|left|right", "labels": {"color": "red", "font": {"size": 14, "family": "Arial", "weight": "bold"}}}}}
+
+Title (goes under plugins.title):
+{"plugins": {"title": {"display": true, "text": "My Chart Title", "color": "#333", "font": {"size": 18}}}}
+
+Colors (dataset properties at root):
+{"backgroundColor": ["#e74c3c", "#3498db", "#2ecc71", "#f39c12"], "borderColor": "#fff", "borderWidth": 2}
+
+Donut hole (dataset property):
+{"cutout": "50%"} - creates donut with 50% center cutout
+
+Chart size (dataset property):
+{"radius": "90%"} - controls pie size (percentage of canvas)',
 
 			'doughnut' => '
-   - backgroundColor: Array of colors for slices ["#e74c3c", "#3498db", "#2ecc71"]
-   - borderColor: Border colors for slices
-   - borderWidth: Number (border width in pixels)
-   - plugins.legend: {display: true, position: "top", labels: {color: "#000", font: {size: 12}}}
-   - plugins.title: {display: true, text: "Chart Title"}
-   - cutout: "50%" (percentage of center to cut out)
-   - radius: "90%"',
+COMMON CUSTOMIZATIONS FOR DOUGHNUT CHARTS:
+
+Legend (goes under plugins.legend):
+{"plugins": {"legend": {"display": true, "position": "top|bottom|left|right", "labels": {"color": "red", "font": {"size": 14}}}}}
+
+Title (goes under plugins.title):
+{"plugins": {"title": {"display": true, "text": "My Chart Title"}}}
+
+Colors (dataset properties at root):
+{"backgroundColor": ["#e74c3c", "#3498db", "#2ecc71"], "borderColor": "#fff", "borderWidth": 2}
+
+Donut size (dataset property):
+{"cutout": "70%"} - larger number = bigger hole',
 
 			'line' => '
-   - backgroundColor: "rgba(231, 76, 60, 0.2)" (fill color under line)
-   - borderColor: "#e74c3c" (line color)
-   - borderWidth: 2 (line thickness)
-   - tension: 0.4 (0 = straight lines, 0.4 = smooth curves)
-   - pointRadius: 3 (size of data points)
-   - pointBackgroundColor: "#e74c3c"
-   - fill: true/false (fill area under line)
-   - plugins.legend: {display: true, position: "bottom"}
-   - scales.y: {beginAtZero: true, title: {display: true, text: "Y Axis"}, grid: {color: "#ddd"}}
-   - scales.x: {title: {display: true, text: "X Axis"}}',
+COMMON CUSTOMIZATIONS FOR LINE CHARTS:
+
+Legend (goes under plugins.legend):
+{"plugins": {"legend": {"display": true, "position": "bottom", "labels": {"color": "#666", "font": {"size": 12}}}}}
+
+Y-Axis (goes under scales.y):
+{"scales": {"y": {"beginAtZero": true, "title": {"display": true, "text": "Values"}, "ticks": {"color": "#666"}, "grid": {"color": "#e0e0e0"}}}}
+
+X-Axis (goes under scales.x):
+{"scales": {"x": {"title": {"display": true, "text": "Time"}, "ticks": {"color": "#666"}}}}
+
+Line appearance (dataset properties at root):
+{"borderColor": "#e74c3c", "backgroundColor": "rgba(231, 76, 60, 0.2)", "borderWidth": 3, "tension": 0.4, "fill": true, "pointRadius": 4, "pointBackgroundColor": "#e74c3c"}
+
+tension: 0 = straight lines, 0.4 = smooth curves',
 
 			'bar' => '
-   - backgroundColor: Array of colors ["#e74c3c", "#3498db"]
-   - borderColor: Array of border colors
-   - borderWidth: 1
-   - borderRadius: 5 (rounded corners)
-   - plugins.legend: {display: true, position: "top"}
-   - scales.y: {beginAtZero: true, title: {display: true, text: "Values"}}
-   - scales.x: {title: {display: true, text: "Categories"}}
-   - indexAxis: "y" (for horizontal bars)',
+COMMON CUSTOMIZATIONS FOR BAR CHARTS:
+
+Legend (goes under plugins.legend):
+{"plugins": {"legend": {"display": true, "position": "top"}}}
+
+Y-Axis (goes under scales.y):
+{"scales": {"y": {"beginAtZero": true, "title": {"display": true, "text": "Values"}, "ticks": {"color": "#666"}}}}
+
+X-Axis (goes under scales.x):
+{"scales": {"x": {"title": {"display": true, "text": "Categories"}}}}
+
+Bar appearance (dataset properties at root):
+{"backgroundColor": ["#e74c3c", "#3498db", "#2ecc71"], "borderColor": "#333", "borderWidth": 1, "borderRadius": 5}
+
+For horizontal bars (dataset property):
+{"indexAxis": "y"}',
 
 			'horizontalBar' => '
-   - Same as bar chart options
-   - indexAxis: "y" is set automatically for horizontal orientation',
+Same as bar chart. Use {"indexAxis": "y"} to make bars horizontal.',
 		);
 
 		return isset( $options[ $chart_type ] ) ? $options[ $chart_type ] : $options['line'];

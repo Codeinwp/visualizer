@@ -194,10 +194,12 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		if ( isset( $_POST['visualizer_openai_api_key'] ) ) {
 			$new_key = sanitize_text_field( $_POST['visualizer_openai_api_key'] );
 
-			// Allow empty value to remove key
+			// Allow empty value to remove key - but only show notification if key existed
 			if ( empty( $new_key ) ) {
-				delete_option( 'visualizer_openai_api_key' );
-				$validation_results['openai'] = array( 'status' => 'removed', 'message' => __( 'OpenAI API key removed.', 'visualizer' ) );
+				if ( ! empty( $current_openai ) ) {
+					delete_option( 'visualizer_openai_api_key' );
+					$validation_results['openai'] = array( 'status' => 'removed', 'message' => __( 'OpenAI API key removed.', 'visualizer' ) );
+				}
 			} elseif ( $new_key !== $this->_maskAPIKey( $current_openai ) ) {
 				// Validate new key before saving
 				$validation = $this->_validateAPIKey( 'openai', $new_key );
@@ -214,10 +216,12 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		if ( isset( $_POST['visualizer_gemini_api_key'] ) ) {
 			$new_key = sanitize_text_field( $_POST['visualizer_gemini_api_key'] );
 
-			// Allow empty value to remove key
+			// Allow empty value to remove key - but only show notification if key existed
 			if ( empty( $new_key ) ) {
-				delete_option( 'visualizer_gemini_api_key' );
-				$validation_results['gemini'] = array( 'status' => 'removed', 'message' => __( 'Gemini API key removed.', 'visualizer' ) );
+				if ( ! empty( $current_gemini ) ) {
+					delete_option( 'visualizer_gemini_api_key' );
+					$validation_results['gemini'] = array( 'status' => 'removed', 'message' => __( 'Gemini API key removed.', 'visualizer' ) );
+				}
 			} elseif ( $new_key !== $this->_maskAPIKey( $current_gemini ) ) {
 				// Validate new key before saving
 				$validation = $this->_validateAPIKey( 'gemini', $new_key );
@@ -234,10 +238,12 @@ class Visualizer_Render_Page_AISettings extends Visualizer_Render_Page {
 		if ( isset( $_POST['visualizer_claude_api_key'] ) ) {
 			$new_key = sanitize_text_field( $_POST['visualizer_claude_api_key'] );
 
-			// Allow empty value to remove key
+			// Allow empty value to remove key - but only show notification if key existed
 			if ( empty( $new_key ) ) {
-				delete_option( 'visualizer_claude_api_key' );
-				$validation_results['claude'] = array( 'status' => 'removed', 'message' => __( 'Claude API key removed.', 'visualizer' ) );
+				if ( ! empty( $current_claude ) ) {
+					delete_option( 'visualizer_claude_api_key' );
+					$validation_results['claude'] = array( 'status' => 'removed', 'message' => __( 'Claude API key removed.', 'visualizer' ) );
+				}
 			} elseif ( $new_key !== $this->_maskAPIKey( $current_claude ) ) {
 				// Validate new key before saving
 				$validation = $this->_validateAPIKey( 'claude', $new_key );
