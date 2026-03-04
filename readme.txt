@@ -223,6 +223,13 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 == Changelog ==
 
+##### [Version 3.11.15](https://github.com/Codeinwp/visualizer/compare/v3.11.14...v3.11.15) (2026-03-04)
+
+- Enhanced security
+
+
+
+
 ##### [Version 3.11.14](https://github.com/Codeinwp/visualizer/compare/v3.11.13...v3.11.14) (2025-11-28)
 
 - Enhanced security
