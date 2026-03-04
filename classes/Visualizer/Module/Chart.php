@@ -379,7 +379,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @return array The array of chart data.
 	 */
-	private function _getChartArray( ?WP_Post $chart = null ) {
+	private function _getChartArray( $chart = null ) {
 		if ( is_null( $chart ) ) {
 			$chart = $this->_chart;
 		}
@@ -575,33 +575,31 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 				}
 			} else {
-				if ( current_user_can( 'edit_posts' ) ) {
-					$parent_chart_id = isset( $_GET['parent_chart_id'] ) ? filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT ) : '';
-					$success = false;
-					if ( $parent_chart_id ) {
-						$parent_chart   = get_post( $parent_chart_id );
-						$success = $parent_chart && $parent_chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
-					}
-					if ( $success ) {
-						$new_chart_id = wp_insert_post(
-							array(
-								'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
-								'post_title'   => 'Visualization',
-								'post_author'  => get_current_user_id(),
-								'post_status'  => $parent_chart->post_status,
-								'post_content' => $parent_chart->post_content,
-							)
-						);
+				$parent_chart_id = isset( $_GET['parent_chart_id'] ) ? filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT ) : '';
+				$success = false;
+				if ( $parent_chart_id ) {
+					$parent_chart   = get_post( $parent_chart_id );
+					$success = $parent_chart && $parent_chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
+				}
+				if ( $success ) {
+					$new_chart_id = wp_insert_post(
+						array(
+							'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+							'post_title'   => 'Visualization',
+							'post_author'  => get_current_user_id(),
+							'post_status'  => $parent_chart->post_status,
+							'post_content' => $parent_chart->post_content,
+						)
+					);
 
-						if ( is_wp_error( $new_chart_id ) ) {
-							do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while cloning chart %d = %s', $parent_chart_id, print_r( $new_chart_id, true ) ), 'error', __FILE__, __LINE__ );
-						} else {
-							$post_meta = get_post_meta( $parent_chart_id );
-							$chart_id  = $new_chart_id;
-							foreach ( $post_meta as $key => $value ) {
-								if ( strpos( $key, 'visualizer-' ) !== false ) {
-									add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
-								}
+					if ( is_wp_error( $new_chart_id ) ) {
+						do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while cloning chart %d = %s', $parent_chart_id, print_r( $new_chart_id, true ) ), 'error', __FILE__, __LINE__ );
+					} else {
+						$post_meta = get_post_meta( $parent_chart_id );
+						$chart_id  = $new_chart_id;
+						foreach ( $post_meta as $key => $value ) {
+							if ( strpos( $key, 'visualizer-' ) !== false ) {
+								add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
 							}
 						}
 					}

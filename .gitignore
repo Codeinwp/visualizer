@@ -4,12 +4,6 @@ logs
 dist
 artifact
 vendor
-cypress/integration/examples
-cypress/integration/localhost*
-cypress/plugins
-cypress.env.json
 .DS_Store
-/cypress/videos/
-/cypress/screenshots/
 artifacts
 .phpunit.result.cache

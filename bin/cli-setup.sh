@@ -11,7 +11,7 @@ wp  --allow-root plugin activate visualizer
 wp  --allow-root theme activate twentytwentyone
 
 # set this constant so that the specific hooks are loaded
-wp  --allow-root config set TI_CYPRESS_TESTING true --raw
+wp  --allow-root config set TI_E2E_TESTING true --raw
 
 
 # debugging

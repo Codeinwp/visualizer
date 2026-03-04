@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Access to constant CF_PERMISSIONS on an unknown class Visualizer_PRO\.$#'
-			identifier: class.notFound
-			count: 2
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
 			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 1
@@ -1609,12 +1603,6 @@ parameters:
 			path: classes/Visualizer/Module/Language.php
 
 		-
-			message: '#^Access to constant CF_PERMISSIONS on an unknown class Visualizer_PRO\.$#'
-			identifier: class.notFound
-			count: 1
-			path: classes/Visualizer/Module/Setup.php
-
-		-
 			message: '#^Call to function is_null\(\) with array\{''administrator''\} will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 1
@@ -2195,12 +2183,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: classes/Visualizer/Render.php
-
-		-
-			message: '#^Access to constant ACTION_FETCH_DATA on an unknown class Visualizer_Pro\.$#'
-			identifier: class.notFound
-			count: 1
-			path: classes/Visualizer/Render/Layout.php
 
 		-
 			message: '#^Method Visualizer_Render_Layout\:\:_renderDbQuery\(\) has no return type specified\.$#'
