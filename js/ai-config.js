@@ -9,10 +9,13 @@
 
         if (typeof visualizerAI !== 'undefined') {
             console.log('visualizerAI data:', visualizerAI);
+            console.log('Chart Library:', visualizerAI.chart_library);
+            console.log('Chart Type:', visualizerAI.chart_type);
 
             // Show welcome message with animation
+            var libraryName = visualizerAI.chart_library && visualizerAI.chart_library.toLowerCase() === 'chartjs' ? 'Chart.js' : 'Google Charts';
             setTimeout(function() {
-                addAIMessage('👋 Hello! I\'m your AI chart assistant. I can help you customize this ' + visualizerAI.chart_type + ' chart.\n\n✨ Try a Quick Action above, choose a Preset, or ask me anything!');
+                addAIMessage('👋 Hello! I\'m your AI chart assistant. I can help you customize this ' + visualizerAI.chart_type + ' chart (' + libraryName + ').\n\n✨ Try a Quick Action above, choose a Preset, or ask me anything!');
             }, 300);
         } else {
             console.error('visualizerAI is not defined!');
@@ -110,6 +113,7 @@
         };
 
         console.log('Request data:', requestData);
+        console.log('Sending chart_library:', requestData.chart_library);
 
         $.ajax({
             url: visualizerAI.ajaxurl,
@@ -126,28 +130,15 @@
                     // Add AI response to chat
                     addAIMessage(data.message);
 
-                    // Intelligently handle configuration if provided
+                    // Auto-apply configuration if provided (no preview, just apply)
                     if (data.configuration) {
                         currentConfig = data.configuration;
 
-                        // Detect user intent: is this an action request or just a question?
-                        var isActionRequest = detectActionIntent(prompt);
+                        console.log('Configuration received - auto-applying');
+                        addConfigPreview(data.configuration);
 
-                        if (isActionRequest) {
-                            // User wants to make a change - auto-apply configuration
-                            console.log('Detected action request - auto-applying configuration');
-                            addConfigPreview(data.configuration);
-
-                            // Auto-apply after a short delay to let user see the preview
-                            setTimeout(function() {
-                                applyConfiguration(true); // Show success message
-                            }, 500);
-                        } else {
-                            // User is asking for information - show preview but don't apply
-                            console.log('Detected informational request - showing preview only');
-                            addConfigPreview(data.configuration);
-                            addAIMessage('ℹ️ This is a preview of what the configuration would look like. If you want to apply it, just ask me to make the change!');
-                        }
+                        // Auto-apply immediately
+                        applyConfiguration(true); // Show success message
                     }
 
                     // Add to history
@@ -326,70 +317,6 @@
         if (container.length && container[0]) {
             container.scrollTop(container[0].scrollHeight);
         }
-    }
-
-    function detectActionIntent(prompt) {
-        // Convert to lowercase for easier matching
-        var lowerPrompt = prompt.toLowerCase();
-
-        // Strong action indicators - if these are present, user wants to make a change
-        var actionKeywords = [
-            'make', 'change', 'set', 'update', 'modify', 'create', 'add',
-            'remove', 'delete', 'apply', 'use', 'turn', 'enable', 'disable',
-            'increase', 'decrease', 'adjust', 'switch', 'convert', 'transform',
-            'put', 'give', 'let\'s', 'i want', 'i need', 'please'
-        ];
-
-        // Question indicators - if these are primary, user is asking for information
-        var questionKeywords = [
-            'what can', 'what are', 'what\'s', 'how can', 'how do',
-            'which', 'show me', 'tell me', 'explain', 'describe',
-            'suggest', 'recommend', 'list', 'options', 'possibilities',
-            'examples', 'ideas', 'help'
-        ];
-
-        // Check if prompt starts with a question word (strong indicator of informational query)
-        var startsWithQuestion = /^(what|how|which|could|should|can|would|where|when|why)\b/i.test(prompt);
-
-        // Count action and question keywords
-        var actionCount = 0;
-        var questionCount = 0;
-
-        actionKeywords.forEach(function(keyword) {
-            if (lowerPrompt.indexOf(keyword) !== -1) {
-                actionCount++;
-            }
-        });
-
-        questionKeywords.forEach(function(keyword) {
-            if (lowerPrompt.indexOf(keyword) !== -1) {
-                questionCount++;
-            }
-        });
-
-        // Decision logic:
-        // 1. If starts with question word and has question keywords, it's informational
-        if (startsWithQuestion && questionCount > 0) {
-            return false;
-        }
-
-        // 2. If has action keywords but no question keywords, it's an action
-        if (actionCount > 0 && questionCount === 0) {
-            return true;
-        }
-
-        // 3. If has more action keywords than question keywords, it's likely an action
-        if (actionCount > questionCount) {
-            return true;
-        }
-
-        // 4. If ends with a question mark, it's probably informational
-        if (prompt.trim().endsWith('?')) {
-            return false;
-        }
-
-        // 5. Default: if has any action keywords, treat as action
-        return actionCount > 0;
     }
 
     function escapeHtml(text) {
