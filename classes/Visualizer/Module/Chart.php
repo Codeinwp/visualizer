@@ -375,11 +375,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @access private
 	 *
-	 * @param WP_Post $chart The chart object.
+	 * @param WP_Post|null $chart The chart object.
 	 *
 	 * @return array The array of chart data.
 	 */
-	private function _getChartArray( WP_Post $chart = null ) {
+	private function _getChartArray( $chart = null ) {
 		if ( is_null( $chart ) ) {
 			$chart = $this->_chart;
 		}
@@ -524,6 +524,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function renderChartPages() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_die( __( 'You do not have permission to access this page.', 'visualizer' ) );
+		}
+
 		defined( 'IFRAME_REQUEST' ) || define( 'IFRAME_REQUEST', 1 );
 		if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) && function_exists( 'et_get_theme_version' ) ) {
 			define( 'ET_BUILDER_PRODUCT_VERSION', et_get_theme_version() );
@@ -571,33 +575,31 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 				}
 			} else {
-				if ( current_user_can( 'edit_posts' ) ) {
-					$parent_chart_id = isset( $_GET['parent_chart_id'] ) ? filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT ) : '';
-					$success = false;
-					if ( $parent_chart_id ) {
-						$parent_chart   = get_post( $parent_chart_id );
-						$success = $parent_chart && $parent_chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
-					}
-					if ( $success ) {
-						$new_chart_id = wp_insert_post(
-							array(
-								'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
-								'post_title'   => 'Visualization',
-								'post_author'  => get_current_user_id(),
-								'post_status'  => $parent_chart->post_status,
-								'post_content' => $parent_chart->post_content,
-							)
-						);
+				$parent_chart_id = isset( $_GET['parent_chart_id'] ) ? filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT ) : '';
+				$success = false;
+				if ( $parent_chart_id ) {
+					$parent_chart   = get_post( $parent_chart_id );
+					$success = $parent_chart && $parent_chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
+				}
+				if ( $success ) {
+					$new_chart_id = wp_insert_post(
+						array(
+							'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+							'post_title'   => 'Visualization',
+							'post_author'  => get_current_user_id(),
+							'post_status'  => $parent_chart->post_status,
+							'post_content' => $parent_chart->post_content,
+						)
+					);
 
-						if ( is_wp_error( $new_chart_id ) ) {
-							do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while cloning chart %d = %s', $parent_chart_id, print_r( $new_chart_id, true ) ), 'error', __FILE__, __LINE__ );
-						} else {
-							$post_meta = get_post_meta( $parent_chart_id );
-							$chart_id  = $new_chart_id;
-							foreach ( $post_meta as $key => $value ) {
-								if ( strpos( $key, 'visualizer-' ) !== false ) {
-									add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
-								}
+					if ( is_wp_error( $new_chart_id ) ) {
+						do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while cloning chart %d = %s', $parent_chart_id, print_r( $new_chart_id, true ) ), 'error', __FILE__, __LINE__ );
+					} else {
+						$post_meta = get_post_meta( $parent_chart_id );
+						$chart_id  = $new_chart_id;
+						foreach ( $post_meta as $key => $value ) {
+							if ( strpos( $key, 'visualizer-' ) !== false ) {
+								add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
 							}
 						}
 					}
@@ -953,7 +955,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	private function _handleTypesPage() {
 		// process post request
-		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ) ) ) {
+		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && wp_verify_nonce( filter_input( INPUT_POST, 'nonce' ), 'visualizer-upload-data' ) ) {
 			$type = filter_input( INPUT_POST, 'type' );
 			$library = filter_input( INPUT_POST, 'chart-library' );
 			if ( Visualizer_Module_Admin::checkChartStatus( $type ) ) {
@@ -1139,7 +1141,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
 
 		// validate nonce
-		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'] ) ) {
+		if (
+			! isset( $_GET['nonce'] ) ||
+			! wp_verify_nonce( $_GET['nonce'], 'visualizer-upload-data' ) ||
+			! current_user_can( 'edit_posts' )
+		) {
 			if ( ! $can_die ) {
 				return;
 			}
@@ -1150,7 +1156,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
+		if (
+			! $chart_id ||
+			! ( $chart = get_post( $chart_id ) ) ||
+			$chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ||
+			! current_user_can( 'edit_post', $chart_id )
+		) {
 			if ( ! $can_die ) {
 				return;
 			}

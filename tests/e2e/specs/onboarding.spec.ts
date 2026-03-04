@@ -54,15 +54,15 @@ test.describe( 'Onboarding', () => {
         await page.getByRole('button', { name: 'Continue ' }).click();
 
         // Step 3
-        await expect(page.getByRole('heading')).toContainText('Insert a chart into the draft page');
+        await expect(page.getByRole('heading', { name: 'Insert a chart into the draft page' })).toBeVisible();
         await expect(page.getByRole('button', { name: 'Create a draft page We will' })).toBeVisible();
         await page.getByRole('button', { name: 'Create a draft page We will' }).click();
-        await expect(page.getByRole('heading', { name: 'Chart preview' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Chart preview' })).toBeVisible({ timeout: 15000 });
         await page.getByRole('button', { name: 'Create a draft page We will' }).click();
         await page.getByRole('button', { name: 'Save And Continue ' }).click();
 
         // Step 4
-        await expect(page.getByRole('heading')).toContainText('Extra Features');
+        await expect(page.getByRole('heading', { name: 'Extra Features' })).toBeVisible();
         await expect(page.getByRole('button', { name: 'Enable perfomance features' })).toBeVisible();
         await page.getByRole('button', { name: 'Enable perfomance features' }).click();
         await expect(page.getByLabel('Extra Features We\'re').getByRole('listitem')).toContainText('Improve your website speed and images by 80% with Optimole');
@@ -72,7 +72,7 @@ test.describe( 'Onboarding', () => {
         await page.getByRole('button', { name: 'Skip Improvement' }).click();
 
         // Step 5
-        await expect(page.getByRole('heading')).toContainText('Updates, tutorials, special offers, and more');
+        await expect(page.getByRole('heading', { name: 'Updates, tutorials, special offers, and more' })).toBeVisible();
         await expect(page.getByLabel('Updates, tutorials, special')).toContainText('Get exclusive access to the Visualizer newsletter.');
         await expect(page.getByLabel('Updates, tutorials, special').locator('img')).toBeVisible();
         await expect(page.getByPlaceholder('test1@xx.com')).toBeVisible();

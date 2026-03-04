@@ -89,11 +89,11 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$this->_addFilter( 'admin_footer_text', 'render_review_notice' );
 
-		if ( ! defined( 'TI_CYPRESS_TESTING' ) ) {
+		if ( ! defined( 'TI_E2E_TESTING' ) ) {
 			$this->_addFilter( 'themeisle-sdk/survey/' . VISUALIZER_DIRNAME, 'get_survey_metadata', 10, 2 );
 		}
 
-		if ( defined( 'TI_CYPRESS_TESTING' ) ) {
+		if ( defined( 'TI_E2E_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
 
