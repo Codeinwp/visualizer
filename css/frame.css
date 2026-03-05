@@ -1097,7 +1097,8 @@ button#editor-chart-button {
 
 .only-pro-feature input,
 .only-pro-feature button,
-.only-pro-feature select {
+.only-pro-feature select,
+.only-pro-feature textarea {
 	cursor: not-allowed !important;
 	pointer-events: none;
 }

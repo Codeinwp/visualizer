@@ -121,6 +121,7 @@ function visualizer_launch() {
 	if ( is_admin() || defined( 'WP_TESTS_DOMAIN' ) ) {
 		// set admin modules
 		$plugin->setModule( Visualizer_Module_Admin::NAME );
+		$plugin->setModule( Visualizer_Module_AI::NAME );
 	}
 
 	// set frontend modules
