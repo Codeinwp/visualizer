@@ -2,6 +2,7 @@
 /* global visualizer */
 /* global jQuery */
 var vizClipboard1=null;
+var vizClipboard2=null;
 (function($, visualizer){
     
     function initActionsButtons(v) {
@@ -13,12 +14,12 @@ var vizClipboard1=null;
             });
         }
 
-        if($('a.visualizer-action[data-visualizer-type=copy]').length > 0) {
+        if($('a.visualizer-action[data-visualizer-type=copy]').length > 0 && vizClipboard2 === null) {
             $('a.visualizer-action[data-visualizer-type=copy]').on('click', function(e) {
                 e.preventDefault();
             });
-            var clipboard = new ClipboardJS('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
-            clipboard.on('success', function(e) {
+            vizClipboard2 = new ClipboardJS('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
+            vizClipboard2.on('success', function(e) {
                 window.alert(v.i10n['copied']);
             });
         }
