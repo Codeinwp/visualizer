@@ -87,7 +87,50 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 					<input type="button" class="button button-primary" id='visualizer-query-fetch' value='<?php _e( 'Show Results', 'visualizer' ); ?>'>
 				</div>
 			</div>
-			<div class='db-wizard-hints'>
+			<?php
+		$openai_key = get_option( 'visualizer_openai_api_key', '' );
+		$gemini_key = get_option( 'visualizer_gemini_api_key', '' );
+		$claude_key = get_option( 'visualizer_claude_api_key', '' );
+		if ( ! empty( $openai_key ) || ! empty( $gemini_key ) || ! empty( $claude_key ) ) :
+		?>
+		<div id="visualizer-ai-sql-assistant" style="margin:10px 0;padding:14px 16px;background:linear-gradient(135deg,#f0f7ff 0%,#e8f4fd 100%);border:1px solid #b3d4f5;border-radius:6px;">
+			<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+				<span style="font-size:18px;">&#x1F916;</span>
+				<strong style="color:#0073aa;font-size:13px;"><?php esc_html_e( 'AI SQL Assistant', 'visualizer' ); ?></strong>
+				<span style="font-size:11px;color:#888;"><?php esc_html_e( 'Describe what you want and AI writes the query for you', 'visualizer' ); ?></span>
+			</div>
+			<textarea id="visualizer-ai-sql-prompt" placeholder="<?php esc_attr_e( 'e.g. Get all WooCommerce products from category "toys" with their prices', 'visualizer' ); ?>" style="width:100%;height:58px;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:12px;box-sizing:border-box;resize:vertical;margin-bottom:8px;"></textarea>
+			<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+				<label for="visualizer-ai-sql-model" style="font-size:12px;color:#555;white-space:nowrap;"><?php esc_html_e( 'AI model:', 'visualizer' ); ?></label>
+				<select id="visualizer-ai-sql-model" style="height:30px;padding:0 24px 0 8px;border:1px solid #8c8f94;border-radius:3px;font-size:12px;background-color:#fff;appearance:auto;-webkit-appearance:menulist;cursor:pointer;">
+					<?php if ( ! empty( $openai_key ) ) : ?>
+						<option value="openai"><?php esc_html_e( 'ChatGPT (OpenAI)', 'visualizer' ); ?></option>
+					<?php endif; ?>
+					<?php if ( ! empty( $gemini_key ) ) : ?>
+						<option value="gemini"><?php esc_html_e( 'Gemini (Google)', 'visualizer' ); ?></option>
+					<?php endif; ?>
+					<?php if ( ! empty( $claude_key ) ) : ?>
+						<option value="claude"><?php esc_html_e( 'Claude (Anthropic)', 'visualizer' ); ?></option>
+					<?php endif; ?>
+				</select>
+				<button id="visualizer-ai-sql-generate" class="button button-primary" type="button" style="font-size:12px;"><?php esc_html_e( 'Generate Query', 'visualizer' ); ?></button>
+				<span id="visualizer-ai-sql-loading" style="display:none;color:#0073aa;font-size:12px;">&#9203; <?php esc_html_e( 'Generating...', 'visualizer' ); ?></span>
+			</div>
+			<div id="visualizer-ai-sql-error" style="display:none;margin-top:10px;padding:8px 12px;background:#ffebeb;border:1px solid #dc3232;border-radius:4px;color:#dc3232;font-size:12px;"></div>
+			<div id="visualizer-ai-sql-result" style="display:none;margin-top:12px;padding:12px;background:#fff;border:1px solid #ddd;border-radius:4px;">
+				<div id="visualizer-ai-sql-explanation" style="margin-bottom:8px;font-size:12px;color:#555;font-style:italic;"></div>
+				<pre id="visualizer-ai-sql-query-preview" style="background:#f8f8f8;border:1px solid #e0e0e0;padding:10px;border-radius:4px;font-size:11px;max-height:160px;overflow-y:auto;white-space:pre-wrap;word-wrap:break-word;margin:0 0 10px 0;"></pre>
+				<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+					<button id="visualizer-ai-sql-use-query" class="button button-primary" type="button" data-query=""><?php esc_html_e( 'Use This Query', 'visualizer' ); ?></button>
+					<span style="font-size:11px;color:#888;"><?php esc_html_e( 'Replaces current query in the editor', 'visualizer' ); ?></span>
+				</div>
+				<div id="visualizer-ai-sql-suggestions-label" style="display:none;margin-top:12px;font-size:11px;color:#666;font-weight:600;"><?php esc_html_e( 'Try also:', 'visualizer' ); ?></div>
+				<div id="visualizer-ai-sql-suggestions" style="margin-top:6px;"></div>
+			</div>
+		</div>
+		<?php endif; ?>
+
+		<div class='db-wizard-hints'>
 				<ul>
 					<li><?php echo __( 'Your database prefix is:', 'visualizer' ); ?> <span class="visualizer-emboss"><?php echo $wpdb->prefix; ?></span></li>
 					<li>
@@ -980,7 +1023,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 													add_query_arg(
 														array(
 															'action' => Visualizer_Module::is_pro() ? Visualizer_Pro::ACTION_FETCH_DATA : '',
-															'nonce'  => Visualizer_Module::is_pro() ? wp_create_nonce( Visualizer_Pro::ACTION_FETCH_DATA ) : wp_create_nonce(),
+															'nonce'  => wp_create_nonce( 'visualizer-upload-data' ),
 														),
 														admin_url( 'admin-ajax.php' )
 													)
