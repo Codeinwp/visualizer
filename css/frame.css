@@ -53,17 +53,17 @@
 /******************************************************************************/
 
 #sidebar {
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 	position: absolute;
-	z-index: 75;
+	z-index: 80;
 	top: 0;
 	right: 0;
 	bottom: 60px;
 	width: 350px;
 	border-left: 1px solid #dfdfdf;
 	background: whitesmoke;
-
-	-webkit-overflow-scrolling: touch;
+	overscroll-behavior: contain;
 }
 
 .viz-group {
@@ -1113,12 +1113,14 @@ button#editor-chart-button {
 	left: 0;
 	width: 100%;
 	opacity: 0;
+	pointer-events: none;
 	background: rgba(253,253,253,0.9);
 	transition: 0.5s ease;
 }
 
 .only-pro-feature:hover .only-pro-content {
 	opacity: 1;
+	pointer-events: auto;
 }
 
 .only-pro-container {
