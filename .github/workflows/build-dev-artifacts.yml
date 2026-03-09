@@ -29,6 +29,7 @@ jobs:
           composer install --no-dev --prefer-dist --no-progress
       - name: Create zip
         run: |
+          npm ci
           CURRENT_VERSION=$(node -p -e "require('./package.json').version")
           COMMIT_HASH=$(git rev-parse --short HEAD)
           DEV_VERSION="${CURRENT_VERSION}-dev.${COMMIT_HASH}"
