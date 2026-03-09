@@ -1,8 +1,8 @@
 /* global console */
 /* global visualizer */
 /* global jQuery */
-var vizClipboard1=null;
-var vizClipboard2=null;
+window['vizClipboard1'] = window['vizClipboard1'] || null;
+window['vizClipboard2'] = window['vizClipboard2'] || null;
 (function($, visualizer){
     
     function initActionsButtons(v) {
