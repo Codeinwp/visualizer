@@ -64,7 +64,7 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 	 * @since 3.11.0
 	 *
 	 * @access private
-	 * @return object
+	 * @return object|null
 	 */
 	private function run_export() {
 		$_GET = array(
@@ -115,6 +115,9 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		$response = $this->run_export();
+		$this->assertIsObject( $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertTrue( $response->success );
 
 		$data = $response->data;

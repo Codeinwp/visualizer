@@ -277,7 +277,7 @@ class Visualizer_Module {
 			$fp = fopen( wp_tempnam(), 'w+' );
 		}
 		if ( ! $fp ) {
-			return array( 'csv' => '', 'name' => $filename, 'string' => '' );
+			return null;
 		}
 		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
 			unset( $rows[1] );
