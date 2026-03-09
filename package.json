@@ -22,6 +22,7 @@
     "env:up": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
     "env:down": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
     "wp-env": "wp-env",
+    "grunt": "grunt",
     "test:env:start": "wp-env start",
     "test:env:stop": "wp-env stop",
     "test:env:clean": "wp-env clean",

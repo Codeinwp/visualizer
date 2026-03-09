@@ -32,7 +32,7 @@ jobs:
           CURRENT_VERSION=$(node -p -e "require('./package.json').version")
           COMMIT_HASH=$(git rev-parse --short HEAD)
           DEV_VERSION="${CURRENT_VERSION}-dev.${COMMIT_HASH}"
-          grunt version::${DEV_VERSION}
+          npm run grunt version::${DEV_VERSION}
           npm run dist
       - name: Retrieve branch name
         id: retrieve-branch-name
