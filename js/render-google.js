@@ -31,12 +31,17 @@ var isResizeRequest = false;
         // remember, some charts do not support annotations so they should not be included in this.
         var no_annotation_charts = ['tabular', 'timeline', 'gauge', 'geo', 'bubble', 'candlestick'];
         if ( undefined !== chart.settings && undefined !== chart.settings.series && undefined === chart.settings.series.length ) {
-            var chartSeries = [];
-            var chartSeriesValue = Object.values( chart.settings.series );
-            $.each( Object.keys( chart.settings.series ), function( index, element ) {
-                chartSeries[element] = chartSeriesValue[index];
-            } );
-            chart.settings.series = chartSeries;
+            var seriesKeys = Object.keys( chart.settings.series );
+            // Only convert when keys are numeric indices (PHP JSON-encoded array).
+            // String keys (e.g. named series from manual config) must be left as-is.
+            if ( seriesKeys.every( function( k ) { return ! isNaN( k ); } ) ) {
+                var chartSeries = [];
+                var chartSeriesValue = Object.values( chart.settings.series );
+                $.each( seriesKeys, function( index, element ) {
+                    chartSeries[ element ] = chartSeriesValue[ index ];
+                } );
+                chart.settings.series = chartSeries;
+            }
         }
         if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined' && ! no_annotation_charts.includes(chart.type) ) {
             hasAnnotation = chart.series.length - chart.settings.series.length > 1;
