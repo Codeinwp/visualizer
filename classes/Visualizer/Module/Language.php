@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 if ( ! class_exists( '_WP_Editors' ) ) {
-	require( ABSPATH . WPINC . '/class-wp-editor.php' );
+	require ABSPATH . WPINC . '/class-wp-editor.php';
 }
 
 /**
@@ -79,7 +79,6 @@ class Visualizer_Module_Language extends Visualizer_Module {
 	public function get_strings() {
 		return $this->strings;
 	}
-
 }
 
 $visualizerLangClass = new Visualizer_Module_Language();

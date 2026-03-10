@@ -58,7 +58,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 	 *
 	 * @access public
 	 */
-	function load_assets( $deps, $is_frontend ) {
+	public function load_assets( $deps, $is_frontend ) {
 		$this->load_dependent_assets( array( 'moment' ) );
 
 		wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
@@ -101,7 +101,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 		$this->_supportsAnimation = false;
 		$this->_renderGeneralSettings();
 		$this->_renderTableSettings();
-		 $this->_renderColumnSettings();
+		$this->_renderColumnSettings();
 		$this->_renderAdvancedSettings();
 	}
 
@@ -499,5 +499,4 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 				break;
 		}
 	}
-
 }

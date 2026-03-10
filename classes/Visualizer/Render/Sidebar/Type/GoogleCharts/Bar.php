@@ -72,5 +72,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Bar extends Visualizer_Render_
 		$this->_renderViewSettings();
 		$this->_renderAdvancedSettings();
 	}
-
 }

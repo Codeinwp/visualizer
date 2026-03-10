@@ -112,7 +112,7 @@ abstract class Visualizer_Render {
 	 * @abstract
 	 * @access protected
 	 */
-	protected abstract function _toHTML();
+	abstract protected function _toHTML();
 
 	/**
 	 * Builds template and return it as string.
@@ -215,6 +215,4 @@ abstract class Visualizer_Render {
 
 		return true;
 	}
-
-
 }

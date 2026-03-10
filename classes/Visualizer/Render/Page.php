@@ -86,5 +86,4 @@ class Visualizer_Render_Page extends Visualizer_Render {
 	 * @access protected
 	 */
 	protected function _renderToolbar() {}
-
 }

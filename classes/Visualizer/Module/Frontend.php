@@ -87,7 +87,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	/**
 	 * Adds the async attribute to certain scripts.
 	 */
-	function script_loader_tag( $tag, $handle, $src ) {
+	public function script_loader_tag( $tag, $handle, $src ) {
 		if ( is_admin() ) {
 			return $tag;
 		}
@@ -98,7 +98,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				$tag = str_replace( ' src', ' async src', $tag );
 				break;
 			}
-		};
+		}
 
 		// Async scripts.
 		$scripts = array( 'dom-to-image' );
@@ -124,7 +124,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	/**
 	 * Returns the language/locale.
 	 */
-	function getLanguage( $dummy, $only_language ) {
+	public function getLanguage( $dummy, $only_language ) {
 		return $this->get_language();
 	}
 
@@ -132,7 +132,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	/**
 	 * Registers the endpoints
 	 */
-	function endpoint_register() {
+	public function endpoint_register() {
 		register_rest_route(
 			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/action/(?P<chart>\d+)/(?P<type>.+)/',
@@ -142,7 +142,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				'args'     => array(
 					'chart' => array(
 						'required' => true,
-						'sanitize_callback' => function( $param ) {
+						'sanitize_callback' => function ( $param ) {
 							return is_numeric( $param ) ? $param : null;
 						},
 					),
@@ -342,8 +342,8 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// in case revisions exist.
-		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
-		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
+		$revisions = $this->undoRevisions( $chart->ID, true );
+		if ( true === $revisions ) {
 			$chart = get_post( $chart->ID );
 		}
 
@@ -509,7 +509,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					)
 				);
 			}
-			$count++;
+			++$count;
 		}
 		$prefix = 'C' . 'h' . 'a' . 'rt';
 		if ( $type === 'tabular' ) {

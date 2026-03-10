@@ -131,6 +131,5 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Bar extends Visualizer_Render_Sideb
 			self::_renderSectionEnd();
 
 		self::_renderGroupEnd();
-
 	}
 }

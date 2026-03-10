@@ -175,5 +175,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Candlestick extends Visualizer
 			null
 		);
 	}
-
 }

@@ -93,7 +93,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 			</div>
 			<div class="viz-info-item">
 				<label for="viz-backend-name"><?php _e( 'Backend chart title for internal usage', 'visualizer' ); ?></label>
-				<input type="text" id="viz-backend-name" value="<?php echo  $hasTitle ? $chartSettings['backend-title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>">
+				<input type="text" id="viz-backend-name" value="<?php echo $hasTitle ? $chartSettings['backend-title'] : ( '#' . esc_attr( $this->chart->ID ) ); ?>">
 			</div>
 		</div>
 		<div id="viz-tabs">
@@ -156,5 +156,4 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		Visualizer_Render_Layout::show( 'db-query', $query, $this->chart->ID );
 		Visualizer_Render_Layout::show( 'json-screen', $this->chart->ID );
 	}
-
 }

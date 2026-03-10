@@ -136,7 +136,6 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				'</a>'
 			)
 		);
-
 	}
 
 	/**
@@ -461,7 +460,6 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 		);
 
 		$this->_renderRoleField( $index );
-
 	}
 
 	/**
@@ -525,5 +523,4 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			)
 		);
 	}
-
 }

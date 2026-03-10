@@ -79,7 +79,6 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 			);
 
 		self::_renderSectionEnd();
-
 	}
 
 	/**
@@ -124,7 +123,6 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 			);
 
 		self::_renderSectionEnd();
-
 	}
 
 	/**
@@ -318,6 +316,5 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 			);
 
 		self::_renderSectionEnd();
-
 	}
 }

@@ -71,6 +71,5 @@ class Visualizer_Module_Upgrade extends Visualizer_Module {
 			AND pm.meta_value IN ( 'dataTable', 'table' )"
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
-
 	}
 }
