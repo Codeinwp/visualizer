@@ -790,7 +790,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 													data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 													data-t-chart="<?php _e( 'Edit Data', 'visualizer' ); ?>"
 											>
-											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
+											<p class="viz-group-description viz-info-msg" style="display:none"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 										</div>
 										<?php } else { ?>
 											<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
@@ -799,7 +799,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 													data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
 													data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>"
 											>
-											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
+											<p class="viz-group-description viz-info-msg" style="display:none"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 										<?php } ?>
 									</form>
 								</div>
