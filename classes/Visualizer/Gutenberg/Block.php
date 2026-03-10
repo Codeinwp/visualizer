@@ -874,7 +874,7 @@ class Visualizer_Gutenberg_Block {
 	 * @param mixed $value The value to sanitize.
 	 * @return mixed Sanitized value.
 	 */
-	private function sanitize_value( $value ) {
+	public function sanitize_value( $value ) {
 		if ( is_string( $value ) ) {
 			return sanitize_text_field( $value );
 		}
