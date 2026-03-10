@@ -375,7 +375,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @access private
 	 *
-	 * @param WP_Post|null $chart The chart object.
+	 * @param WP_Post $chart The chart object.
 	 *
 	 * @return array The array of chart data.
 	 */
@@ -638,6 +638,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		wp_register_style( 'visualizer-frame', VISUALIZER_ABSURL . 'css/frame.css', array( 'visualizer-chosen' ), Visualizer_Plugin::VERSION );
 		wp_register_script( 'visualizer-frame', VISUALIZER_ABSURL . 'js/frame.js', array( 'visualizer-chosen', 'jquery-ui-accordion', 'jquery-ui-tabs' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-ai-config', VISUALIZER_ABSURL . 'js/ai-config.js', array( 'jquery', 'visualizer-frame' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-ai-chart-from-image', VISUALIZER_ABSURL . 'js/ai-chart-from-image.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-ai-chart-data-populate', VISUALIZER_ABSURL . 'js/ai-chart-data-populate.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+		wp_register_script( 'visualizer-ai-sql-query', VISUALIZER_ABSURL . 'js/ai-sql-query.js', array( 'jquery', 'visualizer-ai-config' ), Visualizer_Plugin::VERSION, true );
 		wp_register_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 		wp_register_script(
 			'visualizer-render',
@@ -853,6 +857,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-preview' );
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
+		wp_enqueue_script( 'visualizer-ai-config' );
+		wp_enqueue_script( 'visualizer-ai-chart-data-populate' );
+		wp_enqueue_script( 'visualizer-ai-sql-query' );
 
 		if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) {
 			wp_enqueue_script( 'visualizer-editor-simple' );
@@ -920,6 +927,20 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
+		global $wpdb;
+		wp_localize_script(
+			'visualizer-ai-config',
+			'visualizerAI',
+			array(
+				'nonce'         => wp_create_nonce( 'visualizer-ai-generate' ),
+				'nonce_sql'     => wp_create_nonce( 'visualizer-ai-sql-generate' ),
+				'chart_type'    => $data['type'],
+				'chart_library' => isset( $data['library'] ) && ! empty( $data['library'] ) ? $data['library'] : 'Google Charts',
+				'ajaxurl'       => admin_url( 'admin-ajax.php' ),
+				'db_prefix'     => $wpdb->prefix,
+			)
+		);
+
 		$render          = new Visualizer_Render_Page_Data();
 		$render->chart   = $this->_chart;
 		$render->type    = $data['type'];
@@ -961,7 +982,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( Visualizer_Module_Admin::checkChartStatus( $type ) ) {
 				if ( empty( $library ) ) {
 					// library cannot be empty.
+					error_log( 'Visualizer: Library is empty! Available POST data: ' . print_r( $_POST, true ) );
 					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'Chart library empty while creating the chart! Aborting...', 'error', __FILE__, __LINE__ );
+					// Show error message instead of blank screen
+					echo '<div style="padding: 20px; color: red;">';
+					echo '<h2>Error: Chart Library Not Selected</h2>';
+					echo '<p>Please select a chart library and try again.</p>';
+					echo '<p><a href="javascript:history.back()">Go Back</a></p>';
+					echo '</div>';
 					return;
 				}
 
@@ -980,9 +1008,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				Visualizer_Module_Utility::set_defaults( $this->_chart );
 
 				// redirect to next tab
-				// changed by Ash/Upwork
-				wp_redirect( esc_url_raw( add_query_arg( 'tab', 'settings' ) ) );
-
+				$redirect_url = esc_url_raw( add_query_arg( 'tab', 'settings' ) );
+				wp_redirect( $redirect_url );
+				exit;
+			} else {
+				echo '<div style="padding: 20px; color: red;">';
+				echo '<h2>Error: Invalid Chart Type</h2>';
+				echo '<p>The selected chart type is not available.</p>';
+				echo '<p><a href="javascript:history.back()">Go Back</a></p>';
+				echo '</div>';
 				return;
 			}
 		}
@@ -992,6 +1026,27 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->chart = $this->_chart;
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-frame' );
+		wp_enqueue_script( 'visualizer-ai-chart-from-image' );
+
+		// Localize script for AI image analysis
+		$has_openai = ! empty( get_option( 'visualizer_openai_api_key', '' ) );
+		$has_gemini = ! empty( get_option( 'visualizer_gemini_api_key', '' ) );
+		$has_claude = ! empty( get_option( 'visualizer_claude_api_key', '' ) );
+
+		wp_localize_script(
+			'visualizer-ai-chart-from-image',
+			'visualizerAI',
+			array(
+				'nonce_image'   => wp_create_nonce( 'visualizer-ai-image' ),
+				'ajaxurl'       => admin_url( 'admin-ajax.php' ),
+				'has_openai'    => $has_openai,
+				'has_gemini'    => $has_gemini,
+				'has_claude'    => $has_claude,
+				'chart_types'   => Visualizer_Module_Admin::_getChartTypesLocalized( false, false, false, 'types' ),
+				'pro_url'       => tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'aichartimage', 'chartfromimage' ),
+			)
+		);
+
 		wp_iframe( array( $render, 'render' ) );
 	}
 
@@ -1136,6 +1191,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function uploadData() {
+		// Prevent any PHP warnings/errors from contaminating the response
+		ini_set( 'display_errors', '0' );
+
 		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
 		// otherwise, assume this is a normal web request.
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
@@ -1454,7 +1512,39 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$html       = $source->fetch( true );
 		$error      = $source->get_error();
 		if ( ! empty( $error ) ) {
+			// On some MySQL environments (e.g. Local by Flywheel), a syntactically valid query
+			// that matches 0 rows will drop the connection, causing WordPress to report
+			// "Unable to connect to database". Distinguish this from a real server outage by
+			// pinging the DB with SELECT 1 after the error. If it responds, the server is fine
+			// and the drop was caused by the query returning no rows — show "no results" instead.
+			if ( stripos( $error, 'Unable to connect' ) !== false || stripos( $error, 'connect to database' ) !== false ) {
+				global $wpdb;
+				$wpdb->hide_errors();
+				$ping = $wpdb->get_var( 'SELECT 1' );
+				$wpdb->show_errors();
+
+				if ( $ping !== null ) {
+					// DB is alive — connection drop was query-specific (0 rows on this MySQL).
+					wp_send_json_success( array(
+						'table'   => '',
+						'empty'   => true,
+						'message' => __( 'No results found. The query matched no rows — try adjusting your filters or date range.', 'visualizer' ),
+					) );
+				}
+
+				// DB genuinely unreachable.
+				wp_send_json_error( array( 'msg' => __( 'Could not connect to the database. Please check your database configuration.', 'visualizer' ) ) );
+			}
+
 			wp_send_json_error( array( 'msg' => $error ) );
+		}
+		// No error and no rows returned (0-row result on a healthy connection).
+		if ( false === $html || ( is_string( $html ) && preg_match( '/<tbody[^>]*>\s*<\/tbody>/i', $html ) ) ) {
+			wp_send_json_success( array(
+				'table'   => '',
+				'empty'   => true,
+				'message' => __( 'No results found. The query matched no rows — try adjusting your filters or date range.', 'visualizer' ),
+			) );
 		}
 		wp_send_json_success( array( 'table' => $html ) );
 	}

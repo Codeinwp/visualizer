@@ -7,13 +7,7 @@
 /* global vizHaveSettingsChanged */
 
 (function ($) {
-    $(window).on('load', function(){
-        let chart_select = $('#chart-select');
-        if(chart_select.length > 0){
-            // scroll to the selected chart type.
-            $('#chart-select')[0].scrollIntoView();
-        }
-    });
+    // Auto-scroll removed - scroll position is now managed in Types.php to keep AI image upload visible
 
     $(document).ready(function () {
         onReady();
@@ -259,7 +253,19 @@
             }
         });
 
-        enable_libraries_for($('input.type-radio:checked').val(), $typeVsLibrary);
+        // Get type vs library mapping from the select element
+        const rendererSelect = document.querySelector('select.viz-select-library');
+        if (rendererSelect) {
+            const mappingData = rendererSelect.getAttribute('data-type-vs-library');
+            if (mappingData) {
+                try {
+                    const typeVsLibrary = JSON.parse(mappingData);
+                    enable_libraries_for($('input.type-radio:checked').val(), typeVsLibrary);
+                } catch (e) {
+                    console.error('Error parsing type-vs-library data:', e);
+                }
+            }
+        }
     }
 
     function enable_libraries_for($type, $typeVsLibrary) {
@@ -271,7 +277,16 @@
             $('select.viz-select-library option[value="' + $lib + '"]').removeClass('disabled').removeAttr('disabled');
             $('select.viz-select-library option[value="' + $lib + '"] .premium-label').remove();
         });
-        $('select.viz-select-library').val( $('select.viz-select-library option:not(.disabled)').val() );
+
+        // Only change the selected value if the current selection is disabled or empty
+        var $select = $('select.viz-select-library');
+        var currentVal = $select.val();
+        var $currentOption = $select.find('option[value="' + currentVal + '"]');
+
+        // If current value is empty, disabled, or not in the enabled list, change to first enabled option
+        if (!currentVal || $currentOption.hasClass('disabled') || $currentOption.attr('disabled')) {
+            $select.val( $select.find('option:not(.disabled)').val() );
+        }
     }
 
     function init_permissions(){
@@ -399,13 +414,28 @@
                 },
                 success : function(data){
                     if(data.success){
-                        $('.db-wizard-results').html(data.data.table);
-                        $('#results').DataTable({
-                            "paging":   false
-                        });
+                        if(data.data.empty){
+                            var infoMsg = data.data.message || 'The query ran successfully but returned no results.';
+                            $('.db-wizard-error').html('<span style="color:#555;">&#8505; ' + infoMsg + '</span>');
+                        }else{
+                            $('.db-wizard-results').html(data.data.table);
+                            $('#results').DataTable({
+                                "paging":   false
+                            });
+                        }
                     }else{
-                        $('.db-wizard-error').html(data.data.msg);
+                        var errMsg = (data.data && data.data.msg) ? data.data.msg : 'An unknown error occurred.';
+                        $('.db-wizard-error').html('<strong>Query error:</strong> ' + errMsg);
                     }
+                },
+                error: function(xhr, status, err){
+                    var errMsg = 'Request failed';
+                    if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.msg) {
+                        errMsg = xhr.responseJSON.data.msg;
+                    } else if (err) {
+                        errMsg = err;
+                    }
+                    $('.db-wizard-error').html('<strong>Query error:</strong> ' + errMsg);
                 },
                 complete: function(){
                     end_ajax($('#visualizer-db-query'));
