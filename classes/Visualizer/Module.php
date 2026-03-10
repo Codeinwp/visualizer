@@ -270,11 +270,14 @@ class Visualizer_Module {
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$fp = function_exists( 'tmpfile' ) ? @tmpfile() : null;
-		if ( null === $fp ) {
+		if ( ! $fp ) {
 			if ( ! function_exists( 'wp_tempnam' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/file.php';
 			}
 			$fp = fopen( wp_tempnam(), 'w+' );
+		}
+		if ( ! $fp ) {
+			return array( 'csv' => '', 'name' => $filename, 'string' => '' );
 		}
 		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
 			unset( $rows[1] );
