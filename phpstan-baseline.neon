@@ -7,7 +7,7 @@ parameters:
 			path: classes/Visualizer/Gutenberg/Block.php
 
 		-
-			message: '#^Call to function is_wp_error\(\) with string will always evaluate to false\.$#'
+			message: '#^Call to function is_wp_error\(\) with non\-empty\-string will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
@@ -33,12 +33,6 @@ parameters:
 		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:add_rest_query_vars\(\) has parameter \$args with no type specified\.$#'
 			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:add_rest_query_vars\(\) has parameter \$request with generic class WP_REST_Request but does not specify its types\: T$#'
-			identifier: missingType.generics
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
 
@@ -201,6 +195,12 @@ parameters:
 		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:upload_csv_data\(\) has parameter \$data with no type specified\.$#'
 			identifier: missingType.parameter
+			count: 1
+			path: classes/Visualizer/Gutenberg/Block.php
+
+		-
+			message: '#^Unable to resolve the template type TUrl in call to function wp_http_validate_url$#'
+			identifier: argument.templateType
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
 
@@ -1387,6 +1387,12 @@ parameters:
 			path: classes/Visualizer/Module/Chart.php
 
 		-
+			message: '#^Unable to resolve the template type TUrl in call to function wp_http_validate_url$#'
+			identifier: argument.templateType
+			count: 1
+			path: classes/Visualizer/Module/Chart.php
+
+		-
 			message: '#^Undefined variable\: \$atts$#'
 			identifier: variable.undefined
 			count: 1
@@ -1509,12 +1515,6 @@ parameters:
 		-
 			message: '#^Method Visualizer_Module_Frontend\:\:perform_action\(\) has no return type specified\.$#'
 			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Module/Frontend.php
-
-		-
-			message: '#^Method Visualizer_Module_Frontend\:\:perform_action\(\) has parameter \$params with generic class WP_REST_Request but does not specify its types\: T$#'
-			identifier: missingType.generics
 			count: 1
 			path: classes/Visualizer/Module/Frontend.php
 
@@ -2031,12 +2031,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$wizard_data array\)\: Unexpected token "\$wizard_data", expected type at offset 53 on line 5$#'
 			identifier: phpDoc.parseError
-			count: 1
-			path: classes/Visualizer/Module/Wizard.php
-
-		-
-			message: '#^Path in include_once\(\) "\./wp\-admin/includes/plugin\-install\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
 			count: 1
 			path: classes/Visualizer/Module/Wizard.php
 

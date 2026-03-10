@@ -34,7 +34,7 @@
     "format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
     "lint": "phpcs --standard=phpcs.xml",
     "phpstan": "phpstan",
-    "phpstan:generate:baseline": "phpstan --generate-baseline"
+    "phpstan:generate:baseline": "phpstan --generate-baseline --memory-limit=2G"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
