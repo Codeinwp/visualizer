@@ -291,7 +291,5 @@ abstract class Visualizer_Render_Sidebar_Linear extends Visualizer_Render_Sideba
 		);
 
 		$this->_renderRoleField( $index );
-
 	}
-
 }

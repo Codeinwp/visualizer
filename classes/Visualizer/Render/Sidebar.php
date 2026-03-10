@@ -208,7 +208,6 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 
 		self::_renderSectionEnd();
 		self::_renderGroupEnd();
-
 	}
 
 	/**
@@ -276,7 +275,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	private static function is_excel_enabled() {
 		$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 		if ( is_readable( $vendor_file ) ) {
-			include_once( $vendor_file );
+			include_once $vendor_file;
 		}
 
 		if ( version_compare( phpversion(), '5.6.0', '<' ) ) {
@@ -313,7 +312,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			echo '<select class="control-select ', implode( ' ', $classes ) , '" name="', $name, '" ', ( $multiple ? 'multiple' : '' ), ' ' , $atts, '>';
+			echo '<select class="control-select ', implode( ' ', $classes ), '" name="', $name, '" ', ( $multiple ? 'multiple' : '' ), ' ', $atts, '>';
 		foreach ( $options as $key => $label ) {
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$extra      = $multiple && is_array( $value ) ? ( in_array( $key, $value ) ? 'selected' : '' ) : selected( $key, $value, false );
@@ -336,13 +335,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @param string $title The title of the select item.
 	 * @param string $name The name of the select item.
 	 * @param string $value The actual value of the select item.
-	 * @param string $default The default value of the color picker.
+	 * @param string $default_color The default value of the color picker.
 	 */
-	protected static function _renderColorPickerItem( $title, $name, $value, $default ) {
+	protected static function _renderColorPickerItem( $title, $name, $value, $default_color ) {
 		echo '<div class="viz-section-item">';
 			echo '<b>', $title, '</b>';
 			echo '<div>';
-				echo '<input type="text" class="color-picker-hex color-picker" data-alpha-enabled="true" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default : esc_attr( $value ), '" data-default-color="', $default, '">';
+				echo '<input type="text" class="color-picker-hex color-picker" data-alpha-enabled="true" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default_color : esc_attr( $value ), '" data-default-color="', $default_color, '">';
 			echo '</div>';
 		echo '</div>';
 	}
@@ -387,10 +386,10 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * @access public
 	 * @param string $title The title of this group.
 	 * @param string $html Any additional HTML.
-	 * @param string $class Any additional classes.
+	 * @param string $extra_class Any additional classes.
 	 */
-	public static function _renderGroupStart( $title, $html = '', $class = '', $id = '' ) {
-		echo '<li id="' . $id . '" class="viz-group ' . $class . '">';
+	public static function _renderGroupStart( $title, $html = '', $extra_class = '', $id = '' ) {
+		echo '<li id="' . $id . '" class="viz-group ' . $extra_class . '">';
 			echo '<h3 class="viz-group-title">', $title, '</h3>';
 			echo $html;
 			echo '<ul class="viz-group-content">';
@@ -506,12 +505,11 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	/**
 	 * Render a checkbox item
 	 */
-	protected static function _renderCheckboxItem( $title, $name, $value, $default, $desc, $disabled = false ) {
+	protected static function _renderCheckboxItem( $title, $name, $value, $default_value, $desc, $disabled = false ) {
 		echo '<div class="viz-section-item">';
 			echo '<a class="more-info" href="javascript:;">[?]</a>';
 			echo '<b>', $title, '</b>';
-			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			echo '<input type="checkbox" class="control-check" value="', $default, '" name="', $name, '" ', ( $value == $default ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
+			echo '<input type="checkbox" class="control-check" value="', $default_value, '" name="', $name, '" ', ( $value ? 'checked' : '' ), ' ', ( $disabled ? 'disabled=disabled' : '' ), '>';
 			echo '<p class="viz-section-description">', $desc, '</p>';
 		echo '</div>';
 	}
@@ -552,7 +550,6 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		if ( in_array( 'numeral', $libs, true ) && ! wp_script_is( 'numeral', 'registered' ) ) {
 			wp_register_script( 'numeral', VISUALIZER_ABSURL . 'js/lib/numeral.min.js', array(), Visualizer_Plugin::VERSION );
 		}
-
 	}
 
 	/**
@@ -656,8 +653,8 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			array( 'vz-controls-opt' )
 		);
 
-		$column_index = [ 'false' => '' ];
-		$column_label = [ 'false' => '' ];
+		$column_index = array( 'false' => '' );
+		$column_label = array( 'false' => '' );
 		if ( ! empty( $this->__series ) ) {
 			foreach ( $this->__series as $key => $column ) {
 				$column_type            = isset( $column['type'] ) ? $column['type'] : '';

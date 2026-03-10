@@ -390,7 +390,6 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 
 			</div>
 		<?php
-
 	}
 
 	/**
@@ -787,18 +786,18 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											</p>
 											<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
 											<input type="button" id="editor-button" class="button button-primary "
-												   value="<?php _e( 'Edit Data', 'visualizer' ); ?>" data-current="chart"
-												   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-												   data-t-chart="<?php _e( 'Edit Data', 'visualizer' ); ?>"
+													value="<?php _e( 'Edit Data', 'visualizer' ); ?>" data-current="chart"
+													data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+													data-t-chart="<?php _e( 'Edit Data', 'visualizer' ); ?>"
 											>
 											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 										</div>
 										<?php } else { ?>
 											<input type="button" id="editor-undo" class="button button-secondary" style="display: none" value="<?php _e( 'Undo Changes', 'visualizer' ); ?>">
 											<input type="button" id="editor-chart-button" class="button button-primary "
-												   value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
-												   data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
-												   data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>"
+													value="<?php _e( 'View Editor', 'visualizer' ); ?>" data-current="chart"
+													data-t-editor="<?php _e( 'Show Chart', 'visualizer' ); ?>"
+													data-t-chart="<?php _e( 'View Editor', 'visualizer' ); ?>"
 											>
 											<p class="viz-group-description viz-info-msg"><?php echo sprintf( __( 'Please make sure you click \'Show Chart\' before you save the chart.', 'visualizer' ) ); ?></p>
 										<?php } ?>
@@ -1017,8 +1016,8 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											</select>
 										</form>
 										<input type="button" id="existing-chart" class="button button-primary"
-											   value="<?php _e( 'Import Chart', 'visualizer' ); ?>"
-											   data-viz-link="<?php echo $fetch_link; ?>">
+												value="<?php _e( 'Import Chart', 'visualizer' ); ?>"
+												data-viz-link="<?php echo $fetch_link; ?>">
 										<?php
 										if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
 											echo apply_filters( 'visualizer_pro_upsell', '', 'import-chart' );

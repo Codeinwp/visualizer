@@ -410,5 +410,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Tabular extends Visualizer_Ren
 	protected function _renderSeriesSettings() {
 		parent::_renderSeriesSettings();
 	}
-
 }

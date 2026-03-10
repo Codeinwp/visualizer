@@ -91,5 +91,4 @@ class Visualizer_Render_Page_Update extends Visualizer_Render_Page {
 
 		return 'win.vizUpdateHTML(' . json_encode( array( 'html' => $editor ) ) . ', ' . json_encode( array( 'html' => $sidebar ) ) . ');';
 	}
-
 }

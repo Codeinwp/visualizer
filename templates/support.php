@@ -21,17 +21,17 @@
 
 	<h2 class="nav-tab-wrapper">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=help' ) ); ?>"
-		   class="nav-tab <?php echo $active_tab === 'help' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Support', 'visualizer' ); ?></a>
+			class="nav-tab <?php echo $active_tab === 'help' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Support', 'visualizer' ); ?></a>
 		<?php
 		if ( $show_more ) {
 			?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=more' ) ); ?>"
-	   class="nav-tab <?php echo $active_tab === 'more' ? 'nav-tab-active' : ''; ?>"><?php _e( 'More Features', 'visualizer' ); ?></a>
+		class="nav-tab <?php echo $active_tab === 'more' ? 'nav-tab-active' : ''; ?>"><?php _e( 'More Features', 'visualizer' ); ?></a>
 			<?php
 		}
 		?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=viz-support&tab=improve' ) ); ?>"
-		   class="nav-tab <?php echo $active_tab === 'improve' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Help us improve!', 'visualizer' ); ?></a>
+			class="nav-tab <?php echo $active_tab === 'improve' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Help us improve!', 'visualizer' ); ?></a>
 	</h2>
 
 	<div class="viz-features-content">

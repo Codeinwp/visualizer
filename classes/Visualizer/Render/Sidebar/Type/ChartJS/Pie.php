@@ -86,7 +86,6 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Pie extends Visualizer_Render_Sideb
 			isset( $this->slices[ $index ]['hoverBackgroundColor'] ) ? $this->slices[ $index ]['hoverBackgroundColor'] : null,
 			null
 		);
-
 	}
 
 	/**

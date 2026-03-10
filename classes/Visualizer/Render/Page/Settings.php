@@ -80,5 +80,4 @@ class Visualizer_Render_Page_Settings extends Visualizer_Render_Page {
 	protected function _renderSidebarContent() {
 		echo $this->sidebar;
 	}
-
 }

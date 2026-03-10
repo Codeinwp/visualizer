@@ -72,5 +72,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Column extends Visualizer_Rend
 		$this->_renderViewSettings();
 		$this->_renderAdvancedSettings();
 	}
-
 }

@@ -105,5 +105,4 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 			$this->_renderTemplate( $template, $callback );
 		}
 	}
-
 }

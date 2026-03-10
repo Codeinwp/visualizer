@@ -109,7 +109,7 @@ abstract class Visualizer_Source {
 	 * @access public
 	 * @return string The name of source.
 	 */
-	public abstract function getSourceName();
+	abstract public function getSourceName();
 
 	/**
 	 * Fetches information from source, parses it and builds series and data arrays.
@@ -119,7 +119,7 @@ abstract class Visualizer_Source {
 	 * @abstract
 	 * @access public
 	 */
-	public abstract function fetch();
+	abstract public function fetch();
 
 	/**
 	 * Returns series parsed from source.
@@ -263,7 +263,7 @@ abstract class Visualizer_Source {
 	 *
 	 * @return string The converted data.
 	 */
-	protected final function toUTF8( $datum ) {
+	final protected function toUTF8( $datum ) {
 		if ( ! function_exists( 'mb_detect_encoding' ) || mb_detect_encoding( $datum ) !== 'ASCII' ) {
 			$datum = \ForceUTF8\Encoding::toUTF8( $datum );
 		}
@@ -280,7 +280,7 @@ abstract class Visualizer_Source {
 	 *
 	 * @return array
 	 */
-	public static final function get_date_formats_if_exists( $series, $data ) {
+	final public static function get_date_formats_if_exists( $series, $data ) {
 		$date_formats = array();
 		$types = array();
 		$index = 0;
@@ -288,7 +288,7 @@ abstract class Visualizer_Source {
 			if ( in_array( $column['type'], array( 'date', 'datetime', 'timeofday' ), true ) ) {
 				$types[] = array( 'index' => $index, 'type' => $column['type'] );
 			}
-			$index++;
+			++$index;
 		}
 
 		if ( ! $types ) {
@@ -474,6 +474,4 @@ abstract class Visualizer_Source {
 
 		return true;
 	}
-
-
 }

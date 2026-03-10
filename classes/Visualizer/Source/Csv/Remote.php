@@ -161,5 +161,4 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 
 		return ! is_wp_error( $this->_tmpfile ) ? parent::_get_file_handle( $this->_tmpfile ) : false;
 	}
-
 }

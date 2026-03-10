@@ -38,7 +38,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			'bottom' => esc_html__( 'Below the chart', 'visualizer' ),
 			'none'   => esc_html__( 'Omit the legend', 'visualizer' ),
 		);
-
 	}
 
 	/**
@@ -78,7 +77,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	/**
 	 * Loads the assets.
 	 */
-	function load_chartjs_assets( $deps, $is_frontend ) {
+	public function load_chartjs_assets( $deps, $is_frontend ) {
 		$this->load_dependent_assets( array( 'moment', 'numeral' ) );
 
 		wp_register_script( 'chartjs', VISUALIZER_ABSURL . 'js/lib/chartjs.min.js', array( 'numeral', 'moment' ), null, true );
@@ -96,7 +95,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			$deps,
 			array( 'visualizer-render-chartjs-lib' )
 		);
-
 	}
 
 	/**
@@ -133,7 +131,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	protected function _renderSeries( $index ) {
 		$this->_renderFormatField( $index );
 		$this->_renderChartTypeSeries( $index );
-
 	}
 
 	/**
@@ -187,7 +184,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 				'</a>'
 			)
 		);
-
 	}
 
 	/**
@@ -367,7 +363,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 		);
 
 		self::_renderSectionEnd();
-
 	}
 
 	/**

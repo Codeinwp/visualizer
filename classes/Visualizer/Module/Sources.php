@@ -145,7 +145,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			if ( in_array( $feature, $biz_features, true ) && Visualizer_Module::is_pro() ) {
 				$msg = $plus_msg;
 			}
-			if ( in_array( $feature, [ 'db-query', 'chart-permissions' ], true ) ) {
+			if ( in_array( $feature, array( 'db-query', 'chart-permissions' ), true ) ) {
 				$msg = $plus_msg;
 			}
 
@@ -165,5 +165,4 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 
 		return $return;
 	}
-
 }
