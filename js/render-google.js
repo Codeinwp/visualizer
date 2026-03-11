@@ -449,19 +449,30 @@ var isResizeRequest = false;
         }
 
         var formatter = null;
-        switch (type) {
-            case 'number':
-                formatter = new gv.NumberFormat({pattern: format});
-                break;
-            case 'date':
-            case 'datetime':
-            case 'timeofday':
-                formatter = new gv.DateFormat({pattern: format});
-                break;
-        }
+        var $formatInput = $('input.control-text[name*="[format]"]').filter(function() {
+            return $(this).val() === format;
+        });
+        try {
+            switch (type) {
+                case 'number':
+                    formatter = new gv.NumberFormat({pattern: format});
+                    break;
+                case 'date':
+                case 'datetime':
+                case 'timeofday':
+                    formatter = new gv.DateFormat({pattern: format});
+                    break;
+            }
 
-        if (formatter) {
-            formatter.format(table, index);
+            if (formatter) {
+                formatter.format(table, index);
+                $formatInput.nextAll('.visualizer-format-error').remove();
+            }
+        } catch (e) {
+            if ($formatInput.length) {
+                $formatInput.nextAll('.visualizer-format-error').remove();
+                $('<p class="visualizer-format-error" style="color:#cc0000;margin:4px 0 0"></p>').text(visualizer.l10n.invalid_format).insertAfter($formatInput);
+            }
         }
 
         var arr = id.split('-');
