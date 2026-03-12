@@ -169,7 +169,7 @@ function visualizer_launch() {
 
 				$license = get_option( 'visualizer_pro_license_data', 'free' );
 				if ( ! empty( $license ) && is_object( $license ) ) {
-					$license = $license->key;
+					$license = $license->key ?? 'free';
 				}
 				$track_hash = 'free' === $license ? 'free' : wp_hash( $license );
 
