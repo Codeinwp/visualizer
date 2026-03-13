@@ -69,13 +69,16 @@ class Visualizer_Gutenberg_Block {
 	public function enqueue_gutenberg_scripts() {
 		global $pagenow;
 
-		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
-		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css';
+		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/index.js';
+		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/style-index.css';
+		$asset_path = VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.asset.php';
+		$asset = file_exists( $asset_path ) ? include $asset_path : array(
+			'dependencies' => array(),
+			'version'      => $this->version,
+		);
 
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
-			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
-		} else {
-			$version = $this->version;
+			$asset['version'] = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.js' );
 		}
 
 		if ( ! wp_script_is( 'visualizer-datatables', 'registered' ) ) {
@@ -87,7 +90,24 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		// Enqueue the bundled block JS file
-		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'visualizer-datatables', 'moment', 'lodash' ), $version, true );
+		$script_deps = array(
+			'wp-api',
+			'wp-blocks',
+			'wp-block-editor',
+			'wp-components',
+			'wp-editor',
+			'wp-element',
+			'wp-i18n',
+			'lodash',
+			'moment',
+			'react',
+			'visualizer-datatables',
+		);
+		if ( isset( $asset['dependencies'] ) && is_array( $asset['dependencies'] ) ) {
+			$script_deps = array_merge( $script_deps, $asset['dependencies'] );
+		}
+		$script_deps = array_values( array_unique( $script_deps ) );
+		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, $script_deps, $asset['version'], true );
 
 		$translation_array = array(
 			'adminPage' => menu_page_url( 'visualizer', false ),
@@ -101,7 +121,7 @@ class Visualizer_Gutenberg_Block {
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
 		// Enqueue frontend and editor block styles
-		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $version );
+		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $asset['version'] );
 
 	}
 	/**

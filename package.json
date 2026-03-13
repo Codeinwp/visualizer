@@ -27,7 +27,9 @@
     "test:env:stop": "wp-env stop",
     "test:env:clean": "wp-env clean",
     "test:e2e:playwright": "wp-scripts test-playwright --config tests/e2e/playwright.config.js",
-    "test:e2e:playwright:debug": "wp-scripts test-playwright --config tests/e2e/playwright.config.js --ui"
+    "test:e2e:playwright:debug": "wp-scripts test-playwright --config tests/e2e/playwright.config.js --ui",
+    "gutenberg:build": "wp-scripts build --webpack-src-dir=classes/Visualizer/Gutenberg/src --output-path=classes/Visualizer/Gutenberg/build",
+    "gutenberg:dev": "wp-scripts start --webpack-src-dir=classes/Visualizer/Gutenberg/src --output-path=classes/Visualizer/Gutenberg/build"
   },
   "pot": {
     "reportmsgidbugsto": "https://github.com/Codeinwp/visualizer/issues",
@@ -50,6 +52,11 @@
     "playwright": "^1.42.1",
     "replace-in-file": "^6.2.0",
     "semantic-release": "^17.1.1",
-    "semantic-release-slack-bot": "^2.1.0"
+    "semantic-release-slack-bot": "^2.1.0",
+    "deep-filter": "^1.0.2",
+    "is-plain-object": "^2.0.4",
+    "merge": "^1.2.1",
+    "react-google-charts": "^3.0.8",
+    "uuid": "^8.3.2"
   }
 }
