@@ -72,10 +72,15 @@ class Visualizer_Gutenberg_Block {
 		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/index.js';
 		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/style-index.css';
 		$asset_path = VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.asset.php';
-		$asset = file_exists( $asset_path ) ? include $asset_path : array(
-			'dependencies' => array(),
-			'version'      => $this->version,
-		);
+		if ( file_exists( $asset_path ) ) {
+			/** @phpstan-ignore-next-line */
+			$asset = require $asset_path;
+		} else {
+			$asset = array(
+				'dependencies' => array(),
+				'version'      => $this->version,
+			);
+		}
 
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
 			$asset['version'] = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.js' );

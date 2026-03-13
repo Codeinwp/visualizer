@@ -103,12 +103,6 @@ parameters:
 			path: classes/Visualizer/Gutenberg/Block.php
 
 		-
-			message: '#^Path in include\(\) "/Users/hardeep/Development/sites/particles/wp\-content/plugins/visualizer/classes/Visualizer/Gutenberg/build/index\.asset\.php" is not a file or it does not exist\.$#'
-			identifier: include.fileNotFound
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
 			message: '#^Constant VISUALIZER_PRO_VERSION not found\.$#'
 			identifier: constant.notFound
 			count: 1
