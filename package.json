@@ -36,6 +36,13 @@
     "languageteam": "Themeisle Translate <friends@themeisle.com>",
     "lasttranslator": "Themeisle Translate Team <friends@themeisle.com>"
   },
+  "dependencies": {
+    "deep-filter": "^1.0.2",
+    "is-plain-object": "^2.0.4",
+    "merge": "^1.2.1",
+    "react-google-charts": "^3.0.8",
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/exec": "^5.0.0",
@@ -52,11 +59,6 @@
     "playwright": "^1.42.1",
     "replace-in-file": "^6.2.0",
     "semantic-release": "^17.1.1",
-    "semantic-release-slack-bot": "^2.1.0",
-    "deep-filter": "^1.0.2",
-    "is-plain-object": "^2.0.4",
-    "merge": "^1.2.1",
-    "react-google-charts": "^3.0.8",
-    "uuid": "^8.3.2"
+    "semantic-release-slack-bot": "^2.1.0"
   }
 }
