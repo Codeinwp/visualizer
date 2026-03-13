@@ -79,14 +79,7 @@ module.exports = {
     },
     optimization: {
 		splitChunks: {
-			cacheGroups: {
-				handsontable: {
-					name: 'handsontable',
-					test: /[\\/]node_modules[\\/]handsontable/,
-					chunks: 'all',
-					enforce: true
-				}
-			}
+			cacheGroups: {}
 		}
 	},
     plugins: [
