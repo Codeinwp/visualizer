@@ -876,12 +876,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
-					'loading'        => esc_html__( 'Loading...', 'visualizer' ),
-					'json_error'     => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
-					'select_columns' => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
-					'save_settings'  => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
-					'copied'         => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
+					'invalid_source'  => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
+					'loading'         => esc_html__( 'Loading...', 'visualizer' ),
+					'json_error'      => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
+					'select_columns'  => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
+					'save_settings'   => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
+					'copied'          => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
+					'invalid_format'  => esc_html__( 'This format pattern is not supported in the series settings field. Use the Manual Configuration option instead.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -1405,7 +1406,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			array(
 				'l10n'   => array(
 					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
-					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
+					'loading'        => esc_html__( 'Loading...', 'visualizer' ),
+					'invalid_format' => esc_html__( 'This format pattern is not supported in the series settings field. To display percentages, use the Manual Configuration option instead.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
