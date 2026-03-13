@@ -1,0 +1,45 @@
+name: Translations Diff
+
+on:
+  pull_request_review:
+  pull_request:
+    types: [opened, edited, synchronize, ready_for_review]
+    branches:
+      - development
+      - master
+
+jobs:
+  translation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Base Branch
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.base_ref }}
+          path: visualizer-base
+      - name: Setup node 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+      - name: Checkout PR Branch (Head)
+        uses: actions/checkout@master
+        with:
+          path: visualizer-head
+      - name: Build POT for PR Branch
+        run: |
+          chmod +x ./visualizer-head/bin/make-pot.sh
+          ./visualizer-head/bin/make-pot.sh ./visualizer-head ./visualizer-head/languages/visualizer.pot
+          ls ./visualizer-head/languages/
+      - name: Build POT for Base Branch
+        run: |
+          ./visualizer-head/bin/make-pot.sh ./visualizer-base ./visualizer-base/languages/visualizer.pot
+          ls ./visualizer-base/languages/
+      - name: Compare POT files
+        uses: Codeinwp/action-i18n-string-reviewer@main
+        with:
+          fail-on-changes: "false"
+          openrouter-key: ${{ secrets.OPEN_ROUTER_API_KEY }}
+          openrouter-model: "google/gemini-2.5-flash"
+          base-pot-file: "visualizer-base/languages/visualizer.pot"
+          target-pot-file: "visualizer-head/languages/visualizer.pot"
+          github-token: ${{ secrets.BOT_TOKEN }}
