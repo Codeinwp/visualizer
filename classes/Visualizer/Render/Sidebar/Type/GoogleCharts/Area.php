@@ -148,5 +148,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Area extends Visualizer_Render
 			null
 		);
 	}
-
 }

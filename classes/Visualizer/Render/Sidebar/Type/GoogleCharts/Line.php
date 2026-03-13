@@ -66,5 +66,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Line extends Visualizer_Render
 			esc_html__( 'Whether to guess the value of missing points. If yes, it will guess the value of any missing data based on neighboring points. If no, it will leave a break in the line at the unknown point.', 'visualizer' )
 		);
 	}
-
 }

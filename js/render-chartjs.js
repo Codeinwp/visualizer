@@ -148,6 +148,8 @@
             }
         };
 
+        override(settings, chart);
+
         var chartjs = new Chart(context, {
             type: type,
             data: {
@@ -234,8 +236,6 @@
         }
 
         handleAxes(settings, chart);
-
-        override(settings, chart);
     }
 
     function handleAxes(settings, chart){
@@ -501,7 +501,7 @@
         if (settings.manual) {
             try{
                 var options = JSON.parse(settings.manual);
-                $.extend(settings, options);
+                $.extend(true, settings, options);
                 delete settings.manual;
             }catch(error){
                 console.error("Error while adding manual configuration override " + settings.manual);

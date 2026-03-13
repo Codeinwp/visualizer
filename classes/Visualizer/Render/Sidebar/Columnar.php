@@ -110,5 +110,4 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 			'#000'
 		);
 	}
-
 }

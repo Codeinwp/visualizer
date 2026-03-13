@@ -222,10 +222,10 @@ class Visualizer_Plugin {
 	 *
 	 * @access public
 	 *
-	 * @param string $class The name of the module to use in the plugin.
+	 * @param string $class_name The name of the module to use in the plugin.
 	 */
-	public function setModule( $class ) {
-		$this->_modules[ $class ] = new $class( $this );
+	public function setModule( $class_name ) {
+		$this->_modules[ $class_name ] = new $class_name( $this );
 	}
 
 	/**
@@ -241,11 +241,10 @@ class Visualizer_Plugin {
 	/**
 	 * For local testing, overrides the 'themeisle_log_event' hook and redirects to error.log.
 	 */
-	final function themeisle_log_event_debug( $name, $message, $type, $file, $line ) {
+	final public function themeisle_log_event_debug( $name, $message, $type, $file, $line ) {
 		if ( Visualizer_Plugin::NAME !== $name ) {
 			return;
 		}
 		error_log( sprintf( '%s (%s): %s in %s:%s', $name, $type, $message, $file, $line ) );
 	}
-
 }

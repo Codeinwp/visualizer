@@ -229,5 +229,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 			esc_html__( 'Determines what information to display when the user hovers over a pie slice.', 'visualizer' )
 		);
 	}
-
 }

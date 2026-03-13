@@ -84,8 +84,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertTrue( $response->success );
 	}
 
@@ -112,8 +112,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertEquals( 'Only SELECT queries are allowed', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
@@ -141,8 +141,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertFalse( $response->success );
 		$this->assertTrue( strpos( $response->data->msg, ".wp_insert' doesn't exist" ) !== false );
 	}
@@ -169,8 +169,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertEquals( 'Action not allowed for this user.', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
@@ -197,8 +197,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertEquals( 'Action not allowed for this user.', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
@@ -226,8 +226,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertEquals( 'Only SELECT queries are allowed', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
@@ -255,8 +255,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertEquals( 'Only SELECT queries are allowed', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
@@ -296,8 +296,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertEquals( 'Action not allowed for this user.', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}
@@ -324,8 +324,8 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
 		$this->assertEquals( 'Feature is not available.', $response->data->msg );
 		$this->assertFalse( $response->success );
 	}

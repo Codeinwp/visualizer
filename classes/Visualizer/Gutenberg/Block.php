@@ -186,8 +186,7 @@ class Visualizer_Gutenberg_Block {
 			return '';
 		}
 
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( $atts['lazy'] == -1 || $atts['lazy'] == false ) {
+		if ( $atts['lazy'] === '-1' || $atts['lazy'] === false ) {
 			$atts['lazy'] = 'no';
 		}
 
@@ -472,11 +471,12 @@ class Visualizer_Gutenberg_Block {
 			$permissions = get_post_meta( $post_id, Visualizer_Pro::CF_PERMISSIONS, true );
 
 			if ( empty( $permissions ) ) {
-				$permissions = array( 'permissions' => array(
+				$permissions = array(
+					'permissions' => array(
 						'read'          => 'all',
 						'edit'          => 'roles',
 						'edit-specific' => array( 'administrator' ),
-				),
+					),
 				);
 			}
 
@@ -824,7 +824,7 @@ class Visualizer_Gutenberg_Block {
 					foreach ( $users as $user ) {
 						$options[ $i ]['value'] = $user->ID;
 						$options[ $i ]['label'] = $user->display_name;
-						$i++;
+						++$i;
 					}
 				}
 				break;
@@ -838,7 +838,7 @@ class Visualizer_Gutenberg_Block {
 					foreach ( get_editable_roles() as $name => $info ) {
 						$options[ $i ]['value'] = $name;
 						$options[ $i ]['label'] = $name;
-						$i++;
+						++$i;
 					}
 				}
 				break;
@@ -874,7 +874,7 @@ class Visualizer_Gutenberg_Block {
 	 * @param mixed $value The value to sanitize.
 	 * @return mixed Sanitized value.
 	 */
-	private function sanitize_value( $value ) {
+	public function sanitize_value( $value ) {
 		if ( is_string( $value ) ) {
 			return sanitize_text_field( $value );
 		}

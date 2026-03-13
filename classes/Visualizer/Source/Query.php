@@ -152,7 +152,8 @@ class Visualizer_Source_Query extends Visualizer_Source {
 		$headers    = array();
 
 		// short circuit results for remote dbs.
-		if ( false !== ( $remote_results = apply_filters( 'visualizer_db_query_execute', false, $this->_query, $as_html, $results_as_numeric_array, $raw_results, $this->_chart_id, $this->_params ) ) ) {
+		$remote_results = apply_filters( 'visualizer_db_query_execute', false, $this->_query, $as_html, $results_as_numeric_array, $raw_results, $this->_chart_id, $this->_params );
+		if ( false !== $remote_results ) {
 			$error = $remote_results['error'];
 			if ( empty( $error ) ) {
 				$results = $remote_results['results'];
@@ -180,7 +181,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 
 			if ( $wpdb->last_error ) {
 				$this->_error = $wpdb->last_error;
-				return [];
+				return array();
 			}
 
 			if ( $rows ) {
@@ -198,7 +199,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 							}
 						}
 						$results[] = $result;
-						$row_num++;
+						++$row_num;
 					}
 				}
 

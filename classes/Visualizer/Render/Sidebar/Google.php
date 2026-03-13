@@ -82,7 +82,6 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			'center' => esc_html__( 'Centered in the allocated area', 'visualizer' ),
 			'end'    => esc_html__( 'Aligned to the end of the allocated area', 'visualizer' ),
 		);
-
 	}
 
 	/**
@@ -99,7 +98,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 	/**
 	 * Loads the assets.
 	 */
-	function load_google_assets( $deps, $is_frontend ) {
+	public function load_google_assets( $deps, $is_frontend ) {
 		wp_register_script( 'google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'dom-to-image', VISUALIZER_ABSURL . 'js/lib/dom-to-image.min.js', array(), null, true );
 		wp_register_script(
@@ -117,7 +116,6 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			$deps,
 			array( 'visualizer-render-google-lib' )
 		);
-
 	}
 
 	/**
@@ -309,7 +307,6 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 		);
 
 		self::_renderSectionEnd();
-
 	}
 
 	/**

@@ -96,7 +96,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( defined( 'TI_E2E_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
-
 	}
 	/**
 	 * Display review notice.
@@ -104,7 +103,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function render_review_notice( $footer_text ) {
 		$current_screen = get_current_screen();
 
-		$visualizer_page_ids = ['toplevel_page_visualizer', 'visualizer_page_viz-support', 'visualizer_page_ti-about-visualizer' ];
+		$visualizer_page_ids = array( 'toplevel_page_visualizer', 'visualizer_page_viz-support', 'visualizer_page_ti-about-visualizer' );
 
 		if ( ! empty( $current_screen ) && isset( $current_screen->id ) ) {
 			foreach ( $visualizer_page_ids as $page_to_check ) {
@@ -134,7 +133,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	private function load_cypress_hooks() {
 		// all charts should load on the same page without pagination.
 		add_filter(
-			'visualizer_query_args', function( $args ) {
+			'visualizer_query_args', function ( $args ) {
 				$args['posts_per_page'] = 20;
 				return $args;
 			}, 10, 1
@@ -253,8 +252,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access  public
 	 */
 	public function init() {
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' == get_user_option( 'rich_editing' ) ) {
+		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' === get_user_option( 'rich_editing' ) ) {
 			$this->_addFilter( 'mce_external_languages', 'add_tinymce_lang', 10, 1 );
 			$this->_addFilter( 'mce_external_plugins', 'tinymce_plugin', 10, 1 );
 			$this->_addFilter( 'mce_buttons', 'register_mce_button', 10, 1 );
@@ -268,7 +266,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @since   ?
 	 * @access  friendly
 	 */
-	function get_strings_for_block( $settings ) {
+	public function get_strings_for_block( $settings ) {
 		$class = new Visualizer_Module_Language();
 		$strings         = $class->get_strings();
 		$array = array( 'visualizer_tinymce_plugin' => json_encode( $strings ) );
@@ -797,7 +795,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	/**
 	 * Adds the screen options for pagination.
 	 */
-	function addScreenOptions() {
+	public function addScreenOptions() {
 		$screen = get_current_screen();
 
 		// bail if it's some other page.
@@ -816,7 +814,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	/**
 	 * Returns the screen option for pagination.
 	 */
-	function setScreenOptions( $status, $option, $value ) {
+	public function setScreenOptions( $status, $option, $value ) {
 		if ( 'visualizer_library_per_page' === $option ) {
 			return $value;
 		}

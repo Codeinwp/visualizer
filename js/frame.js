@@ -100,8 +100,9 @@
         // collapse other open subsections of this section
         $(document).on('click', '.viz-section-title', function () {
             var grandparent = $(this).parent().parent();
-            grandparent.find('.viz-section-title.open ~ .viz-section-items').hide();
-            grandparent.find('.viz-section-title.open').removeClass('open');
+            grandparent.find('.viz-section-title.open').not(this).each(function () {
+                $(this).removeClass('open').siblings('.viz-section-items').hide();
+            });
         });
 
         $('#view-remote-file').click(function () {

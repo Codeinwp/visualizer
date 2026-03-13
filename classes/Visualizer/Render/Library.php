@@ -152,7 +152,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		$sources = array_filter( $sources );
 		uasort(
-			$sources, function( $a, $b ) {
+			$sources, function ( $a, $b ) {
 				if ( $a === $b ) {
 					return 0;
 				}
@@ -257,7 +257,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 					popup.style.display = "none";
 				}
 				</script>';
-
 	}
 	/**
 	 * Renders library content.
@@ -287,7 +286,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$count = 0;
 			foreach ( $this->charts as $placeholder_id => $chart ) {
 				// show the sidebar after the first 3 charts.
-				$count++;
+				++$count;
 				$enable_controls = false;
 				$settings = isset( $chart['settings'] ) ? $chart['settings'] : array();
 				if ( ! empty( $settings['controls']['controlType'] ) ) {
@@ -400,7 +399,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		);
 		$chart_type = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
 
-		$types = ['area', 'geo', 'column', 'bubble', 'scatter', 'gauge', 'candlestick', 'timeline', 'combo', 'polarArea', 'radar' ];
+		$types = array( 'area', 'geo', 'column', 'bubble', 'scatter', 'gauge', 'candlestick', 'timeline', 'combo', 'polarArea', 'radar' );
 
 		$pro_class = '';
 
@@ -477,5 +476,4 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 		}
 	}
-
 }

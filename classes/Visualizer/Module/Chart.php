@@ -70,7 +70,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 
 		$this->_addFilter( 'visualizer_get_sidebar', 'getSidebar', 10, 2 );
-
 	}
 
 	/**
@@ -539,7 +538,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! empty( $_POST ) ) {
 			$_POST = map_deep( $_POST, 'wp_strip_all_tags' );
 		}
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
+		$chart = $chart_id ? get_post( $chart_id ) : null;
+		if ( ! $chart_id || ! $chart || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			if ( empty( $_GET['lang'] ) || empty( $_GET['parent_chart_id'] ) ) {
 				$this->deleteOldCharts();
 				$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
@@ -738,7 +738,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_register_script( 'visualizer-codemirror-closebrackets', '//codemirror.net/addon/edit/closebrackets.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
 			wp_register_script( 'visualizer-codemirror-sql', '//codemirror.net/mode/sql/sql.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
 			wp_register_script( 'visualizer-codemirror-sql-hint', '//codemirror.net/addon/hint/sql-hint.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-			wp_register_script( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.js', array(  'visualizer-codemirror-sql', 'visualizer-codemirror-sql-hint', 'visualizer-codemirror-placeholder', 'visualizer-codemirror-matchbrackets', 'visualizer-codemirror-closebrackets' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.js', array( 'visualizer-codemirror-sql', 'visualizer-codemirror-sql-hint', 'visualizer-codemirror-placeholder', 'visualizer-codemirror-matchbrackets', 'visualizer-codemirror-closebrackets' ), Visualizer_Plugin::VERSION );
 			wp_register_style( 'visualizer-codemirror-core', '//codemirror.net/lib/codemirror.css', array(), Visualizer_Plugin::VERSION );
 			wp_register_style( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.css', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
 
@@ -862,10 +862,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				array(
 					'ajax'      => array(
 						'url'     => admin_url( 'admin-ajax.php' ),
-						'nonces'  => array(
-						),
-						'actions' => array(
-						),
+						'nonces'  => array(),
+						'actions' => array(),
 					),
 				)
 			);
@@ -1028,7 +1026,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						}
 						$row = explode( ',', $row );
 						$row = array_map(
-							function( $r ) {
+							function ( $r ) {
 								return '' === $r ? ' ' : $r;
 							},
 							$row
@@ -1079,7 +1077,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( empty( $type ) ) {
 				$exclude[] = $index;
 			}
-			$index++;
+			++$index;
 		}
 
 		// when N headers are being renamed, the number of headers increases by N
@@ -1156,9 +1154,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
+		$chart    = $chart_id ? get_post( $chart_id ) : null;
 		if (
 			! $chart_id ||
-			! ( $chart = get_post( $chart_id ) ) ||
+			! $chart ||
 			$chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ||
 			! current_user_can( 'edit_post', $chart_id )
 		) {
@@ -1214,8 +1213,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( isset( $_POST['vz-import-time'] ) ) {
 				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $remote_data, $_POST['vz-import-time'] );
 			}
-			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
+		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] === 0 ) {
 			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
 			$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
