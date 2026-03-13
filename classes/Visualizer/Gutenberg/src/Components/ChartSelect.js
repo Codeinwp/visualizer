@@ -114,15 +114,9 @@ class ChartSelect extends Component {
 				}
 			);
 			const updateChartState = async() => {
-				await this.setState({
-					isLoading: 'getChart'
-				});
-
 				let result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
 				await this.props.editSettings( result['chart_data']['visualizer-settings']);
 				await this.props.getChartData( chartId );
-
-				await this.setState({ route: 'home', chart: result['chart_data'], isModified: true, isLoading: true });
 			};
 			// eslint-disable-next-line camelcase
 			window.send_to_editor = function() {

@@ -177,23 +177,6 @@ class Visualizer_Gutenberg_Block {
 			)
 		);
 
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/update-chart',
-			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'update_chart_data' ),
-				'args'     => array(
-					'id' => array(
-						'sanitize_callback' => 'absint',
-					),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
-
 	}
 
 	/**
@@ -349,138 +332,13 @@ class Visualizer_Gutenberg_Block {
 	}
 
 	/**
-	 * Rest Callback Method
-	 */
-	public function update_chart_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		if ( $data['id'] && ! is_wp_error( $data['id'] ) ) {
-			if ( get_post_type( $data['id'] ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
-				return new WP_Error( 'invalid_post_type', 'Invalid post type.' );
-			}
-			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
-			$source_type = sanitize_text_field( $data['visualizer-source'] );
-			$default_data  = (int) $data['visualizer-default-data'];
-			$series_data   = map_deep( $data['visualizer-series'], array( $this, 'sanitize_value' ) );
-			$settings_data = map_deep( $data['visualizer-settings'], array( $this, 'sanitize_value' ) );
-
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $source_type );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_DEFAULT_DATA, $default_data );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SERIES, $series_data );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $settings_data );
-
-			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] >= 0 ) {
-				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
-				$chart_schedule = intval( $data['visualizer-chart-schedule'] );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $chart_url );
-				apply_filters( 'visualizer_pro_chart_schedule', $data['id'], $chart_url, $chart_schedule );
-			} else {
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
-				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
-			}
-
-			// let's check if this is not an external db chart
-			// as there is no support for that in the block editor interface
-			$external_params = get_post_meta( $data['id'], Visualizer_Plugin::CF_REMOTE_DB_PARAMS, true );
-			if ( empty( $external_params ) ) {
-				if ( $source_type === 'Visualizer_Source_Query' ) {
-					$db_schedule = intval( $data['visualizer-db-schedule'] );
-					$db_query = $data['visualizer-db-query'];
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
-				} else {
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
-				}
-
-				if ( 'Visualizer_Source_Csv_Remote' === $source_type ) {
-					$schedule_url = esc_url_raw( $data['visualizer-chart-url'] );
-					$schedule_id  = intval( $data['visualizer-chart-schedule'] );
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $schedule_url );
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_SCHEDULE, $schedule_id );
-				} else {
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_SCHEDULE );
-				}
-			}
-
-			if ( $source_type === 'Visualizer_Source_Json' ) {
-				$json_schedule = intval( $data['visualizer-json-schedule'] );
-				$json_url = esc_url_raw( $data['visualizer-json-url'] );
-				$json_headers = esc_url_raw( $data['visualizer-json-headers'] );
-				$json_root   = sanitize_text_field( $data['visualizer-json-root'] );
-				$json_paging = sanitize_text_field( $data['visualizer-json-paging'] );
-
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE, $json_schedule );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL, $json_url );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS, $json_headers );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT, $json_root );
-
-				if ( ! empty( $json_paging ) ) {
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING, $json_paging );
-				} else {
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
-				}
-			} else {
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
-			}
-
-			if ( Visualizer_Module::is_pro() ) {
-				$permissions_data = map_deep( $data['visualizer-permissions'], array( $this, 'sanitize_value' ) );
-				update_post_meta( $data['id'], Visualizer_Pro::CF_PERMISSIONS, $permissions_data );
-			}
-
-			if ( $data['visualizer-chart-url'] ) {
-				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
-				$content['source'] = $chart_url;
-				$content['data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
-			} else {
-				$content = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
-			}
-
-			$chart = array(
-				'ID'           => $data['id'],
-				'post_content' => serialize( $content ),
-			);
-
-			wp_update_post( $chart );
-
-			// Clear existing chart cache.
-			$cache_key = Visualizer_Plugin::CF_CHART_CACHE . '_' . $data['id'];
-			if ( get_transient( $cache_key ) ) {
-				delete_transient( $cache_key );
-			}
-
-			$revisions = wp_get_post_revisions( $data['id'], array( 'order' => 'ASC' ) );
-
-			if ( count( $revisions ) > 1 ) {
-				$revision_ids = array_keys( $revisions );
-
-				// delete all revisions.
-				foreach ( $revision_ids as $id ) {
-					wp_delete_post_revision( $id );
-				}
-			}
-
-			return new \WP_REST_Response( array( 'success' => sprintf( 'Chart updated' ) ) );
-		}
-	}
-
-	/**
 	 * Format chart data.
 	 *
 	 * Note: No matter how tempted, don't use the similar method from Visualizer_Source. That works on a different structure.
 	 */
 	public function format_chart_data( $data, $series ) {
 		foreach ( $series as $i => $row ) {
-			// if no value exists for the seires, then add null
+			// if no value exists for the series, then add null
 			if ( ! isset( $series[ $i ] ) ) {
 				$series[ $i ] = null;
 			}
@@ -556,17 +414,4 @@ class Visualizer_Gutenberg_Block {
 		return $args;
 	}
 
-	/**
-	 * Sanitize value.
-	 *
-	 * @param mixed $value The value to sanitize.
-	 * @return mixed Sanitized value.
-	 */
-	public function sanitize_value( $value ) {
-		if ( is_string( $value ) ) {
-			return sanitize_text_field( $value );
-		}
-
-		return $value;
-	}
 }

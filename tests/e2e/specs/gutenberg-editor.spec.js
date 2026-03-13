@@ -41,8 +41,6 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         await page.frameLocator('iframe').getByRole('button', { name: 'Next' }).click();
         await page.frameLocator('iframe').getByRole('button', { name: 'Create Chart' }).click();
 
-        await expect( page.getByRole('button', { name: 'Save', exact: true }) ).toBeVisible();
-        await page.getByRole('button', { name: 'Save', exact: true }).click();
         await expect( page.getByRole('button', { name: 'Done' }) ).toBeVisible();
         await page.getByRole('button', { name: 'Done' }).click();
 
@@ -62,7 +60,6 @@ test.describe( 'Charts with Gutenberg Editor', () => {
 
         // Check if it was inserted correctly then enter view mode for the block.
         expect( page.getByLabel('Block: Visualizer Chart').getByText('Visualizer') ).not.toBeNull();
-        await page.getByRole('button', { name: 'Save', exact: true }).click();
         await page.getByRole('button', { name: 'Done' }).click();
 
         // Check if the Chart did not crash the editor.

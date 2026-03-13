@@ -16,10 +16,7 @@ const { __ } = wp.i18n;
 
 const { apiFetch } = wp;
 
-const {
-	Component,
-	Fragment
-} = wp.element;
+const { Component } = wp.element;
 
 const {
 	Button,
@@ -38,7 +35,6 @@ class Editor extends Component {
 		this.editChart = this.editChart.bind( this );
 		this.editSettings = this.editSettings.bind( this );
 		this.getChartData = this.getChartData.bind( this );
-		this.updateChart = this.updateChart.bind( this );
 		this.createChart = this.createChart.bind( this );
 
 		this.state = {
@@ -53,7 +49,6 @@ class Editor extends Component {
 			 */
 			route: ( this.props.attributes.route ? this.props.attributes.route : 'home' ),
 			chart: null,
-			isModified: false,
 			isLoading: false
 		};
 	}
@@ -95,8 +90,7 @@ class Editor extends Component {
 		this.setState({
 			route: 'chartSelect',
 			chart: chartDataRequest.result['chart_data'],
-			isLoading: true,
-			isModified: true
+			isLoading: true
 		});
 
 		this.props.setAttributes({
@@ -118,8 +112,7 @@ class Editor extends Component {
 		}
 		chart['visualizer-settings'] = settings;
 		this.setState({
-			chart,
-			isModified: true
+			chart
 		});
 	}
 
@@ -141,49 +134,6 @@ class Editor extends Component {
 			isLoading: false,
 			chart
 		});
-	}
-
-	updateChart() {
-		this.setState({ isLoading: 'updateChart' });
-
-		const data = this.state.chart;
-
-		let dataChartStylingOption = 'series';
-
-		if ( 'pie' === data['visualizer-chart-type']) {
-			dataChartStylingOption = 'slices';
-		}
-
-        // no series for bubble and timeline charts.
-		if (
-			undefined !== data['visualizer-settings'][dataChartStylingOption] &&
-			-1 >= [ 'bubble', 'timeline' ].indexOf( data['visualizer-chart-type'])
-		) {
-            Object.keys( data['visualizer-settings'][dataChartStylingOption])
-                .map( i => {
-                    if ( data['visualizer-settings'][dataChartStylingOption][i] !== undefined ) {
-                        if ( data['visualizer-settings'][dataChartStylingOption][i].temp !== undefined ) {
-                            delete data['visualizer-settings'][dataChartStylingOption][i].temp;
-                        }
-                    }
-                }
-            );
-        }
-
-		apiRequest({ path: `/visualizer/v1/update-chart?id=${ this.props.attributes.id }`, method: 'POST', data: data }).then(
-			( data ) => {
-
-				this.setState({
-					isLoading: false,
-					isModified: false
-				});
-
-				return data;
-			},
-			( err ) => {
-				return err;
-			}
-		);
 	}
 
 	/**
@@ -346,33 +296,17 @@ class Editor extends Component {
 							</Button>
 
 							{ 'chartSelect' === this.state.route &&
-								<Fragment>
-
-									{ false === this.state.isModified ?
-										<Button
-											variant="secondary"
-											isLarge
-                                            className="visualizer-bttn-done"
-											onClick={ () => {
-												this.setState({ route: 'renderChart', isModified: true });
-												this.props.setAttributes({ route: 'renderChart' });
-											} }
-										>
-											{ __( 'Done' ) }
-										</Button>									:
-										<Button
-											isPrimary
-											isLarge
-                                            className="visualizer-bttn-save"
-											isBusy={ 'updateChart' === this.state.isLoading }
-											disabled={ 'updateChart' === this.state.isLoading }
-											onClick={ this.updateChart }
-										>
-											{ __( 'Save' ) }
-										</Button>
-									}
-
-								</Fragment>
+								<Button
+									variant="secondary"
+									isLarge
+									className="visualizer-bttn-done"
+									onClick={ () => {
+										this.setState({ route: 'renderChart' });
+										this.props.setAttributes({ route: 'renderChart' });
+									} }
+								>
+									{ __( 'Done' ) }
+								</Button>
 							}
 
 						</ButtonGroup>
