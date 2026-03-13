@@ -64,7 +64,7 @@ class Visualizer_Gutenberg_Block {
 	}
 
 	/**
-	 * Enqueue front end and editor JavaScript and CSS
+	 * Enqueue Gutenberg block assets.
 	 */
 	public function enqueue_gutenberg_scripts() {
 		global $pagenow;
@@ -73,7 +73,7 @@ class Visualizer_Gutenberg_Block {
 		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/style-index.css';
 		$asset_path = VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.asset.php';
 		if ( file_exists( $asset_path ) ) {
-			/** @phpstan-ignore-next-line */
+			// @phpstan-ignore-next-line
 			$asset = require $asset_path;
 		} else {
 			$asset = array(
