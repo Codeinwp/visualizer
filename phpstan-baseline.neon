@@ -1,18 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Call to function is_wp_error\(\) with non\-empty\-string will always evaluate to false\.$#'
-			identifier: function.impossibleType
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
 			message: '#^If condition is always false\.$#'
 			identifier: if.alwaysFalse
 			count: 1
@@ -67,54 +55,6 @@ parameters:
 			path: classes/Visualizer/Gutenberg/Block.php
 
 		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_root_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_root_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_permission_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_permission_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_query_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_query_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:get_visualizer_data\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -151,18 +91,6 @@ parameters:
 			path: classes/Visualizer/Gutenberg/Block.php
 
 		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:set_json_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:set_json_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:toUTF8\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -171,36 +99,6 @@ parameters:
 		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:toUTF8\(\) has parameter \$datum with no type specified\.$#'
 			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:update_chart_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:update_chart_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:upload_csv_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:upload_csv_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Unable to resolve the template type TUrl in call to function wp_http_validate_url$#'
-			identifier: argument.templateType
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
 
