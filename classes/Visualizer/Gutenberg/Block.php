@@ -122,7 +122,6 @@ class Visualizer_Gutenberg_Block {
 
 		// Enqueue frontend and editor block styles
 		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $asset['version'] );
-
 	}
 	/**
 	 * Hook server side rendering into render callback
@@ -196,7 +195,6 @@ class Visualizer_Gutenberg_Block {
 				'get_callback' => array( $this, 'get_visualizer_data' ),
 			)
 		);
-
 	}
 
 	/**
@@ -433,5 +431,4 @@ class Visualizer_Gutenberg_Block {
 		}
 		return $args;
 	}
-
 }
