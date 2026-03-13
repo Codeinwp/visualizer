@@ -24,6 +24,7 @@ jobs:
       - name: Install npm deps
         run: |
           npm ci
+          npm run gutenberg:build
           npm install -g playwright-cli
           npx playwright install --with-deps chromium
       - name: Install composer deps
