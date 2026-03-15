@@ -145,26 +145,26 @@ function visualizer_launch() {
 
 			// ChartJS render library.
 			if ( ! wp_script_is( 'numeral', 'registered' ) ) {
-				wp_register_script( 'numeral', VISUALIZER_ABSURL . 'js/lib/numeral.min.js', [], Visualizer_Plugin::VERSION, true );
+				wp_register_script( 'numeral', VISUALIZER_ABSURL . 'js/lib/numeral.min.js', array(), Visualizer_Plugin::VERSION, true );
 			}
 			if ( ! wp_script_is( 'chartjs', 'registered' ) ) {
-				wp_register_script( 'chartjs', VISUALIZER_ABSURL . 'js/lib/chartjs.min.js', [ 'numeral' ], null, true );
+				wp_register_script( 'chartjs', VISUALIZER_ABSURL . 'js/lib/chartjs.min.js', array( 'numeral' ), null, true );
 			}
-			wp_enqueue_script( 'visualizer-render-chartjs-lib', VISUALIZER_ABSURL . 'js/render-chartjs.js', [ 'chartjs', 'visualizer-customization' ], Visualizer_Plugin::VERSION, true );
+			wp_enqueue_script( 'visualizer-render-chartjs-lib', VISUALIZER_ABSURL . 'js/render-chartjs.js', array( 'chartjs', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
 
 			// Google Charts render library.
-			wp_enqueue_script( 'visualizer-google-jsapi', '//www.gstatic.com/charts/loader.js', [], null, true );
-			wp_enqueue_script( 'visualizer-render-google-lib', VISUALIZER_ABSURL . 'js/render-google.js', [ 'visualizer-google-jsapi', 'visualizer-customization' ], Visualizer_Plugin::VERSION, true );
+			wp_enqueue_script( 'visualizer-google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
+			wp_enqueue_script( 'visualizer-render-google-lib', VISUALIZER_ABSURL . 'js/render-google.js', array( 'visualizer-google-jsapi', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
 
 			// DataTable render library + styles.
 			if ( ! wp_script_is( 'visualizer-datatables', 'registered' ) ) {
-				wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', [ 'jquery' ], Visualizer_Plugin::VERSION, true );
+				wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
 			}
-			wp_enqueue_script( 'visualizer-render-datatables-lib', VISUALIZER_ABSURL . 'js/render-datatables.js', [ 'visualizer-datatables', 'visualizer-customization' ], Visualizer_Plugin::VERSION, true );
-			wp_enqueue_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', [], Visualizer_Plugin::VERSION );
+			wp_enqueue_script( 'visualizer-render-datatables-lib', VISUALIZER_ABSURL . 'js/render-datatables.js', array( 'visualizer-datatables', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
+			wp_enqueue_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
 
 			// Elementor widget preview handler — uses frontend/element_ready hook.
-			wp_enqueue_script( 'visualizer-elementor-preview', VISUALIZER_ABSURL . 'js/elementor-widget-preview.js', [ 'jquery', 'elementor-frontend' ], Visualizer_Plugin::VERSION, true );
+			wp_enqueue_script( 'visualizer-elementor-preview', VISUALIZER_ABSURL . 'js/elementor-widget-preview.js', array( 'jquery', 'elementor-frontend' ), Visualizer_Plugin::VERSION, true );
 
 			// Prevent Elementor's editor-preview CSS from hiding our widget.
 			// Elementor marks widgets without a content_template() as elementor-widget-empty

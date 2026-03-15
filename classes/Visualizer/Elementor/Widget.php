@@ -66,7 +66,7 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 	/**
 	 * Get widget categories.
 	 *
-	 * @return array Widget categories.
+	 * @return array<string> Widget categories.
 	 */
 	public function get_categories() {
 		return array( 'general' );
@@ -75,7 +75,7 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 	/**
 	 * Get widget keywords.
 	 *
-	 * @return array Widget keywords.
+	 * @return array<string> Widget keywords.
 	 */
 	public function get_keywords() {
 		return array( 'visualizer', 'chart', 'graph', 'table', 'data' );
@@ -84,7 +84,7 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 	/**
 	 * Build the select options from all published Visualizer charts.
 	 *
-	 * @return array Associative array of chart ID => label.
+	 * @return array<int|string, string> Associative array of chart ID => label.
 	 */
 	private function get_chart_options() {
 		static $options_cache = null;
@@ -132,6 +132,8 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 
 	/**
 	 * Register widget controls.
+	 *
+	 * @return void
 	 */
 	protected function register_controls() {
 		$this->start_controls_section(
@@ -191,6 +193,8 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 
 	/**
 	 * Render the widget output on the frontend.
+	 *
+	 * @return void
 	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
@@ -205,7 +209,7 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 
 		// Detect Elementor edit / preview context early — needed before do_shortcode().
 		$is_editor = \Elementor\Plugin::$instance->editor->is_edit_mode() ||
-		             \Elementor\Plugin::$instance->preview->is_preview_mode();
+					\Elementor\Plugin::$instance->preview->is_preview_mode();
 
 		// In the editor, force lazy-loading off so the chart renders immediately in the
 		// preview iframe without requiring a user-interaction event (scroll, hover, etc.).
@@ -311,9 +315,9 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 	/**
 	 * Ensure custom CSS class mappings are present in settings for preview rendering.
 	 *
-	 * @param array $settings Chart settings.
-	 * @param int   $chart_id Chart ID.
-	 * @return array
+	 * @param array<string, mixed> $settings Chart settings.
+	 * @param int                  $chart_id Chart ID.
+	 * @return array<string, mixed>
 	 */
 	private function apply_custom_css_class_names( $settings, $chart_id ) {
 		if ( empty( $settings['customcss'] ) || ! is_array( $settings['customcss'] ) ) {
