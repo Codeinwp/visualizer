@@ -33,7 +33,7 @@
   "scripts": {
     "format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
     "lint": "phpcs --standard=phpcs.xml",
-    "phpstan": "phpstan",
+    "phpstan": "phpstan --memory-limit=2G",
     "phpstan:generate:baseline": "phpstan --generate-baseline --memory-limit=2G"
   },
   "minimum-stability": "dev",
