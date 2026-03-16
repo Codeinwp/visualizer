@@ -176,11 +176,12 @@
 	margin: 0;
 }
 
-.viz-group.bottom-fixed {
+.viz-group.bottom-fixed { 
 	display: block;
-	position: absolute;
-	bottom: 0;
-	width: 100%;
+	position: fixed;
+	width: 350px;
+	padding: 12px;
+	margin: 0 auto;
 }
 
 .viz-group ul li h2,
@@ -1012,8 +1013,10 @@ button#editor-chart-button {
 }
 
 #vz-chart-copyright {
-	bottom: 10px;
+	bottom: 60px;
 	text-align: center;
+	z-index: 999;
+	background: #f3f3f3;
 }
 
 #sidebar {
