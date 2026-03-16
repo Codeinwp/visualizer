@@ -1163,6 +1163,20 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array Updated array of plugin meta links.
 	 */
 	public function getPluginMetaLinks( $plugin_meta, $plugin_file ) {
+		if ( Visualizer_Module::is_pro() ) {
+			return $plugin_meta;
+		}
+
+		// Also suppress the upsell when Pro is installed but not currently active.
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		foreach ( array_keys( get_plugins() ) as $installed_plugin ) {
+			if ( false !== strpos( $installed_plugin, 'visualizer-pro' ) ) {
+				return $plugin_meta;
+			}
+		}
+
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
