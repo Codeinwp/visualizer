@@ -445,6 +445,13 @@
             }
         } );
 
+        $( document ).on( 'click', '#vz-db-sync-btn', function(){
+            var $options = $( '#vz-db-sync-options' );
+            var isOpen   = $options.is( ':visible' );
+            $options.toggle();
+            $( this ).attr( 'aria-expanded', ! isOpen );
+        } );
+
         $( '#db-chart-save-button' ).on( 'click', function(){
             // submit only if a query has been provided.
             if($('#db-query-form .visualizer-db-query').val().length > 0){

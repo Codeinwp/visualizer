@@ -884,7 +884,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 														// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 														$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 														?>
-														<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+														<option value="<?php echo esc_attr( $num ); ?>" <?php echo esc_attr( $extra ); ?>><?php echo esc_html( $name ); ?></option>
 														<?php
 													}
 														do_action( 'visualizer_chart_schedules_spl', 'csv', $chart_id, 1 );
@@ -934,7 +934,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 																	// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 																	$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 																	?>
-																	<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+																	<option value="<?php echo esc_attr( $num ); ?>" <?php echo esc_attr( $extra ); ?>><?php echo esc_html( $name ); ?></option>
 																	<?php
 																}
 																do_action( 'visualizer_chart_schedules_spl', 'json', $chart_id, 1 );
@@ -1039,37 +1039,50 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								);
 							?>
 							<!-- import from WordPress -->
-							<li class="viz-group visualizer_source_query_wp <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-wp' ); ?> ">
+							<li class="viz-group visualizer_source_query_wp <?php echo esc_attr( apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-wp' ) ); ?> ">
 								<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from WordPress', 'visualizer' ); ?><span
 											class="dashicons dashicons-lock"></span></h2>
 								<div class="viz-group-content edit-data-content">
 									<div>
 										<p class="viz-group-description"><?php _e( 'You can import data from WordPress here.', 'visualizer' ); ?></p>
-										<form id="vz-filter-wizard" action="<?php echo $save_filter; ?>" method="post" target="thehole">
-											<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from WordPress.', 'visualizer' ); ?></p>
-											<select name="refresh" id="vz-filter-import-time" class="visualizer-select">
+										<form id="vz-filter-wizard" action="<?php echo esc_url( $save_filter ); ?>" method="post" target="thehole">
 											<?php
-											$bttn_label = 'visualizer_source_query_wp' === $source_of_chart ? __( 'Modify Filter', 'visualizer' ) : __( 'Create Filter', 'visualizer' );
-											$hours     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-											$schedules = apply_filters(
-												'visualizer_chart_schedules', array(
-													'-1' => __( 'One-time', 'visualizer' ),
-												),
-												'wp',
-												$chart_id
-											);
-											foreach ( $schedules as $num => $name ) {
-												$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
-												?>
-												<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
-													<?php
-											}
-											do_action( 'visualizer_chart_schedules_spl', 'wp', $chart_id, 1 );
+											$is_wp_source = 'visualizer_source_query_wp' === $source_of_chart;
+											$hours        = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+											$bttn_label   = $is_wp_source ? __( '1. Modify Data Source', 'visualizer' ) : __( '1. Choose Data Source', 'visualizer' );
 											?>
-											</select>
 
-											<input type="button" id="filter-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
-											<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+											<!-- Step 1: Choose / modify data source -->
+											<input type="button" id="filter-chart-button" class="button button-secondary show-chart-toggle vz-import-step-btn" value="<?php echo esc_attr( $bttn_label ); ?>" data-current="chart" data-t-filter="<?php esc_attr_e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo esc_attr( $bttn_label ); ?>">
+
+											<!-- Step 2: Sync schedule toggle -->
+											<div id="vz-wp-sync-step">
+												<button type="button" id="vz-wp-sync-btn" class="vz-import-step-toggle" aria-expanded="<?php echo $is_wp_source ? 'true' : 'false'; ?>">
+													<?php _e( '2. Set Sync Schedule', 'visualizer' ); ?>
+													<span class="dashicons dashicons-arrow-down-alt2"></span>
+												</button>
+												<div id="vz-wp-sync-options"<?php echo $is_wp_source ? '' : ' style="display:none"'; ?>>
+													<select name="refresh" id="vz-filter-import-time" class="visualizer-select">
+												<?php
+												$schedules = apply_filters(
+													'visualizer_chart_schedules', array(
+														'-1' => __( 'One-time', 'visualizer' ),
+													),
+													'wp',
+													$chart_id
+												);
+												foreach ( $schedules as $num => $name ) {
+													$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
+													?>
+													<option value="<?php echo esc_attr( $num ); ?>" <?php echo esc_attr( $extra ); ?>><?php echo esc_html( $name ); ?></option>
+														<?php
+												}
+												do_action( 'visualizer_chart_schedules_spl', 'wp', $chart_id, 1 );
+												?>
+												</select>
+													<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+												</div>
+											</div>
 										</form>
 										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wp' ); ?>
 									</div>
@@ -1138,7 +1151,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 														foreach ( $schedules as $num => $name ) {
 															$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
 															?>
-															<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
+															<option value="<?php echo esc_attr( $num ); ?>" <?php echo esc_attr( $extra ); ?>><?php echo esc_html( $name ); ?></option>
 															<?php
 														}
 														do_action( 'visualizer_chart_schedules_spl', 'json', $chart_id, 1 );
@@ -1185,38 +1198,51 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								);
 							?>
 							<!-- import from db -->
-							<li class="viz-group visualizer_source_query <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ); ?>">
+							<li class="viz-group visualizer_source_query <?php echo esc_attr( apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ) ); ?>">
 							<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from database', 'visualizer' ); ?><span
 								class="dashicons dashicons-lock"></span></h2>
 							<div class="viz-group-content edit-data-content">
 							<div>
 								<p class="viz-group-description"><?php _e( 'You can import data from the database here.', 'visualizer' ); ?></p>
-								<form id="vz-db-wizard" action="<?php echo $save_query; ?>" method="post" target="thehole">
-									<p class="viz-group-description"><?php _e( 'How often do you want to refresh the data from the database.', 'visualizer' ); ?></p>
-									<select name="refresh" id="vz-db-import-time" class="visualizer-select">
+								<form id="vz-db-wizard" action="<?php echo esc_url( $save_query ); ?>" method="post" target="thehole">
 									<?php
-									$bttn_label = 'visualizer_source_query' === $source_of_chart ? __( 'Modify Query', 'visualizer' ) : __( 'Create Query', 'visualizer' );
-									$hours     = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-									$schedules = apply_filters(
-										'visualizer_chart_schedules', array(
-											'-1' => __( 'One-time', 'visualizer' ),
-										),
-										'db',
-										$chart_id
-									);
-									foreach ( $schedules as $num => $name ) {
-										$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
-										?>
-										<option value="<?php echo $num; ?>" <?php echo $extra; ?>><?php echo $name; ?></option>
-											<?php
-									}
-									do_action( 'visualizer_chart_schedules_spl', 'db', $chart_id, 1 );
+									$is_db_source = 'visualizer_source_query' === $source_of_chart;
+									$hours        = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
+									$bttn_label   = $is_db_source ? __( '1. Modify Data Source', 'visualizer' ) : __( '1. Choose Data Source', 'visualizer' );
 									?>
-									</select>
-									<input type="hidden" name="params" id="viz-db-wizard-params">
 
-									<input type="button" id="db-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
-									<input type="button" id="db-chart-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+									<!-- Step 1: Choose / modify data source -->
+									<input type="hidden" name="params" id="viz-db-wizard-params">
+									<input type="button" id="db-chart-button" class="button button-secondary show-chart-toggle vz-import-step-btn" value="<?php echo esc_attr( $bttn_label ); ?>" data-current="chart" data-t-filter="<?php esc_attr_e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo esc_attr( $bttn_label ); ?>">
+
+									<!-- Step 2: Sync schedule toggle -->
+									<div id="vz-db-sync-step">
+										<button type="button" id="vz-db-sync-btn" class="vz-import-step-toggle" aria-expanded="<?php echo $is_db_source ? 'true' : 'false'; ?>">
+											<?php _e( '2. Set Sync Schedule', 'visualizer' ); ?>
+											<span class="dashicons dashicons-arrow-down-alt2"></span>
+										</button>
+										<div id="vz-db-sync-options"<?php echo $is_db_source ? '' : ' style="display:none"'; ?>>
+											<select name="refresh" id="vz-db-import-time" class="visualizer-select">
+										<?php
+										$schedules = apply_filters(
+											'visualizer_chart_schedules', array(
+												'-1' => __( 'One-time', 'visualizer' ),
+											),
+											'db',
+											$chart_id
+										);
+										foreach ( $schedules as $num => $name ) {
+											$extra = self::is_hour_selected( $hours, $num ) ? 'selected' : '';
+											?>
+											<option value="<?php echo esc_attr( $num ); ?>" <?php echo esc_attr( $extra ); ?>><?php echo esc_html( $name ); ?></option>
+												<?php
+										}
+										do_action( 'visualizer_chart_schedules_spl', 'db', $chart_id, 1 );
+										?>
+										</select>
+											<input type="button" id="db-chart-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
+										</div>
+									</div>
 									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
 								</form>
 							</div>
