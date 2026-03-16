@@ -1194,15 +1194,37 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
-	 * If check is existing user.
+	 * Returns true when premium chart types should be enabled for the current user.
 	 *
-	 * @return bool Default false
+	 * Pro 1.9.0+ hooks the 'visualizer_is_pro' filter and returns true only when
+	 * the license is valid. Pre-1.9.0 Pro defined a Visualizer_Pro class instead;
+	 * we detect that as a fallback so those legacy installs still work.
+	 *
+	 * Passing false as the filter default ensures the constant VISUALIZER_PRO
+	 * (which is set to true whenever the Pro class exists, regardless of license
+	 * state) cannot bypass the license check.
+	 *
+	 * @return bool
 	 */
 	public static function proFeaturesLocked() {
-		if ( Visualizer_Module::is_pro() ) {
+		$is_pro_filter = apply_filters( 'visualizer_is_pro', false );
+
+		// Pro 1.9.0+: filter is hooked and returns true only with a valid license.
+		if ( $is_pro_filter ) {
 			return true;
 		}
-		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false : true;
+
+		// Pro is installed (active) but the license check above did not pass.
+		// Do NOT fall through to the legacy "old user" path — that path exists
+		// only for sites that never had Pro installed.  If Pro is present but
+		// the license is inactive we should lock, regardless of chart history.
+		if ( class_exists( 'Visualizer_Pro', false ) ) {
+			return false;
+		}
+
+		// No Pro installed at all: grant legacy access to existing users so
+		// their charts are not suddenly broken when they upgrade the free plugin.
+		return 'yes' === get_option( 'visualizer-new-user' ) ? false : true;
 	}
 
 	/**
