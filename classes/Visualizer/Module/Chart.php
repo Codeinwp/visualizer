@@ -1010,6 +1010,78 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @since 3.2.0
 	 */
+	/**
+	 * Determines whether a remote URL serves an XLSX file.
+	 *
+	 * Used as a fallback when the URL path has no recognisable file extension
+	 * (e.g. SharePoint, signed S3 URLs, or "download?id=…" endpoints).
+	 *
+	 * Uses wp_safe_remote_get() to block requests to private/loopback addresses,
+	 * and streams the response to a temp file so no body data is held in memory
+	 * regardless of whether the server honours the Range header.
+	 *
+	 * The check relies on the ZIP magic number (PK\x03\x04) that every XLSX
+	 * file begins with, making it immune to misleading Content-Type headers
+	 * such as application/octet-stream.  Content-Type is used as a last-resort
+	 * fallback only when the temp file is empty (e.g. a HEAD-only server).
+	 *
+	 * @access private
+	 * @param string $url The remote URL to probe.
+	 * @return bool TRUE if the file appears to be XLSX, FALSE otherwise.
+	 */
+	private static function _url_is_xlsx( $url ) {
+		$tmpfile = wp_tempnam( 'visualizer_xlsx_probe' );
+		if ( ! $tmpfile ) {
+			return false;
+		}
+
+		$response = wp_safe_remote_get(
+			$url,
+			array(
+				'timeout'    => 10,
+				'user-agent' => 'WordPress/' . get_bloginfo( 'version' ),
+				'headers'    => array( 'Range' => 'bytes=0-3' ),
+				'stream'     => true,
+				'filename'   => $tmpfile,
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			@unlink( $tmpfile ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+			return false;
+		}
+
+		$magic = '';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		$fh = @fopen( $tmpfile, 'rb' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+		if ( $fh ) {
+			$magic = fread( $fh, 4 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
+			fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+		}
+		@unlink( $tmpfile ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+
+		if ( strlen( $magic ) >= 4 ) {
+			// XLSX (and all ZIP-based Office formats) start with PK\x03\x04.
+			return $magic === "PK\x03\x04";
+		}
+
+		// Last resort: server returned an empty body (e.g. ignored Range and
+		// returned only headers). Check Content-Type from the same response.
+		// application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+		return false !== strpos(
+			wp_remote_retrieve_header( $response, 'content-type' ),
+			'spreadsheetml'
+		);
+	}
+
+	/**
+	 * Parses a raw CSV string or editor payload and returns a source object.
+	 *
+	 * @access private
+	 * @param string $data        The raw CSV data string.
+	 * @param string $editor_type The editor type ('text' or 'tabular').
+	 * @return Visualizer_Source|null The populated source object, or null on failure.
+	 */
 	private function handleCSVasString( $data, $editor_type ) {
 		$source = null;
 
@@ -1209,12 +1281,22 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$remote_data = wp_http_validate_url( $_POST['remote_data'] );
 		}
 		if ( false !== $remote_data ) {
-			$source = new Visualizer_Source_Csv_Remote( $remote_data );
+			$remote_ext = strtolower( pathinfo( parse_url( $remote_data, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+			if ( 'xlsx' === $remote_ext || ( 'csv' !== $remote_ext && self::_url_is_xlsx( $remote_data ) ) ) {
+				$source = new Visualizer_Source_Xlsx_Remote( $remote_data );
+			} else {
+				$source = new Visualizer_Source_Csv_Remote( $remote_data );
+			}
 			if ( isset( $_POST['vz-import-time'] ) ) {
 				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $remote_data, $_POST['vz-import-time'] );
 			}
 		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] === 0 ) {
-			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
+			$local_ext = strtolower( pathinfo( isset( $_FILES['local_data']['name'] ) ? $_FILES['local_data']['name'] : '', PATHINFO_EXTENSION ) );
+			if ( 'xlsx' === $local_ext ) {
+				$source = new Visualizer_Source_Xlsx( $_FILES['local_data']['tmp_name'] );
+			} else {
+				$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
+			}
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
 			$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
