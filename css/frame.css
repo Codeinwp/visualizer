@@ -1482,6 +1482,61 @@ span.viz-section-error {
 
 
 /******************************************************************************/
+/************************  manual config JSON editor  *************************/
+/******************************************************************************/
+textarea[name="manual"] + .CodeMirror {
+	background: #282923;
+	color: #f8f8f2;
+	border-radius: 4px;
+	height: 200px;
+	font-size: 13px;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-scroll {
+	min-height: 200px;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-gutters {
+	background: #1e1f1c;
+	border-right: 1px solid #404040;
+	color: #75715e;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-linenumber {
+	color: #75715e;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-cursor {
+	border-left: 1px solid #f8f8f0;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-selected {
+	background: #49483e;
+}
+
+textarea[name="manual"] + .CodeMirror pre.CodeMirror-line,
+textarea[name="manual"] + .CodeMirror pre.CodeMirror-line-like {
+	color: #f8f8f2;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-string {
+	color: #A9DC76;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-number {
+	color: #AB9DF2;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-atom {
+	color: #78DCE8;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-punctuation,
+textarea[name="manual"] + .CodeMirror .cm-bracket {
+	color: #f8f8f2;
+}
+
+/******************************************************************************/
 /********************************  data tables  *******************************/
 /******************************************************************************/
 .db-wizard-results .dt-button {
