@@ -187,6 +187,10 @@
 		});
 		$('textarea[name="manual"]').change(validateJSON).keyup(validateJSON);
 
+		$(document).on('change', 'input[name="paging_bool"], input[name="pagination"]', function() {
+			$('.viz-pagination-options').toggle($(this).is(':checked'));
+		});
+
 	});
 })(jQuery, visualizer);
 
