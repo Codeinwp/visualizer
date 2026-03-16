@@ -211,6 +211,12 @@ Pay attention that to turn your shortcodes into graphs, your theme has to have `
 
 [http://docs.themeisle.com/article/691-how-to-use-google-visualization-variables](http://docs.themeisle.com/article/691-how-to-use-google-visualization-variables)
 
+### How to report a security issue? ###
+ 
+Plugin security is a core priority for us. If you identify a potential vulnerability, we ask that you disclose it responsibly.
+
+Please follow the reporting protocols outlined on our [Security Page](https://themeisle.com/security/).
+
 ## Screenshots ##
 
 1. Charts Selection
