@@ -472,7 +472,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	/**
 	 * Schedule the recurring DB refresh action.
 	 */
-	private function schedule_refresh_db_action() {
+	private function schedule_refresh_db_action(): void {
 		$hook         = 'visualizer_schedule_refresh_db';
 		$group        = 'visualizer';
 		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
@@ -495,7 +495,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	/**
 	 * Unschedule the recurring DB refresh action.
 	 */
-	private function unschedule_refresh_db_action() {
+	private function unschedule_refresh_db_action(): void {
 		$hook  = 'visualizer_schedule_refresh_db';
 		$group = 'visualizer';
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {

@@ -83,7 +83,7 @@ class Visualizer_Module_Upgrade extends Visualizer_Module {
 	/**
 	 * Migrate recurring WP-Cron jobs to Action Scheduler.
 	 */
-	private static function migrate_action_scheduler() {
+	private static function migrate_action_scheduler(): void {
 		if ( ! function_exists( 'as_schedule_recurring_action' ) || ! function_exists( 'as_next_scheduled_action' ) ) {
 			return;
 		}
