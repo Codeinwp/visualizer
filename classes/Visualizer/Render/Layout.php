@@ -1049,7 +1049,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											<?php
 											$is_wp_source = 'visualizer_source_query_wp' === $source_of_chart;
 											$hours        = get_post_meta( $chart_id, Visualizer_Plugin::CF_DB_SCHEDULE, true );
-											$bttn_label   = $is_wp_source ? __( '1. Modify Data Source', 'visualizer' ) : __( '1. Choose Data Source', 'visualizer' );
+											$bttn_label   = $is_wp_source ? '1. ' . __( 'Modify Data Source', 'visualizer' ) : '1. ' . __( 'Choose Data Source', 'visualizer' );
 											?>
 
 											<!-- Step 1: Choose / modify data source -->
@@ -1058,7 +1058,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											<!-- Step 2: Sync schedule toggle -->
 											<div id="vz-wp-sync-step">
 												<button type="button" id="vz-wp-sync-btn" class="vz-import-step-toggle" aria-expanded="<?php echo $is_wp_source ? 'true' : 'false'; ?>">
-													<?php _e( '2. Set Sync Schedule', 'visualizer' ); ?>
+													<?php echo '2. ' . __( 'Set Sync Schedule', 'visualizer' ); ?>
 													<span class="dashicons dashicons-arrow-down-alt2"></span>
 												</button>
 												<div id="vz-wp-sync-options"<?php echo $is_wp_source ? '' : ' style="display:none"'; ?>>
@@ -1218,7 +1218,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 									<!-- Step 2: Sync schedule toggle -->
 									<div id="vz-db-sync-step">
 										<button type="button" id="vz-db-sync-btn" class="vz-import-step-toggle" aria-expanded="<?php echo $is_db_source ? 'true' : 'false'; ?>">
-											<?php _e( '2. Set Sync Schedule', 'visualizer' ); ?>
+											<?php echo '2. ' . __( 'Set Sync Schedule', 'visualizer' ); ?>
 											<span class="dashicons dashicons-arrow-down-alt2"></span>
 										</button>
 										<div id="vz-db-sync-options"<?php echo $is_db_source ? '' : ' style="display:none"'; ?>>
