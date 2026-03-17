@@ -616,7 +616,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 					array( 'visualizer-permission', 'visualizer-permission-specific', 'visualizer-permission-edit-specific' )
 				);
 			Visualizer_Render_Sidebar::_renderSectionEnd();
-			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions', 'https://docs.themeisle.com/article/1280-how-to-customize-permissions' );
 			echo '</div>';
 		Visualizer_Render_Sidebar::_renderGroupEnd();
 	}
@@ -1071,7 +1071,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											<input type="button" id="filter-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
 											<input type="button" id="db-filter-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 										</form>
-										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wp' ); ?>
+										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wp', 'https://docs.themeisle.com/article/1278-how-to-import-data-from-wordpress' ); ?>
 									</div>
 								</div>
 							</li>
@@ -1217,7 +1217,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 
 									<input type="button" id="db-chart-button" class="button button-secondary show-chart-toggle" value="<?php echo $bttn_label; ?>" data-current="chart" data-t-filter="<?php _e( 'Show Chart', 'visualizer' ); ?>" data-t-chart="<?php echo $bttn_label; ?>">
 									<input type="button" id="db-chart-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
-									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
+									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query', 'https://docs.themeisle.com/article/1279-how-to-import-data-from-a-database' ); ?>
 								</form>
 							</div>
 							</div>

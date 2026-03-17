@@ -1136,10 +1136,11 @@ button#editor-chart-button {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	gap: 12px;
 }
 
 .only-pro-content p {
-	margin: 0 0 15px;
+	margin: 0;
 	font-size: 14px;
 	font-weight: 700;
 }
@@ -1155,9 +1156,6 @@ button#editor-chart-button {
 	border-width: 1px;
 	border-style: solid;
 	border-radius: 3px;
-}
-.only-pro-content .only-pro-container a {
-	color: #fff !important;
 }
 
 .only-pro-content a:hover {
