@@ -33,31 +33,9 @@ npm run build                       # Production build → build/block.js
 npm run dev                         # Watch mode for development
 ```
 
-### E2E Tests & Environment
+### E2E & PHPUnit Tests
 
-Requires Docker to be running. Uses `docker-compose.ci.yml` (MariaDB + WordPress on port 8889).
-
-```bash
-# 1. Install dependencies
-npm ci
-npx playwright install --with-deps chromium
-composer install --no-dev
-
-# 2. Start the WordPress environment (boots Docker, installs WP, activates plugin)
-DOCKER_FILE=docker-compose.ci.yml bash bin/wp-init.sh
-
-# 3. Run the full Playwright suite
-npm run test:e2e:playwright
-
-# 4. Run a single spec file
-npx wp-scripts test-playwright --config tests/e2e/playwright.config.js tests/e2e/specs/gutenberg-editor.spec.js
-
-# 5. Tear down
-DOCKER_FILE=docker-compose.ci.yml bash bin/wp-down.sh
-```
-
-WordPress is installed at `http://localhost:8889` with credentials `admin` / `password`.
-The `TI_E2E_TESTING` constant is set to `true` in `wp-config.php` by the setup script, which enables test-only code paths in the plugin.
+> Skill files for running tests are in [`skills/`](skills/): use `skills/e2e.md` for E2E and `skills/unit.md` for PHPUnit.
 
 ---
 
