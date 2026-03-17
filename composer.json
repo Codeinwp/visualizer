@@ -23,7 +23,8 @@
   "require": {
     "codeinwp/themeisle-sdk": "^3.3",
     "neitanod/forceutf8": "~2.0",
-    "openspout/openspout": "^3.7"
+    "openspout/openspout": "^3.7",
+    "woocommerce/action-scheduler": "^3.8"
   },
   "autoload": {
     "files": [
