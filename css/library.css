@@ -696,10 +696,8 @@ span.viz-view-toggle-group {
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	background: #f0f6fc;
-	border: 1px solid #c3daf9;
+	background: #fff;
 	border-left: 4px solid #007CBA;
-	border-radius: 4px;
 	padding: 12px 16px;
 	margin-bottom: 10px;
 }

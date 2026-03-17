@@ -293,6 +293,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( ! empty( $this->charts ) ) {
 			if ( $this->_isListView() ) {
 				echo '<div id="visualizer-library" class="visualizer-clearfix view-list">';
+				$this->_renderSidebar();
 				echo '<table class="wp-list-table widefat striped viz-charts-table">';
 				echo '<thead><tr>';
 				echo '<th class="col-id">' . esc_html__( 'ID', 'visualizer' ) . '</th>';
@@ -314,7 +315,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 					$this->_renderChartBox( $placeholder_id, $chart['id'], $enable_controls );
 				}
 				echo '</tbody></table>';
-				$this->_renderSidebar();
 				echo '</div>';
 			} else {
 				echo '<div id="visualizer-library" class="visualizer-clearfix view-grid">';
@@ -354,7 +354,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<span class="visualizer-chart-action visualizer-nochart-image"><span class="dashicons dashicons-format-image"></span></span>';
 			echo '<span class="visualizer-chart-action visualizer-nochart-export"><span class="dashicons dashicons-download"></span></span>';
 			echo '<span class="visualizer-chart-action visualizer-nochart-clone"><span class="dashicons dashicons-admin-page"></span></span>';
-			echo '<span class="visualizer-chart-action visualizer-nochart-edit"><span class="dashicons dashicons-admin-generic"></span></span>';
+			echo '<span class="visualizer-chart-action visualizer-nochart-edit"><span class="dashicons dashicons-edit"></span></span>';
 			echo '</div>';
 			echo '</div>';
 			echo '</div></div>';
@@ -459,7 +459,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<a class="visualizer-chart-action visualizer-chart-shortcode ' . esc_attr( $pro_class ) . '" href="javascript:;" data-clipboard-text="' . esc_attr( $shortcode ) . '"><span class="dashicons dashicons-shortcode ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
 			echo '<a class="visualizer-chart-action visualizer-chart-export ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . $export_link . '"><span class="dashicons dashicons-download ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Export CSV', 'visualizer' ) . '</span></a>';
 			echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="' . $clone_url . '"><span class="dashicons dashicons-admin-page ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Duplicate', 'visualizer' ) . '</span></a>';
-			echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . esc_attr( (string) $chart_id ) . '"><span class="dashicons dashicons-admin-generic ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . esc_attr( (string) $chart_id ) . '"><span class="dashicons dashicons-edit ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
 			echo '</div></td>';
 			echo '</tr>';
 			return;
@@ -487,7 +487,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		echo '<a class="visualizer-chart-action visualizer-chart-export ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $export_link, '"><span class="dashicons dashicons-download ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Export CSV', 'visualizer' ) . '</span></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="', $clone_url, '"><span class="dashicons dashicons-admin-page ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Duplicate', 'visualizer' ) . '</span></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $chart_id, '"><span class="dashicons dashicons-admin-generic ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $chart_id, '"><span class="dashicons dashicons-edit ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
 		echo '</div>';
 		do_action( 'visualizer_chart_languages', $chart_id );
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
@@ -540,7 +540,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			if ( $this->_isListView() ) {
 				$upgrade_url = tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' );
 				$chart_types = Visualizer_Module_Admin::proFeaturesLocked() ? __( '6 more chart types', 'visualizer' ) : __( '11 more chart types', 'visualizer' );
-				echo '<div class="items items--upsell">';
+				echo '<div class="items--upsell">';
 				echo '<div class="viz-upsell-banner">';
 				echo '<span class="dashicons dashicons-star-filled viz-upsell-banner__icon"></span>';
 				echo '<div class="viz-upsell-banner__text">';
