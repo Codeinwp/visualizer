@@ -537,22 +537,53 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	 */
 	private function _renderSidebar() {
 		if ( ! Visualizer_Module::is_pro() ) {
-			$upgrade_url  = tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' );
-			$chart_types  = Visualizer_Module_Admin::proFeaturesLocked() ? __( '6 more chart types', 'visualizer' ) : __( '11 more chart types', 'visualizer' );
-			echo '<div class="items items--upsell">';
-			echo '<div class="viz-upsell-banner">';
-			echo '<span class="dashicons dashicons-star-filled viz-upsell-banner__icon"></span>';
-			echo '<div class="viz-upsell-banner__text">';
-			echo '<strong>' . esc_html__( 'Unlock the full power of Visualizer PRO!', 'visualizer' ) . '</strong>';
-			/* translators: %s: number of additional chart types (e.g. "11 more chart types") */
-			echo '<span>' . sprintf( esc_html__( '%s, periodic data sync, database queries, frontend editor, and more.', 'visualizer' ), esc_html( $chart_types ) ) . '</span>';
-			echo '</div>';
-			echo '<div class="viz-upsell-banner__actions">';
-			echo '<a href="' . esc_url( $upgrade_url . '#pro-features' ) . '" target="_blank" class="button button-secondary">' . esc_html__( 'View Features', 'visualizer' ) . '</a>';
-			echo '<a href="' . esc_url( $upgrade_url . '#pricing' ) . '" target="_blank" class="button button-primary">' . esc_html__( 'Upgrade Now', 'visualizer' ) . '</a>';
-			echo '</div>';
-			echo '</div>';
-			echo '</div>';
+			if ( $this->_isListView() ) {
+				$upgrade_url = tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' );
+				$chart_types = Visualizer_Module_Admin::proFeaturesLocked() ? __( '6 more chart types', 'visualizer' ) : __( '11 more chart types', 'visualizer' );
+				echo '<div class="items items--upsell">';
+				echo '<div class="viz-upsell-banner">';
+				echo '<span class="dashicons dashicons-star-filled viz-upsell-banner__icon"></span>';
+				echo '<div class="viz-upsell-banner__text">';
+				echo '<strong>' . esc_html__( 'Unlock the full power of Visualizer PRO!', 'visualizer' ) . '</strong>';
+				/* translators: %s: number of additional chart types (e.g. "11 more chart types") */
+				echo '<span>' . sprintf( esc_html__( '%s, periodic data sync, database queries, frontend editor, and more.', 'visualizer' ), esc_html( $chart_types ) ) . '</span>';
+				echo '</div>';
+				echo '<div class="viz-upsell-banner__actions">';
+				echo '<a href="' . esc_url( $upgrade_url . '#pro-features' ) . '" target="_blank" class="button button-secondary">' . esc_html__( 'View Features', 'visualizer' ) . '</a>';
+				echo '<a href="' . esc_url( $upgrade_url . '#pricing' ) . '" target="_blank" class="button button-primary">' . esc_html__( 'Upgrade Now', 'visualizer' ) . '</a>';
+				echo '</div>';
+				echo '</div>';
+				echo '</div>';
+			} else {
+				echo '<div class="items">';
+				echo '<div class="viz-pro">';
+				echo '<div id="visualizer-sidebar" class="one-columns">';
+				echo '<div class="visualizer-sidebar-box">';
+				echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
+				if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
+					echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '6 more chart types', 'visualizer' );
+				} else {
+					echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '11 more chart types', 'visualizer' ) . '</li>';
+					echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Synchronize Data Periodically', 'visualizer' ) . '</li>';
+					echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'ChartJS Charts', 'visualizer' ) . '</li>';
+					echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Table Google chart', 'visualizer' ) . '</li>';
+					echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend Actions(Print, Export, Copy, Download)', 'visualizer' ) . '</li>';
+				}
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Use database query to create charts', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Create charts from WordPress tables', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Private charts', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'WPML support for translating charts', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Integration with Woocommerce Data endpoints', 'visualizer' ) . '</li>';
+				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li></ul>';
+				echo '<p class="vz-sidebar-box-action"><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' ) . '#pro-features" target="_blank" class="button button-secondary">' . __( 'View more features', 'visualizer' ) . '</a><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' ) . '#pricing" target="_blank" class="button button-primary">' . __( 'Upgrade Now', 'visualizer' ) . '</a></p>';
+				echo '</div>';
+				echo '</div>';
+				echo '</div>';
+				echo '</div>';
+			}
 		}
 	}
 }
