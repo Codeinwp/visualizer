@@ -29,6 +29,13 @@
 class Visualizer_Render_Library extends Visualizer_Render {
 
 	/**
+	 * Cached result of _isListView() to avoid repeat DB reads per request.
+	 *
+	 * @var bool|null
+	 */
+	private $_list_view_cached = null;
+
+	/**
 	 * Renders library page.
 	 *
 	 * @since 1.0.0
@@ -78,6 +85,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div class="visualizer-library-form">
 		<form action="' . admin_url( 'admin.php' ) . '">
 			<input type="hidden" name="page" value="' . Visualizer_Plugin::NAME . '"/>
+			<input type="hidden" name="view" value="' . esc_attr( $this->_isListView() ? 'list' : 'grid' ) . '"/>
+			<span class="viz-view-toggle-group">' . $this->_getViewToggleHTML() . '</span>
 				<select class="viz-filter" name="type">
 		';
 
@@ -282,34 +291,58 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div id="visualizer-content-wrapper">';
 		echo '<div id="tsdk_banner" class="visualizer-banner"></div>';
 		if ( ! empty( $this->charts ) ) {
-			echo '<div id="visualizer-library" class="visualizer-clearfix">';
-			$count = 0;
-			foreach ( $this->charts as $placeholder_id => $chart ) {
-				// show the sidebar after the first 3 charts.
-				++$count;
-				$enable_controls = false;
-				$settings = isset( $chart['settings'] ) ? $chart['settings'] : array();
-				if ( ! empty( $settings['controls']['controlType'] ) ) {
-					$column_index = $settings['controls']['filterColumnIndex'];
-					$column_label = $settings['controls']['filterColumnLabel'];
-					if ( 'false' !== $column_index || 'false' !== $column_label ) {
-						$enable_controls = true;
+			if ( $this->_isListView() ) {
+				echo '<div id="visualizer-library" class="visualizer-clearfix view-list">';
+				echo '<table class="wp-list-table widefat striped viz-charts-table">';
+				echo '<thead><tr>';
+				echo '<th class="col-id">' . esc_html__( 'ID', 'visualizer' ) . '</th>';
+				echo '<th class="col-title">' . esc_html__( 'Title', 'visualizer' ) . '</th>';
+				echo '<th class="col-type">' . esc_html__( 'Type', 'visualizer' ) . '</th>';
+				echo '<th class="col-shortcode">' . esc_html__( 'Shortcode', 'visualizer' ) . '</th>';
+				echo '<th class="col-actions">' . esc_html__( 'Actions', 'visualizer' ) . '</th>';
+				echo '</tr></thead><tbody>';
+				foreach ( $this->charts as $placeholder_id => $chart ) {
+					$enable_controls = false;
+					$settings        = isset( $chart['settings'] ) ? $chart['settings'] : array();
+					if ( ! empty( $settings['controls']['controlType'] ) ) {
+						$column_index = $settings['controls']['filterColumnIndex'];
+						$column_label = $settings['controls']['filterColumnLabel'];
+						if ( 'false' !== $column_index || 'false' !== $column_label ) {
+							$enable_controls = true;
+						}
 					}
-				}
-				if ( 3 === $count ) {
-					$this->_renderSidebar();
-					$this->_renderChartBox( $placeholder_id, $chart['id'], $enable_controls );
-				} else {
 					$this->_renderChartBox( $placeholder_id, $chart['id'], $enable_controls );
 				}
-			}
-			// show the sidebar if there are less than 3 charts.
-			if ( $count < 3 ) {
+				echo '</tbody></table>';
 				$this->_renderSidebar();
+				echo '</div>';
+			} else {
+				echo '<div id="visualizer-library" class="visualizer-clearfix view-grid">';
+				$count = 0;
+				foreach ( $this->charts as $placeholder_id => $chart ) {
+					// show the sidebar after the first 3 charts.
+					++$count;
+					$enable_controls = false;
+					$settings        = isset( $chart['settings'] ) ? $chart['settings'] : array();
+					if ( ! empty( $settings['controls']['controlType'] ) ) {
+						$column_index = $settings['controls']['filterColumnIndex'];
+						$column_label = $settings['controls']['filterColumnLabel'];
+						if ( 'false' !== $column_index || 'false' !== $column_label ) {
+							$enable_controls = true;
+						}
+					}
+					if ( 3 === $count ) {
+						$this->_renderSidebar();
+					}
+					$this->_renderChartBox( $placeholder_id, $chart['id'], $enable_controls );
+				}
+				if ( $count < 3 ) {
+					$this->_renderSidebar();
+				}
+				echo '</div>';
 			}
-			echo '</div>';
 		} else {
-			echo '<div id="visualizer-library" class="visualizer-clearfix">';
+			echo '<div id="visualizer-library" class="visualizer-clearfix view-grid">';
 			echo '<div class="items"><div class="visualizer-chart">';
 			echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
 			echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', 'visualizer' ), '<p><h2><a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a></h2></p></div>';
@@ -413,7 +446,28 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			$chart_status['title'] = __( 'Click to view the error', 'visualizer' );
 		}
 		$shortcode = sprintf( '[visualizer id="%s" class=""]', $chart_id );
-		echo '<div class="items"><div class="visualizer-chart"><div class="visualizer-chart-title">', esc_html( $title ), '</div>';
+
+		if ( $this->_isListView() ) {
+			// ── List view: table row ──
+			echo '<tr class="viz-list-row">';
+			echo '<td class="col-id">#' . esc_html( (string) $chart_id ) . '</td>';
+			echo '<td class="col-title">' . esc_html( $title ) . '</td>';
+			echo '<td class="col-type">' . ( ! empty( $chart_type ) ? '<span class="viz-chart-type-badge">' . esc_html( $chart_type ) . '</span>' : '&mdash;' ) . '</td>';
+			echo '<td class="col-shortcode"><code class="viz-shortcode-display">' . esc_html( $shortcode ) . '</code></td>';
+			echo '<td class="col-actions"><div class="visualizer-action-group">';
+			echo '<a class="visualizer-chart-action visualizer-chart-delete" href="' . $delete_url . '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_html__( 'Delete', 'visualizer' ) . '</span></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-shortcode ' . esc_attr( $pro_class ) . '" href="javascript:;" data-clipboard-text="' . esc_attr( $shortcode ) . '"><span class="dashicons dashicons-shortcode ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-export ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . $export_link . '"><span class="dashicons dashicons-download ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Export CSV', 'visualizer' ) . '</span></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="' . $clone_url . '"><span class="dashicons dashicons-admin-page ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Duplicate', 'visualizer' ) . '</span></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . esc_attr( (string) $chart_id ) . '"><span class="dashicons dashicons-admin-generic ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
+			echo '</div></td>';
+			echo '</tr>';
+			return;
+		}
+
+		// ── Grid view: card ──
+		$type_badge = ! empty( $chart_type ) ? '<span class="viz-chart-type-badge">' . esc_html( $chart_type ) . '</span>' : '';
+		echo '<div class="items"><div class="visualizer-chart"><div class="visualizer-chart-title"><span>' . esc_html( $title ) . '</span>' . $type_badge . '</div>';
 		if ( Visualizer_Module::is_pro() && $with_filter ) {
 			echo '<div id="chart_wrapper_' . $placeholder_id . '">';
 			echo '<div id="control_wrapper_' . $placeholder_id . '" class="vz-library-chart-filter"></div>';
@@ -426,14 +480,14 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 		echo '<div class="visualizer-action-group">';
-		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_attr__( 'Delete', 'visualizer' ) . '</span></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-shortcode ' . esc_attr( $pro_class ) . '" href="javascript:;" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-shortcode ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_attr__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_html__( 'Delete', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-shortcode ' . esc_attr( $pro_class ) . '" href="javascript:;" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-shortcode ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
 		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
-			echo '<a class="visualizer-chart-action visualizer-chart-image ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"><span class="dashicons dashicons-format-image ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_attr__( 'Download PNG', 'visualizer' ) . '</span></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-image ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"><span class="dashicons dashicons-format-image ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Download PNG', 'visualizer' ) . '</span></a>';
 		}
-		echo '<a class="visualizer-chart-action visualizer-chart-export ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $export_link, '"><span class="dashicons dashicons-download ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_attr__( 'Export CSV', 'visualizer' ) . '</span></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="', $clone_url, '"><span class="dashicons dashicons-admin-page ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_attr__( 'Duplicate', 'visualizer' ) . '</span></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $chart_id, '"><span class="dashicons dashicons-admin-generic ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_attr__( 'Edit', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-export ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $export_link, '"><span class="dashicons dashicons-download ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Export CSV', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="', $clone_url, '"><span class="dashicons dashicons-admin-page ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Duplicate', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $chart_id, '"><span class="dashicons dashicons-admin-generic ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
 		echo '</div>';
 		do_action( 'visualizer_chart_languages', $chart_id );
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
@@ -442,35 +496,60 @@ class Visualizer_Render_Library extends Visualizer_Render {
 	}
 
 	/**
+	 * Returns true when the library should render in list (no-preview) mode.
+	 *
+	 * Priority: ?view= URL param (saves to user meta) → saved user meta → grid default.
+	 *
+	 * No nonce needed: this is a bookmarkable UI preference URL. A nonce would expire
+	 * and break saved/shared links for zero real security gain — the value is allowlisted
+	 * to 'list'|'grid' before any write happens.
+	 */
+	private function _isListView(): bool {
+		if ( null !== $this->_list_view_cached ) {
+			return $this->_list_view_cached;
+		}
+		if ( isset( $_GET['view'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$view = sanitize_text_field( wp_unslash( $_GET['view'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( in_array( $view, array( 'list', 'grid' ), true ) ) {
+				update_user_meta( get_current_user_id(), 'visualizer_library_view', $view );
+			}
+			$this->_list_view_cached = ( 'list' === $view );
+		} else {
+			$saved                   = get_user_meta( get_current_user_id(), 'visualizer_library_view', true );
+			$this->_list_view_cached = ( 'list' === $saved );
+		}
+		return $this->_list_view_cached;
+	}
+
+	/**
+	 * Returns the HTML for the grid/list view toggle links.
+	 */
+	private function _getViewToggleHTML(): string {
+		$is_list  = $this->_isListView();
+		$grid_url = esc_url( add_query_arg( 'view', 'grid' ) );
+		$list_url = esc_url( add_query_arg( 'view', 'list' ) );
+		return '<a href="' . $grid_url . '" class="viz-view-toggle' . ( ! $is_list ? ' active' : '' ) . '" title="' . esc_attr__( 'Grid View', 'visualizer' ) . '"><span class="dashicons dashicons-screenoptions"></span></a>'
+			. '<a href="' . $list_url . '" class="viz-view-toggle' . ( $is_list ? ' active' : '' ) . '" title="' . esc_attr__( 'List View', 'visualizer' ) . '"><span class="dashicons dashicons-list-view"></span></a>';
+	}
+
+	/**
 	 * Render 2-col sidebar
 	 */
 	private function _renderSidebar() {
 		if ( ! Visualizer_Module::is_pro() ) {
-			echo '<div class="items">';
-			echo '<div class="viz-pro">';
-			echo '<div id="visualizer-sidebar" class="one-columns">';
-			echo '<div class="visualizer-sidebar-box">';
-			echo '<h3>' . __( 'Discover the power of PRO!', 'visualizer' ) . '</h3><ul>';
-			if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '6 more chart types', 'visualizer' );
-			} else {
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( '11 more chart types', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Synchronize Data Periodically', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'ChartJS Charts', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Table Google chart', 'visualizer' ) . '</li>';
-				echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend Actions(Print, Export, Copy, Download)', 'visualizer' ) . '</li>';
-			}
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Spreadsheet like editor', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Import from other charts', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Use database query to create charts', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Create charts from WordPress tables', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Frontend editor', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Private charts', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'WPML support for translating charts', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Integration with Woocommerce Data endpoints', 'visualizer' ) . '</li>';
-			echo '<li><svg class="icon list-icon"><use xlink:href="#list-icon"></use></svg>' . __( 'Auto-sync with online files', 'visualizer' ) . '</li></ul>';
-			echo '<p class="vz-sidebar-box-action"><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' ) . '#pro-features" target="_blank" class="button button-secondary">' . __( 'View more features', 'visualizer' ) . '</a><a href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' ) . '#pricing" target="_blank" class="button button-primary">' . __( 'Upgrade Now', 'visualizer' ) . '</a></p>';
+			$upgrade_url  = tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' );
+			$chart_types  = Visualizer_Module_Admin::proFeaturesLocked() ? __( '6 more chart types', 'visualizer' ) : __( '11 more chart types', 'visualizer' );
+			echo '<div class="items items--upsell">';
+			echo '<div class="viz-upsell-banner">';
+			echo '<span class="dashicons dashicons-star-filled viz-upsell-banner__icon"></span>';
+			echo '<div class="viz-upsell-banner__text">';
+			echo '<strong>' . esc_html__( 'Unlock the full power of Visualizer PRO!', 'visualizer' ) . '</strong>';
+			/* translators: %s: number of additional chart types (e.g. "11 more chart types") */
+			echo '<span>' . sprintf( esc_html__( '%s, periodic data sync, database queries, frontend editor, and more.', 'visualizer' ), esc_html( $chart_types ) ) . '</span>';
 			echo '</div>';
+			echo '<div class="viz-upsell-banner__actions">';
+			echo '<a href="' . esc_url( $upgrade_url . '#pro-features' ) . '" target="_blank" class="button button-secondary">' . esc_html__( 'View Features', 'visualizer' ) . '</a>';
+			echo '<a href="' . esc_url( $upgrade_url . '#pricing' ) . '" target="_blank" class="button button-primary">' . esc_html__( 'Upgrade Now', 'visualizer' ) . '</a>';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';

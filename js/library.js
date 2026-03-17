@@ -46,6 +46,9 @@ function createPopupProBlocker( $ , e ) {
     var resizeTimeout;
 
     $.fn.adjust = function () {
+        if ( $( '#visualizer-library' ).hasClass( 'view-list' ) ) {
+            return this;
+        }
         return $(this).each(function () {
             var width = $('#visualizer-library').width(),
                 margin = width * 0.02;
@@ -84,6 +87,26 @@ function createPopupProBlocker( $ , e ) {
             });
             $(this).parent('form').submit();
         });
+
+        // Copy shortcode when clicking the code display in list view.
+        $( document ).on( 'click', '.viz-shortcode-display', function () {
+            var text = $( this ).text();
+            var el   = this;
+            if ( navigator.clipboard ) {
+                navigator.clipboard.writeText( text );
+            } else {
+                var ta = document.createElement( 'textarea' );
+                ta.value = text;
+                document.body.appendChild( ta );
+                ta.select();
+                document.execCommand( 'copy' );
+                document.body.removeChild( ta );
+            }
+            $( el ).addClass( 'viz-shortcode-copied' );
+            setTimeout( function () {
+                $( el ).removeClass( 'viz-shortcode-copied' );
+            }, 1200 );
+        } );
 
         $('.visualizer-chart-shortcode').click(function (event) {
 
