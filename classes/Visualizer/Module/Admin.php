@@ -1464,29 +1464,35 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function add_black_friday_data( $configs ) {
 		$config = $configs['default'];
 
-		// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-		$message_template = __( 'Our biggest sale of the year: %1$sup to %2$s OFF%3$s on %4$s. Don\'t miss this limited-time offer.', 'visualizer' );
-		$product_label    = 'Visualizer';
-		$discount         = '70%';
+		$message = __( 'Database queries, private charts, auto-sync. Go beyond basic charts. Exclusively for existing Visualizer users.', 'visualizer' );
+		$cta_label = __( 'Get Visualizer Pro', 'visualizer' );
 
 		$plan    = apply_filters( 'product_visualizer_license_plan', 0 );
 		$license = apply_filters( 'product_visualizer_license_key', false );
-		$is_pro  = 0 < $plan;
+		$status  = apply_filters( 'product_visualizer_license_status', false );
+
+		$is_pro  = 'valid' === $status;
+		$is_expired = 'expired' === $status || 'active-expired' === $status;
 
 		if ( $is_pro ) {
-			// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-			$message_template = __( 'Get %1$sup to %2$s off%3$s when you upgrade your %4$s plan or renew early.', 'visualizer' );
-			$product_label    = 'Visualizer Pro';
-			$discount         = '30%';
+			// translators: %1$s - discount, %2$s - discount.
+			$message = sprintf( __( 'Upgrade your Visualizer Pro plan: %1$s off this week. Already on the plan you need? Renew early and save up to %2$s.', 'visualizer' ), '30%', '20%' );
+			$cta_label = __( 'See your options', 'visualizer' );
+		} elseif ( $is_expired ) {
+			$message = __( 'Your Visualizer Pro features are still here, just locked. Renew at a reduced rate this week.', 'visualizer' );
+			$cta_label = __( 'Reactivate now', 'visualizer' );
+		} else {
+			$config['title'] = __( 'Visualizer Pro: 60% off this week', 'visualizer' );
 		}
 
-		$product_label = sprintf( '<strong>%s</strong>', $product_label );
 		$url_params    = array(
 			'utm_term' => $is_pro ? 'plan-' . $plan : 'free',
 			'lkey'     => ! empty( $license ) ? $license : false,
+			'expired'  => $is_expired ? '1' : false,
 		);
 
-		$config['message']  = sprintf( $message_template, '<strong>', $discount, '</strong>', $product_label );
+		$config['message']  = $message;
+		$config['cta_label'] = $cta_label;
 		$config['sale_url'] = add_query_arg(
 			$url_params,
 			tsdk_translate_link( tsdk_utmify( 'https://themeisle.link/vizualizer-bf', 'bfcm', 'visualizer' ) )
