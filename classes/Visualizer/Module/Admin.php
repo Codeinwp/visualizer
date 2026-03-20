@@ -1273,16 +1273,19 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
+			$is_black_friday = apply_filters( 'themeisle_sdk_is_black_friday_sale', false );
 			// knowledge base link
 			$plugin_meta[] = sprintf(
 				'<a href="' . VISUALIZER_MAIN_DOC . '" target="_blank">%s</a>',
 				esc_html__( 'Docs', 'visualizer' )
 			);
-			// flattr link
-			$plugin_meta[] = sprintf(
-				'<a style="color:red" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'pluginrow' ) . '" target="_blank">%s</a>',
-				esc_html__( 'Get Visualizer Pro', 'visualizer' )
-			);
+			if ( ! $is_black_friday ) {
+				// flattr link
+				$plugin_meta[] = sprintf(
+					'<a style="color:red" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'pluginrow' ) . '" target="_blank">%s</a>',
+					esc_html__( 'Get Visualizer Pro', 'visualizer' )
+				);
+			}
 		}
 
 		return $plugin_meta;
@@ -1470,6 +1473,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$plan    = apply_filters( 'product_visualizer_license_plan', 0 );
 		$license = apply_filters( 'product_visualizer_license_key', false );
 		$status  = apply_filters( 'product_visualizer_license_status', false );
+		$pro_product_slug = defined( 'VISUALIZER_PRO_BASEFILE' ) ? basename( dirname( VISUALIZER_PRO_BASEFILE ) ) : '';
 
 		$is_pro  = 'valid' === $status;
 		$is_expired = 'expired' === $status || 'active-expired' === $status;
@@ -1491,8 +1495,18 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'expired'  => $is_expired ? '1' : false,
 		);
 
-		$config['message']  = $message;
+		if ( ( $is_pro || $is_expired ) && ! empty( $pro_product_slug ) ) {
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - up to %s off', 'visualizer' ), '30%' );
+			$config['plugin_meta_targets'] = array( $pro_product_slug );
+		} else {
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - %s off', 'visualizer' ), '60%' );
+		}
+
+		$config['message']   = $message;
 		$config['cta_label'] = $cta_label;
+
 		$config['sale_url'] = add_query_arg(
 			$url_params,
 			tsdk_translate_link( tsdk_utmify( 'https://themeisle.link/vizualizer-bf', 'bfcm', 'visualizer' ) )
