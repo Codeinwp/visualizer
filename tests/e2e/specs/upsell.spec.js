@@ -42,7 +42,7 @@ test.describe( 'Upsell', () => {
 		expect( await page.frameLocator('iframe').locator('#vz-chart-source .viz-group-title .dashicons-lock').count() ).toBe( 5 );
 
 
-		const uploadFileUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_csv .only-pro-inner a');
+		const uploadFileUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_csv .only-pro-inner a').last();
 		let href = await uploadFileUpsell.getAttribute('href');
 		let searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('import-file');
@@ -52,7 +52,7 @@ test.describe( 'Upsell', () => {
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('import-url');
 
-		const otherChartUpsell = page.frameLocator('iframe').locator('#vz-chart-source .viz-import-from-other .only-pro-inner a');
+		const otherChartUpsell = page.frameLocator('iframe').locator('#vz-chart-source .viz-import-from-other .only-pro-inner a').last();
 		href = await otherChartUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('import-chart');
@@ -75,17 +75,17 @@ test.describe( 'Upsell', () => {
 
 		await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
 
-		const dataFilterConfigurationUpsell = page.frameLocator('iframe').locator('#vz-data-controls .only-pro-inner a');
+		const dataFilterConfigurationUpsell = page.frameLocator('iframe').locator('#vz-data-controls .only-pro-inner a').last();
 		href = await dataFilterConfigurationUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('data-filter-configuration');
 
-		const frontendActionsUpsell = page.frameLocator('iframe').locator('#vz-frontend-actions .only-pro-inner a');
+		const frontendActionsUpsell = page.frameLocator('iframe').locator('#vz-frontend-actions .only-pro-inner a').last();
 		href = await frontendActionsUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('frontend-actions');
 
-		const chartPermissionsUpsell = page.frameLocator('iframe').locator('#vz-permissions .only-pro-inner a');
+		const chartPermissionsUpsell = page.frameLocator('iframe').locator('#vz-permissions .only-pro-inner a').last();
 		href = await chartPermissionsUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('chart-permissions');
