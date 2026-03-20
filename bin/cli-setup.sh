@@ -4,6 +4,7 @@ wp  --allow-root core install --url="http://localhost:8889" --admin_user="admin"
 mkdir -p /var/www/html/wp-content/uploads
 chmod -R 777 /var/www/html/wp-content/uploads/*
 wp  --allow-root  plugin install classic-editor
+wp  --allow-root  plugin install elementor
 wp  --allow-root  theme install twentytwentyone
 
 # activate

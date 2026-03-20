@@ -148,16 +148,6 @@ class Charts extends Component {
 														chartsScreen={ true }
 														options={ data['visualizer-settings'] }
 													/>
-												) : ( '' !== data['visualizer-data-exploded'] ? (
-													<Chart
-														chartVersion={ chartVersion }
-														chartType={ chart }
-														rows={ data['visualizer-data'] }
-														columns={ data['visualizer-series'] }
-														options={ filterCharts( data['visualizer-settings']) }
-                                                        formatters={ formatData( data ) }
-														chartPackages={ googleChartPackages }
-													/>
 												) : (
 													<Chart
 														chartVersion={ chartVersion }
@@ -168,7 +158,7 @@ class Charts extends Component {
                                                         formatters={ formatData( data ) }
 														chartPackages={ googleChartPackages }
 													/>
-												) ) }
+												) }
 
                                                  <div className="visualizer-settings__charts-footer"><sub>
                                                     { footer }

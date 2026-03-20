@@ -95,7 +95,7 @@ class ChartRender extends Component {
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
 							/>
-						) : ( '' !== data['visualizer-data-exploded'] ? (
+						) : (
 							<Chart
 								chartVersion={ chartVersion }
 								chartType={ chart }
@@ -110,22 +110,7 @@ class ChartRender extends Component {
                                 formatters={ formatData( data ) }
 								chartPackages={ googleChartPackages }
 							/>
-                        ) : (
-							<Chart
-								chartVersion={ chartVersion }
-								chartType={ chart }
-								rows={ data['visualizer-data'] }
-								columns={ data['visualizer-series'] }
-								options={
-									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
-										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
-										compact( this.props.chart['visualizer-settings'])
-								}
-								height="500px"
-                                formatters={ formatData( data ) }
-								chartPackages={ googleChartPackages }
-							/>
-						) ) }
+						) }
 
                          <div className="visualizer-settings__charts-footer"><sub>
                             { footer }
