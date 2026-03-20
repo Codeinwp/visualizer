@@ -201,6 +201,13 @@ function visualizer_launch() {
 	if ( is_readable( $vendor_file ) ) {
 		include_once $vendor_file;
 	}
+
+	$action_scheduler_file = VISUALIZER_ABSPATH . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
+
+	if ( is_readable( $action_scheduler_file ) ) {
+		require_once $action_scheduler_file;
+	}
+
 	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
 	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
 	add_filter(

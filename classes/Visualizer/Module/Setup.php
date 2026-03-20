@@ -209,8 +209,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * Activates the plugin on a particular blog instance (supports multisite and single site).
 	 */
 	private function activate_on_site() {
-		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
-		wp_schedule_event( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS, apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' ), 'visualizer_schedule_refresh_db' );
+		$this->schedule_refresh_db_action();
 		add_option( 'visualizer-activated', true );
 		$is_fresh_install  = get_option( 'visualizer_fresh_install', false );
 		if ( ! defined( 'TI_E2E_TESTING' ) && false === $is_fresh_install ) {
@@ -237,7 +236,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * Deactivates the plugin on a particular blog instance (supports multisite and single site).
 	 */
 	private function deactivate_on_site() {
-		wp_clear_scheduled_hook( 'visualizer_schedule_refresh_db' );
+		$this->unschedule_refresh_db_action();
 		delete_option( 'visualizer-activated', true );
 	}
 
@@ -468,5 +467,55 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		);
 
 		return $schedules;
+	}
+
+	/**
+	 * Schedule the recurring DB refresh action.
+	 */
+	private function schedule_refresh_db_action(): void {
+		$hook         = 'visualizer_schedule_refresh_db';
+		$group        = 'visualizer';
+		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
+		$interval     = $this->get_schedule_interval_seconds( $interval_key );
+		$timestamp    = strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+
+		if ( function_exists( 'as_next_scheduled_action' ) && function_exists( 'as_schedule_recurring_action' ) ) {
+			$next = as_next_scheduled_action( $hook, array(), $group );
+			if ( false === $next ) {
+				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group );
+			}
+			wp_clear_scheduled_hook( $hook );
+			return;
+		}
+
+		wp_clear_scheduled_hook( $hook );
+		wp_schedule_event( $timestamp, $interval_key, $hook );
+	}
+
+	/**
+	 * Unschedule the recurring DB refresh action.
+	 */
+	private function unschedule_refresh_db_action(): void {
+		$hook  = 'visualizer_schedule_refresh_db';
+		$group = 'visualizer';
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( $hook, array(), $group );
+		}
+		wp_clear_scheduled_hook( $hook );
+	}
+
+	/**
+	 * Resolve a cron schedule key to seconds.
+	 *
+	 * @param string $interval_key Cron schedule key.
+	 * @return int Interval in seconds.
+	 */
+	private function get_schedule_interval_seconds( $interval_key ) {
+		$schedules = wp_get_schedules();
+		if ( isset( $schedules[ $interval_key ]['interval'] ) ) {
+			return (int) $schedules[ $interval_key ]['interval'];
+		}
+
+		return 600;
 	}
 }
