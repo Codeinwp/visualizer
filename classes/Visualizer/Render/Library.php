@@ -223,8 +223,8 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		$license_key = '';
 		$download_id = '';
 		if ( ! empty( $license ) && is_object( $license ) ) {
-			$license_key = $license->key;
-			$download_id = $license->download_id;
+			$license_key = isset( $license->key ) ? $license->key : '';
+			$download_id = isset( $license->download_id ) ? $license->download_id : '';
 		}
 		$admin_license_url = admin_url( 'options-general.php#visualizer_pro_license' );
 		$renew_license_url = tsdk_utmify( Visualizer_Plugin::STORE_URL . '?edd_license_key=' . $license_key . '&download_id=' . $download_id, 'visualizer_license_block' );

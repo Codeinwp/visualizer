@@ -2,6 +2,7 @@
 /* global console */
 /* global vizSettingsHaveChanged */
 /* global vizHaveSettingsChanged */
+/* global wp */
 
 (function($, v) {
 	var timeout;
@@ -22,6 +23,7 @@
                 clear: updateChart
             });
             $('#settings-form textarea[name="manual"]').change(validateJSON).keyup(validateJSON);
+            initManualConfigEditor();
             vizSettingsHaveChanged(false);
         };
 
@@ -173,10 +175,40 @@
         function validateJSON() {
             $('#visualizer-error-manual').remove();
             try{
-                var options = JSON.parse($(this).val());
+                JSON.parse($(this).val());
             }catch(error){
-                $('<div class="visualizer-error" id="visualizer-error-manual">Invalid JSON: ' + error + '</div>').insertAfter($(this));
+                var $after = $(this).next('.CodeMirror').length ? $(this).next('.CodeMirror') : $(this);
+                $('<div class="visualizer-error" id="visualizer-error-manual">Invalid JSON: ' + error + '</div>').insertAfter($after);
             }
+        }
+
+        function initManualConfigEditor() {
+            var $textarea = $('textarea[name="manual"]');
+            if (!$textarea.length || $textarea.data('cm-initialized')) return;
+
+            var CodeMirrorLib = (typeof wp !== 'undefined' && wp.CodeMirror) ? wp.CodeMirror : null;
+            if (!CodeMirrorLib) return;
+
+            $textarea.data('cm-initialized', true);
+
+            var cm = CodeMirrorLib.fromTextArea($textarea.get(0), {
+                mode: 'application/json',
+                lineNumbers: true,
+                lineWrapping: true,
+                matchBrackets: true,
+                autoCloseBrackets: true
+            });
+
+            // Refresh when any sidebar group is expanded so line numbers render correctly
+            // (CodeMirror can't measure gutter width while the container is hidden).
+            $(document).on('click.vizManualConfig', '.viz-group-title', function() {
+                setTimeout(function() { cm.refresh(); }, 50);
+            });
+
+            cm.on('change', function() {
+                cm.save();
+                $textarea.trigger('change');
+            });
         }
 
 		$('.control-text').change(updateChart).keyup(updateChart);
@@ -186,6 +218,11 @@
 			clear: updateChart
 		});
 		$('textarea[name="manual"]').change(validateJSON).keyup(validateJSON);
+        initManualConfigEditor();
+
+		$(document).on('change', 'input[name="paging_bool"], input[name="pagination"]', function() {
+			$('.viz-pagination-options').toggle($(this).is(':checked'));
+		});
 
 	});
 })(jQuery, visualizer);

@@ -30,6 +30,7 @@
                 button.html( button.attr( 'data-t-chart' ) );
                 button.attr( 'data-current', 'chart' );
                 $('p.viz-editor-selection').show();
+                $('p.viz-info-msg').hide();
                 $('.viz-text-editor').hide();
                 $('.viz-simple-editor').hide();
                 $( '#canvas' ).css('z-index', '1').show();
@@ -40,6 +41,7 @@
             button.html( button.attr( 'data-t-editor' ) );
             button.attr( 'data-current', 'editor' );
             $('p.viz-editor-selection').hide();
+            $('p.viz-info-msg').show();
             $('.viz-text-editor').css('z-index', '9999').show();
             $('.viz-simple-editor').css('z-index', '9999').show();
             $( '#canvas' ).css('z-index', '-100').hide();
@@ -53,6 +55,7 @@
             button.html( button.attr( 'data-t-chart' ) );
             button.attr( 'data-current', 'chart' );
             $('p.viz-editor-selection').show();
+            $('p.viz-info-msg').hide();
             $('.viz-text-editor').hide();
             $('.viz-simple-editor').hide();
             $( '#canvas' ).css('z-index', '1').show();
@@ -74,6 +77,7 @@
                 button.html( button.attr( 'data-t-chart' ) );
                 button.attr( 'data-current', 'chart' );
                 $('p.viz-editor-selection').show();
+                $('p.viz-info-msg').hide();
                 $('.viz-table-editor').hide();
                 $('.viz-simple-editor').hide();
                 $( '#canvas' ).css('z-index', '1').show();
@@ -84,6 +88,7 @@
             button.html( button.attr( 'data-t-editor' ) );
             button.attr( 'data-current', 'editor' );
             $('p.viz-editor-selection').hide();
+            $('p.viz-info-msg').show();
             $( '.viz-table-editor' ).css("z-index", "9999").show();
             $('.viz-simple-editor').css('z-index', '9999').show();
             $('body').trigger('visualizer:db:editor:table:redraw', {});
@@ -98,6 +103,7 @@
             button.html( button.attr( 'data-t-chart' ) );
             button.attr( 'data-current', 'chart' );
             $('p.viz-editor-selection').show();
+            $('p.viz-info-msg').hide();
             $('.viz-table-editor').hide();
             $('.viz-simple-editor').hide();
             $( '#canvas' ).css('z-index', '1').show();

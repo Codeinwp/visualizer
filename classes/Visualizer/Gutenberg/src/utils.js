@@ -70,45 +70,6 @@ export const isValidJSON = obj => {
 	return true;
 };
 
-// Convert CSV data to Array
-// Source: https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
-export const CSVToArray = ( strData, strDelimiter ) => {
-	strDelimiter = ( strDelimiter || ',' );
-
-	const objPattern = new RegExp(
-		( '(\\' + strDelimiter + '|\\r?\\n|\\r|^)' +  '(?:\'([^\']*(?:\'\'[^\']*)*)\'|' + '([^\'\\' + strDelimiter + '\\r\\n]*))' ), 'gi' );
-
-	const arrData = [ [] ];
-
-	let arrMatches = null;
-
-	while ( arrMatches = objPattern.exec( strData ) ) {
-
-		const strMatchedDelimiter = arrMatches[ 1 ];
-
-		if ( strMatchedDelimiter.length && strMatchedDelimiter !== strDelimiter ) {
-			arrData.push([]);
-		}
-
-		let strMatchedValue;
-
-		if ( arrMatches[ 2 ]) {
-			strMatchedValue = arrMatches[ 2 ].replace( new RegExp( '\'\'', 'g' ), '\'' );
-		} else {
-			strMatchedValue = arrMatches[ 3 ];
-		}
-
-		arrData[ arrData.length - 1 ].push( strMatchedValue );
-	}
-
-	return ( arrData );
-};
-
-
-export const isChecked = ( settings, param ) => {
-    return true === settings[param] || 'true' === settings[param] || '1' === settings[param] || 1 === settings[param];
-};
-
 
 export const formatData = ( chart ) => {
     let library = chart['visualizer-chart-library'];
@@ -182,17 +143,6 @@ export const getFormatterForGoogle = ( dataType ) => {
             return 'DateFormat';
     }
     return null;
-};
-
-export const getColorCode = ( color ) => {
-	if ( -1 === color.indexOf( '#' ) ) {
-		let getCssVar = color.match( /\((.*)\)/ ).pop();
-		if ( getCssVar ) {
-			let style = getComputedStyle( document.body );
-			return style.getPropertyValue( getCssVar );
-		}
-	}
-	return color;
 };
 
 // Google Chart Packages

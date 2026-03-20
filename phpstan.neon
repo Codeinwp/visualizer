@@ -1,15 +1,19 @@
 parameters:
 	level: 6
+	reportUnmatchedIgnoredErrors: false
 	paths:
 		- %currentWorkingDirectory%/index.php
 		- %currentWorkingDirectory%/classes
 	bootstrapFiles:
 		- %currentWorkingDirectory%/tests/php/static-analysis-stubs/symbols.php
 		- %currentWorkingDirectory%/tests/php/static-analysis-stubs/visualizer-pro.php
+		- %currentWorkingDirectory%/tests/php/static-analysis-stubs/elementor.php
 	scanDirectories:
 		- %currentWorkingDirectory%/vendor/neitanod/forceutf8
 		- %currentWorkingDirectory%/vendor/openspout/openspout
 		- %currentWorkingDirectory%/vendor/codeinwp/themeisle-sdk
+	excludePaths:
+		- classes/Visualizer/Gutenberg/build (?)
 includes:
 	- %currentWorkingDirectory%/vendor/szepeviktor/phpstan-wordpress/extension.neon
 	- %currentWorkingDirectory%/phpstan-baseline.neon
