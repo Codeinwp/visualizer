@@ -371,6 +371,8 @@
     function init_filter_import() {
         $( '#db-filter-save-button' ).on( 'click', function(){
             $('#vz-filter-wizard').submit();
+            $( '#vz-wp-sync-options' ).hide();
+            $( '#vz-wp-sync-btn' ).attr( 'aria-expanded', false );
         });
     }
 
@@ -445,11 +447,27 @@
             }
         } );
 
+        $( document ).on( 'click', '#vz-db-sync-btn', function(){
+            var $options = $( '#vz-db-sync-options' );
+            var isOpen   = $options.is( ':visible' );
+            $options.toggle();
+            $( this ).attr( 'aria-expanded', ! isOpen );
+        } );
+
+        $( document ).on( 'click', '#vz-wp-sync-btn', function(){
+            var $options = $( '#vz-wp-sync-options' );
+            var isOpen   = $options.is( ':visible' );
+            $options.toggle();
+            $( this ).attr( 'aria-expanded', ! isOpen );
+        } );
+
         $( '#db-chart-save-button' ).on( 'click', function(){
             // submit only if a query has been provided.
             if($('#db-query-form .visualizer-db-query').val().length > 0){
                 $('#viz-db-wizard-params').val($('#db-query-form').serialize());
                 $('#vz-db-wizard').submit();
+                $( '#vz-db-sync-options' ).hide();
+                $( '#vz-db-sync-btn' ).attr( 'aria-expanded', false );
             }else{
                 $('#canvas').unlock();
             }

@@ -1016,6 +1016,48 @@ button#editor-chart-button {
 	text-align: center;
 }
 
+/* Import steps — stepped data-source + schedule flow */
+.vz-import-step-btn {
+	width: 100%;
+	margin-bottom: 4px !important;
+	text-align: left;
+}
+
+.vz-import-step-toggle {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin: 0;
+	padding: 5px 10px;
+	background: #f0f0f1;
+	border: 1px solid #c3c4c7;
+	border-radius: 2px;
+	cursor: pointer;
+	font-size: 13px;
+	color: #50575e;
+	line-height: 2;
+}
+
+.vz-import-step-toggle:hover {
+	background: #e5e5e5;
+	border-color: #a7aaad;
+}
+
+.vz-import-step-toggle .dashicons {
+	transition: transform 0.2s ease;
+	flex-shrink: 0;
+}
+
+.vz-import-step-toggle[aria-expanded="true"] .dashicons {
+	transform: rotate(180deg);
+}
+
+#vz-wp-sync-options,
+#vz-db-sync-options {
+	padding-top: 8px;
+}
+
 #sidebar {
 	border-left: 1px solid #ddd;
 	background: #f3f3f3;
