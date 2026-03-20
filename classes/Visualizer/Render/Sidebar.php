@@ -174,7 +174,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		// Chart control settings.
 		$this->_renderChartControlsGroup();
 
-		if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
+		if ( Visualizer_Module_Admin::proFeaturesEnabled() ) {
 			self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) );
 		} else {
 			self::_renderGroupStart( esc_html__( 'Frontend Actions', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-frontend-actions' ), 'vz-frontend-actions' );
@@ -185,7 +185,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 			self::_renderSectionEnd();
 
 			$this->_renderActionSettings();
-		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+		if ( ! Visualizer_Module_Admin::proFeaturesEnabled() ) {
 			echo apply_filters( 'visualizer_pro_upsell', '', 'frontend-actions' );
 			echo '</div>';
 		}
@@ -602,7 +602,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		if ( 'google' !== $this->getLibrary() ) {
 			return;
 		}
-		if ( Visualizer_Module_Admin::proFeaturesLocked() ) {
+		if ( Visualizer_Module_Admin::proFeaturesEnabled() ) {
 			self::_renderGroupStart( esc_html__( 'Chart Data Filter Configuration', 'visualizer' ) );
 		} else {
 			self::_renderGroupStart( esc_html__( 'Chart Data Filter Configuration', 'visualizer' ) . '<span class="dashicons dashicons-lock"></span>', '', apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'chart-filter-controls' ), 'vz-data-controls' );
@@ -619,7 +619,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		);
 		self::_renderSectionEnd();
 		$this->_renderChartControlsSettings();
-		if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+		if ( ! Visualizer_Module_Admin::proFeaturesEnabled() ) {
 			echo apply_filters( 'visualizer_pro_upsell', '', 'data-filter-configuration' );
 			echo '</div>';
 		}

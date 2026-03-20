@@ -1019,7 +1019,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 												value="<?php _e( 'Import Chart', 'visualizer' ); ?>"
 												data-viz-link="<?php echo $fetch_link; ?>">
 										<?php
-										if ( ! Visualizer_Module_Admin::proFeaturesLocked() ) {
+										if ( ! Visualizer_Module_Admin::proFeaturesEnabled() ) {
 											echo apply_filters( 'visualizer_pro_upsell', '', 'import-chart' );
 										}
 										?>

@@ -427,7 +427,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			);
 		}
 
-		$enabled = self::proFeaturesLocked();
+		$enabled = self::proFeaturesEnabled();
 
 		$types = array_merge(
 			$additional,
@@ -1206,7 +1206,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 *
 	 * @return bool
 	 */
-	public static function proFeaturesLocked() {
+	public static function proFeaturesEnabled() {
 		$is_pro_filter = apply_filters( 'visualizer_is_pro', false );
 
 		// Pro 1.9.0+: filter is hooked and returns true only with a valid license.
