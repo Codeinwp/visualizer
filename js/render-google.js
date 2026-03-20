@@ -26,6 +26,10 @@ var isResizeRequest = false;
             return;
         }
 
+        if ( chart.library && chart.library !== 'google' && chart.library !== 'GoogleCharts' ) {
+            return;
+        }
+
         // re-render the chart only if it doesn't have annotations and it is on the front-end
         // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
         // remember, some charts do not support annotations so they should not be included in this.
