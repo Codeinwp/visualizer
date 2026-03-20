@@ -113,7 +113,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
 						'<b>Visualizer</b>',
 						esc_html__( 'You can help us by leaving a', 'visualizer' ),
-						'<a href="https://wordpress.org/support/plugin/visualizer/reviews/" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
+						'<a href="https://wordpress.org/support/plugin/visualizer/reviews/#new-post" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
 					);
 					break;
 				}
@@ -427,7 +427,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			);
 		}
 
-		$enabled = self::proFeaturesLocked();
+		$enabled = self::proFeaturesEnabled();
 
 		$types = array_merge(
 			$additional,
@@ -1163,6 +1163,20 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array Updated array of plugin meta links.
 	 */
 	public function getPluginMetaLinks( $plugin_meta, $plugin_file ) {
+		if ( Visualizer_Module::is_pro() ) {
+			return $plugin_meta;
+		}
+
+		// Also suppress the upsell when Pro is installed but not currently active.
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		foreach ( array_keys( get_plugins() ) as $installed_plugin ) {
+			if ( false !== strpos( $installed_plugin, 'visualizer-pro' ) ) {
+				return $plugin_meta;
+			}
+		}
+
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
@@ -1180,15 +1194,37 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
-	 * If check is existing user.
+	 * Returns true when premium chart types should be enabled for the current user.
 	 *
-	 * @return bool Default false
+	 * Pro 1.9.0+ hooks the 'visualizer_is_pro' filter and returns true only when
+	 * the license is valid. Pre-1.9.0 Pro defined a Visualizer_Pro class instead;
+	 * we detect that as a fallback so those legacy installs still work.
+	 *
+	 * Passing false as the filter default ensures the constant VISUALIZER_PRO
+	 * (which is set to true whenever the Pro class exists, regardless of license
+	 * state) cannot bypass the license check.
+	 *
+	 * @return bool
 	 */
-	public static function proFeaturesLocked() {
-		if ( Visualizer_Module::is_pro() ) {
+	public static function proFeaturesEnabled() {
+		$is_pro_filter = apply_filters( 'visualizer_is_pro', false );
+
+		// Pro 1.9.0+: filter is hooked and returns true only with a valid license.
+		if ( $is_pro_filter ) {
 			return true;
 		}
-		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false : true;
+
+		// Pro is installed (active) but the license check above did not pass.
+		// Do NOT fall through to the legacy "old user" path — that path exists
+		// only for sites that never had Pro installed.  If Pro is present but
+		// the license is inactive we should lock, regardless of chart history.
+		if ( class_exists( 'Visualizer_Pro', false ) ) {
+			return false;
+		}
+
+		// No Pro installed at all: grant legacy access to existing users so
+		// their charts are not suddenly broken when they upgrade the free plugin.
+		return 'yes' === get_option( 'visualizer-new-user' ) ? false : true;
 	}
 
 	/**

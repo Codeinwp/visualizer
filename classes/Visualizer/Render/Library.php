@@ -49,7 +49,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		esc_html_e( 'Visualizer Library', 'visualizer' );
 		echo ' <a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a>';
 		if ( Visualizer_Module::is_pro() ) {
-			echo ' <a href="' . admin_url( 'options-general.php' ) . '" class="page-title-action">', esc_html__( 'License Settings', 'visualizer' ), '</a>';
+			echo ' <a href="' . admin_url( 'options-general.php#visualizer_pro_license' ) . '" class="page-title-action">', esc_html__( 'License Settings', 'visualizer' ), '</a>';
 		}
 		echo '</h2>';
 		$this->_renderMessages();
@@ -539,7 +539,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		if ( ! Visualizer_Module::is_pro() ) {
 			if ( $this->_isListView() ) {
 				$upgrade_url = tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' );
-				$chart_types = Visualizer_Module_Admin::proFeaturesLocked() ? __( '6 more chart types', 'visualizer' ) : __( '11 more chart types', 'visualizer' );
+				$chart_types = Visualizer_Module_Admin::proFeaturesEnabled() ? __( '6 more chart types', 'visualizer' ) : __( '11 more chart types', 'visualizer' );
 				echo '<div class="items--upsell">';
 				echo '<div class="viz-upsell-banner">';
 				echo '<span class="dashicons dashicons-star-filled viz-upsell-banner__icon"></span>';

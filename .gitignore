@@ -7,3 +7,4 @@ vendor
 .DS_Store
 artifacts
 .phpunit.result.cache
+classes/Visualizer/Gutenberg/build

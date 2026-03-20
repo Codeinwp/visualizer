@@ -108,9 +108,7 @@ class Visualizer_Render_Page_Data extends Visualizer_Render_Page {
 		</div>
 
 		<li class="viz-group bottom-fixed" id="vz-chart-copyright">
-		Hate it? Love it? <a href="https://wordpress.org/support/plugin/visualizer/reviews/#new-post" target="_blank">Rate it!</a>
-		<br/>
-		Visualizer &copy; 
+		<?php _e( 'Hate it? Love it?', 'visualizer' ); ?> <a href="https://wordpress.org/support/plugin/visualizer/reviews/#new-post" target="_blank"><?php _e( 'Rate it!', 'visualizer' ); ?></a>
 		<?php
 			// phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
 			echo date( 'Y', current_time( 'timestamp' ) );

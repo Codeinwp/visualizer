@@ -57,14 +57,14 @@ test.describe( 'Upsell', () => {
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('import-chart');
 
-		const wpImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query_wp .only-pro-inner a');
+		const wpImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query_wp .only-pro-inner a').last();
 		href = await wpImportUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('import-wp');
 		await page.frameLocator('iframe').getByRole('heading', { name: /Import from WordPress/ }).click();
 		await expect(page.frameLocator('iframe').locator('#vz-chart-source')).toContainText('Upgrade to PRO to activate this feature!');
 
-		const dbImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query .only-pro-inner a');
+		const dbImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query .only-pro-inner a').last();
 		href = await dbImportUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('db-query');
