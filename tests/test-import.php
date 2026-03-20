@@ -146,6 +146,134 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Testing XLSX file import feature.
+	 *
+	 * @access public
+	 * @dataProvider xlsxFileProvider
+	 */
+	public function test_file_import_xlsx( $file, $content, $series ) {
+		$this->create_chart();
+		$this->_setRole( 'administrator' );
+		$dest = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . basename( $file );
+		copy( $file, $dest );
+		$_FILES = array(
+			'local_data' => array(
+				'tmp_name' => $dest,
+				'name'     => basename( $file ),
+				'error'    => 0,
+			),
+		);
+		$_GET   = array(
+			'nonce' => wp_create_nonce( 'visualizer-upload-data' ),
+			'chart' => $this->chart,
+		);
+		// swallow the output
+		ob_start();
+		try {
+			$this->_handleAjax( 'visualizer-upload-data' );
+		} catch ( WPAjaxDieContinueException  $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee ) {
+			// We expected this, do nothing.
+		}
+		ob_end_clean();
+		unlink( $dest );
+		$series_new  = get_post_meta( $this->chart, 'visualizer-series', true );
+		$chart       = get_post( $this->chart );
+		$src         = get_post_meta( $this->chart, 'visualizer-source', true );
+		$content_new = $chart->post_content;
+		$this->assertEquals( 'Visualizer_Source_Xlsx', $src );
+		$this->assertEquals( $content_new, serialize( $content ) );
+		$this->assertEquals( $series_new, $series );
+	}
+
+	/**
+	 * Provide the XLSX file for uploading.
+	 *
+	 * @access public
+	 */
+	public function xlsxFileProvider() {
+		$file = VISUALIZER_ABSPATH . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR . 'bar.xlsx';
+		$this->assertFileExists( $file, 'Fixture samples/bar.xlsx does not exist' );
+		list( $content, $series ) = $this->parseXlsxFile( $file );
+		return array(
+			array( $file, $content, $series ),
+		);
+	}
+
+	/**
+	 * Parses an XLSX fixture file via OpenSpout and returns [ $content, $series ]
+	 * in the same shape that Visualizer_Source_Xlsx::fetch() produces, so the
+	 * test assertion is independent of the source class implementation.
+	 *
+	 * @access private
+	 * @param  string $file Absolute path to the XLSX file.
+	 * @return array        Two-element array: [ $content, $series ].
+	 */
+	private function parseXlsxFile( $file ) {
+		$vendor_file = VISUALIZER_ABSPATH . 'vendor/autoload.php';
+		if ( is_readable( $vendor_file ) ) {
+			include_once $vendor_file;
+		}
+
+		$reader = \OpenSpout\Reader\Common\Creator\ReaderEntityFactory::createXLSXReader();
+		$reader->open( $file );
+
+		$all_rows = array();
+		foreach ( $reader->getSheetIterator() as $sheet ) {
+			foreach ( $sheet->getRowIterator() as $row ) {
+				$row_data = array();
+				foreach ( $row->getCells() as $cell ) {
+					$value      = $cell->getValue();
+					$row_data[] = is_null( $value ) ? null : (string) $value;
+				}
+				$all_rows[] = $row_data;
+			}
+			break; // first sheet only
+		}
+		$reader->close();
+
+		// Row 1 = labels, Row 2 = types (mirrors Visualizer_Source_Xlsx convention).
+		$label_values = array_values( $all_rows[0] );
+		$type_values  = array_values( $all_rows[1] );
+		$col_count    = count( $label_values );
+
+		$_series = array();
+		for ( $i = 0; $i < $col_count; $i++ ) {
+			$default_type = ( $i === 0 ) ? 'string' : 'number';
+			$_series[]    = array(
+				'label' => isset( $label_values[ $i ] ) ? $label_values[ $i ] : '',
+				'type'  => ( isset( $type_values[ $i ] ) && ! empty( $type_values[ $i ] ) ) ? trim( $type_values[ $i ] ) : $default_type,
+			);
+		}
+
+		$_content = array();
+		for ( $r = 2; $r < count( $all_rows ); $r++ ) {
+			$row = $all_rows[ $r ];
+			foreach ( $_series as $i => $col ) {
+				if ( ! isset( $row[ $i ] ) ) {
+					$row[ $i ] = null;
+				}
+				if ( is_null( $row[ $i ] ) ) {
+					continue;
+				}
+				switch ( $col['type'] ) {
+					case 'number':
+						$row[ $i ] = is_numeric( $row[ $i ] ) ? floatval( $row[ $i ] ) : ( is_numeric( str_replace( ',', '', $row[ $i ] ) ) ? floatval( str_replace( ',', '', $row[ $i ] ) ) : null );
+						break;
+					case 'boolean':
+						$datum     = trim( strval( $row[ $i ] ) );
+						$row[ $i ] = in_array( $datum, array( 'true', 'yes', '1' ), true ) ? 'true' : 'false';
+						break;
+				}
+			}
+			$_content[] = $row;
+		}
+
+		return array( $_content, $_series );
+	}
+
+	/**
 	 * Testing file import feature.
 	 *
 	 * @access public
@@ -159,6 +287,7 @@ class Test_Import extends WP_Ajax_UnitTestCase {
 		$_FILES = array(
 			'local_data' => array(
 				'tmp_name' => $dest,
+				'name'     => basename( $file ),
 				'error'    => 0,
 			),
 		);

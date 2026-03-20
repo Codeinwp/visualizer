@@ -32,4 +32,4 @@ phpstan-baseline.neon
 AGENTS.md
 .wp-env.json
 .claude
-
+classes/Visualizer/Gutenberg/src

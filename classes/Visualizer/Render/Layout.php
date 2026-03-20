@@ -616,7 +616,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 					array( 'visualizer-permission', 'visualizer-permission-specific', 'visualizer-permission-edit-specific' )
 				);
 			Visualizer_Render_Sidebar::_renderSectionEnd();
-			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions' );
+			echo apply_filters( 'visualizer_pro_upsell', '', 'chart-permissions', 'https://docs.themeisle.com/article/1280-how-to-customize-permissions' );
 			echo '</div>';
 		Visualizer_Render_Sidebar::_renderGroupEnd();
 	}
@@ -810,7 +810,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
 								<div class="viz-group-content">
 									<div>
-										<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data CSV file here. The first row of the CSV file should contain the column headings. The second one should contain series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
+										<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data file here. Supported formats: CSV, XLSX. The first row should contain the column headings. The second row should contain the series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
 										<p class="viz-group-description viz-info-msg">
 											<b>
 											<?php
@@ -826,7 +826,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											target="thehole" enctype="multipart/form-data">
 											<input type="hidden" id="remote-data" name="remote_data">
 											<div class="">
-												<input type="file" id="csv-file" name="local_data">
+												<input type="file" id="csv-file" name="local_data" accept=".csv,.xlsx">
 											</div>
 											<input type="button" class="button button-primary" id="vz-import-file"
 												value="<?php _e( 'Import', 'visualizer' ); ?>">
@@ -841,14 +841,14 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								<ul class="viz-group-content">
 									<!-- import from csv url -->
 									<li class="viz-subsection">
-										<span class="viz-section-title"><?php _e( 'Import from CSV', 'visualizer' ); ?></span>
+										<span class="viz-section-title"><?php _e( 'Import from CSV / XLSX', 'visualizer' ); ?></span>
 										<div class="only-pro-anchor">	
 											<div class="viz-section-items section-items">
 												<p class="viz-group-description">
 													<?php
 													echo sprintf(
 														// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
-														__( 'You can use this to import data from a remote CSV file or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ),
+														__( 'You can use this to import data from a remote CSV or Excel (XLSX) file, or %1$sGoogle Spreadsheet%2$s.', 'visualizer' ),
 														'<a href="https://docs.themeisle.com/article/607-how-can-i-populate-data-from-google-spreadsheet" target="_blank" >',
 														'</a>'
 													);
@@ -868,7 +868,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 												<form id="vz-one-time-import" action="<?php echo $upload_link; ?>" method="post"
 													target="thehole" enctype="multipart/form-data">
 													<div class="remote-file-section">
-														<input type="url" id="vz-schedule-url" name="remote_data" value="<?php echo esc_attr( get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_URL, true ) ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of CSV file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
+														<input type="url" id="vz-schedule-url" name="remote_data" value="<?php echo esc_attr( get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_URL, true ) ); ?>" placeholder="<?php esc_html_e( 'Please enter the URL of a CSV or XLSX file', 'visualizer' ); ?>" class="visualizer-input visualizer-remote-url">
 													</div>
 													<select name="vz-import-time" id="vz-import-time" class="visualizer-select">
 													<?php
@@ -1084,7 +1084,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 												</div>
 											</div>
 										</form>
-										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wp' ); ?>
+										<?php echo apply_filters( 'visualizer_pro_upsell', '', 'import-wp', 'https://docs.themeisle.com/article/1278-how-to-import-data-from-wordpress' ); ?>
 									</div>
 								</div>
 							</li>
@@ -1243,7 +1243,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											<input type="button" id="db-chart-save-button" class="button button-primary" value="<?php _e( 'Save Schedule', 'visualizer' ); ?>">
 										</div>
 									</div>
-									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query' ); ?>
+									<?php echo apply_filters( 'visualizer_pro_upsell', '', 'db-query', 'https://docs.themeisle.com/article/1279-how-to-import-data-from-a-database' ); ?>
 								</form>
 							</div>
 							</div>

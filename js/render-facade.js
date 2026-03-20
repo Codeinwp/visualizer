@@ -129,11 +129,18 @@ window['vizClipboard2'] = window['vizClipboard2'] || null;
     }
 
     function displayChartsOnFrontEnd() {
-        $(window).on('scroll', function() {
+        function renderVisibleLazyCharts() {
             $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error):empty').each(function(index, element){
                 // Do not render charts that are intentionally hidden.
                 const style = window.getComputedStyle(element);
                 if (style.display === 'none' || style.visibility === 'hidden') {
+                    return;
+                }
+
+                // Only render charts that are currently within the viewport.
+                const rect = element.getBoundingClientRect();
+                const inViewport = rect.bottom >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight);
+                if (!inViewport) {
                     return;
                 }
 
@@ -143,7 +150,12 @@ window['vizClipboard2'] = window['vizClipboard2'] || null;
                     showChart(id);
                 }, ( index + 1 ) * 100);
             });
-        });
+        }
+
+        $(window).on('scroll', renderVisibleLazyCharts);
+
+        // Run once on page load to render any lazy charts already in the viewport.
+        renderVisibleLazyCharts();
 
         $('div.visualizer-front-container:not(.visualizer-lazy-render)').each(function(index, element){
             // Do not render charts that are intentionally hidden.
