@@ -11,6 +11,8 @@ parameters:
 		- %currentWorkingDirectory%/vendor/neitanod/forceutf8
 		- %currentWorkingDirectory%/vendor/openspout/openspout
 		- %currentWorkingDirectory%/vendor/codeinwp/themeisle-sdk
+	excludePaths:
+		- classes/Visualizer/Gutenberg/build (?)
 includes:
 	- %currentWorkingDirectory%/vendor/szepeviktor/phpstan-wordpress/extension.neon
 	- %currentWorkingDirectory%/phpstan-baseline.neon
