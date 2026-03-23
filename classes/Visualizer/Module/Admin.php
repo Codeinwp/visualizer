@@ -1487,6 +1487,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$cta_label = __( 'Reactivate now', 'visualizer' );
 		} else {
 			$config['title'] = __( 'Visualizer Pro: 60% off this week', 'visualizer' );
+			// translators: %s is the discount percentage.
+			$config['upgrade_menu_text'] = sprintf( __( 'BF Sale - %s off', 'visualizer' ), '60%' );
 		}
 
 		$url_params    = array(
