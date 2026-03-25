@@ -142,6 +142,32 @@ function createPopupProBlocker( $ , e ) {
         } );
 
         $('.add-new-chart').click(function () {
+            // Hook for the React chart builder chooser modal.
+            // If the React app is loaded it sets window.vizOpenChartChooser and handles routing.
+            // It will call the classicCallback if the user picks the Classic Builder.
+            if (typeof window.vizOpenChartChooser === 'function') {
+                var classicCallback = function() {
+                    var wnd = window,
+                        view = new vmv.Chart({action: vu.create});
+                    vu.create = vu.create.replace(/[\?&]lang=[^&]+/, '').replace(/[\?&]parent_chart_id=[^&]+/, '');
+
+                    window.parent.addEventListener('message', function(event){
+                        switch(event.data) {
+                            case 'visualizer:mediaframe:close':
+                                view.close();
+                                break;
+                        }
+                    }, false);
+
+                    wnd.send_to_editor = function () {
+                        wnd.location.href = vu.base.replace(/type=[a-zA-Z]*/, '').replace(/vaction/, '');
+                    };
+                    view.open();
+                };
+                window.vizOpenChartChooser(classicCallback);
+                return false;
+            }
+
             var wnd = window,
                 view = new vmv.Chart({action: vu.create});
             vu.create = vu.create.replace(/[\?&]lang=[^&]+/, '').replace(/[\?&]parent_chart_id=[^&]+/, '');
@@ -169,6 +195,12 @@ function createPopupProBlocker( $ , e ) {
 
             if ( createPopupProBlocker( $, event ) ) {
                 return;
+            }
+
+            // D3/AI charts open in the AI Builder instead of the classic modal.
+            if ( $(this).data('library') === 'd3' && typeof window.vizOpenAIBuilderEdit === 'function' ) {
+                window.vizOpenAIBuilderEdit( $(this).attr('data-chart') );
+                return false;
             }
 
             var wnd = window;

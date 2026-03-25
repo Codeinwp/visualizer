@@ -385,6 +385,12 @@ parameters:
 			path: classes/Visualizer/Module.php
 
 		-
+			message: '#^Constant VISUALIZER_AGENTS_URL not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: classes/Visualizer/Module/AIBuilder.php
+
+		-
 			message: '#^Constructor of class Visualizer_Module_AMP has an unused parameter \$plugin\.$#'
 			identifier: constructor.unusedParameter
 			count: 1
@@ -1163,7 +1169,6 @@ parameters:
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Module/Chart.php
-
 
 		-
 			message: '#^Method Visualizer_Module_Chart\:\:handlePermissions\(\) has no return type specified\.$#'
@@ -5024,6 +5029,48 @@ parameters:
 			path: classes/Visualizer/Source/Query/Params.php
 
 		-
+			message: '#^Path in include_once\(\) "/Users/hardeep/Development/sites/particles/wp\-content/plugins/visualizervendor/autoload\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: classes/Visualizer/Source/Xlsx.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateData\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateSeries\(\) has parameter \$series with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateSeries\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 2
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
 			message: '#^Function visualizer_launch\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -5100,25 +5147,3 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: index.php
-
-		-
-			message: '#^Path in include_once\(\)#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: classes/Visualizer/Source/Xlsx.php
-
-		-
-			identifier: missingType.iterableValue
-			count: 4
-			path: classes/Visualizer/Source/Xlsx/Remote.php
-
-		-
-			identifier: booleanNot.alwaysTrue
-			count: 2
-			path: classes/Visualizer/Source/Xlsx/Remote.php
-
-		-
-			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: classes/Visualizer/Source/Xlsx/Remote.php

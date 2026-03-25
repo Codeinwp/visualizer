@@ -1,0 +1,328 @@
+// ─── Vega tooltip z-index fix (tooltip div is appended to body) ───────────────
+#vg-tooltip-element {
+	z-index: 100001 !important;
+}
+
+// ─── Shared overlay / modal base ─────────────────────────────────────────────
+
+%overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.55);
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+%modal {
+	position: relative;
+	background: #fff;
+	border-radius: 10px;
+	box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+}
+
+// ─── Chooser modal ────────────────────────────────────────────────────────────
+
+.viz-chooser-overlay {
+	@extend %overlay;
+}
+
+.viz-chooser-modal {
+	@extend %modal;
+	padding: 40px 36px 32px;
+	width: 580px;
+	max-width: calc(100vw - 32px);
+	text-align: center;
+}
+
+.viz-chooser-close {
+	position: absolute;
+	top: 14px;
+	right: 16px;
+	background: none;
+	border: none;
+	font-size: 18px;
+	cursor: pointer;
+	color: #666;
+	padding: 4px 8px;
+	line-height: 1;
+	&:hover { color: #000; }
+}
+
+.viz-chooser-title {
+	margin: 0 0 8px;
+	font-size: 20px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.viz-chooser-subtitle {
+	margin: 0 0 28px;
+	color: #646970;
+	font-size: 14px;
+}
+
+.viz-chooser-options {
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+	margin-bottom: 24px;
+}
+
+.viz-chooser-option {
+	position: relative;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 24px 16px 20px;
+	border: 2px solid #dcdcde;
+	border-radius: 8px;
+	background: #f6f7f7;
+	cursor: pointer;
+	transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+	text-align: center;
+
+	&:hover, &:focus-visible {
+		border-color: #2271b1;
+		background: #f0f6fc;
+		box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.15);
+		outline: none;
+	}
+
+	&--ai {
+		border-color: rgba(57, 195, 210, 0.45);
+		background: #eef9fb;
+		&:hover, &:focus-visible {
+			border-color: #39c3d2;
+			background: #e6f7fa;
+			box-shadow: 0 0 0 3px rgba(57, 195, 210, 0.18);
+		}
+	}
+}
+
+.viz-chooser-option__badge {
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	background: #39c3d2;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	padding: 2px 8px;
+	border-radius: 12px;
+}
+
+.viz-chooser-option__icon {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	svg { width: 24px; height: 24px; }
+
+	&--classic { background: #e0f0ff; color: #2271b1; }
+	&--ai      { background: #dff6f9; color: #0b6b75; }
+}
+
+.viz-chooser-option__title {
+	font-size: 15px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.viz-chooser-option__desc {
+	font-size: 12px;
+	color: #646970;
+	line-height: 1.5;
+}
+
+.viz-chooser-cancel {
+	background: none;
+	border: none;
+	color: #646970;
+	font-size: 13px;
+	cursor: pointer;
+	padding: 4px 8px;
+	text-decoration: underline;
+	&:hover { color: #1d2327; }
+}
+
+// ─── AI Builder overlay / modal ───────────────────────────────────────────────
+
+.viz-ai-builder-overlay {
+	@extend %overlay;
+}
+
+.viz-ai-builder-modal {
+	@extend %modal;
+	width: calc(100vw - 48px);
+	max-width: 1400px;
+	height: calc(100vh - 48px);
+	overflow: hidden;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.viz-ai-builder-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 20px 14px 24px;
+	border-bottom: 1px solid #dcdcde;
+	background: #fff;
+	flex-shrink: 0;
+	z-index: 1;
+}
+
+.viz-ai-builder-header__logo {
+	width: 30px;
+	height: 30px;
+	border-radius: 8px;
+	background: #39c3d2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.viz-ai-builder-close {
+	background: none;
+	border: none;
+	padding: 6px;
+	border-radius: 6px;
+	cursor: pointer;
+	color: #8c8f94;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.15s, color 0.15s;
+	&:hover { background: #f0f0f1; color: #1d2327; }
+}
+
+// ─── Fullscreen preview ─────────────────────────────────────────────────────
+
+.viz-ai-fullscreen-overlay {
+	@extend %overlay;
+	z-index: 100002;
+}
+
+.viz-ai-fullscreen-modal {
+	@extend %modal;
+	width: calc(100vw - 64px);
+	height: calc(100vh - 64px);
+	max-width: 1600px;
+	max-height: 1000px;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.viz-ai-fullscreen-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 12px;
+	border-bottom: 1px solid #e2e3e6;
+	background: #fff;
+	font-size: 12px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.viz-ai-fullscreen-body {
+	width: 100%;
+	flex: 1;
+	min-height: 0;
+	> svg {
+		width: 100% !important;
+		height: 100% !important;
+		display: block;
+	}
+}
+
+.viz-ai-fullscreen-close {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 6px 10px;
+	cursor: pointer;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: #1d2327;
+	&:hover { filter: brightness(0.98); }
+}
+
+// Ensure Handsontable context menu appears above modal layers.
+.viz-ai-hot {
+	.htContextMenu,
+	.htContextMenu table {
+		z-index: 100010 !important;
+	}
+}
+
+// Handsontable context menu is attached to body; keep it above overlays.
+.htContextMenu,
+.htContextMenu table {
+	z-index: 100010 !important;
+}
+
+.viz-ai-builder-header__badge {
+	background: linear-gradient(135deg, #6c5ecf, #a855f7);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	padding: 3px 9px;
+	border-radius: 20px;
+}
+
+.viz-ai-builder-header__title {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+// ─── Spinner (used in legacy classes, keep for compat) ────────────────────────
+
+.viz-spinner {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	border: 2px solid #dcdcde;
+	border-top-color: #6c5ecf;
+	border-radius: 50%;
+	animation: viz-spin 0.7s linear infinite;
+	flex-shrink: 0;
+
+	&--sm {
+		width: 13px;
+		height: 13px;
+	}
+}
+
+@keyframes viz-spin {
+	to { transform: rotate(360deg); }
+}
+
+// ─── Shortcode code (used in legacy saved state) ──────────────────────────────
+
+.viz-shortcode-code {
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 6px 12px;
+	font-size: 13px;
+	font-family: monospace;
+}
