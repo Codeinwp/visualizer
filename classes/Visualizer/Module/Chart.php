@@ -1654,7 +1654,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$hours = filter_input(
 			INPUT_POST,
 			'refresh',
-			FILTER_VALIDATE_INT,
+			FILTER_VALIDATE_FLOAT,
 			array(
 				'options' => array(
 					'min_range' => -1,
@@ -1663,7 +1663,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		if ( 0 !== $hours && empty( $hours ) ) {
+		if ( ! is_numeric( $hours ) ) {
 			$hours = -1;
 		}
 
