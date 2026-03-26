@@ -762,7 +762,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 						<ul class="viz-group-wrapper">
 							<!-- manual -->
 							<li class="viz-group visualizer_source_manual">
-								<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart"><?php _e( 'Manual Data', 'visualizer' ); ?></h2>
+								<h2 class="viz-group-title viz-sub-group visualizer-editor-tab" data-current="chart" role="button" tabindex="0"><?php _e( 'Manual Data', 'visualizer' ); ?></h2>
 								<div class="viz-group-content edit-data-content">
 									<form id="editor-form" action="<?php echo $upload_link; ?>" method="post" target="thehole">
 										<input type="hidden" id="chart-data" name="chart_data">
@@ -807,7 +807,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 
 							<!-- import from file -->
 							<li class="viz-group visualizer_source_csv <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-file' ); ?> ">
-								<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from file', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
+								<h2 class="viz-group-title viz-sub-group visualizer-src-tab" role="button" tabindex="0"><?php _e( 'Import data from file', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
 								<div class="viz-group-content">
 									<div>
 										<p class="viz-group-description"><?php esc_html_e( 'Select and upload your data file here. Supported formats: CSV, XLSX. The first row should contain the column headings. The second row should contain the series type (string, number, boolean, date, datetime, timeofday).', 'visualizer' ); ?></p>
@@ -837,11 +837,11 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 							</li>
 							<!-- import from url -->
 							<li class="viz-group visualizer-import-url visualizer_source_csv_remote visualizer_source_json <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-url' ); ?> ">
-								<h2 class="viz-group-title viz-sub-group visualizer-src-tab"><?php _e( 'Import data from URL', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
+								<h2 class="viz-group-title viz-sub-group visualizer-src-tab" role="button" tabindex="0"><?php _e( 'Import data from URL', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
 								<ul class="viz-group-content">
 									<!-- import from csv url -->
 									<li class="viz-subsection">
-										<span class="viz-section-title"><?php _e( 'Import from CSV / XLSX', 'visualizer' ); ?></span>
+										<span class="viz-section-title" role="button" tabindex="0"><?php _e( 'Import from CSV / XLSX', 'visualizer' ); ?></span>
 										<div class="only-pro-anchor">	
 											<div class="viz-section-items section-items">
 												<p class="viz-group-description">
@@ -909,7 +909,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 									</li>
 									<!-- import from json url -->
 									<li class="viz-subsection">
-										<span class="viz-section-title visualizer_source_json"><?php _e( 'Import from JSON', 'visualizer' ); ?></span>
+										<span class="viz-section-title visualizer_source_json" role="button" tabindex="0"><?php _e( 'Import from JSON', 'visualizer' ); ?></span>
 										<div class="only-pro-anchor">	
 											<div class="viz-section-items section-items">
 												<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a remote JSON source. For more info check <a href="https://docs.themeisle.com/article/1052-how-to-generate-charts-from-json-data-rest-endpoints" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
@@ -967,7 +967,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 							<!-- import from chart -->
 							<li class="viz-group viz-import-from-other <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature' ); ?>">
 								<h2 class="viz-group-title viz-sub-group"
-									data-current="chart"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
+									data-current="chart" role="button" tabindex="0"><?php _e( 'Import from other chart', 'visualizer' ); ?><span
 											class="dashicons dashicons-lock"></span></h2>
 								<div class="viz-group-content edit-data-content">
 									<div>
@@ -1040,7 +1040,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 							?>
 							<!-- import from WordPress -->
 							<li class="viz-group visualizer_source_query_wp <?php echo esc_attr( apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-wp' ) ); ?> ">
-								<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from WordPress', 'visualizer' ); ?><span
+								<h2 class="viz-group-title viz-sub-group" role="button" tabindex="0"><?php _e( 'Import from WordPress', 'visualizer' ); ?><span
 											class="dashicons dashicons-lock"></span></h2>
 								<div class="viz-group-content edit-data-content">
 									<div>
@@ -1128,7 +1128,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								);
 								?>
 							<li class="viz-group visualizer_woocommerce_source<?php echo 'visualizer_source_json_wc' === $source_of_chart ? ' open' : ''; ?> <?php echo apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'import-wc-report' ); ?> ">
-								<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from WooCommerce Reports', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
+								<h2 class="viz-group-title viz-sub-group" role="button" tabindex="0"><?php _e( 'Import from WooCommerce Reports', 'visualizer' ); ?><span class="dashicons dashicons-lock"></span></h2>
 								<div class="viz-group-content edit-data-content">
 									<div>
 										<p class="viz-group-description"><?php _e( 'You can choose here to import/synchronize your chart data with a WooCommerce report API. For more info check <a href="https://woocommerce.github.io/woocommerce-rest-api-docs/?shell#reports" target="_blank" >this</a> tutorial', 'visualizer' ); ?></p>
@@ -1199,7 +1199,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 							?>
 							<!-- import from db -->
 							<li class="viz-group visualizer_source_query <?php echo esc_attr( apply_filters( 'visualizer_pro_upsell_class', 'only-pro-feature', 'db-query' ) ); ?>">
-							<h2 class="viz-group-title viz-sub-group"><?php _e( 'Import from database', 'visualizer' ); ?><span
+							<h2 class="viz-group-title viz-sub-group" role="button" tabindex="0"><?php _e( 'Import from database', 'visualizer' ); ?><span
 								class="dashicons dashicons-lock"></span></h2>
 							<div class="viz-group-content edit-data-content">
 							<div>
