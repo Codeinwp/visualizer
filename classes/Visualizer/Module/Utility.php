@@ -36,7 +36,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 * @since 3.3.0
 	 *
 	 * @access private
-	 * @var _CHART_COLORS
+	 * @var string[]
 	 */
 	private static $_CHART_COLORS = array(
 		'#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080',
@@ -106,15 +106,81 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	}
 
 	/**
-	 * Gets a random color from the array of chart colors and returns it as well as its transparent equivalent.
+	 * Returns a color at a specific index from the palette, with its transparent equivalent.
 	 *
-	 * @since 3.3.0
+	 * @return array{string, string}
+	 * @access private
+	 */
+	private static function get_color_at( int $index ): array {
+		$colors = self::get_color_palette();
+		$color  = $colors[ $index % count( $colors ) ];
+		return array( self::hex2rgba( $color, 0.5 ), $color );
+	}
+
+	/**
+	 * Mixes a hex color toward white by the given factor (0 = original, 1 = white).
 	 *
 	 * @access private
 	 */
-	private static function get_random_color() {
-		$color = self::$_CHART_COLORS[ rand( 0, count( self::$_CHART_COLORS ) - 1 ) ];
-		return array( self::hex2rgba( $color, 0.5 ), $color );
+	private static function tint_color( string $hex, float $factor ): string {
+		$hex = ltrim( $hex, '#' );
+		if ( strlen( $hex ) === 3 ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+		$r = (int) round( hexdec( substr( $hex, 0, 2 ) ) + ( 255 - hexdec( substr( $hex, 0, 2 ) ) ) * $factor );
+		$g = (int) round( hexdec( substr( $hex, 2, 2 ) ) + ( 255 - hexdec( substr( $hex, 2, 2 ) ) ) * $factor );
+		$b = (int) round( hexdec( substr( $hex, 4, 2 ) ) + ( 255 - hexdec( substr( $hex, 4, 2 ) ) ) * $factor );
+		return sprintf( '#%02x%02x%02x', $r, $g, $b );
+	}
+
+	/**
+	 * Returns the color palette to use for charts.
+	 *
+	 * When global primary/secondary colors are configured, generates a palette of
+	 * alternating tints: [primary, secondary, primary@25%, secondary@25%, ...].
+	 * Falls back to the built-in colors otherwise.
+	 *
+	 * @return string[]
+	 * @access private
+	 */
+	private static function get_color_palette(): array {
+		$global  = self::get_global_style_defaults();
+		$primary   = $global['color_primary'];
+		$secondary = $global['color_secondary'];
+
+		if ( empty( $primary ) && empty( $secondary ) ) {
+			return self::$_CHART_COLORS;
+		}
+
+		$bases   = array_filter( array( $primary, $secondary ) );
+		$factors = array( 0, 0.25, 0.5, 0.75 );
+		$palette = array();
+
+		foreach ( $factors as $factor ) {
+			foreach ( $bases as $base ) {
+				$palette[] = $factor === 0 ? $base : self::tint_color( $base, $factor );
+			}
+		}
+
+		return $palette;
+	}
+
+	/**
+	 * Returns the global style defaults stored in the plugin settings.
+	 *
+	 * @return array<string, string>
+	 * @access public
+	 * @static
+	 */
+	public static function get_global_style_defaults(): array {
+		$option = get_option( Visualizer_Module_Admin::OPTION_GLOBAL_SETTINGS, array() );
+		return wp_parse_args(
+			$option,
+			array(
+				'color_primary'   => '',
+				'color_secondary' => '',
+			)
+		);
 	}
 
 	/**
@@ -178,6 +244,14 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 					$attributes['candlestick']['risingColor']['fill'] = '#3366cc';
 					break;
 			}
+
+			// Apply global color defaults to new Google Charts (not Geo — it uses colorAxis).
+			if ( 'geo' !== $type ) {
+				$global = self::get_global_style_defaults();
+				if ( ! empty( $global['color_primary'] ) || ! empty( $global['color_secondary'] ) ) {
+					$attributes['colors'] = self::get_color_palette();
+				}
+			}
 		}
 
 		if ( $attributes ) {
@@ -218,7 +292,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'bar':
 				for ( $i = 0; $i < $max; $i++ ) {
-					$colors = self::get_random_color();
+					$colors = self::get_color_at( $i );
 					$attributes[] = array( 'backgroundColor' => $colors[0], 'hoverBackgroundColor' => $colors[1] );
 				}
 				break;
@@ -228,7 +302,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'area':
 				for ( $i = 0; $i < $max; $i++ ) {
-					$colors = self::get_random_color();
+					$colors = self::get_color_at( $i );
 					$attributes[] = array( 'borderColor' => $colors[0] );
 				}
 				break;

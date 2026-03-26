@@ -804,7 +804,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 			// save meta data only when it is NOT being canceled.
 			if ( ! $is_canceled ) {
-				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
+				$post_settings = $_POST;
+				$existing      = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+				if ( isset( $existing['colors'] ) && is_array( $existing['colors'] ) && ! isset( $post_settings['colors'] ) ) {
+					$post_settings['colors'] = $existing['colors'];
+				}
+				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $post_settings );
 
 				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
 				// this will help in searching with the chart id.

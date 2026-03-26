@@ -30,6 +30,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 	const NAME = __CLASS__;
 
+	const OPTION_GLOBAL_SETTINGS = 'visualizer_global_settings';
+
 	/**
 	 * Library page suffix.
 	 *
@@ -49,6 +51,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	private $_supportPage;
 
 	/**
+	 * Settings page suffix.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $_settingsPage;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -65,6 +75,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_footer', 'renderTemplates' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts', null, 0 );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueue_support_page' );
+		$this->_addAction( 'admin_enqueue_scripts', 'enqueueSettingsScripts' );
+		$this->_addAction( 'admin_post_visualizer_save_global_settings', 'saveGlobalSettings' );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
@@ -835,6 +847,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew'
 		);
 
+		$this->_settingsPage = add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'Settings', 'visualizer' ),
+			__( 'Settings', 'visualizer' ),
+			'manage_options',
+			'viz-settings',
+			array( $this, 'renderSettingsPage' )
+		);
+
 		$this->_supportPage = add_submenu_page(
 			Visualizer_Plugin::NAME,
 			__( 'Support', 'visualizer' ),
@@ -1056,6 +1077,86 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function renderSupportPage() {
 		wp_enqueue_style( 'visualizer-upsell', VISUALIZER_ABSURL . 'css/upsell.css', array(), Visualizer_Plugin::VERSION );
 		include_once VISUALIZER_ABSPATH . '/templates/support.php';
+	}
+
+	/**
+	 * Enqueues scripts/styles for the Settings page.
+	 *
+	 * @access public
+	 */
+	public function enqueueSettingsScripts( string $hook_suffix ): void {
+		if ( $this->_settingsPage !== $hook_suffix ) {
+			return;
+		}
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'wp-color-picker' );
+	}
+
+	/**
+	 * Renders the global style settings page.
+	 *
+	 * @access public
+	 */
+	public function renderSettingsPage(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'visualizer' ) );
+		}
+		$settings = self::getGlobalSettings();
+		include_once VISUALIZER_ABSPATH . '/templates/global-settings.php';
+	}
+
+	/**
+	 * Returns the global style settings option.
+	 *
+	 * @return array<string, string>
+	 * @access public
+	 * @static
+	 */
+	public static function getGlobalSettings(): array {
+		$defaults = array(
+			'color_primary'   => '',
+			'color_secondary' => '',
+		);
+		$saved = get_option( self::OPTION_GLOBAL_SETTINGS, array() );
+		return wp_parse_args( $saved, $defaults );
+	}
+
+	/**
+	 * Handles saving of the global style settings.
+	 *
+	 * @access public
+	 */
+	public function saveGlobalSettings(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'visualizer' ) );
+		}
+
+		check_admin_referer( 'visualizer_save_global_settings' );
+
+		$color_primary   = sanitize_hex_color( wp_unslash( $_POST['visualizer_color_primary'] ?? '' ) );
+		$color_secondary = sanitize_hex_color( wp_unslash( $_POST['visualizer_color_secondary'] ?? '' ) );
+		$clear           = ! empty( $_POST['visualizer_clear_settings'] );
+
+		if ( $clear ) {
+			delete_option( self::OPTION_GLOBAL_SETTINGS );
+		} else {
+			$settings = array(
+				'color_primary'   => $color_primary ? $color_primary : '',
+				'color_secondary' => $color_secondary ? $color_secondary : '',
+			);
+			update_option( self::OPTION_GLOBAL_SETTINGS, $settings );
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'    => 'viz-settings',
+					'updated' => $clear ? 'cleared' : 'true',
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
 	}
 
 	/**
