@@ -5,9 +5,18 @@
  *   1. Classic Builder — opens the existing iframe-based wizard
  *   2. AI Chart Builder — opens the new D3-powered React wizard
  */
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 function ChooserModal( { isOpen, onClassic, onAIBuilder, onClose } ) {
+	const [ rememberChoice, setRememberChoice ] = useState( false );
+
+	useEffect( () => {
+		if ( isOpen ) {
+			setRememberChoice( false );
+		}
+	}, [ isOpen ] );
+
 	if ( ! isOpen ) {
 		return null;
 	}
@@ -34,7 +43,10 @@ function ChooserModal( { isOpen, onClassic, onAIBuilder, onClose } ) {
 
 				<div className="viz-chooser-options">
 
-					<button className="viz-chooser-option viz-chooser-option--ai" onClick={ onAIBuilder }>
+					<button
+						className="viz-chooser-option viz-chooser-option--ai"
+						onClick={ () => onAIBuilder( rememberChoice ) }
+					>
 						<span className="viz-chooser-option__badge">
 							{ __( 'New', 'visualizer' ) }
 						</span>
@@ -51,7 +63,10 @@ function ChooserModal( { isOpen, onClassic, onAIBuilder, onClose } ) {
 						</span>
 					</button>
 
-					<button className="viz-chooser-option" onClick={ onClassic }>
+					<button
+						className="viz-chooser-option"
+						onClick={ () => onClassic( rememberChoice ) }
+					>
 						<span className="viz-chooser-option__icon viz-chooser-option__icon--classic">
 							<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 								<rect x="3" y="14" width="4" height="7" rx="1" fill="currentColor"/>
@@ -67,6 +82,20 @@ function ChooserModal( { isOpen, onClassic, onAIBuilder, onClose } ) {
 						</span>
 					</button>
 
+				</div>
+
+				<div className="viz-chooser-remember">
+					<label className="viz-chooser-remember__label">
+						<input
+							type="checkbox"
+							checked={ rememberChoice }
+							onChange={ ( event ) => setRememberChoice( event.target.checked ) }
+						/>
+						<span>{ __( 'Don\'t ask me again', 'visualizer' ) }</span>
+					</label>
+					<p className="viz-chooser-remember__help">
+						{ __( 'We will open your selected builder by default next time.', 'visualizer' ) }
+					</p>
 				</div>
 
 				<button className="viz-chooser-cancel" onClick={ onClose }>

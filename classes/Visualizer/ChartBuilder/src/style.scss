@@ -142,6 +142,34 @@
 	line-height: 1.5;
 }
 
+.viz-chooser-remember {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 14px;
+}
+
+.viz-chooser-remember__label {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	color: #1d2327;
+	cursor: pointer;
+}
+
+.viz-chooser-remember__label input {
+	width: 16px;
+	height: 16px;
+}
+
+.viz-chooser-remember__help {
+	margin: 0;
+	font-size: 12px;
+	color: #646970;
+}
+
 .viz-chooser-cancel {
 	background: none;
 	border: none;

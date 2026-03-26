@@ -47,9 +47,16 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<div id="visualizer-icon" class="icon32"><br></div>';
 		echo '<h2>';
 		esc_html_e( 'Visualizer Library', 'visualizer' );
-		echo ' <a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a>';
+		echo ' <div class="viz-add-new-group">';
+		echo '<a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a>';
+		echo '<button type="button" class="viz-add-new-toggle" aria-haspopup="true" aria-expanded="false"><span class="dashicons dashicons-arrow-down-alt2"></span></button>';
+		echo '<div class="viz-add-new-menu" role="menu" aria-hidden="true">';
+		echo '<button type="button" class="viz-add-new-item" data-viz-builder="ai">', esc_html__( 'AI Chart Builder', 'visualizer' ), '</button>';
+		echo '<button type="button" class="viz-add-new-item" data-viz-builder="classic">', esc_html__( 'Classic Builder', 'visualizer' ), '</button>';
+		echo '</div>';
+		echo '</div>';
 		if ( Visualizer_Module::is_pro() ) {
-			echo ' <a href="' . admin_url( 'options-general.php#visualizer_pro_license' ) . '" class="page-title-action">', esc_html__( 'License Settings', 'visualizer' ), '</a>';
+			echo ' <a href="' . admin_url( 'options-general.php#visualizer_pro_license' ) . '" class="page-title-action" style="top:0;">', esc_html__( 'License Settings', 'visualizer' ), '</a>';
 		}
 		echo '</h2>';
 		$this->_renderMessages();
@@ -338,7 +345,18 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div id="visualizer-library" class="visualizer-clearfix view-grid">';
 			echo '<div class="items"><div class="visualizer-chart">';
 			echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
-			echo '<div class="visualizer-notfound">', esc_html__( 'No charts found', 'visualizer' ), '<p><h2><a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a></h2></p></div>';
+			echo '<div class="visualizer-notfound">';
+			echo esc_html__( 'No charts found', 'visualizer' );
+			echo '<p><h2>';
+			echo '<div class="viz-add-new-group">';
+			echo '<a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a>';
+			echo '<button type="button" class="viz-add-new-toggle" aria-haspopup="true" aria-expanded="false"><span class="dashicons dashicons-arrow-down-alt2"></span></button>';
+			echo '<div class="viz-add-new-menu" role="menu" aria-hidden="true">';
+			echo '<button type="button" class="viz-add-new-item" data-viz-builder="ai">', esc_html__( 'AI Chart Builder', 'visualizer' ), '</button>';
+			echo '<button type="button" class="viz-add-new-item" data-viz-builder="classic">', esc_html__( 'Classic Builder', 'visualizer' ), '</button>';
+			echo '</div>';
+			echo '</div>';
+			echo '</h2></p></div>';
 			echo '</div>';
 			echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 			echo '<div class="visualizer-action-group visualizer-nochart">';

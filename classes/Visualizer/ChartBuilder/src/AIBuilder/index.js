@@ -2,7 +2,7 @@
  * AI Builder — two-column layout matching layout.html design
  *
  * Left  : Step 1 (DataSource) + Step 2 (Describe)
- * Right : Live preview sidebar (256px)
+ * Right : Live preview sidebar (560px)
  * Footer: Cancel + Generate / Publish actions
  */
 import { useState, useEffect, useRef } from '@wordpress/element';
@@ -579,6 +579,12 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 									<Text fontSize="12px" color="#b45309">{ editorError }</Text>
 								</Box>
 							) }
+							<Text fontSize="11px" color={ C.gray2 }>
+								{ __( 'Need a refresher? Read the D3 documentation to understand selections, scales, and shapes:', 'visualizer' ) }{' '}
+								<a href="https://d3js.org/getting-started" target="_blank" rel="noopener noreferrer">
+									{ __( 'd3js.org/getting-started', 'visualizer' ) }
+								</a>
+							</Text>
 							<Flex align="center" justify="flex-end" gap="2">
 								<PillBtn onClick={ closeEditor } bg="white" color={ C.gray1 } border="1.5px solid" borderColor={ C.border }>
 									{ __( 'Cancel', 'visualizer' ) }
@@ -628,16 +634,22 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 								>
 									<Box
 										as="textarea"
-										w="100%" h="68px"
+										w="100%" minH="68px"
 										border="none" outline="none"
 										bg="transparent"
 										p="10px 12px"
 										fontSize="13px" fontFamily="inherit"
-										resize="none"
+										resize="vertical"
 										color={ C.dark }
 										placeholder={ __( 'e.g. Create a grouped bar chart comparing revenue and profit by quarter', 'visualizer' ) }
 										value={ prompt }
 										onChange={ isLocked ? undefined : ( e ) => setPrompt( e.target.value ) }
+										onKeyDown={ isLocked ? undefined : ( e ) => {
+											if ( e.key === 'Enter' && ! e.shiftKey ) {
+												e.preventDefault();
+												if ( canGenerate ) handleGenerate();
+											}
+										} }
 										disabled={ isLocked }
 										display="block"
 										sx={ { '&::placeholder': { color: C.gray3 } } }
@@ -700,6 +712,9 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 										) }
 									</Flex>
 								</Box>
+								<Text fontSize="11px" color={ C.gray2 }>
+									{ __( 'Press Enter to generate. Shift + Enter for a new line.', 'visualizer' ) }
+								</Text>
 
 								<input
 									ref={ refImageInputRef }
@@ -759,7 +774,7 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 				</Box>
 
 				{ /* ── Right: rebuilt preview panel ─────────────────────────────── */ }
-				<Box w="460px" flexShrink={ 0 } display="flex" flexDirection="column" bg="#f7f7f8" borderLeft="1px solid #e2e3e6">
+				<Box w="560px" flexShrink={ 0 } display="flex" flexDirection="column" bg="#f7f7f8" borderLeft="1px solid #e2e3e6">
 					<Flex align="center" justify="space-between" px="5" py="4" borderBottom="1px solid #e2e3e6">
 						<Box>
 							<Text fontSize="12px" fontWeight="700" color={ C.dark } letterSpacing="0.02em">

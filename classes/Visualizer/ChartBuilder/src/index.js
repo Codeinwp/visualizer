@@ -11,6 +11,24 @@ import ChooserModal from './ChooserModal';
 import AIBuilder    from './AIBuilder/index';
 import './style.scss';
 
+const CHOOSER_STORAGE_KEY = 'viz_chart_builder_default';
+
+function getStoredBuilderChoice() {
+	try {
+		return window.localStorage.getItem( CHOOSER_STORAGE_KEY );
+	} catch ( err ) {
+		return null;
+	}
+}
+
+function setStoredBuilderChoice( choice ) {
+	try {
+		window.localStorage.setItem( CHOOSER_STORAGE_KEY, choice );
+	} catch ( err ) {
+		// ignore storage failures
+	}
+}
+
 function ChartBuilderApp() {
 	// mode: 'hidden' | 'chooser' | 'ai-builder'
 	const [ mode,            setMode            ] = useState( 'hidden' );
@@ -21,23 +39,45 @@ function ChartBuilderApp() {
 		window.vizOpenChartChooser = ( cb ) => {
 			setEditChartId( null );
 			setClassicCallback( () => cb );
+			const storedChoice = getStoredBuilderChoice();
+			if ( storedChoice === 'classic' ) {
+				cb();
+				return;
+			}
+			if ( storedChoice === 'ai' ) {
+				setMode( 'ai-builder' );
+				return;
+			}
 			setMode( 'chooser' );
 		};
 		window.vizOpenAIBuilderEdit = ( chartId ) => {
 			setEditChartId( String( chartId ) );
 			setMode( 'ai-builder' );
 		};
+		window.vizOpenAIBuilderNew = () => {
+			setEditChartId( null );
+			setMode( 'ai-builder' );
+		};
 		return () => {
 			delete window.vizOpenChartChooser;
 			delete window.vizOpenAIBuilderEdit;
+			delete window.vizOpenAIBuilderNew;
 		};
 	}, [] );
 
-	function handleClassic() {
+	function handleClassic( rememberChoice = false ) {
+		if ( rememberChoice ) {
+			setStoredBuilderChoice( 'classic' );
+		}
 		setMode( 'hidden' );
 		if ( typeof classicCallback === 'function' ) classicCallback();
 	}
-	function handleAIBuilder() { setMode( 'ai-builder' ); }
+	function handleAIBuilder( rememberChoice = false ) {
+		if ( rememberChoice ) {
+			setStoredBuilderChoice( 'ai' );
+		}
+		setMode( 'ai-builder' );
+	}
 	function handleClose()     { setMode( 'hidden' ); setEditChartId( null ); }
 
 	return (

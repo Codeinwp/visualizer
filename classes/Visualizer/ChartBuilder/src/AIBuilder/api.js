@@ -5,11 +5,15 @@
 
 const { ajaxUrl, nonce } = window.vizAIBuilder || {};
 
-async function post( action, body ) {
+async function post( action, body, options = {} ) {
+	const { nonceOverride = null, omitEmpty = false } = options;
 	const form = new FormData();
 	form.append( 'action', action );
-	form.append( 'nonce', nonce );
+	form.append( 'nonce', nonceOverride || nonce );
 	for ( const [ key, val ] of Object.entries( body ) ) {
+		if ( omitEmpty && ( val === null || val === undefined || val === '' ) ) {
+			continue;
+		}
 		form.append( key, val );
 	}
 	const res  = await fetch( ajaxUrl, { method: 'POST', body: form } );
@@ -51,61 +55,33 @@ export async function saveChart( chartId, title, code ) {
 
 // ── Upload helpers ─────────────────────────────────────────────────────────────
 
-/** Build a FormData for any upload call, including the per-chart upload nonce. */
-function uploadForm( action, chartId, uploadNonce, fields = {} ) {
-	const form = new FormData();
-	form.append( 'action', action );
-	form.append( 'nonce', uploadNonce );
-	form.append( 'chart_id', chartId );
-	for ( const [ key, val ] of Object.entries( fields ) ) {
-		if ( val !== null && val !== undefined && val !== '' ) {
-			form.append( key, val );
-		}
-	}
-	return form;
-}
-
-async function uploadFetch( form ) {
-	const res = await fetch( ajaxUrl, { method: 'POST', body: form } );
-	let json;
-	try {
-		json = await res.json();
-	} catch {
-		throw new Error( 'Server returned an unexpected response.' );
-	}
-	if ( ! json.success ) {
-		throw new Error( json.data?.message || 'Upload failed.' );
-	}
-	return json.data;
-}
-
 /** Upload pasted CSV string. Returns { series, data }. */
 export async function uploadCsvString( chartId, uploadNonce, csvData ) {
-	const form = uploadForm( 'visualizer-ai-upload', chartId, uploadNonce, {
+	return post( 'visualizer-ai-upload', {
+		chart_id: chartId,
 		source_type: 'csv_string',
 		csv_data: csvData,
-	} );
-	return uploadFetch( form );
+	}, { nonceOverride: uploadNonce, omitEmpty: true } );
 }
 
 /** Upload a CSV or XLSX file. Returns { series, data }. */
 export async function uploadFile( chartId, uploadNonce, file ) {
 	const ext  = file.name.split( '.' ).pop().toLowerCase();
-	const form = uploadForm( 'visualizer-ai-upload', chartId, uploadNonce, {
+	return post( 'visualizer-ai-upload', {
+		chart_id: chartId,
 		source_type: ext === 'xlsx' ? 'xlsx_file' : 'csv_file',
-	} );
-	form.append( 'data_file', file );
-	return uploadFetch( form );
+		data_file: file,
+	}, { nonceOverride: uploadNonce, omitEmpty: true } );
 }
 
 /** Upload a remote CSV/XLSX URL. Returns { series, data }. */
 export async function uploadFileUrl( chartId, uploadNonce, url, schedule = '' ) {
-	const form = uploadForm( 'visualizer-ai-upload', chartId, uploadNonce, {
+	return post( 'visualizer-ai-upload', {
+		chart_id: chartId,
 		source_type: 'file_url',
 		file_url:    url,
 		schedule:    schedule,
-	} );
-	return uploadFetch( form );
+	}, { nonceOverride: uploadNonce, omitEmpty: true } );
 }
 
 /** Upload a JSON URL source. Returns { series, data }. */
@@ -115,7 +91,8 @@ export async function uploadJsonUrl( chartId, uploadNonce, params ) {
 		auth = '', username = '', password = '', headers = '',
 		schedule = '',
 	} = params;
-	const form = uploadForm( 'visualizer-ai-upload', chartId, uploadNonce, {
+	return post( 'visualizer-ai-upload', {
+		chart_id: chartId,
 		source_type:   'json_url',
 		json_url:      url,
 		json_root:     root,
@@ -126,8 +103,7 @@ export async function uploadJsonUrl( chartId, uploadNonce, params ) {
 		json_password: password,
 		json_headers:  headers,
 		json_schedule: schedule,
-	} );
-	return uploadFetch( form );
+	}, { nonceOverride: uploadNonce, omitEmpty: true } );
 }
 
 // ── AI generation helpers ──────────────────────────────────────────────────────
@@ -168,7 +144,8 @@ export async function uploadDbQuery( chartId, uploadNonce, query, dbParams = {} 
 		host = '', port = 3306, name = '',
 		username = '', password = '', type = 'mysql',
 	} = dbParams;
-	const form = uploadForm( 'visualizer-ai-upload', chartId, uploadNonce, {
+	return post( 'visualizer-ai-upload', {
+		chart_id: chartId,
 		source_type:  'db_query',
 		db_query:     query,
 		db_host:      host,
@@ -177,6 +154,5 @@ export async function uploadDbQuery( chartId, uploadNonce, query, dbParams = {} 
 		db_username:  username,
 		db_password:  password,
 		db_type:      type,
-	} );
-	return uploadFetch( form );
+	}, { nonceOverride: uploadNonce, omitEmpty: true } );
 }
