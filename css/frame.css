@@ -570,6 +570,13 @@ div.viz-group-content .viz-group-description {
 	filter: grayscale(0);
 }
 
+.type-label:focus,
+.viz-group-title:focus,
+.viz-section-title:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
 .type-box-area .type-label {
 	background-position: -8px -225px;
 }

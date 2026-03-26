@@ -36,6 +36,7 @@
     }
 
     function onReady() {
+        initAccessibility();
         initTabs();
 
         // open the correct source tab/sub-tab.
@@ -73,6 +74,7 @@
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');
             $(this).parent().addClass('type-label-selected');
+            updateTypeAriaChecked();
         });
 
         // collapse other open sections of this group
@@ -95,6 +97,7 @@
              * let's close the LHS window and show the chart that is hidden
              */
             $('body').trigger('visualizer:change:action');
+            updateGroupAriaState($(this));
         });
 
         // collapse other open subsections of this section
@@ -103,6 +106,7 @@
             grandparent.find('.viz-section-title.open').not(this).each(function () {
                 $(this).removeClass('open').siblings('.viz-section-items').hide();
             });
+            updateSectionAriaState($(this));
         });
 
         $('#view-remote-file').click(function () {
@@ -154,6 +158,100 @@
             window.parent.postMessage('visualizer:mediaframe:close', '*');
         });
 
+    }
+
+    function initAccessibility(){
+        // Chart type picker: treat tiles as radios with keyboard support.
+        var $typePicker = $('#type-picker');
+        if($typePicker.length){
+            $typePicker.attr('role', 'radiogroup');
+            $('.type-label').each(function(){
+                var $label = $(this);
+                var $input = $label.find('input[type="radio"]');
+                $label.attr('tabindex', '0').attr('role', 'radio');
+                if($input.length){
+                    $label.attr('aria-checked', $input.is(':checked') ? 'true' : 'false');
+                }else{
+                    $label.attr('aria-disabled', 'true');
+                }
+            });
+            $(document).on('keydown', '.type-label', function(e){
+                if(e.key === 'Enter' || e.key === ' '){
+                    e.preventDefault();
+                    var $label = $(this);
+                    var $input = $label.find('input[type="radio"]');
+                    if($input.length){
+                        $input.prop('checked', true).trigger('change');
+                    }
+                }
+            });
+        }
+
+        // Collapsible groups: add button roles + keyboard activation.
+        $('.viz-group-title').each(function(index){
+            var $title = $(this);
+            $title.attr('role', 'button').attr('tabindex', '0');
+            var $content = $title.siblings('.viz-group-content');
+            if($content.length){
+                if(!$content.attr('id')){
+                    $content.attr('id', 'viz-group-content-' + index);
+                }
+                $title.attr('aria-controls', $content.attr('id'));
+                updateGroupAriaState($title);
+            }
+        });
+        $(document).on('keydown', '.viz-group-title', function(e){
+            if(e.key === 'Enter' || e.key === ' '){
+                e.preventDefault();
+                $(this).trigger('click');
+            }
+        });
+
+        // Subsections in source panel.
+        $('.viz-section-title').each(function(index){
+            var $title = $(this);
+            $title.attr('role', 'button').attr('tabindex', '0');
+            var $items = $title.siblings('.viz-section-items');
+            if($items.length){
+                if(!$items.attr('id')){
+                    $items.attr('id', 'viz-section-items-' + index);
+                }
+                $title.attr('aria-controls', $items.attr('id'));
+                updateSectionAriaState($title);
+            }
+        });
+        $(document).on('keydown', '.viz-section-title', function(e){
+            if(e.key === 'Enter' || e.key === ' '){
+                e.preventDefault();
+                $(this).trigger('click');
+            }
+        });
+    }
+
+    function updateTypeAriaChecked(){
+        $('.type-label').each(function(){
+            var $label = $(this);
+            var $input = $label.find('input[type="radio"]');
+            if($input.length){
+                $label.attr('aria-checked', $input.is(':checked') ? 'true' : 'false');
+            }
+        });
+    }
+
+    function updateGroupAriaState($title){
+        if(!$title || $title.length === 0){
+            return;
+        }
+        var isOpen = $title.parent().hasClass('open');
+        $title.attr('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    function updateSectionAriaState($title){
+        if(!$title || $title.length === 0){
+            return;
+        }
+        var isOpen = $title.hasClass('open');
+        $title.attr('aria-expanded', isOpen ? 'true' : 'false');
     }
 
     /**
