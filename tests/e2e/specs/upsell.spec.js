@@ -18,6 +18,8 @@ test.describe( 'Upsell', () => {
 	test( 'chart selection on admin', async ( { admin, page } ) => {
 		await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
 		await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+		await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+		await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
 		await page.waitForSelector('h1:text("Visualizer")');
 
 		expect( await page.frameLocator('iframe').locator('.pro-upsell').count() ).toBe( 11 );
@@ -34,6 +36,8 @@ test.describe( 'Upsell', () => {
 	test( 'chart settings on admin', async ( { admin, page } ) => {
 		await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
 		await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+		await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+		await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
 		await page.waitForSelector('h1:text("Visualizer")');
 		await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
 

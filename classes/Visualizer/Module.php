@@ -585,6 +585,12 @@ class Visualizer_Module {
 	 * Load the class for the given chart's chart type so that its assets can be loaded.
 	 */
 	protected function load_chart_type( $chart_id ) {
+		// D3/AI charts have no traditional type class — return the library string directly.
+		$lib = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		if ( 'd3' === $lib ) {
+			return 'd3';
+		}
+
 		$name   = $this->load_chart_class_name( $chart_id );
 		$class  = null;
 		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {

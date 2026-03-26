@@ -49,12 +49,6 @@ class Visualizer_Source_Xlsx extends Visualizer_Source {
 			return false;
 		}
 
-		// Ensure the OpenSpout autoloader is available.
-		$vendor_file = VISUALIZER_ABSPATH . 'vendor/autoload.php';
-		if ( is_readable( $vendor_file ) ) {
-			include_once $vendor_file;
-		}
-
 		if ( ! class_exists( 'OpenSpout\Reader\Common\Creator\ReaderEntityFactory' ) ) {
 			$this->_error = esc_html__( 'The OpenSpout library is required to import XLSX files but could not be found. Please contact support.', 'visualizer' );
 			return false;

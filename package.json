@@ -29,7 +29,11 @@
     "test:e2e:playwright": "wp-scripts test-playwright --config tests/e2e/playwright.config.js",
     "test:e2e:playwright:debug": "wp-scripts test-playwright --config tests/e2e/playwright.config.js --ui",
     "gutenberg:build": "wp-scripts build --webpack-src-dir=classes/Visualizer/Gutenberg/src --output-path=classes/Visualizer/Gutenberg/build",
-    "gutenberg:dev": "wp-scripts start --webpack-src-dir=classes/Visualizer/Gutenberg/src --output-path=classes/Visualizer/Gutenberg/build"
+    "gutenberg:dev": "wp-scripts start --webpack-src-dir=classes/Visualizer/Gutenberg/src --output-path=classes/Visualizer/Gutenberg/build",
+    "chartbuilder:build": "wp-scripts build --config classes/Visualizer/ChartBuilder/webpack.config.js --webpack-src-dir=classes/Visualizer/ChartBuilder/src --output-path=classes/Visualizer/ChartBuilder/build",
+    "chartbuilder:dev": "wp-scripts start --config classes/Visualizer/ChartBuilder/webpack.config.js --webpack-src-dir=classes/Visualizer/ChartBuilder/src --output-path=classes/Visualizer/ChartBuilder/build",
+    "d3renderer:build": "wp-scripts build --webpack-src-dir=classes/Visualizer/D3Renderer/src --output-path=classes/Visualizer/D3Renderer/build",
+    "d3renderer:dev": "wp-scripts start --webpack-src-dir=classes/Visualizer/D3Renderer/src --output-path=classes/Visualizer/D3Renderer/build"
   },
   "pot": {
     "reportmsgidbugsto": "https://github.com/Codeinwp/visualizer/issues",
@@ -37,10 +41,17 @@
     "lasttranslator": "Themeisle Translate Team <friends@themeisle.com>"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.34.0",
+    "@codemirror/lang-javascript": "^6.2.4",
+    "@emotion/react": "^11.14.0",
+    "@handsontable/react": "^13.0.0",
+    "@uiw/react-codemirror": "^4.23.6",
+    "d3": "^7.9.0",
     "deep-filter": "^1.0.2",
     "is-plain-object": "^2.0.4",
     "merge": "^1.2.1",
     "react-google-charts": "^3.0.8",
+    "topojson-client": "^3.1.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

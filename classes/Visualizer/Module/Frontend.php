@@ -433,13 +433,20 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// add chart to the array
-		$this->_charts[ $id ] = array(
+		$chart_entry = array(
 			'type'     => $type,
 			'series'   => $series,
 			'settings' => $settings,
 			'data'     => $data,
 			'library'  => $library,
 		);
+
+		// For D3 charts, include the stored code so the renderer can execute it.
+		if ( 'd3' === $library ) {
+			$chart_entry['code'] = get_post_meta( $chart->ID, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+		}
+
+		$this->_charts[ $id ] = $chart_entry;
 
 		$actions_div            = '';
 		$actions_visible        = apply_filters( 'visualizer_pro_add_actions', isset( $settings['actions'] ) ? $settings['actions'] : array(), $atts['id'] );
@@ -489,6 +496,27 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					true
 				);
 				wp_enqueue_script( "visualizer-render-$library" );
+			}
+
+			// For D3 charts, also enqueue the dedicated renderer bundle.
+			if ( 'd3' === $library ) {
+				$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+				if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+					/**
+					 * Ignore missing build asset in source checkout.
+					 *
+					 * @phpstan-ignore-next-line
+					 */
+					$d3_asset = include $d3_renderer_asset;
+					wp_register_script(
+						'visualizer-d3-renderer',
+						VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+						array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+						$d3_asset['version'],
+						true
+					);
+					wp_enqueue_script( 'visualizer-d3-renderer' );
+				}
 			}
 
 			if ( wp_script_is( "visualizer-render-$_charts_type" ) && 0 === $count ) {

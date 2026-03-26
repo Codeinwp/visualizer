@@ -97,6 +97,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_DEMO_URL', 'https://demo.themeisle.com/visualizer/#' );
 	define( 'VISUALIZER_CODE_SNIPPETS_URL', 'https://docs.themeisle.com/category/726-visualizer' );
 	define( 'VISUALIZER_SUBSCRIBE_API', 'https://api.themeisle.com/tracking/subscribe' );
+	define( 'VISUALIZER_AGENTS_URL', 'https://ai.themeisle.com' );
 
 	// to redirect all themeisle_log_event to error log.
 	define( 'VISUALIZER_LOCAL_DEBUG', false );
@@ -196,6 +197,9 @@ function visualizer_launch() {
 
 	// Set setup wizard module.
 	$plugin->setModule( Visualizer_Module_Wizard::NAME );
+
+	// AI Chart Builder module (AJAX endpoints for the React wizard).
+	$plugin->setModule( Visualizer_Module_AIBuilder::NAME );
 
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 	if ( is_readable( $vendor_file ) ) {

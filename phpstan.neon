@@ -14,6 +14,8 @@ parameters:
 		- %currentWorkingDirectory%/vendor/codeinwp/themeisle-sdk
 	excludePaths:
 		- classes/Visualizer/Gutenberg/build (?)
+		- classes/Visualizer/GutenChartBuilder/build (?)
+		- classes/Visualizer/GutenD3Renderer/build (?)
 includes:
 	- %currentWorkingDirectory%/vendor/szepeviktor/phpstan-wordpress/extension.neon
 	- %currentWorkingDirectory%/phpstan-baseline.neon

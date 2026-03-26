@@ -141,7 +141,7 @@ function createPopupProBlocker( $ , e ) {
             }
         } );
 
-        $('.add-new-chart').click(function () {
+        function openClassicBuilder() {
             var wnd = window,
                 view = new vmv.Chart({action: vu.create});
             vu.create = vu.create.replace(/[\?&]lang=[^&]+/, '').replace(/[\?&]parent_chart_id=[^&]+/, '');
@@ -161,7 +161,69 @@ function createPopupProBlocker( $ , e ) {
                 wnd.location.href = vu.base.replace(/type=[a-zA-Z]*/, '').replace(/vaction/, '');
             };
             view.open();
+        }
 
+        function closeAddNewMenus() {
+            $('.viz-add-new-group').removeClass('is-open');
+            $('.viz-add-new-toggle').attr('aria-expanded', 'false');
+            $('.viz-add-new-menu').attr('aria-hidden', 'true');
+        }
+
+        $(document).on('click', function() {
+            closeAddNewMenus();
+        });
+
+        $(document).on('click', '.viz-add-new-toggle', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            var $group = $(this).closest('.viz-add-new-group');
+            var isOpen = $group.hasClass('is-open');
+            closeAddNewMenus();
+            if ( ! isOpen ) {
+                $group.addClass('is-open');
+                $(this).attr('aria-expanded', 'true');
+                $group.find('.viz-add-new-menu').attr('aria-hidden', 'false');
+            }
+            return false;
+        });
+
+        $(document).on('click', '.viz-add-new-item', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            var builder = $(this).data('viz-builder');
+            closeAddNewMenus();
+
+            if ( builder === 'ai' ) {
+                if ( typeof window.vizOpenAIBuilderNew === 'function' ) {
+                    window.vizOpenAIBuilderNew();
+                    return;
+                }
+                if ( typeof window.vizOpenChartChooser === 'function' ) {
+                    var classicCallback = function() {
+                        openClassicBuilder();
+                    };
+                    window.vizOpenChartChooser( classicCallback );
+                    return;
+                }
+            }
+
+            openClassicBuilder();
+        });
+
+        $('.add-new-chart').click(function () {
+            // Hook for the React chart builder chooser modal.
+            // If the React app is loaded it sets window.vizOpenChartChooser and handles routing.
+            // It will call the classicCallback if the user picks the Classic Builder.
+            if (typeof window.vizOpenChartChooser === 'function') {
+                var classicCallback = function() {
+                    openClassicBuilder();
+                };
+                window.vizOpenChartChooser(classicCallback);
+                return false;
+            }
+            openClassicBuilder();
             return false;
         });
 
@@ -169,6 +231,12 @@ function createPopupProBlocker( $ , e ) {
 
             if ( createPopupProBlocker( $, event ) ) {
                 return;
+            }
+
+            // D3/AI charts open in the AI Builder instead of the classic modal.
+            if ( $(this).data('library') === 'd3' && typeof window.vizOpenAIBuilderEdit === 'function' ) {
+                window.vizOpenAIBuilderEdit( $(this).attr('data-chart') );
+                return false;
             }
 
             var wnd = window;

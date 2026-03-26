@@ -669,6 +669,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 
+		$has_d3 = false;
 		$query = $this->getQuery();
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
@@ -682,6 +683,96 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				apply_filters( 'visualizer_assets_render', array( 'visualizer-library', 'visualizer-customization' ), true ),
 				Visualizer_Plugin::VERSION,
 				true
+			);
+			if ( 'd3' === $library ) {
+				$has_d3 = true;
+			}
+		}
+
+		if ( $has_d3 ) {
+			$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+			if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+				/**
+				 * Ignore missing build asset in source checkout.
+				 *
+				 * @phpstan-ignore-next-line
+				 */
+				$d3_asset = include $d3_renderer_asset;
+				wp_register_script(
+					'visualizer-d3-renderer',
+					VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+					array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+					$d3_asset['version'],
+					true
+				);
+				wp_enqueue_script( 'visualizer-d3-renderer' );
+			}
+		}
+
+		$chart_builder_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.asset.php';
+		if ( file_exists( $chart_builder_asset ) ) {
+			/**
+			 * Ignore missing build asset in source checkout.
+			 *
+			 * @phpstan-ignore-next-line
+			 */
+			$asset = include $chart_builder_asset;
+			$chart_builder_deps = $asset['dependencies'];
+			if ( ! wp_script_is( 'visualizer-handsontable', 'registered' ) && defined( 'Visualizer_Pro_ABSURL' ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
+				wp_register_script(
+					'visualizer-handsontable',
+					Visualizer_Pro_ABSURL . 'vendor/handsontable/dist/handsontable.full.min.js',
+					array(),
+					VISUALIZER_PRO_VERSION,
+					true
+				);
+			}
+			if ( ! wp_style_is( 'visualizer-handsontable', 'registered' ) && defined( 'Visualizer_Pro_ABSURL' ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
+				wp_register_style(
+					'visualizer-handsontable',
+					Visualizer_Pro_ABSURL . 'vendor/handsontable/dist/handsontable.full.min.css',
+					array(),
+					VISUALIZER_PRO_VERSION
+				);
+			}
+			if ( wp_script_is( 'visualizer-handsontable', 'registered' ) ) {
+				wp_enqueue_script( 'visualizer-handsontable' );
+				$chart_builder_deps = array_unique( array_merge( $chart_builder_deps, array( 'visualizer-handsontable' ) ) );
+			}
+			if ( wp_style_is( 'visualizer-handsontable', 'registered' ) ) {
+				wp_enqueue_style( 'visualizer-handsontable' );
+			}
+			wp_enqueue_script(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.js',
+				$chart_builder_deps,
+				$asset['version'],
+				true
+			);
+			wp_enqueue_style(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/style-index.css',
+				array(),
+				$asset['version']
+			);
+			$chart_builder_css = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.css';
+			if ( file_exists( $chart_builder_css ) ) {
+				wp_enqueue_style(
+					'visualizer-chart-builder-runtime',
+					VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.css',
+					array( 'visualizer-chart-builder' ),
+					$asset['version']
+				);
+			}
+			wp_localize_script(
+				'visualizer-chart-builder',
+				'vizAIBuilder',
+				array(
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'visualizer-ai-builder' ),
+					'isPro'   => Visualizer_Module::is_pro(),
+					'upgradeUrl' => tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'aiBuilderUpgrade', 'dataSource' ),
+				)
 			);
 		}
 
@@ -1053,12 +1144,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// add chart to the array
 			$charts[ $id ] = array(
 				'id'       => $chart->ID,
+				'title'    => $chart->post_title,
 				'type'     => $type,
 				'series'   => $series,
 				'settings' => $settings,
 				'data'     => $data,
 				'library'  => $library,
 			);
+			if ( 'd3' === $library ) {
+				$charts[ $id ]['code'] = get_post_meta( $chart->ID, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+			}
 		}
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );

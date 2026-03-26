@@ -16,6 +16,8 @@ jobs:
         run: |
           npm ci
           npm run gutenberg:build
+          npm run chartbuilder:build
+          npm run d3renderer:build
           composer install --no-dev --prefer-dist --no-progress --no-suggest
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@master
