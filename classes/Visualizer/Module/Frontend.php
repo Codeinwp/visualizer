@@ -502,6 +502,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			if ( 'd3' === $library ) {
 				$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
 				if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+					/** @phpstan-ignore-next-line -- Build asset may not exist in source checkout. */
 					$d3_asset = include $d3_renderer_asset;
 					wp_register_script(
 						'visualizer-d3-renderer',

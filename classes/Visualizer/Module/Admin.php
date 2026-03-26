@@ -692,6 +692,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( $has_d3 ) {
 			$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
 			if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+				/** @phpstan-ignore-next-line -- Build asset may not exist in source checkout. */
 				$d3_asset = include $d3_renderer_asset;
 				wp_register_script(
 					'visualizer-d3-renderer',
@@ -706,6 +707,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$chart_builder_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.asset.php';
 		if ( file_exists( $chart_builder_asset ) ) {
+			/** @phpstan-ignore-next-line -- Build asset may not exist in source checkout. */
 			$asset = include $chart_builder_asset;
 			$chart_builder_deps = $asset['dependencies'];
 			if ( ! wp_script_is( 'visualizer-handsontable', 'registered' ) && defined( 'Visualizer_Pro_ABSURL' ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
