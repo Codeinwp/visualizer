@@ -198,7 +198,7 @@ test.describe( 'Chart Library', () => {
         expect( titleValue ).toBe( backendName );
 
         await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
-        await page.frameLocator('iframe').getByRole('heading', { name: 'General Settings' }).click();
+        await page.frameLocator('iframe').getByRole('button', { name: 'General Settings' }).click();
         await page.frameLocator('iframe').getByText('Title', { exact: true }).click();
 
         await page.frameLocator('iframe').locator('input[name="title"]').fill(chartName);

@@ -22,14 +22,16 @@ test.describe( 'Upsell', () => {
 		await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
 		await page.waitForSelector('h1:text("Visualizer")');
 
-		expect( await page.frameLocator('iframe').locator('.pro-upsell').count() ).toBe( 11 );
+		const frame = page.frameLocator('iframe');
+		await expect( frame.locator('#type-picker') ).toBeVisible({ timeout: 10000 });
+		await expect( frame.locator('.pro-upsell') ).toHaveCount( 11 );
 
-		const proUpsellElements = await page.frameLocator('iframe').locator('a.pro-upsell').all();
+		const proUpsellElements = await frame.getByRole('link', { name: 'Upgrade Now' }).all();
 
 		for (const element of proUpsellElements) {
 			const href = await element.getAttribute('href');
 			const searchParams = new URLSearchParams(href);
-			expect( searchParams.get('utm_campaign') ).toBe('charttypes');
+			expect( searchParams.get('utm_campaign') ).toBe('procharts');
 		}
 	} );
 
@@ -65,7 +67,7 @@ test.describe( 'Upsell', () => {
 		href = await wpImportUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('import-wp');
-		await page.frameLocator('iframe').getByRole('heading', { name: /Import from WordPress/ }).click();
+		await page.frameLocator('iframe').getByRole('button', { name: /Import from WordPress/ }).click();
 		await expect(page.frameLocator('iframe').locator('#vz-chart-source')).toContainText('Upgrade to PRO to activate this feature!');
 
 		const dbImportUpsell = page.frameLocator('iframe').locator('#vz-chart-source .visualizer_source_query .only-pro-inner a').last();
@@ -73,7 +75,7 @@ test.describe( 'Upsell', () => {
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('db-query');
 
-		await page.frameLocator('iframe').getByRole('heading', { name: /Import from database/ }).click();
+		await page.frameLocator('iframe').getByRole('button', { name: /Import from database/ }).click();
 		await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade to Plus plan to activate this feature!');
 		await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade Now');
 
@@ -93,7 +95,7 @@ test.describe( 'Upsell', () => {
 		href = await chartPermissionsUpsell.getAttribute('href');
 		searchParams = new URLSearchParams(href);
 		expect( searchParams.get('utm_campaign') ).toBe('chart-permissions');
-		await page.frameLocator('iframe').getByRole('heading', { name: /Permissions/ }).click();
+		await page.frameLocator('iframe').getByRole('button', { name: /Permissions/ }).click();
 		await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade to Plus plan to activate this feature!');
 		await expect(page.frameLocator('iframe').locator('#vz-db-wizard')).toContainText('Upgrade Now');
 	});
