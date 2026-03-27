@@ -73,6 +73,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 		}
 	}
 
+
 	/**
 	 * Method to register the setup wizard page.
 	 *
@@ -168,7 +169,15 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	 */
 	public function visualizer_wizard_step_process() {
 		check_ajax_referer( VISUALIZER_ABSPATH, 'security' );
-		$step = ! empty( $_POST['step'] ) ? filter_input( INPUT_POST, 'step', FILTER_SANITIZE_STRING ) : 1;
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json(
+				array(
+					'status'  => 0,
+					'message' => __( 'You do not have permission to perform this action.', 'visualizer' ),
+				)
+			);
+		}
+		$step = ! empty( $_POST['step'] ) ? sanitize_text_field( wp_unslash( $_POST['step'] ) ) : 1;
 		switch ( $step ) {
 			case 'step_2':
 				$this->setup_wizard_import_chart();
@@ -193,7 +202,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	 */
 	private function setup_wizard_import_chart() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$chart_type   = ! empty( $_POST['chart_type'] ) ? filter_input( INPUT_POST, 'chart_type', FILTER_SANITIZE_STRING ) : '';
+		$chart_type   = ! empty( $_POST['chart_type'] ) ? sanitize_text_field( wp_unslash( $_POST['chart_type'] ) ) : '';
 		$chart_status = Visualizer_Module_Admin::checkChartStatus( $chart_type );
 		if ( ! $chart_status ) {
 			wp_send_json(
@@ -386,7 +395,8 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 			);
 			$this->update_wizard_data( $wizard_data, false );
 			$response = array(
-				'success' => 1,
+				'success'  => 1,
+				'chart_id' => $chart_id,
 			);
 		}
 		wp_send_json( $response );
@@ -416,7 +426,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	private function setup_wizard_create_draft_page( $return_page_id = false ) {
 		$add_basic_shortcode = ! empty( $_POST['add_basic_shortcode'] ) ? sanitize_text_field( wp_unslash( $_POST['add_basic_shortcode'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$add_basic_shortcode = 'true' === $add_basic_shortcode ? true : false;
-		$basic_shortcode     = ! empty( $_POST['basic_shortcode'] ) ? filter_input( INPUT_POST, 'basic_shortcode', FILTER_SANITIZE_STRING ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$basic_shortcode     = ! empty( $_POST['basic_shortcode'] ) ? sanitize_text_field( wp_unslash( $_POST['basic_shortcode'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $add_basic_shortcode ) {
 			wp_send_json(
@@ -472,16 +482,30 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	}
 
 	/**
+	 * Allowed plugin slugs for the setup wizard installer.
+	 */
+	const ALLOWED_PLUGIN_SLUGS = array( 'optimole-wp', 'otter-blocks', 'wp-cloudflare-page-cache' );
+
+	/**
 	 * Step: 3 Install plugin.
 	 */
 	private function setup_wizard_install_plugin() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$slug = ! empty( $_POST['slug'] ) ? filter_input( INPUT_POST, 'slug', FILTER_SANITIZE_STRING ) : '';
+		$slug = ! empty( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
 		if ( empty( $slug ) ) {
 			wp_send_json(
 				array(
 					'status'  => 0,
 					'message' => __( 'No plugin specified.', 'visualizer' ),
+				)
+			);
+		}
+
+		if ( ! in_array( $slug, self::ALLOWED_PLUGIN_SLUGS, true ) ) {
+			wp_send_json(
+				array(
+					'status'  => 0,
+					'message' => __( 'Plugin not allowed.', 'visualizer' ),
 				)
 			);
 		}
@@ -496,8 +520,10 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 		}
 
 		if ( ! empty( $slug ) ) {
+			$wizard_data = get_option( self::OPTION_NAME, array() );
 			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 			include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 			$api = plugins_api(
 				'plugin_information',
@@ -513,7 +539,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 				wp_send_json(
 					array(
 						'status'  => 0,
-						'message' => $api->get_error_message(),
+						'message' => esc_html( $api->get_error_message() ),
 					)
 				);
 			}
@@ -525,7 +551,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 				wp_send_json(
 					array(
 						'status'  => 0,
-						'message' => $api->get_error_message(),
+						'message' => esc_html( $result->get_error_message() ),
 					)
 				);
 			} elseif ( is_wp_error( $skin->result ) ) {
@@ -533,7 +559,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 					wp_send_json(
 						array(
 							'status'  => 0,
-							'message' => $skin->result->get_error_message(),
+							'message' => esc_html( $skin->result->get_error_message() ),
 						)
 					);
 				}
@@ -542,7 +568,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 					wp_send_json(
 						array(
 							'status'  => 0,
-							'message' => $skin->get_error_message(),
+							'message' => esc_html( $skin->get_error_message() ),
 						)
 					);
 				}
@@ -559,11 +585,33 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 				wp_send_json( $status );
 			}
 
-			activate_plugin( 'optimole-wp/optimole-wp.php' );
-			delete_transient( 'optml_fresh_install' );
-			// Update wizard data.
-			$wizard_data['enable_perfomance'] = true;
-			$this->update_wizard_data( $wizard_data );
+			$installed_plugins = get_plugins( '/' . sanitize_key( wp_unslash( $slug ) ) );
+			if ( ! empty( $installed_plugins ) ) {
+				$plugin_files = array_keys( $installed_plugins );
+				$plugin_file  = sanitize_key( wp_unslash( $slug ) ) . '/' . $plugin_files[0];
+				activate_plugin( $plugin_file );
+			}
+			$wizard_data_updated = false;
+			if ( 'optimole-wp' === $slug ) {
+				delete_transient( 'optml_fresh_install' );
+				// Update wizard data.
+				$wizard_data['enable_perfomance'] = true;
+				$wizard_data_updated              = true;
+			}
+			if ( 'otter-blocks' === $slug ) {
+				// Update wizard data.
+				$wizard_data['enable_otter_blocks'] = true;
+				$wizard_data_updated                = true;
+				update_option( 'themeisle_blocks_settings_onboarding', false );
+			}
+			if ( 'wp-cloudflare-page-cache' === $slug ) {
+				// Update wizard data.
+				$wizard_data['enable_page_cache'] = true;
+				$wizard_data_updated              = true;
+			}
+			if ( $wizard_data_updated ) {
+				$this->update_wizard_data( $wizard_data );
+			}
 
 			wp_send_json(
 				array(
