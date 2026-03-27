@@ -29,6 +29,8 @@ jQuery(function ($) {
 		postData.step ??= 'step_subscribe';
 
 		// Subscribe the user using the email if provided. Redirect to the draft page.
+		var $currentStep = $('#step-3');
+
 		$.post(visualizerSetupWizardData.ajax.url, postData, function (res) {
 
 			// Toggle the redirect popup.
@@ -42,75 +44,142 @@ jQuery(function ($) {
 			} else {
 				$('.redirect-popup').hide();
 			}
-			currentStep.find('.spinner').removeClass('is-active');
+			$currentStep.find('.spinner').removeClass('is-active');
 		}).fail(function () {
 			$('.redirect-popup').hide();
-			currentStep.find('.spinner').removeClass('is-active');
+			$currentStep.find('.spinner').removeClass('is-active');
 		});
 	}
 
-	var provideContent = function(id, stepDirection, stepPosition, selStep, callback) {
-		// Import chart data.
-		if ( 1 == id ) {
-			var chartType = $(".vz-radio-btn:checked").val();
-			var percentBarWidth = 0;
-			var loaderDelay;
-			$.ajax( {
-				beforeSend: function() {
-					loaderDelay = setInterval(function () {
-						$('.vz-progress-bar').css({
-							width: percentBarWidth++ + '%'
-						});
-					}, 1000);
-				},
-				type: 'POST',
-				url: visualizerSetupWizardData.ajax.url,
-				dataType: 'json',
-				data: {
-					action: 'visualizer_wizard_step_process',
-					security: visualizerSetupWizardData.ajax.security,
-					chart_type: chartType,
-					step: 'step_2',
-				},
-				success: function (data) {
-					clearInterval( loaderDelay );
-					loaderDelay = setInterval(function () {
-						$('.vz-progress-bar').css({
-							width: percentBarWidth++ + '%'
-						});
-						if ( percentBarWidth >= 100 ) {
-							if ( 1 === data.success ) {
-								var importMessage = jQuery('[data-import_message]');
-								importMessage
-								.html( importMessage.data('import_message') )
-								.addClass('import_message');
+	var runImport = function () {
+		var chartType = $(".vz-radio-btn:checked").val();
+		var percentBarWidth = 0;
+		var loaderDelay;
+		var $step = $('#step-1');
+		var $status = $step.find('.vz-import-status');
+		var $progress = $status.find('.vz-progress-bar');
+		var $message = $status.find('[data-import_message]');
+		var $error = $status.find('.vz-error-notice');
+		var $spinner = $step.find('.spinner');
+		var $button = $step.find('[data-step_number="1"]');
 
-								$('#step-2').find('button.disabled').removeClass('disabled');
-							} else if( 2 === data.status && '' !== data.message ) {
-								$('#step-2')
-								.find('.vz-error-notice')
-								.html( '<p>' + data.message + '</p>' )
-								.removeClass('hidden');
-							} else {
-								$('#smartwizard').smartWizard('reset');
-							}
-							$('.vz-progress-bar').css({
-								width: 100 + '%'
-							});
-							$('.vz-progress').css({
-								visibility: 'hidden'
-							});
-							clearInterval( loaderDelay );
-						}
-					}, 36 );
-				},
-				error: function() {
-					$('#step-2').find('.vz-progress-bar').animate({ width: '0' });
-				}
-			} );
+		$status.show();
+		$progress.css({ width: '0' });
+		if ($message.length) {
+			$message
+				.text($message.data('import_initial'))
+				.removeClass('import_message');
 		}
-		callback();
-	}
+		$error.addClass('hidden').empty();
+		$spinner.addClass('is-active');
+		$button.addClass('disabled');
+
+		loaderDelay = setInterval(function () {
+			percentBarWidth = Math.min(percentBarWidth + 4, 90);
+			$progress.css({ width: percentBarWidth + '%' });
+		}, 120);
+
+		$.ajax({
+			type: 'POST',
+			url: visualizerSetupWizardData.ajax.url,
+			dataType: 'json',
+			data: {
+				action: 'visualizer_wizard_step_process',
+				security: visualizerSetupWizardData.ajax.security,
+				chart_type: chartType,
+				step: 'step_2',
+			},
+			success: function (data) {
+				clearInterval(loaderDelay);
+				$progress.css({ width: '100%' });
+
+				if (1 === data.success) {
+					if (data.chart_id) {
+						var $shortcode = $('#basic_shortcode');
+						if ($shortcode.length) {
+							$shortcode.val(
+								$shortcode.val().replace('{{chart_id}}', data.chart_id)
+							);
+						}
+					}
+					if ($message.length) {
+						$message
+							.text($message.data('import_message'))
+							.addClass('import_message');
+					}
+
+					setTimeout(function () {
+						$spinner.removeClass('is-active');
+						$('#smartwizard').smartWizard('next');
+					}, 200);
+				} else if (2 === data.status && '' !== data.message) {
+					$error.html('<p>' + data.message + '</p>').removeClass('hidden');
+					$spinner.removeClass('is-active');
+					$button.removeClass('disabled');
+				} else {
+					$spinner.removeClass('is-active');
+					$button.removeClass('disabled');
+					$('#smartwizard').smartWizard('reset');
+				}
+			},
+			error: function () {
+				clearInterval(loaderDelay);
+				$progress.css({ width: '0' });
+				$spinner.removeClass('is-active');
+				$button.removeClass('disabled');
+			}
+		});
+	};
+
+	var collectInstallSlugs = function () {
+		var slugs = [];
+		var $optimole = $('#enable_performance');
+		if ($optimole.length && $optimole.is(':checked') && !$optimole.is(':disabled')) {
+			slugs.push('optimole-wp');
+		}
+		if ($('#enable_otter_blocks').is(':checked') && !$('#enable_otter_blocks').is(':disabled')) {
+			slugs.push('otter-blocks');
+		}
+		if ($('#enable_page_cache').is(':checked') && !$('#enable_page_cache').is(':disabled')) {
+			slugs.push('wp-cloudflare-page-cache');
+		}
+		return slugs;
+	};
+
+	var setInstallStatus = function (slug, statusClass) {
+		var $status = $('[data-install-status="' + slug + '"]');
+		$status.removeClass('is-installing is-done is-error').addClass(statusClass);
+	};
+
+	var installPluginsSequentially = function (slugs, onDone) {
+		if (!slugs.length) {
+			onDone(true);
+			return;
+		}
+		var slug = slugs.shift();
+		setInstallStatus(slug, 'is-installing');
+		$.post(
+			visualizerSetupWizardData.ajax.url,
+			{
+				action: 'visualizer_wizard_step_process',
+				security: visualizerSetupWizardData.ajax.security,
+				slug: slug,
+				step: 'step_4',
+			},
+			function (response) {
+				if (1 === response.status) {
+					setInstallStatus(slug, 'is-done');
+					installPluginsSequentially(slugs, onDone);
+				} else {
+					setInstallStatus(slug, 'is-error');
+					onDone(false, response.message);
+				}
+			}
+		).fail(function () {
+			setInstallStatus(slug, 'is-error');
+			onDone(false, '');
+		});
+	};
 	$("#smartwizard").smartWizard({
 		transition: {
 			animation: "fade", // Animation effect on navigation, none|fade|slideHorizontal|slideVertical|slideSwing|css(Animation CSS class also need to specify)
@@ -133,8 +202,7 @@ jQuery(function ($) {
 			btnCss: "",
 			btnNextCss: "btn-primary next-btn",
 			btnPrevCss: "btn-light",
-		},
-		getContent: provideContent
+		}
 	});
 
 	// click to open accordion.
@@ -168,46 +236,18 @@ jQuery(function ($) {
 			switch (stepNumber) {
 				case 1:
 					if ($(".vz-radio-btn").is(":checked")) {
-						$('#smartwizard').smartWizard('next');
+						runImport();
 					}
 					break;
-				case 3:
+				case 2:
 					if ( isLivePreview ) {
 						$('#smartwizard').smartWizard('next');
 					} else {
 						var urlParams = new URLSearchParams(window.location.search);
 						urlParams.set('preview_chart', Date.now());
-						window.location.hash = "#step-3";
+						window.location.hash = "#step-2";
 						window.location.search = urlParams;
 					} 
-					break;
-				case 4:
-					$('#step-4').find('.spinner').addClass('is-active');
-					$('#step-4').find('.vz-error-notice').addClass('hidden');
-
-					$.post(
-						visualizerSetupWizardData.ajax.url,
-						{
-							action: 'visualizer_wizard_step_process',
-							security: visualizerSetupWizardData.ajax.security,
-							slug: 'optimole-wp',
-							step: 'step_4',
-						},
-						function (response) {
-							if (1 === response.status) {
-								$('#smartwizard').smartWizard('next');
-							} else if ( 'undefined' !== typeof response.message ) {
-								$('#step-4')
-								.find('.vz-error-notice')
-								.html("<p>" + response.message + "</p>");
-								$('#step-4').find('.vz-error-notice').removeClass('hidden');
-							}
-							$('#step-4').find('.spinner').removeClass('is-active');
-						}
-					).fail(function () {
-						$('#step-4').find('.spinner').removeClass('is-active');
-					});
-					e.preventDefault();
 					break;
 				default:
 					e.preventDefault();
@@ -246,16 +286,6 @@ jQuery(function ($) {
 	});
 
 	// Enable performance feature.
-	$("#step-4").on("change", "input:checkbox", function () {
-		if ($(this).is(":checked")) {
-			$(".skip-improvement").hide();
-			$(".vz-wizard-install-plugin").show();
-		} else {
-			$(".skip-improvement").show();
-			$(".vz-wizard-install-plugin").hide();
-		}
-	});
-
 	// Step: 4 Skip and subscribe process.
 	$(document).on( 'click', '.vz-subscribe', function (e) {
 		var withSubscribe = $(this).data("vz_subscribe");
@@ -267,8 +297,9 @@ jQuery(function ($) {
 		var emailElement = $("#vz_subscribe_email");
 		// Remove error message.
 		emailElement.next(".vz-field-error").remove();
+		var newsletterEnabled = $("#enable_newsletter").is(":checked");
 
-		if (withSubscribe) {
+		if (withSubscribe && newsletterEnabled) {
 			var subscribeEmail = emailElement.val();
 			var EmailTest = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
 			var errorMessage = "";
@@ -285,12 +316,47 @@ jQuery(function ($) {
 
 			postData.email = subscribeEmail;
 			postData.with_subscribe = withSubscribe;
+		} else {
+			postData.with_subscribe = false;
 		}
-		var currentStep = $( '.vz-wizard-wrap .tab-pane:last-child' );
-		currentStep.find(".spinner").addClass("is-active");
+		var $step = $('#step-3');
+		$step.find(".spinner").addClass("is-active");
+		var $error = $step.find('.vz-error-notice').first();
+		$error.addClass('hidden').empty();
 
-		goToDraftPage( postData );
+		var slugs = collectInstallSlugs();
+		installPluginsSequentially(slugs.slice(), function (ok, message) {
+			if (!ok) {
+				if (message) {
+					$error.html('<p>' + message + '</p>').removeClass('hidden');
+				}
+				$step.find(".spinner").removeClass("is-active");
+				return;
+			}
+			goToDraftPage(postData);
+		});
 		e.preventDefault();
+	});
+
+	$(document).on('click', '.vz-change-email', function () {
+		var $card = $(this).closest('.vz-option-card--newsletter');
+		var $inputWrap = $card.find('.vz-option-input');
+		$inputWrap.show();
+		$card.find('#vz_subscribe_email').focus();
+	});
+
+	var finalizeNewsletterEmail = function ($card) {
+		var $input = $card.find('#vz_subscribe_email');
+		var $text = $card.find('.vz-email-text');
+		var email = $input.val();
+		if (email) {
+			$text.text(email);
+		}
+		$card.find('.vz-option-input').hide();
+	};
+
+	$(document).on('click', '.vz-save-email', function () {
+		finalizeNewsletterEmail($(this).closest('.vz-option-card--newsletter'));
 	});
 
 	// Click to copy.
@@ -318,29 +384,6 @@ jQuery(function ($) {
 			);
 		}
 	});
-
-	$('.vz-chart-list > ul').slick({
-		dots: false,
-		infinite: false,
-		speed: 400,
-		slidesToShow: 1,
-		centerMode: false,
-		variableWidth: true
-	})
-	.on( 'afterChange', function(event, slick, currentSlide) {
-		// Disable next buttion.
-		if( currentSlide === 4 ) {
-			$('.slick-next').attr('disabled', true).css('pointer-events', 'none');
-		} else {
-			$('.slick-next').removeAttr('disabled').css('pointer-events', 'all');
-		}
-		// Disable prev buttion.
-		if( currentSlide === 0 ) {
-			$('.slick-prev').attr('disabled', true).css('pointer-events', 'none');
-		} else {
-			$('.slick-prev').removeAttr('disabled').css('pointer-events', 'all');
-		}
-	} );
 
 	$(window).bind('pageshow', function() {
 		if ( jQuery('.vz-chart-option input').is(':checked') ) {
