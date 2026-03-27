@@ -54,10 +54,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<button type="button" class="viz-add-new-item" data-viz-builder="ai">', esc_html__( 'AI Chart Builder', 'visualizer' ), '</button>';
 		echo '<button type="button" class="viz-add-new-item" data-viz-builder="classic">', esc_html__( 'Classic Builder', 'visualizer' ), '</button>';
 		echo '</div>';
-		echo '</div>';
 		if ( Visualizer_Module::is_pro() ) {
-			echo ' <a href="' . admin_url( 'options-general.php#visualizer_pro_license' ) . '" class="page-title-action" style="top:0;">', esc_html__( 'License Settings', 'visualizer' ), '</a>';
+			echo ' <a href="' . admin_url( 'options-general.php#visualizer_pro_license' ) . '" class="page-title-action">', esc_html__( 'License Settings', 'visualizer' ), '</a>';
 		}
+		echo '</div>';
 		echo '</h2>';
 		$this->_renderMessages();
 		$this->_renderLibrary();
@@ -443,6 +443,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			)
 		);
 		$chart_type = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		$chart_type_label = $chart_type;
+		if ( empty( $chart_type_label ) && 'd3' === strtolower( (string) $chart_library ) ) {
+			$chart_type_label = __( 'AI', 'visualizer' );
+		}
 
 		$types = array( 'area', 'geo', 'column', 'bubble', 'scatter', 'gauge', 'candlestick', 'timeline', 'combo', 'polarArea', 'radar' );
 
@@ -464,14 +468,14 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<tr class="viz-list-row">';
 			echo '<td class="col-id">#' . esc_html( (string) $chart_id ) . '</td>';
 			echo '<td class="col-title">' . esc_html( $title ) . '</td>';
-			echo '<td class="col-type">' . ( ! empty( $chart_type ) ? '<span class="viz-chart-type-badge">' . esc_html( $chart_type ) . '</span>' : '&mdash;' ) . '</td>';
+			echo '<td class="col-type">' . ( ! empty( $chart_type_label ) ? '<span class="viz-chart-type-badge">' . esc_html( $chart_type_label ) . '</span>' : '&mdash;' ) . '</td>';
 			echo '<td class="col-shortcode"><code class="viz-shortcode-display">' . esc_html( $shortcode ) . '</code></td>';
 			echo '<td class="col-actions"><div class="visualizer-action-group">';
 			echo '<a class="visualizer-chart-action visualizer-chart-delete" href="' . $delete_url . '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_html__( 'Delete', 'visualizer' ) . '</span></a>';
 			echo '<a class="visualizer-chart-action visualizer-chart-shortcode ' . esc_attr( $pro_class ) . '" href="javascript:;" data-clipboard-text="' . esc_attr( $shortcode ) . '"><span class="dashicons dashicons-shortcode ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
 			echo '<a class="visualizer-chart-action visualizer-chart-export ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . $export_link . '"><span class="dashicons dashicons-download ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Export CSV', 'visualizer' ) . '</span></a>';
 			echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="' . $clone_url . '"><span class="dashicons dashicons-admin-page ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Duplicate', 'visualizer' ) . '</span></a>';
-			echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . esc_attr( (string) $chart_id ) . '" data-library="' . esc_attr( $chart_library ) . '"><span class="dashicons dashicons-edit ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
+			echo '<a class="visualizer-chart-action visualizer-chart-edit button button-secondary ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="' . esc_attr( (string) $chart_id ) . '" data-library="' . esc_attr( $chart_library ) . '"><span class="dashicons dashicons-edit ' . esc_attr( $pro_class ) . '"></span><span class="visualizer-action-label">' . esc_html__( 'Edit', 'visualizer' ) . '</span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
 			echo '</div></td>';
 			echo '</tr>';
 			return;
@@ -492,14 +496,14 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		}
 		echo '<div class="visualizer-chart-footer visualizer-clearfix">';
 		echo '<div class="visualizer-action-group">';
-		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_html__( 'Delete', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-edit button button-secondary ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $chart_id, '" data-library="' . esc_attr( $chart_library ) . '"><span class="dashicons dashicons-edit ' . esc_attr( $pro_class ) . '"></span><span class="visualizer-action-label">' . esc_html__( 'Edit', 'visualizer' ) . '</span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-shortcode ' . esc_attr( $pro_class ) . '" href="javascript:;" data-clipboard-text="', esc_attr( $shortcode ), '"><span class="dashicons dashicons-shortcode ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Copy Shortcode', 'visualizer' ) . '</span></a>';
 		if ( $this->can_chart_have_action( 'image', $chart_id ) ) {
 			echo '<a class="visualizer-chart-action visualizer-chart-image ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="visualizer-', $chart_id, '" data-chart-title="', $title, '"><span class="dashicons dashicons-format-image ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Download PNG', 'visualizer' ) . '</span></a>';
 		}
 		echo '<a class="visualizer-chart-action visualizer-chart-export ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $export_link, '"><span class="dashicons dashicons-download ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Export CSV', 'visualizer' ) . '</span></a>';
 		echo '<a class="visualizer-chart-action visualizer-chart-clone ' . esc_attr( $pro_class ) . '" href="', $clone_url, '"><span class="dashicons dashicons-admin-page ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Duplicate', 'visualizer' ) . '</span></a>';
-		echo '<a class="visualizer-chart-action visualizer-chart-edit ' . esc_attr( $pro_class ) . '" href="javascript:;" data-chart="', $chart_id, '" data-library="' . esc_attr( $chart_library ) . '"><span class="dashicons dashicons-edit ' . esc_attr( $pro_class ) . '"></span><span class="tooltip-text">' . esc_html__( 'Edit', 'visualizer' ) . '</span></a>';
+		echo '<a class="visualizer-chart-action visualizer-chart-delete" href="', $delete_url, '" onclick="return showNotice.warn();"><span class="dashicons dashicons-trash"></span><span class="tooltip-text">' . esc_html__( 'Delete', 'visualizer' ) . '</span></a>';
 		echo '</div>';
 		do_action( 'visualizer_chart_languages', $chart_id );
 		echo '<hr><div class="visualizer-chart-status"><span title="' . __( 'Chart ID', 'visualizer' ) . '">(' . $chart_id . '):</span> <span class="visualizer-date" title="' . __( 'Last Updated', 'visualizer' ) . '">' . $chart_status['date'] . '</span><span class="visualizer-error"><i class="dashicons ' . $chart_status['icon'] . '" data-viz-error="' . esc_attr( str_replace( '"', "'", $chart_status['error'] ) ) . '" title="' . esc_attr( $chart_status['title'] ) . '"></i></span></div>';
