@@ -252,10 +252,21 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		// fire any upgrades necessary.
 		Visualizer_Module_Upgrade::upgrade();
 
-		if ( get_option( 'visualizer-activated' ) ) {
+		$activated_flag   = get_option( 'visualizer-activated' );
+		$fresh_install    = get_option( 'visualizer_fresh_install', false );
+		$is_pro           = Visualizer_Module::is_pro();
+		if ( $activated_flag ) {
+			if ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) {
+				// Defer redirect until a normal admin request.
+				return;
+			}
+			if ( wp_doing_cron() ) {
+				// Defer redirect during cron requests.
+				return;
+			}
 			delete_option( 'visualizer-activated' );
 			if ( ! headers_sent() ) {
-				if ( ! Visualizer_Module::is_pro() && ! empty( get_option( 'visualizer_fresh_install', false ) ) ) {
+				if ( ! $is_pro && ! empty( $fresh_install ) ) {
 					$redirect_url = array(
 						'page' => 'visualizer-setup-wizard',
 						'tab'  => '#step-1',
