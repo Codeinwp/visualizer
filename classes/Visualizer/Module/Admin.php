@@ -349,6 +349,22 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( post_type_supports( $typenow, 'editor' ) || $current_screen->id === 'widgets' || $current_screen->id === 'customize' ) {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
 
+			$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+			if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+				// @phpstan-ignore-next-line
+				$d3_asset = include $d3_renderer_asset;
+				wp_register_script(
+					'visualizer-d3-renderer',
+					VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+					array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+					$d3_asset['version'],
+					true
+				);
+			}
+			if ( wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+				wp_enqueue_script( 'visualizer-d3-renderer' );
+			}
+
 			// Load all the assets for the different libraries we support.
 			$deps   = array(
 				Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) ),

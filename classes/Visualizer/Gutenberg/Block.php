@@ -124,6 +124,22 @@ class Visualizer_Gutenberg_Block {
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
+		$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+		if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+			// @phpstan-ignore-next-line
+			$d3_asset = include $d3_renderer_asset;
+			wp_register_script(
+				'visualizer-d3-renderer',
+				VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+				array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+				$d3_asset['version'],
+				true
+			);
+		}
+		if ( wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+			wp_enqueue_script( 'visualizer-d3-renderer' );
+		}
+
 		// Enqueue frontend and editor block styles
 		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $asset['version'] );
 	}
@@ -216,6 +232,9 @@ class Visualizer_Gutenberg_Block {
 
 		$library = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		$data['visualizer-chart-library'] = $library;
+		if ( 'd3' === $library ) {
+			$data['visualizer-d3-code'] = get_post_meta( $post_id, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+		}
 
 		$data['visualizer-source'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SOURCE, true );
 

@@ -55,11 +55,26 @@
 			chart.data = model.get('data');
 			chart.library = model.get('library');
 			chart.settings = model.get('settings');
+			chart.code = model.get('code');
 			chart.settings.width = self.options.width;
 			chart.settings.height = self.options.height;
             $('#' + self.id).parent().append(model.get('css'));
 
-            $('body').trigger('visualizer:render:specificchart:start', {id: self.id, chart: chart, v: {page_type: 'post'}} );
+			if ( chart.library && 'd3' === chart.library ) {
+				$('body').trigger('visualizer:render:chart:start', {
+					id: self.id,
+					charts: {
+						[self.id]: {
+							library: 'd3',
+							code: chart.code,
+							series: chart.series,
+							data: chart.data
+						}
+					}
+				});
+			} else {
+				$('body').trigger('visualizer:render:specificchart:start', {id: self.id, chart: chart, v: {page_type: 'post'}} );
+			}
 		}
 	});
 

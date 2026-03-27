@@ -402,12 +402,18 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$date_formats = Visualizer_Source::get_date_formats_if_exists( $series, $data );
 
+		$code = '';
+		if ( 'd3' === $library ) {
+			$code = get_post_meta( $chart->ID, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+		}
+
 		return array(
 			'type'     => $type,
 			'series'   => $series,
 			'settings' => $settings,
 			'data'     => $data,
 			'library'  => $library,
+			'code'     => $code,
 			'css'       => $css,
 			'date_formats'       => $date_formats,
 		);

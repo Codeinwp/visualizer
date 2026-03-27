@@ -81,14 +81,61 @@ visualizerMediaView.Chart = wp.media.view.MediaFrame.extend(
 );
 
 class ChartSelect extends Component {
+	getD3ContainerId() {
+		return `visualizer-d3-select-${ this.props.id }`;
+	}
+
+	isD3Chart( chart ) {
+		return chart && chart['visualizer-chart-library'] && 'd3' === chart['visualizer-chart-library'].toLowerCase();
+	}
+
+	renderD3Chart() {
+		const chart = this.props.chart;
+		if ( ! this.isD3Chart( chart ) ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof jQuery ) {
+			return;
+		}
+
+		const containerId = this.getD3ContainerId();
+		const data = formatDate( JSON.parse( JSON.stringify( chart ) ) );
+		const code = chart['visualizer-d3-code'] || chart.code || '';
+		const payload = {
+			id: containerId,
+			charts: {
+				[ containerId ]: {
+					library: 'd3',
+					code,
+					series: data['visualizer-series'],
+					data: data['visualizer-data']
+				}
+			}
+		};
+
+		jQuery( 'body' ).trigger( 'visualizer:render:chart:start', payload );
+	}
+
+	componentDidMount() {
+		this.renderD3Chart();
+	}
+
+	componentDidUpdate( prevProps ) {
+		if ( prevProps.chart !== this.props.chart ) {
+			this.renderD3Chart();
+		}
+	}
+
 	render() {
 		let chartVersion = 'undefined' !== typeof google.visualization ? google.visualization.Version : 'current';
 
 		let chart, footer;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
+		const isD3 = this.isD3Chart( data );
 
-		if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+		if ( ! isD3 && 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
 			if ( 'DataTable' === data['visualizer-chart-library']) {
 				chart = data['visualizer-chart-type'];
 			} else {
@@ -98,8 +145,10 @@ class ChartSelect extends Component {
                 }
                 chart = startCase( chart );
 			}
-		} else {
+		} else if ( ! isD3 ) {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
+		} else {
+			chart = 'AI';
 		}
 
         if ( data['visualizer-data-exploded']) {
@@ -147,7 +196,13 @@ class ChartSelect extends Component {
 
 					{ ( null !== this.props.chart ) &&
 
-						( 'DataTable' === data['visualizer-chart-library']) ? (
+						isD3 ? (
+							<div
+								id={ this.getD3ContainerId() }
+								className="visualizer-d3-preview"
+								style={ { height: '500px' } }
+							/>
+						) : ( 'DataTable' === data['visualizer-chart-library']) ? (
 							<DataTable
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
