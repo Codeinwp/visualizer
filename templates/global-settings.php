@@ -66,6 +66,24 @@ $updated = isset( $_GET['updated'] ) ? sanitize_text_field( $_GET['updated'] ) :
 					</td>
 				</tr>
 
+				<tr>
+					<th scope="row">
+						<label for="visualizer-apply-existing"><?php esc_html_e( 'Apply To Existing Charts', 'visualizer' ); ?></label>
+					</th>
+					<td>
+						<label>
+							<input
+								type="checkbox"
+								id="visualizer-apply-existing"
+								name="visualizer_apply_existing"
+								value="1"
+								<?php checked( $settings['apply_existing'], '1' ); ?>
+							/>
+							<?php esc_html_e( 'Apply global colors to existing charts at render time (this will override chart colors on display).', 'visualizer' ); ?>
+						</label>
+					</td>
+				</tr>
+
 			</tbody>
 		</table>
 

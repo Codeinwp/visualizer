@@ -1116,6 +1116,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$defaults = array(
 			'color_primary'   => '',
 			'color_secondary' => '',
+			'apply_existing'  => '0',
 		);
 		$saved = get_option( self::OPTION_GLOBAL_SETTINGS, array() );
 		return wp_parse_args( $saved, $defaults );
@@ -1135,6 +1136,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		$color_primary   = sanitize_hex_color( wp_unslash( $_POST['visualizer_color_primary'] ?? '' ) );
 		$color_secondary = sanitize_hex_color( wp_unslash( $_POST['visualizer_color_secondary'] ?? '' ) );
+		$apply_existing  = ! empty( $_POST['visualizer_apply_existing'] ) ? '1' : '0';
 		$clear           = ! empty( $_POST['visualizer_clear_settings'] );
 
 		if ( $clear ) {
@@ -1143,6 +1145,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$settings = array(
 				'color_primary'   => $color_primary ? $color_primary : '',
 				'color_secondary' => $color_secondary ? $color_secondary : '',
+				'apply_existing'  => $apply_existing,
 			);
 			update_option( self::OPTION_GLOBAL_SETTINGS, $settings );
 		}

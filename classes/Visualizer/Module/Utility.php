@@ -54,6 +54,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
+		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, 'apply_global_style_settings', 999, 3 );
 	}
 
 
@@ -179,8 +180,157 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 			array(
 				'color_primary'   => '',
 				'color_secondary' => '',
+				'apply_existing'  => '0',
 			)
 		);
+	}
+
+	/**
+	 * Applies global styles to existing charts at render time.
+	 *
+	 * @param array<string, mixed>|mixed $settings Chart settings.
+	 * @param int                        $chart_id Chart ID.
+	 * @param string                     $type     Chart type.
+	 * @return array<string, mixed>
+	 * @access public
+	 */
+	public function apply_global_style_settings( $settings, $chart_id, $type ): array {
+		$settings = is_array( $settings ) ? $settings : array();
+		$global   = self::get_global_style_defaults();
+
+		if ( empty( $global['apply_existing'] ) ) {
+			return $settings;
+		}
+
+		if ( empty( $global['color_primary'] ) && empty( $global['color_secondary'] ) ) {
+			return $settings;
+		}
+
+		if ( empty( $chart_id ) ) {
+			return $settings;
+		}
+
+		$library = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		$library = is_string( $library ) ? strtolower( $library ) : '';
+		if ( empty( $type ) ) {
+			$type = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		}
+		$type = is_string( $type ) ? strtolower( $type ) : '';
+
+		if ( empty( $library ) ) {
+			$library = in_array( $type, array( 'datatable', 'tabular' ), true ) ? 'datatable' : 'googlecharts';
+		}
+
+		if ( 'googlecharts' === $library || 'google' === $library ) {
+			if ( 'geo' !== $type ) {
+				$has_explicit = false;
+				if ( ! empty( $settings['colors'] ) ) {
+					$has_explicit = true;
+				}
+				if ( ! $has_explicit && isset( $settings['series'] ) && is_array( $settings['series'] ) ) {
+					foreach ( $settings['series'] as $series_settings ) {
+						if ( ! empty( $series_settings['color'] ) ) {
+							$has_explicit = true;
+							break;
+						}
+					}
+				}
+				if ( ! $has_explicit && isset( $settings['slices'] ) && is_array( $settings['slices'] ) ) {
+					foreach ( $settings['slices'] as $slice_settings ) {
+						if ( ! empty( $slice_settings['color'] ) ) {
+							$has_explicit = true;
+							break;
+						}
+					}
+				}
+				if ( ! $has_explicit ) {
+					$settings['colors'] = self::get_color_palette();
+				}
+			}
+			return $settings;
+		}
+
+		if ( 'chartjs' === $library ) {
+			$has_explicit = false;
+			if ( isset( $settings['series'] ) && is_array( $settings['series'] ) ) {
+				foreach ( $settings['series'] as $series_settings ) {
+					if ( ! empty( $series_settings['backgroundColor'] ) || ! empty( $series_settings['borderColor'] ) || ! empty( $series_settings['hoverBackgroundColor'] ) ) {
+						$has_explicit = true;
+						break;
+					}
+				}
+			}
+			if ( ! $has_explicit && isset( $settings['slices'] ) && is_array( $settings['slices'] ) ) {
+				foreach ( $settings['slices'] as $slice_settings ) {
+					if ( ! empty( $slice_settings['backgroundColor'] ) || ! empty( $slice_settings['borderColor'] ) || ! empty( $slice_settings['hoverBackgroundColor'] ) ) {
+						$has_explicit = true;
+						break;
+					}
+				}
+			}
+			if ( $has_explicit ) {
+				return $settings;
+			}
+			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+			if ( is_array( $series ) ) {
+				$settings = self::apply_chartjs_palette( $settings, $type, $series, $chart_id );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Applies the global palette to ChartJS settings for a chart.
+	 *
+	 * @param array<string, mixed> $settings Current chart settings.
+	 * @param string               $type     Chart type.
+	 * @param array<int, mixed>    $series   Series definitions.
+	 * @param int                  $chart_id Chart ID.
+	 * @return array<string, mixed>
+	 * @access private
+	 * @static
+	 */
+	private static function apply_chartjs_palette( array $settings, string $type, array $series, int $chart_id ): array {
+		$attributes = array();
+		$name   = 'series';
+		$count  = count( $series );
+		$max    = $count - 1;
+
+		switch ( $type ) {
+			case 'polarArea':
+				// fall through.
+			case 'pie':
+				$chart = get_post( $chart_id );
+				$data  = $chart instanceof WP_Post ? maybe_unserialize( $chart->post_content ) : array();
+				$name  = 'slices';
+				$max   = is_array( $data ) ? count( $data ) : $count;
+				// fall through.
+			case 'column':
+				// fall through.
+			case 'bar':
+				for ( $i = 0; $i < $max; $i++ ) {
+					$colors = self::get_color_at( $i );
+					$attributes[] = array( 'backgroundColor' => $colors[0], 'hoverBackgroundColor' => $colors[1] );
+				}
+				break;
+			case 'radar':
+				// fall through.
+			case 'line':
+				// fall through.
+			case 'area':
+				for ( $i = 0; $i < $max; $i++ ) {
+					$colors = self::get_color_at( $i );
+					$attributes[] = array( 'borderColor' => $colors[0] );
+				}
+				break;
+		}
+
+		if ( $attributes ) {
+			$settings[ $name ] = $attributes;
+		}
+
+		return $settings;
 	}
 
 	/**
