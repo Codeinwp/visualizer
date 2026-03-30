@@ -157,6 +157,12 @@ class ChartSelect extends Component {
 
 		const openEditChart = ( chartId ) => {
 			const baseURL = ( window.visualizerLocalize.chartEditUrl ) ? window.visualizerLocalize.chartEditUrl : '';
+			if ( isD3 ) {
+				if ( window.visualizerLocalize && window.visualizerLocalize.adminPage ) {
+					window.open( window.visualizerLocalize.adminPage, '_blank' );
+				}
+				return;
+			}
 			let view = new visualizerMediaView.Chart(
 				{
 					action: `${baseURL}?action=visualizer-edit-chart&library=yes&chart=` + chartId

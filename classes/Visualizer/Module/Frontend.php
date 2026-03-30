@@ -341,10 +341,13 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
-		// in case revisions exist.
-		$revisions = $this->undoRevisions( $chart->ID, true );
-		if ( true === $revisions ) {
-			$chart = get_post( $chart->ID );
+		// in case revisions exist (skip D3 charts to avoid reverting AI data).
+		$chart_library = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		if ( 'd3' !== $chart_library ) {
+			$revisions = $this->undoRevisions( $chart->ID, true );
+			if ( true === $revisions ) {
+				$chart = get_post( $chart->ID );
+			}
 		}
 
 		$id = 'visualizer-' . $atts['id'];
