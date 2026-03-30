@@ -57,7 +57,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	 * @access public
 	 */
 	public function registerAdminMenu() {
-		if ( ! Visualizer_Module::is_pro() && get_option( 'visualizer_fresh_install', false ) ) {
+		// if ( ! Visualizer_Module::is_pro() && get_option( 'visualizer_fresh_install', false ) ) {
 			$hook = add_submenu_page(
 				Visualizer_Plugin::NAME,
 				__( 'Setup Wizard', 'visualizer' ),
@@ -70,7 +70,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 				)
 			);
 			add_action( "load-$hook", array( $this, 'visualizer_load_setup_wizard_page' ) );
-		}
+		// }
 	}
 
 

@@ -16,6 +16,15 @@ jQuery(function ($) {
 	 * @type {boolean}
 	 */
 	const isLivePreview = window.location.search.includes('env=preview');
+	const emailRegex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+
+	var showNewsletterError = function ($input, message) {
+		var $wrap = $input.closest('.vz-option-input');
+		$wrap.next('.vz-field-error').remove();
+		if (message) {
+			$wrap.after('<span class="vz-field-error">' + message + '</span>');
+		}
+	};
 
 	/**
 	 * Redirect to draft page after subscribe (optional).
@@ -304,21 +313,20 @@ jQuery(function ($) {
 		};
 		var emailElement = $("#vz_subscribe_email");
 		// Remove error message.
-		emailElement.next(".vz-field-error").remove();
+		showNewsletterError(emailElement, '');
 		var newsletterEnabled = $("#enable_newsletter").is(":checked");
 
 		if (withSubscribe && newsletterEnabled) {
-			var subscribeEmail = emailElement.val();
-			var EmailTest = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+			var subscribeEmail = emailElement.val().trim();
 			var errorMessage = "";
 
 			if ("" === subscribeEmail) {
 				errorMessage = visualizerSetupWizardData.errorMessages.requiredEmail;
-			} else if (!EmailTest.test(subscribeEmail)) {
+			} else if (!emailRegex.test(subscribeEmail)) {
 				errorMessage = visualizerSetupWizardData.errorMessages.invalidEmail;
 			}
 			if ("" !== errorMessage) {
-				$('<span class="vz-field-error">' + errorMessage + "</span>").insertAfter(emailElement);
+				showNewsletterError(emailElement, errorMessage);
 				return false;
 			}
 
@@ -354,6 +362,7 @@ jQuery(function ($) {
 		var $inputWrap = $card.find('.vz-option-input');
 		$inputWrap.show();
 		$card.find('#vz_subscribe_email').focus();
+		validateNewsletterEmail();
 	});
 
 	var finalizeNewsletterEmail = function ($card) {
@@ -367,7 +376,37 @@ jQuery(function ($) {
 	};
 
 	$(document).on('click', '.vz-save-email', function () {
-		finalizeNewsletterEmail($(this).closest('.vz-option-card--newsletter'));
+		var $card = $(this).closest('.vz-option-card--newsletter');
+		if (!validateNewsletterEmail()) {
+			return;
+		}
+		finalizeNewsletterEmail($card);
+	});
+
+	var validateNewsletterEmail = function () {
+		var $input = $("#vz_subscribe_email");
+		if (!$input.length) {
+			return true;
+		}
+		var $card = $input.closest('.vz-option-card--newsletter');
+		var $saveButton = $card.find('.vz-save-email');
+		var email = $input.val().trim();
+		showNewsletterError($input, '');
+		if (!email) {
+			$saveButton.prop('disabled', false);
+			return true;
+		}
+		if (!emailRegex.test(email)) {
+			showNewsletterError($input, visualizerSetupWizardData.errorMessages.invalidEmail);
+			$saveButton.prop('disabled', true);
+			return false;
+		}
+		$saveButton.prop('disabled', false);
+		return true;
+	};
+
+	$(document).on('input blur', '#vz_subscribe_email', function () {
+		validateNewsletterEmail();
 	});
 
 	// Click to copy.
@@ -380,6 +419,9 @@ jQuery(function ($) {
 	$("#step-1").on("change", "input:radio", function () {
 		$("#step-1").find('[data-step_number="1"]').removeClass("disabled");
 	});
+	if ( $('#step-1 .vz-radio-btn:checked').length ) {
+		$('#step-1').find('[data-step_number="1"]').removeClass('disabled');
+	}
 
 	// Change button text.
 	$(document).on("change", "#insert_shortcode", function () {

@@ -1069,6 +1069,14 @@ display: none;
 	align-items: center;
 	gap: 8px;
 }
+.vz-option-card--newsletter .vz-save-email[disabled]{
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+.vz-option-card--newsletter .vz-field-error{
+	display: block;
+	margin-top: 6px;
+}
 .vz-option-card--newsletter .vz-change-email{
 	background: transparent;
 	border: 0;

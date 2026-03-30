@@ -15,6 +15,7 @@ $dashboard_url = add_query_arg(
 );
 
 $chart_id           = ! empty( $this->wizard_data['chart_id'] ) ? (int) $this->wizard_data['chart_id'] : '';
+$chart_type_default = ! empty( $this->wizard_data['chart_type'] ) ? $this->wizard_data['chart_type'] : 'pie';
 $wp_optimole_active = is_plugin_active( 'optimole-wp/optimole-wp.php' );
 $wp_otter_active    = is_plugin_active( 'otter-blocks/otter-blocks.php' );
 $wp_spc_active      = is_plugin_active( 'wp-cloudflare-page-cache/wp-cloudflare-super-page-cache.php' );
@@ -80,7 +81,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 											<ul>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-1">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-1" name="visualizer[wizard_data][chart_type]" value="pie">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-1" name="visualizer[wizard_data][chart_type]" value="pie" <?php echo checked( $chart_type_default, 'pie', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Pie/Donut chart', 'visualizer' ); ?></h3>
 														<div class="img type-box-pie"></div>
 														<div class="bg"></div>
@@ -88,7 +89,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 												</li>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-2">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-2" name="visualizer[wizard_data][chart_type]" value="bar">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-2" name="visualizer[wizard_data][chart_type]" value="bar" <?php echo checked( $chart_type_default, 'bar', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Bar chart', 'visualizer' ); ?></h3>
 														<div class="img type-box-bar"></div>
 														<div class="bg"></div>
@@ -96,7 +97,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 												</li>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-3">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-3" name="visualizer[wizard_data][chart_type]" value="line">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-3" name="visualizer[wizard_data][chart_type]" value="line" <?php echo checked( $chart_type_default, 'line', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Line chart', 'visualizer' ); ?></h3>
 														<div class="img type-box-line"></div>
 														<div class="bg"></div>
@@ -104,7 +105,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 												</li>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-4">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-4" name="visualizer[wizard_data][chart_type]" value="tabular">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-4" name="visualizer[wizard_data][chart_type]" value="tabular" <?php echo checked( $chart_type_default, 'tabular', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Table', 'visualizer' ); ?></h3>
 														<div class="img type-box-tabular"></div>
 														<div class="bg"></div>
