@@ -109,16 +109,17 @@ export default function DataSource( { chartId, uploadNonce, onDataReady, dataLoa
 	const [ loading, setLoading ] = useState( false );
 	const [ error,   setError   ] = useState( null );
 
-	// Manual
-	const [ csvText, setCsvText ] = useState( '' );
-	const [ sheetRows, setSheetRows ] = useState( [] );
+	// Manual — pre-load sample data for new charts (no initialCsvText means no existing data).
+	const [ csvText, setCsvText ] = useState( initialCsvText ? '' : SAMPLE_CSV );
+	const [ sheetRows, setSheetRows ] = useState( initialCsvText ? [] : csvToGrid( SAMPLE_CSV ) );
 	const sheetEditRef = useRef( false );
 	const sheetHotRef = useRef( null );
 
 	// File
 	const [ file, setFile ] = useState( null );
 	const fileInputRef = useRef( null );
-	const skipUploadRef = useRef( false );
+	// Skip the initial auto-upload when pre-loading sample data for a new chart.
+	const skipUploadRef = useRef( ! initialCsvText );
 
 	// URL
 	const [ fileUrl, setFileUrl ] = useState( '' );
