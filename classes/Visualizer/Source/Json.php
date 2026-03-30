@@ -341,7 +341,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		$leaf   = $data;
 		foreach ( $root as $tag ) {
 			if ( array_key_exists( $tag, $leaf ) ) {
-				$leaf = $data[ $tag ];
+				$leaf = $leaf[ $tag ];
 			} else {
 				// if the tag does not exist, we assume it is present in the 0th element of the current array.
 				// TODO: we may want to change this to a filter later.
