@@ -888,7 +888,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source'  => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
+					'invalid_source'  => esc_html__( 'The URL you entered is invalid. Please enter a valid URL.', 'visualizer' ),
 					'loading'         => esc_html__( 'Loading...', 'visualizer' ),
 					'json_error'      => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
 					'select_columns'  => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
@@ -1318,8 +1318,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
 		} else {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'CSV file with chart data was not uploaded for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
-			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' );
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' ) );
+			$render->message = esc_html__( 'No CSV file was received. Select a file and try uploading again.', 'visualizer' );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, esc_html__( 'No CSV file was received. Select a file and try uploading again.', 'visualizer' ) );
 		}
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploaded data for chart %d with source %s', $chart_id, print_r( $source, true ) ), 'debug', __FILE__, __LINE__ );
@@ -1369,7 +1369,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			} else {
 				$error = $source->get_error();
 				if ( empty( $error ) ) {
-					$error = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
+					$error = esc_html__( 'The CSV file couldn\'t be read. Check that it\'s properly formatted and try again.', 'visualizer' );
 				}
 				$render->message = $error;
 				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( '%s for chart %d.', $error, $chart_id ), 'error', __FILE__, __LINE__ );
@@ -1499,7 +1499,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
+					'invalid_source' => esc_html__( 'The URL you entered is invalid. Please enter a valid URL.', 'visualizer' ),
 					'loading'        => esc_html__( 'Loading...', 'visualizer' ),
 					'invalid_format' => esc_html__( 'This format pattern is not supported in the series settings field. To display percentages, use the Manual Configuration option instead.', 'visualizer' ),
 				),

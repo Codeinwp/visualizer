@@ -399,7 +399,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'visualizer',
 				array(
 					'i10n' => array(
-						'insert'    => __( 'Insert', 'visualizer' ),
+						'insert'    => __( 'Insert Chart', 'visualizer' ),
 					),
 				)
 			);
@@ -430,7 +430,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'title' => esc_html__( 'Visualizations', 'visualizer' ),
 			),
 			'routers'    => array(
-				'library' => esc_html__( 'From Library', 'visualizer' ),
+				'library' => esc_html__( 'Insert from Library', 'visualizer' ),
 				'create'  => esc_html__( 'Create New', 'visualizer' ),
 			),
 			'library'    => array(

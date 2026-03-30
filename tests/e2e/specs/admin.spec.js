@@ -17,7 +17,7 @@ test.describe( 'Chart Library', () => {
     } );
 
     test( 'check Add New button', async ( { page} ) => {
-        await expect(page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Visualizer Library Add New Chart' }).getByRole('link')).toBeVisible();
     } );
 
     test( 'check filters options', async ( { page } ) => {
@@ -233,7 +233,7 @@ test.describe( 'Support', () => {
 
     test('check Chart selection', async ( { page, admin } ) => {
         await admin.visitAdminPage( 'admin.php?page=visualizer' );
-        await page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link').click();
+        await page.getByRole('heading', { name: 'Visualizer Library Add New Chart' }).getByRole('link').click();
         await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
         await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
         await expect(page.frameLocator('iframe').getByText('Select Library for charts')).toBeVisible();
