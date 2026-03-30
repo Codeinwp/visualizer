@@ -161,15 +161,29 @@
 	height: 16px;
 	font-size: 16px;
 }
+.visualizer-chart-action .visualizer-action-label {
+	font-size: 12px;
+	line-height: 1;
+}
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action:hover,
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action:focus {
 	color: #3F3F3F;
 	background: #ffffff;
 }
 
-.visualizer-chart-action.visualizer-chart-delete,
-.visualizer-chart-action.visualizer-nochart-delete {
+.visualizer-chart-action.visualizer-chart-edit,
+.visualizer-chart-action.visualizer-nochart-edit {
 	margin-right: auto;
+	width: auto;
+	height: auto;
+	padding: 0 10px;
+	gap: 6px;
+}
+.visualizer-chart-action.visualizer-chart-edit .dashicons {
+	margin-right: 0;
+}
+.visualizer-chart-action.visualizer-chart-edit .tooltip-text {
+	display: none;
 }
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-chart-delete:hover,
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-nochart-delete:hover {
@@ -676,9 +690,7 @@ span.viz-view-toggle-group {
 
 /* ── Edit button — more visible ── */
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-chart-edit {
-	background-color: #007CBA;
-	color: #fff;
-	border-radius: 4px;
+	display: flex;
 }
 
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-chart-edit:hover,
@@ -901,18 +913,11 @@ span.viz-view-toggle-group {
 	background: #f8fafc;
 }
 
-/* Edit button stays blue in table */
 .viz-charts-table .visualizer-action-group .visualizer-chart-action.visualizer-chart-edit {
-	background-color: #007CBA;
-	border-color: #007CBA;
-	color: #fff;
-	border-radius: 4px;
-}
-
-.viz-charts-table .visualizer-action-group .visualizer-chart-action.visualizer-chart-edit:hover {
-	background-color: #0069a6 !important;
-	border-color: #0069a6 !important;
-	color: #fff !important;
+	width: auto;
+	height: auto;
+	padding: 0 8px;
+	gap: 6px;
 }
 
 /* Upsell banner after the table */

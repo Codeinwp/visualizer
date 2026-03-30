@@ -2,55 +2,15 @@
  * D3.js frontend renderer for Visualizer.
  *
  * Listens to the `visualizer:render:chart:start` event fired by render-facade.js.
- * For charts with library === 'd3', retrieves the stored D3 code, converts the
- * series/data arrays to plain objects, and executes the code via new Function.
- */
-import * as d3 from 'd3';
-import * as topojson from 'topojson-client';
-
-/** Convert Visualizer series + data arrays to plain objects for D3. */
-function toD3Values( series, data ) {
-	if ( ! Array.isArray( series ) || ! Array.isArray( data ) ) return [];
-	return data.map( ( row ) => {
-		const obj = {};
-		series.forEach( ( col, i ) => {
-			obj[ col.label ] = row[ i ];
-		} );
-		return obj;
-	} );
-}
-
-/**
- * Render a single D3 chart into its container element.
+ * For charts with library === 'd3', creates a sandboxed <iframe> and delegates
+ * chart execution to it via postMessage — eliminating the persistent-XSS risk of
+ * running stored code via new Function() in the main page context.
  *
- * @param {string}  id    - DOM element ID of the container
- * @param {object}  chart - chart entry from visualizer.charts
+ * The iframe uses srcdoc so no physical HTML file is needed.  srcdoc iframes
+ * always have a null origin regardless of sandbox, and sandbox="allow-scripts"
+ * ensures the chart code cannot access the parent page's cookies, localStorage,
+ * or DOM.
  */
-function renderD3Chart( id, chart ) {
-	const container = document.getElementById( id );
-	if ( ! container ) return;
-
-	const code = typeof chart.code === 'string' ? chart.code : null;
-
-	if ( ! code ) {
-		container.innerHTML = '<p style="color:#c00;padding:12px">No chart code found.</p>';
-		return;
-	}
-
-	const values = toD3Values( chart.series, chart.data );
-
-	function doRender() {
-		try {
-			// eslint-disable-next-line no-new-func
-			new Function( 'd3', 'topojson', 'container', 'data', code )( d3, topojson, container, values );
-		} catch ( err ) {
-			container.innerHTML = '<p style="color:#c00;padding:12px">Chart render error: ' + err.message + '</p>';
-		}
-	}
-
-	// Double requestAnimationFrame — ensures browser has completed layout before measuring.
-	requestAnimationFrame( () => requestAnimationFrame( doRender ) );
-}
 
 function ensurePngName( name ) {
 	if ( ! name ) return 'chart.png';
@@ -66,68 +26,108 @@ function downloadDataUrl( dataUrl, name ) {
 	link.remove();
 }
 
-function svgToPng( svg, callback ) {
-	const rect = svg.getBoundingClientRect();
-	const width = parseFloat( svg.getAttribute( 'width' ) ) || rect.width || 800;
-	const height = parseFloat( svg.getAttribute( 'height' ) ) || rect.height || 600;
-	const clone = svg.cloneNode( true );
-	clone.setAttribute( 'width', width );
-	clone.setAttribute( 'height', height );
-	const serializer = new XMLSerializer();
-	const svgText = serializer.serializeToString( clone );
-	const svgDataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( svgText );
+/**
+ * Render a single D3 chart into its container element via a sandboxed iframe.
+ *
+ * @param {string} id    - DOM element ID of the container
+ * @param {object} chart - chart entry from visualizer.charts
+ */
+function renderD3Chart( id, chart ) {
+	const container = document.getElementById( id );
+	if ( ! container ) return;
 
-	const img = new Image();
-	img.onload = () => {
-		const canvas = document.createElement( 'canvas' );
-		canvas.width = width;
-		canvas.height = height;
-		const ctx = canvas.getContext( '2d' );
-		ctx.fillStyle = '#ffffff';
-		ctx.fillRect( 0, 0, width, height );
-		ctx.drawImage( img, 0, 0 );
-		callback( canvas.toDataURL( 'image/png' ) );
-	};
-	img.onerror = () => callback( null );
-	img.src = svgDataUrl;
+	const code = typeof chart.code === 'string' ? chart.code : null;
+
+	if ( ! code ) {
+		container.innerHTML = '<p style="color:#c00;padding:12px">No chart code found.</p>';
+		return;
+	}
+
+	const iframeJsUrl =
+		window.vizD3Renderer && window.vizD3Renderer.iframeJsUrl
+			? window.vizD3Renderer.iframeJsUrl
+			: null;
+
+	if ( ! iframeJsUrl ) {
+		container.innerHTML =
+			'<p style="color:#c00;padding:12px">D3 renderer iframe URL not configured.</p>';
+		return;
+	}
+
+	// Match the iframe dimensions to the container after layout is complete.
+	function doRender() {
+		const width = container.offsetWidth || 800;
+		const height = container.offsetHeight || 400;
+
+		// srcdoc iframes always have a null origin — no physical file needed.
+		const srcdoc =
+			'<!DOCTYPE html><html><head><meta charset="utf-8">' +
+			'<style>*{margin:0;padding:0;box-sizing:border-box}body{overflow:hidden}' +
+			'#chart{width:100%;height:100vh}</style></head>' +
+			'<body><div id="chart"></div>' +
+			'<script src="' + iframeJsUrl + '"><\/script></body></html>';
+
+		const iframe = document.createElement( 'iframe' );
+		iframe.setAttribute( 'sandbox', 'allow-scripts' );
+		iframe.setAttribute( 'srcdoc', srcdoc );
+		iframe.setAttribute( 'data-viz-id', id );
+		iframe.style.cssText =
+			'border:0;width:' + width + 'px;height:' + height + 'px;display:block;';
+
+		// Once the iframe signals it is ready, send the render command.
+		function onReady( event ) {
+			if ( event.source !== iframe.contentWindow ) return;
+			const msg = event.data;
+			if ( ! msg || msg.type !== 'iframe-ready' ) return;
+			window.removeEventListener( 'message', onReady );
+			iframe.contentWindow.postMessage(
+				{ type: 'render', code, series: chart.series, data: chart.data },
+				'*'
+			);
+		}
+
+		window.addEventListener( 'message', onReady );
+
+		container.innerHTML = '';
+		container.appendChild( iframe );
+	}
+
+	// Double requestAnimationFrame — ensures browser has completed layout before measuring.
+	requestAnimationFrame( () => requestAnimationFrame( doRender ) );
 }
 
 function handleImageAction( id, name, action ) {
 	const container = document.getElementById( id );
 	if ( ! container ) return;
 
-	const canvas = container.querySelector( 'canvas' );
-	if ( canvas && typeof canvas.toDataURL === 'function' ) {
-		const img = canvas.toDataURL( 'image/png' );
+	const iframe = container.querySelector( 'iframe[data-viz-id]' );
+	if ( ! iframe || ! iframe.contentWindow ) return;
+
+	function onResult( event ) {
+		if ( event.source !== iframe.contentWindow ) return;
+		const msg = event.data;
+		if ( ! msg || msg.type !== 'export-image-result' ) return;
+		window.removeEventListener( 'message', onResult );
+
+		const dataUrl = msg.dataUrl;
+		if ( ! dataUrl ) return;
+
 		if ( action === 'print' ) {
 			const win = window.open();
-			win.document.write( "<br><img src='" + img + "'/>" );
+			win.document.write( "<br><img src='" + dataUrl + "'/>" );
 			win.document.close();
 			win.onload = function () { win.print(); setTimeout( win.close, 500 ); };
 		} else {
-			downloadDataUrl( img, name );
+			downloadDataUrl( dataUrl, name );
 		}
-		return;
 	}
 
-	const svg = container.querySelector( 'svg' );
-	if ( ! svg ) return;
-
-	svgToPng( svg, ( img ) => {
-		if ( ! img ) return;
-		if ( action === 'print' ) {
-			const win = window.open();
-			win.document.write( "<br><img src='" + img + "'/>" );
-			win.document.close();
-			win.onload = function () { win.print(); setTimeout( win.close, 500 ); };
-		} else {
-			downloadDataUrl( img, name );
-		}
-	} );
+	window.addEventListener( 'message', onResult );
+	iframe.contentWindow.postMessage( { type: 'export-image' }, '*' );
 }
 
 ( function ( $ ) {
-	$( 'body' ).on( 'visualizer:render:chart:start', function ( e, viz ) {
+	$( 'body' ).on( 'visualizer:render:chart:start', function ( _e, viz ) {
 		if ( ! viz.charts ) return;
 
 		// Frontend mode: a specific chart ID is provided.
@@ -148,7 +148,7 @@ function handleImageAction( id, name, action ) {
 		} );
 	} );
 
-	$( 'body' ).on( 'visualizer:action:specificchart', function ( event, v ) {
+	$( 'body' ).on( 'visualizer:action:specificchart', function ( _event, v ) {
 		if ( v.action !== 'image' && v.action !== 'print' ) return;
 		handleImageAction( v.id, v?.dataObj?.name, v.action );
 	} );

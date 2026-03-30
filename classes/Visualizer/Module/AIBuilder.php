@@ -181,13 +181,17 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 			wp_send_json_error( array( 'message' => __( 'Chart not found.', 'visualizer' ) ) );
 		}
 
-		$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-		$data   = Visualizer_Module::get_chart_data( $chart, '', false );
-		$code   = get_post_meta( $chart_id, self::CF_D3_CODE, true );
+		$series   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+		$data     = Visualizer_Module::get_chart_data( $chart, '', false );
+		$code     = get_post_meta( $chart_id, self::CF_D3_CODE, true );
+		$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+		$title    = ( is_array( $settings ) && ! empty( $settings['backend-title'] ) )
+			? $settings['backend-title']
+			: $chart->post_title;
 
 		wp_send_json_success(
 			array(
-				'title'  => $chart->post_title,
+				'title'  => $title,
 				'series' => $series,
 				'data'   => $data,
 				'code'   => $code,

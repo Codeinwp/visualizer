@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Base Branch
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.base_ref }}
           path: visualizer-base
@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 22.x
       - name: Checkout PR Branch (Head)
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           path: visualizer-head
       - name: Build POT for PR Branch

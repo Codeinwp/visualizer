@@ -57,7 +57,7 @@ export async function createChartWithAdmin( admin, page, chart_label = CHART_JS_
     await selectChartAdmin( page.frameLocator('iframe'), chart_label );
 
     // Wait a little for the request to be processed.
-    await expect( page.frameLocator('iframe').getByRole('heading', { name: 'Import data from URL' })).toBeVisible({ timeout: 5000 });
+    await expect( page.frameLocator('iframe').getByRole('button', { name: 'Import data from URL' })).toBeVisible({ timeout: 5000 });
     
     const chartId = await page.frameLocator('iframe').locator('#visualizer-chart-id').getAttribute('data-id');
 

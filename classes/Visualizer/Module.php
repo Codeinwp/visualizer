@@ -487,6 +487,11 @@ class Visualizer_Module {
 		if ( get_post_type( $chart_id ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return $chart_id;
 		}
+		// AI Builder (D3) charts use their own publish flow — skip the classic revision-restore
+		// mechanism, which would otherwise overwrite the saved title and settings.
+		if ( 'd3' === get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true ) ) {
+			return $chart;
+		}
 		// undo revisions.
 		$revisions_found    = $this->undoRevisions( $chart_id, true );
 
