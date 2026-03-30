@@ -129,7 +129,7 @@ window['vizClipboard2'] = window['vizClipboard2'] || null;
     }
 
     function displayChartsOnFrontEnd() {
-        function renderVisibleLazyCharts() {
+        function renderVisibleLazyCharts( checkViewport ) {
             $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error):empty').each(function(index, element){
                 // Do not render charts that are intentionally hidden.
                 const style = window.getComputedStyle(element);
@@ -137,11 +137,13 @@ window['vizClipboard2'] = window['vizClipboard2'] || null;
                     return;
                 }
 
-                // Only render charts that are currently within the viewport.
-                const rect = element.getBoundingClientRect();
-                const inViewport = rect.bottom >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight);
-                if (!inViewport) {
-                    return;
+                // On scroll, only render charts that are currently within the viewport.
+                if ( checkViewport ) {
+                    const rect = element.getBoundingClientRect();
+                    const inViewport = rect.bottom >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight);
+                    if (!inViewport) {
+                        return;
+                    }
                 }
 
                 const id = $(element).addClass('viz-facade-loaded').attr('id');
@@ -152,10 +154,12 @@ window['vizClipboard2'] = window['vizClipboard2'] || null;
             });
         }
 
-        $(window).on('scroll', renderVisibleLazyCharts);
+        $(window).on('scroll', function() { renderVisibleLazyCharts( true ); });
 
-        // Run once on page load to render any lazy charts already in the viewport.
-        renderVisibleLazyCharts();
+        // Run once on page load to render all non-lazy charts regardless of viewport position.
+        // Skipping the viewport check here avoids missing charts when the browser window is
+        // not in focus (e.g. mouse outside the window) and layout may not be fully computed.
+        renderVisibleLazyCharts( false );
 
         $('div.visualizer-front-container:not(.visualizer-lazy-render)').each(function(index, element){
             // Do not render charts that are intentionally hidden.
