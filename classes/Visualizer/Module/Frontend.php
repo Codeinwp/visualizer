@@ -734,7 +734,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		if ( $this->lazy_render_script ) {
 			?>
 		<script type="text/javascript">
-			var visualizerScriptsLoaded = false;
 			var visualizerUserInteractionEvents = [
 				"scroll",
 				"mouseover",
@@ -748,17 +747,13 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			});
 
 			function visualizerTriggerScriptLoader() {
+				visualizerLoadScripts();
 				visualizerUserInteractionEvents.forEach(function(event) {
 					window.removeEventListener(event, visualizerTriggerScriptLoader, { passive: true });
 				});
-				visualizerLoadScripts();
 			}
 
 			function visualizerLoadScripts() {
-				if ( visualizerScriptsLoaded ) {
-					return;
-				}
-				visualizerScriptsLoaded = true;
 				document.querySelectorAll("script[data-visualizer-script]").forEach(function(elem) {
 					jQuery.getScript( elem.getAttribute("data-visualizer-script") )
 					.done( function( script, textStatus ) {
@@ -781,20 +776,6 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					} );
 				}
 			}
-
-			// This script tag is printed before the enqueued script tags (data-visualizer-script),
-			// so defer the viewport check until after the full DOM is parsed and those elements exist.
-			setTimeout( function() {
-				var charts = document.querySelectorAll( '.visualizer-front' );
-				var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-				for ( var i = 0; i < charts.length; i++ ) {
-					var rect = charts[ i ].getBoundingClientRect();
-					if ( rect.bottom >= 0 && rect.top <= viewportHeight ) {
-						visualizerLoadScripts();
-						return;
-					}
-				}
-			}, 0 );
 		</script>
 			<?php
 		}
