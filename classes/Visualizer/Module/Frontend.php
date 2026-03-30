@@ -483,19 +483,35 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$_charts = array();
 		$_charts_type = '';
 		$count = 0;
+		static $visualizer_localized = false;
+		static $visualizer_charts = array();
+		static $d3_localized = false;
+		$facade_handle = 'visualizer-render-facade';
 		foreach ( $this->_charts as $id => $array ) {
 			$_charts = $this->_charts;
 			$library = $array['library'];
 			$_charts_type = $library;
-			if ( ! wp_script_is( "visualizer-render-$library", 'registered' ) ) {
+			$facade_deps = apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true );
+			if ( ! wp_script_is( $facade_handle, 'registered' ) ) {
 				wp_register_script(
-					"visualizer-render-$library",
+					$facade_handle,
 					VISUALIZER_ABSURL . 'js/render-facade.js',
-					apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
+					$facade_deps,
 					Visualizer_Plugin::VERSION,
 					true
 				);
-				wp_enqueue_script( "visualizer-render-$library" );
+				wp_enqueue_script( $facade_handle );
+			} else {
+				// Ensure newly discovered dependencies are attached to the facade.
+				global $wp_scripts;
+				if ( isset( $wp_scripts->registered[ $facade_handle ] ) ) {
+					$wp_scripts->registered[ $facade_handle ]->deps = array_unique(
+						array_merge( $wp_scripts->registered[ $facade_handle ]->deps, $facade_deps )
+					);
+				}
+				foreach ( $facade_deps as $dep_handle ) {
+					wp_enqueue_script( $dep_handle );
+				}
 			}
 
 			// For D3 charts, also enqueue the dedicated renderer bundle.
@@ -517,32 +533,50 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					);
 					wp_enqueue_script( 'visualizer-d3-renderer' );
 				}
-				wp_localize_script(
-					'visualizer-d3-renderer',
-					'vizD3Renderer',
-					array(
-						'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
-					)
-				);
+				if ( ! $d3_localized ) {
+					wp_localize_script(
+						'visualizer-d3-renderer',
+						'vizD3Renderer',
+						array(
+							'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+						)
+					);
+					$d3_localized = true;
+				}
 			}
 
-			if ( wp_script_is( "visualizer-render-$_charts_type" ) && 0 === $count ) {
-				wp_localize_script(
-					"visualizer-render-$_charts_type",
-					'visualizer',
-					array(
-						'charts'        => $this->_charts,
-						'language'      => $this->get_language(),
-						'map_api_key'   => get_option( 'visualizer-map-api-key' ),
-						'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
-						'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
-						'i10n'          => array(
-							'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
-						),
-						'page_type' => 'frontend',
-						'is_front'  => true,
-					)
-				);
+			if ( wp_script_is( $facade_handle ) && 0 === $count ) {
+				if ( ! $visualizer_localized ) {
+					$visualizer_charts = $this->_charts;
+					wp_localize_script(
+						$facade_handle,
+						'visualizer',
+						array(
+							'charts'        => $this->_charts,
+							'language'      => $this->get_language(),
+							'map_api_key'   => get_option( 'visualizer-map-api-key' ),
+							'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
+							'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
+							'i10n'          => array(
+								'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
+							),
+							'page_type' => 'frontend',
+							'is_front'  => true,
+						)
+					);
+					$visualizer_localized = true;
+				} else {
+					$new_charts = array_diff_key( $this->_charts, $visualizer_charts );
+					if ( ! empty( $new_charts ) ) {
+						wp_add_inline_script(
+							$facade_handle,
+							'window.visualizer = window.visualizer || {};' .
+							'window.visualizer.charts = Object.assign(window.visualizer.charts || {}, ' . wp_json_encode( $new_charts ) . ');',
+							'before'
+						);
+						$visualizer_charts = array_merge( $visualizer_charts, $new_charts );
+					}
+				}
 			}
 			++$count;
 		}

@@ -564,6 +564,10 @@ var isResizeRequest = false;
             // check what all chart types to load.
             $chart_types = [];
             $.each(v.charts, function(i, c){
+                // Only consider charts rendered by Google Charts.
+                if ( c.library && c.library !== 'google' && c.library !== 'GoogleCharts' ) {
+                    return;
+                }
                 var $type = c.type;
                 switch($type){
                     case 'bar':
@@ -594,7 +598,7 @@ var isResizeRequest = false;
                         $type = null;
                         break;
                 }
-                if($type != null){
+                if($type != null && $type !== ''){
                     $chart_types.push($type);
                 }
             });
