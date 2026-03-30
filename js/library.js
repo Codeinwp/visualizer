@@ -92,20 +92,47 @@ function createPopupProBlocker( $ , e ) {
         $( document ).on( 'click', '.viz-shortcode-display', function () {
             var text = $( this ).text();
             var el   = this;
-            if ( navigator.clipboard ) {
-                navigator.clipboard.writeText( text );
-            } else {
+
+            // Fallback copy method using a temporary textarea. Returns true on success.
+            var fallbackCopy = function ( value ) {
                 var ta = document.createElement( 'textarea' );
-                ta.value = text;
+                ta.value = value;
                 document.body.appendChild( ta );
                 ta.select();
-                document.execCommand( 'copy' );
+                var succeeded = false;
+                try {
+                    succeeded = document.execCommand( 'copy' );
+                } catch ( e ) {
+                    succeeded = false;
+                }
                 document.body.removeChild( ta );
+                return succeeded;
+            };
+
+            // Apply temporary "copied" feedback.
+            var showCopiedFeedback = function () {
+                $( el ).addClass( 'viz-shortcode-copied' );
+                setTimeout( function () {
+                    $( el ).removeClass( 'viz-shortcode-copied' );
+                }, 1200 );
+            };
+
+            if ( navigator.clipboard && navigator.clipboard.writeText ) {
+                navigator.clipboard.writeText( text ).then( function () {
+                    // Clipboard API succeeded.
+                    showCopiedFeedback();
+                } ).catch( function () {
+                    // Clipboard API failed; fall back to textarea method.
+                    if ( fallbackCopy( text ) ) {
+                        showCopiedFeedback();
+                    }
+                } );
+            } else {
+                // No Clipboard API; use fallback directly.
+                if ( fallbackCopy( text ) ) {
+                    showCopiedFeedback();
+                }
             }
-            $( el ).addClass( 'viz-shortcode-copied' );
-            setTimeout( function () {
-                $( el ).removeClass( 'viz-shortcode-copied' );
-            }, 1200 );
         } );
 
         $('.visualizer-chart-shortcode').click(function (event) {
