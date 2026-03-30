@@ -343,6 +343,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			}
 		} else {
 			echo '<div id="visualizer-library" class="visualizer-clearfix view-grid">';
+			$this->_renderSidebar();
 			echo '<div class="items"><div class="visualizer-chart">';
 			echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
 			echo '<div class="visualizer-notfound">';
@@ -369,7 +370,6 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '</div>';
 			echo '</div>';
 			echo '</div></div>';
-			$this->_renderSidebar();
 			echo '</div>';
 		}
 		echo '</div>';
