@@ -110,16 +110,18 @@ export default function DataSource( { chartId, uploadNonce, onDataReady, dataLoa
 	const [ error,   setError   ] = useState( null );
 
 	// Manual — pre-load sample data for new charts (no initialCsvText means no existing data).
-	const [ csvText, setCsvText ] = useState( initialCsvText ? '' : SAMPLE_CSV );
-	const [ sheetRows, setSheetRows ] = useState( initialCsvText ? [] : csvToGrid( SAMPLE_CSV ) );
+	const [ csvText, setCsvText ] = useState( initialCsvText || SAMPLE_CSV );
+	const [ sheetRows, setSheetRows ] = useState(
+		initialCsvText ? csvToGrid( initialCsvText ) : csvToGrid( SAMPLE_CSV )
+	);
 	const sheetEditRef = useRef( false );
 	const sheetHotRef = useRef( null );
 
 	// File
 	const [ file, setFile ] = useState( null );
 	const fileInputRef = useRef( null );
-	// Skip the initial auto-upload when pre-loading sample data for a new chart.
-	const skipUploadRef = useRef( ! initialCsvText );
+	// Skip the initial auto-upload only when editing existing data.
+	const skipUploadRef = useRef( !! initialCsvText );
 
 	// URL
 	const [ fileUrl, setFileUrl ] = useState( '' );
@@ -214,7 +216,7 @@ export default function DataSource( { chartId, uploadNonce, onDataReady, dataLoa
 	// Manual CSV: debounce 700 ms — uploads whenever the full CSV text changes.
 	useEffect( () => {
 		if ( disabled ) return;
-		if ( ( source !== 'manual' && source !== 'sheet' ) || ! csvText.trim() || ! chartId ) return;
+		if ( ( source !== 'manual' && source !== 'sheet' ) || ! csvText.trim() || ! chartId || ! uploadNonce ) return;
 		if ( skipUploadRef.current ) { skipUploadRef.current = false; return; }
 		const trimmed = csvText.trim();
 		if ( lastCsvRef.current === trimmed ) return;
@@ -233,7 +235,7 @@ export default function DataSource( { chartId, uploadNonce, onDataReady, dataLoa
 			finally { setLoading( false ); }
 		}, 700 );
 		return () => clearTimeout( t );
-	}, [ source, csvText ] ); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [ source, csvText, uploadNonce ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// File and URL import are manual (button-triggered).
 	async function handleImportFile() {
