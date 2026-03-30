@@ -581,7 +581,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 				}
 			} else {
-				$parent_chart_id = isset( $_GET['parent_chart_id'] ) ? filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT ) : '';
+				$parent_chart_id = filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT );
 				$success = false;
 				if ( $parent_chart_id ) {
 					$parent_chart   = get_post( $parent_chart_id );
