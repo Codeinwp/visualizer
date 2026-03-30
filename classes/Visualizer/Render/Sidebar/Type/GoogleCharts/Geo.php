@@ -465,4 +465,14 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}
+
+	/**
+	 * Geo charts use colorAxis for their colour scheme, not the global preset palette.
+	 * Skip the hidden colors[] inputs that the Google base class would otherwise inject.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAdvancedSettings(): void {
+		Visualizer_Render_Sidebar::_renderAdvancedSettings();
+	}
 }

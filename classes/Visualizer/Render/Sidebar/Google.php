@@ -453,4 +453,22 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}
+
+	/**
+	 * Renders advanced settings and hidden inputs for programmatically-set keys
+	 * (e.g. the global-preset colors palette) that have no visible sidebar control.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAdvancedSettings(): void {
+		parent::_renderAdvancedSettings();
+
+		// @phpstan-ignore-next-line (property accessed via magic __get from _data array)
+		$colors = $this->colors;
+		if ( ! empty( $colors ) && is_array( $colors ) ) {
+			foreach ( $colors as $color ) {
+				echo '<input type="hidden" name="colors[]" value="', esc_attr( $color ), '">';
+			}
+		}
+	}
 }
