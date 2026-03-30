@@ -759,19 +759,38 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					return;
 				}
 				visualizerScriptsLoaded = true;
+
+				var promises = [];
 				document.querySelectorAll("script[data-visualizer-script]").forEach(function(elem) {
-					jQuery.getScript( elem.getAttribute("data-visualizer-script") )
-					.done( function( script, textStatus ) {
-						elem.setAttribute("src", elem.getAttribute("data-visualizer-script"));
-						elem.removeAttribute("data-visualizer-script");
-						setTimeout( function() {
-							visualizerRefreshChart();
+					var p = jQuery.getScript( elem.getAttribute("data-visualizer-script") )
+						.done( function() {
+							elem.setAttribute("src", elem.getAttribute("data-visualizer-script"));
+							elem.removeAttribute("data-visualizer-script");
 						} );
-					} );
+					promises.push( p );
 				});
+
+				// Wait for ALL scripts before refreshing so render-facade and the render
+				// libraries (render-google, render-chartjs, etc.) are guaranteed to be ready.
+				jQuery.when.apply( jQuery, promises ).always( function() {
+					setTimeout( function() {
+						visualizerRefreshChart();
+					} );
+				} );
 			}
 
 			function visualizerRefreshChart() {
+				// Re-trigger rendering for charts that render-facade queued but the render
+				// library missed due to the parallel-load race condition.
+				jQuery( '.viz-facade-loaded.visualizer-front:not(.visualizer-chart-loaded)' ).each( function() {
+					var id = jQuery( this ).attr( 'id' );
+					if ( id && window.visualizer ) {
+						jQuery( 'body' ).trigger(
+							'visualizer:render:chart:start',
+							jQuery.extend( {}, window.visualizer, { id: id } )
+						);
+					}
+				} );
 				jQuery( '.visualizer-front:not(.visualizer-chart-loaded)' ).resize();
 				if ( jQuery( 'div.viz-facade-loaded:not(.visualizer-lazy):empty' ).length > 0 ) {
 					visualizerUserInteractionEvents.forEach( function( event ) {
