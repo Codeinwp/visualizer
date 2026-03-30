@@ -138,6 +138,13 @@ class Visualizer_Gutenberg_Block {
 		}
 		if ( wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
 			wp_enqueue_script( 'visualizer-d3-renderer' );
+			wp_localize_script(
+				'visualizer-d3-renderer',
+				'vizD3Renderer',
+				array(
+					'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+				)
+			);
 		}
 
 		// Enqueue frontend and editor block styles

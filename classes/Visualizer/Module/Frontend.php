@@ -517,6 +517,13 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					);
 					wp_enqueue_script( 'visualizer-d3-renderer' );
 				}
+				wp_localize_script(
+					'visualizer-d3-renderer',
+					'vizD3Renderer',
+					array(
+						'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+					)
+				);
 			}
 
 			if ( wp_script_is( "visualizer-render-$_charts_type" ) && 0 === $count ) {

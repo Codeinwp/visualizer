@@ -363,6 +363,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			}
 			if ( wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
 				wp_enqueue_script( 'visualizer-d3-renderer' );
+				wp_localize_script(
+					'visualizer-d3-renderer',
+					'vizD3Renderer',
+					array(
+						'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+					)
+				);
 			}
 
 			// Load all the assets for the different libraries we support.
@@ -723,6 +730,13 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				);
 				wp_enqueue_script( 'visualizer-d3-renderer' );
 			}
+			wp_localize_script(
+				'visualizer-d3-renderer',
+				'vizD3Renderer',
+				array(
+					'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+				)
+			);
 		}
 
 		$chart_builder_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.asset.php';
