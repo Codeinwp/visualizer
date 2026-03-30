@@ -1335,7 +1335,6 @@ display: none;
 	top: 0;
 	width: 100%;
 	height: 100%;
-	padding: 12px 12px 20px;
 	z-index: 2;
 	opacity: 0;
 	visibility: hidden;
@@ -1343,8 +1342,9 @@ display: none;
 }
 .vz-pro-option .pro-overlay .pro-box{
 	padding-bottom: 58.88%;
-	background: rgba(255,255,255,.5);
+	background: rgba(185, 185, 185, 0.5);
 	backdrop-filter: blur(2px);
+	height: 100%;
 }
 .vz-pro-option .pro-overlay .pro-box .btn {
 	position: absolute;
@@ -1352,6 +1352,7 @@ display: none;
 	left: 50%;
 	white-space: nowrap;
 	transform: translate(-50%, -50%);
+	font-size: 14px;
 }
 
 .vz-power-pro{

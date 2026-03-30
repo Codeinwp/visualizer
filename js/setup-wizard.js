@@ -288,7 +288,15 @@ jQuery(function ($) {
 	// Enable performance feature.
 	// Step: 4 Skip and subscribe process.
 	$(document).on( 'click', '.vz-subscribe', function (e) {
-		var withSubscribe = $(this).data("vz_subscribe");
+		var $btn = $(this);
+
+		// Prevent double-clicks while the async flow is running.
+		if ( $btn.prop('disabled') ) {
+			e.preventDefault();
+			return;
+		}
+
+		var withSubscribe = $btn.data("vz_subscribe");
 		var postData = {
 			action: "visualizer_wizard_step_process",
 			security: visualizerSetupWizardData.ajax.security,
@@ -319,6 +327,8 @@ jQuery(function ($) {
 		} else {
 			postData.with_subscribe = false;
 		}
+
+		$btn.prop('disabled', true);
 		var $step = $('#step-3');
 		$step.find(".spinner").addClass("is-active");
 		var $error = $step.find('.vz-error-notice').first();
@@ -331,6 +341,7 @@ jQuery(function ($) {
 					$error.html('<p>' + message + '</p>').removeClass('hidden');
 				}
 				$step.find(".spinner").removeClass("is-active");
+				$btn.prop('disabled', false);
 				return;
 			}
 			goToDraftPage(postData);

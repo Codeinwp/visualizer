@@ -586,6 +586,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 				// Update wizard data.
 				$wizard_data['enable_page_cache'] = true;
 				$wizard_data_updated              = true;
+				update_option( 'swcfpc_dashboard_redirect', false );
 			}
 			if ( $wizard_data_updated ) {
 				$this->update_wizard_data( $wizard_data );
@@ -640,16 +641,17 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 		}
 
 		if ( $with_subscribe && is_email( $email ) ) {
-			$request_res = wp_remote_post(
+			wp_remote_post(
 				VISUALIZER_SUBSCRIBE_API,
 				array(
-					'timeout' => 100,
-					'headers' => array(
+					'timeout'  => 5,
+					'blocking' => false,
+					'headers'  => array(
 						'Content-Type'  => 'application/json',
 						'Cache-Control' => 'no-cache',
 						'Accept'        => 'application/json, */*;q=0.1',
 					),
-					'body'    => wp_json_encode(
+					'body'     => wp_json_encode(
 						array(
 							'slug'  => 'visualizer',
 							'site'  => home_url(),
@@ -661,24 +663,10 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 					),
 				)
 			);
-			if ( ! is_wp_error( $request_res ) ) {
-				$body = json_decode( wp_remote_retrieve_body( $request_res ) );
-				if ( 'success' === $body->code ) {
-					$this->dismissWizard( false );
-					wp_send_json( $response );
-				}
-			}
-			wp_send_json(
-				array(
-					'status'      => 0,
-					'redirect_to' => '',
-					'message'     => '',
-				)
-			);
-		} else {
-			$this->dismissWizard( false );
-			wp_send_json( $response );
 		}
+
+		$this->dismissWizard( false );
+		wp_send_json( $response );
 	}
 
 	/**
