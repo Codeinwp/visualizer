@@ -244,7 +244,7 @@ class Charts extends Component {
 
 							</Fragment>						:
 							<p className="visualizer-no-charts">
-								{ __( 'No charts found.' ) }
+								{ __( 'No charts found. Create a chart in the Visualizer dashboard first.' ) }
 							</p>					:
 						<Placeholder>
 							<Spinner/>

@@ -341,7 +341,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 		echo '<div class="viz-section-item">';
 			echo '<b>', $title, '</b>';
 			echo '<div>';
-				echo '<input type="text" class="color-picker-hex color-picker" data-alpha-enabled="true" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Value', 'visualizer' ), '" value="', is_null( $value ) ? $default_color : esc_attr( $value ), '" data-default-color="', $default_color, '">';
+				echo '<input type="text" class="color-picker-hex color-picker" data-alpha-enabled="true" name="', $name, '" maxlength="7" placeholder="', esc_attr__( 'Hex Color Code', 'visualizer' ), '" value="', is_null( $value ) ? $default_color : esc_attr( $value ), '" data-default-color="', $default_color, '">';
 			echo '</div>';
 		echo '</div>';
 	}
@@ -476,7 +476,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 					isset( $this->series[ $index ]['format'] ) ? $this->series[ $index ]['format'] : '',
 					sprintf(
 						// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
-						esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, or $# to add dollar sign before digits. Pay attention that if you use &#37; percentage format then your values will be multiplied by 100.', 'visualizer' ),
+						esc_html__( 'Enter custom format pattern to apply to this series value, similar to the %1$sICU pattern set%2$s. Use something like #,### to get 1,234 as output, or $# to add dollar sign before digits. Note: Using the &#37; percentage format will multiply your values by 100.', 'visualizer' ),
 						'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
 						'</a>'
 					),

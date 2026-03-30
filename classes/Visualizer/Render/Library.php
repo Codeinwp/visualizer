@@ -48,7 +48,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 		echo '<h2>';
 		esc_html_e( 'Visualizer Library', 'visualizer' );
 		echo ' <div class="viz-add-new-group">';
-		echo '<a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a>';
+		echo '<a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New Chart', 'visualizer' ), '</a>';
 		echo '<button type="button" class="viz-add-new-toggle" aria-haspopup="true" aria-expanded="false"><span class="dashicons dashicons-arrow-down-alt2"></span></button>';
 		echo '<div class="viz-add-new-menu" role="menu" aria-hidden="true">';
 		echo '<button type="button" class="viz-add-new-item" data-viz-builder="ai">', esc_html__( 'AI Chart Builder', 'visualizer' ), '</button>';
@@ -78,7 +78,7 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<p>';
 			printf(
 				// translators: %s - the name of the option.
-				esc_html__( '%s option is disabled in your php.ini config. Please, enable it by change its value to 1. This option increases the speed of remote CSV uploading.', 'visualizer' ),
+				esc_html__( '%s option is disabled in your php.ini config. Please enable it by changing its value to 1. This option increases the speed of remote CSV uploading.', 'visualizer' ),
 				'<b>allow_url_fopen</b>'
 			);
 			echo '</p>';
@@ -347,10 +347,10 @@ class Visualizer_Render_Library extends Visualizer_Render {
 			echo '<div class="items"><div class="visualizer-chart">';
 			echo '<div class="visualizer-chart-canvas visualizer-nochart-canvas">';
 			echo '<div class="visualizer-notfound">';
-			echo esc_html__( 'No charts found', 'visualizer' );
+			echo esc_html__( 'No charts found. Click \'Add New Chart\' to create one.', 'visualizer' );
 			echo '<p><h2>';
 			echo '<div class="viz-add-new-group">';
-			echo '<a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New', 'visualizer' ), '</a>';
+			echo '<a href="javascript:;" class="add-new-h2 add-new-chart">', esc_html__( 'Add New Chart', 'visualizer' ), '</a>';
 			echo '<button type="button" class="viz-add-new-toggle" aria-haspopup="true" aria-expanded="false"><span class="dashicons dashicons-arrow-down-alt2"></span></button>';
 			echo '<div class="viz-add-new-menu" role="menu" aria-hidden="true">';
 			echo '<button type="button" class="viz-add-new-item" data-viz-builder="ai">', esc_html__( 'AI Chart Builder', 'visualizer' ), '</button>';

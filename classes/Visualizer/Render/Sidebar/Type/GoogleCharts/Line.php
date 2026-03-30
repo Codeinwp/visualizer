@@ -59,7 +59,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Line extends Visualizer_Render
 		echo '<div class="viz-section-delimiter"></div>';
 
 		self::_renderSelectItem(
-			esc_html__( 'Interpolate Nulls', 'visualizer' ),
+			esc_html__( 'Fill in Missing Values', 'visualizer' ),
 			'interpolateNulls',
 			$this->interpolateNulls,
 			$this->_yesno,

@@ -206,7 +206,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			self::_renderSectionStart( esc_html__( 'Font Styles', 'visualizer' ), false );
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Font Family And Size', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -244,7 +244,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					// let's have a default otherwise the chart behaves weird when hovering in edit mode
 					isset( $this->legend['position'] ) ? $this->legend['position'] : 'top',
 					$this->_legendPositions,
-					esc_html__( 'Determines where to place the legend, compared to the chart area.', 'visualizer' )
+					esc_html__( 'Sets the legend position relative to the chart.', 'visualizer' )
 				);
 
 				self::_renderCheckboxItem(
@@ -257,7 +257,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Font Family And Size', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
