@@ -124,6 +124,9 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Tabular extends Visualizer_Ren
 					esc_html__( 'To enable paging through the data.', 'visualizer' )
 				);
 
+				$paging_enabled = ( isset( $this->pagination ) && 1 === $this->pagination ); // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			echo '<div class="viz-pagination-options"', ( $paging_enabled ? '' : ' style="display:none"' ), '>';
+
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
 				self::_renderTextItem(
@@ -134,7 +137,9 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Tabular extends Visualizer_Ren
 					'10'
 				);
 
-				echo '<div class="viz-section-delimiter section-delimiter"></div>';
+			echo '</div>';
+
+			echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
 				self::_renderCheckboxItem(
 					esc_html__( 'Disable Sort', 'visualizer' ),
@@ -410,5 +415,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Tabular extends Visualizer_Ren
 	protected function _renderSeriesSettings() {
 		parent::_renderSeriesSettings();
 	}
-
 }

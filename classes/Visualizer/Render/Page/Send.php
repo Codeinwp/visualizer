@@ -53,5 +53,4 @@ class Visualizer_Render_Page_Send extends Visualizer_Render_Page {
 			echo '<body></body>';
 		echo '</html>';
 	}
-
 }

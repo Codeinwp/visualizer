@@ -1,7 +1,8 @@
 /* global console */
 /* global visualizer */
 /* global jQuery */
-var vizClipboard1=null;
+window['vizClipboard1'] = window['vizClipboard1'] || null;
+window['vizClipboard2'] = window['vizClipboard2'] || null;
 (function($, visualizer){
     
     function initActionsButtons(v) {
@@ -13,12 +14,12 @@ var vizClipboard1=null;
             });
         }
 
-        if($('a.visualizer-action[data-visualizer-type=copy]').length > 0) {
+        if($('a.visualizer-action[data-visualizer-type=copy]').length > 0 && vizClipboard2 === null) {
             $('a.visualizer-action[data-visualizer-type=copy]').on('click', function(e) {
                 e.preventDefault();
             });
-            var clipboard = new ClipboardJS('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
-            clipboard.on('success', function(e) {
+            vizClipboard2 = new ClipboardJS('a.visualizer-action[data-visualizer-type=copy]'); // jshint ignore:line
+            vizClipboard2.on('success', function(e) {
                 window.alert(v.i10n['copied']);
             });
         }
@@ -128,11 +129,18 @@ var vizClipboard1=null;
     }
 
     function displayChartsOnFrontEnd() {
-        $(window).on('scroll', function() {
+        function renderVisibleLazyCharts() {
             $('div.visualizer-front:not(.viz-facade-loaded):not(.visualizer-lazy):not(.visualizer-cw-error):empty').each(function(index, element){
                 // Do not render charts that are intentionally hidden.
                 const style = window.getComputedStyle(element);
                 if (style.display === 'none' || style.visibility === 'hidden') {
+                    return;
+                }
+
+                // Only render charts that are currently within the viewport.
+                const rect = element.getBoundingClientRect();
+                const inViewport = rect.bottom >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight);
+                if (!inViewport) {
                     return;
                 }
 
@@ -142,7 +150,12 @@ var vizClipboard1=null;
                     showChart(id);
                 }, ( index + 1 ) * 100);
             });
-        });
+        }
+
+        $(window).on('scroll', renderVisibleLazyCharts);
+
+        // Run once on page load to render any lazy charts already in the viewport.
+        renderVisibleLazyCharts();
 
         $('div.visualizer-front-container:not(.visualizer-lazy-render)').each(function(index, element){
             // Do not render charts that are intentionally hidden.

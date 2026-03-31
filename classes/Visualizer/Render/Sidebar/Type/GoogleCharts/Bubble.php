@@ -115,8 +115,5 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Bubble extends Visualizer_Rend
 
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
-
 	}
-
-
 }

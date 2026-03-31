@@ -1,0 +1,46 @@
+name: "Agent Task"
+description: "Structured task for coding agents"
+labels: ["agent"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal / Acceptance Criteria
+      description: "What does 'done' look like? Be specific."
+      placeholder: "Example: Update E2E docs to use npm run env:up/env:down and ensure credentials match bin/cli-setup.sh."
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints / Do Not Touch
+      description: "List files/areas to avoid or any guardrails."
+      placeholder: "Example: Do not edit build outputs directly; do not change vendor/ or node_modules/."
+    validations:
+      required: false
+
+  - type: textarea
+    id: relevant_files
+    attributes:
+      label: Relevant Files (if known)
+      description: "Optional: point the agent to likely files."
+      placeholder: "Example: tests/e2e/README.md, AGENTS.md"
+    validations:
+      required: false
+
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests to Run
+      description: "Default is PHPUnit + E2E unless explicitly scoped out."
+      value: |
+        Default:
+        - composer lint
+        - composer phpstan
+        - ./vendor/bin/phpunit
+        - npm run env:up
+        - npm run test:e2e:playwright
+        - npm run env:down
+    validations:
+      required: true

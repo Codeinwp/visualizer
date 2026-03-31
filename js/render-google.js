@@ -26,17 +26,26 @@ var isResizeRequest = false;
             return;
         }
 
+        if ( chart.library && chart.library !== 'google' && chart.library !== 'GoogleCharts' ) {
+            return;
+        }
+
         // re-render the chart only if it doesn't have annotations and it is on the front-end
         // this is to prevent the chart from showing "All series on a given axis must be of the same data type" during resize.
         // remember, some charts do not support annotations so they should not be included in this.
         var no_annotation_charts = ['tabular', 'timeline', 'gauge', 'geo', 'bubble', 'candlestick'];
         if ( undefined !== chart.settings && undefined !== chart.settings.series && undefined === chart.settings.series.length ) {
-            var chartSeries = [];
-            var chartSeriesValue = Object.values( chart.settings.series );
-            $.each( Object.keys( chart.settings.series ), function( index, element ) {
-                chartSeries[element] = chartSeriesValue[index];
-            } );
-            chart.settings.series = chartSeries;
+            var seriesKeys = Object.keys( chart.settings.series );
+            // Only convert when keys are numeric indices (PHP JSON-encoded array).
+            // String keys (e.g. named series from manual config) must be left as-is.
+            if ( seriesKeys.every( function( k ) { return ! isNaN( k ); } ) ) {
+                var chartSeries = [];
+                var chartSeriesValue = Object.values( chart.settings.series );
+                $.each( seriesKeys, function( index, element ) {
+                    chartSeries[ element ] = chartSeriesValue[ index ];
+                } );
+                chart.settings.series = chartSeries;
+            }
         }
         if(id !== 'canvas' && typeof chart.series !== 'undefined' && typeof chart.settings.series !== 'undefined' && ! no_annotation_charts.includes(chart.type) ) {
             hasAnnotation = chart.series.length - chart.settings.series.length > 1;
@@ -444,19 +453,30 @@ var isResizeRequest = false;
         }
 
         var formatter = null;
-        switch (type) {
-            case 'number':
-                formatter = new gv.NumberFormat({pattern: format});
-                break;
-            case 'date':
-            case 'datetime':
-            case 'timeofday':
-                formatter = new gv.DateFormat({pattern: format});
-                break;
-        }
+        var $formatInput = $('input.control-text[name*="[format]"]').filter(function() {
+            return $(this).val() === format;
+        });
+        try {
+            switch (type) {
+                case 'number':
+                    formatter = new gv.NumberFormat({pattern: format});
+                    break;
+                case 'date':
+                case 'datetime':
+                case 'timeofday':
+                    formatter = new gv.DateFormat({pattern: format});
+                    break;
+            }
 
-        if (formatter) {
-            formatter.format(table, index);
+            if (formatter) {
+                formatter.format(table, index);
+                $formatInput.nextAll('.visualizer-format-error').remove();
+            }
+        } catch (e) {
+            if ($formatInput.length) {
+                $formatInput.nextAll('.visualizer-format-error').remove();
+                $('<p class="visualizer-format-error" style="color:#cc0000;margin:4px 0 0"></p>').text(visualizer.l10n.invalid_format).insertAfter($formatInput);
+            }
         }
 
         var arr = id.split('-');
@@ -544,6 +564,10 @@ var isResizeRequest = false;
             // check what all chart types to load.
             $chart_types = [];
             $.each(v.charts, function(i, c){
+                // Only consider charts rendered by Google Charts.
+                if ( c.library && c.library !== 'google' && c.library !== 'GoogleCharts' ) {
+                    return;
+                }
                 var $type = c.type;
                 switch($type){
                     case 'bar':
@@ -574,7 +598,7 @@ var isResizeRequest = false;
                         $type = null;
                         break;
                 }
-                if($type != null){
+                if($type != null && $type !== ''){
                     $chart_types.push($type);
                 }
             });

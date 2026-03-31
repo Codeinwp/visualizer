@@ -36,7 +36,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 * @since 3.3.0
 	 *
 	 * @access private
-	 * @var _CHART_COLORS
+	 * @var string[]
 	 */
 	private static $_CHART_COLORS = array(
 		'#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080',
@@ -54,6 +54,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	 */
 	public function __construct( Visualizer_Plugin $plugin ) {
 		parent::__construct( $plugin );
+		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, 'apply_global_style_settings', 999, 3 );
 	}
 
 
@@ -106,15 +107,230 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 	}
 
 	/**
-	 * Gets a random color from the array of chart colors and returns it as well as its transparent equivalent.
+	 * Returns a color at a specific index from the palette, with its transparent equivalent.
 	 *
-	 * @since 3.3.0
+	 * @return array{string, string}
+	 * @access private
+	 */
+	private static function get_color_at( int $index ): array {
+		$colors = self::get_color_palette();
+		$color  = $colors[ $index % count( $colors ) ];
+		return array( self::hex2rgba( $color, 0.5 ), $color );
+	}
+
+	/**
+	 * Mixes a hex color toward white by the given factor (0 = original, 1 = white).
 	 *
 	 * @access private
 	 */
-	private static function get_random_color() {
-		$color = self::$_CHART_COLORS[ rand( 0, count( self::$_CHART_COLORS ) - 1 ) ];
-		return array( self::hex2rgba( $color, 0.5 ), $color );
+	private static function tint_color( string $hex, float $factor ): string {
+		$hex = ltrim( $hex, '#' );
+		if ( strlen( $hex ) === 3 ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+		$r = (int) round( hexdec( substr( $hex, 0, 2 ) ) + ( 255 - hexdec( substr( $hex, 0, 2 ) ) ) * $factor );
+		$g = (int) round( hexdec( substr( $hex, 2, 2 ) ) + ( 255 - hexdec( substr( $hex, 2, 2 ) ) ) * $factor );
+		$b = (int) round( hexdec( substr( $hex, 4, 2 ) ) + ( 255 - hexdec( substr( $hex, 4, 2 ) ) ) * $factor );
+		return sprintf( '#%02x%02x%02x', $r, $g, $b );
+	}
+
+	/**
+	 * Returns the color palette to use for charts.
+	 *
+	 * When global primary/secondary colors are configured, generates a palette of
+	 * alternating tints: [primary, secondary, primary@25%, secondary@25%, ...].
+	 * Falls back to the built-in colors otherwise.
+	 *
+	 * @return string[]
+	 * @access private
+	 */
+	private static function get_color_palette(): array {
+		$global  = self::get_global_style_defaults();
+		$primary   = $global['color_primary'];
+		$secondary = $global['color_secondary'];
+
+		if ( empty( $primary ) && empty( $secondary ) ) {
+			return self::$_CHART_COLORS;
+		}
+
+		$bases   = array_filter( array( $primary, $secondary ) );
+		$factors = array( 0, 0.25, 0.5, 0.75 );
+		$palette = array();
+
+		foreach ( $factors as $factor ) {
+			foreach ( $bases as $base ) {
+				$palette[] = $factor === 0 ? $base : self::tint_color( $base, $factor );
+			}
+		}
+
+		return $palette;
+	}
+
+	/**
+	 * Returns the global style defaults stored in the plugin settings.
+	 *
+	 * @return array<string, string>
+	 * @access public
+	 * @static
+	 */
+	public static function get_global_style_defaults(): array {
+		$option = get_option( Visualizer_Module_Admin::OPTION_GLOBAL_SETTINGS, array() );
+		return wp_parse_args(
+			$option,
+			array(
+				'color_primary'   => '',
+				'color_secondary' => '',
+				'apply_existing'  => '0',
+			)
+		);
+	}
+
+	/**
+	 * Applies global styles to existing charts at render time.
+	 *
+	 * @param array<string, mixed>|mixed $settings Chart settings.
+	 * @param int                        $chart_id Chart ID.
+	 * @param string                     $type     Chart type.
+	 * @return array<string, mixed>
+	 * @access public
+	 */
+	public function apply_global_style_settings( $settings, $chart_id, $type ): array {
+		$settings = is_array( $settings ) ? $settings : array();
+		$global   = self::get_global_style_defaults();
+
+		if ( empty( $global['apply_existing'] ) ) {
+			return $settings;
+		}
+
+		if ( empty( $global['color_primary'] ) && empty( $global['color_secondary'] ) ) {
+			return $settings;
+		}
+
+		if ( empty( $chart_id ) ) {
+			return $settings;
+		}
+
+		$library = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		$library = is_string( $library ) ? strtolower( $library ) : '';
+		if ( empty( $type ) ) {
+			$type = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
+		}
+		$type = is_string( $type ) ? strtolower( $type ) : '';
+
+		if ( empty( $library ) ) {
+			$library = in_array( $type, array( 'datatable', 'tabular' ), true ) ? 'datatable' : 'googlecharts';
+		}
+
+		if ( 'googlecharts' === $library || 'google' === $library ) {
+			if ( 'geo' !== $type ) {
+				$has_explicit = false;
+				if ( ! empty( $settings['colors'] ) ) {
+					$has_explicit = true;
+				}
+				if ( ! $has_explicit && isset( $settings['series'] ) && is_array( $settings['series'] ) ) {
+					foreach ( $settings['series'] as $series_settings ) {
+						if ( ! empty( $series_settings['color'] ) ) {
+							$has_explicit = true;
+							break;
+						}
+					}
+				}
+				if ( ! $has_explicit && isset( $settings['slices'] ) && is_array( $settings['slices'] ) ) {
+					foreach ( $settings['slices'] as $slice_settings ) {
+						if ( ! empty( $slice_settings['color'] ) ) {
+							$has_explicit = true;
+							break;
+						}
+					}
+				}
+				if ( ! $has_explicit ) {
+					$settings['colors'] = self::get_color_palette();
+				}
+			}
+			return $settings;
+		}
+
+		if ( 'chartjs' === $library ) {
+			$has_explicit = false;
+			if ( isset( $settings['series'] ) && is_array( $settings['series'] ) ) {
+				foreach ( $settings['series'] as $series_settings ) {
+					if ( ! empty( $series_settings['backgroundColor'] ) || ! empty( $series_settings['borderColor'] ) || ! empty( $series_settings['hoverBackgroundColor'] ) ) {
+						$has_explicit = true;
+						break;
+					}
+				}
+			}
+			if ( ! $has_explicit && isset( $settings['slices'] ) && is_array( $settings['slices'] ) ) {
+				foreach ( $settings['slices'] as $slice_settings ) {
+					if ( ! empty( $slice_settings['backgroundColor'] ) || ! empty( $slice_settings['borderColor'] ) || ! empty( $slice_settings['hoverBackgroundColor'] ) ) {
+						$has_explicit = true;
+						break;
+					}
+				}
+			}
+			if ( $has_explicit ) {
+				return $settings;
+			}
+			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
+			if ( is_array( $series ) ) {
+				$settings = self::apply_chartjs_palette( $settings, $type, $series, $chart_id );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Applies the global palette to ChartJS settings for a chart.
+	 *
+	 * @param array<string, mixed> $settings Current chart settings.
+	 * @param string               $type     Chart type.
+	 * @param array<int, mixed>    $series   Series definitions.
+	 * @param int                  $chart_id Chart ID.
+	 * @return array<string, mixed>
+	 * @access private
+	 * @static
+	 */
+	private static function apply_chartjs_palette( array $settings, string $type, array $series, int $chart_id ): array {
+		$attributes = array();
+		$name   = 'series';
+		$count  = count( $series );
+		$max    = $count - 1;
+
+		switch ( $type ) {
+			case 'polarArea':
+				// fall through.
+			case 'pie':
+				$chart = get_post( $chart_id );
+				$data  = $chart instanceof WP_Post ? maybe_unserialize( $chart->post_content ) : array();
+				$name  = 'slices';
+				$max   = is_array( $data ) ? count( $data ) : $count;
+				// fall through.
+			case 'column':
+				// fall through.
+			case 'bar':
+				for ( $i = 0; $i < $max; $i++ ) {
+					$colors = self::get_color_at( $i );
+					$attributes[] = array( 'backgroundColor' => $colors[0], 'hoverBackgroundColor' => $colors[1] );
+				}
+				break;
+			case 'radar':
+				// fall through.
+			case 'line':
+				// fall through.
+			case 'area':
+				for ( $i = 0; $i < $max; $i++ ) {
+					$colors = self::get_color_at( $i );
+					$attributes[] = array( 'borderColor' => $colors[0] );
+				}
+				break;
+		}
+
+		if ( $attributes ) {
+			$settings[ $name ] = $attributes;
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -178,6 +394,14 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 					$attributes['candlestick']['risingColor']['fill'] = '#3366cc';
 					break;
 			}
+
+			// Apply global color defaults to new Google Charts (not Geo — it uses colorAxis).
+			if ( 'geo' !== $type ) {
+				$global = self::get_global_style_defaults();
+				if ( ! empty( $global['color_primary'] ) || ! empty( $global['color_secondary'] ) ) {
+					$attributes['colors'] = self::get_color_palette();
+				}
+			}
 		}
 
 		if ( $attributes ) {
@@ -218,7 +442,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'bar':
 				for ( $i = 0; $i < $max; $i++ ) {
-					$colors = self::get_random_color();
+					$colors = self::get_color_at( $i );
 					$attributes[] = array( 'backgroundColor' => $colors[0], 'hoverBackgroundColor' => $colors[1] );
 				}
 				break;
@@ -228,7 +452,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'area':
 				for ( $i = 0; $i < $max; $i++ ) {
-					$colors = self::get_random_color();
+					$colors = self::get_color_at( $i );
 					$attributes[] = array( 'borderColor' => $colors[0] );
 				}
 				break;

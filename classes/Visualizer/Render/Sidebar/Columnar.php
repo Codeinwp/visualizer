@@ -60,7 +60,7 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 					'isStacked',
 					$this->isStacked,
 					$this->_yesno,
-					esc_html__( 'If set to yes, series elements are stacked.', 'visualizer' )
+					esc_html__( 'When enabled, series elements are stacked.', 'visualizer' )
 				);
 
 				echo '<div class="viz-section-delimiter"></div>';
@@ -110,5 +110,4 @@ abstract class Visualizer_Render_Sidebar_Columnar extends Visualizer_Render_Side
 			'#000'
 		);
 	}
-
 }

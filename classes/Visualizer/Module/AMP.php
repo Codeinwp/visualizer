@@ -100,5 +100,4 @@ class Visualizer_Module_AMP extends Visualizer_Module {
 		}
 		return $output['csv'];
 	}
-
 }

@@ -98,7 +98,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Bar extends Visualizer_Render_Sideb
 					'xAxes[stacked_bool]',
 					isset( $this->xAxes['stacked_bool'] ) ? $this->xAxes['stacked_bool'] : false,
 					'true',
-					esc_html__( 'If checked, series elements are stacked.', 'visualizer' )
+					esc_html__( 'When enabled, series elements are stacked.', 'visualizer' )
 				);
 				break;
 			case 'Bar':
@@ -123,7 +123,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Bar extends Visualizer_Render_Sideb
 					'yAxes[stacked_bool]',
 					isset( $this->yAxes['stacked_bool'] ) ? $this->yAxes['stacked_bool'] : false,
 					'true',
-					esc_html__( 'If checked, series elements are stacked.', 'visualizer' )
+					esc_html__( 'When enabled, series elements are stacked.', 'visualizer' )
 				);
 				break;
 		}
@@ -131,6 +131,5 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Bar extends Visualizer_Render_Sideb
 			self::_renderSectionEnd();
 
 		self::_renderGroupEnd();
-
 	}
 }

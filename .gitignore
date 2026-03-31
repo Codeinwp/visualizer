@@ -7,3 +7,6 @@ vendor
 .DS_Store
 artifacts
 .phpunit.result.cache
+classes/Visualizer/Gutenberg/build
+classes/Visualizer/ChartBuilder/build
+classes/Visualizer/D3Renderer/build

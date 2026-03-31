@@ -59,7 +59,36 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Runs the export AJAX action and returns the decoded response.
+	 *
+	 * @since 3.11.0
+	 *
+	 * @access private
+	 * @return object|null
+	 */
+	private function run_export() {
+		$_GET = array(
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
+			'chart'    => $this->chart,
+		);
+
+		ob_start();
+		try {
+			$this->_handleAjax( 'visualizer-export-data' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		} catch ( WPAjaxDieStopException $ee ) {
+			// We expected this, do nothing.
+		}
+		ob_end_clean();
+
+		return json_decode( $this->_last_response );
+	}
+
+	/**
 	 * Testing export
+	 *
+	 * @since 2.0.0
 	 *
 	 * @access public
 	 */
@@ -67,26 +96,71 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 		$this->create_chart();
 		$this->_setRole( 'administrator' );
 
-		$_GET  = array(
-			'security'      => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
-			'chart'         => $this->chart,
+		$response = $this->run_export();
+		$this->assertIsObject( $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
+		$this->assertTrue( $response->success );
+	}
+
+	/**
+	 * CSV response contains the expected keys from _getCSV.
+	 *
+	 * @since 3.11.0
+	 *
+	 * @access public
+	 */
+	public function test_csv_export_response_structure() {
+		$this->create_chart();
+		$this->_setRole( 'administrator' );
+
+		$response = $this->run_export();
+		$this->assertIsObject( $response );
+		$this->assertTrue( property_exists( $response, 'success' ) );
+		$this->assertTrue( property_exists( $response, 'data' ) );
+		$this->assertTrue( $response->success );
+
+		$data = $response->data;
+		$this->assertTrue( property_exists( $data, 'csv' ) );
+		$this->assertTrue( property_exists( $data, 'name' ) );
+		$this->assertTrue( property_exists( $data, 'string' ) );
+		$this->assertIsString( $data->csv );
+		$this->assertIsString( $data->name );
+		$this->assertIsString( $data->string );
+		// filename must end with .csv
+		$this->assertStringEndsWith( '.csv', $data->name );
+		// string is csv without the BOM
+		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
+		$this->assertStringNotContainsString( $bom, $data->string );
+	}
+
+	/**
+	 * Export must fail gracefully for non-existent chart ids.
+	 *
+	 * @since 3.11.0
+	 *
+	 * @access public
+	 */
+	public function test_csv_export_invalid_chart_returns_no_success() {
+		$this->_setRole( 'administrator' );
+
+		$_GET = array(
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION ),
+			'chart'    => PHP_INT_MAX,
 		);
 
-		// swallow the output
 		ob_start();
 		try {
 			$this->_handleAjax( 'visualizer-export-data' );
-		} catch ( WPAjaxDieContinueException  $e ) {
+		} catch ( WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		} catch ( WPAjaxDieStopException $ee ) {
 			// We expected this, do nothing.
 		}
 		ob_end_clean();
 
+		// No success JSON should have been emitted for a missing chart.
 		$response = json_decode( $this->_last_response );
-		$this->assertIsObject( $response );
-		$this->assertObjectHasAttribute( 'success', $response );
-		$this->assertObjectHasAttribute( 'data', $response );
-		$this->assertTrue( $response->success );
+		$this->assertTrue( empty( $response ) || empty( $response->success ) );
 	}
 }

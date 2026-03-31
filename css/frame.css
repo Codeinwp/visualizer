@@ -53,17 +53,17 @@
 /******************************************************************************/
 
 #sidebar {
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 	position: absolute;
-	z-index: 75;
+	z-index: 80;
 	top: 0;
 	right: 0;
 	bottom: 60px;
 	width: 350px;
-	border-left: 1px solid #dfdfdf;
-	background: whitesmoke;
-
-	-webkit-overflow-scrolling: touch;
+	border-left: 1px solid #ddd;
+	background: #f8f9fa;
+	overscroll-behavior: contain;
 }
 
 .viz-group {
@@ -83,11 +83,11 @@
 }
 
 .viz-group-wrapper ul .viz-group-title {
-	border-top: 1px solid #ddd;
+	border-top: 1px solid #e5e5e5;
 }
 
 .viz-group-wrapper ul li {
-	border-top: 1px solid #ddd;
+	border-top: 1px solid #e5e5e5;
 }
 
 .viz-group-wrapper ul ul li.viz-subsection {
@@ -98,17 +98,17 @@
 .viz-group-wrapper .viz-group .viz-group .viz-group-title {
 	position: relative;
 	margin: 0;
-	padding: 10px 10px 11px 14px;
+	padding: 12px 36px 12px 16px;
 	border-top: none;
 	border-bottom: none;
-	border-left: 4px solid #fff;
+	border-left: 4px solid transparent;
 	color: #555d66;
 	background-color: #fff;
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: 600;
-	line-height: 21px;
+	line-height: 1.4;
 	cursor: pointer;
-	transition: 0.15s color ease-in-out,0.15s background-color ease-in-out,0.15s border-color ease-in-out;
+	transition: 0.15s color ease-in-out, 0.15s background-color ease-in-out, 0.15s border-color ease-in-out;
 }
 
 .viz-title-small {
@@ -125,11 +125,13 @@
 .viz-group-wrapper .viz-group .viz-group .viz-group-title:after {
 	position: absolute;
 	z-index: 1;
-	top: 11px;
-	right: 10px;
-	color: #a0a5aa;
-	font: 400 20px/1 dashicons;
+	top: 50%;
+	right: 12px;
+	transform: translateY(-50%);
+	color: inherit;
+	font: 400 18px/1 dashicons;
 	content: "\f345";
+	opacity: 0.6;
 }
 
 .viz-group-wrapper .viz-group .viz-group.open .viz-group-title:after {
@@ -174,13 +176,15 @@
 	width: 100%;
 	height: 100%;
 	margin: 0;
+	padding-bottom: 60px;
 }
 
-.viz-group.bottom-fixed {
+.viz-group.bottom-fixed { 
 	display: block;
-	position: absolute;
-	bottom: 0;
-	width: 100%;
+	position: fixed;
+	width: 350px;
+	padding: 12px;
+	margin: 0 auto;
 }
 
 .viz-group ul li h2,
@@ -198,7 +202,7 @@
 	display: none;
 	margin: 0;
 	padding: 0;
-	background-color: #fdfdfd;
+	background-color: #fff;
 }
 
 div.viz-group-content {
@@ -233,37 +237,44 @@ div.viz-group-content .viz-group-description {
 .viz-section-title {
 	display: block;
 	position: relative;
-	margin-bottom: 5px;
-	padding: 4px 20px;
-	border-top: 1px solid #eee;
-	border-bottom: 1px solid #eee;
-	background-color: rgba(0, 0, 0, 0.02);
-	box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.1);
-	font-weight: bold;
+	margin-bottom: 0;
+	padding: 10px 36px 10px 16px;
+	border-top: 1px solid #e5e5e5;
+	border-left: 3px solid transparent;
+	background-color: #f8f9fa;
+	font-size: 12px;
+	font-weight: 600;
+	color: #555d66;
+	text-transform: uppercase;
+	letter-spacing: 0.4px;
 	cursor: pointer;
+	transition: border-left-color 0.15s ease-in-out, color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.viz-section-title:hover,
+.viz-section-title.open {
+	border-left-color: #0073aa;
+	color: #0073aa;
+	background-color: #f0f6fb;
 }
 
 .viz-group-wrapper ul ul li .viz-section-title {
-	margin-bottom: 0;
-	border: none;
-	box-shadow: none;
+	border-left: 3px solid transparent;
 }
 
 .viz-section-title::after {
 	position: absolute;
-	z-index: 1;
-	top: 13px;
-	right: 20px;
-	width: 0;
-	height: 0;
-	border-width: 4px 4px 0;
-	border-style: solid;
-	border-color: #ccc transparent;
-	content: "";
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	color: inherit;
+	font: 400 16px/1 dashicons;
+	content: "\f345";
+	opacity: 0.6;
 }
 
 .viz-section-title.open::after {
-	border-width: 0 4px 4px;
+	content: "\f347";
 }
 
 .section-items,
@@ -311,7 +322,7 @@ div.viz-group-content .viz-group-description {
 .section-delimiter,
 .viz-section-delimiter {
 	margin: 15px 0;
-	border-top: 1px dashed #ccc;
+	border-top: 1px solid #e5e5e5;
 }
 
 .viz-section-table-column {
@@ -351,7 +362,7 @@ div.viz-group-content .viz-group-description {
 #rate-the-plugin {
 	margin-top: 40px;
 	padding: 20px;
-	border-top: 1px dashed #ddd;
+	border-top: 1px solid #e5e5e5;
 	text-align: center;
 }
 
@@ -393,14 +404,71 @@ div.viz-group-content .viz-group-description {
 }
 
 #viz-tabs .wp-color-picker {
-  width: 4rem !important;
+	width: 4rem !important;
+}
+
+/* Modern flat tab nav */
+#viz-tabs .ui-tabs-nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	background: #fff;
+	border: none;
+	border-bottom: 2px solid #e5e5e5;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+#viz-tabs .ui-tabs-nav li {
+	flex: 1;
+	margin: 0;
+	border: none;
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
+	background: transparent;
+	top: 2px;
+	transition: border-color 0.15s ease-in-out;
+}
+
+#viz-tabs .ui-tabs-nav li a {
+	display: block;
+	width: 100%;
+	padding: 10px 0;
+	color: #555d66;
+	font-size: 13px;
+	font-weight: 500;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+#viz-tabs .ui-tabs-nav li:hover a {
+	color: #0073aa;
+}
+
+#viz-tabs .ui-tabs-nav .ui-state-active {
+	border-bottom-color: #0073aa;
+	background: transparent;
+}
+
+#viz-tabs .ui-tabs-nav .ui-state-active a {
+	color: #0073aa;
+	font-weight: 600;
+}
+
+#viz-tabs .ui-tabs-nav li a:focus,
+#viz-tabs .ui-tabs-nav li.ui-state-focus a {
+	outline: none;
+	box-shadow: none;
+	border-radius: 2px;
 }
 
 .viz-info-panel {
 	display: flex;
 	flex-direction: column;
-	padding: 10px;
-	gap: 10px;
+	padding: 16px;
+	gap: 14px;
+	background: #fff;
+	border-bottom: 1px solid #e5e5e5;
 }
 
 .viz-info-panel label {
@@ -484,46 +552,49 @@ div.viz-group-content .viz-group-description {
 	display: block;
 	position: absolute;
 	right: 0;
-	bottom: -6px;
+	bottom: 0;
 	width: 100%;
-	padding: 4px 0;
-	border-top: 1px dashed #ddd;
-	border-bottom: 1px dashed #ddd;
-	background: #e0e0e0;
-	background-color: #efefef;
-	box-shadow: 0 0 8px #ddd;
-	font-weight: bold;
+	padding: 6px 0;
+	border-top: 1px solid #e5e5e5;
+	background-color: #fff;
+	font-weight: 600;
+	font-size: 12px;
 	text-align: center;
+	color: #555d66;
 }
 
 .type-box .pro-upsell {
-	color: #c55555;
+	color: #d63638;
 }
 
 #type-picker {
-	width: 954px;
-	margin: 50px auto;
+	max-width: 960px;
+	margin: 30px auto;
+	padding: 0 16px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
 }
 
 .type-box {
-	float: left;
 	position: relative;
-	margin: 0 20px 20px 0;
-	border: 1px dashed #ddd;
-	background-color: #efefef;
-	box-shadow: 0 0 8px #ddd;
+	border: 1px solid #ddd;
+	border-left: 3px solid transparent;
+	background-color: #fff;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+	border-radius: 2px;
+	overflow: hidden;
+	transition: border-left-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.type-box:hover,
+.type-box:has(.type-label-selected) {
+	border-left-color: #0073aa;
+	box-shadow: 0 2px 6px rgba(0,114,170,0.15);
 }
 
 .type-box.viz-hidden {
 	display: none;
-}
-
-.type-box.viz-hidden {
-	display: none;
-}
-
-.type-box:nth-child(3n+1) {
-	margin-right: 0;
 }
 
 .type-box .pro-upsell .visualizder-pro-label {
@@ -531,12 +602,16 @@ div.viz-group-content .viz-group-description {
 	position: absolute;
 	top: 0;
 	width: 74px;
-	height: 10px;
 	height: 17px;
 	border: none;
 	color: #fff;
 	z-index: 4;
-	background: #c55555;
+	background: #d63638;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	line-height: 17px;
+	text-align: center;
 }
 
 .type-label {
@@ -544,14 +619,15 @@ div.viz-group-content .viz-group-description {
 	width: 270px;
 	height: 205px;
 	padding: 15px;
-	border: 1px solid #e0e0e0;
-	background-color: white;
+	border: none;
+	background-color: #f9f9f9;
 	background-image: url(../images/chart_types_v395.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: 900px 1150px;
 	filter: grayscale(100%);
 	cursor: pointer;
+	transition: filter 0.15s ease-in-out, background-color 0.15s ease-in-out;
 }
 
 #type-picker.lib-ChartJS .type-label {
@@ -564,8 +640,15 @@ div.viz-group-content .viz-group-description {
 
 .type-label-selected,
 .type-box .type-label:hover {
-/*	background-image: url(../images/chart_types_v340.png);*/
 	filter: grayscale(0);
+	background-color: #f0f7fb;
+}
+
+.type-label:focus,
+.viz-group-title:focus,
+.viz-section-title:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
 }
 
 .type-box-area .type-label {
@@ -1012,8 +1095,52 @@ button#editor-chart-button {
 }
 
 #vz-chart-copyright {
-	bottom: 10px;
+	bottom: 60px;
 	text-align: center;
+	z-index: 999;
+	background: #f3f3f3;
+}
+
+/* Import steps — stepped data-source + schedule flow */
+.vz-import-step-btn {
+	width: 100%;
+	margin-bottom: 4px !important;
+	text-align: left;
+}
+
+.vz-import-step-toggle {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin: 0;
+	padding: 5px 10px;
+	background: #f0f0f1;
+	border: 1px solid #c3c4c7;
+	border-radius: 2px;
+	cursor: pointer;
+	font-size: 13px;
+	color: #50575e;
+	line-height: 2;
+}
+
+.vz-import-step-toggle:hover {
+	background: #e5e5e5;
+	border-color: #a7aaad;
+}
+
+.vz-import-step-toggle .dashicons {
+	transition: transform 0.2s ease;
+	flex-shrink: 0;
+}
+
+.vz-import-step-toggle[aria-expanded="true"] .dashicons {
+	transform: rotate(180deg);
+}
+
+#vz-wp-sync-options,
+#vz-db-sync-options {
+	padding-top: 8px;
 }
 
 #sidebar {
@@ -1113,12 +1240,14 @@ button#editor-chart-button {
 	left: 0;
 	width: 100%;
 	opacity: 0;
+	pointer-events: none;
 	background: rgba(253,253,253,0.9);
 	transition: 0.5s ease;
 }
 
 .only-pro-feature:hover .only-pro-content {
 	opacity: 1;
+	pointer-events: auto;
 }
 
 .only-pro-container {
@@ -1134,10 +1263,11 @@ button#editor-chart-button {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	gap: 12px;
 }
 
 .only-pro-content p {
-	margin: 0 0 15px;
+	margin: 0;
 	font-size: 14px;
 	font-weight: 700;
 }
@@ -1153,9 +1283,6 @@ button#editor-chart-button {
 	border-width: 1px;
 	border-style: solid;
 	border-radius: 3px;
-}
-.only-pro-content .only-pro-container a {
-	color: #fff !important;
 }
 
 .only-pro-content a:hover {
@@ -1175,7 +1302,7 @@ button#editor-chart-button {
 }
 
 span.viz-section-error {
-	color: #ff000;
+	color: #ff0000;
 }
 
 #visualizer-error-manual {
@@ -1478,6 +1605,74 @@ span.viz-section-error {
 	width: calc(100% - 17px);
 }
 
+
+/******************************************************************************/
+/************************  manual config JSON editor  *************************/
+/******************************************************************************/
+code.viz-manual-config-example {
+	display: block;
+	white-space: pre;
+	background: #f5f5f5;
+	border: 1px solid #e0e0e0;
+	border-radius: 3px;
+	padding: 6px 8px;
+	margin-top: 6px;
+	font-size: 11px;
+	line-height: 1.5;
+}
+
+
+textarea[name="manual"] + .CodeMirror {
+	background: #282923;
+	color: #f8f8f2;
+	border-radius: 4px;
+	height: 200px;
+	font-size: 13px;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-scroll {
+	min-height: 200px;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-gutters {
+	background: #1e1f1c;
+	border-right: 1px solid #404040;
+	color: #75715e;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-linenumber {
+	color: #75715e;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-cursor {
+	border-left: 1px solid #f8f8f0;
+}
+
+textarea[name="manual"] + .CodeMirror .CodeMirror-selected {
+	background: #49483e;
+}
+
+textarea[name="manual"] + .CodeMirror pre.CodeMirror-line,
+textarea[name="manual"] + .CodeMirror pre.CodeMirror-line-like {
+	color: #f8f8f2;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-string {
+	color: #A9DC76;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-number {
+	color: #AB9DF2;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-atom {
+	color: #78DCE8;
+}
+
+textarea[name="manual"] + .CodeMirror .cm-punctuation,
+textarea[name="manual"] + .CodeMirror .cm-bracket {
+	color: #f8f8f2;
+}
 
 /******************************************************************************/
 /********************************  data tables  *******************************/

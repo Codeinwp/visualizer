@@ -5,22 +5,6 @@ import { Chart } from 'react-google-charts';
 
 import DataTable from './DataTable.js';
 
-import FileImport from './Import/FileImport.js';
-
-import RemoteImport from './Import/RemoteImport.js';
-
-import ChartImport from './Import/ChartImport.js';
-
-import DataImport from './Import/DataImport.js';
-
-import ManualData from './Import/ManualData.js';
-
-import Sidebar from './Sidebar.js';
-
-import ChartPermissions from './ChartPermissions.js';
-
-import PanelButton from './PanelButton.js';
-
 import merge from 'merge';
 
 import { compact, formatDate, isValidJSON, formatData, googleChartPackages } from '../utils.js';
@@ -34,9 +18,7 @@ const { __ } = wp.i18n;
 
 const { apiFetch } = wp;
 
-const {
-	Button
-} = wp.components;
+const { Button } = wp.components;
 
 const {
 	Component,
@@ -99,30 +81,61 @@ visualizerMediaView.Chart = wp.media.view.MediaFrame.extend(
 );
 
 class ChartSelect extends Component {
-	constructor() {
-		super( ...arguments );
+	getD3ContainerId() {
+		return `visualizer-d3-select-${ this.props.id }`;
+	}
 
-		this.state = {
+	isD3Chart( chart ) {
+		return chart && chart['visualizer-chart-library'] && 'd3' === chart['visualizer-chart-library'].toLowerCase();
+	}
 
-			/**
-			 * Sidebar Route Status
-			 *
-			 * home - Initial screen.
-			 * showAdvanced - Show Advanced Options.
-			 */
-			route: 'home'
+	renderD3Chart() {
+		const chart = this.props.chart;
+		if ( ! this.isD3Chart( chart ) ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof jQuery ) {
+			return;
+		}
+
+		const containerId = this.getD3ContainerId();
+		const data = formatDate( JSON.parse( JSON.stringify( chart ) ) );
+		const code = chart['visualizer-d3-code'] || chart.code || '';
+		const payload = {
+			id: containerId,
+			charts: {
+				[ containerId ]: {
+					library: 'd3',
+					code,
+					series: data['visualizer-series'],
+					data: data['visualizer-data']
+				}
+			}
 		};
+
+		jQuery( 'body' ).trigger( 'visualizer:render:chart:start', payload );
+	}
+
+	componentDidMount() {
+		this.renderD3Chart();
+	}
+
+	componentDidUpdate( prevProps ) {
+		if ( prevProps.chart !== this.props.chart ) {
+			this.renderD3Chart();
+		}
 	}
 
 	render() {
-		const { legacyBlockEdit, blockEditDoc } = window.visualizerLocalize;
 		let chartVersion = 'undefined' !== typeof google.visualization ? google.visualization.Version : 'current';
 
 		let chart, footer;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
+		const isD3 = this.isD3Chart( data );
 
-		if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+		if ( ! isD3 && 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
 			if ( 'DataTable' === data['visualizer-chart-library']) {
 				chart = data['visualizer-chart-type'];
 			} else {
@@ -132,8 +145,10 @@ class ChartSelect extends Component {
                 }
                 chart = startCase( chart );
 			}
-		} else {
+		} else if ( ! isD3 ) {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
+		} else {
+			chart = 'AI';
 		}
 
         if ( data['visualizer-data-exploded']) {
@@ -141,6 +156,17 @@ class ChartSelect extends Component {
         }
 
 		const openEditChart = ( chartId ) => {
+			if ( isD3 ) {
+				// Set a callback the AI Builder will invoke instead of reloading the page.
+				window.vizAIBuilderDoneCallback = async() => {
+					await this.props.getChartData( chartId );
+				};
+				if ( typeof window.vizOpenAIBuilderEdit === 'function' ) {
+					window.vizOpenAIBuilderEdit( chartId );
+				}
+				return;
+			}
+
 			const baseURL = ( window.visualizerLocalize.chartEditUrl ) ? window.visualizerLocalize.chartEditUrl : '';
 			let view = new visualizerMediaView.Chart(
 				{
@@ -148,21 +174,14 @@ class ChartSelect extends Component {
 				}
 			);
 			const updateChartState = async() => {
-				await this.setState({
-					isLoading: 'getChart'
-				});
-
 				let result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
 				await this.props.editSettings( result['chart_data']['visualizer-settings']);
 				await this.props.getChartData( chartId );
-
-				await this.setState({ route: 'home', chart: result['chart_data'], isModified: true, isLoading: true });
+				view.close();
 			};
 			// eslint-disable-next-line camelcase
 			window.send_to_editor = function() {
-				updateChartState().then( () => {
-					view.close();
-				});
+				updateChartState();
 			};
 
 			view.open();
@@ -170,112 +189,35 @@ class ChartSelect extends Component {
 
 		return (
 			<Fragment>
-				{ 'home' === this.state.route &&
-					<InspectorControls>
-						{ ! legacyBlockEdit && (
-							<div className="viz-edit-chart-new">
-								<Button
-									isPrimary={true}
-									onClick={ () => {
- openEditChart( this.props.id );
-} }> Edit Chart </ Button>
-								<p dangerouslySetInnerHTML={{__html: blockEditDoc}}></p>
-							</div>
-						) }
-
-						{ legacyBlockEdit && (
-							<>
-
-						<ManualData chart={ this.props.chart } editChartData={ this.props.editChartData } />
-
-						<FileImport
-							chart={ this.props.chart }
-							readUploadedFile={ this.props.readUploadedFile }
-						/>
-
-								<RemoteImport
-									id={ this.props.id }
-									chart={ this.props.chart }
-									editURL={ this.props.editURL }
-									isLoading={ this.props.isLoading }
-									uploadData={ this.props.uploadData }
-									editSchedule={ this.props.editSchedule }
-									editJSONSchedule={ this.props.editJSONSchedule }
-									editJSONURL={ this.props.editJSONURL }
-									editJSONHeaders={ this.props.editJSONHeaders }
-									editJSONRoot={ this.props.editJSONRoot }
-									editJSONPaging={ this.props.editJSONPaging }
-									JSONImportData={ this.props.JSONImportData }
-								/>
-
-								<ChartImport getChartData={ this.props.getChartData } isLoading={ this.props.isLoading } />
-
-								<DataImport
-									chart={ this.props.chart }
-									editSchedule={ this.props.editDatabaseSchedule }
-									databaseImportData={ this.props.databaseImportData }
-								/>
-
-						<PanelButton
-							label={ __( 'Advanced Options' ) }
-                            className="visualizer-advanced-options"
-							icon="admin-tools"
-							onClick={ () => this.setState({ route: 'showAdvanced' }) }
-						/>
-
-								<PanelButton
-									label={ __( 'Chart Permissions' ) }
-									icon="admin-users"
-									onClick={ () => this.setState({ route: 'showPermissions' }) }
-								/>
-							</>
-						) }
-					</InspectorControls>
-				}
-
-				{ ( 'showAdvanced' === this.state.route || 'showPermissions' === this.state.route ) &&
-					<InspectorControls>
-						<PanelButton
-							label={ __( 'Chart Settings' ) }
-							onClick={ () => this.setState({ route: 'home' }) }
-							isBack={ true }
-						/>
-
-						{ 'showAdvanced' === this.state.route &&
-							<Sidebar chart={ this.props.chart } attributes={ this.props.attributes } edit={ this.props.editSettings } />
-						}
-
-						{ 'showPermissions' === this.state.route &&
-							<ChartPermissions chart={ this.props.chart } edit={ this.props.editPermissions } />
-						}
-					</InspectorControls>
-				}
+				<InspectorControls>
+					<div className="viz-edit-chart-new">
+						<Button
+							isPrimary={ true }
+							onClick={ () => {
+								openEditChart( this.props.id );
+							} }
+						>
+							{ __( 'Edit Chart' ) }
+						</Button>
+					</div>
+				</InspectorControls>
 
 				<div className="visualizer-settings__chart" data-chart-type={ chart }>
 
 					{ ( null !== this.props.chart ) &&
 
-						( 'DataTable' === data['visualizer-chart-library']) ? (
+						isD3 ? (
+							<div
+								id={ this.getD3ContainerId() }
+								className="visualizer-d3-preview"
+								style={ { height: '500px' } }
+							/>
+						) : ( 'DataTable' === data['visualizer-chart-library']) ? (
 							<DataTable
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
-							/>
-						) : ( '' !== data['visualizer-data-exploded'] ? (
-							<Chart
-								chartVersion={ chartVersion }
-								chartType={ chart }
-								rows={ data['visualizer-data'] }
-								columns={ data['visualizer-series'] }
-								options={
-									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
-										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
-										compact( this.props.chart['visualizer-settings'])
-								}
-								height="500px"
-                                formatters={ formatData( data ) }
-								chartPackages={ googleChartPackages }
 							/>
                         ) : (
 							<Chart
@@ -293,12 +235,11 @@ class ChartSelect extends Component {
 								chartPackages={ googleChartPackages }
 							/>
 						)
-					) }
+					}
 
-                     <div className="visualizer-settings__charts-footer"><sub>
+                    <div className="visualizer-settings__charts-footer"><sub>
                         { footer }
-                     </sub></div>
-
+                    </sub></div>
 				</div>
 			</Fragment>
 		);

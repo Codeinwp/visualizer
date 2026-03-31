@@ -32,4 +32,7 @@ phpstan-baseline.neon
 AGENTS.md
 .wp-env.json
 .claude
-
+skills
+classes/Visualizer/Gutenberg/src
+classes/Visualizer/ChartBuilder/src
+classes/Visualizer/D3Renderer/src

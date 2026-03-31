@@ -58,7 +58,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 	 *
 	 * @access public
 	 */
-	function load_assets( $deps, $is_frontend ) {
+	public function load_assets( $deps, $is_frontend ) {
 		$this->load_dependent_assets( array( 'moment' ) );
 
 		wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery-ui-core', 'moment' ), Visualizer_Plugin::VERSION );
@@ -101,7 +101,7 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 		$this->_supportsAnimation = false;
 		$this->_renderGeneralSettings();
 		$this->_renderTableSettings();
-		 $this->_renderColumnSettings();
+		$this->_renderColumnSettings();
 		$this->_renderAdvancedSettings();
 	}
 
@@ -177,6 +177,9 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 					esc_html__( 'To enable paging through the data.', 'visualizer' )
 				);
 
+				$paging_enabled = ( isset( $this->paging_bool ) && 'true' === $this->paging_bool );
+			echo '<div class="viz-pagination-options"', ( $paging_enabled ? '' : ' style="display:none"' ), '>';
+
 				echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
 				self::_renderTextItem(
@@ -208,7 +211,9 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 
 				do_action( 'visualizer_chart_settings', __CLASS__, $this->_data, 'pagination' );
 
-				echo '<div class="viz-section-delimiter section-delimiter"></div>';
+			echo '</div>';
+
+			echo '<div class="viz-section-delimiter section-delimiter"></div>';
 
 				self::_renderTextItem(
 					esc_html__( 'Table Height', 'visualizer' ),
@@ -499,5 +504,4 @@ class Visualizer_Render_Sidebar_Type_DataTable_Tabular extends Visualizer_Render
 				break;
 		}
 	}
-
 }

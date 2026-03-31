@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+body {
+	height: auto;
+}
+
 #visualizer-icon {
 	background-image: url("../images/icon.png");
 }
@@ -161,15 +165,29 @@
 	height: 16px;
 	font-size: 16px;
 }
+.visualizer-chart-action .visualizer-action-label {
+	font-size: 12px;
+	line-height: 1;
+}
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action:hover,
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action:focus {
 	color: #3F3F3F;
 	background: #ffffff;
 }
 
-.visualizer-chart-action.visualizer-chart-delete,
-.visualizer-chart-action.visualizer-nochart-delete {
+.visualizer-chart-action.visualizer-chart-edit,
+.visualizer-chart-action.visualizer-nochart-edit {
 	margin-right: auto;
+	width: auto;
+	height: auto;
+	padding: 0 10px;
+	gap: 6px;
+}
+.visualizer-chart-action.visualizer-chart-edit .dashicons {
+	margin-right: 0;
+}
+.visualizer-chart-action.visualizer-chart-edit .tooltip-text {
+	display: none;
 }
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-chart-delete:hover,
 .visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-nochart-delete:hover {
@@ -626,4 +644,373 @@ div#visualizer-types ul, div#visualizer-types form p {
 	font: inherit;
 	text-align: inherit;
 	text-decoration: none;
+}
+
+/* ── View toggle buttons ── */
+span.viz-view-toggle-group {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-left: 0;
+	margin-right: 8px;
+	vertical-align: middle;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 1px;
+	background: #f6f7f7;
+}
+
+.viz-view-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	cursor: pointer;
+	background: transparent;
+	border: none;
+	border-radius: 3px;
+	color: #646970;
+	line-height: 1;
+	text-decoration: none;
+}
+
+.viz-view-toggle.active {
+	background: #007CBA;
+	color: #fff;
+}
+
+.viz-view-toggle:hover:not(.active) {
+	background: #e0e0e0;
+	color: #1d2327;
+}
+
+.viz-view-toggle:focus {
+	outline: 2px solid #007CBA;
+	outline-offset: 0;
+	box-shadow: none;
+}
+
+/* ── Edit button — more visible ── */
+.visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-chart-edit {
+	display: flex;
+}
+
+.visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-chart-edit:hover,
+.visualizer-action-group:not(.visualizer-nochart) .visualizer-chart-action.visualizer-chart-edit:focus {
+	background-color: #0069a6 !important;
+	color: #fff !important;
+}
+
+/* ── Compact upsell banner ── */
+#visualizer-library .items--upsell {
+	width: 100%;
+}
+
+.viz-upsell-banner {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	background: #fff;
+	border-left: 4px solid #007CBA;
+	padding: 12px 16px;
+	margin-bottom: 10px;
+}
+
+.viz-upsell-banner__icon {
+	color: #007CBA;
+	font-size: 20px;
+	flex-shrink: 0;
+}
+
+.viz-upsell-banner__text {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.viz-upsell-banner__text strong {
+	font-size: 13px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.viz-upsell-banner__text span {
+	font-size: 12px;
+	color: #50575e;
+}
+
+.viz-upsell-banner__actions {
+	display: flex;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+/* ── Chart type badge (list view only) ── */
+.viz-chart-type-badge {
+	display: none;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: capitalize;
+	background: #e8f0f8;
+	color: #007CBA;
+	border: 1px solid #c3daf9;
+	border-radius: 10px;
+	padding: 2px 8px;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+/* ── List view: WP-style table ── */
+#visualizer-library.view-list {
+	display: block;
+	margin: 20px 0;
+}
+
+.viz-charts-table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.viz-charts-table thead th {
+	padding: 10px 12px;
+	font-size: 12px;
+	font-weight: 700;
+	color: #1d2327;
+	text-align: left;
+	background: #f6f7f7;
+	border-bottom: 2px solid #c3c4c7;
+	white-space: nowrap;
+}
+
+.viz-charts-table tbody tr {
+	background: #fff;
+	border-bottom: 1px solid #f0f0f1;
+	transition: background 0.1s;
+}
+
+.viz-charts-table tbody tr:hover {
+	background: #f6f7f7;
+}
+
+.viz-charts-table td {
+	padding: 10px 12px;
+	vertical-align: middle;
+	font-size: 13px;
+	color: #3c434a;
+}
+
+/* Column widths */
+.viz-charts-table .col-id {
+	width: 50px;
+	font-weight: 600;
+	color: #787c82;
+}
+
+.viz-charts-table .col-title {
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.viz-charts-table .col-type {
+	width: 110px;
+}
+
+.viz-charts-table .col-shortcode {
+	width: 260px;
+}
+
+.viz-charts-table .col-actions {
+	width: 1%;
+	white-space: nowrap;
+}
+
+/* Type badge in table */
+.viz-charts-table .viz-chart-type-badge {
+	display: inline-block;
+}
+
+/* Shortcode cell */
+.viz-shortcode-display {
+	display: inline-block;
+	font-size: 11px;
+	background: #f6f7f7;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 3px 7px;
+	color: #50575e;
+	white-space: nowrap;
+	max-width: 260px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	font-family: Consolas, Monaco, monospace;
+	cursor: pointer;
+	transition: background 0.15s, border-color 0.15s;
+}
+
+.viz-shortcode-display:hover {
+	background: #e8f0f8;
+	border-color: #bfdbfe;
+	color: #1d2327;
+}
+
+.viz-shortcode-display.viz-shortcode-copied {
+	background: #dcfce7;
+	border-color: #86efac;
+	color: #15803d;
+}
+
+/* Action buttons in table: colored bordered icon buttons */
+.viz-charts-table .visualizer-action-group {
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 4px;
+	justify-content: flex-end;
+}
+
+.viz-charts-table .visualizer-chart-action {
+	width: 32px;
+	height: 32px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+	color: #646970;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.viz-charts-table .visualizer-chart-action:hover {
+	background: #f6f7f7;
+}
+
+.viz-charts-table .visualizer-chart-action.visualizer-chart-delete {
+	border-color: #fca5a5;
+	color: #dc2626;
+	margin-right: 0;
+}
+
+.viz-charts-table .visualizer-chart-action.visualizer-chart-delete:hover {
+	background: #fef2f2;
+}
+
+.viz-charts-table .visualizer-chart-action.visualizer-chart-shortcode {
+	color: #2563eb;
+	border-color: #bfdbfe;
+}
+
+.viz-charts-table .visualizer-chart-action.visualizer-chart-shortcode:hover {
+	background: #eff6ff;
+}
+
+.viz-charts-table .visualizer-chart-action.visualizer-chart-clone,
+.viz-charts-table .visualizer-chart-action.visualizer-chart-export {
+	color: #64748b;
+	border-color: #cbd5e1;
+}
+
+.viz-charts-table .visualizer-chart-action.visualizer-chart-clone:hover,
+.viz-charts-table .visualizer-chart-action.visualizer-chart-export:hover {
+	background: #f8fafc;
+}
+
+.viz-charts-table .visualizer-action-group .visualizer-chart-action.visualizer-chart-edit {
+	width: auto;
+	height: auto;
+	padding: 0 8px;
+	gap: 6px;
+}
+
+/* Upsell banner after the table */
+#visualizer-library.view-list .items--upsell {
+	margin-top: 12px;
+}
+
+.viz-add-new-group {
+	display: inline-flex;
+	align-items: center;
+	position: relative;
+}
+
+.viz-add-new-group .add-new-h2 {
+	margin-right: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.viz-add-new-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 30px;
+	margin-left: 0;
+	border: 1px solid #2271b1;
+	border-left: 0;
+	border-radius: 0 3px 3px 0;
+	background: #f6f7f7;
+	color: #2271b1;
+	cursor: pointer;
+	position: relative;
+	top: -3px;
+}
+
+.viz-add-new-toggle .dashicons {
+	font-size: 16px;
+	line-height: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.viz-add-new-toggle .dashicon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.viz-add-new-toggle:hover,
+.viz-add-new-toggle:focus {
+	background: #2271b1;
+	color: #fff;
+	outline: none;
+}
+
+.viz-add-new-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	margin-top: 2px;
+	min-width: 190px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	padding: 6px 0;
+	display: none;
+	z-index: 100001;
+}
+
+.viz-add-new-group.is-open .viz-add-new-menu {
+	display: block;
+}
+
+.viz-add-new-item {
+	width: 100%;
+	text-align: left;
+	padding: 8px 12px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.viz-add-new-item:hover,
+.viz-add-new-item:focus {
+	background: #f6f7f7;
+	outline: none;
 }

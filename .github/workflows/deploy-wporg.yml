@@ -8,13 +8,16 @@ jobs:
     name: New version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: Build
         run: |
           npm ci
+          npm run gutenberg:build
+          npm run chartbuilder:build
+          npm run d3renderer:build
           composer install --no-dev --prefer-dist --no-progress --no-suggest
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@master

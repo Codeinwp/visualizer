@@ -321,7 +321,6 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		}
 
 		return $rows;
-
 	}
 
 	/**
@@ -331,7 +330,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 *
 	 * @access private
 	 */
-	private function getNextPage( $array ) {
+	private function getNextPage( $data ) {
 		if ( empty( $this->_paging ) ) {
 			return null;
 		}
@@ -339,10 +338,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		$root   = explode( self::TAG_SEPARATOR, $this->_paging );
 		// get rid of the first element as that is the faux root element indicator
 		array_shift( $root );
-		$leaf   = $array;
+		$leaf   = $data;
 		foreach ( $root as $tag ) {
 			if ( array_key_exists( $tag, $leaf ) ) {
-				$leaf = $array[ $tag ];
+				$leaf = $leaf[ $tag ];
 			} else {
 				// if the tag does not exist, we assume it is present in the 0th element of the current array.
 				// TODO: we may want to change this to a filter later.
@@ -362,19 +361,19 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 *
 	 * @access private
 	 */
-	private function getRootElements( $parent, $now, $root, $array ) {
-		if ( is_null( $array ) ) {
+	private function getRootElements( $parent_key, $now, $root, $data ) {
+		if ( is_null( $data ) ) {
 			return null;
 		}
 
-		$root[] = $parent;
-		foreach ( $array as $key => $value ) {
+		$root[] = $parent_key;
+		foreach ( $data as $key => $value ) {
 			if ( is_array( $value ) && ! empty( $value ) ) {
 				if ( ! is_numeric( $key ) ) {
-					$now = sprintf( '%s%s%s', $parent, self::TAG_SEPARATOR, $key );
+					$now = sprintf( '%s%s%s', $parent_key, self::TAG_SEPARATOR, $key );
 					$root[] = $now;
 				} else {
-					$now = $parent;
+					$now = $parent_key;
 				}
 				$root = $this->getRootElements( $now, $key, $root, $value );
 			}
@@ -442,7 +441,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			$this->_additional_headers = array_filter( $this->_additional_headers );
 			if ( ! empty( $this->_additional_headers ) ) {
 				$this->_additional_headers = array_map(
-					function( $headers ) {
+					function ( $headers ) {
 						$headers = explode( ':', $headers );
 						$headers = array_map( 'trim', $headers );
 						return $headers;
@@ -555,5 +554,4 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	public function getSourceName() {
 		return __CLASS__;
 	}
-
 }

@@ -231,7 +231,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 				'focus'     => esc_html__( 'The tooltip will be displayed when the user hovers over an element', 'visualizer' ),
 				'none'      => esc_html__( 'The tooltip will not be displayed', 'visualizer' ),
 			),
-			esc_html__( 'Determines the user interaction that causes the tooltip to be displayed.', 'visualizer' )
+			esc_html__( 'Controls when the tooltip appears.', 'visualizer' )
 		);
 	}
 
@@ -245,7 +245,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 	protected function _renderColorAxisSettings() {
 		self::_renderGroupStart( esc_html__( 'Color Axis', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure color axis gradient scale, minimum and maximun values and a color of the dateless regions.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'Configure color axis gradient scale, minimum and maximum values and a color of the regions with no data.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
@@ -289,7 +289,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 				);
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Dateless Region', 'visualizer' ),
+					esc_html__( 'Region with No Data', 'visualizer' ),
 					'datalessRegionColor',
 					! empty( $this->datalessRegionColor ) ? $this->datalessRegionColor : null,
 					null
@@ -309,7 +309,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 	protected function _renderSizeAxisSettings() {
 		self::_renderGroupStart( esc_html__( 'Size Axis', 'visualizer' ) );
 			self::_renderSectionStart();
-				self::_renderSectionDescription( esc_html__( 'Configure how values are associated with bubble size, minimum and maximun values and marker opacity setting.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'Configure how values are associated with bubble size, minimum and maximum values and marker opacity setting.', 'visualizer' ) );
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
@@ -382,7 +382,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 					'magnifyingGlass[enable]',
 					isset( $this->magnifyingGlass['enable'] ) ? $this->magnifyingGlass['enable'] : '',
 					$this->_yesno,
-					esc_html__( 'If yes, when the user lingers over a cluttered marker, a magnifiying glass will be opened.', 'visualizer' )
+					esc_html__( 'If yes, when the user lingers over a cluttered marker, a magnifying glass will be opened.', 'visualizer' )
 				);
 
 				self::_renderTextItem(
@@ -439,7 +439,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 
 				echo '<div class="viz-section-delimiter"></div>';
 
-				self::_renderSectionDescription( esc_html__( 'Configure the background color for the main area of the chart and the chart border width and color.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'Set the chart\'s background color, border width, and border color.', 'visualizer' ) );
 
 				self::_renderTextItem(
 					esc_html__( 'Stroke Width', 'visualizer' ),
@@ -466,4 +466,13 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Geo extends Visualizer_Render_
 		self::_renderGroupEnd();
 	}
 
+	/**
+	 * Geo charts use colorAxis for their colour scheme, not the global preset palette.
+	 * Skip the hidden colors[] inputs that the Google base class would otherwise inject.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAdvancedSettings(): void {
+		Visualizer_Render_Sidebar::_renderAdvancedSettings();
+	}
 }

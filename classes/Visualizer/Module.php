@@ -68,8 +68,7 @@ class Visualizer_Module {
 		$this->_addFilter( Visualizer_Plugin::FILTER_HANDLE_REVISIONS, 'handleExistingRevisions', 10, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA_AS, 'getDataAs', 10, 3 );
 		$this->_addAction( 'pre_get_posts', 'PreGetPosts' );
-		register_shutdown_function( array($this, 'onShutdown') );
-
+		register_shutdown_function( array( $this, 'onShutdown' ) );
 	}
 
 	/**
@@ -114,16 +113,16 @@ class Visualizer_Module {
 	 * @param string  $tag The name of the AJAX action to which the $method is hooked.
 	 * @param string  $method Optional. The name of the method to be called. If the name of the method is not provided, tag name will be used as method name.
 	 * @param bool    $methodClass The root of the method.
-	 * @param boolean $private Optional. Determines if we should register hook for logged in users.
-	 * @param boolean $public Optional. Determines if we should register hook for not logged in users.
+	 * @param boolean $logged_in Optional. Determines if we should register hook for logged in users.
+	 * @param boolean $logged_out Optional. Determines if we should register hook for not logged in users.
 	 * @return Visualizer_Module
 	 */
-	protected function _addAjaxAction( $tag, $method = '', $methodClass = null, $private = true, $public = false ) {
-		if ( $private ) {
+	protected function _addAjaxAction( $tag, $method = '', $methodClass = null, $logged_in = true, $logged_out = false ) {
+		if ( $logged_in ) {
 			$this->_addAction( 'wp_ajax_' . $tag, $method, $methodClass );
 		}
 
-		if ( $public ) {
+		if ( $logged_out ) {
 			$this->_addAction( 'wp_ajax_nopriv_' . $tag, $method, $methodClass );
 		}
 
@@ -169,7 +168,7 @@ class Visualizer_Module {
 	 *
 	 * @since 3.2.0
 	 */
-	public function getDataAs( $final, $chart_id, $type ) {
+	public function getDataAs( $data, $chart_id, $type ) {
 		return $this->_getDataAs( $chart_id, $type );
 	}
 
@@ -270,11 +269,14 @@ class Visualizer_Module {
 		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$fp = function_exists( 'tmpfile' ) ? @tmpfile() : null;
-		if ( null === $fp ) {
+		if ( ! $fp ) {
 			if ( ! function_exists( 'wp_tempnam' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/file.php';
 			}
 			$fp = fopen( wp_tempnam(), 'w+' );
+		}
+		if ( ! $fp ) {
+			return array( 'csv' => '', 'name' => $filename, 'string' => '' );
 		}
 		if ( ! apply_filters( 'vizualizer_export_include_series_type', true ) ) {
 			unset( $rows[1] );
@@ -287,8 +289,8 @@ class Visualizer_Module {
 		}
 		rewind( $fp );
 		$csv = '';
-		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-		while ( ( $array = fgetcsv( $fp ) ) !== false ) {
+		$array = fgetcsv( $fp );
+		while ( $array !== false ) {
 			if ( strlen( $csv ) > 0 ) {
 				$csv .= PHP_EOL;
 			}
@@ -304,7 +306,8 @@ class Visualizer_Module {
 				}
 				$array = $temp_array;
 			}
-			$csv .= implode( ',', $array );
+			$csv  .= implode( ',', $array );
+			$array = fgetcsv( $fp );
 		}
 		fclose( $fp );
 
@@ -330,7 +333,7 @@ class Visualizer_Module {
 			unset( $rows[1] );
 			$rows = array_values( $rows );
 			$rows = array_map(
-				function( $r ) {
+				function ( $r ) {
 					return array_map( 'strval', $r );
 				},
 				$rows
@@ -402,7 +405,7 @@ class Visualizer_Module {
 		foreach ( $rows as $row ) {
 			// skip the data type row.
 			if ( 1 === $index ) {
-				$index++;
+				++$index;
 				continue;
 			}
 
@@ -415,7 +418,7 @@ class Visualizer_Module {
 				}
 			}
 			$table  .= '</tr>';
-			$index++;
+			++$index;
 		}
 		$table      .= '</table>';
 
@@ -430,9 +433,9 @@ class Visualizer_Module {
 	/**
 	 * Disable revisions temporarily for visualizer post type.
 	 */
-	protected final function disableRevisionsTemporarily() {
+	final protected function disableRevisionsTemporarily() {
 		add_filter(
-			'wp_revisions_to_keep', function( $num, $post ) {
+			'wp_revisions_to_keep', function ( $num, $post ) {
 				if ( $post->post_type === Visualizer_Plugin::CPT_VISUALIZER ) {
 					return 0;
 				}
@@ -446,7 +449,7 @@ class Visualizer_Module {
 	 *
 	 * @return bool If any revisions were found.
 	 */
-	public final function undoRevisions( $chart_id, $restore = false ) {
+	final public function undoRevisions( $chart_id, $restore = false ) {
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'undoRevisions for %d with%s restore', $chart_id, ( $restore ? '' : 'out' ) ), 'debug', __FILE__, __LINE__ );
 		if ( get_post_type( $chart_id ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return false;
@@ -478,11 +481,16 @@ class Visualizer_Module {
 	/**
 	 * If existing revisions exist for the chart, restore the earliest version and then create a new revision to initiate editing.
 	 */
-	public final function handleExistingRevisions( $chart_id, $chart ) {
+	final public function handleExistingRevisions( $chart_id, $chart ) {
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'handleExistingRevisions for %d', $chart_id ), 'debug', __FILE__, __LINE__ );
 		if ( get_post_type( $chart_id ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			return $chart_id;
+		}
+		// AI Builder (D3) charts use their own publish flow — skip the classic revision-restore
+		// mechanism, which would otherwise overwrite the saved title and settings.
+		if ( 'd3' === get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true ) ) {
+			return $chart;
 		}
 		// undo revisions.
 		$revisions_found    = $this->undoRevisions( $chart_id, true );
@@ -529,63 +537,69 @@ class Visualizer_Module {
 			return $default;
 		}
 
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		WP_Filesystem();
-		global $wp_filesystem;
-		if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base' ) ) {
-			$creds = request_filesystem_credentials( site_url() );
-			wp_filesystem( $creds );
-		}
+		try {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+			global $wp_filesystem;
+			if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base' ) ) {
+				return $default;
+			}
 
-		$multisite_arg = '/';
-		if ( is_multisite() && ! is_main_site() ) {
-			$multisite_arg = '/sites/' . get_current_blog_id() . '/';
-		}
+			$multisite_arg = '/';
+			if ( is_multisite() && ! is_main_site() ) {
+				$multisite_arg = '/sites/' . get_current_blog_id() . '/';
+			}
 
-		$dir    = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer';
-		$file   = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer/customization.js';
+			$dir    = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer';
+			$file   = $wp_filesystem->wp_content_dir() . 'uploads' . $multisite_arg . 'visualizer/customization.js';
 
-		if ( $wp_filesystem->is_readable( $file ) ) {
+			if ( $wp_filesystem->is_readable( $file ) ) {
+				return $specific;
+			}
+
+			if ( $wp_filesystem->exists( $file ) && ! $wp_filesystem->is_readable( $file ) ) {
+				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to read file %s', $file ), 'error', __FILE__, __LINE__ );
+				return $default;
+			}
+
+			if ( ! $wp_filesystem->exists( $dir ) ) {
+				$done = $wp_filesystem->mkdir( $dir );
+				if ( $done === false ) {
+					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
+					return $default;
+				}
+			}
+
+			// if file does not exist, copy.
+			if ( ! $wp_filesystem->exists( $file ) ) {
+				$src  = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
+				$done = $wp_filesystem->copy( $src, $file );
+				if ( $done === false ) {
+					do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
+					return $default;
+				}
+			}
+
 			return $specific;
-		}
-
-		if ( $wp_filesystem->exists( $file ) && ! $wp_filesystem->is_readable( $file ) ) {
-			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to read file %s', $file ), 'error', __FILE__, __LINE__ );
+		} catch ( \Throwable $e ) {
 			return $default;
 		}
-
-		if ( ! $wp_filesystem->exists( $dir ) ) {
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
-			if ( ( $done = $wp_filesystem->mkdir( $dir ) ) === false ) {
-				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to create directory %s', $dir ), 'error', __FILE__, __LINE__ );
-				return $default;
-			}
-		}
-
-		// if file does not exist, copy.
-		if ( ! $wp_filesystem->exists( $file ) ) {
-			$src    = str_replace( ABSPATH, $wp_filesystem->abspath(), VISUALIZER_ABSPATH . '/js/customization.js' );
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
-			if ( ( $done = $wp_filesystem->copy( $src, $file ) ) === false ) {
-				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Unable to copy file %s to %s', $src, $file ), 'error', __FILE__, __LINE__ );
-				return $default;
-			}
-		}
-
-		return $specific;
 	}
 
 	/**
 	 * Load the class for the given chart's chart type so that its assets can be loaded.
 	 */
 	protected function load_chart_type( $chart_id ) {
+		// D3/AI charts have no traditional type class — return the library string directly.
+		$lib = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		if ( 'd3' === $lib ) {
+			return 'd3';
+		}
+
 		$name   = $this->load_chart_class_name( $chart_id );
 		$class  = null;
 		if ( class_exists( $name ) || true === apply_filters( 'visualizer_load_chart', false, $name ) ) {
-			if ( 'Visualizer_Render_Sidebar_Type_DataTable_DataTable' === $name ) {
-				$name = 'Visualizer_Render_Sidebar_Type_DataTable_Tabular';
-			}
-			$class  = new $name;
+			$class  = new $name();
 		}
 
 		if ( is_null( $class ) && Visualizer_Module::is_pro() ) {
@@ -746,7 +760,7 @@ class Visualizer_Module {
 	/**
 	 * Gets the features for the provided license type.
 	 */
-	public static final function get_features_for_license( $plan ) {
+	final public static function get_features_for_license( $plan ) {
 		$is_new_personal = apply_filters( 'visualizer_is_new_personal', false );
 		switch ( $plan ) {
 			case 1:

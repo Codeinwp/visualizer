@@ -15,8 +15,11 @@ $dashboard_url = add_query_arg(
 );
 
 $chart_id           = ! empty( $this->wizard_data['chart_id'] ) ? (int) $this->wizard_data['chart_id'] : '';
+$chart_type_default = ! empty( $this->wizard_data['chart_type'] ) ? $this->wizard_data['chart_type'] : 'pie';
 $wp_optimole_active = is_plugin_active( 'optimole-wp/optimole-wp.php' );
-$last_step_number   = 5;
+$wp_otter_active    = is_plugin_active( 'otter-blocks/otter-blocks.php' );
+$wp_spc_active      = is_plugin_active( 'wp-cloudflare-page-cache/wp-cloudflare-super-page-cache.php' );
+$last_step_number   = 3;
 
 // Check if we are in the Live Preview which is used to showcase only the plugin features without any other distractions. Ideal for marketing purposes (like Live Preview on WordPress.org or on the plugin's website)
 $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET['env'] ) ) : false;
@@ -51,31 +54,12 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 							2
 						</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#step-3">
-							3
-						</a>
-					</li>
 					<?php if ( ! $is_live_preview ) { ?>
-						<?php if ( ! $wp_optimole_active ) : ?>
-							<li class="nav-item">
-								<a class="nav-link" href="#step-4">
-									4
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#step-5">
-									5
-								</a>
-							</li>
-						<?php else : ?>
-							<?php $last_step_number = 4; ?>
-							<li class="nav-item">
-								<a class="nav-link" href="#step-4">
-									4
-								</a>
-							</li>
-						<?php endif; ?>
+						<li class="nav-item">
+							<a class="nav-link" href="#step-3">
+								3
+							</a>
+						</li>
 					<?php } ?>
 				</ul>
 				<div class="tab-content">
@@ -97,7 +81,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 											<ul>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-1">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-1" name="visualizer[wizard_data][chart_type]" value="pie">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-1" name="visualizer[wizard_data][chart_type]" value="pie" <?php echo checked( $chart_type_default, 'pie', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Pie/Donut chart', 'visualizer' ); ?></h3>
 														<div class="img type-box-pie"></div>
 														<div class="bg"></div>
@@ -105,7 +89,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 												</li>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-2">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-2" name="visualizer[wizard_data][chart_type]" value="bar">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-2" name="visualizer[wizard_data][chart_type]" value="bar" <?php echo checked( $chart_type_default, 'bar', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Bar chart', 'visualizer' ); ?></h3>
 														<div class="img type-box-bar"></div>
 														<div class="bg"></div>
@@ -113,7 +97,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 												</li>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-3">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-3" name="visualizer[wizard_data][chart_type]" value="line">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-3" name="visualizer[wizard_data][chart_type]" value="line" <?php echo checked( $chart_type_default, 'line', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Line chart', 'visualizer' ); ?></h3>
 														<div class="img type-box-line"></div>
 														<div class="bg"></div>
@@ -121,7 +105,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 												</li>
 												<li>
 													<label class="vz-chart-option" for="vz-chart-4">
-														<input type="radio" class="vz-radio-btn" id="vz-chart-4" name="visualizer[wizard_data][chart_type]" value="tabular">
+														<input type="radio" class="vz-radio-btn" id="vz-chart-4" name="visualizer[wizard_data][chart_type]" value="tabular" <?php echo checked( $chart_type_default, 'tabular', false ); ?>>
 														<h3 class="h3"><?php esc_html_e( 'Table', 'visualizer' ); ?></h3>
 														<div class="img type-box-tabular"></div>
 														<div class="bg"></div>
@@ -133,7 +117,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-5" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Geo chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-geo"></div>
 															<div class="bg"></div>
@@ -147,18 +131,193 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 													</div>
 												</li>
 												<li>
-													<div class="vz-power-pro">
-														<h3 class="h3"><?php esc_html_e( 'Discover the power of PRO!', 'visualizer' ); ?></h3>
-														<ul>
-															<li><?php esc_html_e( '11 more chart types', 'visualizer' ); ?></li>
-															<li><?php esc_html_e( 'Private charts', 'visualizer' ); ?></li>
-															<li><?php esc_html_e( 'Auto-sync with online files', 'visualizer' ); ?></li>
-															<li>
-																<?php esc_html_e( 'Frontend Actions(Print, Export, Copy, Download', 'visualizer' ); ?>)
-															</li>
-															<li><?php esc_html_e( 'Create charts from WordPress tables', 'visualizer' ); ?></li>
-														</ul>
-														<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>" class="btn btn-secondary" target="_blank"><?php esc_html_e( 'View more features', 'visualizer' ); ?></a>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-6" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Area chart', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-area"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-7" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Column chart', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-column"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-8" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Bubble chart', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-bubble"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-9" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Scatter chart', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-scatter"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-10" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Gauge chart', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-gauge"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-11" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Candlestick chart', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-candlestick"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-12" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Timeline', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-timeline"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-13" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Combo', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-combo"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-14" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Polar Area', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-polarArea"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="vz-pro-option">
+														<label class="vz-chart-option">
+															<input type="radio" class="vz-radio-btn" id="vz-chart-15" readonly>
+															<div class="vz-pro-label-wrap">
+																<h3><?php esc_html_e( 'Radar', 'visualizer' ); ?></h3>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
+															</div>
+															<div class="img type-box-radar"></div>
+															<div class="bg"></div>
+														</label>
+														<div class="pro-overlay">
+															<div class="pro-box">
+																<a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>"
+																	class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Upgrade to Pro', 'visualizer' ); ?></a>
+															</div>
+														</div>
 													</div>
 												</li>
 											</ul>
@@ -166,48 +325,20 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 									</div>
 									<div class="form-block">
 										<button class="btn btn-primary disabled" data-step_number="1"><?php esc_html_e( 'Save And Continue', 'visualizer' ); ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
+										<span class="spinner"></span>
+										<div class="vz-import-status" style="display: none;">
+											<div class="vz-error-notice notice notice-error hidden"></div>
+											<p class="p pb-8" data-import_message="<?php esc_attr_e( 'Done! Demo data has been successfully imported.', 'visualizer' ); ?>" data-import_initial="<?php esc_attr_e( 'Importing demo data for your selected chart...', 'visualizer' ); ?>"><?php esc_html_e( 'Importing demo data for your selected chart...', 'visualizer' ); ?></p>
+											<div class="vz-progress">
+												<div class="vz-progress-bar"></div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
-						<div class="vz-accordion-item">
-							<div class="vz-accordion-item__title">
-								<div class="vz-accordion-item__button">
-									<h2 class="h2 pb-8"><?php esc_html_e( 'You\'re almost done!', 'visualizer' ); ?></h2>
-									<p class="p"><?php esc_html_e( 'We use demo data during the import process, but don\'t worry; you can customize it later.', 'visualizer' ); ?></p>
-								</div>
-							</div>
-							<div class="vz-accordion-item__content">
-								<div class="vz-form-wrap">
-									<div class="form-block" style="padding-top: 8px">
-										<div class="vz-error-notice notice notice-error hidden"></div>
-										<div class="pb-30">
-											<div class="vz-shortcode-preview-box">
-												<div class="vz-shortcode-preview-title border-0">
-													<div class="icon">
-														<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/database-icon.png' ); ?>" alt="">
-													</div>
-													<div class="txt" style="width: 100%;">
-														<h4 class="h4 pb-4"><?php esc_html_e( 'Importing demo data', 'visualizer' ); ?></h4>
-														<p class="p" data-import_message="<?php esc_attr_e( 'Done! Demo data has been successfully imported.', 'visualizer' ); ?>"><?php esc_html_e( 'Hold on! we are importing demo data for your selected chart', 'visualizer' ); ?></p>
-													<div class="vz-progress" style="margin-top: 4px;">
-														<div class="vz-progress-bar"></div>
-													</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<p class="help-text help-text-primary pb-16"><?php esc_html_e( 'Import data from other charts, WordPress, databases, or manual data entries using Visualizer', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'setupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Premium version', 'visualizer' ); ?></a></p>
-									</div>
-									<div class="form-block"><button class="btn btn-primary disabled" data-step_number="3"><?php esc_html_e( 'Continue', 'visualizer' ); ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
 						<div class="vz-accordion-item">
 							<div class="vz-accordion-item__title">
 								<div class="vz-accordion-item__button">
@@ -218,42 +349,38 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 							<div class="vz-accordion-item__content border-top">
 								<div class="vz-form-wrap">
 									<div class="form-block">
-										<div class="vz-accordion">
-											<div class="vz-accordion-item vz-features-accordion mb-0">
-												<div class="vz-shortcode-preview-box">
-													<div class="vz-accordion-item__title vz-accordion-checkbox__title">
-														<div class="vz-checkbox">
-															<input type="checkbox" class="vz-checkbox-btn" id="insert_shortcode" checked <?php echo $is_live_preview ? 'disabled' : ''; ?>>
-														</div>
-														<button type="button" class="vz-accordion-item__button">
-															<div class="vz-accordion__step-title h4 pb-4"><?php esc_html_e( 'Create a draft page', 'visualizer' ); ?></div>
-															<p class="help-text"><?php esc_html_e( 'We will automatically create a draft page with Visualizer chart for preview', 'visualizer' ); ?></p>
-															<div class="vz-accordion__icon"><span class="dashicons dashicons-arrow-down-alt2"></span>
-															</div>
-														</button>
+										<div class="vz-accordion-item vz-features-accordion mb-0">
+											<div class="vz-shortcode-preview-box">
+												<div class="vz-accordion-item__title vz-accordion-checkbox__title vz-accordion-title--static">
+													<div class="vz-checkbox">
+														<input type="checkbox" class="vz-checkbox-btn" id="insert_shortcode" checked <?php echo $is_live_preview ? 'disabled' : ''; ?>>
 													</div>
-													<div class="vz-accordion-item__content">
-														<div class="vz-shortcode-preview-content">
-															<?php $shortcode = '[visualizer id="{{chart_id}}" class=""]'; ?>
-															<?php if ( $is_live_preview ) { ?>
-																<p class="pb-16"><?php esc_html_e( 'Charts are added in the page/post via Gutenberg Blocks.', 'visualizer' ); ?></p>
-																<p class="pb-16"><?php esc_html_e( 'Alternatively, you can use a shortcode with the following structure:', 'visualizer' ); ?></p>
-															<?php } else { ?>
-																<h4 class="h4 pb-16"><?php esc_html_e( 'Chart preview', 'visualizer' ); ?></h4>
-																<div class="vz-chart pb-30">
-																	<?php
-																	if ( ! empty( $_GET['preview_chart'] ) ) {
-																		$shortcode = str_replace( '{{chart_id}}', $chart_id, $shortcode );
-																		echo do_shortcode( $shortcode );
-																	}
-																	?>
-																</div>
-															<?php } ?>
-															<div class="vz-code-box">
-																<input type="text" id="basic_shortcode" value="<?php echo esc_attr( $shortcode ); ?>" readonly>
-																<button type="button" class="vz-copy-code-btn" data-clipboard-target="#basic_shortcode"><?php esc_html_e( 'click to copy', 'visualizer' ); ?> <img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/copy.svg' ); ?>" alt="">
-																</button>
+													<div>
+														<div class="vz-accordion__step-title h4 pb-4"><?php esc_html_e( 'Create a draft page', 'visualizer' ); ?></div>
+														<p class="help-text"><?php esc_html_e( 'We will automatically create a draft page with Visualizer chart for preview', 'visualizer' ); ?></p>
+													</div>
+												</div>
+												<div class="vz-accordion-item__content vz-accordion-content--static">
+													<div class="vz-shortcode-preview-content">
+														<?php $shortcode = '[visualizer id="{{chart_id}}" class=""]'; ?>
+														<?php if ( $is_live_preview ) { ?>
+															<p class="pb-16"><?php esc_html_e( 'Charts are added in the page/post via Gutenberg Blocks.', 'visualizer' ); ?></p>
+															<p class="pb-16"><?php esc_html_e( 'Alternatively, you can use a shortcode with the following structure:', 'visualizer' ); ?></p>
+														<?php } else { ?>
+															<h4 class="h4 pb-16"><?php esc_html_e( 'Chart preview', 'visualizer' ); ?></h4>
+															<div class="vz-chart pb-30">
+																<?php
+																if ( ! empty( $_GET['preview_chart'] ) ) {
+																	$shortcode = str_replace( '{{chart_id}}', $chart_id, $shortcode );
+																	echo do_shortcode( $shortcode );
+																}
+																?>
 															</div>
+														<?php } ?>
+														<div class="vz-code-box">
+															<input type="text" id="basic_shortcode" value="<?php echo esc_attr( $shortcode ); ?>" readonly>
+															<button type="button" class="vz-copy-code-btn" data-clipboard-target="#basic_shortcode"><?php esc_html_e( 'click to copy', 'visualizer' ); ?> <img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/copy.svg' ); ?>" alt="">
+															</button>
 														</div>
 													</div>
 												</div>
@@ -268,88 +395,118 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 							</div>
 						</div>
 					</div>
-					<?php if ( ! $wp_optimole_active && ! $is_live_preview ) { ?>
-						<div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
-							<div class="vz-accordion-item">
-								<div class="vz-accordion-item__title">
-									<div class="vz-accordion-item__button">
-										<h2 class="h2 pb-8"><?php esc_html_e( 'Extra Features', 'visualizer' ); ?></h2>
-										<p class="p"><?php esc_html_e( 'We\'re confident you\'ll appreciate the improvements. If not, you can remove them at any time.', 'visualizer' ); ?></p>
-									</div>
-								</div>
-								<div class="vz-accordion-item__content border-top">
-									<div class="vz-form-wrap">
-										<div class="form-block">
-											<div class="vz-error-notice notice notice-error hidden"></div>
-											<div class="vz-accordion">
-												<div class="vz-accordion-item vz-features-accordion mb-0">
-													<div class="vz-accordion-item__title vz-accordion-checkbox__title">
-														<div class="vz-checkbox">
-															<input type="checkbox" class="vz-checkbox-btn" checked>
-														</div>
-														<button type="button" class="vz-accordion-item__button">
-															<div class="vz-accordion__step-title h4 pb-4"><?php esc_html_e( 'Enable perfomance features for your website.', 'visualizer' ); ?></div>
-															<p class="help-text"><?php esc_html_e( 'Optimize and speed up your site with our trusted add-on—it\'s free!', 'visualizer' ); ?></p>
-															<div class="vz-accordion__icon"><span class="dashicons dashicons-arrow-down-alt2"></span>
-															</div>
-														</button>
-													</div>
-													<div class="vz-accordion-item__content">
-														<div class="vz-features-list">
-															<ul>
-																<li>
-																	<div class="icon">
-																		<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/boost-logo.png' ); ?>" width="37" height="30" alt="">
-																	</div>
-																	<div class="txt">
-																		<div class="h4 pb-4"><?php esc_html_e( 'Boost your website speed', 'visualizer' ); ?> <span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span></div>
-																		<p class="help-text"><?php esc_html_e( 'Improve your website speed and images by 80% with', 'visualizer' ); ?> <a href="<?php echo esc_url( tsdk_utmify( 'https://optimole.com/', 'VisualizerSetupWizard' ) ); ?>" target="_blank"><?php esc_html_e( 'Optimole', 'visualizer' ); ?></a></p>
-																	</div>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="form-block">
-											<button class="btn btn-primary vz-wizard-install-plugin" data-step_number="4"><?php esc_html_e( 'Improve now', 'visualizer' ); ?>
-											<button class="btn btn-primary next-btn skip-improvement" style="display: none;"><?php esc_html_e( 'Skip Improvement', 'visualizer' ); ?></button>
-											<span class="spinner"></span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					<?php } ?>
 					<?php if ( ! $is_live_preview ) { ?>
-						<div id="step-<?php echo esc_attr( $last_step_number ); ?>" class="tab-pane" role="tabpanel" aria-labelledby="step-5">
+						<div id="step-<?php echo esc_attr( $last_step_number ); ?>" class="tab-pane" role="tabpanel" aria-labelledby="step-<?php echo esc_attr( $last_step_number ); ?>">
 							<div class="vz-accordion-item">
 								<div class="vz-accordion-item__title">
 									<div class="vz-accordion-item__button">
-										<h2 class="h2 pb-8"><?php esc_html_e( 'Updates, tutorials, special offers, and more', 'visualizer' ); ?></h2>
-										<p class="p"><?php esc_html_e( 'Get exclusive access to the Visualizer newsletter.', 'visualizer' ); ?></p>
+										<h2 class="h2 pb-8"><?php esc_html_e( 'You\'re all set!', 'visualizer' ); ?></h2>
+										<p class="p"><?php esc_html_e( 'Optionally enhance your site and stay updated.', 'visualizer' ); ?></p>
 									</div>
 								</div>
 								<div class="vz-accordion-item__content border-top">
 									<div class="vz-form-wrap">
-										<div class="form-block">
-											<div class="vz-newsletter-wrap">
-												<div class="vz-newsletter">
-													<p class="p pb-30"><?php esc_html_e( 'Share your email with us! That way, we can keep you updated with exciting product news, handy tutorials, exclusive offers, and lots more awesome content.', 'visualizer' ); ?></p>
-													<div class="vz-form-group">
-														<input type="email" class="form-control" id="vz_subscribe_email" placeholder="<?php echo esc_attr( get_bloginfo( 'admin_email' ) ); ?>">
+										<div class="form-block no-sep vz-final-block">
+											<div class="vz-error-notice notice notice-error hidden"></div>
+											<div class="vz-final-options">
+												<div class="vz-option-card">
+													<label class="vz-option-check">
+														<input type="checkbox" id="enable_performance" <?php echo $wp_optimole_active ? 'checked disabled' : 'checked'; ?>>
+													</label>
+													<div class="vz-option-icon">
+														<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/boost-logo.png' ); ?>" width="37" height="30" alt="">
 													</div>
+													<div class="vz-option-body">
+														<div class="vz-option-title">
+															<?php esc_html_e( 'Boost your website speed', 'visualizer' ); ?>
+															<span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span>
+														</div>
+														<p class="help-text">
+															<?php
+															if ( $wp_optimole_active ) {
+																esc_html_e( 'Optimole is already active on your site.', 'visualizer' );
+															} else {
+																esc_html_e( 'Improve your website speed and images by 80% with Optimole.', 'visualizer' );
+															}
+															?>
+														</p>
+													</div>
+													<span class="vz-install-status" data-install-status="optimole-wp"></span>
 												</div>
-												<div class="vz-newsletter-img">
-													<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/newsletter-img.png' ); ?>" alt="">
+												<div class="vz-option-card">
+													<label class="vz-option-check">
+														<input type="checkbox" id="enable_otter_blocks" <?php echo $wp_otter_active ? 'checked disabled' : 'checked'; ?>>
+													</label>
+													<div class="vz-option-icon">
+														<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/otter-logo.png' ); ?>" width="28" height="28" alt="">
+													</div>
+													<div class="vz-option-body">
+														<div class="vz-option-title">
+															<?php esc_html_e( 'Build better pages', 'visualizer' ); ?>
+															<span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span>
+														</div>
+														<p class="help-text">
+															<?php
+															if ( $wp_otter_active ) {
+																esc_html_e( 'Otter Blocks is already active on your site.', 'visualizer' );
+															} else {
+																esc_html_e( 'Add powerful Gutenberg blocks for layouts, forms, and more with Otter Blocks.', 'visualizer' );
+															}
+															?>
+														</p>
+													</div>
+													<span class="vz-install-status" data-install-status="otter-blocks"></span>
+												</div>
+												<div class="vz-option-card">
+													<label class="vz-option-check">
+														<input type="checkbox" id="enable_page_cache" <?php echo $wp_spc_active ? 'checked disabled' : 'checked'; ?>>
+													</label>
+													<div class="vz-option-icon">
+														<img src="<?php echo esc_url( VISUALIZER_ABSURL . 'images/spc-logo.svg' ); ?>" width="28" height="28" alt="">
+													</div>
+													<div class="vz-option-body">
+														<div class="vz-option-title">
+															<?php esc_html_e( 'Cache your pages', 'visualizer' ); ?>
+															<span class="pro-label free-label"><?php esc_html_e( 'Free', 'visualizer' ); ?></span>
+														</div>
+														<p class="help-text">
+															<?php
+															if ( $wp_spc_active ) {
+																esc_html_e( 'Super Page Cache is already active on your site.', 'visualizer' );
+															} else {
+																esc_html_e( 'Make your site load faster with Super Page Cache for Cloudflare.', 'visualizer' );
+															}
+															?>
+														</p>
+													</div>
+													<span class="vz-install-status" data-install-status="wp-cloudflare-page-cache"></span>
+												</div>
+												<div class="vz-option-card vz-option-card--newsletter">
+													<label class="vz-option-check">
+														<input type="checkbox" id="enable_newsletter" checked>
+													</label>
+													<div class="vz-option-icon">
+														<span class="dashicons dashicons-email-alt"></span>
+													</div>
+													<div class="vz-option-body">
+														<div class="vz-option-title"><?php esc_html_e( 'Stay in the loop', 'visualizer' ); ?></div>
+														<p class="help-text">
+															<?php esc_html_e( 'Get tutorials, tips, and special offers at', 'visualizer' ); ?>
+															<span class="vz-email-text" data-email="<?php echo esc_attr( get_bloginfo( 'admin_email' ) ); ?>"><?php echo esc_html( get_bloginfo( 'admin_email' ) ); ?></span>
+															<button type="button" class="vz-change-email"><?php esc_html_e( 'Change', 'visualizer' ); ?></button>
+															<?php esc_html_e( '· Unsubscribe anytime.', 'visualizer' ); ?>
+														</p>
+														<div class="vz-option-input" style="display: none;">
+															<input type="email" class="form-control" id="vz_subscribe_email" value="<?php echo esc_attr( get_bloginfo( 'admin_email' ) ); ?>">
+															<button type="button" class="btn btn-primary vz-save-email"><?php esc_html_e( 'Save', 'visualizer' ); ?></button>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
 										<div class="form-block">
 											<div class="vz-btn-group">
-												<button class="btn btn-primary vz-subscribe" data-vz_subscribe="true"><?php esc_html_e( 'Send Me Access', 'visualizer' ); ?></button>
-												<button class="btn btn-outline-primary vz-subscribe" data-vz_subscribe="false"><?php esc_html_e( 'Skip, Don&#x92;t give me access', 'visualizer' ); ?></button>
+												<button class="btn btn-primary vz-subscribe" data-vz_subscribe="true"><?php esc_html_e( 'Finish Setup', 'visualizer' ); ?></button>
 												<span class="spinner"></span>
 											</div>
 										</div>

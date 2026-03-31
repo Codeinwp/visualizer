@@ -35,6 +35,52 @@ class ChartRender extends Component {
 		super( ...arguments );
 	}
 
+	getD3ContainerId() {
+		return `visualizer-d3-${ this.props.id }`;
+	}
+
+	isD3Chart( chart ) {
+		return chart && chart['visualizer-chart-library'] && 'd3' === chart['visualizer-chart-library'].toLowerCase();
+	}
+
+	renderD3Chart() {
+		const chart = this.props.chart;
+		if ( ! this.isD3Chart( chart ) ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof jQuery ) {
+			return;
+		}
+
+		const containerId = this.getD3ContainerId();
+		const data = formatDate( JSON.parse( JSON.stringify( chart ) ) );
+		const code = chart['visualizer-d3-code'] || chart.code || '';
+		const payload = {
+			id: containerId,
+			charts: {
+				[ containerId ]: {
+					library: 'd3',
+					code,
+					series: data['visualizer-series'],
+					data: data['visualizer-data']
+				}
+			}
+		};
+
+		jQuery( 'body' ).trigger( 'visualizer:render:chart:start', payload );
+	}
+
+	componentDidMount() {
+		this.renderD3Chart();
+	}
+
+	componentDidUpdate( prevProps ) {
+		if ( prevProps.chart !== this.props.chart ) {
+			this.renderD3Chart();
+		}
+	}
+
 	render() {
 
 		let chartVersion = 'undefined' !== typeof google ? google.visualization.Version : 'current';
@@ -42,9 +88,10 @@ class ChartRender extends Component {
 		let chart, footer;
 
 		let data = formatDate( JSON.parse( JSON.stringify( this.props.chart ) ) );
+		const isD3 = this.isD3Chart( data );
 
-		if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
-			if ( 'DataTable' === data['visualizer-chart-library']) {
+		if ( ! isD3 && 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( this.props.chart['visualizer-chart-type']) ) {
+			if ( 'DataTable' === data['visualizer-chart-library'] ) {
 				chart = data['visualizer-chart-type'];
 			} else {
                 chart = this.props.chart['visualizer-chart-type'];
@@ -53,7 +100,7 @@ class ChartRender extends Component {
                 }
                 chart = startCase( chart );
 			}
-		} else {
+		} else if ( ! isD3 ) {
 			chart = `${ startCase( this.props.chart['visualizer-chart-type']) }Chart`;
 		}
 
@@ -88,14 +135,20 @@ class ChartRender extends Component {
 							</Toolbar>
 						</BlockControls>
 
-						{ ( 'DataTable' === data['visualizer-chart-library']) ? (
+						{ isD3 ? (
+							<div
+								id={ this.getD3ContainerId() }
+								className="visualizer-d3-preview"
+								style={ { height: '500px' } }
+							/>
+						) : ( 'DataTable' === data['visualizer-chart-library']) ? (
 							<DataTable
 								id={ this.props.id }
 								rows={ data['visualizer-data'] }
 								columns={ data['visualizer-series'] }
 								options={ data['visualizer-settings'] }
 							/>
-						) : ( '' !== data['visualizer-data-exploded'] ? (
+						) : (
 							<Chart
 								chartVersion={ chartVersion }
 								chartType={ chart }
@@ -110,22 +163,7 @@ class ChartRender extends Component {
                                 formatters={ formatData( data ) }
 								chartPackages={ googleChartPackages }
 							/>
-                        ) : (
-							<Chart
-								chartVersion={ chartVersion }
-								chartType={ chart }
-								rows={ data['visualizer-data'] }
-								columns={ data['visualizer-series'] }
-								options={
-									isValidJSON( this.props.chart['visualizer-settings'].manual ) ?
-										merge( compact( this.props.chart['visualizer-settings']), JSON.parse( this.props.chart['visualizer-settings'].manual ) ) :
-										compact( this.props.chart['visualizer-settings'])
-								}
-								height="500px"
-                                formatters={ formatData( data ) }
-								chartPackages={ googleChartPackages }
-							/>
-						) ) }
+						) }
 
                          <div className="visualizer-settings__charts-footer"><sub>
                             { footer }

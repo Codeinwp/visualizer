@@ -244,6 +244,13 @@ input.vz-switch-toggle[type=checkbox]:checked:before{
 	position: relative;
 	border-bottom: 1px solid #D9D9D9;
 }
+.vz-form-wrap .form-block.no-sep{
+	border-bottom: 0;
+	padding-bottom: 12px;
+}
+.vz-form-wrap .form-block.vz-final-block{
+	padding: 12px 0;
+}
 .vz-form-wrap .form-block:last-child{
 	border-bottom: 0;
 }
@@ -948,6 +955,21 @@ display: none;
 	padding-left: 20px;
 	padding-right: 20px;
 }
+.vz-accordion-title--static{
+	padding: 22px 30px 22px 80px;
+}
+.vz-accordion-title--static .vz-checkbox{
+	position: absolute;
+	left: 30px;
+	top: 50%;
+	margin-top: -10px;
+	width: 20px;
+	height: 20px;
+	z-index: 12;
+}
+.vz-accordion-content--static{
+	display: block;
+}
 
 .vz-features-list ul li{
 	padding: 25px 0;
@@ -968,14 +990,154 @@ display: none;
 .vz-features-list ul li .txt{
 	width: 100%;
 }
-.pro-label{
-	background: #007CBA;
-	border-radius: 6px;
-	color: #ffffff;
-	text-transform: uppercase;
+.vz-final-options{
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.vz-option-card{
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 16px 18px;
+	border: 1px solid #E5E7EB;
+	border-radius: 8px;
+	background: #fff;
+	position: relative;
+}
+.vz-option-check{
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+.vz-option-check input[type=checkbox]{
+	width: 18px;
+	height: 18px;
+}
+.vz-option-icon{
+	width: 40px;
+	height: 40px;
+	border-radius: 8px;
+	background: #F3F4F6;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+.vz-option-icon img{
+	display: block;
+	max-width: 24px;
+	max-height: 24px;
+}
+.vz-option-body{
+	flex: 1;
+}
+.vz-option-title{
 	font-size: 16px;
-	line-height: 19px;
-	padding: 2px 9px 4px;
+	font-weight: 600;
+	color: #0f172a;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 4px;
+}
+.vz-option-title .pro-label.free-label{
+	font-size: 11px;
+	line-height: 14px;
+	padding: 2px 8px 3px;
+}
+.vz-option-card--newsletter .vz-option-icon{
+	background: #E6F3F3;
+	color: #39C3D2;
+}
+.vz-option-card--newsletter .vz-option-icon .dashicons{
+	font-size: 22px;
+	width: 22px;
+	height: 22px;
+}
+.vz-option-card--newsletter .vz-option-body{
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.vz-option-card--newsletter .vz-option-input{
+	max-width: 320px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.vz-option-card--newsletter .vz-save-email[disabled]{
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+.vz-option-card--newsletter .vz-field-error{
+	display: block;
+	margin-top: 6px;
+}
+.vz-option-card--newsletter .vz-change-email{
+	background: transparent;
+	border: 0;
+	color: #39C3D2;
+	text-decoration: underline;
+	cursor: pointer;
+	padding: 0 0 0 6px;
+	font-size: 13px;
+}
+.vz-option-card--newsletter .vz-email-text{
+	color: #39C3D2;
+	font-weight: 600;
+	padding-left: 6px;
+}
+.vz-install-status{
+	position: absolute;
+	right: 14px;
+	top: 14px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 2px solid #cbd5e1;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	line-height: 1;
+	color: #ffffff;
+}
+.vz-install-status.is-installing{
+	display: flex;
+	border-color: #39C3D2;
+	border-top-color: transparent;
+	animation: spin 1s linear infinite;
+}
+.vz-install-status.is-done{
+	display: flex;
+	background: #00AA63;
+	border-color: #00AA63;
+}
+.vz-install-status.is-error{
+	display: flex;
+	background: #d63638;
+	border-color: #d63638;
+}
+.vz-install-status.is-done:before{
+	content: "✓";
+}
+.vz-install-status.is-error:before{
+	content: "!";
+}
+.pro-label{
+	display: inline;
+	width: 74px;
+	height: 17px;
+	border: none;
+	color: #fff;
+	z-index: 4;
+	background: #d63638;
+	letter-spacing: 0.5px;
+	text-align: center;
 }
 .pro-label.free-label{
 	background: #BDE6EB;
@@ -988,34 +1150,23 @@ display: none;
 }
 /* visualizer accordion style End */
 .vz-chart-list{
-/*	max-width: 780px;*/
-	padding: 0 18px;
+	max-width: 1100px;
+	padding: 0;
 	margin-bottom: 40px;
+	margin-left: auto;
+	margin-right: auto;
 }
 .vz-chart-list > ul{
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 16px;
+	align-items: stretch;
 }
 .vz-chart-list .slick-arrow{
-	position: absolute;
-	width: 30px;
-	top: 50%;
-	height: 30px;
-	margin-top: -15px;
-	font-size: 0;
-	color: #757575;
-	display: grid;
-	place-items: center;
-	border: 0;
-	background: transparent;
-	cursor: pointer;
+	display: none;
 }
 .vz-chart-list .slick-arrow:before{
-	display: block;
-	font-family: "dashicons";
-	font-size: 24px;
-	line-height: 1;
+	display: none;
 }
 .vz-chart-list .slick-arrow.slick-prev{
 	left: -42px;
@@ -1030,19 +1181,19 @@ display: none;
 	content: "\f345";
 }
 .vz-chart-list > ul > li{
-	width: 48%;
-	max-width: 362px;
-	padding-bottom: 60px;
+	width: 100%;
+	max-width: 100%;
+	padding-bottom: 0;
 }
 .vz-chart-list .slick-slide{
-	margin-right: 34px;
+	margin-right: 0;
 }
 .vz-chart-option{
-	width: 317px;
+	width: 100%;
 	position: relative;
 	display: flex;
 	flex-wrap: wrap;
-	padding: 12px 12px 20px;
+	padding: 12px 12px 16px;
 }
 .vz-chart-option .img{
 	order: 1;
@@ -1050,8 +1201,9 @@ display: none;
 	z-index: 1;
 	display: block;
 	width: 100%;
-	max-width: 338px;
-	height: 198px;
+	max-width: 100%;
+	aspect-ratio: 23 / 18;
+	height: auto;
 	background-color: #ffffff;
 	margin-bottom: 20px;
 	background-image: url(../images/chart_types_v395.png);
@@ -1060,23 +1212,54 @@ display: none;
 	transition: all .3s ease-in-out;
 	/* filter: grayscale(100%);
 	-webkit-filter: grayscale(100%); */
-	background-size: 900px 1150px;
+	--wizard-sprite-scale: 0.45;
+	background-size: calc(900px * var(--wizard-sprite-scale)) calc(1150px * var(--wizard-sprite-scale));
 	filter: grayscale(100%);
 }
 .vz-chart-option .img.type-box-pie{
-	background-position: -5px -17px;
+	background-position: calc(-5px * var(--wizard-sprite-scale)) calc(-17px * var(--wizard-sprite-scale));
 }
 .vz-chart-option .img.type-box-bar{
-	background-position: -305px -235px;
+	background-position: calc(-305px * var(--wizard-sprite-scale)) calc(-235px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-area{
+	background-position: calc(-8px * var(--wizard-sprite-scale)) calc(-225px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-scatter{
+	background-position: calc(-300px * var(--wizard-sprite-scale)) calc(0px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-gauge{
+	background-position: calc(-7px * var(--wizard-sprite-scale)) calc(-450px * var(--wizard-sprite-scale));
 }
 .vz-chart-option .img.type-box-line{
-	background-position: -606px -14px;
+	background-position: calc(-606px * var(--wizard-sprite-scale)) calc(-14px * var(--wizard-sprite-scale));
 }
 .vz-chart-option .img.type-box-tabular{
-	background-position: -306px -693px;
+	background-position: calc(-306px * var(--wizard-sprite-scale)) calc(-693px * var(--wizard-sprite-scale));
 }
 .vz-chart-option .img.type-box-geo{
-	background-position: -603px -459px;
+	background-position: calc(-603px * var(--wizard-sprite-scale)) calc(-459px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-candlestick{
+	background-position: calc(-304px * var(--wizard-sprite-scale)) calc(-450px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-bubble{
+	background-position: calc(-604px * var(--wizard-sprite-scale)) calc(-906px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-column{
+	background-position: calc(-600px * var(--wizard-sprite-scale)) calc(-225px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-timeline{
+	background-position: calc(-8px * var(--wizard-sprite-scale)) calc(-670px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-combo{
+	background-position: calc(-606px * var(--wizard-sprite-scale)) calc(-670px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-polarArea{
+	background-position: calc(-2px * var(--wizard-sprite-scale)) calc(-912px * var(--wizard-sprite-scale));
+}
+.vz-chart-option .img.type-box-radar{
+	background-position: calc(-301px * var(--wizard-sprite-scale)) calc(-899px * var(--wizard-sprite-scale));
 }
 .vz-chart-option:hover .img{
 	background-image: url(../images/chart_types_v395.png);
@@ -1112,24 +1295,34 @@ display: none;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	font-size: 13px;
+	line-height: 16px;
 }
 .vz-pro-label-wrap {
 	order: 3;
 	width: calc(100% - 20px);
 	padding-left: 12px;
-	position: relative;
 	z-index: 1;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	padding-right: 42px;
 }
 .vz-pro-label-wrap h3 {
 	opacity: .7;
 	color: #000000;
+	font-size: 13px;
+	line-height: 16px;
 }
 .vz-pro-label-wrap span.pro-label{
-	margin-left: 30px;
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	margin-left: 0;
 	font-weight: 600;
+	font-size: 11px;
+	line-height: 14px;
+	padding: 2px 8px 3px;
 }
 .vz-chart-option input[type=radio].vz-radio-btn:checked ~ .bg{
 	background: #BDE6EB;	
@@ -1152,7 +1345,6 @@ display: none;
 	top: 0;
 	width: 100%;
 	height: 100%;
-	padding: 12px 12px 20px;
 	z-index: 2;
 	opacity: 0;
 	visibility: hidden;
@@ -1160,8 +1352,9 @@ display: none;
 }
 .vz-pro-option .pro-overlay .pro-box{
 	padding-bottom: 58.88%;
-	background: rgba(255,255,255,.5);
+	background: rgba(185, 185, 185, 0.5);
 	backdrop-filter: blur(2px);
+	height: 100%;
 }
 .vz-pro-option .pro-overlay .pro-box .btn {
 	position: absolute;
@@ -1169,6 +1362,7 @@ display: none;
 	left: 50%;
 	white-space: nowrap;
 	transform: translate(-50%, -50%);
+	font-size: 14px;
 }
 
 .vz-power-pro{
@@ -1215,6 +1409,9 @@ display: none;
 	background: #39C3D2;
 	transition: all .3s ease-in-out;
 }
+.vz-import-status{
+	margin-top: 12px;
+}
 .vz-chart-list .slick-arrow[disabled="disabled"], .vz-chart-list .slick-arrow[aria-disabled="true"] {
 	color: #eeeeee
 }
@@ -1253,7 +1450,8 @@ display: none;
 	.vz-document-list > ul > li{width: 100%;}
 	.vz-help-improve-box .left{width: 100%;}
 	.vz-help-improve-box .right{width: 100%;}
-	.vz-chart-list > ul > li{width: 100%; max-width: 100%; padding-bottom: 30px;}
+	.vz-chart-list > ul{grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;}
+	.vz-chart-list > ul > li{width: 100%; max-width: 100%; padding-bottom: 0;}
 	.vz-shortcode-preview-content{padding-right: 20px;}
 	.vz-newsletter-wrap .vz-newsletter, .vz-newsletter-wrap .vz-newsletter-img{width: 100%; padding-bottom: 20px;}
 }

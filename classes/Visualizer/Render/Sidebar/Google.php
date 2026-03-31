@@ -82,7 +82,6 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			'center' => esc_html__( 'Centered in the allocated area', 'visualizer' ),
 			'end'    => esc_html__( 'Aligned to the end of the allocated area', 'visualizer' ),
 		);
-
 	}
 
 	/**
@@ -99,7 +98,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 	/**
 	 * Loads the assets.
 	 */
-	function load_google_assets( $deps, $is_frontend ) {
+	public function load_google_assets( $deps, $is_frontend ) {
 		wp_register_script( 'google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
 		wp_register_script( 'dom-to-image', VISUALIZER_ABSURL . 'js/lib/dom-to-image.min.js', array(), null, true );
 		wp_register_script(
@@ -117,7 +116,6 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			$deps,
 			array( 'visualizer-render-google-lib' )
 		);
-
 	}
 
 	/**
@@ -183,7 +181,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			self::_renderSectionStart( esc_html__( 'Font Styles', 'visualizer' ), false );
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Font Family And Size', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -220,7 +218,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 					'legend[position]',
 					isset( $this->legend['position'] ) ? $this->legend['position'] : '',
 					$this->_legendPositions,
-					esc_html__( 'Determines where to place the legend, compared to the chart area.', 'visualizer' )
+					esc_html__( 'Sets the legend position relative to the chart.', 'visualizer' )
 				);
 
 				self::_renderSelectItem(
@@ -309,7 +307,6 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 		);
 
 		self::_renderSectionEnd();
-
 	}
 
 	/**
@@ -327,10 +324,10 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 			array(
 				''          => esc_html__( 'Default', 'visualizer' ),
 				'focus'     => esc_html__( 'The tooltip will be displayed when the user hovers over an element', 'visualizer' ),
-				'selection' => esc_html__( 'The tooltip will be displayed when the user selects an element', 'visualizer' ),
+				'selection' => esc_html__( 'The tooltip will be displayed when the user selects an element.', 'visualizer' ),
 				'none'      => esc_html__( 'The tooltip will not be displayed', 'visualizer' ),
 			),
-			esc_html__( 'Determines the user interaction that causes the tooltip to be displayed.', 'visualizer' )
+			esc_html__( 'Controls when the tooltip appears.', 'visualizer' )
 		);
 
 		self::_renderSelectItem(
@@ -376,7 +373,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 
 				echo '<div class="viz-section-delimiter"></div>';
 
-				self::_renderSectionDescription( esc_html__( 'Configure the background color for the main area of the chart and the chart border width and color.', 'visualizer' ) );
+				self::_renderSectionDescription( esc_html__( 'Set the chart\'s background color, border width, and border color.', 'visualizer' ) );
 
 				self::_renderTextItem(
 					esc_html__( 'Stroke Width', 'visualizer' ),
@@ -450,10 +447,28 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 					echo '</table>';
 
 					echo '<p class="viz-section-description">';
-						esc_html_e( 'Determines the width and hight of the chart area.', 'visualizer' );
+						esc_html_e( 'Determines the width and height of the chart area.', 'visualizer' );
 					echo '</p>';
 				echo '</div>';
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
+	}
+
+	/**
+	 * Renders advanced settings and hidden inputs for programmatically-set keys
+	 * (e.g. the global-preset colors palette) that have no visible sidebar control.
+	 *
+	 * @access protected
+	 */
+	protected function _renderAdvancedSettings(): void {
+		parent::_renderAdvancedSettings();
+
+		// @phpstan-ignore-next-line (property accessed via magic __get from _data array)
+		$colors = $this->colors;
+		if ( ! empty( $colors ) && is_array( $colors ) ) {
+			foreach ( $colors as $color ) {
+				echo '<input type="hidden" name="colors[]" value="', esc_attr( $color ), '">';
+			}
+		}
 	}
 }

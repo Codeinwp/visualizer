@@ -168,7 +168,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'From And To Range', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Value Range (Min / Max)', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -208,7 +208,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'From And To Range', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Value Range (Min / Max)', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -248,7 +248,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'From And To Range', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Value Range (Min / Max)', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -309,5 +309,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Gauge extends Visualizer_Rende
 			self::_renderSectionEnd();
 		self::_renderGroupEnd();
 	}
-
 }

@@ -136,7 +136,6 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				'</a>'
 			)
 		);
-
 	}
 
 	/**
@@ -193,7 +192,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			isset( $this->hAxis['direction'] ) ? $this->hAxis['direction'] : '',
 			array(
 				''   => '',
-				'1'  => esc_html__( 'Identical Direction', 'visualizer' ),
+				'1'  => esc_html__( 'Default Direction', 'visualizer' ),
 				'-1' => esc_html__( 'Reverse Direction', 'visualizer' ),
 			),
 			esc_html__( 'The direction in which the values along the horizontal axis grow.', 'visualizer' )
@@ -308,7 +307,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			isset( $this->vAxis['direction'] ) ? $this->vAxis['direction'] : '',
 			array(
 				''   => '',
-				'1'  => esc_html__( 'Identical Direction', 'visualizer' ),
+				'1'  => esc_html__( 'Default Direction', 'visualizer' ),
 				'-1' => esc_html__( 'Reverse Direction', 'visualizer' ),
 			),
 			esc_html__( 'The direction in which the values along the vertical axis grow.', 'visualizer' )
@@ -461,7 +460,6 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 		);
 
 		$this->_renderRoleField( $index );
-
 	}
 
 	/**
@@ -481,7 +479,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Enter custom format pattern to apply to horizontal axis labels.', 'visualizer' ),
 				sprintf(
 					// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
-					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%2$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #&#37;&#37; percentage format then your values will be multiplied by 100.', 'visualizer' ),
+					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%2$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Note: Using the #&#37;&#37; percentage format will multiply your values by 100.', 'visualizer' ),
 					'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
 					'</a>'
 				),
@@ -512,7 +510,7 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 				esc_html__( 'Enter custom format pattern to apply to vertical axis labels.', 'visualizer' ),
 				sprintf(
 					// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
-					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%2$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #&#37;&#37; percentage format then your values will be multiplied by 100.', 'visualizer' ),
+					esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%2$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Note: Using the #&#37;&#37; percentage format will multiply your values by 100.', 'visualizer' ),
 					'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
 					'</a>'
 				),
@@ -525,5 +523,4 @@ abstract class Visualizer_Render_Sidebar_Graph extends Visualizer_Render_Sidebar
 			)
 		);
 	}
-
 }

@@ -35,6 +35,7 @@ class Charts extends Component {
 		super( ...arguments );
 
 		this.loadMoreCharts = this.loadMoreCharts.bind( this );
+		this.renderD3Charts = this.renderD3Charts.bind( this );
 
 		this.state = {
 			charts: null,
@@ -50,6 +51,12 @@ class Charts extends Component {
 		// Fetch review again if block loaded after saving.
 		let result = await apiFetch({ path: 'wp/v2/visualizer/?per_page=' + perPage + '&meta_key=visualizer-chart-library&meta_value=ChartJS' });
 		this.setState({ charts: result });
+	}
+
+	componentDidUpdate( prevProps, prevState ) {
+		if ( prevState.charts !== this.state.charts ) {
+			this.renderD3Charts( this.state.charts );
+		}
 	}
 
 	async loadMoreCharts() {
@@ -70,6 +77,43 @@ class Charts extends Component {
 			isBusy: false,
 			chartsLoaded
 		});
+	}
+
+	isD3Chart( chart ) {
+		return chart && chart['visualizer-chart-library'] && 'd3' === chart['visualizer-chart-library'].toLowerCase();
+	}
+
+	getD3ContainerId( chartId ) {
+		return `visualizer-d3-list-${ chartId }`;
+	}
+
+	renderD3Charts( charts ) {
+		if ( ! charts || 'undefined' === typeof jQuery ) {
+			return;
+		}
+
+		Object.keys( charts ).forEach( ( i ) => {
+			const data = formatDate( charts[i]['chart_data'] );
+			if ( ! this.isD3Chart( data ) ) {
+				return;
+			}
+
+			const containerId = this.getD3ContainerId( charts[i].id );
+			const code = data['visualizer-d3-code'] || data.code || '';
+			const payload = {
+				id: containerId,
+				charts: {
+					[ containerId ]: {
+						library: 'd3',
+						code,
+						series: data['visualizer-series'],
+						data: data['visualizer-data']
+					}
+				}
+			};
+
+			jQuery( 'body' ).trigger( 'visualizer:render:chart:start', payload );
+		} );
 	}
 
 	render() {
@@ -109,7 +153,9 @@ class Charts extends Component {
 											title = `#${charts[i].id}`;
 										}
 
-										if ( 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
+										const isD3 = this.isD3Chart( data );
+
+										if ( ! isD3 && 0 <= [ 'gauge', 'tabular', 'timeline' ].indexOf( data['visualizer-chart-type']) ) {
 											if ( 'DataTable' === data['visualizer-chart-library']) {
 												chart = data['visualizer-chart-type'];
 											} else {
@@ -119,8 +165,10 @@ class Charts extends Component {
                                                 }
 												chart = startCase( chart );
 											}
-										} else {
+										} else if ( ! isD3 ) {
 											chart = `${ startCase( data['visualizer-chart-type']) }Chart`;
+										} else {
+											chart = 'AI';
 										}
 
 										if ( data['visualizer-chart-library']) {
@@ -140,23 +188,19 @@ class Charts extends Component {
 													{ title }
 												</div>
 
-												{ ( 'DataTable' === data['visualizer-chart-library']) ? (
+												{ isD3 ? (
+													<div
+														id={ this.getD3ContainerId( charts[i].id ) }
+														className="visualizer-d3-preview"
+														style={ { height: '260px' } }
+													/>
+												) : ( 'DataTable' === data['visualizer-chart-library']) ? (
 													<DataTable
 														id={ charts[i].id }
 														rows={ data['visualizer-data'] }
 														columns={ data['visualizer-series'] }
 														chartsScreen={ true }
 														options={ data['visualizer-settings'] }
-													/>
-												) : ( '' !== data['visualizer-data-exploded'] ? (
-													<Chart
-														chartVersion={ chartVersion }
-														chartType={ chart }
-														rows={ data['visualizer-data'] }
-														columns={ data['visualizer-series'] }
-														options={ filterCharts( data['visualizer-settings']) }
-                                                        formatters={ formatData( data ) }
-														chartPackages={ googleChartPackages }
 													/>
 												) : (
 													<Chart
@@ -168,7 +212,7 @@ class Charts extends Component {
                                                         formatters={ formatData( data ) }
 														chartPackages={ googleChartPackages }
 													/>
-												) ) }
+												) }
 
                                                  <div className="visualizer-settings__charts-footer"><sub>
                                                     { footer }
@@ -200,7 +244,7 @@ class Charts extends Component {
 
 							</Fragment>						:
 							<p className="visualizer-no-charts">
-								{ __( 'No charts found.' ) }
+								{ __( 'No charts found. Create a chart in the Visualizer dashboard first.' ) }
 							</p>					:
 						<Placeholder>
 							<Spinner/>

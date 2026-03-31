@@ -52,8 +52,8 @@ class Visualizer_Render_Page_Types extends Visualizer_Render_Page {
 	 * @access protected
 	 */
 	protected function _renderContent() {
-		echo '<div id="type-picker">';
 		echo '<div id="chart-select">' . $this->render_chart_selection() . '</div>';
+		echo '<div id="type-picker">';
 		foreach ( $this->types as $type => $array ) {
 			// add classes to each box that identifies the libraries this chart type supports.
 			$lib_classes = '';

@@ -48,12 +48,16 @@ export async function createChartWithAdmin( admin, page, chart_label = CHART_JS_
     await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
 
     await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
-    await page.waitForSelector('h1:text("Visualizer")', { timeout: 5000 });
+
+    await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+    await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
+
+    await page.waitForSelector('h1:text("Visualizer")', { timeout: 10000 });
 
     await selectChartAdmin( page.frameLocator('iframe'), chart_label );
 
     // Wait a little for the request to be processed.
-    await expect( page.frameLocator('iframe').getByRole('heading', { name: 'Import data from URL' })).toBeVisible({ timeout: 5000 });
+    await expect( page.frameLocator('iframe').getByRole('button', { name: 'Import data from URL' })).toBeVisible({ timeout: 5000 });
     
     const chartId = await page.frameLocator('iframe').locator('#visualizer-chart-id').getAttribute('data-id');
 

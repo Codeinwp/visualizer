@@ -53,7 +53,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 		parent::__construct( $plugin );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_SERIES, 'filterChartSeries', 1, 2 );
 		$this->_addFilter( Visualizer_Plugin::FILTER_GET_CHART_DATA, 'filterChartData', 1, 2 );
-		$this->_addFilter( 'visualizer_pro_upsell', 'addProUpsell', 10, 2 );
+		$this->_addFilter( 'visualizer_pro_upsell', 'addProUpsell', 10, 3 );
 	}
 
 	/**
@@ -129,7 +129,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 	 *
 	 * @return string The new html code.
 	 */
-	public function addProUpsell( $old, $feature = null ) {
+	public function addProUpsell( $old, $feature = null, string $docs_url = '' ) {
 		$pro_features   = Visualizer_Module::get_features_for_license( 1 );
 		$biz_features   = Visualizer_Module::get_features_for_license( 2 );
 		$return  = '';
@@ -145,7 +145,7 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			if ( in_array( $feature, $biz_features, true ) && Visualizer_Module::is_pro() ) {
 				$msg = $plus_msg;
 			}
-			if ( in_array( $feature, [ 'db-query', 'chart-permissions' ], true ) ) {
+			if ( in_array( $feature, array( 'db-query', 'chart-permissions' ), true ) ) {
 				$msg = $plus_msg;
 			}
 
@@ -153,7 +153,10 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 			$return .= '	<div class="only-pro-container">';
 			$return .= '		<div class="only-pro-inner">';
 			$return .= '			<p>' . $msg . '</p>';
-			$return .= '            <a target="_blank" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, esc_attr( $feature ) ) . '" title="' . __( 'Upgrade Now', 'visualizer' ) . '">' . __( 'Upgrade Now', 'visualizer' ) . '</a>';
+			if ( ! empty( $docs_url ) ) {
+				$return .= '            <a target="_blank" href="' . esc_url( $docs_url ) . '" class="button button-secondary">' . esc_html__( 'Documentation', 'visualizer' ) . '</a>';
+			}
+			$return .= '            <a target="_blank" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, esc_attr( $feature ) ) . '" title="' . __( 'Upgrade Now', 'visualizer' ) . '" class="button button-primary">' . __( 'Upgrade Now', 'visualizer' ) . '</a>';
 			$return .= ' 		</div>';
 			$return .= ' 	</div>';
 			$return .= '</div>';
@@ -165,5 +168,4 @@ class Visualizer_Module_Sources extends Visualizer_Module {
 
 		return $return;
 	}
-
 }

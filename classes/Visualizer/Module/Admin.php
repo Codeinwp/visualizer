@@ -30,6 +30,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 	const NAME = __CLASS__;
 
+	const OPTION_GLOBAL_SETTINGS = 'visualizer_global_settings';
+
 	/**
 	 * Library page suffix.
 	 *
@@ -49,6 +51,14 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	private $_supportPage;
 
 	/**
+	 * Settings page suffix.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $_settingsPage;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -65,6 +75,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addAction( 'admin_footer', 'renderTemplates' );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueueLibraryScripts', null, 0 );
 		$this->_addAction( 'admin_enqueue_scripts', 'enqueue_support_page' );
+		$this->_addAction( 'admin_enqueue_scripts', 'enqueueSettingsScripts' );
+		$this->_addAction( 'admin_post_visualizer_save_global_settings', 'saveGlobalSettings' );
 		$this->_addAction( 'admin_menu', 'registerAdminMenu' );
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
@@ -96,7 +108,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( defined( 'TI_E2E_TESTING' ) ) {
 			$this->load_cypress_hooks();
 		}
-
 	}
 	/**
 	 * Display review notice.
@@ -104,7 +115,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function render_review_notice( $footer_text ) {
 		$current_screen = get_current_screen();
 
-		$visualizer_page_ids = ['toplevel_page_visualizer', 'visualizer_page_viz-support', 'visualizer_page_ti-about-visualizer' ];
+		$visualizer_page_ids = array( 'toplevel_page_visualizer', 'visualizer_page_viz-support', 'visualizer_page_ti-about-visualizer' );
 
 		if ( ! empty( $current_screen ) && isset( $current_screen->id ) ) {
 			foreach ( $visualizer_page_ids as $page_to_check ) {
@@ -114,7 +125,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 						__( 'Enjoying %1$s? %2$s %3$s rating. Thank you for being so supportive!', 'visualizer' ),
 						'<b>Visualizer</b>',
 						esc_html__( 'You can help us by leaving a', 'visualizer' ),
-						'<a href="https://wordpress.org/support/plugin/visualizer/reviews/" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
+						'<a href="https://wordpress.org/support/plugin/visualizer/reviews/#new-post" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
 					);
 					break;
 				}
@@ -134,7 +145,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	private function load_cypress_hooks() {
 		// all charts should load on the same page without pagination.
 		add_filter(
-			'visualizer_query_args', function( $args ) {
+			'visualizer_query_args', function ( $args ) {
 				$args['posts_per_page'] = 20;
 				return $args;
 			}, 10, 1
@@ -253,8 +264,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @access  public
 	 */
 	public function init() {
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' == get_user_option( 'rich_editing' ) ) {
+		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) && 'true' === get_user_option( 'rich_editing' ) ) {
 			$this->_addFilter( 'mce_external_languages', 'add_tinymce_lang', 10, 1 );
 			$this->_addFilter( 'mce_external_plugins', 'tinymce_plugin', 10, 1 );
 			$this->_addFilter( 'mce_buttons', 'register_mce_button', 10, 1 );
@@ -268,7 +278,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @since   ?
 	 * @access  friendly
 	 */
-	function get_strings_for_block( $settings ) {
+	public function get_strings_for_block( $settings ) {
 		$class = new Visualizer_Module_Language();
 		$strings         = $class->get_strings();
 		$array = array( 'visualizer_tinymce_plugin' => json_encode( $strings ) );
@@ -351,6 +361,29 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		if ( post_type_supports( $typenow, 'editor' ) || $current_screen->id === 'widgets' || $current_screen->id === 'customize' ) {
 			wp_enqueue_style( 'visualizer-media', VISUALIZER_ABSURL . 'css/media.css', array( 'media-views' ), Visualizer_Plugin::VERSION );
 
+			$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+			if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+				// @phpstan-ignore-next-line
+				$d3_asset = include $d3_renderer_asset;
+				wp_register_script(
+					'visualizer-d3-renderer',
+					VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+					array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+					$d3_asset['version'],
+					true
+				);
+			}
+			if ( wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+				wp_enqueue_script( 'visualizer-d3-renderer' );
+				wp_localize_script(
+					'visualizer-d3-renderer',
+					'vizD3Renderer',
+					array(
+						'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+					)
+				);
+			}
+
 			// Load all the assets for the different libraries we support.
 			$deps   = array(
 				Visualizer_Render_Sidebar_Google::enqueue_assets( array( 'media-editor' ) ),
@@ -366,7 +399,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'visualizer',
 				array(
 					'i10n' => array(
-						'insert'    => __( 'Insert', 'visualizer' ),
+						'insert'    => __( 'Insert Chart', 'visualizer' ),
 					),
 				)
 			);
@@ -397,7 +430,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'title' => esc_html__( 'Visualizations', 'visualizer' ),
 			),
 			'routers'    => array(
-				'library' => esc_html__( 'From Library', 'visualizer' ),
+				'library' => esc_html__( 'Insert from Library', 'visualizer' ),
 				'create'  => esc_html__( 'Create New', 'visualizer' ),
 			),
 			'library'    => array(
@@ -429,7 +462,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			);
 		}
 
-		$enabled = self::proFeaturesLocked();
+		$enabled = self::proFeaturesEnabled();
 
 		$types = array_merge(
 			$additional,
@@ -671,6 +704,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 
 		wp_enqueue_script( 'visualizer-customization', $this->get_user_customization_js(), array(), null, true );
 
+		$has_d3 = false;
 		$query = $this->getQuery();
 		while ( $query->have_posts() ) {
 			$chart = $query->next_post();
@@ -684,6 +718,103 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				apply_filters( 'visualizer_assets_render', array( 'visualizer-library', 'visualizer-customization' ), true ),
 				Visualizer_Plugin::VERSION,
 				true
+			);
+			if ( 'd3' === $library ) {
+				$has_d3 = true;
+			}
+		}
+
+		if ( $has_d3 ) {
+			$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+			if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+				/**
+				 * Ignore missing build asset in source checkout.
+				 *
+				 * @phpstan-ignore-next-line
+				 */
+				$d3_asset = include $d3_renderer_asset;
+				wp_register_script(
+					'visualizer-d3-renderer',
+					VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+					array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+					$d3_asset['version'],
+					true
+				);
+				wp_enqueue_script( 'visualizer-d3-renderer' );
+			}
+			wp_localize_script(
+				'visualizer-d3-renderer',
+				'vizD3Renderer',
+				array(
+					'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+				)
+			);
+		}
+
+		$chart_builder_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.asset.php';
+		if ( file_exists( $chart_builder_asset ) ) {
+			/**
+			 * Ignore missing build asset in source checkout.
+			 *
+			 * @phpstan-ignore-next-line
+			 */
+			$asset = include $chart_builder_asset;
+			$chart_builder_deps = $asset['dependencies'];
+			if ( ! wp_script_is( 'visualizer-handsontable', 'registered' ) && defined( 'Visualizer_Pro_ABSURL' ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
+				wp_register_script(
+					'visualizer-handsontable',
+					Visualizer_Pro_ABSURL . 'vendor/handsontable/dist/handsontable.full.min.js',
+					array(),
+					VISUALIZER_PRO_VERSION,
+					true
+				);
+			}
+			if ( ! wp_style_is( 'visualizer-handsontable', 'registered' ) && defined( 'Visualizer_Pro_ABSURL' ) && defined( 'VISUALIZER_PRO_VERSION' ) ) {
+				wp_register_style(
+					'visualizer-handsontable',
+					Visualizer_Pro_ABSURL . 'vendor/handsontable/dist/handsontable.full.min.css',
+					array(),
+					VISUALIZER_PRO_VERSION
+				);
+			}
+			if ( wp_script_is( 'visualizer-handsontable', 'registered' ) ) {
+				wp_enqueue_script( 'visualizer-handsontable' );
+				$chart_builder_deps = array_unique( array_merge( $chart_builder_deps, array( 'visualizer-handsontable' ) ) );
+			}
+			if ( wp_style_is( 'visualizer-handsontable', 'registered' ) ) {
+				wp_enqueue_style( 'visualizer-handsontable' );
+			}
+			wp_enqueue_script(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.js',
+				$chart_builder_deps,
+				$asset['version'],
+				true
+			);
+			wp_enqueue_style(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/style-index.css',
+				array(),
+				$asset['version']
+			);
+			$chart_builder_css = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.css';
+			if ( file_exists( $chart_builder_css ) ) {
+				wp_enqueue_style(
+					'visualizer-chart-builder-runtime',
+					VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.css',
+					array( 'visualizer-chart-builder' ),
+					$asset['version']
+				);
+			}
+			wp_localize_script(
+				'visualizer-chart-builder',
+				'vizAIBuilder',
+				array(
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'visualizer-ai-builder' ),
+					'isPro'   => Visualizer_Module::is_pro(),
+					'upgradeUrl' => tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'aiBuilderUpgrade', 'dataSource' ),
+				)
 			);
 		}
 
@@ -746,6 +877,15 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			'admin.php?page=' . Visualizer_Plugin::NAME . '&vaction=addnew'
 		);
 
+		$this->_settingsPage = add_submenu_page(
+			Visualizer_Plugin::NAME,
+			__( 'Settings', 'visualizer' ),
+			__( 'Settings', 'visualizer' ),
+			'manage_options',
+			'viz-settings',
+			array( $this, 'renderSettingsPage' )
+		);
+
 		$this->_supportPage = add_submenu_page(
 			Visualizer_Plugin::NAME,
 			__( 'Support', 'visualizer' ),
@@ -797,7 +937,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	/**
 	 * Adds the screen options for pagination.
 	 */
-	function addScreenOptions() {
+	public function addScreenOptions() {
 		$screen = get_current_screen();
 
 		// bail if it's some other page.
@@ -816,7 +956,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	/**
 	 * Returns the screen option for pagination.
 	 */
-	function setScreenOptions( $status, $option, $value ) {
+	public function setScreenOptions( $status, $option, $value ) {
 		if ( 'visualizer_library_per_page' === $option ) {
 			return $value;
 		}
@@ -970,6 +1110,89 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
+	 * Enqueues scripts/styles for the Settings page.
+	 *
+	 * @access public
+	 */
+	public function enqueueSettingsScripts( string $hook_suffix ): void {
+		if ( $this->_settingsPage !== $hook_suffix ) {
+			return;
+		}
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'wp-color-picker' );
+	}
+
+	/**
+	 * Renders the global style settings page.
+	 *
+	 * @access public
+	 */
+	public function renderSettingsPage(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'visualizer' ) );
+		}
+		$settings = self::getGlobalSettings();
+		include_once VISUALIZER_ABSPATH . '/templates/global-settings.php';
+	}
+
+	/**
+	 * Returns the global style settings option.
+	 *
+	 * @return array<string, string>
+	 * @access public
+	 * @static
+	 */
+	public static function getGlobalSettings(): array {
+		$defaults = array(
+			'color_primary'   => '',
+			'color_secondary' => '',
+			'apply_existing'  => '0',
+		);
+		$saved = get_option( self::OPTION_GLOBAL_SETTINGS, array() );
+		return wp_parse_args( $saved, $defaults );
+	}
+
+	/**
+	 * Handles saving of the global style settings.
+	 *
+	 * @access public
+	 */
+	public function saveGlobalSettings(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'visualizer' ) );
+		}
+
+		check_admin_referer( 'visualizer_save_global_settings' );
+
+		$color_primary   = sanitize_hex_color( wp_unslash( $_POST['visualizer_color_primary'] ?? '' ) );
+		$color_secondary = sanitize_hex_color( wp_unslash( $_POST['visualizer_color_secondary'] ?? '' ) );
+		$apply_existing  = ! empty( $_POST['visualizer_apply_existing'] ) ? '1' : '0';
+		$clear           = ! empty( $_POST['visualizer_clear_settings'] );
+
+		if ( $clear ) {
+			delete_option( self::OPTION_GLOBAL_SETTINGS );
+		} else {
+			$settings = array(
+				'color_primary'   => $color_primary ? $color_primary : '',
+				'color_secondary' => $color_secondary ? $color_secondary : '',
+				'apply_existing'  => $apply_existing,
+			);
+			update_option( self::OPTION_GLOBAL_SETTINGS, $settings );
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'    => 'viz-settings',
+					'updated' => $clear ? 'cleared' : 'true',
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
 	 * Renders visualizer library page.
 	 *
 	 * @since 1.0.0
@@ -1055,12 +1278,16 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			// add chart to the array
 			$charts[ $id ] = array(
 				'id'       => $chart->ID,
+				'title'    => $chart->post_title,
 				'type'     => $type,
 				'series'   => $series,
 				'settings' => $settings,
 				'data'     => $data,
 				'library'  => $library,
 			);
+			if ( 'd3' === $library ) {
+				$charts[ $id ]['code'] = get_post_meta( $chart->ID, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+			}
 		}
 		// enqueue charts array
 		$ajaxurl = admin_url( 'admin-ajax.php' );
@@ -1165,6 +1392,20 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	 * @return array Updated array of plugin meta links.
 	 */
 	public function getPluginMetaLinks( $plugin_meta, $plugin_file ) {
+		if ( Visualizer_Module::is_pro() ) {
+			return $plugin_meta;
+		}
+
+		// Also suppress the upsell when Pro is installed but not currently active.
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		foreach ( array_keys( get_plugins() ) as $installed_plugin ) {
+			if ( false !== strpos( $installed_plugin, 'visualizer-pro' ) ) {
+				return $plugin_meta;
+			}
+		}
+
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
 			// knowledge base link
 			$plugin_meta[] = sprintf(
@@ -1182,15 +1423,37 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	}
 
 	/**
-	 * If check is existing user.
+	 * Returns true when premium chart types should be enabled for the current user.
 	 *
-	 * @return bool Default false
+	 * Pro 1.9.0+ hooks the 'visualizer_is_pro' filter and returns true only when
+	 * the license is valid. Pre-1.9.0 Pro defined a Visualizer_Pro class instead;
+	 * we detect that as a fallback so those legacy installs still work.
+	 *
+	 * Passing false as the filter default ensures the constant VISUALIZER_PRO
+	 * (which is set to true whenever the Pro class exists, regardless of license
+	 * state) cannot bypass the license check.
+	 *
+	 * @return bool
 	 */
-	public static function proFeaturesLocked() {
-		if ( Visualizer_Module::is_pro() ) {
+	public static function proFeaturesEnabled() {
+		$is_pro_filter = apply_filters( 'visualizer_is_pro', false );
+
+		// Pro 1.9.0+: filter is hooked and returns true only with a valid license.
+		if ( $is_pro_filter ) {
 			return true;
 		}
-		return 'yes' === get_option( 'visualizer-new-user', 'yes' ) ? false : true;
+
+		// Pro is installed (active) but the license check above did not pass.
+		// Do NOT fall through to the legacy "old user" path — that path exists
+		// only for sites that never had Pro installed.  If Pro is present but
+		// the license is inactive we should lock, regardless of chart history.
+		if ( class_exists( 'Visualizer_Pro', false ) ) {
+			return false;
+		}
+
+		// No Pro installed at all: grant legacy access to existing users so
+		// their charts are not suddenly broken when they upgrade the free plugin.
+		return 'yes' === get_option( 'visualizer-new-user' ) ? false : true;
 	}
 
 	/**

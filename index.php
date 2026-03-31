@@ -36,15 +36,15 @@ if ( class_exists( 'Visualizer_Pro', false ) ) {
  *
  * @since 1.0.0
  *
- * @param string $class The class name to autoload.
+ * @param string $class_name The class name to autoload.
  *
  * @return boolean Returns TRUE if the class is located. Otherwise FALSE.
  */
-function visualizer_autoloader( $class ) {
+function visualizer_autoloader( $class_name ) {
 	$namespaces = array( 'Visualizer' );
 	foreach ( $namespaces as $namespace ) {
-		if ( substr( $class, 0, strlen( $namespace ) ) === $namespace ) {
-			$filename = dirname( __FILE__ ) . str_replace( '_', DIRECTORY_SEPARATOR, "_classes_{$class}.php" );
+		if ( substr( $class_name, 0, strlen( $namespace ) ) === $namespace ) {
+			$filename = __DIR__ . str_replace( '_', DIRECTORY_SEPARATOR, "_classes_{$class_name}.php" );
 			if ( is_readable( $filename ) ) {
 				require $filename;
 
@@ -66,7 +66,7 @@ function visualizer_launch() {
 	define( 'VISUALIZER_BASEFILE', __FILE__ );
 	define( 'VISUALIZER_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'VISUALIZER_ABSURL', plugins_url( '/', __FILE__ ) );
-	define( 'VISUALIZER_ABSPATH', dirname( __FILE__ ) );
+	define( 'VISUALIZER_ABSPATH', __DIR__ );
 	define( 'VISUALIZER_DIRNAME', basename( VISUALIZER_ABSPATH ) );
 	define( 'VISUALIZER_REST_VERSION', 1 );
 	// if the below is true, then the js/customization.js in the plugin folder will be used instead of the one in the uploads folder (if it exists).
@@ -93,10 +93,11 @@ function visualizer_launch() {
 	// the link to pre-build queries.
 	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
 	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
-	define( 'VISUALIZER_DOC_COLLECTION', 'https://docs.themeisle.com/search?collectionId=561ec249c69791452ed4bceb&query=#+visualizer' );
+	define( 'VISUALIZER_DOC_COLLECTION', 'https://docs.themeisle.com/visualizer-charts-and-graphs/?query=#' );
 	define( 'VISUALIZER_DEMO_URL', 'https://demo.themeisle.com/visualizer/#' );
 	define( 'VISUALIZER_CODE_SNIPPETS_URL', 'https://docs.themeisle.com/category/726-visualizer' );
 	define( 'VISUALIZER_SUBSCRIBE_API', 'https://api.themeisle.com/tracking/subscribe' );
+	define( 'VISUALIZER_AGENTS_URL', 'https://ai.themeisle.com' );
 
 	// to redirect all themeisle_log_event to error log.
 	define( 'VISUALIZER_LOCAL_DEBUG', false );
@@ -110,6 +111,16 @@ function visualizer_launch() {
 			if ( function_exists( 'register_block_type' ) ) {
 				Visualizer_Gutenberg_Block::get_instance();
 			}}
+	);
+
+	// register Elementor widget and related hooks
+	// Use elementor/init so Elementor's autoloader is registered and Widget_Base is resolvable.
+	add_action(
+		'elementor/init',
+		function () {
+			require_once VISUALIZER_ABSPATH . '/classes/Visualizer/Elementor/Widget.php';
+			Visualizer_Elementor_Widget::register_hooks();
+		}
 	);
 
 	// set general modules
@@ -131,10 +142,20 @@ function visualizer_launch() {
 	// Set setup wizard module.
 	$plugin->setModule( Visualizer_Module_Wizard::NAME );
 
+	// AI Chart Builder module (AJAX endpoints for the React wizard).
+	$plugin->setModule( Visualizer_Module_AIBuilder::NAME );
+
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 	if ( is_readable( $vendor_file ) ) {
-		include_once( $vendor_file );
+		include_once $vendor_file;
 	}
+
+	$action_scheduler_file = VISUALIZER_ABSPATH . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
+
+	if ( is_readable( $action_scheduler_file ) ) {
+		require_once $action_scheduler_file;
+	}
+
 	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
 	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
 	add_filter(
@@ -149,7 +170,7 @@ function visualizer_launch() {
 	);
 	add_filter(
 		'visualizer_about_us_metadata',
-		function() {
+		function () {
 			return array(
 				'logo'             => esc_url( VISUALIZER_ABSURL . 'images/visualizer-logo.svg' ),
 				'location'         => 'visualizer',
@@ -164,12 +185,12 @@ function visualizer_launch() {
 		add_filter( 'themeisle_sdk_enable_telemetry', '__return_true' );
 		add_filter(
 			'themeisle_sdk_telemetry_products',
-			function( $products ) {
+			function ( $products ) {
 				$already_registered = false;
 
 				$license = get_option( 'visualizer_pro_license_data', 'free' );
 				if ( ! empty( $license ) && is_object( $license ) ) {
-					$license = $license->key;
+					$license = $license->key ?? 'free';
 				}
 				$track_hash = 'free' === $license ? 'free' : wp_hash( $license );
 

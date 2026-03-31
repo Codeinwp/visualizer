@@ -60,5 +60,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Scatter extends Visualizer_Ren
 		$this->_renderViewSettings();
 		$this->_renderAdvancedSettings();
 	}
-
 }

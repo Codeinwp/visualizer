@@ -79,11 +79,11 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Candlestick extends Visualizer
 						'single'   => esc_html__( 'Single data point', 'visualizer' ),
 						'multiple' => esc_html__( 'Multiple data points', 'visualizer' ),
 					),
-					esc_html__( 'Determines how many data points an user can select on a chart.', 'visualizer' )
+					esc_html__( 'Determines how many data points a user can select on a chart.', 'visualizer' )
 				);
 
 				self::_renderSelectItem(
-					esc_html__( 'Aggregation Target', 'visualizer' ),
+					esc_html__( 'Group Tooltips By', 'visualizer' ),
 					'aggregationTarget',
 					$this->aggregationTarget,
 					array(
@@ -93,7 +93,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Candlestick extends Visualizer
 						'auto'     => esc_html__( 'Group selected data by x-value if all selections have the same x-value, and by series otherwise', 'visualizer' ),
 						'none'     => esc_html__( 'Show only one tooltip per selection', 'visualizer' ),
 					),
-					esc_html__( 'Determines how multiple data selections are rolled up into tooltips. To make it working you need to set multiple selection mode and tooltip trigger to display it when an user selects an element.', 'visualizer' )
+					esc_html__( 'Determines how multiple data selections are rolled up into tooltips. To make it work, you need to set multiple selection mode and tooltip trigger to display it when a user selects an element.', 'visualizer' )
 				);
 			self::_renderSectionEnd();
 
@@ -175,5 +175,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Candlestick extends Visualizer
 			null
 		);
 	}
-
 }

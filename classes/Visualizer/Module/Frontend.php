@@ -87,7 +87,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	/**
 	 * Adds the async attribute to certain scripts.
 	 */
-	function script_loader_tag( $tag, $handle, $src ) {
+	public function script_loader_tag( $tag, $handle, $src ) {
 		if ( is_admin() ) {
 			return $tag;
 		}
@@ -98,7 +98,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				$tag = str_replace( ' src', ' async src', $tag );
 				break;
 			}
-		};
+		}
 
 		// Async scripts.
 		$scripts = array( 'dom-to-image' );
@@ -124,7 +124,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	/**
 	 * Returns the language/locale.
 	 */
-	function getLanguage( $dummy, $only_language ) {
+	public function getLanguage( $dummy, $only_language ) {
 		return $this->get_language();
 	}
 
@@ -132,7 +132,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 	/**
 	 * Registers the endpoints
 	 */
-	function endpoint_register() {
+	public function endpoint_register() {
 		register_rest_route(
 			'visualizer/v' . VISUALIZER_REST_VERSION,
 			'/action/(?P<chart>\d+)/(?P<type>.+)/',
@@ -142,7 +142,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 				'args'     => array(
 					'chart' => array(
 						'required' => true,
-						'sanitize_callback' => function( $param ) {
+						'sanitize_callback' => function ( $param ) {
 							return is_numeric( $param ) ? $param : null;
 						},
 					),
@@ -341,10 +341,13 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			return '';
 		}
 
-		// in case revisions exist.
-		// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
-		if ( true === ( $revisions = $this->undoRevisions( $chart->ID, true ) ) ) {
-			$chart = get_post( $chart->ID );
+		// in case revisions exist (skip D3 charts to avoid reverting AI data).
+		$chart_library = get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_LIBRARY, true );
+		if ( 'd3' !== $chart_library ) {
+			$revisions = $this->undoRevisions( $chart->ID, true );
+			if ( true === $revisions ) {
+				$chart = get_post( $chart->ID );
+			}
 		}
 
 		$id = 'visualizer-' . $atts['id'];
@@ -433,13 +436,20 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		}
 
 		// add chart to the array
-		$this->_charts[ $id ] = array(
+		$chart_entry = array(
 			'type'     => $type,
 			'series'   => $series,
 			'settings' => $settings,
 			'data'     => $data,
 			'library'  => $library,
 		);
+
+		// For D3 charts, include the stored code so the renderer can execute it.
+		if ( 'd3' === $library ) {
+			$chart_entry['code'] = get_post_meta( $chart->ID, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+		}
+
+		$this->_charts[ $id ] = $chart_entry;
 
 		$actions_div            = '';
 		$actions_visible        = apply_filters( 'visualizer_pro_add_actions', isset( $settings['actions'] ) ? $settings['actions'] : array(), $atts['id'] );
@@ -476,40 +486,102 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 		$_charts = array();
 		$_charts_type = '';
 		$count = 0;
+		static $visualizer_localized = false;
+		static $visualizer_charts = array();
+		static $d3_localized = false;
+		$facade_handle = 'visualizer-render-facade';
 		foreach ( $this->_charts as $id => $array ) {
 			$_charts = $this->_charts;
 			$library = $array['library'];
 			$_charts_type = $library;
-			if ( ! wp_script_is( "visualizer-render-$library", 'registered' ) ) {
+			$facade_deps = apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true );
+			if ( ! wp_script_is( $facade_handle, 'registered' ) ) {
 				wp_register_script(
-					"visualizer-render-$library",
+					$facade_handle,
 					VISUALIZER_ABSURL . 'js/render-facade.js',
-					apply_filters( 'visualizer_assets_render', array( 'jquery', 'visualizer-customization' ), true ),
+					$facade_deps,
 					Visualizer_Plugin::VERSION,
 					true
 				);
-				wp_enqueue_script( "visualizer-render-$library" );
+				wp_enqueue_script( $facade_handle );
+			} else {
+				// Ensure newly discovered dependencies are attached to the facade.
+				global $wp_scripts;
+				if ( isset( $wp_scripts->registered[ $facade_handle ] ) ) {
+					$wp_scripts->registered[ $facade_handle ]->deps = array_unique(
+						array_merge( $wp_scripts->registered[ $facade_handle ]->deps, $facade_deps )
+					);
+				}
+				foreach ( $facade_deps as $dep_handle ) {
+					wp_enqueue_script( $dep_handle );
+				}
 			}
 
-			if ( wp_script_is( "visualizer-render-$_charts_type" ) && 0 === $count ) {
-				wp_localize_script(
-					"visualizer-render-$_charts_type",
-					'visualizer',
-					array(
-						'charts'        => $this->_charts,
-						'language'      => $this->get_language(),
-						'map_api_key'   => get_option( 'visualizer-map-api-key' ),
-						'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
-						'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
-						'i10n'          => array(
-							'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
-						),
-						'page_type' => 'frontend',
-						'is_front'  => true,
-					)
-				);
+			// For D3 charts, also enqueue the dedicated renderer bundle.
+			if ( 'd3' === $library ) {
+				$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+				if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+					/**
+					 * Ignore missing build asset in source checkout.
+					 *
+					 * @phpstan-ignore-next-line
+					 */
+					$d3_asset = include $d3_renderer_asset;
+					wp_register_script(
+						'visualizer-d3-renderer',
+						VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+						array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+						$d3_asset['version'],
+						true
+					);
+					wp_enqueue_script( 'visualizer-d3-renderer' );
+				}
+				if ( ! $d3_localized ) {
+					wp_localize_script(
+						'visualizer-d3-renderer',
+						'vizD3Renderer',
+						array(
+							'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+						)
+					);
+					$d3_localized = true;
+				}
 			}
-			$count++;
+
+			if ( wp_script_is( $facade_handle ) && 0 === $count ) {
+				if ( ! $visualizer_localized ) {
+					$visualizer_charts = $this->_charts;
+					wp_localize_script(
+						$facade_handle,
+						'visualizer',
+						array(
+							'charts'        => $this->_charts,
+							'language'      => $this->get_language(),
+							'map_api_key'   => get_option( 'visualizer-map-api-key' ),
+							'rest_url'      => version_compare( $wp_version, '4.7.0', '>=' ) ? rest_url( 'visualizer/v' . VISUALIZER_REST_VERSION . '/action/#id#/#type#/' ) : '',
+							'wp_nonce'      => wp_create_nonce( 'wp_rest' ),
+							'i10n'          => array(
+								'copied'        => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
+							),
+							'page_type' => 'frontend',
+							'is_front'  => true,
+						)
+					);
+					$visualizer_localized = true;
+				} else {
+					$new_charts = array_diff_key( $this->_charts, $visualizer_charts );
+					if ( ! empty( $new_charts ) ) {
+						wp_add_inline_script(
+							$facade_handle,
+							'window.visualizer = window.visualizer || {};' .
+							'window.visualizer.charts = Object.assign(window.visualizer.charts || {}, ' . wp_json_encode( $new_charts ) . ');',
+							'before'
+						);
+						$visualizer_charts = array_merge( $visualizer_charts, $new_charts );
+					}
+				}
+			}
+			++$count;
 		}
 		$prefix = 'C' . 'h' . 'a' . 'rt';
 		if ( $type === 'tabular' ) {

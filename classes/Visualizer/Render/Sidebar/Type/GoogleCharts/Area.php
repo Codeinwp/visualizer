@@ -84,7 +84,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Area extends Visualizer_Render
 			'isStacked',
 			$this->isStacked,
 			$this->_yesno,
-			esc_html__( 'If set to yes, series elements are stacked.', 'visualizer' )
+			esc_html__( 'When enabled, series elements are stacked.', 'visualizer' )
 		);
 	}
 
@@ -148,5 +148,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Area extends Visualizer_Render
 			null
 		);
 	}
-
 }

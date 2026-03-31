@@ -67,7 +67,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 						esc_html__( 'Enter custom format pattern to apply to horizontal axis labels.', 'visualizer' ),
 						sprintf(
 							// translators: %1$s - HTML link tag, %2$s - HTML closing link tag.
-							esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%2$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Pay attention that if you use #&#37;&#37; percentage format then your values will be multiplied by 100.', 'visualizer' ),
+							esc_html__( 'For number axis labels, this is a subset of the decimal formatting %1$sICU pattern set%2$s. For instance, $#,###.## will display values $1,234.56 for value 1234.56. Note: Using the #&#37;&#37; percentage format will multiply your values by 100.', 'visualizer' ),
 							'<a href="http://icu-project.org/apiref/icu4c/classDecimalFormat.html#_details" target="_blank">',
 							'</a>'
 						),
@@ -116,7 +116,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 					esc_html__( 'Pie Hole', 'visualizer' ),
 					'pieHole',
 					$this->pieHole,
-					esc_html__( 'If between 0 and 1, displays a donut chart. The hole with have a radius equal to number times the radius of the chart. Only applicable when the chart is two-dimensional.', 'visualizer' ),
+					esc_html__( 'If between 0 and 1, displays a donut chart. The hole will have a radius equal to a number times the radius of the chart. Only applicable when the chart is two-dimensional.', 'visualizer' ),
 					'0.0'
 				);
 
@@ -146,7 +146,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 	 * @access protected
 	 */
 	protected function _renderResidueSettings() {
-		self::_renderGroupStart( esc_html__( 'Residue Settings', 'visualizer' ) );
+		self::_renderGroupStart( esc_html__( 'Other Slice Settings', 'visualizer' ) );
 			self::_renderSectionStart();
 				self::_renderTextItem(
 					esc_html__( 'Visibility Threshold', 'visualizer' ),
@@ -157,7 +157,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 				);
 
 				self::_renderTextItem(
-					esc_html__( 'Residue Slice Label', 'visualizer' ),
+					esc_html__( 'Other Slice Label', 'visualizer' ),
 					'pieResidueSliceLabel',
 					$this->pieResidueSliceLabel,
 					esc_html__( 'A label for the combination slice that holds all slices below slice visibility threshold.', 'visualizer' ),
@@ -165,7 +165,7 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 				);
 
 				self::_renderColorPickerItem(
-					esc_html__( 'Residue Slice Color', 'visualizer' ),
+					esc_html__( 'Other Slice Color', 'visualizer' ),
 					'pieResidueSliceColor',
 					$this->pieResidueSliceColor,
 					'#ccc'
@@ -229,5 +229,4 @@ class Visualizer_Render_Sidebar_Type_GoogleCharts_Pie extends Visualizer_Render_
 			esc_html__( 'Determines what information to display when the user hovers over a pie slice.', 'visualizer' )
 		);
 	}
-
 }

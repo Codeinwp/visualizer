@@ -28,7 +28,16 @@ jobs:
         run: |
           composer install --no-dev --prefer-dist --no-progress
       - name: Create zip
-        run: npm run dist
+        run: |
+          npm ci
+          npm run gutenberg:build
+          npm run chartbuilder:build
+          npm run d3renderer:build
+          CURRENT_VERSION=$(node -p -e "require('./package.json').version")
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          DEV_VERSION="${CURRENT_VERSION}-dev.${COMMIT_HASH}"
+          npm run grunt version::${DEV_VERSION}
+          npm run dist
       - name: Retrieve branch name
         id: retrieve-branch-name
         run: echo "::set-output name=branch_name::$(REF=${GITHUB_HEAD_REF:-$GITHUB_REF} && echo ${REF#refs/heads/} | sed 's/\//-/g')"

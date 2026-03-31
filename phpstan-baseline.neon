@@ -1,18 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Call to function is_wp_error\(\) with string will always evaluate to false\.$#'
-			identifier: function.impossibleType
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
 			message: '#^If condition is always false\.$#'
 			identifier: if.alwaysFalse
 			count: 1
@@ -33,12 +21,6 @@ parameters:
 		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:add_rest_query_vars\(\) has parameter \$args with no type specified\.$#'
 			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:add_rest_query_vars\(\) has parameter \$request with generic class WP_REST_Request but does not specify its types\: T$#'
-			identifier: missingType.generics
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
 
@@ -69,54 +51,6 @@ parameters:
 		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:get_instance\(\) has no return type specified\.$#'
 			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_root_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_json_root_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_permission_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_permission_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_query_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:get_query_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
 
@@ -157,18 +91,6 @@ parameters:
 			path: classes/Visualizer/Gutenberg/Block.php
 
 		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:set_json_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:set_json_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:toUTF8\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -176,30 +98,6 @@ parameters:
 
 		-
 			message: '#^Method Visualizer_Gutenberg_Block\:\:toUTF8\(\) has parameter \$datum with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:update_chart_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:update_chart_data\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:upload_csv_data\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Gutenberg/Block.php
-
-		-
-			message: '#^Method Visualizer_Gutenberg_Block\:\:upload_csv_data\(\) has parameter \$data with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Gutenberg/Block.php
@@ -295,7 +193,7 @@ parameters:
 			path: classes/Visualizer/Module.php
 
 		-
-			message: '#^Method Visualizer_Module\:\:getDataAs\(\) has parameter \$final with no type specified\.$#'
+			message: '#^Method Visualizer_Module\:\:getDataAs\(\) has parameter \$data with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Module.php
@@ -485,6 +383,12 @@ parameters:
 			identifier: variable.undefined
 			count: 2
 			path: classes/Visualizer/Module.php
+
+		-
+			message: '#^Constant VISUALIZER_AGENTS_URL not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: classes/Visualizer/Module/AIBuilder.php
 
 		-
 			message: '#^Constructor of class Visualizer_Module_AMP has an unused parameter \$plugin\.$#'
@@ -1267,24 +1171,6 @@ parameters:
 			path: classes/Visualizer/Module/Chart.php
 
 		-
-			message: '#^Method Visualizer_Module_Chart\:\:handleCSVasString\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Module/Chart.php
-
-		-
-			message: '#^Method Visualizer_Module_Chart\:\:handleCSVasString\(\) has parameter \$data with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Module/Chart.php
-
-		-
-			message: '#^Method Visualizer_Module_Chart\:\:handleCSVasString\(\) has parameter \$editor_type with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Module/Chart.php
-
-		-
 			message: '#^Method Visualizer_Module_Chart\:\:handlePermissions\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -1383,6 +1269,12 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$post_id of function wp_delete_post expects int, WP_Post given\.$#'
 			identifier: argument.type
+			count: 1
+			path: classes/Visualizer/Module/Chart.php
+
+		-
+			message: '#^Unable to resolve the template type TUrl in call to function wp_http_validate_url$#'
+			identifier: argument.templateType
 			count: 1
 			path: classes/Visualizer/Module/Chart.php
 
@@ -1509,12 +1401,6 @@ parameters:
 		-
 			message: '#^Method Visualizer_Module_Frontend\:\:perform_action\(\) has no return type specified\.$#'
 			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Module/Frontend.php
-
-		-
-			message: '#^Method Visualizer_Module_Frontend\:\:perform_action\(\) has parameter \$params with generic class WP_REST_Request but does not specify its types\: T$#'
-			identifier: missingType.generics
 			count: 1
 			path: classes/Visualizer/Module/Frontend.php
 
@@ -2031,12 +1917,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @var has invalid value \(\$wizard_data array\)\: Unexpected token "\$wizard_data", expected type at offset 53 on line 5$#'
 			identifier: phpDoc.parseError
-			count: 1
-			path: classes/Visualizer/Module/Wizard.php
-
-		-
-			message: '#^Path in include_once\(\) "\./wp\-admin/includes/plugin\-install\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
 			count: 1
 			path: classes/Visualizer/Module/Wizard.php
 
@@ -2743,7 +2623,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar.php
 
 		-
-			message: '#^Method Visualizer_Render_Sidebar\:\:_renderCheckboxItem\(\) has parameter \$default with no type specified\.$#'
+			message: '#^Method Visualizer_Render_Sidebar\:\:_renderCheckboxItem\(\) has parameter \$default_value with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Render/Sidebar.php
@@ -3421,7 +3301,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Graph.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 3
 			path: classes/Visualizer/Render/Sidebar/Graph.php
@@ -3517,7 +3397,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Linear.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: classes/Visualizer/Render/Sidebar/Linear.php
@@ -3547,7 +3427,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 3
 			path: classes/Visualizer/Render/Sidebar/Type/ChartJS/Bar.php
@@ -3583,7 +3463,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/ChartJS/Line.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 2
 			path: classes/Visualizer/Render/Sidebar/Type/ChartJS/Line.php
@@ -3691,7 +3571,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 4
 			path: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php
@@ -3701,168 +3581,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: classes/Visualizer/Render/Sidebar/Type/ChartJS/Pie.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$__series\.$#'
-			identifier: property.notFound
-			count: 2
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$_includeCurveTypes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$description\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$fixedHeader_bool\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$ordering_bool\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$pageLength_int\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$pagingType\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$paging_bool\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$responsive_bool\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$scrollX\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:__construct\(\) has parameter \$data with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:_renderAdvancedSettings\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:_renderColumnSettings\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:_renderFormatField\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:_renderGeneralSettings\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:_renderTableSettings\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:_toHTML\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:enqueue_assets\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:enqueue_assets\(\) has parameter \$deps with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:hooks\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:load_assets\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:load_assets\(\) has parameter \$deps with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Method Visualizer_Render_Sidebar_Type_DataTable_DataTable\:\:load_assets\(\) has parameter \$is_frontend with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
-			identifier: argument.type
-			count: 8
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Parameter \#4 \$desc of static method Visualizer_Render_Sidebar\:\:_renderTextItem\(\) expects string, null given\.$#'
-			identifier: argument.type
-			count: 4
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
-
-		-
-			message: '#^Parameter \#5 \$placeholder of static method Visualizer_Render_Sidebar\:\:_renderTextItem\(\) expects string, int given\.$#'
-			identifier: argument.type
-			count: 1
-			path: classes/Visualizer/Render/Sidebar/Type/DataTable/DataTable.php
 
 		-
 			message: '#^Access to an undefined property Visualizer_Render_Sidebar_Type_DataTable_Tabular\:\:\$__series\.$#'
@@ -4009,7 +3727,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 8
 			path: classes/Visualizer/Render/Sidebar/Type/DataTable/Tabular.php
@@ -4063,7 +3781,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Area.php
@@ -4111,7 +3829,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Bubble.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Bubble.php
@@ -4159,7 +3877,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 5
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Candlestick.php
@@ -4459,7 +4177,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Geo.php
@@ -4573,7 +4291,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Pie.php
@@ -4699,7 +4417,7 @@ parameters:
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php
 
 		-
-			message: '#^Parameter \#4 \$default of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
+			message: '#^Parameter \#4 \$default_color of static method Visualizer_Render_Sidebar\:\:_renderColorPickerItem\(\) expects string, null given\.$#'
 			identifier: argument.type
 			count: 14
 			path: classes/Visualizer/Render/Sidebar/Type/GoogleCharts/Tabular.php
@@ -5041,7 +4759,7 @@ parameters:
 			path: classes/Visualizer/Source/Json.php
 
 		-
-			message: '#^Method Visualizer_Source_Json\:\:getNextPage\(\) has parameter \$array with no type specified\.$#'
+			message: '#^Method Visualizer_Source_Json\:\:getNextPage\(\) has parameter \$data with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Source/Json.php
@@ -5059,7 +4777,7 @@ parameters:
 			path: classes/Visualizer/Source/Json.php
 
 		-
-			message: '#^Method Visualizer_Source_Json\:\:getRootElements\(\) has parameter \$array with no type specified\.$#'
+			message: '#^Method Visualizer_Source_Json\:\:getRootElements\(\) has parameter \$data with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Source/Json.php
@@ -5071,7 +4789,7 @@ parameters:
 			path: classes/Visualizer/Source/Json.php
 
 		-
-			message: '#^Method Visualizer_Source_Json\:\:getRootElements\(\) has parameter \$parent with no type specified\.$#'
+			message: '#^Method Visualizer_Source_Json\:\:getRootElements\(\) has parameter \$parent_key with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
 			path: classes/Visualizer/Source/Json.php
@@ -5309,6 +5027,48 @@ parameters:
 			identifier: deadCode.unreachable
 			count: 1
 			path: classes/Visualizer/Source/Query/Params.php
+
+		-
+			message: '#^Path in include_once\(\) "/Users/hardeep/Development/sites/particles/wp\-content/plugins/visualizervendor/autoload\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: classes/Visualizer/Source/Xlsx.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateData\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateSeries\(\) has parameter \$series with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Method Visualizer_Source_Xlsx_Remote\:\:repopulateSeries\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: classes/Visualizer/Source/Xlsx/Remote.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 2
+			path: classes/Visualizer/Source/Xlsx/Remote.php
 
 		-
 			message: '#^Function visualizer_launch\(\) has no return type specified\.$#'

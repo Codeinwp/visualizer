@@ -17,7 +17,7 @@ test.describe( 'Chart Library', () => {
     } );
 
     test( 'check Add New button', async ( { page} ) => {
-        await expect(page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Visualizer Library Add New Chart' }).getByRole('link')).toBeVisible();
     } );
 
     test( 'check filters options', async ( { page } ) => {
@@ -137,6 +137,8 @@ test.describe( 'Chart Library', () => {
     test( 'cancel second step of chart creation', async ( { admin, page } ) => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+        await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
         await page.waitForSelector('h1:text("Visualizer")');
 
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.table );
@@ -156,6 +158,8 @@ test.describe( 'Chart Library', () => {
     test( 'chart filtering', async ( { admin, page } ) => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+        await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
         await page.waitForSelector('h1:text("Visualizer")');
 
         await page.frameLocator('iframe').locator('label').filter({ hasText: 'Pie/Donut' }).click();
@@ -170,6 +174,8 @@ test.describe( 'Chart Library', () => {
     test( 'check info panel', async ( { admin, page } ) => {
         await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
         await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+        await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
         await page.waitForSelector('h1:text("Visualizer")');
 
         await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
@@ -192,7 +198,7 @@ test.describe( 'Chart Library', () => {
         expect( titleValue ).toBe( backendName );
 
         await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
-        await page.frameLocator('iframe').getByRole('heading', { name: 'General Settings' }).click();
+        await page.frameLocator('iframe').getByRole('button', { name: 'General Settings' }).click();
         await page.frameLocator('iframe').getByText('Title', { exact: true }).click();
 
         await page.frameLocator('iframe').locator('input[name="title"]').fill(chartName);
@@ -227,7 +233,9 @@ test.describe( 'Support', () => {
 
     test('check Chart selection', async ( { page, admin } ) => {
         await admin.visitAdminPage( 'admin.php?page=visualizer' );
-        await page.getByRole('heading', { name: 'Visualizer Library Add New' }).getByRole('link').click();
+        await page.getByRole('heading', { name: 'Visualizer Library Add New Chart' }).getByRole('link').click();
+        await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+        await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
         await expect(page.frameLocator('iframe').getByText('Select Library for charts')).toBeVisible();
         await expect(page.frameLocator('iframe').getByRole('combobox')).toBeVisible();
         await expect(page.frameLocator('iframe').locator('#chart-select')).toContainText('Select Library for charts');

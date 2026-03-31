@@ -38,7 +38,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			'bottom' => esc_html__( 'Below the chart', 'visualizer' ),
 			'none'   => esc_html__( 'Omit the legend', 'visualizer' ),
 		);
-
 	}
 
 	/**
@@ -78,7 +77,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	/**
 	 * Loads the assets.
 	 */
-	function load_chartjs_assets( $deps, $is_frontend ) {
+	public function load_chartjs_assets( $deps, $is_frontend ) {
 		$this->load_dependent_assets( array( 'moment', 'numeral' ) );
 
 		wp_register_script( 'chartjs', VISUALIZER_ABSURL . 'js/lib/chartjs.min.js', array( 'numeral', 'moment' ), null, true );
@@ -96,7 +95,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			$deps,
 			array( 'visualizer-render-chartjs-lib' )
 		);
-
 	}
 
 	/**
@@ -133,7 +131,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	protected function _renderSeries( $index ) {
 		$this->_renderFormatField( $index );
 		$this->_renderChartTypeSeries( $index );
-
 	}
 
 	/**
@@ -187,7 +184,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 				'</a>'
 			)
 		);
-
 	}
 
 	/**
@@ -210,7 +206,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			self::_renderSectionStart( esc_html__( 'Font Styles', 'visualizer' ), false );
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Font Family And Size', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -248,7 +244,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					// let's have a default otherwise the chart behaves weird when hovering in edit mode
 					isset( $this->legend['position'] ) ? $this->legend['position'] : 'top',
 					$this->_legendPositions,
-					esc_html__( 'Determines where to place the legend, compared to the chart area.', 'visualizer' )
+					esc_html__( 'Sets the legend position relative to the chart.', 'visualizer' )
 				);
 
 				self::_renderCheckboxItem(
@@ -261,7 +257,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 
 				echo '<div class="viz-section-item">';
 					echo '<a class="more-info" href="javascript:;">[?]</a>';
-					echo '<b>', esc_html__( 'Family And Size', 'visualizer' ), '</b>';
+					echo '<b>', esc_html__( 'Font Family And Size', 'visualizer' ), '</b>';
 
 					echo '<table class="viz-section-table" cellspacing="0" cellpadding="0" border="0">';
 						echo '<tr>';
@@ -367,7 +363,6 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 		);
 
 		self::_renderSectionEnd();
-
 	}
 
 	/**
@@ -395,7 +390,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 			self::_renderSectionDescription(
 				'<span class="viz-gvlink">' . sprintf(
 					// translators: %1$s - HTML link tag, %2$s - HTML closing link tag, %3$s - HTML link tag, %4$s - HTML closing link tag.
-					__( 'Configure the graph by providing configuration variables right from the %1$sChartJS API%2$s. You can refer to to some examples %3$shere%4$s.', 'visualizer' ),
+					__( 'Configure the graph by providing configuration variables right from the %1$sChartJS API%2$s. You can refer to %3$sCommon Snippets%4$s for examples.', 'visualizer' ),
 					'<a href="https://www.chartjs.org/docs/latest/configuration/" target="_blank">',
 					'</a>',
 					'<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">',
@@ -408,10 +403,13 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	 * Add the correct example for the manual configuration box.
 	 */
 	protected function _renderManualConfigExample() {
-		return '{
-			"cutoutPercentage": 5,
-			"rotation": 60
-		}';
+		return json_encode(
+			array(
+				'cutoutPercentage' => 5,
+				'rotation'         => 60,
+			),
+			JSON_PRETTY_PRINT
+		);
 	}
 
 	/**

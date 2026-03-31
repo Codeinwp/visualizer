@@ -17,13 +17,20 @@ class Visualizer_Module_Upgrade extends Visualizer_Module {
 	 */
 	public static function upgrade() {
 		$last_version = get_option( 'visualizer-upgraded', '0.0.0' );
+		$upgraded     = false;
 
-		switch ( $last_version ) {
-			case '0.0.0':
-				self::makeAllTableChartsTabular();
-				break;
-			default:
-				return;
+		if ( version_compare( $last_version, '3.4.3', '<' ) ) {
+			self::makeAllTableChartsTabular();
+			$upgraded = true;
+		}
+
+		if ( wp_next_scheduled( 'visualizer_schedule_refresh_db' ) ) {
+			self::migrate_action_scheduler();
+			$upgraded = true;
+		}
+
+		if ( ! $upgraded ) {
+			return;
 		}
 
 		update_option( 'visualizer-upgraded', Visualizer_Plugin::VERSION );
@@ -71,6 +78,42 @@ class Visualizer_Module_Upgrade extends Visualizer_Module {
 			AND pm.meta_value IN ( 'dataTable', 'table' )"
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+	}
 
+	/**
+	 * Migrate recurring WP-Cron jobs to Action Scheduler.
+	 */
+	private static function migrate_action_scheduler(): void {
+		if ( ! function_exists( 'as_schedule_recurring_action' ) || ! function_exists( 'as_next_scheduled_action' ) ) {
+			return;
+		}
+
+		$hook         = 'visualizer_schedule_refresh_db';
+		$group        = 'visualizer';
+		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
+		$interval     = self::get_schedule_interval_seconds( $interval_key );
+		$timestamp    = strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+
+		$next = as_next_scheduled_action( $hook, array(), $group );
+		if ( false === $next ) {
+			as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group );
+		}
+
+		wp_clear_scheduled_hook( $hook );
+	}
+
+	/**
+	 * Resolve a cron schedule key to seconds.
+	 *
+	 * @param string $interval_key Cron schedule key.
+	 * @return int Interval in seconds.
+	 */
+	private static function get_schedule_interval_seconds( $interval_key ) {
+		$schedules = wp_get_schedules();
+		if ( isset( $schedules[ $interval_key ]['interval'] ) ) {
+			return (int) $schedules[ $interval_key ]['interval'];
+		}
+
+		return 600;
 	}
 }

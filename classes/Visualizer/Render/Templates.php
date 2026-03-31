@@ -65,7 +65,7 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	 */
 	protected function _renderLibraryChart() {
 		echo '<div class="visualizer-library-chart-footer visualizer-clearfix visualizer-library-media-popup">';
-			echo '<span class="visualizer-library-chart-shortcode" title="', esc_attr__( 'Click to select', 'visualizer' ), '">&nbsp;[visualizer id=&quot;{{data.id}}&quot;]&nbsp;</span>';
+			echo '<span class="visualizer-library-chart-shortcode" title="', esc_attr__( 'Select Chart', 'visualizer' ), '">&nbsp;[visualizer id=&quot;{{data.id}}&quot;]&nbsp;</span>';
 		echo '</div>';
 	}
 
@@ -79,7 +79,7 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 	protected function _renderLibraryEmpty() {
 		echo '<div class="visualizer-library-chart">';
 			echo '<div class="visualizer-library-chart-canvas visualizer-library-nochart-canvas">';
-				echo '<div class="visualizer-library-notfound">', esc_html__( 'No charts found', 'visualizer' ), '</div>';
+				echo '<div class="visualizer-library-notfound">', esc_html__( 'No charts found. Click \'Add New Chart\' to create one.', 'visualizer' ), '</div>';
 			echo '</div>';
 			echo '<div class="visualizer-library-chart-footer visualizer-clearfix">';
 				echo '<span class="visualizer-library-chart-action visualizer-library-nochart-delete"></span>';
@@ -105,5 +105,4 @@ class Visualizer_Render_Templates extends Visualizer_Render {
 			$this->_renderTemplate( $template, $callback );
 		}
 	}
-
 }

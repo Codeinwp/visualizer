@@ -70,7 +70,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 
 		$this->_addFilter( 'visualizer_get_sidebar', 'getSidebar', 10, 2 );
-
 	}
 
 	/**
@@ -403,12 +402,18 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$date_formats = Visualizer_Source::get_date_formats_if_exists( $series, $data );
 
+		$code = '';
+		if ( 'd3' === $library ) {
+			$code = get_post_meta( $chart->ID, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+		}
+
 		return array(
 			'type'     => $type,
 			'series'   => $series,
 			'settings' => $settings,
 			'data'     => $data,
 			'library'  => $library,
+			'code'     => $code,
 			'css'       => $css,
 			'date_formats'       => $date_formats,
 		);
@@ -539,7 +544,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! empty( $_POST ) ) {
 			$_POST = map_deep( $_POST, 'wp_strip_all_tags' );
 		}
-		if ( ! $chart_id || ! ( $chart = get_post( $chart_id ) ) || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
+		$chart = $chart_id ? get_post( $chart_id ) : null;
+		if ( ! $chart_id || ! $chart || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			if ( empty( $_GET['lang'] ) || empty( $_GET['parent_chart_id'] ) ) {
 				$this->deleteOldCharts();
 				$default_type = isset( $_GET['type'] ) && ! empty( $_GET['type'] ) ? $_GET['type'] : 'line';
@@ -575,7 +581,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 					do_action( 'visualizer_pro_new_chart_defaults', $chart_id );
 				}
 			} else {
-				$parent_chart_id = isset( $_GET['parent_chart_id'] ) ? filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT ) : '';
+				$parent_chart_id = filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT );
 				$success = false;
 				if ( $parent_chart_id ) {
 					$parent_chart   = get_post( $parent_chart_id );
@@ -738,7 +744,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_register_script( 'visualizer-codemirror-closebrackets', '//codemirror.net/addon/edit/closebrackets.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
 			wp_register_script( 'visualizer-codemirror-sql', '//codemirror.net/mode/sql/sql.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
 			wp_register_script( 'visualizer-codemirror-sql-hint', '//codemirror.net/addon/hint/sql-hint.js', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
-			wp_register_script( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.js', array(  'visualizer-codemirror-sql', 'visualizer-codemirror-sql-hint', 'visualizer-codemirror-placeholder', 'visualizer-codemirror-matchbrackets', 'visualizer-codemirror-closebrackets' ), Visualizer_Plugin::VERSION );
+			wp_register_script( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.js', array( 'visualizer-codemirror-sql', 'visualizer-codemirror-sql-hint', 'visualizer-codemirror-placeholder', 'visualizer-codemirror-matchbrackets', 'visualizer-codemirror-closebrackets' ), Visualizer_Plugin::VERSION );
 			wp_register_style( 'visualizer-codemirror-core', '//codemirror.net/lib/codemirror.css', array(), Visualizer_Plugin::VERSION );
 			wp_register_style( 'visualizer-codemirror-hint', '//codemirror.net/addon/hint/show-hint.css', array( 'visualizer-codemirror-core' ), Visualizer_Plugin::VERSION );
 
@@ -804,7 +810,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 			// save meta data only when it is NOT being canceled.
 			if ( ! $is_canceled ) {
-				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $_POST );
+				$post_settings = $_POST;
+				$existing      = get_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
+				if ( isset( $existing['colors'] ) && is_array( $existing['colors'] ) && ! isset( $post_settings['colors'] ) ) {
+					$post_settings['colors'] = $existing['colors'];
+				}
+				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $post_settings );
 
 				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
 				// this will help in searching with the chart id.
@@ -853,6 +864,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_script( 'visualizer-preview' );
 		wp_enqueue_script( 'visualizer-chosen' );
 		wp_enqueue_script( 'visualizer-render' );
+		wp_enqueue_code_editor( array( 'type' => 'application/json' ) );
 
 		if ( Visualizer_Module::can_show_feature( 'simple-editor' ) ) {
 			wp_enqueue_script( 'visualizer-editor-simple' );
@@ -862,10 +874,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				array(
 					'ajax'      => array(
 						'url'     => admin_url( 'admin-ajax.php' ),
-						'nonces'  => array(
-						),
-						'actions' => array(
-						),
+						'nonces'  => array(),
+						'actions' => array(),
 					),
 				)
 			);
@@ -878,12 +888,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
-					'loading'        => esc_html__( 'Loading...', 'visualizer' ),
-					'json_error'     => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
-					'select_columns' => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
-					'save_settings'  => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
-					'copied'         => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
+					'invalid_source'  => esc_html__( 'The URL you entered is invalid. Please enter a valid URL.', 'visualizer' ),
+					'loading'         => esc_html__( 'Loading...', 'visualizer' ),
+					'json_error'      => esc_html__( 'An error occured in fetching data.', 'visualizer' ),
+					'select_columns'  => esc_html__( 'Please select a few columns to include in the chart.', 'visualizer' ),
+					'save_settings'   => __( 'You have modified the chart\'s settings. To modify the source/data again, you must save this chart and reopen it for editing. If you continue without saving the chart, you may lose your changes.', 'visualizer' ),
+					'copied'          => __( 'The data has been copied to your clipboard. Hit Ctrl-V/Cmd-V in your spreadsheet editor to paste the data.', 'visualizer' ),
+					'invalid_format'  => esc_html__( 'This format pattern is not supported in the series settings field. Use the Manual Configuration option instead.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -1012,6 +1023,78 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 *
 	 * @since 3.2.0
 	 */
+	/**
+	 * Determines whether a remote URL serves an XLSX file.
+	 *
+	 * Used as a fallback when the URL path has no recognisable file extension
+	 * (e.g. SharePoint, signed S3 URLs, or "download?id=…" endpoints).
+	 *
+	 * Uses wp_safe_remote_get() to block requests to private/loopback addresses,
+	 * and streams the response to a temp file so no body data is held in memory
+	 * regardless of whether the server honours the Range header.
+	 *
+	 * The check relies on the ZIP magic number (PK\x03\x04) that every XLSX
+	 * file begins with, making it immune to misleading Content-Type headers
+	 * such as application/octet-stream.  Content-Type is used as a last-resort
+	 * fallback only when the temp file is empty (e.g. a HEAD-only server).
+	 *
+	 * @access private
+	 * @param string $url The remote URL to probe.
+	 * @return bool TRUE if the file appears to be XLSX, FALSE otherwise.
+	 */
+	private static function _url_is_xlsx( $url ) {
+		$tmpfile = wp_tempnam( 'visualizer_xlsx_probe' );
+		if ( ! $tmpfile ) {
+			return false;
+		}
+
+		$response = wp_safe_remote_get(
+			$url,
+			array(
+				'timeout'    => 10,
+				'user-agent' => 'WordPress/' . get_bloginfo( 'version' ),
+				'headers'    => array( 'Range' => 'bytes=0-3' ),
+				'stream'     => true,
+				'filename'   => $tmpfile,
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			@unlink( $tmpfile ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+			return false;
+		}
+
+		$magic = '';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		$fh = @fopen( $tmpfile, 'rb' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+		if ( $fh ) {
+			$magic = fread( $fh, 4 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
+			fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+		}
+		@unlink( $tmpfile ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+
+		if ( strlen( $magic ) >= 4 ) {
+			// XLSX (and all ZIP-based Office formats) start with PK\x03\x04.
+			return $magic === "PK\x03\x04";
+		}
+
+		// Last resort: server returned an empty body (e.g. ignored Range and
+		// returned only headers). Check Content-Type from the same response.
+		// application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+		return false !== strpos(
+			wp_remote_retrieve_header( $response, 'content-type' ),
+			'spreadsheetml'
+		);
+	}
+
+	/**
+	 * Parses a raw CSV string or editor payload and returns a source object.
+	 *
+	 * @access private
+	 * @param string $data        The raw CSV data string.
+	 * @param string $editor_type The editor type ('text' or 'tabular').
+	 * @return Visualizer_Source|null The populated source object, or null on failure.
+	 */
 	private function handleCSVasString( $data, $editor_type ) {
 		$source = null;
 
@@ -1028,7 +1111,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						}
 						$row = explode( ',', $row );
 						$row = array_map(
-							function( $r ) {
+							function ( $r ) {
 								return '' === $r ? ' ' : $r;
 							},
 							$row
@@ -1079,7 +1162,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( empty( $type ) ) {
 				$exclude[] = $index;
 			}
-			$index++;
+			++$index;
 		}
 
 		// when N headers are being renamed, the number of headers increases by N
@@ -1156,9 +1239,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// check chart, if chart exists
 		// do not use filter_input as it does not work for phpunit test cases, use filter_var instead
 		$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
+		$chart    = $chart_id ? get_post( $chart_id ) : null;
 		if (
 			! $chart_id ||
-			! ( $chart = get_post( $chart_id ) ) ||
+			! $chart ||
 			$chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ||
 			! current_user_can( 'edit_post', $chart_id )
 		) {
@@ -1210,13 +1294,22 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$remote_data = wp_http_validate_url( $_POST['remote_data'] );
 		}
 		if ( false !== $remote_data ) {
-			$source = new Visualizer_Source_Csv_Remote( $remote_data );
+			$remote_ext = strtolower( pathinfo( parse_url( $remote_data, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+			if ( 'xlsx' === $remote_ext || ( 'csv' !== $remote_ext && self::_url_is_xlsx( $remote_data ) ) ) {
+				$source = new Visualizer_Source_Xlsx_Remote( $remote_data );
+			} else {
+				$source = new Visualizer_Source_Csv_Remote( $remote_data );
+			}
 			if ( isset( $_POST['vz-import-time'] ) ) {
 				apply_filters( 'visualizer_pro_chart_schedule', $chart_id, $remote_data, $_POST['vz-import-time'] );
 			}
-			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] == 0 ) {
-			$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
+		} elseif ( isset( $_FILES['local_data'] ) && $_FILES['local_data']['error'] === 0 ) {
+			$local_ext = strtolower( pathinfo( isset( $_FILES['local_data']['name'] ) ? $_FILES['local_data']['name'] : '', PATHINFO_EXTENSION ) );
+			if ( 'xlsx' === $local_ext ) {
+				$source = new Visualizer_Source_Xlsx( $_FILES['local_data']['tmp_name'] );
+			} else {
+				$source = new Visualizer_Source_Csv( $_FILES['local_data']['tmp_name'] );
+			}
 		} elseif ( isset( $_POST['chart_data'] ) && strlen( $_POST['chart_data'] ) > 0 ) {
 			$source = $this->handleCSVasString( $_POST['chart_data'], $_POST['editor-type'] );
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
@@ -1225,8 +1318,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITOR, $_POST['editor-type'] );
 		} else {
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'CSV file with chart data was not uploaded for chart %d.', $chart_id ), 'error', __FILE__, __LINE__ );
-			$render->message = esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' );
-			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, esc_html__( 'CSV file with chart data was not uploaded. Please try again.', 'visualizer' ) );
+			$render->message = esc_html__( 'No CSV file was received. Select a file and try uploading again.', 'visualizer' );
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, esc_html__( 'No CSV file was received. Select a file and try uploading again.', 'visualizer' ) );
 		}
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Uploaded data for chart %d with source %s', $chart_id, print_r( $source, true ) ), 'debug', __FILE__, __LINE__ );
@@ -1276,7 +1369,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			} else {
 				$error = $source->get_error();
 				if ( empty( $error ) ) {
-					$error = esc_html__( 'CSV file is broken or invalid. Please try again.', 'visualizer' );
+					$error = esc_html__( 'The CSV file couldn\'t be read. Check that it\'s properly formatted and try again.', 'visualizer' );
 				}
 				$render->message = $error;
 				do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( '%s for chart %d.', $error, $chart_id ), 'error', __FILE__, __LINE__ );
@@ -1406,8 +1499,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'visualizer',
 			array(
 				'l10n'   => array(
-					'invalid_source' => esc_html__( 'You have entered an invalid URL. Please provide a valid URL.', 'visualizer' ),
-					'loading'       => esc_html__( 'Loading...', 'visualizer' ),
+					'invalid_source' => esc_html__( 'The URL you entered is invalid. Please enter a valid URL.', 'visualizer' ),
+					'loading'        => esc_html__( 'Loading...', 'visualizer' ),
+					'invalid_format' => esc_html__( 'This format pattern is not supported in the series settings field. To display percentages, use the Manual Configuration option instead.', 'visualizer' ),
 				),
 				'charts' => array(
 					'canvas' => $data,
@@ -1571,7 +1665,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$hours = filter_input(
 			INPUT_POST,
 			'refresh',
-			FILTER_VALIDATE_INT,
+			FILTER_VALIDATE_FLOAT,
 			array(
 				'options' => array(
 					'min_range' => -1,
@@ -1580,7 +1674,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			)
 		);
 
-		if ( 0 !== $hours && empty( $hours ) ) {
+		if ( ! is_numeric( $hours ) ) {
 			$hours = -1;
 		}
 

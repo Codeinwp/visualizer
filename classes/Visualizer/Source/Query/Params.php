@@ -79,7 +79,7 @@ class Visualizer_Source_Query_Params extends Visualizer_Source_Query {
 					}
 				}
 			}
-			$index++;
+			++$index;
 		}
 
 		if ( $first ) {

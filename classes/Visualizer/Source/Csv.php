@@ -77,6 +77,11 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 			$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
 		}
 
+		if ( ! is_array( $labels ) || ! is_array( $types ) ) {
+			$this->_error = esc_html__( 'File should have a heading row (1st row) and a data type row (2nd row). Please try again.', 'visualizer' );
+			return false;
+		}
+
 		$labels = array_filter( $labels );
 		$types = array_filter( $types );
 
@@ -143,9 +148,10 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 			}
 
 			// fetch data
-			// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-			while ( ( $data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE ) ) !== false ) {
+			$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+			while ( $data !== false ) {
 				$this->_data[] = $this->_normalizeData( $data );
+				$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
 			}
 
 			// close file handle

@@ -33,14 +33,44 @@ npm run build                       # Production build → build/block.js
 npm run dev                         # Watch mode for development
 ```
 
-### E2E Tests & Environment
-```bash
-npm install                         # Install root-level JS dependencies
-npm run test:env:start              # Start wp-env WordPress environment
-npm run test:env:stop               # Stop wp-env
-npm run test:e2e:playwright         # Run Playwright E2E tests
-npm run test:e2e:playwright:debug   # Playwright UI debug mode
-```
+### E2E & PHPUnit Tests
+
+> Skill files for running tests are in [`skills/`](skills/): use `skills/e2e.md` for E2E and `skills/unit.md` for PHPUnit.
+
+---
+
+## Agent Quickstart
+
+### Copilot Coding Agent Environment
+This repo includes `.github/workflows/copilot-setup-steps.yml` to preinstall dependencies for Copilot Coding Agent. This workflow is not part of normal CI and only prepares the agent environment. Note: Copilot only uses it once it exists on the default branch.
+
+### Standard Test Sequence
+1. `composer lint`
+2. `composer phpstan`
+3. `./vendor/bin/phpunit`
+4. `npm ci` (if deps missing)
+5. `npm run gutenberg:build`
+6. `npm run chartbuilder:build`
+7. `npm run d3renderer:build`
+8. `npm run env:up`
+9. `npm run test:e2e:playwright`
+10. `npm run env:down`
+
+### E2E Environment
+- Default: Docker via `npm run env:up` / `npm run env:down` (uses `docker-compose.ci.yml`).
+- Optional: `wp-env` is supported, but Docker is the default for agents.
+
+### Build Outputs
+If you change anything under `classes/Visualizer/**/src`, you must run the corresponding build and commit the output:
+- Gutenberg: `npm run gutenberg:build`
+- ChartBuilder: `npm run chartbuilder:build`
+- D3Renderer: `npm run d3renderer:build`
+
+### Do / Don't
+- Do: keep changes scoped to the task and run the standard test sequence.
+- Do: update both classic and Gutenberg editor paths when changing settings UI.
+- Don't: edit build artifacts directly (edit `src`, then build).
+- Don't: modify `vendor/` or `node_modules/`.
 
 ---
 

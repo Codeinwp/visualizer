@@ -64,20 +64,26 @@ class Visualizer_Gutenberg_Block {
 	}
 
 	/**
-	 * Enqueue front end and editor JavaScript and CSS
+	 * Enqueue Gutenberg block assets.
 	 */
 	public function enqueue_gutenberg_scripts() {
-		global $wp_version, $pagenow;
+		global $pagenow;
 
-		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.js';
-		$handsontableJS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.js';
-		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/block.css';
-		$handsontableCSS = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/handsontable.css';
+		$blockPath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/index.js';
+		$stylePath = VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/style-index.css';
+		$asset_path = VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.asset.php';
+		if ( file_exists( $asset_path ) ) {
+			// @phpstan-ignore-next-line
+			$asset = require $asset_path;
+		} else {
+			$asset = array(
+				'dependencies' => array(),
+				'version'      => $this->version,
+			);
+		}
 
 		if ( VISUALIZER_TEST_JS_CUSTOMIZATION ) {
-			$version = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/block.js' );
-		} else {
-			$version = $this->version;
+			$asset['version'] = filemtime( VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.js' );
 		}
 
 		if ( ! wp_script_is( 'visualizer-datatables', 'registered' ) ) {
@@ -89,57 +95,106 @@ class Visualizer_Gutenberg_Block {
 		}
 
 		// Enqueue the bundled block JS file
-		wp_enqueue_script( 'handsontable', $handsontableJS );
-		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, array( 'wp-api', 'handsontable', 'visualizer-datatables', 'moment', 'lodash' ), $version, true );
-
-		$type = 'community';
-
-		if ( Visualizer_Module::is_pro() ) {
-			$type = 'pro';
-			if ( apply_filters( 'visualizer_is_business', false ) ) {
-				$type = 'business';
-			}
+		$script_deps = array(
+			'wp-api',
+			'wp-blocks',
+			'wp-block-editor',
+			'wp-components',
+			'wp-editor',
+			'wp-element',
+			'wp-i18n',
+			'lodash',
+			'moment',
+			'react',
+			'visualizer-datatables',
+		);
+		if ( isset( $asset['dependencies'] ) && is_array( $asset['dependencies'] ) ) {
+			$script_deps = array_merge( $script_deps, $asset['dependencies'] );
 		}
-
-		$table_col_mapping  = Visualizer_Source_Query_Params::get_all_db_tables_column_mapping( null, false );
+		$script_deps = array_values( array_unique( $script_deps ) );
+		wp_enqueue_script( 'visualizer-gutenberg-block', $blockPath, $script_deps, $asset['version'], true );
 
 		$translation_array = array(
-			'isPro'     => $type,
-			'proTeaser' => tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'blockupsell'),
-			'absurl'    => VISUALIZER_ABSURL,
-			'charts'    => Visualizer_Module_Admin::_getChartTypesLocalized(),
 			'adminPage' => menu_page_url( 'visualizer', false ),
 			'createChart' => add_query_arg( array( 'action' => 'visualizer-create-chart', 'library' => 'yes', 'type' => '', 'chart-library' => '', 'tab' => 'visualizer' ), admin_url( 'admin-ajax.php' ) ),
-			'sqlTable'  => $table_col_mapping,
 			'chartsPerPage' => defined( 'TI_E2E_TESTING' ) ? 20 : 6,
-			'proFeaturesLocked' => Visualizer_Module_Admin::proFeaturesLocked(),
 			'isFullSiteEditor'  => 'site-editor.php' === $pagenow,
-			'legacyBlockEdit'   => apply_filters( 'visualizer_legacy_block_edit', false ),
 			/* translators: %1$s: opening tag, %2$s: closing tag */
-			'blockEditDoc'      => sprintf( __( 'The editor for managing chart settings has been removed from the block editor. You can find more information in this %1$sdocumentation%2$s', 'visualizer' ), '<a href="https://docs.themeisle.com/article/1705-how-can-i-display-a-chart#using-visualizer-block" target="_blank">', '</a>' ),
 			'chartEditUrl'      => admin_url( 'admin-ajax.php' ),
 		);
 		wp_localize_script( 'visualizer-gutenberg-block', 'visualizerLocalize', $translation_array );
 
-		// Enqueue frontend and editor block styles
-		wp_enqueue_style( 'handsontable', $handsontableCSS );
-		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $version );
-
-		if ( version_compare( $wp_version, '4.9.0', '>' ) ) {
-
-			wp_enqueue_code_editor(
+		$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+		if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+			// @phpstan-ignore-next-line
+			$d3_asset = include $d3_renderer_asset;
+			wp_register_script(
+				'visualizer-d3-renderer',
+				VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+				array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+				$d3_asset['version'],
+				true
+			);
+		}
+		if ( wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+			wp_enqueue_script( 'visualizer-d3-renderer' );
+			wp_localize_script(
+				'visualizer-d3-renderer',
+				'vizD3Renderer',
 				array(
-					'type' => 'sql',
-					'codemirror' => array(
-						'autofocus'         => true,
-						'lineWrapping'      => true,
-						'dragDrop'          => false,
-						'matchBrackets'     => true,
-						'autoCloseBrackets' => true,
-						'extraKeys'         => array( 'Shift-Space' => 'autocomplete' ),
-						'hintOptions'       => array( 'tables' => $table_col_mapping ),
-					),
+					'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
 				)
+			);
+		}
+
+		// Enqueue frontend and editor block styles
+		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $asset['version'] );
+
+		// Enqueue ChartBuilder (AI Builder) so the D3 edit modal is available in the block editor.
+		$chart_builder_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.asset.php';
+		if ( file_exists( $chart_builder_asset ) && ! wp_script_is( 'visualizer-chart-builder', 'enqueued' ) ) {
+			/**
+			 * Ignore missing build asset in source checkout.
+			 *
+			 * @phpstan-ignore-next-line
+			 */
+			$cb_asset = include $chart_builder_asset;
+			wp_enqueue_script(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.js',
+				$cb_asset['dependencies'],
+				$cb_asset['version'],
+				true
+			);
+			wp_enqueue_style(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/style-index.css',
+				array(),
+				$cb_asset['version']
+			);
+			$chart_builder_css = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.css';
+			if ( file_exists( $chart_builder_css ) ) {
+				wp_enqueue_style(
+					'visualizer-chart-builder-runtime',
+					VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.css',
+					array( 'visualizer-chart-builder' ),
+					$cb_asset['version']
+				);
+			}
+			wp_localize_script(
+				'visualizer-chart-builder',
+				'vizAIBuilder',
+				array(
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'visualizer-ai-builder' ),
+					'isPro'   => Visualizer_Module::is_pro(),
+				)
+			);
+			// Inject the mount point the ChartBuilder React app needs.
+			wp_add_inline_script(
+				'visualizer-chart-builder',
+				'document.body.insertAdjacentHTML("beforeend","<div id=\"viz-chart-builder-root\"></div>");',
+				'before'
 			);
 		}
 	}
@@ -186,8 +241,7 @@ class Visualizer_Gutenberg_Block {
 			return '';
 		}
 
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( $atts['lazy'] == -1 || $atts['lazy'] == false ) {
+		if ( $atts['lazy'] === '-1' || $atts['lazy'] === false ) {
 			$atts['lazy'] = 'no';
 		}
 
@@ -216,123 +270,6 @@ class Visualizer_Gutenberg_Block {
 				'get_callback' => array( $this, 'get_visualizer_data' ),
 			)
 		);
-
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/get-query-data',
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_query_data' ),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
-
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/get-json-root',
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_json_root_data' ),
-				'args'     => array(
-					'url' => array(
-						'sanitize_callback' => 'esc_url_raw',
-					),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
-
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/get-json-data',
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_json_data' ),
-				'args'     => array(
-					'url' => array(
-						'sanitize_callback' => 'esc_url_raw',
-					),
-					'chart' => array(
-						'sanitize_callback' => 'absint',
-					),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
-
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/set-json-data',
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'set_json_data' ),
-				'args'     => array(
-					'url' => array(
-						'sanitize_callback' => 'esc_url_raw',
-					),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
-
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/update-chart',
-			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'update_chart_data' ),
-				'args'     => array(
-					'id' => array(
-						'sanitize_callback' => 'absint',
-					),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
-
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/upload-data',
-			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'upload_csv_data' ),
-				'args'     => array(
-					'url' => array(
-						'sanitize_callback' => 'esc_url_raw',
-					),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
-
-		register_rest_route(
-			'visualizer/v' . VISUALIZER_REST_VERSION,
-			'/get-permission-data',
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_permission_data' ),
-				'args'     => array(
-					'type' => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-				),
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				},
-			)
-		);
 	}
 
 	/**
@@ -350,6 +287,9 @@ class Visualizer_Gutenberg_Block {
 
 		$library = get_post_meta( $post_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 		$data['visualizer-chart-library'] = $library;
+		if ( 'd3' === $library ) {
+			$data['visualizer-d3-code'] = get_post_meta( $post_id, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+		}
 
 		$data['visualizer-source'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SOURCE, true );
 
@@ -472,11 +412,12 @@ class Visualizer_Gutenberg_Block {
 			$permissions = get_post_meta( $post_id, Visualizer_Pro::CF_PERMISSIONS, true );
 
 			if ( empty( $permissions ) ) {
-				$permissions = array( 'permissions' => array(
+				$permissions = array(
+					'permissions' => array(
 						'read'          => 'all',
 						'edit'          => 'roles',
 						'edit-specific' => array( 'administrator' ),
-				),
+					),
 				);
 			}
 
@@ -487,234 +428,13 @@ class Visualizer_Gutenberg_Block {
 	}
 
 	/**
-	 * Returns the data for the query.
-	 *
-	 * @access public
-	 */
-	public function get_query_data( $data ) {
-		if ( ! current_user_can( 'administrator' ) || ( is_multisite() && ! is_super_admin() ) ) {
-			return false;
-		}
-
-		$source = new Visualizer_Source_Query( stripslashes( $data['query'] ) );
-		$html = $source->fetch( true );
-		$source->fetch( false );
-		$name = $source->getSourceName();
-		$series = $source->getSeries();
-		$data = $source->getRawData();
-		$error = '';
-		if ( empty( $html ) ) {
-			$error = $source->get_error();
-			wp_send_json_error( array( 'msg' => $error ) );
-		}
-		wp_send_json_success( array( 'table' => $html, 'name' => $name, 'series' => $series, 'data' => $data ) );
-	}
-
-	/**
-	 * Returns the JSON root.
-	 *
-	 * @access public
-	 */
-	public function get_json_root_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		$source = new Visualizer_Source_Json( $data );
-
-		$roots = $source->fetchRoots();
-		if ( empty( $roots ) ) {
-			wp_send_json_error( array( 'msg' => $source->get_error() ) );
-		}
-
-		wp_send_json_success( array( 'url' => $data['url'], 'roots' => $roots ) );
-	}
-
-	/**
-	 * Returns the JSON data.
-	 *
-	 * @access public
-	 */
-	public function get_json_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		$chart_id = $data['chart'];
-
-		if ( empty( $chart_id ) ) {
-			wp_die();
-		}
-
-		$source = new Visualizer_Source_Json( $data );
-		$source->fetch();
-		$table = $source->getRawData();
-
-		if ( empty( $table ) ) {
-			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
-		}
-
-		$table = Visualizer_Render_Layout::show( 'editor-table', $table, $chart_id, 'viz-json-table', false, false );
-		wp_send_json_success( array( 'table' => $table, 'root' => $data['root'], 'url' => $data['url'], 'paging' => $source->getPaginationElements() ) );
-	}
-
-	/**
-	 * Set the JSON data.
-	 *
-	 * @access public
-	 */
-	public function set_json_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		$source = new Visualizer_Source_Json( $data );
-
-		$table = $source->fetch();
-		if ( empty( $table ) ) {
-			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
-		}
-
-		$source->fetchFromEditableTable();
-		$name = $source->getSourceName();
-		$series = json_encode( $source->getSeries() );
-		$data = json_encode( $source->getRawData() );
-		wp_send_json_success( array( 'name' => $name, 'series' => $series, 'data' => $data ) );
-	}
-
-	/**
-	 * Rest Callback Method
-	 */
-	public function update_chart_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		if ( $data['id'] && ! is_wp_error( $data['id'] ) ) {
-			if ( get_post_type( $data['id'] ) !== Visualizer_Plugin::CPT_VISUALIZER ) {
-				return new WP_Error( 'invalid_post_type', 'Invalid post type.' );
-			}
-			$chart_type = sanitize_text_field( $data['visualizer-chart-type'] );
-			$source_type = sanitize_text_field( $data['visualizer-source'] );
-			$default_data  = (int) $data['visualizer-default-data'];
-			$series_data   = map_deep( $data['visualizer-series'], array( $this, 'sanitize_value' ) );
-			$settings_data = map_deep( $data['visualizer-settings'], array( $this, 'sanitize_value' ) );
-
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_TYPE, $chart_type );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SOURCE, $source_type );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_DEFAULT_DATA, $default_data );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SERIES, $series_data );
-			update_post_meta( $data['id'], Visualizer_Plugin::CF_SETTINGS, $settings_data );
-
-			if ( $data['visualizer-chart-url'] && $data['visualizer-chart-schedule'] >= 0 ) {
-				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
-				$chart_schedule = intval( $data['visualizer-chart-schedule'] );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $chart_url );
-				apply_filters( 'visualizer_pro_chart_schedule', $data['id'], $chart_url, $chart_schedule );
-			} else {
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
-				apply_filters( 'visualizer_pro_remove_schedule', $data['id'] );
-			}
-
-			// let's check if this is not an external db chart
-			// as there is no support for that in the block editor interface
-			$external_params = get_post_meta( $data['id'], Visualizer_Plugin::CF_REMOTE_DB_PARAMS, true );
-			if ( empty( $external_params ) ) {
-				if ( $source_type === 'Visualizer_Source_Query' ) {
-					$db_schedule = intval( $data['visualizer-db-schedule'] );
-					$db_query = $data['visualizer-db-query'];
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE, $db_schedule );
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY, stripslashes( $db_query ) );
-				} else {
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_SCHEDULE );
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_DB_QUERY );
-				}
-
-				if ( 'Visualizer_Source_Csv_Remote' === $source_type ) {
-					$schedule_url = esc_url_raw( $data['visualizer-chart-url'] );
-					$schedule_id  = intval( $data['visualizer-chart-schedule'] );
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL, $schedule_url );
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_SCHEDULE, $schedule_id );
-				} else {
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_URL );
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_CHART_SCHEDULE );
-				}
-			}
-
-			if ( $source_type === 'Visualizer_Source_Json' ) {
-				$json_schedule = intval( $data['visualizer-json-schedule'] );
-				$json_url = esc_url_raw( $data['visualizer-json-url'] );
-				$json_headers = esc_url_raw( $data['visualizer-json-headers'] );
-				$json_root   = sanitize_text_field( $data['visualizer-json-root'] );
-				$json_paging = sanitize_text_field( $data['visualizer-json-paging'] );
-
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE, $json_schedule );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL, $json_url );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS, $json_headers );
-				update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT, $json_root );
-
-				if ( ! empty( $json_paging ) ) {
-					update_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING, $json_paging );
-				} else {
-					delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
-				}
-			} else {
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_SCHEDULE );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_URL );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_HEADERS );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_ROOT );
-				delete_post_meta( $data['id'], Visualizer_Plugin::CF_JSON_PAGING );
-			}
-
-			if ( Visualizer_Module::is_pro() ) {
-				$permissions_data = map_deep( $data['visualizer-permissions'], array( $this, 'sanitize_value' ) );
-				update_post_meta( $data['id'], Visualizer_Pro::CF_PERMISSIONS, $permissions_data );
-			}
-
-			if ( $data['visualizer-chart-url'] ) {
-				$chart_url = esc_url_raw( $data['visualizer-chart-url'] );
-				$content['source'] = $chart_url;
-				$content['data'] = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
-			} else {
-				$content = $this->format_chart_data( $data['visualizer-data'], $data['visualizer-series'] );
-			}
-
-			$chart = array(
-				'ID'           => $data['id'],
-				'post_content' => serialize( $content ),
-			);
-
-			wp_update_post( $chart );
-
-			// Clear existing chart cache.
-			$cache_key = Visualizer_Plugin::CF_CHART_CACHE . '_' . $data['id'];
-			if ( get_transient( $cache_key ) ) {
-				delete_transient( $cache_key );
-			}
-
-			$revisions = wp_get_post_revisions( $data['id'], array( 'order' => 'ASC' ) );
-
-			if ( count( $revisions ) > 1 ) {
-				$revision_ids = array_keys( $revisions );
-
-				// delete all revisions.
-				foreach ( $revision_ids as $id ) {
-					wp_delete_post_revision( $id );
-				}
-			}
-
-			return new \WP_REST_Response( array( 'success' => sprintf( 'Chart updated' ) ) );
-		}
-	}
-
-	/**
 	 * Format chart data.
 	 *
 	 * Note: No matter how tempted, don't use the similar method from Visualizer_Source. That works on a different structure.
 	 */
 	public function format_chart_data( $data, $series ) {
 		foreach ( $series as $i => $row ) {
-			// if no value exists for the seires, then add null
+			// if no value exists for the series, then add null
 			if ( ! isset( $series[ $i ] ) ) {
 				$series[ $i ] = null;
 			}
@@ -769,84 +489,6 @@ class Visualizer_Gutenberg_Block {
 	}
 
 	/**
-	 * Handle remote CSV data
-	 */
-	public function upload_csv_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		$remote_data = false;
-		if ( isset( $data['url'] ) && function_exists( 'wp_http_validate_url' ) ) {
-			$remote_data = wp_http_validate_url( $data['url'] );
-		}
-		if ( false !== $remote_data && ! is_wp_error( $remote_data ) ) {
-			$source = new Visualizer_Source_Csv_Remote( $remote_data );
-			if ( $source->fetch() ) {
-				$temp = $source->getData();
-				if ( is_string( $temp ) && is_array( unserialize( $temp ) ) ) {
-					$content['series'] = $source->getSeries();
-					$content['data']   = $source->getRawData();
-					return $content;
-				} else {
-					return new \WP_REST_Response( array( 'failed' => sprintf( 'Invalid CSV URL' ) ) );
-				}
-			} else {
-				return new \WP_REST_Response( array( 'failed' => sprintf( 'Invalid CSV URL' ) ) );
-			}
-		} else {
-			return new \WP_REST_Response( array( 'failed' => sprintf( 'Invalid CSV URL' ) ) );
-		}
-	}
-
-	/**
-	 * Get permission data
-	 */
-	public function get_permission_data( $data ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		$options = array();
-		switch ( $data['type'] ) {
-			case 'users':
-				$query  = new WP_User_Query(
-					array(
-						'number'        => 1000,
-						'orderby'       => 'display_name',
-						'fields'        => array( 'ID', 'display_name' ),
-						'count_total'   => false,
-					)
-				);
-				$users  = $query->get_results();
-				if ( ! empty( $users ) ) {
-					$i = 0;
-					foreach ( $users as $user ) {
-						$options[ $i ]['value'] = $user->ID;
-						$options[ $i ]['label'] = $user->display_name;
-						$i++;
-					}
-				}
-				break;
-			case 'roles':
-				if ( ! function_exists( 'get_editable_roles' ) ) {
-					require_once ABSPATH . 'wp-admin/includes/user.php';
-				}
-				$roles  = get_editable_roles();
-				if ( ! empty( $roles ) ) {
-					$i = 0;
-					foreach ( get_editable_roles() as $name => $info ) {
-						$options[ $i ]['value'] = $name;
-						$options[ $i ]['label'] = $name;
-						$i++;
-					}
-				}
-				break;
-		}
-		return $options;
-	}
-
-	/**
 	 * Filter Rest Query
 	 */
 	public function add_rest_query_vars( $args, \WP_REST_Request $request ) {
@@ -866,19 +508,5 @@ class Visualizer_Gutenberg_Block {
 			);
 		}
 		return $args;
-	}
-
-	/**
-	 * Sanitize value.
-	 *
-	 * @param mixed $value The value to sanitize.
-	 * @return mixed Sanitized value.
-	 */
-	private function sanitize_value( $value ) {
-		if ( is_string( $value ) ) {
-			return sanitize_text_field( $value );
-		}
-
-		return $value;
 	}
 }
