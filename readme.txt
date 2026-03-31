@@ -229,6 +229,29 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 
 == Changelog ==
 
+#### [Version 4.0.0](https://github.com/Codeinwp/visualizer/compare/v3.11.15...v4.0.0) (2026-03-31)
+
+### New Features
+- Introducing AI chart creation powered by D3.js  
+- You can now import XLSX files natively  
+- The charts library now includes a grid and list view for easier browsing  
+- Added a new Elementor widget for displaying Visualizer charts  
+- Improved auto-sync reliability by replacing WP-Cron with Action Scheduler  
+
+### Improvements
+- Cleaned up legacy block controls in the Block Editor  
+
+### Bug Fixes
+- Resolved an issue where lazy charts didn’t render when already in the viewport on page load  
+- Fixed a fatal error on servers with broken FTP filesystem configuration  
+- Addressed errors occurring in the getCSV method  
+- Fixed an intermittent sidebar scroll issue in Chrome  
+- Prevented a double clipboard alert when copying  
+- Fixed a bubble chart crash on window resize when using named series in manual configuration
+
+
+
+
 ##### [Version 3.11.15](https://github.com/Codeinwp/visualizer/compare/v3.11.14...v3.11.15) (2026-03-04)
 
 - Enhanced security
