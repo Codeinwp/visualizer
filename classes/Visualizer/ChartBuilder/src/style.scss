@@ -270,6 +270,7 @@
 	width: 100%;
 	flex: 1;
 	min-height: 0;
+	overflow: auto;
 	> svg {
 		width: 100% !important;
 		height: 100% !important;

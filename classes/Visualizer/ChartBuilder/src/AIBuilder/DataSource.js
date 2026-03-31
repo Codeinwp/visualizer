@@ -439,8 +439,8 @@ export default function DataSource( { chartId, uploadNonce, onDataReady, dataLoa
 					</Flex>
 					<Box
 						as="textarea"
-						display="block" w="100%" h="96px"
-						border="none" outline="none" resize="none"
+						display="block" w="100%" minH="96px"
+						border="none" outline="none" resize="vertical"
 						px="12px" py="10px"
 						fontFamily="'SF Mono', 'Fira Code', monospace" fontSize="12px" lineHeight="1.6"
 						color={ C.dark }

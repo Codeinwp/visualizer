@@ -155,13 +155,13 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 */
 	protected function _renderManualConfigExample() {
 		return json_encode(
-			[
-				'vAxis' => [
-					'ticks'          => [ 5, 10, 15, 20 ],
-					'titleTextStyle' => [ 'color' => 'red' ],
+			array(
+				'vAxis' => array(
+					'ticks'          => array( 5, 10, 15, 20 ),
+					'titleTextStyle' => array( 'color' => 'red' ),
 					'textPosition'   => 'in',
-				],
-			],
+				),
+			),
 			JSON_PRETTY_PRINT
 		);
 	}

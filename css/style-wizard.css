@@ -1129,13 +1129,15 @@ display: none;
 	content: "!";
 }
 .pro-label{
-	background: #007CBA;
-	border-radius: 6px;
-	color: #ffffff;
-	text-transform: uppercase;
-	font-size: 16px;
-	line-height: 19px;
-	padding: 2px 9px 4px;
+	display: inline;
+	width: 74px;
+	height: 17px;
+	border: none;
+	color: #fff;
+	z-index: 4;
+	background: #d63638;
+	letter-spacing: 0.5px;
+	text-align: center;
 }
 .pro-label.free-label{
 	background: #BDE6EB;

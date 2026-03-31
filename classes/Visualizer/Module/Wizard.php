@@ -580,7 +580,9 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 				// Update wizard data.
 				$wizard_data['enable_otter_blocks'] = true;
 				$wizard_data_updated                = true;
-				update_option( 'themeisle_blocks_settings_onboarding', false );
+				// Suppress Otter's post-activation redirects so the user stays in Visualizer.
+				update_option( 'themeisle_blocks_settings_redirect', '0' );
+				update_option( 'themeisle_blocks_settings_onboarding', '0' );
 			}
 			if ( 'wp-cloudflare-page-cache' === $slug ) {
 				// Update wizard data.

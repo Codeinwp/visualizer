@@ -829,13 +829,14 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 							ref={ previewRef }
 							flex="1"
 							minH="320px"
-							overflow="visible"
+							overflow="auto"
 							position="relative"
 							display={ code ? 'flex' : 'none' }
-							alignItems="center"
-							justifyContent="center"
+							alignItems="flex-start"
+							justifyContent="flex-start"
 							sx={ {
 								'> svg': { width: '100% !important', height: '100% !important', display: 'block' },
+								'> iframe': { maxWidth: '100%', maxHeight: '100%' },
 							} }
 						>
 						</Box>

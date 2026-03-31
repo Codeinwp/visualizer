@@ -404,10 +404,10 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 	 */
 	protected function _renderManualConfigExample() {
 		return json_encode(
-			[
+			array(
 				'cutoutPercentage' => 5,
 				'rotation'         => 60,
-			],
+			),
 			JSON_PRETTY_PRINT
 		);
 	}

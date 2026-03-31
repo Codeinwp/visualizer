@@ -117,7 +117,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-5" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Geo chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-geo"></div>
 															<div class="bg"></div>
@@ -136,7 +136,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-6" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Area chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-area"></div>
 															<div class="bg"></div>
@@ -155,7 +155,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-7" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Column chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-column"></div>
 															<div class="bg"></div>
@@ -174,7 +174,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-8" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Bubble chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-bubble"></div>
 															<div class="bg"></div>
@@ -193,7 +193,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-9" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Scatter chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-scatter"></div>
 															<div class="bg"></div>
@@ -212,7 +212,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-10" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Gauge chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-gauge"></div>
 															<div class="bg"></div>
@@ -231,7 +231,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-11" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Candlestick chart', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-candlestick"></div>
 															<div class="bg"></div>
@@ -250,7 +250,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-12" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Timeline', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-timeline"></div>
 															<div class="bg"></div>
@@ -269,7 +269,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-13" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Combo', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-combo"></div>
 															<div class="bg"></div>
@@ -288,7 +288,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-14" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Polar Area', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-polarArea"></div>
 															<div class="bg"></div>
@@ -307,7 +307,7 @@ $is_live_preview = ! empty( $_GET['env'] ) ? ( 'preview' === sanitize_key( $_GET
 															<input type="radio" class="vz-radio-btn" id="vz-chart-15" readonly>
 															<div class="vz-pro-label-wrap">
 																<h3><?php esc_html_e( 'Radar', 'visualizer' ); ?></h3>
-																<span class="pro-label"><?php esc_html_e( 'PRO', 'visualizer' ); ?></span>
+																<span class="pro-label"><?php esc_html_e( 'PREMIUM', 'visualizer' ); ?></span>
 															</div>
 															<div class="img type-box-radar"></div>
 															<div class="bg"></div>
