@@ -154,15 +154,16 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 	 * Add the correct example for the manual configuration box.
 	 */
 	protected function _renderManualConfigExample() {
-		return '{
-			"vAxis": {
-				"ticks": [5, 10, 15, 20],
-				"titleTextStyle": {
-					"color": "red"
-				},
-				"textPosition": "in"
-			}
-		}';
+		return json_encode(
+			[
+				'vAxis' => [
+					'ticks'          => [ 5, 10, 15, 20 ],
+					'titleTextStyle' => [ 'color' => 'red' ],
+					'textPosition'   => 'in',
+				],
+			],
+			JSON_PRETTY_PRINT
+		);
 	}
 
 	/**
@@ -198,9 +199,9 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				'manual',
 				$this->manual,
 				sprintf(
-					// translators: %s - the format.
-					esc_html__( 'One per line in valid JSON (key:value) format e.g. %s', 'visualizer' ),
-					'<br><code>' . $this->_renderManualConfigExample() . '</code>'
+					// translators: %s - JSON example.
+					esc_html__( 'Provide a valid JSON configuration object. Example: %s', 'visualizer' ),
+					'<code class="viz-manual-config-example">' . esc_html( $this->_renderManualConfigExample() ) . '</code>'
 				),
 				'',
 				array( 'rows' => 5 )

@@ -37,6 +37,106 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 
 	/**
+	 * Register all Elementor-related hooks for the Visualizer widget.
+	 *
+	 * Called once from index.php on the plugins_loaded action (after Elementor
+	 * itself is confirmed present). Each inner hook fires at its normal time in
+	 * the WordPress lifecycle, so timing is identical to registering them
+	 * directly in visualizer_launch().
+	 *
+	 * @return void
+	 */
+	public static function register_hooks() {
+		// Register the widget with Elementor's widget manager.
+		add_action(
+			'elementor/widgets/register',
+			function ( $widgets_manager ) {
+				$widgets_manager->register( new self() );
+			}
+		);
+
+		// Register the Visualizer icon for the Elementor widget panel.
+		add_action(
+			'elementor/editor/after_enqueue_styles',
+			function () {
+				$icon_url = VISUALIZER_ABSURL . 'images/visualizer-icon.svg';
+				wp_add_inline_style(
+					'elementor-icons',
+					'.visualizer-elementor-icon { display:inline-block; width:1em; height:1em; background:url("' . esc_url( $icon_url ) . '") no-repeat center/contain; }'
+				);
+			}
+		);
+
+		// Enqueue Visualizer scripts inside the Elementor preview iframe.
+		// Elementor serves the preview iframe as a shell page and injects widget HTML via
+		// JavaScript (innerHTML), so wp_enqueue_script calls inside render() never reach the
+		// iframe. We load all chart render libraries here so they are available when
+		// elementor-widget-preview.js triggers visualizer:render:chart:start.
+		add_action(
+			'elementor/preview/enqueue_scripts',
+			function () {
+				do_action( 'visualizer_enqueue_scripts' );
+
+				// ChartJS render library.
+				if ( ! wp_script_is( 'numeral', 'registered' ) ) {
+					wp_register_script( 'numeral', VISUALIZER_ABSURL . 'js/lib/numeral.min.js', array(), Visualizer_Plugin::VERSION, true );
+				}
+				if ( ! wp_script_is( 'chartjs', 'registered' ) ) {
+					wp_register_script( 'chartjs', VISUALIZER_ABSURL . 'js/lib/chartjs.min.js', array( 'numeral' ), null, true );
+				}
+				wp_enqueue_script( 'visualizer-render-chartjs-lib', VISUALIZER_ABSURL . 'js/render-chartjs.js', array( 'chartjs', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
+
+				// Google Charts render library.
+				wp_enqueue_script( 'visualizer-google-jsapi', '//www.gstatic.com/charts/loader.js', array(), null, true );
+				wp_enqueue_script( 'visualizer-render-google-lib', VISUALIZER_ABSURL . 'js/render-google.js', array( 'visualizer-google-jsapi', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
+
+				// DataTable render library + styles.
+				if ( ! wp_script_is( 'visualizer-datatables', 'registered' ) ) {
+					wp_register_script( 'visualizer-datatables', VISUALIZER_ABSURL . 'js/lib/datatables.min.js', array( 'jquery' ), Visualizer_Plugin::VERSION, true );
+				}
+				wp_enqueue_script( 'visualizer-render-datatables-lib', VISUALIZER_ABSURL . 'js/render-datatables.js', array( 'visualizer-datatables', 'visualizer-customization' ), Visualizer_Plugin::VERSION, true );
+				wp_enqueue_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+
+				// D3 render library (AI charts).
+				$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
+				if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+					$d3_asset = include $d3_renderer_asset;
+					wp_register_script(
+						'visualizer-d3-renderer',
+						VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/index.js',
+						array_merge( $d3_asset['dependencies'], array( 'jquery' ) ),
+						$d3_asset['version'],
+						true
+					);
+				}
+				if ( wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+					wp_enqueue_script( 'visualizer-d3-renderer' );
+					wp_localize_script(
+						'visualizer-d3-renderer',
+						'vizD3Renderer',
+						array(
+							'iframeJsUrl' => VISUALIZER_ABSURL . 'classes/Visualizer/D3Renderer/build/iframe.js',
+						)
+					);
+				}
+
+				// Elementor widget preview handler — uses frontend/element_ready hook.
+				wp_enqueue_script( 'visualizer-elementor-preview', VISUALIZER_ABSURL . 'js/elementor-widget-preview.js', array( 'jquery', 'elementor-frontend' ), Visualizer_Plugin::VERSION, true );
+
+				// Prevent Elementor's editor-preview CSS from hiding our widget.
+				// Elementor marks widgets without a content_template() as elementor-widget-empty
+				// and adds display:none to .elementor-widget-empty when the panel is hidden
+				// (.elementor-editor-preview on <body>). Our widget renders async (Google Charts
+				// loads via callback), so the empty class is always present.
+				wp_add_inline_style(
+					'visualizer-datatables',
+					'.elementor-editor-preview .elementor-widget-visualizer-chart.elementor-widget-empty { display: block !important; }'
+				);
+			}
+		);
+	}
+
+	/**
 	 * Get widget name.
 	 *
 	 * @return string Widget name.
@@ -239,7 +339,7 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 			// via elementor/preview/enqueue_scripts; injecting render-facade.js would add
 			// a second visualizer:render:chart:start trigger causing duplicate renders.
 			foreach ( wp_scripts()->queue as $handle ) {
-				if ( 0 === strpos( $handle, 'visualizer-render-' )
+				if ( ( 0 === strpos( $handle, 'visualizer-render-' ) || 'visualizer-d3-renderer' === $handle )
 					&& 'visualizer-render-google-lib' !== $handle
 					&& 'visualizer-render-chartjs-lib' !== $handle
 					&& 'visualizer-render-datatables-lib' !== $handle ) {
@@ -300,6 +400,12 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 			'data'     => $chart_data,
 			'library'  => $library,
 		);
+
+		// D3/AI charts store their rendering code in post meta — include it so
+		// elementor-widget-preview.js can pass it to the D3 renderer.
+		if ( 'd3' === $library ) {
+			$chart_entry['code'] = get_post_meta( $chart_id, Visualizer_Module_AIBuilder::CF_D3_CODE, true );
+		}
 
 		// Elementor injects widget HTML via innerHTML, so <script type="text/javascript">
 		// tags never execute in the preview iframe. Instead embed the chart data in a

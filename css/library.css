@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+body {
+	height: auto;
+}
+
 #visualizer-icon {
 	background-image: url("../images/icon.png");
 }

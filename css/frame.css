@@ -1609,6 +1609,19 @@ span.viz-section-error {
 /******************************************************************************/
 /************************  manual config JSON editor  *************************/
 /******************************************************************************/
+code.viz-manual-config-example {
+	display: block;
+	white-space: pre;
+	background: #f5f5f5;
+	border: 1px solid #e0e0e0;
+	border-radius: 3px;
+	padding: 6px 8px;
+	margin-top: 6px;
+	font-size: 11px;
+	line-height: 1.5;
+}
+
+
 textarea[name="manual"] + .CodeMirror {
 	background: #282923;
 	color: #f8f8f2;
