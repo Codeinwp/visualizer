@@ -1,3 +1,7 @@
+##### [Version 4.0.1](https://github.com/Codeinwp/visualizer/compare/v4.0.0...v4.0.1) (2026-03-31)
+
+- Internal update to ensure compatibility and improve system consistency.
+
 #### [Version 4.0.0](https://github.com/Codeinwp/visualizer/compare/v3.11.15...v4.0.0) (2026-03-31)
 
 ### New Features
