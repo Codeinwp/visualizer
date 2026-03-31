@@ -100,6 +100,11 @@ class Visualizer_Elementor_Widget extends \Elementor\Widget_Base {
 				// D3 render library (AI charts).
 				$d3_renderer_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/D3Renderer/build/index.asset.php';
 				if ( file_exists( $d3_renderer_asset ) && ! wp_script_is( 'visualizer-d3-renderer', 'registered' ) ) {
+					/**
+					 * Ignore missing build asset in source checkout.
+					 *
+					 * @phpstan-ignore-next-line
+					 */
 					$d3_asset = include $d3_renderer_asset;
 					wp_register_script(
 						'visualizer-d3-renderer',

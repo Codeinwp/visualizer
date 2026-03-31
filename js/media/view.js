@@ -163,18 +163,20 @@
 						}
 
 						self.renderCollection();
-                        $('.visualizer-library-chart').css('position', 'relative')
-                            .append($(
-                                // jshint ignore:start
-                                '<div class="visualizer-chart-bg"></div>'
-                                + '<div class="visualizer-chart-insert-bg">'
-                                + '<button class="button button-primary visualizer-library-chart-insert">' + visualizer.i10n.insert + '</button>'
-                                + '</div>'
-                                // jshint ignore:end
-                            ))
-                            .on('mouseover', function(){
-                                $(this).addClass('hover');
-                            });
+                        if (self.collection.length > 0) {
+                            $('.visualizer-library-chart').css('position', 'relative')
+                                .append($(
+                                    // jshint ignore:start
+                                    '<div class="visualizer-chart-bg"></div>'
+                                    + '<div class="visualizer-chart-insert-bg">'
+                                    + '<button class="button button-primary visualizer-library-chart-insert">' + visualizer.i10n.insert + '</button>'
+                                    + '</div>'
+                                    // jshint ignore:end
+                                ))
+                                .on('mouseover', function(){
+                                    $(this).addClass('hover');
+                                });
+                        }
 						content.unlock();
 					}
 				}
