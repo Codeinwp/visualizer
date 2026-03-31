@@ -944,7 +944,20 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 				) }
 
 				{ shortcode && (
-					<PillBtn onClick={ () => { onClose(); window.location.reload(); } } disabled={ isLocked } bg={ C.dark }>
+					<PillBtn
+						onClick={ () => {
+							onClose();
+							if ( typeof window.vizAIBuilderDoneCallback === 'function' ) {
+								const cb = window.vizAIBuilderDoneCallback;
+								window.vizAIBuilderDoneCallback = null;
+								cb();
+							} else {
+								window.location.reload();
+							}
+						} }
+						disabled={ isLocked }
+						bg={ C.dark }
+					>
 						{ __( 'Done', 'visualizer' ) }
 					</PillBtn>
 				) }

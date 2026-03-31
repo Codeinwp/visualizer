@@ -149,6 +149,54 @@ class Visualizer_Gutenberg_Block {
 
 		// Enqueue frontend and editor block styles
 		wp_enqueue_style( 'visualizer-gutenberg-block', $stylePath, array( 'visualizer-datatables' ), $asset['version'] );
+
+		// Enqueue ChartBuilder (AI Builder) so the D3 edit modal is available in the block editor.
+		$chart_builder_asset = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.asset.php';
+		if ( file_exists( $chart_builder_asset ) && ! wp_script_is( 'visualizer-chart-builder', 'enqueued' ) ) {
+			/**
+			 * Ignore missing build asset in source checkout.
+			 *
+			 * @phpstan-ignore-next-line
+			 */
+			$cb_asset = include $chart_builder_asset;
+			wp_enqueue_script(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.js',
+				$cb_asset['dependencies'],
+				$cb_asset['version'],
+				true
+			);
+			wp_enqueue_style(
+				'visualizer-chart-builder',
+				VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/style-index.css',
+				array(),
+				$cb_asset['version']
+			);
+			$chart_builder_css = VISUALIZER_ABSPATH . '/classes/Visualizer/ChartBuilder/build/index.css';
+			if ( file_exists( $chart_builder_css ) ) {
+				wp_enqueue_style(
+					'visualizer-chart-builder-runtime',
+					VISUALIZER_ABSURL . 'classes/Visualizer/ChartBuilder/build/index.css',
+					array( 'visualizer-chart-builder' ),
+					$cb_asset['version']
+				);
+			}
+			wp_localize_script(
+				'visualizer-chart-builder',
+				'vizAIBuilder',
+				array(
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'visualizer-ai-builder' ),
+					'isPro'   => Visualizer_Module::is_pro(),
+				)
+			);
+			// Inject the mount point the ChartBuilder React app needs.
+			wp_add_inline_script(
+				'visualizer-chart-builder',
+				'document.body.insertAdjacentHTML("beforeend","<div id=\"viz-chart-builder-root\"></div>");',
+				'before'
+			);
+		}
 	}
 	/**
 	 * Hook server side rendering into render callback

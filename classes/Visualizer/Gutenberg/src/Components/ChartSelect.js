@@ -156,13 +156,18 @@ class ChartSelect extends Component {
         }
 
 		const openEditChart = ( chartId ) => {
-			const baseURL = ( window.visualizerLocalize.chartEditUrl ) ? window.visualizerLocalize.chartEditUrl : '';
 			if ( isD3 ) {
-				if ( window.visualizerLocalize && window.visualizerLocalize.adminPage ) {
-					window.open( window.visualizerLocalize.adminPage, '_blank' );
+				// Set a callback the AI Builder will invoke instead of reloading the page.
+				window.vizAIBuilderDoneCallback = async() => {
+					await this.props.getChartData( chartId );
+				};
+				if ( typeof window.vizOpenAIBuilderEdit === 'function' ) {
+					window.vizOpenAIBuilderEdit( chartId );
 				}
 				return;
 			}
+
+			const baseURL = ( window.visualizerLocalize.chartEditUrl ) ? window.visualizerLocalize.chartEditUrl : '';
 			let view = new visualizerMediaView.Chart(
 				{
 					action: `${baseURL}?action=visualizer-edit-chart&library=yes&chart=` + chartId
@@ -172,12 +177,11 @@ class ChartSelect extends Component {
 				let result = await apiFetch({ path: `wp/v2/visualizer/${chartId}` });
 				await this.props.editSettings( result['chart_data']['visualizer-settings']);
 				await this.props.getChartData( chartId );
+				view.close();
 			};
 			// eslint-disable-next-line camelcase
 			window.send_to_editor = function() {
-				updateChartState().then( () => {
-					view.close();
-				});
+				updateChartState();
 			};
 
 			view.open();
