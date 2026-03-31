@@ -1,0 +1,17 @@
+name: Compatibility Check
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+    branches:
+      - master
+
+jobs:
+  compatibility-check:
+    name: Verify Compatibility Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check compatibility label
+        uses: Codeinwp/action-product-compat@v1
+        with:
+          github-token: ${{ secrets.BOT_TOKEN }}
