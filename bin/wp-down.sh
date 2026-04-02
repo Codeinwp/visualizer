@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
-docker compose -f $DOCKER_FILE down
+set -euo pipefail
+
+: "${DOCKER_FILE:=docker-compose.ci.yml}"
+
+docker compose -f "$DOCKER_FILE" down
 docker volume prune --force
