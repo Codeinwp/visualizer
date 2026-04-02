@@ -35,6 +35,9 @@ jobs:
       - name: Install JavaScript dependencies
         run: npm ci
 
+      - name: Install Playwright CLI
+        run: npm install -g playwright-cli
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
@@ -43,9 +46,18 @@ jobs:
         with:
           php-version: "7.4"
           extensions: simplexml, mysql
+          tools: phpunit-polyfills
 
       - name: Install PHP dependencies
-        run: composer install
+        run: composer install --prefer-dist --no-progress
 
       - name: Pre-pull E2E Docker images
         run: docker compose -f docker-compose.ci.yml pull
+
+      - name: Bootstrap E2E environment
+        env:
+          DOCKER_FILE: docker-compose.ci.yml
+        run: bash bin/wp-init.sh
+
+      - name: Install WordPress test suite
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306
