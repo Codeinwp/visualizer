@@ -161,7 +161,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 					echo '<tr>';
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="xAxes[scaleLabel][fontFamily]" class="control-select">';
-								echo '<option></option>';
+								echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		foreach ( self::$_fontFamilies as $font => $label ) {
 			echo '<option value="', $font, '"', selected( $font, $this->xAxes['scaleLabel']['fontFamily'], false ), '>';
 			echo $label;
@@ -171,7 +171,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 						echo '</td>';
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="xAxes[scaleLabel][fontSize]" class="control-select">';
-								echo '<option></option>';
+								echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		for ( $i = 7; $i <= 20; $i++ ) {
 			echo '<option value="', $i, '"', selected( $i, $this->xAxes['scaleLabel']['fontSize'], false ), '>', $i, '</option>';
 		}
@@ -265,7 +265,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 					echo '<tr>';
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="yAxes[scaleLabel][fontFamily]" class="control-select">';
-								echo '<option></option>';
+								echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		foreach ( self::$_fontFamilies as $font => $label ) {
 			echo '<option value="', $font, '"', selected( $font, $this->yAxes['scaleLabel']['fontFamily'], false ), '>';
 			echo $label;
@@ -275,7 +275,7 @@ class Visualizer_Render_Sidebar_Type_ChartJS_Linear extends Visualizer_Render_Si
 						echo '</td>';
 						echo '<td class="viz-section-table-column">';
 							echo '<select name="yAxes[scaleLabel][fontSize]" class="control-select">';
-								echo '<option></option>';
+								echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		for ( $i = 7; $i <= 20; $i++ ) {
 			echo '<option value="', $i, '"', selected( $i, $this->yAxes['scaleLabel']['fontSize'], false ), '>', $i, '</option>';
 		}

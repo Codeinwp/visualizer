@@ -211,6 +211,22 @@ test.describe( 'Chart Library', () => {
         await expect( page.getByText(backendName) ).toBeVisible();
         await expect( page.locator('g').filter({ hasText: 'Test Chart Name' }).locator('rect') ).toBeVisible();
     } );
+
+    test( 'font settings show Default label for empty option', async ( { admin, page } ) => {
+        await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
+        await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+        await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+        await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
+        await page.waitForSelector('h1:text("Visualizer")');
+
+        await selectChartAdmin( page.frameLocator('iframe'), CHART_JS_LABELS.pie );
+        await page.frameLocator('iframe').getByRole('link', { name: 'Settings' }).click();
+        await page.frameLocator('iframe').getByRole('button', { name: 'General Settings' }).click();
+        await page.frameLocator('iframe').getByText('Font Styles', { exact: true }).click();
+
+        await expect( page.frameLocator('iframe').locator('select[name="fontName"] option').first() ).toHaveText( 'Default' );
+        await expect( page.frameLocator('iframe').locator('select[name="fontSize"] option').first() ).toHaveText( 'Default' );
+    } );
 } );
 
 test.describe( 'Support', () => {

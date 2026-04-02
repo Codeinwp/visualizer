@@ -212,7 +212,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 						echo '<tr>';
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="fontName" class="control-select">';
-									echo '<option></option>';
+									echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		foreach ( self::$_fontFamilies as $font => $label ) {
 			echo '<option value="', $font, '"', selected( $font, $this->fontName, false ), '>';
 			echo $label;
@@ -222,7 +222,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 							echo '</td>';
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="fontSize" class="control-select">';
-									echo '<option></option>';
+									echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		for ( $i = 7; $i <= 20; $i++ ) {
 			echo '<option value="', $i, '"', selected( $i, $this->fontSize, false ), '>', $i, '</option>';
 		}
@@ -263,7 +263,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 						echo '<tr>';
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="legend[labels][fontName]" class="control-select">';
-									echo '<option></option>';
+									echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		foreach ( self::$_fontFamilies as $font => $label ) {
 			echo '<option value="', $font, '"', selected( $font, $this->legend['labels']['fontName'], false ), '>';
 			echo $label;
@@ -273,7 +273,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 							echo '</td>';
 							echo '<td class="viz-section-table-column">';
 								echo '<select name="legend[labels][fontSize]" class="control-select">';
-									echo '<option></option>';
+									echo '<option value="">', esc_html__( 'Default', 'visualizer' ), '</option>';
 		for ( $i = 7; $i <= 20; $i++ ) {
 			echo '<option value="', $i, '"', selected( $i, $this->legend['labels']['fontSize'], false ), '>', $i, '</option>';
 		}
