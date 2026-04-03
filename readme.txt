@@ -234,13 +234,14 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 
 ## Screenshots ##
 
-1. Charts Selection
-2. Quick Actions
-3. Import Options
-4. Bar Chart
-5. Bar Chart Settings
-6. Line Chart Settings
-7. Block editor - Chart Library
+1. AI Chart Creation
+2. Charts Selection
+3. Quick Actions
+4. Import Options
+5. Bar Chart
+6. Bar Chart Settings
+7. Line Chart Settings
+8. Block editor - Chart Library
 
 == Changelog ==
 
