@@ -8,13 +8,13 @@ Stable tag: trunk
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
-A simple yet powerful WordPress chart plugin to effortlessly create and embed responsive charts & tables into your site, supporting multiple data sources for enhanced data presentation.
+Create responsive charts and tables manually or let the built-in AI build them from a simple text prompt. Supports multiple chart types and flexible data sources.
 
 ## Description ##
 
 <p><a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/?utm_source=wordpressorg&utm_medium=readme&utm_campaign=description" rel="nofollow">Visualizer: Tables and Charts Manager for WordPress</a> is a powerful and easy to use plugin used to create, manage and embed interactive, responsive charts & tables into your WordPress posts and pages.</p>
 
-The plugin leverages the Google Visualization API, DataTables.net, and ChartJS libraries to deliver responsive and animated charts, graphs, and tables, ensuring excellent cross-browser compatibility and a seamless mobile experience. You can fully customize all aspects of the charts and tables to suit your needs. For enhanced data management features, including importing from Excel, CSV, Google Sheets, and more, consider exploring the [PRO version](https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wordpressorg&utm_medium=readme&utm_campaign=pro-cta).
+The plugin leverages the Google Visualization API, DataTables.net, and ChartJS libraries to deliver responsive and animated charts, graphs, and tables, ensuring excellent cross-browser compatibility and a seamless mobile experience. It also comes with a built-in AI chart builder powered by D3.js that turns a plain text description into a publish-ready chart in seconds, no setup required. You can fully customize all aspects of the charts and tables to suit your needs. For enhanced data management features, including importing from Excel, CSV, Google Sheets, and more, consider exploring the [PRO version](https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wordpressorg&utm_medium=readme&utm_campaign=pro-cta).
 
 ### 🔗 HELPFUL LINKS ###
 
@@ -24,6 +24,8 @@ The plugin leverages the Google Visualization API, DataTables.net, and ChartJS l
 - Interested in Visualizer Pro? <a href="https://themeisle.com/plugins/visualizer-charts-and-graphs/upgrade/?utm_source=wordpressorg&utm_medium=readme&utm_campaign=pro-cta">Know more about Visualizer PRO</a>
 
 ### Why You’ll Love Visualizer ###
+
+- **AI-Powered Chart Generation:** Describe the chart you need in plain everyday language, and Visualizer AI builds it for you instantly. No API key, no setup, and no technical knowledge required. Whether you are a blogger, educator, or small business owner, you can go from a simple text prompt to a fully customizable, ready-to-embed chart in seconds, completely free.
 
 - **Diverse Chart Options:** Begin with essential chart types like line, pie, bar, and table in the free version. Elevate your data presentation with advanced chart types such as scatter, area, and geo available in the Pro version. The free version offers a comprehensive range of options that are perfect for various visualization needs.
 
@@ -41,9 +43,20 @@ These versatile data handling capabilities ensure that Visualizer Free is equipp
 
 *The above descriptions were partially taken from the Google Visualization API site*
 
-### CHECK OUT A QUICK OVERVIEW OF VISUALIZER ### 
 
-https://youtu.be/hQO_evnb_tQ
+### Build Charts Faster with Visualizer AI ###
+
+Chart creation has always been the most time-consuming part of working with data. Picking the right chart type, entering values manually, and tweaking settings until it looks right. Visualizer AI changes that entirely.
+
+Just describe what you want, and Visualizer builds it for you. Preview it live, refine it with follow-up prompts, and publish when it looks right. No coding, no configuration, and no API key required. It is available to all users, completely free, the moment you activate the plugin.
+
+Here is what you can do with it:
+
+📊 Turn a sales spreadsheet into a chart in seconds. Upload your data, type something like "create a bar chart showing monthly revenue by region," and watch Visualizer build it live.
+📋 Visualize survey results without the manual work. Got a CSV of responses? Upload it, describe the breakdown you want to see, and let AI handle the rest.
+🎨 Match your brand without touching the settings. Mention your brand colors in your prompt, and Visualizer styles the chart accordingly, no manual color picking needed.
+🖼️ Build from a reference image. See a chart style you like somewhere? Upload it as a reference, and Visualizer will use it as inspiration with your own data.
+
 
 ### ✨ YOU SHOULD USE VISUALIZER IF: ###
 
@@ -91,6 +104,8 @@ If you’re already benefiting from Visualizer, why not take your website to the
 **USE CASE:** 🛠️ Rachel, a project manager, configures user permissions to ensure that only relevant team members can edit financial forecasts, maintaining data integrity and security.
 
 - **Import Data from Files:** Upload CSV files directly into Visualizer. This feature is ideal for those who prepare data in spreadsheet tools like Microsoft Excel or Google Sheets, allowing for quick and easy data visualization.
+
+- **Import Data from Excel (XLSX):** Upload Excel spreadsheets directly into Visualizer without any conversion steps. Simply export your workbook and import it as-is. Your column headers, values, and structure are automatically mapped to your chart or table, saving you time and eliminating formatting headaches.
 
 - **Import Data from URLs:** Keep your charts updated by importing data dynamically from external sources in CSV or JSON formats via URLs. This powerful feature is essential for displaying real-time or frequently updated data, reducing the need for manual updates.
 
@@ -219,13 +234,14 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 
 ## Screenshots ##
 
-1. Charts Selection
-2. Quick Actions
-3. Import Options
-4. Bar Chart
-5. Bar Chart Settings
-6. Line Chart Settings
-7. Block editor - Chart Library
+1. AI Chart Creation
+2. Charts Selection
+3. Quick Actions
+4. Import Options
+5. Bar Chart
+6. Bar Chart Settings
+7. Line Chart Settings
+8. Block editor - Chart Library
 
 == Changelog ==
 
