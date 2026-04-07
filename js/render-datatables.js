@@ -24,6 +24,11 @@
         if(chart.library !== 'datatables'){
             return;
         }
+
+        // Bail if the chart is already rendered or is being rendered.
+        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader, style)' ).length > 0 ) ) ) {
+            return;
+        }
         rendered_charts[id] = 'yes';
 
         series = chart.series;
