@@ -1407,16 +1407,19 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 
 		if ( $plugin_file === plugin_basename( VISUALIZER_BASEFILE ) ) {
+			$is_black_friday = apply_filters( 'themeisle_sdk_is_black_friday_sale', false );
 			// knowledge base link
 			$plugin_meta[] = sprintf(
 				'<a href="' . VISUALIZER_MAIN_DOC . '" target="_blank">%s</a>',
 				esc_html__( 'Docs', 'visualizer' )
 			);
-			// flattr link
-			$plugin_meta[] = sprintf(
-				'<a style="color:red" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'pluginrow' ) . '" target="_blank">%s</a>',
-				esc_html__( 'Get Visualizer Pro', 'visualizer' )
-			);
+			if ( ! $is_black_friday ) {
+				// flattr link
+				$plugin_meta[] = sprintf(
+					'<a style="color:red" href="' . tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'pluginrow' ) . '" target="_blank">%s</a>',
+					esc_html__( 'Get Visualizer Pro', 'visualizer' )
+				);
+			}
 		}
 
 		return $plugin_meta;
@@ -1598,29 +1601,51 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 	public function add_black_friday_data( $configs ) {
 		$config = $configs['default'];
 
-		// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-		$message_template = __( 'Our biggest sale of the year: %1$sup to %2$s OFF%3$s on %4$s. Don\'t miss this limited-time offer.', 'visualizer' );
-		$product_label    = 'Visualizer';
-		$discount         = '70%';
+		$message = __( 'Database queries, private charts, auto-sync. Go beyond basic charts. Exclusively for existing Visualizer users.', 'visualizer' );
+		$cta_label = __( 'Get Visualizer Pro', 'visualizer' );
 
 		$plan    = apply_filters( 'product_visualizer_license_plan', 0 );
 		$license = apply_filters( 'product_visualizer_license_key', false );
-		$is_pro  = 0 < $plan;
+		$status  = apply_filters( 'product_visualizer_license_status', false );
+		$pro_product_slug = defined( 'VISUALIZER_PRO_BASEFILE' ) ? basename( dirname( VISUALIZER_PRO_BASEFILE ) ) : '';
+
+		$is_pro  = 'valid' === $status;
+		$is_expired = 'expired' === $status || 'active-expired' === $status;
 
 		if ( $is_pro ) {
-			// translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-			$message_template = __( 'Get %1$sup to %2$s off%3$s when you upgrade your %4$s plan or renew early.', 'visualizer' );
-			$product_label    = 'Visualizer Pro';
-			$discount         = '30%';
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - up to %s off', 'visualizer' ), '30%' );
+			// translators: %1$s - discount, %2$s - discount.
+			$message = sprintf( __( 'Upgrade your Visualizer Pro plan: %1$s off this week. Already on the plan you need? Renew early and save up to %2$s.', 'visualizer' ), '30%', '20%' );
+			$cta_label = __( 'See your options', 'visualizer' );
+		} elseif ( $is_expired ) {
+			// translators: %s is the discount percentage.
+			$config['upgrade_menu_text'] = sprintf( __( 'BF Sale - %s off', 'visualizer' ), '50%' );
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - %s off', 'visualizer' ), '50%' );
+			$message = __( 'Your Visualizer Pro features are still here, just locked. Renew at a reduced rate this week.', 'visualizer' );
+			$cta_label = __( 'Reactivate now', 'visualizer' );
+		} else {
+			// translators: %s is the discount percentage.
+			$config['plugin_meta_message'] = sprintf( __( 'Black Friday Sale - %s off', 'visualizer' ), '60%' );
+			$config['title'] = __( 'Visualizer Pro: 60% off this week', 'visualizer' );
+			// translators: %s is the discount percentage.
+			$config['upgrade_menu_text'] = sprintf( __( 'BF Sale - %s off', 'visualizer' ), '60%' );
 		}
 
-		$product_label = sprintf( '<strong>%s</strong>', $product_label );
 		$url_params    = array(
 			'utm_term' => $is_pro ? 'plan-' . $plan : 'free',
 			'lkey'     => ! empty( $license ) ? $license : false,
+			'expired'  => $is_expired ? '1' : false,
 		);
 
-		$config['message']  = sprintf( $message_template, '<strong>', $discount, '</strong>', $product_label );
+		if ( ( $is_pro || $is_expired ) && ! empty( $pro_product_slug ) ) {
+			$config['plugin_meta_targets'] = array( $pro_product_slug );
+		}
+
+		$config['message']   = $message;
+		$config['cta_label'] = $cta_label;
+
 		$config['sale_url'] = add_query_arg(
 			$url_params,
 			tsdk_translate_link( tsdk_utmify( 'https://themeisle.link/vizualizer-bf', 'bfcm', 'visualizer' ) )
