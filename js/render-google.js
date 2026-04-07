@@ -649,7 +649,7 @@ var isResizeRequest = false;
                 if(img !== ''){
                     html = "<html><body><img src='" + img + "' /></body></html>";
                 }
-                // $('body').trigger('visualizer:action:specificchart:defaultprint', {data: html});
+                $('body').trigger('visualizer:action:specificchart:defaultprint', {data: html});
                 break;
             case 'image':
                 if(img !== ''){
