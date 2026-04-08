@@ -73,7 +73,7 @@
                         delete chart.settings['scrollY'];
                         delete chart.settings['scrollY_int'];
                         $.extend( settings, {
-                            scrollX: 150,
+                            scrollX: '100%',
                             scrollY: (( chart.settings['responsive_bool'] === 'true' ? 0.8 : 0.5 ) * parseInt($(container).css('height').replace('px',''))),
                             scrollCollapse: true
                         } );
@@ -83,7 +83,7 @@
                         }
                         delete chart.settings['scrollX'];
                         $.extend( settings, {
-                            scrollX: 150,
+                            scrollX: '100%',
                             scrollY: 180,
                         } );
                     }
