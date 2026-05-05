@@ -28,5 +28,5 @@ You are the Visualizer plugin agent. Follow repository conventions and prioritiz
 
 ## Notes
 
-- E2E uses Docker via `docker-compose.ci.yml` and the default URL `http://localhost:8889`.
+- E2E uses `@wordpress/env` (config in `.wp-env.json`) and the default URL `http://localhost:8889`.
 - If the task is doc-only or non-code, explain why tests were skipped.

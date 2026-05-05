@@ -19,8 +19,9 @@
   "scripts": {
     "dist": "bash bin/dist.sh",
     "release": "semantic-release --debug",
-    "env:up": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-init.sh",
-    "env:down": "export DOCKER_FILE=docker-compose.ci.yml && bash bin/wp-down.sh",
+    "env:up": "wp-env start",
+    "env:down": "wp-env stop",
+    "env:clean": "wp-env clean",
     "wp-env": "wp-env",
     "grunt": "grunt",
     "test:env:start": "wp-env start",

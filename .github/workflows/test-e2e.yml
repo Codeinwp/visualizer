@@ -10,8 +10,6 @@ concurrency:
 jobs:
   e2e:
     name: Playwright E2E tests
-    env:
-      DOCKER_FILE: docker-compose.ci.yml
     strategy:
       fail-fast: false
     runs-on: ubuntu-22.04
@@ -31,9 +29,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Install composer deps
         run: composer install --no-dev
-      - name: Install environment
-        run: |
-          npm run env:up
+      - name: Start wp-env
+        run: npx wp-env start
       - name: Run the tests
         run: |
           npm run test:e2e:playwright

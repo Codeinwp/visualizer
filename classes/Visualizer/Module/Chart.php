@@ -296,7 +296,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$render->series = json_encode( $source->getSeries() );
 		$render->render();
 
-		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) ? wp_die() : exit();
 	}
 
 
@@ -432,7 +432,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		header( 'Content-type: application/json' );
 		nocache_headers();
 		echo json_encode( $results );
-		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) ? wp_die() : exit();
 	}
 
 	/**
@@ -614,7 +614,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 			wp_redirect( esc_url_raw( add_query_arg( 'chart', (int) $chart_id ) ) );
 
-			if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+			if ( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) {
 				wp_die();
 			}
 			exit();
@@ -712,7 +712,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				// this should never happen.
 				break;
 		}
-		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) ? wp_die() : exit();
 	}
 
 	/**
@@ -1382,7 +1382,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! $can_die ) {
 			return;
 		}
-		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) ? wp_die() : exit();
 	}
 
 	/**
@@ -1438,7 +1438,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 
-		if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+		if ( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) {
 			wp_die();
 		}
 		wp_redirect( $redirect );
@@ -1473,7 +1473,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			}
 		}
 
-		defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+		( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) ? wp_die() : exit();
 	}
 
 	/**
@@ -1638,7 +1638,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 		$render->render();
 		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
-			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+			( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) ? wp_die() : exit();
 		}
 	}
 
@@ -1681,7 +1681,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		do_action( 'visualizer_save_filter', $chart_id, $hours );
 
 		if ( ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE ) ) {
-			defined( 'WP_TESTS_DOMAIN' ) ? wp_die() : exit();
+			( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) ? wp_die() : exit();
 		}
 	}
 

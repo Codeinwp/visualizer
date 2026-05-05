@@ -1,11 +1,18 @@
 {
   "core": null,
   "phpVersion": "7.4",
-  "plugins": ["."],
+  "plugins": [
+    "."
+  ],
   "themes": [],
   "config": {
     "WP_DEBUG": true,
     "WP_DEBUG_LOG": true,
-    "SCRIPT_DEBUG": true
+    "WP_DEBUG_DISPLAY": false,
+    "SCRIPT_DEBUG": true,
+    "TI_E2E_TESTING": true
+  },
+  "lifecycleScripts": {
+    "afterStart": "npx wp-env run tests-cli wp plugin install classic-editor elementor --activate && npx wp-env run tests-cli wp theme install twentytwentyone --activate && npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard && npx wp-env run tests-cli wp option update visualizer_fresh_install 1"
   }
 }
