@@ -7,7 +7,7 @@ body:
     attributes:
       label: Goal / Acceptance Criteria
       description: "What does 'done' look like? Be specific."
-      placeholder: "Example: Update E2E docs to use npm run env:up/env:down and ensure credentials match bin/cli-setup.sh."
+      placeholder: "Example: Update E2E docs to use npm run env:up/env:down and ensure credentials match .wp-env.json."
     validations:
       required: true
 

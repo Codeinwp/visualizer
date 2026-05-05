@@ -24,7 +24,6 @@ vendor/openspout/openspout/README.md
 .idea
 .wordpress-org
 .releaserc.yml
-docker-compose.ci.yml
 CONTRIBUTING.md
 artifacts
 phpstan.neon

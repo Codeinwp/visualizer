@@ -57,8 +57,9 @@ This repo includes `.github/workflows/copilot-setup-steps.yml` to preinstall dep
 10. `npm run env:down`
 
 ### E2E Environment
-- Default: Docker via `npm run env:up` / `npm run env:down` (uses `docker-compose.ci.yml`).
-- Optional: `wp-env` is supported, but Docker is the default for agents.
+- Managed by `@wordpress/env`: `npm run env:up` / `npm run env:down` (configured via `.wp-env.json`).
+- Tests instance runs on `http://localhost:8889` with credentials `admin` / `password`.
+- Run wp-cli against the tests instance via `npx wp-env run tests-cli wp <command>`.
 
 ### Build Outputs
 If you change anything under `classes/Visualizer/**/src`, you must run the corresponding build and commit the output:

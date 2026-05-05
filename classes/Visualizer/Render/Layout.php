@@ -531,7 +531,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 		$chart_id = $args[1];
 
 		// ignore for unit tests because Travis throws the error "Indirect modification of overloaded property Visualizer_Render_Page_Data::$permissions has no effect".
-		if ( defined( 'WP_TESTS_DOMAIN' ) ) {
+		if ( defined( 'WP_TESTS_DOMAIN' ) && function_exists( 'tests_add_filter' ) ) {
 			return;
 		}
 

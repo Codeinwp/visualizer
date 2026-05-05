@@ -9,7 +9,7 @@ npx playwright install
 ```
 
 > [!NOTE]
-> You also need to use Node.js 18 or later, along with Docker and Docker Compose.
+> You also need to use Node.js 18 or later, along with Docker (used by `wp-env` under the hood).
 
 Create the testing instance using the following command:
 
@@ -17,8 +17,7 @@ Create the testing instance using the following command:
 npm run env:up
 ```
 
-This will create a WordPress instance. The port is `8889` and the user is `admin` and the password is `password` (the same values used by `wp-env` testing instance).
-If you see port `8080`, ignore it for E2E; the test environment is expected at `http://localhost:8889`.
+This boots a WordPress instance via [`@wordpress/env`](https://www.npmjs.com/package/@wordpress/env). The tests instance runs on port `8889` and uses `admin` / `password` credentials. The development instance runs on `8888`; only `8889` is used by the E2E suite.
 
 For the _headless_ mode, use the following command:
 
@@ -41,13 +40,13 @@ npm run test:e2e:playwright:debug
 > [!NOTE]
 > When writing a test, using the debug mode is recommended since it will allow you to see the browser and the test in action.
 
-For database connection, the credentials are:
+### Running wp-cli against the test instance
 
-- Host: `localhost` or `127.0.0.1`
-- Database: `wordpress`
-- User: `admin`
-- Password: `password`
-- Port: `3306`
+Use the `tests-cli` service to run commands against the WordPress instance the tests use:
+
+```bash
+npx wp-env run tests-cli wp plugin list
+```
 
 ### Build requirements
 
@@ -57,12 +56,9 @@ If you change any sources under `classes/Visualizer/**/src`, run the matching bu
 - `npm run chartbuilder:build`
 - `npm run d3renderer:build`
 
-### Docker file
+### Environment configuration
 
-The E2E environment uses `docker-compose.ci.yml` (via `npm run env:up`).
-
-> [!NOTE]
-> You can modify the credentials in the `docker-compose.yml` file.
+The E2E environment is defined in `.wp-env.json` at the repository root. It installs `classic-editor` and `elementor`, activates `twentytwentyone`, and sets `TI_E2E_TESTING=true` so the plugin loads its E2E-specific hooks.
 
 ### Learn more about E2E testing
 
