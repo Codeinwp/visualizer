@@ -183,7 +183,8 @@ body {
 	padding: 0 10px;
 	gap: 6px;
 }
-.visualizer-chart-action.visualizer-chart-edit .dashicons {
+.visualizer-chart-action.visualizer-chart-edit .dashicons,
+.visualizer-chart-action.visualizer-nochart-edit .dashicons {
 	margin-right: 0;
 	line-height: 1;
 }
