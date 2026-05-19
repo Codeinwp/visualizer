@@ -1,3 +1,9 @@
+##### [Version 4.0.2](https://github.com/Codeinwp/visualizer/compare/v4.0.1...v4.0.2) (2026-05-19)
+
+- Fixed broken candlestick chart
+- Updated dependencies
+- Enhanced security
+
 ##### [Version 4.0.1](https://github.com/Codeinwp/visualizer/compare/v4.0.0...v4.0.1) (2026-03-31)
 
 - Internal update to ensure compatibility and improve system consistency.
