@@ -185,6 +185,7 @@ body {
 }
 .visualizer-chart-action.visualizer-chart-edit .dashicons {
 	margin-right: 0;
+	line-height: 1;
 }
 .visualizer-chart-action.visualizer-chart-edit .tooltip-text {
 	display: none;
@@ -1013,4 +1014,10 @@ span.viz-view-toggle-group {
 .viz-add-new-item:focus {
 	background: #f6f7f7;
 	outline: none;
+}
+
+@media screen and (max-width: 782px) {
+	.viz-add-new-toggle {
+		min-height: 40px;
+	}
 }
