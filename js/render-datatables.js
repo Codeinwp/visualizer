@@ -24,6 +24,11 @@
         if(chart.library !== 'datatables'){
             return;
         }
+
+        // Bail if the chart is already rendered or is being rendered.
+        if ( ! window.isResizeRequest && ( $('#' + id).hasClass('visualizer-chart-loaded') || ( 'canvas' !== id && $('#' + id).children( ':not(.loader, style)' ).length > 0 ) ) ) {
+            return;
+        }
         rendered_charts[id] = 'yes';
 
         series = chart.series;
@@ -68,7 +73,7 @@
                         delete chart.settings['scrollY'];
                         delete chart.settings['scrollY_int'];
                         $.extend( settings, {
-                            scrollX: 150,
+                            scrollX: '100%',
                             scrollY: (( chart.settings['responsive_bool'] === 'true' ? 0.8 : 0.5 ) * parseInt($(container).css('height').replace('px',''))),
                             scrollCollapse: true
                         } );
@@ -78,7 +83,7 @@
                         }
                         delete chart.settings['scrollX'];
                         $.extend( settings, {
-                            scrollX: 150,
+                            scrollX: '100%',
                             scrollY: 180,
                         } );
                     }
