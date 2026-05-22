@@ -435,6 +435,8 @@ input:checked + .visualizer-slider:before {
 
 div.visualizer-library-form .viz-filter {
 	vertical-align: middle;
+	min-height: 30px;
+	line-height: 1;
 }
 
 button.media-modal-close {
@@ -941,6 +943,8 @@ span.viz-view-toggle-group {
 	margin-right: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
+	min-height: 30px;
+	line-height: 2.15384615;
 }
 
 .viz-add-new-toggle {
@@ -1019,6 +1023,12 @@ span.viz-view-toggle-group {
 
 @media screen and (max-width: 782px) {
 	.viz-add-new-toggle {
-		min-height: 40px;
+		min-height: 33px;
 	}
+}
+
+.toplevel_page_visualizer .button,
+.toplevel_page_visualizer button {
+	min-height: 30px;
+	line-height: 2.15384615;
 }
