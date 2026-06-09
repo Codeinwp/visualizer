@@ -1,3 +1,7 @@
+##### [Version 4.0.3](https://github.com/Codeinwp/visualizer/compare/v4.0.2...v4.0.3) (2026-06-09)
+
+- Improved layout compatibility with WP 7.0
+
 ##### [Version 4.0.2](https://github.com/Codeinwp/visualizer/compare/v4.0.1...v4.0.2) (2026-05-19)
 
 - Fixed broken candlestick chart
