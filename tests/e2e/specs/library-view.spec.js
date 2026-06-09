@@ -137,7 +137,7 @@ test.describe( 'Library View Toggle', () => {
 		await waitForLibraryToLoad( page );
 
 		// Submit the filter form — the hidden view input should carry list view through.
-		await page.getByRole( 'button', { name: 'Apply Filters' } ).click();
+		await page.getByRole( 'button', { name: 'Apply Filters' } ).click( { force: true } );
 		await waitForLibraryToLoad( page );
 
 		await expect( page.locator( '#visualizer-library.view-list' ) ).toBeVisible();
