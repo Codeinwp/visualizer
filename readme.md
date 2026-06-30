@@ -245,6 +245,13 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 
 ## Changelog ##
 
+##### [Version 4.0.4](https://github.com/Codeinwp/visualizer/compare/v4.0.3...v4.0.4) (2026-06-30)
+
+- Enhanced security
+
+
+
+
 ##### [Version 4.0.3](https://github.com/Codeinwp/visualizer/compare/v4.0.2...v4.0.3) (2026-06-09)
 
 - Improved layout compatibility with WP 7.0
