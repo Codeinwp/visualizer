@@ -153,14 +153,25 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					),
 				),
 				'permission_callback' => function ( WP_REST_Request $request ) {
-					$chart_id   = filter_var( sanitize_text_field( $request->get_param( 'chart' ), FILTER_VALIDATE_INT ) );
-					if ( ! empty( $chart_id ) && in_array( $request->get_param( 'type' ), array( 'save', 'cancel' ), true ) ) {
-						// let save and cancel go without any check as past version of pro
-						// did not send the X-WP-Nonce
-						// we can change this at a later date.
-						return true;
+					$chart_id = absint( $request->get_param( 'chart' ) );
+					if ( ! $chart_id ) {
+						return false;
 					}
-					return ! empty( $chart_id ) && apply_filters( 'visualizer_pro_show_chart', true, $chart_id );
+
+					$chart = get_post( $chart_id );
+					if ( ! $chart || Visualizer_Plugin::CPT_VISUALIZER !== $chart->post_type ) {
+						return false;
+					}
+
+					if ( in_array( $request->get_param( 'type' ), array( 'save', 'cancel' ), true ) ) {
+						return current_user_can( 'edit_post', $chart_id );
+					}
+
+					if ( 'publish' !== $chart->post_status ) {
+						return current_user_can( 'edit_post', $chart_id );
+					}
+
+					return apply_filters( 'visualizer_pro_show_chart', true, $chart_id );
 				},
 				'callback' => array( $this, 'perform_action' ),
 			)
