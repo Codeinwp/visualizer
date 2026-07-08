@@ -24,7 +24,8 @@ test.describe( 'Lazy rendered charts (frontend)', () => {
 	} );
 
 	async function createChartOnPost( admin, page, requestUtils ) {
-		// New charts have lazy rendering enabled by default.
+		// Lazy rendering is forced on by tests/e2e/config/force-lazy-render.php
+		// (mapped as an mu-plugin in .wp-env.json).
 		const chartId = await createChartWithAdmin( admin, page );
 
 		const post = await requestUtils.createPost( {
