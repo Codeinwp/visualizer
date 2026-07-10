@@ -12,6 +12,15 @@ const {
 	selectChartAdmin,
 } = require( '../utils/common' );
 
+async function setQuery( chartEditor, query ) {
+	await chartEditor
+		.locator( '#visualizer-db-query .CodeMirror' )
+		.evaluate(
+			( editor, sql ) => editor.CodeMirror.setValue( sql ),
+			query
+		);
+}
+
 async function showQueryResults( page, chartEditor, expectedValue ) {
 	const [ response ] = await Promise.all( [
 		page.waitForResponse( ( candidate ) => {
@@ -61,14 +70,15 @@ test.describe( 'Database source', () => {
 		context,
 		page,
 		requestUtils,
-	}, testInfo ) => {
+	} ) => {
 		test.setTimeout( 180000 );
 
+		await page.goto( '/' );
 		await context.addCookies( [
 			{
 				name: 'visualizer_e2e_database_source',
 				value: '1',
-				url: testInfo.project.use.baseURL || 'http://localhost:8889',
+				url: page.url(),
 			},
 		] );
 
@@ -107,12 +117,7 @@ test.describe( 'Database source', () => {
 			.evaluate( ( button ) => button.click() );
 
 		const query = `SELECT post_title AS value FROM wp_posts WHERE ID = ${ sourcePost.id }`;
-		await chartEditor
-			.locator( '.CodeMirror' )
-			.evaluate(
-				( editor, sql ) => editor.CodeMirror.setValue( sql ),
-				query
-			);
+		await setQuery( chartEditor, query );
 
 		await showQueryResults( page, chartEditor, 'ISSUE_1329_OLD' );
 
@@ -177,6 +182,30 @@ test.describe( 'Database source', () => {
 		await page.mouse.wheel( 0, 500 );
 		await expect(
 			page.getByRole( 'cell', { name: 'ISSUE_1329_NEW' } )
+		).toBeVisible();
+
+		await admin.visitAdminPage( 'admin.php?page=visualizer' );
+		await page
+			.locator( `.visualizer-chart-edit[data-chart="${ chartId }"]` )
+			.click();
+		await chartEditor
+			.locator( '#db-chart-button' )
+			.evaluate( ( button ) => button.click() );
+		await setQuery(
+			chartEditor,
+			'SELECT visualizer_missing_column FROM wp_posts'
+		);
+
+		const errorDialogPromise = page.waitForEvent( 'dialog' );
+		await chartEditor.getByRole( 'button', { name: 'Save Chart' } ).click();
+		const errorDialog = await errorDialogPromise;
+		await errorDialog.dismiss();
+
+		await expect(
+			chartEditor.locator( '#visualizer-db-query' )
+		).toBeVisible();
+		await expect(
+			page.getByRole( 'dialog', { name: 'Visualizer' } )
 		).toBeVisible();
 	} );
 } );

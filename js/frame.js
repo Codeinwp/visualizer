@@ -479,19 +479,33 @@
 
         init_db_import_component();
 
-        $( '#settings-button' ).on( 'click', function( event ){
-            $('body').trigger('visualizer:db:query:update', {});
-            if( $( '#db-chart-button' ).attr( 'data-current' ) !== 'filter' || $( '.visualizer-db-query' ).val().length === 0 ){
-                return;
-            }
+        var settings_button = document.querySelector( '#settings-button' );
+        if ( settings_button ) {
+            settings_button.addEventListener( 'click', function( event ){
+                $('body').trigger('visualizer:db:query:update', {});
+                if( $( '#db-chart-button' ).attr( 'data-current' ) !== 'filter' || $( '.visualizer-db-query' ).val().length === 0 ){
+                    return;
+                }
 
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            $( '#thehole' ).one( 'load', function(){
-                $( '#settings-button' ).trigger( 'click' );
-            } );
-            $( '#db-chart-button' ).trigger( 'click' );
-        } );
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                var query_saved = false;
+                var resume_save = function(){
+                    query_saved = true;
+                    settings_button.click();
+                };
+
+                $('body').one( 'visualizer:render:currentchart:update', resume_save );
+                $( '#thehole' ).one( 'load', function(){
+                    $('body').off( 'visualizer:render:currentchart:update', resume_save );
+                    if ( ! query_saved ) {
+                        $( '#db-chart-button' ).trigger( 'click' );
+                    }
+                } );
+                $( '#db-chart-button' ).trigger( 'click' );
+            }, true );
+        }
 
         $('#visualizer-query-fetch').on('click', function(e){
 
