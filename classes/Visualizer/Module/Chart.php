@@ -170,6 +170,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function getJsonRoots() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION, 'security' );
 
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'You do not have permission to perform this action.', 'visualizer' ) ) );
+		}
+
 		$params     = wp_parse_args( $_POST['params'] );
 
 		$source = new Visualizer_Source_Json( $params );
@@ -191,6 +195,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function getJsonData() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION, 'security' );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'You do not have permission to perform this action.', 'visualizer' ) ) );
+		}
 
 		$params = wp_parse_args( $_POST['params'] );
 

@@ -468,7 +468,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		}
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Connecting to %s with args = %s ', $url, print_r( $args, true ) ), 'debug', __FILE__, __LINE__ );
-		return wp_remote_request( $url, $args );
+		return wp_safe_remote_request( $url, $args );
 	}
 
 	/**
