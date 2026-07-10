@@ -1,3 +1,7 @@
+##### [Version 4.0.5](https://github.com/Codeinwp/visualizer/compare/v4.0.4...v4.0.5) (2026-07-10)
+
+- Enhanced security
+
 ##### [Version 4.0.4](https://github.com/Codeinwp/visualizer/compare/v4.0.3...v4.0.4) (2026-06-30)
 
 - Enhanced security
