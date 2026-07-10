@@ -331,6 +331,112 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * JSON get-roots must be denied for users without `edit_posts` (issue #591 access-control fix).
+	 */
+	public function test_json_get_roots_denied_for_subscriber() {
+		wp_set_current_user( $this->subscriber_user_id );
+		$this->_setRole( 'subscriber' );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'url'    => 'http://127.0.0.1:9999/latest/meta-data/',
+			'method' => 'GET',
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_GET_ROOTS );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertFalse( $response->success );
+		$this->assertEquals( 'You do not have permission to perform this action.', $response->data->msg );
+	}
+
+	/**
+	 * JSON get-data must be denied for users without `edit_posts` (issue #591 access-control fix).
+	 */
+	public function test_json_get_data_denied_for_subscriber() {
+		wp_set_current_user( $this->subscriber_user_id );
+		$this->_setRole( 'subscriber' );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'url'    => 'http://127.0.0.1:9999/',
+			'method' => 'GET',
+			'chart'  => 1,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_GET_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertFalse( $response->success );
+		$this->assertEquals( 'You do not have permission to perform this action.', $response->data->msg );
+	}
+
+	/**
+	 * A permitted user (contributor) is not blocked by the guard, and the JSON source fetches through the
+	 * SSRF-safe transport (`reject_unsafe_urls`), matching the CSV path (issue #591 SSRF fix).
+	 */
+	public function test_json_get_roots_allowed_for_contributor_uses_safe_transport() {
+		wp_set_current_user( $this->contibutor_user_id );
+		$this->_setRole( 'contributor' );
+
+		$captured = array();
+		add_filter(
+			'pre_http_request',
+			function ( $pre, $args, $url ) use ( &$captured ) {
+				$captured[] = array(
+					'url'    => $url,
+					'reject' => ! empty( $args['reject_unsafe_urls'] ),
+				);
+				return array(
+					'headers'  => array(),
+					'body'     => wp_json_encode( array( 'results' => array( array( 'id' => 1 ) ) ) ),
+					'response' => array(
+						'code'    => 200,
+						'message' => 'OK',
+					),
+					'cookies'  => array(),
+					'filename' => null,
+				);
+			},
+			10,
+			3
+		);
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'url'    => 'http://127.0.0.1:9999/latest/meta-data/',
+			'method' => 'GET',
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_GET_ROOTS );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		// The capability guard must NOT block a user who has edit_posts.
+		$msg = isset( $response->data->msg ) ? $response->data->msg : '';
+		$this->assertNotEquals( 'You do not have permission to perform this action.', $msg );
+		// Every outbound request for the JSON source must use the SSRF-safe transport.
+		$this->assertNotEmpty( $captured, 'The JSON source did not attempt any fetch.' );
+		foreach ( $captured as $req ) {
+			$this->assertTrue( $req['reject'], 'JSON fetch must use wp_safe_remote_* (reject_unsafe_urls => true).' );
+		}
+	}
+
+	/**
 	 * Utility method to mock pro version.
 	 */
 	private function enable_pro() {
