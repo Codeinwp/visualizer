@@ -5,6 +5,9 @@
     "."
   ],
   "themes": [],
+  "mappings": {
+    "wp-content/mu-plugins/visualizer-e2e-enable-database-source.php": "./tests/e2e/config/enable-database-source.php"
+  },
   "config": {
     "WP_DEBUG": true,
     "WP_DEBUG_LOG": true,

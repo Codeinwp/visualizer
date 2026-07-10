@@ -479,6 +479,20 @@
 
         init_db_import_component();
 
+        $( '#settings-button' ).on( 'click', function( event ){
+            $('body').trigger('visualizer:db:query:update', {});
+            if( $( '#db-chart-button' ).attr( 'data-current' ) !== 'filter' || $( '.visualizer-db-query' ).val().length === 0 ){
+                return;
+            }
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            $( '#thehole' ).one( 'load', function(){
+                $( '#settings-button' ).trigger( 'click' );
+            } );
+            $( '#db-chart-button' ).trigger( 'click' );
+        } );
+
         $('#visualizer-query-fetch').on('click', function(e){
 
             $('body').trigger('visualizer:db:query:update', {});
