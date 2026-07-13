@@ -10,7 +10,8 @@
  */
 class Visualizer_Remote_Fetch {
 
-	const MAX_REDIRECTS = 5;
+	const MAX_DOWNLOAD_BYTES = 10485760;
+	const MAX_REDIRECTS      = 5;
 
 	/**
 	 * Performs a request after validating every destination.
@@ -37,7 +38,8 @@ class Visualizer_Remote_Fetch {
 		}
 
 		for ( $redirect = 0; $redirect <= $redirects; $redirect++ ) {
-			$validated_url = self::validate_url( $url );
+			$ips           = array();
+			$validated_url = self::validate_url( $url, $ips );
 			if ( is_wp_error( $validated_url ) ) {
 				return $validated_url;
 			}
@@ -45,7 +47,12 @@ class Visualizer_Remote_Fetch {
 			$request_args                       = $args;
 			$request_args['redirection']        = 0;
 			$request_args['reject_unsafe_urls'] = true;
-			$response                           = wp_safe_remote_request( $validated_url, $request_args );
+
+			$pin      = self::pin_validated_addresses( $validated_url, $ips );
+			$response = wp_safe_remote_request( $validated_url, $request_args );
+			if ( $pin ) {
+				remove_action( 'http_api_curl', $pin );
+			}
 			if ( is_wp_error( $response ) ) {
 				return $response;
 			}
@@ -63,6 +70,7 @@ class Visualizer_Remote_Fetch {
 			$next_url = WP_Http::make_absolute_url( $location, $validated_url );
 			if ( ! self::same_origin( $validated_url, $next_url ) ) {
 				$args['headers'] = self::headers_for_cross_origin_redirect( isset( $args['headers'] ) ? $args['headers'] : array() );
+				unset( $args['cookies'] );
 			}
 
 			if ( 303 === $status || ( in_array( $status, array( 301, 302 ), true ) && 'POST' === $args['method'] ) ) {
@@ -93,9 +101,10 @@ class Visualizer_Remote_Fetch {
 			return new WP_Error( 'visualizer_temp_file', 'Could not create a temporary file.' );
 		}
 
-		$args['stream']   = true;
-		$args['filename'] = $tmpfile;
-		$response         = self::request( $url, $args );
+		$args['stream']              = true;
+		$args['filename']            = $tmpfile;
+		$args['limit_response_size'] = self::MAX_DOWNLOAD_BYTES;
+		$response                    = self::request( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
 			wp_delete_file( $tmpfile );
@@ -105,6 +114,13 @@ class Visualizer_Remote_Fetch {
 		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
 			wp_delete_file( $tmpfile );
 			return new WP_Error( 'visualizer_remote_status', 'The remote server returned an unexpected response.' );
+		}
+
+		// The transport truncates silently at the limit, so a file that reached it cannot be trusted.
+		clearstatcache( true, $tmpfile );
+		if ( filesize( $tmpfile ) >= self::MAX_DOWNLOAD_BYTES ) {
+			wp_delete_file( $tmpfile );
+			return new WP_Error( 'visualizer_remote_size', 'The remote file is too large to import.' );
 		}
 
 		return $tmpfile;
@@ -135,12 +151,41 @@ class Visualizer_Remote_Fetch {
 	}
 
 	/**
+	 * Binds the cURL transport to the addresses that passed validation.
+	 *
+	 * Without this the transport re-resolves the host on connect, letting a
+	 * rebinding nameserver answer with a private address after validation
+	 * passed. Covers the default cURL transport; the PHP streams fallback
+	 * keeps core's standard re-resolve behavior.
+	 *
+	 * @param string   $url Validated URL.
+	 * @param string[] $ips Validated addresses.
+	 * @return callable|null The registered hook to remove after dispatch, or null when there is nothing to pin.
+	 */
+	private static function pin_validated_addresses( $url, $ips ) {
+		if ( empty( $ips ) || ! defined( 'CURLOPT_RESOLVE' ) ) {
+			return null;
+		}
+
+		$parsed = wp_parse_url( $url );
+		$entry  = sprintf( '%s:%d:%s', strtolower( rtrim( $parsed['host'], '.' ) ), self::url_port( $parsed ), implode( ',', $ips ) );
+		$pin    = function ( $handle ) use ( $entry ) {
+			curl_setopt( $handle, CURLOPT_RESOLVE, array( $entry ) );
+		};
+		add_action( 'http_api_curl', $pin );
+
+		return $pin;
+	}
+
+	/**
 	 * Validates URL syntax and every address returned by DNS.
 	 *
-	 * @param string $url Remote URL.
+	 * @param string   $url Remote URL.
+	 * @param string[] $ips Filled with the validated addresses; stays empty when the host is exempt from the check.
 	 * @return string|WP_Error
 	 */
-	private static function validate_url( $url ) {
+	private static function validate_url( $url, &$ips = array() ) {
+		$ips           = array();
 		$validated_url = wp_http_validate_url( $url );
 		if ( false === $validated_url ) {
 			return new WP_Error( 'visualizer_invalid_remote_url', 'The remote URL is not allowed.' );

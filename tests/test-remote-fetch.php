@@ -119,6 +119,51 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Cookies must not follow a redirect to another origin.
+	 */
+	public function test_drops_cookies_on_cross_origin_redirect() {
+		$requests = array();
+		$filter   = function ( $preempt, $args, $url ) use ( &$requests ) {
+			$requests[] = array( $url, $args['cookies'] );
+			if ( 1 === count( $requests ) ) {
+				return $this->response( 302, array( 'location' => 'http://93.184.216.35/data' ) );
+			}
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 3 );
+
+		$response = Visualizer_Remote_Fetch::request(
+			'http://93.184.216.34/start',
+			array( 'cookies' => array( 'session' => 'secret' ) )
+		);
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $response );
+		$this->assertCount( 2, $requests );
+		$this->assertNotEmpty( $requests[0][1] );
+		$this->assertSame( array(), $requests[1][1] );
+	}
+
+	/**
+	 * The validated addresses are pinned on the cURL transport only while the request dispatches.
+	 */
+	public function test_pins_validated_addresses_during_dispatch() {
+		$pinned_during = null;
+		$filter        = function () use ( &$pinned_during ) {
+			$pinned_during = has_action( 'http_api_curl' );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/data.json' );
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertNotWPError( $response );
+		$this->assertTrue( $pinned_during );
+		$this->assertFalse( has_action( 'http_api_curl' ) );
+	}
+
+	/**
 	 * Header and method policy is applied before dispatch.
 	 */
 	public function test_rejects_unsupported_method_before_request() {
@@ -141,7 +186,14 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	 * URLs on the site's own host skip the public-address check, matching core.
 	 */
 	public function test_allows_same_host_destination_without_dns_check() {
-		update_option( 'home', 'http://visualizer.internal' );
+		// A filter beats the WP_HOME constant pinned by some test configs (e.g. wp-env), which makes update_option() a no-op.
+		add_filter(
+			'option_home',
+			function () {
+				return 'http://visualizer.internal';
+			},
+			100
+		);
 
 		$requests = 0;
 		$filter   = function ( $preempt ) use ( &$requests ) {
@@ -240,6 +292,28 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		remove_filter( 'pre_http_request', $filter, 10 );
 		$this->assertWPError( $response );
 		$this->assertSame( 'visualizer_remote_status', $response->get_error_code() );
+		$this->assertNotEmpty( $tmpfile );
+		$this->assertFileDoesNotExist( $tmpfile );
+	}
+
+	/**
+	 * Downloads are size-capped during transfer and possibly-truncated files are rejected.
+	 */
+	public function test_download_rejects_file_at_size_limit() {
+		$tmpfile = null;
+		$filter  = function ( $preempt, $args ) use ( &$tmpfile ) {
+			$this->assertSame( Visualizer_Remote_Fetch::MAX_DOWNLOAD_BYTES, $args['limit_response_size'] );
+			$tmpfile = $args['filename'];
+			file_put_contents( $tmpfile, str_repeat( 'a', Visualizer_Remote_Fetch::MAX_DOWNLOAD_BYTES ) );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::download( 'http://93.184.216.34/data.csv' );
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertWPError( $response );
+		$this->assertSame( 'visualizer_remote_size', $response->get_error_code() );
 		$this->assertNotEmpty( $tmpfile );
 		$this->assertFileDoesNotExist( $tmpfile );
 	}
