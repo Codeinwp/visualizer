@@ -88,6 +88,8 @@ class Visualizer_Remote_Fetch {
 	 * @return string|WP_Error
 	 */
 	public static function download( $url, $args = array() ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
 		$tmpfile = wp_tempnam( (string) wp_parse_url( $url, PHP_URL_PATH ) );
 		if ( ! $tmpfile ) {
 			return new WP_Error( 'visualizer_temp_file', __( 'Could not create a temporary file.', 'visualizer' ) );
