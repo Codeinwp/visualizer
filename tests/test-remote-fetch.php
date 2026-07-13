@@ -44,6 +44,8 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 			'carrier-grade'  => array( 'http://100.64.0.1/' ),
 			'documentation'  => array( 'http://192.0.2.1/' ),
 			'multicast'      => array( 'http://224.0.0.1/' ),
+			'blocked-port'   => array( 'http://93.184.216.34:8443/' ),
+			'ipv4-mapped'    => array( 'http://[::ffff:169.254.169.254]/' ),
 		);
 	}
 
@@ -54,11 +56,12 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		$filter = function ( $preempt, $args, $url ) {
 			$this->assertSame( 'http://93.184.216.34/data.json', $url );
 			$this->assertTrue( $args['reject_unsafe_urls'] );
+			$this->assertSame( Visualizer_Remote_Fetch::MAX_RESPONSE_SIZE, $args['limit_response_size'] );
 			return $this->response( 200, array(), '{"ok":true}' );
 		};
 		add_filter( 'pre_http_request', $filter, 10, 3 );
 
-		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/data.json' );
+		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/data.json', array( 'limit_response_size' => PHP_INT_MAX ) );
 
 		remove_filter( 'pre_http_request', $filter, 10 );
 		$this->assertNotWPError( $response );
@@ -131,6 +134,111 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		remove_filter( 'pre_http_request', $filter );
 		$this->assertWPError( $response );
 		$this->assertSame( 'visualizer_remote_method', $response->get_error_code() );
+		$this->assertSame( 0, $requests );
+	}
+
+	/**
+	 * A same-origin redirect (relative Location) keeps request headers and resolves the target URL.
+	 */
+	public function test_same_origin_redirect_keeps_headers_and_resolves_relative_location() {
+		$requests = array();
+		$filter   = function ( $preempt, $args, $url ) use ( &$requests ) {
+			$requests[] = array( $url, $args['headers'] );
+			if ( 1 === count( $requests ) ) {
+				return $this->response( 302, array( 'location' => '/next' ) );
+			}
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 3 );
+
+		$headers  = array(
+			'Accept'        => 'application/json',
+			'Authorization' => 'Bearer secret',
+		);
+		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/start', array( 'headers' => $headers ) );
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $response );
+		$this->assertCount( 2, $requests );
+		$this->assertSame( 'http://93.184.216.34/next', $requests[1][0] );
+		$this->assertSame( $headers, $requests[1][1] );
+	}
+
+	/**
+	 * The redirect chain must stop after MAX_REDIRECTS hops.
+	 */
+	public function test_stops_after_max_redirects() {
+		$requests = 0;
+		$filter   = function () use ( &$requests ) {
+			$requests++;
+			return $this->response( 302, array( 'location' => 'http://93.184.216.34/hop' . $requests ) );
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/start' );
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertWPError( $response );
+		$this->assertSame( 'visualizer_too_many_redirects', $response->get_error_code() );
+		$this->assertSame( Visualizer_Remote_Fetch::MAX_REDIRECTS + 1, $requests );
+	}
+
+	/**
+	 * A successful download streams to a temporary file and returns its path.
+	 */
+	public function test_download_returns_temp_file_with_body() {
+		$filter = function ( $preempt, $args ) {
+			$this->assertTrue( $args['stream'] );
+			$this->assertNotEmpty( $args['filename'] );
+			file_put_contents( $args['filename'], 'col1,col2' );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$tmpfile = Visualizer_Remote_Fetch::download( 'http://93.184.216.34/data.csv' );
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $tmpfile );
+		$this->assertSame( 'col1,col2', file_get_contents( $tmpfile ) );
+		wp_delete_file( $tmpfile );
+	}
+
+	/**
+	 * A failed download must not leave the temporary file behind.
+	 */
+	public function test_download_removes_temp_file_on_error_status() {
+		$tmpfile = null;
+		$filter  = function ( $preempt, $args ) use ( &$tmpfile ) {
+			$tmpfile = $args['filename'];
+			file_put_contents( $tmpfile, 'not found' );
+			return $this->response( 404 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::download( 'http://93.184.216.34/data.csv' );
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertWPError( $response );
+		$this->assertSame( 'visualizer_remote_status', $response->get_error_code() );
+		$this->assertNotEmpty( $tmpfile );
+		$this->assertFileDoesNotExist( $tmpfile );
+	}
+
+	/**
+	 * Downloads enforce the same destination policy as plain requests.
+	 */
+	public function test_download_blocks_non_public_destination() {
+		$requests = 0;
+		$filter   = function ( $preempt ) use ( &$requests ) {
+			$requests++;
+			return $preempt;
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		$response = Visualizer_Remote_Fetch::download( 'http://169.254.169.254/latest/meta-data/' );
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertWPError( $response );
 		$this->assertSame( 0, $requests );
 	}
 
