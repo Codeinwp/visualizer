@@ -1060,11 +1060,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$response = Visualizer_Remote_Fetch::request(
 			$url,
 			array(
-				'timeout'    => 10,
-				'user-agent' => 'WordPress/' . get_bloginfo( 'version' ),
-				'headers'    => array( 'Range' => 'bytes=0-3' ),
-				'stream'     => true,
-				'filename'   => $tmpfile,
+				'timeout'             => 10,
+				'user-agent'          => 'WordPress/' . get_bloginfo( 'version' ),
+				'headers'             => array( 'Range' => 'bytes=0-3' ),
+				'stream'              => true,
+				'filename'            => $tmpfile,
+				'limit_response_size' => 4,
 			)
 		);
 

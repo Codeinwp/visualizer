@@ -93,9 +93,15 @@ class Visualizer_Source_Xlsx_Remote extends Visualizer_Source_Xlsx {
 			return $this->_tmpfile;
 		}
 
-		$tmpfile = Visualizer_Remote_Fetch::download( $this->_filename );
+		$max_bytes = (int) apply_filters( 'visualizer_xlsx_max_filesize', 10 * 1024 * 1024 );
+		$tmpfile   = Visualizer_Remote_Fetch::download(
+			$this->_filename,
+			array( 'limit_response_size' => $max_bytes )
+		);
 		if ( is_wp_error( $tmpfile ) ) {
-			$this->_error   = esc_html__( 'Could not download the XLSX file. Please check the URL and try again.', 'visualizer' );
+			$this->_error = 'visualizer_remote_size' === $tmpfile->get_error_code()
+				? esc_html__( 'The XLSX file exceeds the maximum allowed size and cannot be imported.', 'visualizer' )
+				: esc_html__( 'Could not download the XLSX file. Please check the URL and try again.', 'visualizer' );
 			return false;
 		}
 		$this->_tmpfile = $tmpfile;
@@ -103,18 +109,6 @@ class Visualizer_Source_Xlsx_Remote extends Visualizer_Source_Xlsx {
 		if ( ! is_file( $this->_tmpfile ) ) {
 			$this->_tmpfile = false;
 			$this->_error   = esc_html__( 'Could not access the downloaded XLSX file. Please try again.', 'visualizer' );
-			return false;
-		}
-
-		// Maximum allowed file size in bytes. Default 10 MB; override via filter.
-		$max_bytes = (int) apply_filters( 'visualizer_xlsx_max_filesize', 10 * 1024 * 1024 );
-		if ( filesize( $this->_tmpfile ) > $max_bytes ) {
-			wp_delete_file( $this->_tmpfile );
-			$this->_tmpfile = false;
-			$this->_error   = esc_html__(
-				'The XLSX file exceeds the maximum allowed size and cannot be imported.',
-				'visualizer'
-			);
 			return false;
 		}
 

@@ -49,6 +49,9 @@ class Visualizer_Remote_Fetch {
 			$request_args['reject_unsafe_urls'] = true;
 
 			$pin      = self::pin_validated_addresses( $validated_url, $ips );
+			if ( is_wp_error( $pin ) ) {
+				return $pin;
+			}
 			$response = wp_safe_remote_request( $validated_url, $request_args );
 			if ( $pin ) {
 				remove_action( 'http_api_curl', $pin );
@@ -96,6 +99,11 @@ class Visualizer_Remote_Fetch {
 	public static function download( $url, $args = array() ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 
+		$max_bytes = isset( $args['limit_response_size'] ) ? (int) $args['limit_response_size'] : self::MAX_DOWNLOAD_BYTES;
+		if ( $max_bytes < 1 ) {
+			return new WP_Error( 'visualizer_remote_size', 'The remote file size limit is invalid.' );
+		}
+
 		$tmpfile = wp_tempnam( (string) wp_parse_url( $url, PHP_URL_PATH ) );
 		if ( ! $tmpfile ) {
 			return new WP_Error( 'visualizer_temp_file', 'Could not create a temporary file.' );
@@ -103,7 +111,7 @@ class Visualizer_Remote_Fetch {
 
 		$args['stream']              = true;
 		$args['filename']            = $tmpfile;
-		$args['limit_response_size'] = self::MAX_DOWNLOAD_BYTES;
+		$args['limit_response_size'] = $max_bytes < PHP_INT_MAX ? $max_bytes + 1 : $max_bytes;
 		$response                    = self::request( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
@@ -116,9 +124,9 @@ class Visualizer_Remote_Fetch {
 			return new WP_Error( 'visualizer_remote_status', 'The remote server returned an unexpected response.' );
 		}
 
-		// The transport truncates silently at the limit, so a file that reached it cannot be trusted.
+		// Download one extra byte so an exactly-at-limit file remains valid.
 		clearstatcache( true, $tmpfile );
-		if ( filesize( $tmpfile ) >= self::MAX_DOWNLOAD_BYTES ) {
+		if ( filesize( $tmpfile ) > $max_bytes ) {
 			wp_delete_file( $tmpfile );
 			return new WP_Error( 'visualizer_remote_size', 'The remote file is too large to import.' );
 		}
@@ -155,20 +163,44 @@ class Visualizer_Remote_Fetch {
 	 *
 	 * Without this the transport re-resolves the host on connect, letting a
 	 * rebinding nameserver answer with a private address after validation
-	 * passed. Covers the default cURL transport; the PHP streams fallback
-	 * keeps core's standard re-resolve behavior.
+	 * passed. Hostname requests fail closed when cURL pinning is unavailable.
 	 *
 	 * @param string   $url Validated URL.
 	 * @param string[] $ips Validated addresses.
-	 * @return callable|null The registered hook to remove after dispatch, or null when there is nothing to pin.
+	 * @return callable|WP_Error|null The registered hook to remove after dispatch, an error when pinning is unavailable, or null for an IP literal or exempt host.
 	 */
 	private static function pin_validated_addresses( $url, $ips ) {
-		if ( empty( $ips ) || ! defined( 'CURLOPT_RESOLVE' ) ) {
+		if ( empty( $ips ) ) {
 			return null;
 		}
 
 		$parsed = wp_parse_url( $url );
-		$entry  = sprintf( '%s:%d:%s', strtolower( rtrim( $parsed['host'], '.' ) ), self::url_port( $parsed ), implode( ',', $ips ) );
+		if ( filter_var( rtrim( $parsed['host'], '.' ), FILTER_VALIDATE_IP ) ) {
+			return null;
+		}
+
+		if ( ! function_exists( 'curl_init' ) || ! function_exists( 'curl_exec' ) || ! defined( 'CURLOPT_RESOLVE' ) ) {
+			return new WP_Error( 'visualizer_remote_transport', 'The remote host cannot be fetched securely on this server.' );
+		}
+
+		if ( 'https' === strtolower( $parsed['scheme'] ) ) {
+			$curl = curl_version();
+			if ( empty( $curl['features'] ) || ! defined( 'CURL_VERSION_SSL' ) || ! ( $curl['features'] & CURL_VERSION_SSL ) ) {
+				return new WP_Error( 'visualizer_remote_transport', 'The remote host cannot be fetched securely on this server.' );
+			}
+		}
+
+		$proxy = new WP_HTTP_Proxy();
+		if ( $proxy->is_enabled() && $proxy->send_through_proxy( $url ) ) {
+			return new WP_Error( 'visualizer_remote_transport', 'The remote host cannot be fetched securely through the configured proxy.' );
+		}
+
+		$addresses = array();
+		foreach ( $ips as $ip ) {
+			$addresses[] = filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ? '[' . $ip . ']' : $ip;
+		}
+
+		$entry  = sprintf( '%s:%d:%s', strtolower( rtrim( $parsed['host'], '.' ) ), self::url_port( $parsed ), implode( ',', $addresses ) );
 		$pin    = function ( $handle ) use ( $entry ) {
 			curl_setopt( $handle, CURLOPT_RESOLVE, array( $entry ) );
 		};

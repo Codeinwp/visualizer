@@ -155,12 +155,33 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		};
 		add_filter( 'pre_http_request', $filter );
 
-		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/data.json' );
+		$response = Visualizer_Remote_Fetch::request( 'http://example.com/data.json' );
 
 		remove_filter( 'pre_http_request', $filter );
 		$this->assertNotWPError( $response );
 		$this->assertTrue( $pinned_during );
 		$this->assertFalse( has_action( 'http_api_curl' ) );
+	}
+
+	/**
+	 * IPv6 addresses use cURL's bracketed CURLOPT_RESOLVE syntax.
+	 */
+	public function test_formats_ipv6_addresses_for_curl_resolve() {
+		$method = new ReflectionMethod( Visualizer_Remote_Fetch::class, 'pin_validated_addresses' );
+		$method->setAccessible( true );
+		$pin = $method->invoke(
+			null,
+			'https://example.com/data.json',
+			array( '93.184.216.34', '2606:2800:220:1:248:1893:25c8:1946' )
+		);
+
+		$this->assertIsCallable( $pin );
+		$reflection = new ReflectionFunction( $pin );
+		$this->assertSame(
+			'example.com:443:93.184.216.34,[2606:2800:220:1:248:1893:25c8:1946]',
+			$reflection->getStaticVariables()['entry']
+		);
+		remove_action( 'http_api_curl', $pin );
 	}
 
 	/**
@@ -299,12 +320,12 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	/**
 	 * Downloads are size-capped during transfer and possibly-truncated files are rejected.
 	 */
-	public function test_download_rejects_file_at_size_limit() {
+	public function test_download_rejects_file_over_size_limit() {
 		$tmpfile = null;
 		$filter  = function ( $preempt, $args ) use ( &$tmpfile ) {
-			$this->assertSame( Visualizer_Remote_Fetch::MAX_DOWNLOAD_BYTES, $args['limit_response_size'] );
+			$this->assertSame( Visualizer_Remote_Fetch::MAX_DOWNLOAD_BYTES + 1, $args['limit_response_size'] );
 			$tmpfile = $args['filename'];
-			file_put_contents( $tmpfile, str_repeat( 'a', Visualizer_Remote_Fetch::MAX_DOWNLOAD_BYTES ) );
+			file_put_contents( $tmpfile, str_repeat( 'a', Visualizer_Remote_Fetch::MAX_DOWNLOAD_BYTES + 1 ) );
 			return $this->response( 200 );
 		};
 		add_filter( 'pre_http_request', $filter, 10, 2 );
@@ -316,6 +337,115 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		$this->assertSame( 'visualizer_remote_size', $response->get_error_code() );
 		$this->assertNotEmpty( $tmpfile );
 		$this->assertFileDoesNotExist( $tmpfile );
+	}
+
+	/**
+	 * A complete file exactly at the configured limit remains valid.
+	 */
+	public function test_download_accepts_file_at_size_limit() {
+		$filter = function ( $preempt, $args ) {
+			$this->assertSame( 5, $args['limit_response_size'] );
+			file_put_contents( $args['filename'], '1234' );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$tmpfile = Visualizer_Remote_Fetch::download(
+			'http://93.184.216.34/data.csv',
+			array( 'limit_response_size' => 4 )
+		);
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $tmpfile );
+		$this->assertSame( '1234', file_get_contents( $tmpfile ) );
+		wp_delete_file( $tmpfile );
+	}
+
+	/**
+	 * Callers may provide a smaller or larger download limit.
+	 */
+	public function test_download_honors_custom_size_limit() {
+		$tmpfile = null;
+		$filter  = function ( $preempt, $args ) use ( &$tmpfile ) {
+			$this->assertSame( 5, $args['limit_response_size'] );
+			$tmpfile = $args['filename'];
+			file_put_contents( $tmpfile, '12345' );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::download(
+			'http://93.184.216.34/data.csv',
+			array( 'limit_response_size' => 4 )
+		);
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertWPError( $response );
+		$this->assertSame( 'visualizer_remote_size', $response->get_error_code() );
+		$this->assertNotEmpty( $tmpfile );
+		$this->assertFileDoesNotExist( $tmpfile );
+	}
+
+	/**
+	 * XLSX probes only need the four-byte ZIP magic number.
+	 *
+	 * @dataProvider xlsx_probe_callbacks
+	 * @param string $class Probe owner.
+	 */
+	public function test_xlsx_probes_limit_response_to_magic_bytes( $class ) {
+		$filter = function ( $preempt, $args ) {
+			$this->assertSame( 4, $args['limit_response_size'] );
+			file_put_contents( $args['filename'], "PK\x03\x04" );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$method = new ReflectionMethod( $class, '_url_is_xlsx' );
+		$method->setAccessible( true );
+		$result = $method->invoke( null, 'http://93.184.216.34/download' );
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertTrue( $result );
+	}
+
+	/**
+	 * XLSX probe owners.
+	 *
+	 * @return array[]
+	 */
+	public function xlsx_probe_callbacks() {
+		return array(
+			'classic'    => array( Visualizer_Module_Chart::class ),
+			'ai builder' => array( Visualizer_Module_AIBuilder::class ),
+		);
+	}
+
+	/**
+	 * The XLSX-specific filter controls the gateway download limit.
+	 */
+	public function test_xlsx_download_uses_filtered_size_limit() {
+		$max_bytes = 12 * 1024 * 1024;
+		$limit     = function () use ( $max_bytes ) {
+			return $max_bytes;
+		};
+		add_filter( 'visualizer_xlsx_max_filesize', $limit );
+
+		$filter = function ( $preempt, $args ) use ( $max_bytes ) {
+			$this->assertSame( $max_bytes + 1, $args['limit_response_size'] );
+			file_put_contents( $args['filename'], 'xlsx' );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$source = new Visualizer_Source_Xlsx_Remote( 'http://93.184.216.34/data.xlsx' );
+		$method = new ReflectionMethod( $source, '_get_file_path' );
+		$method->setAccessible( true );
+		$path = $method->invoke( $source );
+
+		remove_filter( 'visualizer_xlsx_max_filesize', $limit );
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertIsString( $path );
+		wp_delete_file( $path );
 	}
 
 	/**
