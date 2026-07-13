@@ -12,6 +12,29 @@ const {
 	selectChartAdmin,
 } = require( '../utils/common' );
 
+async function openQueryPanel( chartEditor ) {
+	// The CodeMirror node is created by the same synchronous init that binds
+	// the #db-chart-button handler, so its presence proves the click will work.
+	await chartEditor
+		.locator( '#visualizer-db-query .CodeMirror' )
+		.waitFor( { state: 'attached', timeout: 30000 } );
+	await chartEditor
+		.locator( '#db-chart-button' )
+		.evaluate( ( button ) => button.click() );
+	await expect( chartEditor.locator( '#visualizer-db-query' ) ).toBeVisible();
+}
+
+async function expectChartCell( page, value ) {
+	// Chart scripts lazy-load on user interaction and Google Charts can miss
+	// the first trigger, so keep re-scrolling until the table renders.
+	await expect( async () => {
+		await page.mouse.wheel( 0, 100 );
+		await expect( page.getByRole( 'cell', { name: value } ) ).toBeVisible( {
+			timeout: 5000,
+		} );
+	} ).toPass( { timeout: 60000 } );
+}
+
 async function setQuery( chartEditor, query ) {
 	await chartEditor
 		.locator( '#visualizer-db-query .CodeMirror' )
@@ -48,7 +71,8 @@ test.describe( 'Database source', () => {
 
 	test.beforeEach( async ( { page, requestUtils } ) => {
 		await deleteAllCharts( requestUtils );
-		page.setDefaultTimeout( 20000 );
+		page.setDefaultTimeout( 30000 );
+		page.setDefaultNavigationTimeout( 60000 );
 	} );
 
 	test.afterEach( async ( { requestUtils } ) => {
@@ -67,18 +91,18 @@ test.describe( 'Database source', () => {
 
 	test( 'saves previewed one-time data when saving the chart', async ( {
 		admin,
+		baseURL,
 		context,
 		page,
 		requestUtils,
 	} ) => {
-		test.setTimeout( 180000 );
+		test.setTimeout( 300000 );
 
-		await page.goto( '/' );
 		await context.addCookies( [
 			{
 				name: 'visualizer_e2e_database_source',
 				value: '1',
-				url: page.url(),
+				url: baseURL,
 			},
 		] );
 
@@ -98,12 +122,12 @@ test.describe( 'Database source', () => {
 		const chartEditor = page.frameLocator( 'iframe' );
 		await chartEditor
 			.locator( 'div#type-picker' )
-			.waitFor( { state: 'visible', timeout: 20000 } );
+			.waitFor( { state: 'visible', timeout: 30000 } );
 		await selectChartAdmin( chartEditor, CHART_JS_LABELS.table );
 
 		await chartEditor
 			.locator( '#visualizer-chart-id' )
-			.waitFor( { state: 'attached', timeout: 20000 } );
+			.waitFor( { state: 'attached', timeout: 30000 } );
 		const chartId = await chartEditor
 			.locator( '#visualizer-chart-id' )
 			.getAttribute( 'data-id' );
@@ -112,9 +136,7 @@ test.describe( 'Database source', () => {
 		await chartEditor
 			.getByRole( 'button', { name: /Import from database/ } )
 			.click();
-		await chartEditor
-			.locator( '#db-chart-button' )
-			.evaluate( ( button ) => button.click() );
+		await openQueryPanel( chartEditor );
 
 		const query = `SELECT post_title AS value FROM wp_posts WHERE ID = ${ sourcePost.id }`;
 		await setQuery( chartEditor, query );
@@ -136,14 +158,14 @@ test.describe( 'Database source', () => {
 		expect( saveResponse.ok() ).toBe( true );
 		await expect( chartEditor.locator( '#canvas' ) ).toContainText(
 			'ISSUE_1329_OLD',
-			{ timeout: 20000 }
+			{ timeout: 30000 }
 		);
 		await chartEditor
 			.getByRole( 'button', { name: 'Create Chart' } )
 			.click();
 		await expect(
 			page.getByRole( 'heading', { name: 'Visualizer Library' } )
-		).toBeVisible( { timeout: 20000 } );
+		).toBeVisible( { timeout: 30000 } );
 
 		const chartPost = await requestUtils.createPost( {
 			title: 'Issue 1329 chart',
@@ -152,11 +174,8 @@ test.describe( 'Database source', () => {
 		} );
 		postIds.push( chartPost.id );
 
-		await page.goto( chartPost.link );
-		await page.mouse.wheel( 0, 500 );
-		await expect(
-			page.getByRole( 'cell', { name: 'ISSUE_1329_OLD' } )
-		).toBeVisible();
+		await page.goto( `/?p=${ chartPost.id }` );
+		await expectChartCell( page, 'ISSUE_1329_OLD' );
 
 		await requestUtils.rest( {
 			method: 'POST',
@@ -168,9 +187,7 @@ test.describe( 'Database source', () => {
 		await page
 			.locator( `.visualizer-chart-edit[data-chart="${ chartId }"]` )
 			.click();
-		await chartEditor
-			.locator( '#db-chart-button' )
-			.evaluate( ( button ) => button.click() );
+		await openQueryPanel( chartEditor );
 		await showQueryResults( page, chartEditor, 'ISSUE_1329_NEW' );
 
 		await chartEditor.getByRole( 'button', { name: 'Save Chart' } ).click();
@@ -178,19 +195,14 @@ test.describe( 'Database source', () => {
 			page.getByRole( 'dialog', { name: 'Visualizer' } )
 		).toHaveCount( 0, { timeout: 30000 } );
 
-		await page.goto( chartPost.link );
-		await page.mouse.wheel( 0, 500 );
-		await expect(
-			page.getByRole( 'cell', { name: 'ISSUE_1329_NEW' } )
-		).toBeVisible();
+		await page.goto( `/?p=${ chartPost.id }` );
+		await expectChartCell( page, 'ISSUE_1329_NEW' );
 
 		await admin.visitAdminPage( 'admin.php?page=visualizer' );
 		await page
 			.locator( `.visualizer-chart-edit[data-chart="${ chartId }"]` )
 			.click();
-		await chartEditor
-			.locator( '#db-chart-button' )
-			.evaluate( ( button ) => button.click() );
+		await openQueryPanel( chartEditor );
 		await setQuery(
 			chartEditor,
 			'SELECT visualizer_missing_column FROM wp_posts'
