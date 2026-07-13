@@ -1222,12 +1222,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
 		// otherwise, assume this is a normal web request.
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
+		// $can_die also gates the capability checks below, so VISUALIZER_DO_NOT_DIE must stay internal-only (never set from request input or globally).
 
-		// validate nonce
+		// validate nonce; capability check applies to web requests only, not trusted internal calls.
 		if (
 			! isset( $_GET['nonce'] ) ||
 			! wp_verify_nonce( $_GET['nonce'], 'visualizer-upload-data' ) ||
-			! current_user_can( 'edit_posts' )
+			( $can_die && ! current_user_can( 'edit_posts' ) )
 		) {
 			if ( ! $can_die ) {
 				return;
@@ -1244,7 +1245,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			! $chart_id ||
 			! $chart ||
 			$chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ||
-			! current_user_can( 'edit_post', $chart_id )
+			( $can_die && ! current_user_can( 'edit_post', $chart_id ) )
 		) {
 			if ( ! $can_die ) {
 				return;
