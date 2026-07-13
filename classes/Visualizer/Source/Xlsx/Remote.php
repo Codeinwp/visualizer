@@ -86,41 +86,36 @@ class Visualizer_Source_Xlsx_Remote extends Visualizer_Source_Xlsx {
 	 * guarding against ZIP-bomb and DoS attacks.
 	 *
 	 * @access protected
-	 * @return string Path to the temporary file, or the original URL if download failed.
+	 * @return string|false Path to the temporary file, or false if download failed.
 	 */
 	protected function _get_file_path() {
-		if ( $this->_tmpfile && ! is_wp_error( $this->_tmpfile ) && is_readable( $this->_tmpfile ) ) {
+		if ( $this->_tmpfile && is_readable( $this->_tmpfile ) ) {
 			return $this->_tmpfile;
 		}
 
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-
-		$this->_tmpfile = download_url( $this->_filename );
-
-		if ( is_wp_error( $this->_tmpfile ) ) {
+		$tmpfile = Visualizer_Remote_Fetch::download( $this->_filename );
+		if ( is_wp_error( $tmpfile ) ) {
 			$this->_error   = esc_html__( 'Could not download the XLSX file. Please check the URL and try again.', 'visualizer' );
-			$this->_tmpfile = false;
-			// Return the original URL so the parent's open() call will fail
-			// gracefully and set an error rather than throwing a PHP error.
-			return $this->_filename;
+			return false;
 		}
+		$this->_tmpfile = $tmpfile;
 
 		if ( ! is_file( $this->_tmpfile ) ) {
 			$this->_tmpfile = false;
 			$this->_error   = esc_html__( 'Could not access the downloaded XLSX file. Please try again.', 'visualizer' );
-			return $this->_filename;
+			return false;
 		}
 
 		// Maximum allowed file size in bytes. Default 10 MB; override via filter.
 		$max_bytes = (int) apply_filters( 'visualizer_xlsx_max_filesize', 10 * 1024 * 1024 );
 		if ( filesize( $this->_tmpfile ) > $max_bytes ) {
-			@unlink( $this->_tmpfile ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+			wp_delete_file( $this->_tmpfile );
 			$this->_tmpfile = false;
 			$this->_error   = esc_html__(
 				'The XLSX file exceeds the maximum allowed size and cannot be imported.',
 				'visualizer'
 			);
-			return $this->_filename;
+			return false;
 		}
 
 		return $this->_tmpfile;
@@ -136,8 +131,8 @@ class Visualizer_Source_Xlsx_Remote extends Visualizer_Source_Xlsx {
 		$result = parent::fetch();
 
 		// Clean up the temporary file after parsing.
-		if ( $this->_tmpfile && ! is_wp_error( $this->_tmpfile ) && is_file( $this->_tmpfile ) ) {
-			@unlink( $this->_tmpfile ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+		if ( $this->_tmpfile && is_file( $this->_tmpfile ) ) {
+			wp_delete_file( $this->_tmpfile );
 			$this->_tmpfile = false;
 		}
 

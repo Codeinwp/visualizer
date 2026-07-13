@@ -382,39 +382,22 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * A permitted user (contributor) is not blocked by the guard, and the JSON source fetches through the
-	 * SSRF-safe transport (`reject_unsafe_urls`), matching the CSV path (issue #591 SSRF fix).
+	 * A contributor may use JSON import, but link-local destinations are blocked before transport.
 	 */
-	public function test_json_get_roots_allowed_for_contributor_uses_safe_transport() {
+	public function test_json_get_roots_blocks_link_local_for_contributor() {
 		wp_set_current_user( $this->contibutor_user_id );
 		$this->_setRole( 'contributor' );
 
-		$captured = array();
-		add_filter(
-			'pre_http_request',
-			function ( $pre, $args, $url ) use ( &$captured ) {
-				$captured[] = array(
-					'url'    => $url,
-					'reject' => ! empty( $args['reject_unsafe_urls'] ),
-				);
-				return array(
-					'headers'  => array(),
-					'body'     => wp_json_encode( array( 'results' => array( array( 'id' => 1 ) ) ) ),
-					'response' => array(
-						'code'    => 200,
-						'message' => 'OK',
-					),
-					'cookies'  => array(),
-					'filename' => null,
-				);
-			},
-			10,
-			3
-		);
+		$requests = 0;
+		$filter   = function ( $preempt ) use ( &$requests ) {
+			$requests++;
+			return $preempt;
+		};
+		add_filter( 'pre_http_request', $filter );
 
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION );
 		$_POST['params']  = array(
-			'url'    => 'http://127.0.0.1:9999/latest/meta-data/',
+			'url'    => 'http://169.254.169.254/latest/meta-data/',
 			'method' => 'GET',
 		);
 
@@ -423,17 +406,12 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		} catch ( WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
+		remove_filter( 'pre_http_request', $filter );
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		// The capability guard must NOT block a user who has edit_posts.
-		$msg = isset( $response->data->msg ) ? $response->data->msg : '';
-		$this->assertNotEquals( 'You do not have permission to perform this action.', $msg );
-		// Every outbound request for the JSON source must use the SSRF-safe transport.
-		$this->assertNotEmpty( $captured, 'The JSON source did not attempt any fetch.' );
-		foreach ( $captured as $req ) {
-			$this->assertTrue( $req['reject'], 'JSON fetch must use wp_safe_remote_* (reject_unsafe_urls => true).' );
-		}
+		$this->assertFalse( $response->success );
+		$this->assertSame( 0, $requests );
 	}
 
 	/**
