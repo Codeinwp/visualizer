@@ -59,7 +59,7 @@ class Visualizer_Remote_Fetch {
 			}
 
 			if ( $redirect === $redirects ) {
-				return new WP_Error( 'visualizer_too_many_redirects', __( 'The remote URL redirected too many times.', 'visualizer' ) );
+				return new WP_Error( 'visualizer_too_many_redirects', 'The remote URL redirected too many times.' );
 			}
 
 			$next_url = WP_Http::make_absolute_url( $location, $validated_url );
@@ -75,7 +75,7 @@ class Visualizer_Remote_Fetch {
 			$url = $next_url;
 		}
 
-		return new WP_Error( 'visualizer_remote_request', __( 'The remote request could not be completed.', 'visualizer' ) );
+		return new WP_Error( 'visualizer_remote_request', 'The remote request could not be completed.' );
 	}
 
 	/**
@@ -92,7 +92,7 @@ class Visualizer_Remote_Fetch {
 
 		$tmpfile = wp_tempnam( (string) wp_parse_url( $url, PHP_URL_PATH ) );
 		if ( ! $tmpfile ) {
-			return new WP_Error( 'visualizer_temp_file', __( 'Could not create a temporary file.', 'visualizer' ) );
+			return new WP_Error( 'visualizer_temp_file', 'Could not create a temporary file.' );
 		}
 
 		$args['stream']   = true;
@@ -106,7 +106,7 @@ class Visualizer_Remote_Fetch {
 
 		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
 			wp_delete_file( $tmpfile );
-			return new WP_Error( 'visualizer_remote_status', __( 'The remote server returned an unexpected response.', 'visualizer' ) );
+			return new WP_Error( 'visualizer_remote_status', 'The remote server returned an unexpected response.' );
 		}
 
 		return $tmpfile;
@@ -121,7 +121,7 @@ class Visualizer_Remote_Fetch {
 	private static function enforce_request_policy( $args ) {
 		$args['method'] = strtoupper( (string) $args['method'] );
 		if ( ! in_array( $args['method'], array( 'GET', 'POST' ), true ) ) {
-			return new WP_Error( 'visualizer_remote_method', __( 'Only GET and POST remote requests are allowed.', 'visualizer' ) );
+			return new WP_Error( 'visualizer_remote_method', 'Only GET and POST remote requests are allowed.' );
 		}
 
 		$blocked_headers = array( 'connection', 'content-length', 'host', 'proxy-authorization', 'proxy-connection', 'te', 'trailer', 'transfer-encoding', 'upgrade' );
@@ -146,24 +146,24 @@ class Visualizer_Remote_Fetch {
 	private static function validate_url( $url ) {
 		$validated_url = wp_http_validate_url( $url );
 		if ( false === $validated_url ) {
-			return new WP_Error( 'visualizer_invalid_remote_url', __( 'The remote URL is not allowed.', 'visualizer' ) );
+			return new WP_Error( 'visualizer_invalid_remote_url', 'The remote URL is not allowed.' );
 		}
 
 		$parts = wp_parse_url( $validated_url );
 		$port  = isset( $parts['port'] ) ? (int) $parts['port'] : ( 'https' === strtolower( $parts['scheme'] ) ? 443 : 80 );
 		if ( ! in_array( $port, array( 80, 443, 8080 ), true ) ) {
-			return new WP_Error( 'visualizer_unsafe_remote_port', __( 'The remote URL uses a port that is not allowed.', 'visualizer' ) );
+			return new WP_Error( 'visualizer_unsafe_remote_port', 'The remote URL uses a port that is not allowed.' );
 		}
 
 		$host = strtolower( rtrim( (string) $parts['host'], '.' ) );
 		$ips  = self::resolve_host( $host );
 		if ( empty( $ips ) ) {
-			return new WP_Error( 'visualizer_remote_dns', __( 'The remote host could not be resolved.', 'visualizer' ) );
+			return new WP_Error( 'visualizer_remote_dns', 'The remote host could not be resolved.' );
 		}
 
 		foreach ( $ips as $ip ) {
 			if ( ! self::is_global_ip( $ip ) ) {
-				return new WP_Error( 'visualizer_unsafe_remote_url', __( 'The remote URL resolves to a non-public address.', 'visualizer' ) );
+				return new WP_Error( 'visualizer_unsafe_remote_url', 'The remote URL resolves to a non-public address.' );
 			}
 		}
 
