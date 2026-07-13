@@ -10,7 +10,6 @@
  */
 class Visualizer_Remote_Fetch {
 
-	const MAX_RESPONSE_SIZE = 10485760;
 	const MAX_REDIRECTS = 5;
 
 	/**
@@ -24,9 +23,8 @@ class Visualizer_Remote_Fetch {
 		$args = wp_parse_args(
 			$args,
 			array(
-				'method'              => 'GET',
-				'timeout'             => 15,
-				'limit_response_size' => self::MAX_RESPONSE_SIZE,
+				'method'  => 'GET',
+				'timeout' => 15,
 			)
 		);
 
@@ -131,8 +129,7 @@ class Visualizer_Remote_Fetch {
 			}
 		}
 
-		$args['timeout']             = min( 30, max( 1, (int) $args['timeout'] ) );
-		$args['limit_response_size'] = min( self::MAX_RESPONSE_SIZE, max( 1, (int) $args['limit_response_size'] ) );
+		$args['timeout'] = min( 30, max( 1, (int) $args['timeout'] ) );
 
 		return $args;
 	}

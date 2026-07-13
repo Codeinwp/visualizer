@@ -57,12 +57,11 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		$filter = function ( $preempt, $args, $url ) {
 			$this->assertSame( 'http://93.184.216.34/data.json', $url );
 			$this->assertTrue( $args['reject_unsafe_urls'] );
-			$this->assertSame( Visualizer_Remote_Fetch::MAX_RESPONSE_SIZE, $args['limit_response_size'] );
 			return $this->response( 200, array(), '{"ok":true}' );
 		};
 		add_filter( 'pre_http_request', $filter, 10, 3 );
 
-		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/data.json', array( 'limit_response_size' => PHP_INT_MAX ) );
+		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/data.json' );
 
 		remove_filter( 'pre_http_request', $filter, 10 );
 		$this->assertNotWPError( $response );
