@@ -149,13 +149,7 @@ class Visualizer_Remote_Fetch {
 			return new WP_Error( 'visualizer_invalid_remote_url', 'The remote URL is not allowed.' );
 		}
 
-		$parts = wp_parse_url( $validated_url );
-		$port  = isset( $parts['port'] ) ? (int) $parts['port'] : ( 'https' === strtolower( $parts['scheme'] ) ? 443 : 80 );
-		if ( ! in_array( $port, array( 80, 443, 8080 ), true ) ) {
-			return new WP_Error( 'visualizer_unsafe_remote_port', 'The remote URL uses a port that is not allowed.' );
-		}
-
-		$host = strtolower( rtrim( (string) $parts['host'], '.' ) );
+		$host = strtolower( rtrim( (string) wp_parse_url( $validated_url, PHP_URL_HOST ), '.' ) );
 		$ips  = self::resolve_host( $host );
 		if ( empty( $ips ) ) {
 			return new WP_Error( 'visualizer_remote_dns', 'The remote host could not be resolved.' );
@@ -221,7 +215,7 @@ class Visualizer_Remote_Fetch {
 
 		$ranges = false !== strpos( $ip, ':' )
 			? array( 'fc00::/7', 'fe80::/10', 'ff00::/8' )
-			: array( '100.64.0.0/10', '192.0.0.0/24', '192.0.2.0/24', '198.18.0.0/15', '198.51.100.0/24', '203.0.113.0/24', '224.0.0.0/4', '240.0.0.0/4' );
+			: array( '100.64.0.0/10', '192.0.0.0/24', '192.0.2.0/24', '198.18.0.0/15', '198.51.100.0/24', '203.0.113.0/24', '224.0.0.0/4' );
 
 		foreach ( $ranges as $range ) {
 			if ( self::ip_in_range( $ip, $range ) ) {

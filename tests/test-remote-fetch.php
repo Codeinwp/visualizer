@@ -44,6 +44,7 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 			'carrier-grade'  => array( 'http://100.64.0.1/' ),
 			'documentation'  => array( 'http://192.0.2.1/' ),
 			'multicast'      => array( 'http://224.0.0.1/' ),
+			'reserved'       => array( 'http://240.0.0.1/' ),
 			'blocked-port'   => array( 'http://93.184.216.34:8443/' ),
 			'ipv4-mapped'    => array( 'http://[::ffff:169.254.169.254]/' ),
 		);
