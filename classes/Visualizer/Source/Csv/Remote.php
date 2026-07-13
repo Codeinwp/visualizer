@@ -162,6 +162,7 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 
 		$tmpfile = Visualizer_Remote_Fetch::download( $this->_filename );
 		if ( is_wp_error( $tmpfile ) ) {
+			$this->_error = esc_html__( 'Could not download the file. Please check the URL and try again.', 'visualizer' );
 			return false;
 		}
 
