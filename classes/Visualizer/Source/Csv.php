@@ -117,7 +117,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 *
 	 * @access protected
 	 * @param string $filename Optional file name to get handle. If omitted, $_filename is used.
-	 * @return resource File handle resource on success, otherwise FALSE.
+	 * @return resource|false File handle resource on success, otherwise FALSE.
 	 */
 	protected function _get_file_handle( $filename = false ) {
 		// open file and return handle
