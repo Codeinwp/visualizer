@@ -138,6 +138,26 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	}
 
 	/**
+	 * URLs on the site's own host skip the public-address check, matching core.
+	 */
+	public function test_allows_same_host_destination_without_dns_check() {
+		update_option( 'home', 'http://visualizer.internal' );
+
+		$requests = 0;
+		$filter   = function ( $preempt ) use ( &$requests ) {
+			$requests++;
+			return $this->response( 200, array(), 'a,b' );
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		$response = Visualizer_Remote_Fetch::request( 'http://visualizer.internal/wp-content/uploads/data.csv' );
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertNotWPError( $response );
+		$this->assertSame( 1, $requests );
+	}
+
+	/**
 	 * A same-origin redirect (relative Location) keeps request headers and resolves the target URL.
 	 */
 	public function test_same_origin_redirect_keeps_headers_and_resolves_relative_location() {

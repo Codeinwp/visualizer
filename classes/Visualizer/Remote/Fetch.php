@@ -147,7 +147,14 @@ class Visualizer_Remote_Fetch {
 		}
 
 		$host = strtolower( rtrim( (string) wp_parse_url( $validated_url, PHP_URL_HOST ), '.' ) );
-		$ips  = self::resolve_host( $host );
+
+		// Mirror core's same-host exemption so media library URLs import on hosts that resolve internally.
+		$home_host = strtolower( rtrim( (string) wp_parse_url( get_option( 'home' ), PHP_URL_HOST ), '.' ) );
+		if ( $host === $home_host ) {
+			return $validated_url;
+		}
+
+		$ips = self::resolve_host( $host );
 		if ( empty( $ips ) ) {
 			return new WP_Error( 'visualizer_remote_dns', 'The remote host could not be resolved.' );
 		}
