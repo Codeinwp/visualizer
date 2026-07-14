@@ -17,13 +17,25 @@ if ( ! class_exists( 'Visualizer_POI_Canary' ) ) {
 	 * Canary "gadget": records whether it was ever instantiated by unserialize().
 	 */
 	class Visualizer_POI_Canary {
+		/**
+		 * Flag to track whether the canary was instantiated.
+		 *
+		 * @var bool
+		 */
 		public static $awoke = false;
+
+		/**
+		 * Records that this object was instantiated by unserialize().
+		 */
 		public function __wakeup() {
 			self::$awoke = true;
 		}
 	}
 }
 
+/**
+ * Security tests for object injection vulnerabilities.
+ */
 class Test_Security_Object_Injection extends WP_UnitTestCase {
 
 	/**
