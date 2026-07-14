@@ -164,6 +164,28 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The pin hook records that the cURL transport dispatched the request.
+	 */
+	public function test_pin_callback_records_execution() {
+		if ( ! function_exists( 'curl_init' ) ) {
+			$this->markTestSkipped( 'cURL is not available.' );
+		}
+
+		$ran    = false;
+		$method = new ReflectionMethod( Visualizer_Remote_Fetch::class, 'pin_validated_addresses' );
+		$method->setAccessible( true );
+		$pin = $method->invokeArgs( null, array( 'http://example.com/data.json', array( '93.184.216.34' ), &$ran ) );
+
+		$this->assertIsCallable( $pin );
+		$this->assertFalse( $ran );
+
+		$pin( curl_init() );
+
+		$this->assertTrue( $ran );
+		remove_action( 'http_api_curl', $pin );
+	}
+
+	/**
 	 * IPv6 addresses use cURL's bracketed CURLOPT_RESOLVE syntax.
 	 */
 	public function test_formats_ipv6_addresses_for_curl_resolve() {

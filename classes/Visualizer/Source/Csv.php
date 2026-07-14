@@ -150,6 +150,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 
 		// fetch series
 		if ( ! $this->_fetchSeries( $handle ) ) {
+			fclose( $handle );
 			return false;
 		}
 

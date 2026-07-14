@@ -48,13 +48,30 @@ class Visualizer_Remote_Fetch {
 			$request_args['redirection']        = 0;
 			$request_args['reject_unsafe_urls'] = true;
 
-			$pin      = self::pin_validated_addresses( $validated_url, $ips );
+			$pin_ran = false;
+			$pin     = self::pin_validated_addresses( $validated_url, $ips, $pin_ran );
 			if ( is_wp_error( $pin ) ) {
 				return $pin;
 			}
+
+			// A `pre_http_request` short-circuit never reaches a transport, so the pin legitimately does not run.
+			$short_circuited = false;
+			$probe           = function ( $preempt ) use ( &$short_circuited ) {
+				$short_circuited = false !== $preempt;
+				return $preempt;
+			};
+			if ( $pin ) {
+				add_filter( 'pre_http_request', $probe, PHP_INT_MAX );
+			}
+
 			$response = wp_safe_remote_request( $validated_url, $request_args );
 			if ( $pin ) {
 				remove_action( 'http_api_curl', $pin );
+				remove_filter( 'pre_http_request', $probe, PHP_INT_MAX );
+				if ( ! $pin_ran && ! $short_circuited ) {
+					// A non-cURL transport dispatched the request without the pinned addresses; do not trust the response.
+					return new WP_Error( 'visualizer_remote_transport', 'The remote request did not use the pinned transport.' );
+				}
 			}
 			if ( is_wp_error( $response ) ) {
 				return $response;
@@ -167,9 +184,11 @@ class Visualizer_Remote_Fetch {
 	 *
 	 * @param string   $url Validated URL.
 	 * @param string[] $ips Validated addresses.
+	 * @param bool     $ran Set to true by the hook when the cURL transport actually dispatches the request.
 	 * @return callable|WP_Error|null The registered hook to remove after dispatch, an error when pinning is unavailable, or null for an IP literal or exempt host.
 	 */
-	private static function pin_validated_addresses( $url, $ips ) {
+	private static function pin_validated_addresses( $url, $ips, &$ran = false ) {
+		$ran = false;
 		if ( empty( $ips ) ) {
 			return null;
 		}
@@ -201,7 +220,8 @@ class Visualizer_Remote_Fetch {
 		}
 
 		$entry  = sprintf( '%s:%d:%s', strtolower( rtrim( $parsed['host'], '.' ) ), self::url_port( $parsed ), implode( ',', $addresses ) );
-		$pin    = function ( $handle ) use ( $entry ) {
+		$pin    = function ( $handle ) use ( $entry, &$ran ) {
+			$ran = true;
 			curl_setopt( $handle, CURLOPT_RESOLVE, array( $entry ) );
 		};
 		add_action( 'http_api_curl', $pin );
