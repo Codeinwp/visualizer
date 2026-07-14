@@ -437,6 +437,41 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * setJsonData must not overwrite a chart the current user cannot edit.
+	 *
+	 * A contributor holds a valid nonce (it is a CSRF token, not authorization),
+	 * so without a per-object capability check they could overwrite any post.
+	 * The write must be blocked and the chart left untouched.
+	 */
+	public function test_set_json_data_denied_for_non_owner() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_author'  => $this->admin_user_id,
+				'post_content' => 'ORIGINAL',
+			)
+		);
+
+		// A contributor who does not own the chart.
+		wp_set_current_user( $this->contibutor_user_id );
+		$this->_setRole( 'contributor' );
+
+		$_GET['chart']     = $chart_id;
+		$_POST['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION );
+		$_POST['url']      = 'http://example.com/data.json';
+		$_POST['root']     = '';
+		$_POST['method']   = 'GET';
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_DATA );
+		} catch ( Exception $e ) {
+			// The guard denies the request via wp_die(); nothing to do here.
+		}
+
+		$this->assertSame( 'ORIGINAL', get_post( $chart_id )->post_content, 'A non-owner must not be able to overwrite the chart content.' );
+	}
+
+	/**
 	 * Utility method to mock pro version.
 	 */
 	private function enable_pro() {

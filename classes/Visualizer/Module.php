@@ -256,6 +256,29 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Whether the current user is allowed to edit the given chart.
+	 *
+	 * Verifies the id resolves to an existing Visualizer chart and that the
+	 * current user has the per-object `edit_post` capability for it. Handlers
+	 * that accept a chart id from the request must gate their writes on this
+	 * to avoid IDOR: being logged in (or holding a nonce) is not authorization.
+	 *
+	 * @access public
+	 * @param int $chart_id The chart id, typically from the request.
+	 * @return bool
+	 */
+	public function can_edit_chart( $chart_id ) {
+		$chart_id = absint( $chart_id );
+		if ( ! $chart_id ) {
+			return false;
+		}
+		$chart = get_post( $chart_id );
+		return $chart
+			&& Visualizer_Plugin::CPT_VISUALIZER === $chart->post_type
+			&& current_user_can( 'edit_post', $chart_id );
+	}
+
+	/**
 	 * Prepares a CSV.
 	 *
 	 * @access private

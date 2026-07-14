@@ -297,17 +297,6 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 				}
 				$url = wp_unslash( $_POST['file_url'] );
 
-				// Allow local absolute paths in dev (same CSVs used by Classic).
-				if ( is_string( $url ) && file_exists( $url ) && is_readable( $url ) ) {
-					$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
-					if ( 'xlsx' === $ext && class_exists( 'Visualizer_Source_Xlsx' ) ) {
-						$source = new Visualizer_Source_Xlsx( $url );
-					} else {
-						$source = new Visualizer_Source_Csv( $url );
-					}
-					break;
-				}
-
 				if ( function_exists( 'wp_http_validate_url' ) ) {
 					$validated_url = wp_http_validate_url( (string) $url );
 					$url           = false === $validated_url ? false : (string) $validated_url;

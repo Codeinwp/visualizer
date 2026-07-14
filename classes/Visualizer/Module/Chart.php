@@ -123,6 +123,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_send_json_error();
 		}
 
+		if ( ! $this->can_edit_chart( $chart_id ) ) {
+			wp_send_json_error( null, 403 );
+		}
+
 		$time = filter_input(
 			INPUT_POST,
 			'time',
@@ -231,10 +235,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION, 'security' );
 
 		$params = $_POST;
-		$chart_id = $_GET['chart'];
+		$chart_id = isset( $_GET['chart'] ) ? absint( $_GET['chart'] ) : 0;
 
 		if ( empty( $chart_id ) ) {
 			wp_die();
+		}
+
+		if ( ! $this->can_edit_chart( $chart_id ) ) {
+			wp_die( -1, 403 );
 		}
 
 		$chart  = get_post( $chart_id );
@@ -249,8 +257,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
-		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
-		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, isset( $params['url'] ) ? esc_url_raw( $params['url'] ) : '' );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, isset( $params['root'] ) ? sanitize_text_field( $params['root'] ) : '' );
 
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS );
 		$headers = array( 'method' => $params['method'] );
@@ -470,7 +478,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			);
 			if ( $chart_id ) {
 				$chart   = get_post( $chart_id );
-				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
+				$success = $chart
+					&& $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER
+					&& current_user_can( 'delete_post', $chart_id );
 			}
 		}
 		if ( $success ) {
@@ -626,6 +636,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				wp_die();
 			}
 			exit();
+		}
+
+		// Past this point we operate on an existing chart supplied in the request.
+		// `edit_posts` alone is not enough: enforce per-object rights to prevent
+		// editing/overwriting a chart the current user does not own.
+		if ( ! $this->can_edit_chart( $chart_id ) ) {
+			wp_die( -1, 403 );
 		}
 
 		$_POST['save_chart_image'] = isset( $_POST['save_chart_image'] ) && 'yes' === $_POST['save_chart_image'] ? true : false;
@@ -799,11 +816,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * Handle data and settings page
 	 */
 	private function _handleDataAndSettingsPage() {
-		if ( isset( $_POST['map_api_key'] ) ) {
-			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
-		}
-
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
+			// The map API key is a site-wide option; only write it once the request
+			// is confirmed via nonce, and sanitize the stored value.
+			if ( isset( $_POST['map_api_key'] ) ) {
+				update_option( 'visualizer-map-api-key', sanitize_text_field( $_POST['map_api_key'] ) );
+			}
+
 			$is_canceled      = isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] );
 			$is_newly_created = $this->_chart->post_status === 'auto-draft';
 
@@ -1669,6 +1688,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				),
 			)
 		);
+
+		// The Pro handler hooked to `visualizer_save_filter` performs no
+		// authorization of its own, so gate the delegation here.
+		if ( ! $this->can_edit_chart( $chart_id ) ) {
+			wp_die( -1, 403 );
+		}
 
 		$hours = filter_input(
 			INPUT_POST,
