@@ -61,6 +61,102 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Test that the AI Builder URL import rejects local file paths.
+	 */
+	public function test_ai_builder_file_url_rejects_local_path() {
+		wp_set_current_user( $this->contibutor_user_id );
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'draft',
+				'post_author' => $this->contibutor_user_id,
+			)
+		);
+		$file = wp_tempnam( 'visualizer-local.csv' );
+		file_put_contents( $file, "Label,Value\nstring,number\nSecret,42" );
+
+		$_POST = array(
+			'chart_id'   => $chart_id,
+			'nonce'      => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
+			'source_type' => 'file_url',
+			'file_url'   => $file,
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-upload' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		}
+		wp_delete_file( $file );
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Invalid URL. Please check the URL and try again.', $response->data->message );
+	}
+
+	/**
+	 * Test that a user cannot request an upload nonce for another user's chart.
+	 */
+	public function test_ai_builder_chart_nonce_requires_chart_edit_permission() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'publish',
+				'post_author' => $this->admin_user_id,
+			)
+		);
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$_POST = array(
+			'chart_id' => $chart_id,
+			'nonce'    => wp_create_nonce( 'visualizer-ai-builder' ),
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-chart-nonce' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Unauthorized.', $response->data->message );
+	}
+
+	/**
+	 * Test that a user cannot upload data to another user's chart.
+	 */
+	public function test_ai_builder_upload_requires_chart_edit_permission() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'publish',
+				'post_author' => $this->admin_user_id,
+			)
+		);
+		$original_content = get_post_field( 'post_content', $chart_id );
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$_POST = array(
+			'chart_id'   => $chart_id,
+			'nonce'      => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
+			'source_type' => 'csv_string',
+			'csv_data'   => "Label,Value\nstring,number\nSecret,42",
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-upload' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Unauthorized.', $response->data->message );
+		$this->assertSame( $original_content, get_post_field( 'post_content', $chart_id ) );
+	}
+
+	/**
 	 * Test the AJAX response for fetching the database data.
 	 */
 	public function test_ajax_response_get_query_data_valid_query() {
