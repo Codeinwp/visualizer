@@ -793,7 +793,7 @@ class Visualizer_Module {
 			},
 			$post_content
 		);
-		$data = unserialize( $post_content );
+		$data = unserialize( $post_content, array( 'allowed_classes' => false ) );
 		$altered = array();
 		if ( ! empty( $data ) ) {
 			foreach ( $data as $index => $array ) {

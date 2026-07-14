@@ -307,7 +307,7 @@ class Visualizer_Gutenberg_Block {
 		$data['visualizer-settings'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $data['visualizer-settings'], $post_id, $data['visualizer-chart-type'] );
 
 		// handle data filter hooks
-		$data['visualizer-data'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( get_the_content( $post_id ) ) ), $post_id, $data['visualizer-chart-type'] );
+		$data['visualizer-data'] = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, unserialize( html_entity_decode( get_the_content( $post_id ) ), array( 'allowed_classes' => false ) ), $post_id, $data['visualizer-chart-type'] );
 
 		// we are going to format only for tabular charts, because we are not sure of the effect on others.
 		// this is to solve the case where boolean data shows up as all-ticks on gutenberg.

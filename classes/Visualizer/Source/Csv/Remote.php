@@ -74,7 +74,7 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 		// if filename is empty, extract it from chart content
 		if ( empty( $this->_filename ) ) {
 			$chart = get_post( $chart_id );
-			$data = unserialize( html_entity_decode( $chart->post_content ) );
+			$data = unserialize( html_entity_decode( $chart->post_content ), array( 'allowed_classes' => false ) );
 			if ( ! isset( $data['source'] ) ) {
 				return false;
 			}
