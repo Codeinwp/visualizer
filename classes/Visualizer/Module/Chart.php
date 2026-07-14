@@ -823,6 +823,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				if ( isset( $existing['colors'] ) && is_array( $existing['colors'] ) && ! isset( $post_settings['colors'] ) ) {
 					$post_settings['colors'] = $existing['colors'];
 				}
+				$post_settings = $this->sanitizeSettings( $post_settings );
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $post_settings );
 
 				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
@@ -1012,6 +1013,31 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-frame' );
 		wp_iframe( array( $render, 'render' ) );
+	}
+
+	/**
+	 * Sanitize settings data from the request.
+	 *
+	 * @param array<string, mixed> $post_data The POST data to sanitize.
+	 * @return array<string, mixed> The sanitized settings data.
+	 */
+	private function sanitizeSettings( $post_data ): array {
+		$chart_img = '';
+		if ( isset( $post_data['chart-img'] ) ) {
+			$chart_img = wp_unslash( $post_data['chart-img'] );
+			unset( $post_data['chart-img'] );
+		}
+
+		$post_data = map_deep(
+			wp_unslash( $post_data ),
+			'sanitize_text_field'
+		);
+
+		if ( '' !== $chart_img ) {
+			$post_data['chart-img'] = $chart_img;
+		}
+
+		return $post_data;
 	}
 
 	/**
