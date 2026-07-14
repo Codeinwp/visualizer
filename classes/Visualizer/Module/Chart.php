@@ -1029,8 +1029,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		}
 
 		$post_data = map_deep(
-			wp_unslash( $post_data ),
-			'sanitize_text_field'
+			$post_data,
+			'sanitize_textarea_field'
 		);
 
 		if ( '' !== $chart_img ) {
