@@ -163,4 +163,21 @@ class Test_Export extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 		$this->assertTrue( empty( $response ) || empty( $response->success ) );
 	}
+
+	/**
+	 * Exporting requires permission to edit the requested chart.
+	 */
+	public function test_csv_export_denied_for_chart_user_cannot_edit() {
+		$this->create_chart();
+		$user_id = $this->factory->user->create(
+			array(
+				'role' => 'contributor',
+			)
+		);
+		wp_set_current_user( $user_id );
+
+		$response = $this->run_export();
+
+		$this->assertTrue( empty( $response ) || empty( $response->success ) );
+	}
 }
