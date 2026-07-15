@@ -126,7 +126,8 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		$filter   = function ( $preempt, $args, $url ) use ( &$requests ) {
 			$requests[] = array( $url, $args['cookies'] );
 			if ( 1 === count( $requests ) ) {
-				return $this->response( 302, array( 'location' => 'http://93.184.216.35/data' ) );
+				$cookie = new WP_Http_Cookie( 'redirect=secret; Path=/', 'http://93.184.216.34/start' );
+				return $this->response( 302, array( 'location' => 'http://93.184.216.35/data' ), '', array( $cookie ) );
 			}
 			return $this->response( 200 );
 		};
@@ -253,6 +254,11 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 				array( '2606:2800:220:1:248:1893:25c8:1946', '93.184.216.34' ),
 				'example.com:443:93.184.216.34',
 			),
+			'pre-IPv6 mixed addresses' => array(
+				'7.56.0',
+				array( '2606:2800:220:1:248:1893:25c8:1946', '93.184.216.34' ),
+				'example.com:443:93.184.216.34',
+			),
 			'legacy IPv6 address'    => array(
 				'7.57.0',
 				array( '2606:2800:220:1:248:1893:25c8:1946' ),
@@ -317,17 +323,21 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	 * Header and method policy is applied before dispatch.
 	 */
 	public function test_rejects_unsupported_method_before_request() {
-		$requests = 0;
-		$filter   = function ( $preempt ) use ( &$requests ) {
+		$requests  = 0;
+		$responses = array();
+		$filter    = function ( $preempt ) use ( &$requests ) {
 			$requests++;
-			return $preempt;
+			return $this->response( 200 );
 		};
 		add_filter( 'pre_http_request', $filter );
 
+		foreach ( array( 'CONNECT', 'TRACE', "GET\r\nX-Injected: true" ) as $method ) {
+			$responses[] = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/', array( 'method' => $method ) );
+		}
+
 		remove_filter( 'pre_http_request', $filter );
 
-		foreach ( array( 'CONNECT', 'TRACE', "GET\r\nX-Injected: true" ) as $method ) {
-			$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/', array( 'method' => $method ) );
+		foreach ( $responses as $response ) {
 			$this->assertWPError( $response );
 			$this->assertSame( 'visualizer_remote_method', $response->get_error_code() );
 		}
