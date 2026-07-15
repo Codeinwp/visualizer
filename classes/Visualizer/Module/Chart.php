@@ -614,7 +614,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						$chart_id  = $new_chart_id;
 						foreach ( $post_meta as $key => $value ) {
 							if ( strpos( $key, 'visualizer-' ) !== false ) {
-								add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+								add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 							}
 						}
 					}
@@ -1456,7 +1456,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$post_meta = get_post_meta( $chart_id );
 				foreach ( $post_meta as $key => $value ) {
 					if ( strpos( $key, 'visualizer-' ) !== false ) {
-						add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+						add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 					}
 				}
 				$redirect = esc_url(

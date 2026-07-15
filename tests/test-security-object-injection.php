@@ -39,29 +39,31 @@ if ( ! class_exists( 'Visualizer_POI_Canary' ) ) {
 class Test_Security_Object_Injection extends WP_UnitTestCase {
 
 	/**
-	 * Serialized payload carrying a Visualizer_POI_Canary object.
+	 * Serialized array payload carrying a Visualizer_POI_Canary object.
 	 *
+	 * @param array $data Plain payload data.
 	 * @return string
 	 */
-	private function object_payload() {
+	private function object_payload( $data = array() ) {
 		Visualizer_POI_Canary::$awoke = false;
-		return serialize( new Visualizer_POI_Canary() );
+		$data[] = new Visualizer_POI_Canary();
+		return serialize( $data );
 	}
 
 	/**
 	 * Visualizer_Module::get_chart_data() must not instantiate objects from content.
 	 */
 	public function test_get_chart_data_does_not_instantiate_objects() {
+		$expected = array(
+			array( 'Label', 'Value' ),
+			array( 'Safe', 10 ),
+		);
 		$chart               = new stdClass();
-		$chart->post_content = $this->object_payload();
+		$chart->post_content = $this->object_payload( $expected );
 
-		try {
-			Visualizer_Module::get_chart_data( $chart, 'line', false );
-		} catch ( \Throwable $e ) {
-			// Downstream handling of the neutralized payload is irrelevant here;
-			// we only assert that no object was instantiated during unserialize().
-		}
+		$result = Visualizer_Module::get_chart_data( $chart, 'line', false );
 
+		$this->assertSame( $expected, $result );
 		$this->assertFalse(
 			Visualizer_POI_Canary::$awoke,
 			'unserialize() must not instantiate objects from chart post_content.'
@@ -75,7 +77,7 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 		$chart_id = self::factory()->post->create(
 			array(
 				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
-				'post_content' => wp_slash( $this->object_payload() ),
+				'post_content' => wp_slash( $this->object_payload( array( 'marker' => 'remote-csv' ) ) ),
 			)
 		);
 
@@ -83,12 +85,9 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 		$method = new ReflectionMethod( 'Visualizer_Source_Csv_Remote', '_repopulate' );
 		$method->setAccessible( true );
 
-		try {
-			$method->invoke( $source, $chart_id );
-		} catch ( \Throwable $e ) {
-			// The neutralized payload has no 'source' key and returns false; only the canary matters.
-		}
+		$result = $method->invoke( $source, $chart_id );
 
+		$this->assertFalse( $result, 'Content without a remote source must fail cleanly.' );
 		$this->assertFalse(
 			Visualizer_POI_Canary::$awoke,
 			'Remote CSV source must not instantiate objects from chart post_content.'
@@ -98,23 +97,10 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 	/**
 	 * The shared decode_content() chokepoint must not instantiate objects.
 	 *
-	 * The business/scheduled JSON sink (updateBusinessJson) reads
-	 * serialize()'d source data via getData() and decodes it through
-	 * Visualizer_Module::decode_content(). This feeds a serialized canary the
-	 * same way and asserts the object is never instantiated.
+	 * Covers the helper-level guarantee shared by chart/source content callers.
 	 */
 	public function test_decode_content_does_not_instantiate_objects() {
-		Visualizer_POI_Canary::$awoke = false;
-
-		// Reproduce the content the sink reads: serialize() of the source data
-		// (getData()), here carrying a canary object.
-		$source    = new Visualizer_Source_Json( array( 'url' => '', 'root' => '', 'paging' => '' ) );
-		$data_prop = new ReflectionProperty( 'Visualizer_Source', '_data' );
-		$data_prop->setAccessible( true );
-		$data_prop->setValue( $source, array( new Visualizer_POI_Canary() ) );
-		$content = $source->getData();
-
-		$result = Visualizer_Module::decode_content( $content );
+		$result = Visualizer_Module::decode_content( $this->object_payload( array( 'marker' => 'decoded' ) ) );
 
 		$this->assertFalse(
 			Visualizer_POI_Canary::$awoke,
@@ -124,35 +110,51 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 			$result,
 			'decode_content() should still return the (neutralized) array.'
 		);
+		$this->assertSame( 'decoded', $result['marker'] );
 	}
 
 	/**
 	 * The Utility pie/polarArea render palette call site must not instantiate objects.
 	 *
-	 * Drives the real sink (Visualizer_Module_Utility::apply_chartjs_palette),
-	 * which previously used maybe_unserialize() on post_content, with a chart
-	 * whose content is a serialized canary. Reverting that call site to an
-	 * unrestricted (maybe_)unserialize() would fail this test.
+	 * Covers the public global-style filter seam and preserves the trimming
+	 * behavior of WordPress's maybe_unserialize().
 	 */
 	public function test_utility_pie_palette_call_site_is_guarded() {
-		Visualizer_POI_Canary::$awoke = false;
-
 		$chart_id = self::factory()->post->create(
 			array(
 				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
-				'post_content' => wp_slash( serialize( array( new Visualizer_POI_Canary() ) ) ),
+				'post_content' => wp_slash(
+					" \n" . $this->object_payload(
+						array(
+							array( 'One' ),
+							array( 'Two' ),
+						)
+					) . " \n"
+				),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, 'ChartJS' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'pie' );
+		update_post_meta(
+			$chart_id,
+			Visualizer_Plugin::CF_SERIES,
+			array(
+				array( 'label' => 'Label', 'type' => 'string' ),
+				array( 'label' => 'Value', 'type' => 'number' ),
+			)
+		);
+		update_option(
+			Visualizer_Module_Admin::OPTION_GLOBAL_SETTINGS,
+			array(
+				'color_primary' => '#3366cc',
+				'apply_existing' => '1',
 			)
 		);
 
-		$method = new ReflectionMethod( 'Visualizer_Module_Utility', 'apply_chartjs_palette' );
-		$method->setAccessible( true );
+		$utility = Visualizer_Plugin::instance()->getModule( Visualizer_Module_Utility::NAME );
+		$result  = $utility->apply_global_style_settings( array(), $chart_id, 'pie' );
 
-		try {
-			$method->invoke( null, array(), 'pie', array(), $chart_id );
-		} catch ( \Throwable $e ) {
-			// Only the canary matters here.
-		}
-
+		$this->assertCount( 3, $result['slices'], 'Palette size must match whitespace-wrapped chart data.' );
 		$this->assertFalse(
 			Visualizer_POI_Canary::$awoke,
 			'Utility pie palette call site must not instantiate objects from post_content.'
@@ -160,37 +162,142 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The Gutenberg block render call site must not instantiate objects.
-	 *
-	 * Drives the front-end/REST data path (get_visualizer_data), which reads
-	 * chart content via get_the_content(), with a chart whose content is a
-	 * serialized canary. Reverting that call site to an unrestricted
-	 * unserialize() would fail this test.
+	 * The ChartJS default-settings call site must not instantiate objects.
 	 */
-	public function test_gutenberg_block_render_call_site_is_guarded() {
-		Visualizer_POI_Canary::$awoke = false;
-
+	public function test_utility_chartjs_defaults_call_site_is_guarded() {
 		$chart_id = self::factory()->post->create(
 			array(
 				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
-				'post_content' => wp_slash( serialize( array( new Visualizer_POI_Canary() ) ) ),
+				'post_status'  => 'auto-draft',
+				'post_content' => wp_slash(
+					$this->object_payload(
+						array(
+							array( 'One' ),
+							array( 'Two' ),
+						)
+					)
+				),
 			)
 		);
-		// get_the_content() reads the global post.
-		$GLOBALS['post'] = get_post( $chart_id );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, 'ChartJS' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'pie' );
+		update_post_meta(
+			$chart_id,
+			Visualizer_Plugin::CF_SERIES,
+			array(
+				array( 'label' => 'Label', 'type' => 'string' ),
+				array( 'label' => 'Value', 'type' => 'number' ),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array() );
+
+		Visualizer_Module_Utility::set_defaults( get_post( $chart_id ) );
+		$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+
+		$this->assertCount( 3, $settings['slices'] );
+		$this->assertFalse(
+			Visualizer_POI_Canary::$awoke,
+			'ChartJS defaults must not instantiate objects from post_content.'
+		);
+	}
+
+	/**
+	 * The Gutenberg block render call site must not instantiate objects.
+	 *
+	 * Drives the front-end/REST data path with a requested chart that differs
+	 * from the global post. Reverting the guard or reading the global post fails.
+	 */
+	public function test_gutenberg_block_render_call_site_is_guarded() {
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_content' => wp_slash(
+					$this->object_payload(
+						array(
+							array( 'requested-chart' ),
+						)
+					)
+				),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'line' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, 'ChartJS' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array() );
+		update_post_meta(
+			$chart_id,
+			Visualizer_Plugin::CF_SERIES,
+			array(
+				array( 'label' => 'Label', 'type' => 'string' ),
+			)
+		);
+
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'editor' ) ) );
+		$decoy = self::factory()->post->create(
+			array(
+				'post_content' => wp_slash( serialize( array( array( 'global-post' ) ) ) ),
+			)
+		);
+		$GLOBALS['post'] = get_post( $decoy );
 		setup_postdata( $GLOBALS['post'] );
 
 		try {
-			Visualizer_Gutenberg_Block::get_instance()->get_visualizer_data( array( 'id' => $chart_id ) );
-		} catch ( \Throwable $e ) {
-			// Only the canary matters here.
+			$result = Visualizer_Gutenberg_Block::get_instance()->get_visualizer_data( array( 'id' => $chart_id ) );
+		} finally {
+			wp_reset_postdata();
 		}
 
-		wp_reset_postdata();
-
+		$this->assertIsArray( $result );
+		$this->assertSame( 'requested-chart', $result['visualizer-data'][0][0] );
 		$this->assertFalse(
 			Visualizer_POI_Canary::$awoke,
 			'Gutenberg block render call site must not instantiate objects from post_content.'
+		);
+	}
+
+	/**
+	 * Cloning a chart copies raw post meta through maybe_decode_content(); it must
+	 * neither instantiate objects from meta nor corrupt legitimate serialized meta.
+	 */
+	public function test_clone_chart_meta_is_guarded_and_round_trips() {
+		$settings = array( 'series' => array( array( 'color' => '#ff0000' ) ) );
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_content' => wp_slash( serialize( array( array( 'Label' ), array( 'Value' ) ) ) ),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, $settings );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, array( new Visualizer_POI_Canary() ) );
+		Visualizer_POI_Canary::$awoke = false;
+
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		$_GET['nonce'] = wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART );
+		$_GET['chart'] = (string) $chart_id;
+
+		try {
+			Visualizer_Plugin::instance()->getModule( Visualizer_Module_Chart::NAME )->cloneChart();
+		} catch ( WPDieException $e ) {
+			// Expected test-mode exit before the redirect.
+		}
+
+		$this->assertFalse(
+			Visualizer_POI_Canary::$awoke,
+			'Chart clone must not instantiate objects from raw post meta.'
+		);
+
+		$clones = get_posts(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'any',
+				'exclude'     => array( $chart_id ),
+				'numberposts' => -1,
+			)
+		);
+		$this->assertCount( 1, $clones, 'Clone action must create exactly one new chart.' );
+		$this->assertSame(
+			$settings,
+			get_post_meta( $clones[0]->ID, Visualizer_Plugin::CF_SETTINGS, true ),
+			'Legitimate serialized meta must survive cloning unchanged.'
 		);
 	}
 }

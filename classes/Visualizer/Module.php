@@ -781,14 +781,24 @@ class Visualizer_Module {
 	/**
 	 * Safely unserialize chart/source content, blocking PHP object injection.
 	 *
-	 * Single guarded chokepoint shared by every unserialize() sink so the
+	 * Single guarded chokepoint shared by chart/source content sinks so the
 	 * allowed_classes guard cannot be dropped from one call site independently.
 	 *
 	 * @param mixed $content The serialized content (only strings are decoded).
 	 * @return mixed The decoded value (array for valid chart data), or false.
 	 */
 	public static function decode_content( $content ) {
-		return is_string( $content ) ? unserialize( $content, array( 'allowed_classes' => false ) ) : false;
+		return is_string( $content ) ? unserialize( trim( $content ), array( 'allowed_classes' => false ) ) : false;
+	}
+
+	/**
+	 * Object-injection-safe drop-in for maybe_unserialize().
+	 *
+	 * @param mixed $value Raw meta/content value.
+	 * @return mixed The decoded value for serialized input, the value unchanged otherwise.
+	 */
+	public static function maybe_decode_content( $value ) {
+		return is_serialized( $value ) ? self::decode_content( $value ) : $value;
 	}
 
 	/**
