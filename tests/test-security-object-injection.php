@@ -158,4 +158,39 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 			'Utility pie palette call site must not instantiate objects from post_content.'
 		);
 	}
+
+	/**
+	 * The Gutenberg block render call site must not instantiate objects.
+	 *
+	 * Drives the front-end/REST data path (get_visualizer_data), which reads
+	 * chart content via get_the_content(), with a chart whose content is a
+	 * serialized canary. Reverting that call site to an unrestricted
+	 * unserialize() would fail this test.
+	 */
+	public function test_gutenberg_block_render_call_site_is_guarded() {
+		Visualizer_POI_Canary::$awoke = false;
+
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_content' => wp_slash( serialize( array( new Visualizer_POI_Canary() ) ) ),
+			)
+		);
+		// get_the_content() reads the global post.
+		$GLOBALS['post'] = get_post( $chart_id );
+		setup_postdata( $GLOBALS['post'] );
+
+		try {
+			Visualizer_Gutenberg_Block::get_instance()->get_visualizer_data( array( 'id' => $chart_id ) );
+		} catch ( \Throwable $e ) {
+			// Only the canary matters here.
+		}
+
+		wp_reset_postdata();
+
+		$this->assertFalse(
+			Visualizer_POI_Canary::$awoke,
+			'Gutenberg block render call site must not instantiate objects from post_content.'
+		);
+	}
 }
