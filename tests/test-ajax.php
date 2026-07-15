@@ -639,7 +639,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	 * Chart authorization validates both the object type and meta capability.
 	 */
 	public function test_chart_authorization_is_object_specific() {
-		$own_chart   = $this->create_chart_for_user( $this->contibutor_user_id );
+		$own_chart   = $this->create_chart_for_user( $this->contibutor_user_id, 'publish' );
 		$other_chart = $this->create_chart_for_user( $this->admin_user_id );
 		$regular_post = $this->factory->post->create(
 			array(
@@ -759,6 +759,30 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 		$this->assertFalse( $response->success );
 		$this->assertNotNull( get_post( $chart_id ) );
+	}
+
+	/**
+	 * A contributor may delete their own published chart.
+	 */
+	public function test_delete_chart_allows_owner_without_delete_published_posts() {
+		$chart_id = $this->create_chart_for_user( $this->contibutor_user_id, 'publish' );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'chart' => $chart_id,
+			'nonce' => wp_create_nonce(),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_DELETE_CHART );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success );
+		$this->assertNull( get_post( $chart_id ) );
 	}
 
 	/**

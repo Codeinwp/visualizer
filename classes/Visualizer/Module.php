@@ -737,7 +737,10 @@ class Visualizer_Module {
 		$chart = get_post( $chart_id );
 		return $chart
 			&& Visualizer_Plugin::CPT_VISUALIZER === $chart->post_type
-			&& current_user_can( 'edit_post', $chart_id );
+			&& (
+				current_user_can( 'edit_post', $chart_id )
+				|| ( (int) $chart->post_author === get_current_user_id() && current_user_can( 'edit_posts' ) )
+			);
 	}
 
 	/**

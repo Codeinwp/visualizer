@@ -483,7 +483,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$chart   = get_post( $chart_id );
 				$success = $chart
 					&& $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER
-					&& current_user_can( 'delete_post', $chart_id );
+					&& (
+						current_user_can( 'delete_post', $chart_id )
+						|| ( (int) $chart->post_author === get_current_user_id() && current_user_can( 'delete_posts' ) )
+					);
 			}
 		}
 		if ( $success ) {
