@@ -892,14 +892,27 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	 * @return int
 	 */
 	private function create_chart_for_user( $user_id, $status = 'draft' ) {
-		return $this->factory->post->create(
+		$chart_id = $this->factory->post->create(
 			array(
 				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
 				'post_status'  => $status,
 				'post_author'  => $user_id,
-				'post_content' => wp_json_encode( array( 'data' => array(), 'metadata' => array() ) ),
+				'post_content' => wp_slash( serialize( array( array( 'Label' ), array( 'Value' ) ) ) ),
 			)
 		);
+		add_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'line' );
+		add_post_meta(
+			$chart_id,
+			Visualizer_Plugin::CF_SERIES,
+			array(
+				array(
+					'label' => 'Label',
+					'type'  => 'string',
+				),
+			)
+		);
+
+		return $chart_id;
 	}
 
 	/**
