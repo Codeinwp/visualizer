@@ -779,6 +779,19 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Safely unserialize chart/source content, blocking PHP object injection.
+	 *
+	 * Single guarded chokepoint shared by every unserialize() sink so the
+	 * allowed_classes guard cannot be dropped from one call site independently.
+	 *
+	 * @param string $content The serialized content.
+	 * @return mixed The decoded value (array for valid chart data), or false.
+	 */
+	public static function decode_content( $content ) {
+		return is_string( $content ) ? unserialize( $content, array( 'allowed_classes' => false ) ) : false;
+	}
+
+	/**
 	 * Gets the chart content after common manipulations.
 	 */
 	public static function get_chart_data( $chart, $type, $run_filter = true ) {
@@ -793,7 +806,7 @@ class Visualizer_Module {
 			},
 			$post_content
 		);
-		$data = unserialize( $post_content, array( 'allowed_classes' => false ) );
+		$data = self::decode_content( $post_content );
 		$altered = array();
 		if ( ! empty( $data ) ) {
 			foreach ( $data as $index => $array ) {

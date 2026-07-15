@@ -94,4 +94,35 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 			'Remote CSV source must not instantiate objects from chart post_content.'
 		);
 	}
+
+	/**
+	 * The shared decode_content() chokepoint must not instantiate objects.
+	 *
+	 * The business/scheduled JSON sink (updateBusinessJson) reads
+	 * serialize()'d source data via getData() and decodes it through
+	 * Visualizer_Module::decode_content(). This feeds a serialized canary the
+	 * same way and asserts the object is never instantiated.
+	 */
+	public function test_decode_content_does_not_instantiate_objects() {
+		Visualizer_POI_Canary::$awoke = false;
+
+		// Reproduce the content the sink reads: serialize() of the source data
+		// (getData()), here carrying a canary object.
+		$source    = new Visualizer_Source_Json( array( 'url' => '', 'root' => '', 'paging' => '' ) );
+		$data_prop = new ReflectionProperty( 'Visualizer_Source', '_data' );
+		$data_prop->setAccessible( true );
+		$data_prop->setValue( $source, array( new Visualizer_POI_Canary() ) );
+		$content = $source->getData();
+
+		$result = Visualizer_Module::decode_content( $content );
+
+		$this->assertFalse(
+			Visualizer_POI_Canary::$awoke,
+			'decode_content() must not instantiate objects from source content.'
+		);
+		$this->assertIsArray(
+			$result,
+			'decode_content() should still return the (neutralized) array.'
+		);
+	}
 }

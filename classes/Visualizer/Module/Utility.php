@@ -434,7 +434,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 			case 'polarArea':
 				// fall through.
 			case 'pie':
-				$data   = unserialize( $chart->post_content, array( 'allowed_classes' => false ) );
+				$data   = self::decode_content( $chart->post_content );
 				$name   = 'slices';
 				$max    = count( $data );
 				// fall through.

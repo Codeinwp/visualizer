@@ -1336,7 +1336,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( $source->fetch() ) {
 				$content    = $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 				$populate   = true;
-				$json = is_string( $content ) ? unserialize( $content, array( 'allowed_classes' => false ) ) : false;
+				$json = self::decode_content( $content );
 				if ( is_array( $json ) ) {
 					// if source exists, so should data. if source exists but data is blank, do not populate the chart.
 					// if we populate the data even if it is empty, the chart will show "Table has no columns".
