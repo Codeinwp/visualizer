@@ -206,7 +206,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 	/**
 	 * Determines whether a remote URL serves an XLSX file.
 	 *
-	 * Uses wp_safe_remote_get() and checks ZIP magic number (PK\x03\x04).
+	 * Uses the shared remote-fetch policy and checks ZIP magic number (PK\x03\x04).
 	 *
 	 * @access private
 	 * @param string $url The remote URL to probe.
@@ -218,14 +218,15 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 			return false;
 		}
 
-		$response = wp_safe_remote_get(
+		$response = Visualizer_Remote_Fetch::request(
 			$url,
 			array(
-				'timeout'     => 15,
-				'redirection' => 5,
-				'stream'      => true,
-				'filename'    => $tmpfile,
-				'headers'     => array( 'Range' => 'bytes=0-3' ),
+				'timeout'             => 15,
+				'redirection'         => 5,
+				'stream'              => true,
+				'filename'            => $tmpfile,
+				'headers'             => array( 'Range' => 'bytes=0-3' ),
+				'limit_response_size' => 4,
 			)
 		);
 
