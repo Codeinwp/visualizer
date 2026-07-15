@@ -95,6 +95,17 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 	}
 
 	/**
+	 * Verify that the current user can edit a chart.
+	 *
+	 * @param int $chart_id Chart ID.
+	 */
+	private function _verify_chart_access( $chart_id ): void {
+		if ( ! current_user_can( 'edit_post', $chart_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'visualizer' ) ), 403 );
+		}
+	}
+
+	/**
 	 * Persist chart data + series from a source.
 	 *
 	 * @param int               $chart_id Chart ID.
@@ -159,6 +170,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 		if ( ! $chart_id || ! get_post( $chart_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Chart not found.', 'visualizer' ) ) );
 		}
+		$this->_verify_chart_access( $chart_id );
 		wp_send_json_success(
 			array(
 				'upload_nonce' => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
@@ -180,6 +192,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 		if ( ! $chart || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			wp_send_json_error( array( 'message' => __( 'Chart not found.', 'visualizer' ) ) );
 		}
+		$this->_verify_chart_access( $chart_id );
 
 		$series   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
 		$data     = Visualizer_Module::get_chart_data( $chart, '', false );
@@ -206,7 +219,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 	/**
 	 * Determines whether a remote URL serves an XLSX file.
 	 *
-	 * Uses wp_safe_remote_get() and checks ZIP magic number (PK\x03\x04).
+	 * Uses the shared remote-fetch policy and checks ZIP magic number (PK\x03\x04).
 	 *
 	 * @access private
 	 * @param string $url The remote URL to probe.
@@ -218,14 +231,15 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 			return false;
 		}
 
-		$response = wp_safe_remote_get(
+		$response = Visualizer_Remote_Fetch::request(
 			$url,
 			array(
-				'timeout'     => 15,
-				'redirection' => 5,
-				'stream'      => true,
-				'filename'    => $tmpfile,
-				'headers'     => array( 'Range' => 'bytes=0-3' ),
+				'timeout'             => 15,
+				'redirection'         => 5,
+				'stream'              => true,
+				'filename'            => $tmpfile,
+				'headers'             => array( 'Range' => 'bytes=0-3' ),
+				'limit_response_size' => 4,
 			)
 		);
 
@@ -258,6 +272,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 		if ( ! get_post( $chart_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Chart not found.', 'visualizer' ) ) );
 		}
+		$this->_verify_chart_access( $chart_id );
 
 		$source_type = isset( $_POST['source_type'] ) ? sanitize_key( $_POST['source_type'] ) : 'csv_string';
 		$source      = null;
@@ -296,17 +311,6 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 					wp_send_json_error( array( 'message' => __( 'No URL provided.', 'visualizer' ) ) );
 				}
 				$url = wp_unslash( $_POST['file_url'] );
-
-				// Allow local absolute paths in dev (same CSVs used by Classic).
-				if ( is_string( $url ) && file_exists( $url ) && is_readable( $url ) ) {
-					$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
-					if ( 'xlsx' === $ext && class_exists( 'Visualizer_Source_Xlsx' ) ) {
-						$source = new Visualizer_Source_Xlsx( $url );
-					} else {
-						$source = new Visualizer_Source_Csv( $url );
-					}
-					break;
-				}
 
 				if ( function_exists( 'wp_http_validate_url' ) ) {
 					$validated_url = wp_http_validate_url( (string) $url );
@@ -435,6 +439,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 		if ( ! $chart_id || ! get_post( $chart_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Chart not found.', 'visualizer' ) ) );
 		}
+		$this->_verify_chart_access( $chart_id );
 
 		$prompt         = isset( $_POST['prompt'] ) ? sanitize_textarea_field( wp_unslash( $_POST['prompt'] ) ) : '';
 		$series         = isset( $_POST['series'] ) ? wp_unslash( $_POST['series'] ) : '';
@@ -560,6 +565,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 		if ( ! $chart_id || ! get_post( $chart_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Chart not found.', 'visualizer' ) ) );
 		}
+		$this->_verify_chart_access( $chart_id );
 		if ( empty( $code ) ) {
 			wp_send_json_error( array( 'message' => __( 'No chart code found. Generate a chart first.', 'visualizer' ) ) );
 		}

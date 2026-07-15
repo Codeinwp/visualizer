@@ -117,7 +117,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 *
 	 * @access protected
 	 * @param string $filename Optional file name to get handle. If omitted, $_filename is used.
-	 * @return resource File handle resource on success, otherwise FALSE.
+	 * @return resource|false File handle resource on success, otherwise FALSE.
 	 */
 	protected function _get_file_handle( $filename = false ) {
 		// open file and return handle
@@ -141,22 +141,28 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 
 		// read file and fill arrays
 		$handle = $this->_get_file_handle();
-		if ( $handle ) {
-			// fetch series
-			if ( ! $this->_fetchSeries( $handle ) ) {
-				return false;
+		if ( ! $handle ) {
+			if ( empty( $this->_error ) ) {
+				$this->_error = esc_html__( 'The file could not be opened. Please try again.', 'visualizer' );
 			}
-
-			// fetch data
-			$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
-			while ( $data !== false ) {
-				$this->_data[] = $this->_normalizeData( $data );
-				$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
-			}
-
-			// close file handle
-			fclose( $handle );
+			return false;
 		}
+
+		// fetch series
+		if ( ! $this->_fetchSeries( $handle ) ) {
+			fclose( $handle );
+			return false;
+		}
+
+		// fetch data
+		$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+		while ( $data !== false ) {
+			$this->_data[] = $this->_normalizeData( $data );
+			$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+		}
+
+		// close file handle
+		fclose( $handle );
 
 		return true;
 	}

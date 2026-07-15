@@ -30,12 +30,12 @@
 class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 
 	/**
-	 * Temporary file name used when allow_url_fopen option is disabled.
+	 * Path to the safely downloaded temporary file.
 	 *
 	 * @since 1.4.2
 	 *
 	 * @access private
-	 * @var string
+	 * @var string|false
 	 */
 	private $_tmpfile = false;
 
@@ -130,35 +130,43 @@ class Visualizer_Source_Csv_Remote extends Visualizer_Source_Csv {
 	}
 
 	/**
+	 * Fetches the remote file and removes its temporary copy.
+	 *
+	 * @access public
+	 * @return boolean TRUE on success, otherwise FALSE.
+	 */
+	public function fetch() {
+		$result = parent::fetch();
+
+		if ( $this->_tmpfile && is_file( $this->_tmpfile ) ) {
+			wp_delete_file( $this->_tmpfile );
+			$this->_tmpfile = false;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Returns file handle to fetch data from.
 	 *
 	 * @since 1.4.2
 	 *
 	 * @access protected
-	 * @staticvar boolean $allow_url_fopen Determines whether or not allow_url_fopen option is enabled.
 	 * @param string $filename Optional file name to get handle. If omitted, $_filename is used.
-	 * @return resource File handle resource on success, otherwise FALSE.
+	 * @return resource|false File handle resource on success, otherwise FALSE.
 	 */
 	protected function _get_file_handle( $filename = false ) {
-		static $allow_url_fopen = null;
-
-		if ( ! is_wp_error( $this->_tmpfile ) && $this->_tmpfile && is_readable( $this->_tmpfile ) ) {
+		if ( $this->_tmpfile && is_readable( $this->_tmpfile ) ) {
 			return parent::_get_file_handle( $this->_tmpfile );
 		}
 
-		if ( is_null( $allow_url_fopen ) ) {
-			$allow_url_fopen = filter_var( ini_get( 'allow_url_fopen' ), FILTER_VALIDATE_BOOLEAN );
+		$tmpfile = Visualizer_Remote_Fetch::download( $this->_filename );
+		if ( is_wp_error( $tmpfile ) ) {
+			$this->_error = esc_html__( 'Could not download the file. Please check the URL and try again.', 'visualizer' );
+			return false;
 		}
 
-		$scheme = parse_url( $this->_filename, PHP_URL_SCHEME );
-		if ( $allow_url_fopen && in_array( $scheme, stream_get_wrappers(), true ) ) {
-			return parent::_get_file_handle( $filename );
-		}
-
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-
-		$this->_tmpfile = download_url( $this->_filename );
-
-		return ! is_wp_error( $this->_tmpfile ) ? parent::_get_file_handle( $this->_tmpfile ) : false;
+		$this->_tmpfile = $tmpfile;
+		return parent::_get_file_handle( $this->_tmpfile );
 	}
 }

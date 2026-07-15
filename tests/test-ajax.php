@@ -61,6 +61,102 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Test that the AI Builder URL import rejects local file paths.
+	 */
+	public function test_ai_builder_file_url_rejects_local_path() {
+		wp_set_current_user( $this->contibutor_user_id );
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'draft',
+				'post_author' => $this->contibutor_user_id,
+			)
+		);
+		$file = wp_tempnam( 'visualizer-local.csv' );
+		file_put_contents( $file, "Label,Value\nstring,number\nSecret,42" );
+
+		$_POST = array(
+			'chart_id'   => $chart_id,
+			'nonce'      => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
+			'source_type' => 'file_url',
+			'file_url'   => $file,
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-upload' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		}
+		wp_delete_file( $file );
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Invalid URL. Please check the URL and try again.', $response->data->message );
+	}
+
+	/**
+	 * Test that a user cannot request an upload nonce for another user's chart.
+	 */
+	public function test_ai_builder_chart_nonce_requires_chart_edit_permission() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'publish',
+				'post_author' => $this->admin_user_id,
+			)
+		);
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$_POST = array(
+			'chart_id' => $chart_id,
+			'nonce'    => wp_create_nonce( 'visualizer-ai-builder' ),
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-chart-nonce' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Unauthorized.', $response->data->message );
+	}
+
+	/**
+	 * Test that a user cannot upload data to another user's chart.
+	 */
+	public function test_ai_builder_upload_requires_chart_edit_permission() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'publish',
+				'post_author' => $this->admin_user_id,
+			)
+		);
+		$original_content = get_post_field( 'post_content', $chart_id );
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$_POST = array(
+			'chart_id'   => $chart_id,
+			'nonce'      => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
+			'source_type' => 'csv_string',
+			'csv_data'   => "Label,Value\nstring,number\nSecret,42",
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-upload' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Unauthorized.', $response->data->message );
+		$this->assertSame( $original_content, get_post_field( 'post_content', $chart_id ) );
+	}
+
+	/**
 	 * Test the AJAX response for fetching the database data.
 	 */
 	public function test_ajax_response_get_query_data_valid_query() {
@@ -382,39 +478,102 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * A permitted user (contributor) is not blocked by the guard, and the JSON source fetches through the
-	 * SSRF-safe transport (`reject_unsafe_urls`), matching the CSV path (issue #591 SSRF fix).
+	 * JSON get-data admits a user who can edit the chart (issue #591 access-control fix).
 	 */
-	public function test_json_get_roots_allowed_for_contributor_uses_safe_transport() {
+	public function test_json_get_data_allows_editor_for_editable_chart() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_author' => $this->admin_user_id,
+			)
+		);
+		$this->_setRole( 'editor' );
+
+		$filter = function () {
+			return array(
+				'headers'  => array(),
+				'body'     => wp_json_encode( array( array( 'name' => 'a', 'value' => 1 ), array( 'name' => 'b', 'value' => 2 ) ) ),
+				'response' => array( 'code' => 200, 'message' => '' ),
+				'cookies'  => array(),
+				'filename' => null,
+			);
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'url'    => 'http://93.184.216.34/data.json',
+			'method' => 'GET',
+			'chart'  => $chart_id,
+			'root'   => 'root',
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_GET_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+		remove_filter( 'pre_http_request', $filter );
+
+		$response = json_decode( $this->_last_response );
+		$this->assertIsObject( $response );
+		$this->assertTrue( $response->success );
+	}
+
+	/**
+	 * JSON get-data dies for a chart the user cannot edit (issue #591 access-control fix).
+	 */
+	public function test_json_get_data_denied_for_chart_user_cannot_edit() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_author' => $this->admin_user_id,
+			)
+		);
+		$this->_setRole( 'contributor' );
+
+		$requests = 0;
+		$filter   = function ( $preempt ) use ( &$requests ) {
+			$requests++;
+			return $preempt;
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'url'    => 'http://93.184.216.34/data.json',
+			'method' => 'GET',
+			'chart'  => $chart_id,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_GET_DATA );
+			$this->fail( 'Expected the request to die for a chart the user cannot edit.' );
+		} catch ( WPAjaxDieStopException $e ) {
+			$this->assertSame( '', $e->getMessage() );
+		}
+		remove_filter( 'pre_http_request', $filter );
+
+		$this->assertSame( 0, $requests );
+	}
+
+	/**
+	 * A contributor may use JSON import, but link-local destinations are blocked before transport.
+	 */
+	public function test_json_get_roots_blocks_link_local_for_contributor() {
 		wp_set_current_user( $this->contibutor_user_id );
 		$this->_setRole( 'contributor' );
 
-		$captured = array();
-		add_filter(
-			'pre_http_request',
-			function ( $pre, $args, $url ) use ( &$captured ) {
-				$captured[] = array(
-					'url'    => $url,
-					'reject' => ! empty( $args['reject_unsafe_urls'] ),
-				);
-				return array(
-					'headers'  => array(),
-					'body'     => wp_json_encode( array( 'results' => array( array( 'id' => 1 ) ) ) ),
-					'response' => array(
-						'code'    => 200,
-						'message' => 'OK',
-					),
-					'cookies'  => array(),
-					'filename' => null,
-				);
-			},
-			10,
-			3
-		);
+		$requests = 0;
+		$filter   = function ( $preempt ) use ( &$requests ) {
+			$requests++;
+			return $preempt;
+		};
+		add_filter( 'pre_http_request', $filter );
 
 		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_ROOTS . Visualizer_Plugin::VERSION );
 		$_POST['params']  = array(
-			'url'    => 'http://127.0.0.1:9999/latest/meta-data/',
+			'url'    => 'http://169.254.169.254/latest/meta-data/',
 			'method' => 'GET',
 		);
 
@@ -423,17 +582,12 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		} catch ( WPAjaxDieContinueException $e ) {
 			// We expected this, do nothing.
 		}
+		remove_filter( 'pre_http_request', $filter );
 
 		$response = json_decode( $this->_last_response );
 		$this->assertIsObject( $response );
-		// The capability guard must NOT block a user who has edit_posts.
-		$msg = isset( $response->data->msg ) ? $response->data->msg : '';
-		$this->assertNotEquals( 'You do not have permission to perform this action.', $msg );
-		// Every outbound request for the JSON source must use the SSRF-safe transport.
-		$this->assertNotEmpty( $captured, 'The JSON source did not attempt any fetch.' );
-		foreach ( $captured as $req ) {
-			$this->assertTrue( $req['reject'], 'JSON fetch must use wp_safe_remote_* (reject_unsafe_urls => true).' );
-		}
+		$this->assertFalse( $response->success );
+		$this->assertSame( 0, $requests );
 	}
 
 	/**

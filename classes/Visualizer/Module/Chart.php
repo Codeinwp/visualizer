@@ -204,7 +204,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$chart_id = $params['chart'];
 
-		if ( empty( $chart_id ) ) {
+		$chart = $chart_id ? get_post( $chart_id ) : null;
+		if ( ! $chart || Visualizer_Plugin::CPT_VISUALIZER !== $chart->post_type || ! current_user_can( 'edit_post', $chart_id ) ) {
 			wp_die();
 		}
 
@@ -1063,7 +1064,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * Used as a fallback when the URL path has no recognisable file extension
 	 * (e.g. SharePoint, signed S3 URLs, or "download?id=…" endpoints).
 	 *
-	 * Uses wp_safe_remote_get() to block requests to private/loopback addresses,
+	 * Uses the shared remote-fetch policy to block non-public destinations,
 	 * and streams the response to a temp file so no body data is held in memory
 	 * regardless of whether the server honours the Range header.
 	 *
@@ -1082,14 +1083,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return false;
 		}
 
-		$response = wp_safe_remote_get(
+		$response = Visualizer_Remote_Fetch::request(
 			$url,
 			array(
-				'timeout'    => 10,
-				'user-agent' => 'WordPress/' . get_bloginfo( 'version' ),
-				'headers'    => array( 'Range' => 'bytes=0-3' ),
-				'stream'     => true,
-				'filename'   => $tmpfile,
+				'timeout'             => 10,
+				'user-agent'          => 'WordPress/' . get_bloginfo( 'version' ),
+				'headers'             => array( 'Range' => 'bytes=0-3' ),
+				'stream'              => true,
+				'filename'            => $tmpfile,
+				'limit_response_size' => 4,
 			)
 		);
 
