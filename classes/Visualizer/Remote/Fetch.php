@@ -74,9 +74,14 @@ class Visualizer_Remote_Fetch {
 			if ( ! self::same_origin( $validated_url, $next_url ) ) {
 				$args['headers'] = self::headers_for_cross_origin_redirect( isset( $args['headers'] ) ? $args['headers'] : array() );
 				unset( $args['cookies'] );
+			} else {
+				$response_cookies = wp_remote_retrieve_cookies( $response );
+				if ( ! empty( $response_cookies ) ) {
+					$args['cookies'] = array_merge( isset( $args['cookies'] ) ? $args['cookies'] : array(), $response_cookies );
+				}
 			}
 
-			if ( 303 === $status || ( in_array( $status, array( 301, 302 ), true ) && 'POST' === $args['method'] ) ) {
+			if ( in_array( $status, array( 302, 303 ), true ) ) {
 				$args['method'] = 'GET';
 				unset( $args['body'] );
 			}
@@ -142,12 +147,26 @@ class Visualizer_Remote_Fetch {
 	 */
 	private static function enforce_request_policy( $args ) {
 		$args['method'] = strtoupper( (string) $args['method'] );
-		if ( ! in_array( $args['method'], array( 'GET', 'POST' ), true ) ) {
-			return new WP_Error( 'visualizer_remote_method', 'Only GET and POST remote requests are allowed.' );
+		if ( ! preg_match( '/^[!#$%&\'*+\-.^_`|~0-9A-Z]+$/', $args['method'] ) || in_array( $args['method'], array( 'CONNECT', 'TRACE' ), true ) ) {
+			return new WP_Error( 'visualizer_remote_method', 'The remote request method is not allowed.' );
+		}
+
+		if ( isset( $args['headers'] ) && is_string( $args['headers'] ) ) {
+			$headers = array();
+			foreach ( preg_split( '/\r\n|\r|\n/', $args['headers'] ) as $header ) {
+				if ( false === strpos( $header, ':' ) ) {
+					continue;
+				}
+				list( $name, $value )                   = explode( ':', $header, 2 );
+				$headers[ strtolower( trim( $name ) ) ] = trim( $value );
+			}
+			$args['headers'] = $headers;
+		} elseif ( ! isset( $args['headers'] ) || ! is_array( $args['headers'] ) ) {
+			$args['headers'] = array();
 		}
 
 		$blocked_headers = array( 'connection', 'content-length', 'host', 'proxy-authorization', 'proxy-connection', 'te', 'trailer', 'transfer-encoding', 'upgrade' );
-		foreach ( isset( $args['headers'] ) ? $args['headers'] : array() as $name => $value ) {
+		foreach ( $args['headers'] as $name => $value ) {
 			if ( in_array( strtolower( (string) $name ), $blocked_headers, true ) ) {
 				unset( $args['headers'][ $name ] );
 			}
@@ -165,11 +184,12 @@ class Visualizer_Remote_Fetch {
 	 * rebinding nameserver answer with a private address after validation
 	 * passed. Hostname requests fail closed when cURL pinning is unavailable.
 	 *
-	 * @param string   $url Validated URL.
-	 * @param string[] $ips Validated addresses.
+	 * @param string      $url          Validated URL.
+	 * @param string[]    $ips          Validated addresses.
+	 * @param string|null $curl_version Optional cURL version override.
 	 * @return callable|WP_Error|null The registered hook to remove after dispatch, an error when pinning is unavailable, or null for an IP literal or exempt host.
 	 */
-	private static function pin_validated_addresses( $url, $ips ) {
+	private static function pin_validated_addresses( $url, $ips, $curl_version = null ) {
 		if ( empty( $ips ) ) {
 			return null;
 		}
@@ -183,16 +203,33 @@ class Visualizer_Remote_Fetch {
 			return new WP_Error( 'visualizer_remote_transport', 'The remote host cannot be fetched securely on this server.' );
 		}
 
+		$curl = curl_version();
 		if ( 'https' === strtolower( $parsed['scheme'] ) ) {
-			$curl = curl_version();
 			if ( empty( $curl['features'] ) || ! defined( 'CURL_VERSION_SSL' ) || ! ( $curl['features'] & CURL_VERSION_SSL ) ) {
 				return new WP_Error( 'visualizer_remote_transport', 'The remote host cannot be fetched securely on this server.' );
 			}
+		}
+		if ( null === $curl_version ) {
+			$curl_version = isset( $curl['version'] ) ? $curl['version'] : '0.0.0';
 		}
 
 		$proxy = new WP_HTTP_Proxy();
 		if ( $proxy->is_enabled() && $proxy->send_through_proxy( $url ) ) {
 			return new WP_Error( 'visualizer_remote_transport', 'The remote host cannot be fetched securely through the configured proxy.' );
+		}
+
+		if ( version_compare( $curl_version, '7.59.0', '<' ) ) {
+			foreach ( $ips as $ip ) {
+				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+					$ips = array( $ip );
+					break;
+				}
+			}
+			$ips = array( reset( $ips ) );
+		}
+
+		if ( version_compare( $curl_version, '7.57.0', '<' ) && filter_var( reset( $ips ), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ) {
+			return new WP_Error( 'visualizer_remote_transport', 'The remote host cannot be fetched securely on this server.' );
 		}
 
 		$addresses = array();

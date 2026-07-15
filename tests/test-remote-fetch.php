@@ -126,7 +126,8 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		$filter   = function ( $preempt, $args, $url ) use ( &$requests ) {
 			$requests[] = array( $url, $args['cookies'] );
 			if ( 1 === count( $requests ) ) {
-				return $this->response( 302, array( 'location' => 'http://93.184.216.35/data' ) );
+				$cookie = new WP_Http_Cookie( 'redirect=secret; Path=/', 'http://93.184.216.34/start' );
+				return $this->response( 302, array( 'location' => 'http://93.184.216.35/data' ), '', array( $cookie ) );
 			}
 			return $this->response( 200 );
 		};
@@ -142,6 +143,55 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		$this->assertCount( 2, $requests );
 		$this->assertNotEmpty( $requests[0][1] );
 		$this->assertSame( array(), $requests[1][1] );
+	}
+
+	/**
+	 * Cookies set by a response must be available to its same-origin redirect target.
+	 */
+	public function test_carries_response_cookies_on_same_origin_redirect() {
+		$requests = array();
+		$filter   = function ( $preempt, $args ) use ( &$requests ) {
+			$requests[] = $args['cookies'];
+			if ( 1 === count( $requests ) ) {
+				$cookie = new WP_Http_Cookie( 'session=secret; Path=/', 'http://93.184.216.34/start' );
+				return $this->response( 302, array( 'location' => '/next' ), '', array( $cookie ) );
+			}
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/start' );
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $response );
+		$this->assertCount( 2, $requests );
+		$this->assertCount( 1, $requests[1] );
+		$this->assertSame( 'session', $requests[1][0]->name );
+	}
+
+	/**
+	 * WordPress accepts request headers as a string, including across redirects.
+	 */
+	public function test_normalizes_string_headers_before_cross_origin_redirect() {
+		$requests = array();
+		$filter   = function ( $preempt, $args ) use ( &$requests ) {
+			$requests[] = $args['headers'];
+			if ( 1 === count( $requests ) ) {
+				return $this->response( 302, array( 'location' => 'http://93.184.216.35/next' ) );
+			}
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::request(
+			'http://93.184.216.34/start',
+			array( 'headers' => "Accept: application/json\r\nAuthorization: Bearer secret" )
+		);
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $response );
+		$this->assertCount( 2, $requests );
+		$this->assertSame( array( 'accept' => 'application/json' ), $requests[1] );
 	}
 
 	/**
@@ -164,42 +214,133 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	}
 
 	/**
-	 * IPv6 addresses use cURL's bracketed CURLOPT_RESOLVE syntax.
+	 * Addresses use syntax supported by the installed cURL version.
+	 *
+	 * @dataProvider curl_resolve_entries
+	 * @param string   $curl_version cURL version.
+	 * @param string[] $ips          Validated addresses.
+	 * @param string   $expected     Expected resolve entry.
 	 */
-	public function test_formats_ipv6_addresses_for_curl_resolve() {
+	public function test_formats_addresses_for_curl_resolve( $curl_version, $ips, $expected ) {
 		$method = new ReflectionMethod( Visualizer_Remote_Fetch::class, 'pin_validated_addresses' );
 		$method->setAccessible( true );
 		$pin = $method->invoke(
 			null,
 			'https://example.com/data.json',
-			array( '93.184.216.34', '2606:2800:220:1:248:1893:25c8:1946' )
+			$ips,
+			$curl_version
 		);
 
 		$this->assertIsCallable( $pin );
 		$reflection = new ReflectionFunction( $pin );
-		$this->assertSame(
-			'example.com:443:93.184.216.34,[2606:2800:220:1:248:1893:25c8:1946]',
-			$reflection->getStaticVariables()['entry']
-		);
+		$this->assertSame( $expected, $reflection->getStaticVariables()['entry'] );
 		remove_action( 'http_api_curl', $pin );
+	}
+
+	/**
+	 * Resolve entries for supported cURL syntax generations.
+	 *
+	 * @return array[]
+	 */
+	public function curl_resolve_entries() {
+		return array(
+			'modern mixed addresses' => array(
+				'7.59.0',
+				array( '93.184.216.34', '2606:2800:220:1:248:1893:25c8:1946' ),
+				'example.com:443:93.184.216.34,[2606:2800:220:1:248:1893:25c8:1946]',
+			),
+			'legacy mixed addresses' => array(
+				'7.58.0',
+				array( '2606:2800:220:1:248:1893:25c8:1946', '93.184.216.34' ),
+				'example.com:443:93.184.216.34',
+			),
+			'pre-IPv6 mixed addresses' => array(
+				'7.56.0',
+				array( '2606:2800:220:1:248:1893:25c8:1946', '93.184.216.34' ),
+				'example.com:443:93.184.216.34',
+			),
+			'legacy IPv6 address'    => array(
+				'7.57.0',
+				array( '2606:2800:220:1:248:1893:25c8:1946' ),
+				'example.com:443:[2606:2800:220:1:248:1893:25c8:1946]',
+			),
+		);
+	}
+
+	/**
+	 * cURL versions without bracketed IPv6 resolve support fail closed for IPv6-only hosts.
+	 */
+	public function test_rejects_ipv6_pinning_on_unsupported_curl() {
+		$method = new ReflectionMethod( Visualizer_Remote_Fetch::class, 'pin_validated_addresses' );
+		$method->setAccessible( true );
+		$response = $method->invoke(
+			null,
+			'https://example.com/data.json',
+			array( '2606:2800:220:1:248:1893:25c8:1946' ),
+			'7.56.0'
+		);
+
+		$this->assertWPError( $response );
+		$this->assertSame( 'visualizer_remote_transport', $response->get_error_code() );
+	}
+
+	/**
+	 * JSON imports retain the established extended request methods.
+	 *
+	 * @dataProvider extended_json_request_methods
+	 * @param string $method HTTP method.
+	 */
+	public function test_allows_extended_json_request_methods( $method ) {
+		$filter = function ( $preempt, $args ) use ( $method ) {
+			$this->assertSame( $method, $args['method'] );
+			return $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/', array( 'method' => $method ) );
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $response );
+	}
+
+	/**
+	 * Extended JSON request methods.
+	 *
+	 * @return array[]
+	 */
+	public function extended_json_request_methods() {
+		return array(
+			'PUT'      => array( 'PUT' ),
+			'PATCH'    => array( 'PATCH' ),
+			'DELETE'   => array( 'DELETE' ),
+			'HEAD'     => array( 'HEAD' ),
+			'OPTIONS'  => array( 'OPTIONS' ),
+			'PROPFIND' => array( 'PROPFIND' ),
+		);
 	}
 
 	/**
 	 * Header and method policy is applied before dispatch.
 	 */
 	public function test_rejects_unsupported_method_before_request() {
-		$requests = 0;
-		$filter   = function ( $preempt ) use ( &$requests ) {
+		$requests  = 0;
+		$responses = array();
+		$filter    = function ( $preempt ) use ( &$requests ) {
 			$requests++;
-			return $preempt;
+			return $this->response( 200 );
 		};
 		add_filter( 'pre_http_request', $filter );
 
-		$response = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/', array( 'method' => 'DELETE' ) );
+		foreach ( array( 'CONNECT', 'TRACE', "GET\r\nX-Injected: true" ) as $method ) {
+			$responses[] = Visualizer_Remote_Fetch::request( 'http://93.184.216.34/', array( 'method' => $method ) );
+		}
 
 		remove_filter( 'pre_http_request', $filter );
-		$this->assertWPError( $response );
-		$this->assertSame( 'visualizer_remote_method', $response->get_error_code() );
+
+		foreach ( $responses as $response ) {
+			$this->assertWPError( $response );
+			$this->assertSame( 'visualizer_remote_method', $response->get_error_code() );
+		}
 		$this->assertSame( 0, $requests );
 	}
 
@@ -255,6 +396,79 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 		$this->assertCount( 2, $requests );
 		$this->assertSame( 'http://93.184.216.34/next', $requests[1][0] );
 		$this->assertSame( $headers, $requests[1][1] );
+	}
+
+	/**
+	 * A 301 redirect preserves the request method and body, matching WordPress Requests.
+	 */
+	public function test_301_redirect_preserves_post_method_and_body() {
+		$requests = array();
+		$filter   = function ( $preempt, $args ) use ( &$requests ) {
+			$requests[] = array( $args['method'], isset( $args['body'] ) ? $args['body'] : null );
+			return 1 === count( $requests )
+				? $this->response( 301, array( 'location' => '/next' ) )
+				: $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::request(
+			'http://93.184.216.34/start',
+			array(
+				'method' => 'POST',
+				'body'   => '{"query":"data"}',
+			)
+		);
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $response );
+		$this->assertSame(
+			array(
+				array( 'POST', '{"query":"data"}' ),
+				array( 'POST', '{"query":"data"}' ),
+			),
+			$requests
+		);
+	}
+
+	/**
+	 * Browser-compatible redirects switch extended methods to GET without a body.
+	 *
+	 * @dataProvider get_redirect_statuses
+	 * @param int $status Redirect status.
+	 */
+	public function test_browser_redirect_switches_extended_method_to_get( $status ) {
+		$requests = array();
+		$filter   = function ( $preempt, $args ) use ( &$requests, $status ) {
+			$requests[] = array( $args['method'], isset( $args['body'] ) ? $args['body'] : null );
+			return 1 === count( $requests )
+				? $this->response( $status, array( 'location' => '/next' ) )
+				: $this->response( 200 );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$response = Visualizer_Remote_Fetch::request(
+			'http://93.184.216.34/start',
+			array(
+				'method' => 'PATCH',
+				'body'   => '{"query":"data"}',
+			)
+		);
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		$this->assertNotWPError( $response );
+		$this->assertSame( array( 'GET', null ), $requests[1] );
+	}
+
+	/**
+	 * Redirect statuses that WordPress follows with GET.
+	 *
+	 * @return array[]
+	 */
+	public function get_redirect_statuses() {
+		return array(
+			'302' => array( 302 ),
+			'303' => array( 303 ),
+		);
 	}
 
 	/**
@@ -472,9 +686,10 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	 * @param int    $code    Status code.
 	 * @param array  $headers Response headers.
 	 * @param string $body    Response body.
+	 * @param array  $cookies Response cookies.
 	 * @return array
 	 */
-	private function response( $code, $headers = array(), $body = '' ) {
+	private function response( $code, $headers = array(), $body = '', $cookies = array() ) {
 		return array(
 			'headers'  => $headers,
 			'body'     => $body,
@@ -482,7 +697,7 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 				'code'    => $code,
 				'message' => '',
 			),
-			'cookies'  => array(),
+			'cookies'  => $cookies,
 			'filename' => null,
 		);
 	}
