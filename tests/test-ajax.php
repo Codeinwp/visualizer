@@ -95,6 +95,51 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Test that saving chart settings sanitizes the stored settings meta.
+	 */
+	public function test_edit_chart_save_sanitizes_settings_meta() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'publish',
+				'post_author' => $this->admin_user_id,
+			)
+		);
+		add_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'line' );
+
+		$original_request_method   = isset( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : null;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_GET = array(
+			'chart' => $chart_id,
+			'tab'   => 'settings',
+			'nonce' => wp_create_nonce(),
+		);
+		// No literal '<' so the payload survives the wp_strip_all_tags() pass at
+		// the top of renderChartPages(); only sanitizeSettings() removes the
+		// percent-encoded octets. This fails if the sanitizeSettings() call is
+		// dropped from the save path.
+		$_POST = array(
+			'backend-title' => 'Chart %3Cscript%3E',
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_EDIT_CHART );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected.
+		} finally {
+			if ( null === $original_request_method ) {
+				unset( $_SERVER['REQUEST_METHOD'] );
+			} else {
+				$_SERVER['REQUEST_METHOD'] = $original_request_method;
+			}
+		}
+
+		$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+		$this->assertSame( 'Chart script', $settings['backend-title'] );
+	}
+
+	/**
 	 * Test that a user cannot request an upload nonce for another user's chart.
 	 */
 	public function test_ai_builder_chart_nonce_requires_chart_edit_permission() {
