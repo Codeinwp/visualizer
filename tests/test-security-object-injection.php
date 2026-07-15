@@ -300,4 +300,53 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 			'Legitimate serialized meta must survive cloning unchanged.'
 		);
 	}
+
+	/**
+	 * Saving and restoring a chart revision copies raw post meta through
+	 * maybe_decode_content(); neither direction may instantiate objects, and
+	 * legitimate serialized meta must survive the round trip.
+	 */
+	public function test_revision_meta_copy_is_guarded_and_round_trips() {
+		$settings = array( 'series' => array( array( 'color' => '#00ff00' ) ) );
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_content' => wp_slash( serialize( array( array( 'Label' ), array( 'Value' ) ) ) ),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, $settings );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, array( new Visualizer_POI_Canary() ) );
+		Visualizer_POI_Canary::$awoke = false;
+
+		// _wp_put_post_revision fires the hook that runs Admin::addRevision().
+		$revision_id = _wp_put_post_revision( get_post( $chart_id ) );
+
+		$this->assertIsInt( $revision_id );
+		$this->assertFalse(
+			Visualizer_POI_Canary::$awoke,
+			'Saving a revision must not instantiate objects from raw post meta.'
+		);
+		$this->assertSame(
+			$settings,
+			get_metadata( 'post', $revision_id, Visualizer_Plugin::CF_SETTINGS, true ),
+			'Legitimate serialized meta must be copied to the revision unchanged.'
+		);
+
+		// Change the live meta, then restore; wp_restore_post_revision fires
+		// the hook that runs Admin::restoreRevision().
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, array( 'series' => array() ) );
+		Visualizer_POI_Canary::$awoke = false;
+
+		wp_restore_post_revision( $revision_id );
+
+		$this->assertFalse(
+			Visualizer_POI_Canary::$awoke,
+			'Restoring a revision must not instantiate objects from raw revision meta.'
+		);
+		$this->assertSame(
+			$settings,
+			get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ),
+			'Legitimate serialized meta must survive the revision restore unchanged.'
+		);
+	}
 }
