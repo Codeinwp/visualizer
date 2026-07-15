@@ -775,8 +775,11 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 
 		try {
 			$this->_handleAjax( Visualizer_Plugin::ACTION_CLONE_CHART );
+			$this->fail( 'Expected the request to die for a chart the user cannot edit.' );
+		} catch ( WPAjaxDieStopException $e ) {
+			// cloneChart() ends with wp_die() in the test environment when denied.
 		} catch ( WPAjaxDieContinueException $e ) {
-			// Expected when the handler ends.
+			// Expected when the handler ends normally.
 		}
 
 		$this->assertSame( $before, wp_count_posts( Visualizer_Plugin::CPT_VISUALIZER )->draft );
