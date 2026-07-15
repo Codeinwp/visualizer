@@ -55,8 +55,13 @@ class Visualizer_Source_Xlsx extends Visualizer_Source {
 		}
 
 		$reader = \OpenSpout\Reader\Common\Creator\ReaderEntityFactory::createXLSXReader();
+		$file_path = $this->_get_file_path();
+		if ( ! $file_path ) {
+			return false;
+		}
+
 		try {
-			$reader->open( $this->_get_file_path() );
+			$reader->open( $file_path );
 
 			$all_rows = array();
 			foreach ( $reader->getSheetIterator() as $sheet ) {

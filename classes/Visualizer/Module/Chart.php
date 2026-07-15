@@ -204,7 +204,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$chart_id = $params['chart'];
 
-		if ( empty( $chart_id ) ) {
+		$chart = $chart_id ? get_post( $chart_id ) : null;
+		if ( ! $chart || Visualizer_Plugin::CPT_VISUALIZER !== $chart->post_type || ! current_user_can( 'edit_post', $chart_id ) ) {
 			wp_die();
 		}
 
@@ -823,6 +824,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				if ( isset( $existing['colors'] ) && is_array( $existing['colors'] ) && ! isset( $post_settings['colors'] ) ) {
 					$post_settings['colors'] = $existing['colors'];
 				}
+				$post_settings = $this->sanitizeSettings( $post_settings );
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $post_settings );
 
 				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
@@ -1015,6 +1017,31 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	}
 
 	/**
+	 * Sanitize settings data from the request.
+	 *
+	 * @param array<string, mixed> $post_data The POST data to sanitize.
+	 * @return array<string, mixed> The sanitized settings data.
+	 */
+	private function sanitizeSettings( $post_data ): array {
+		$chart_img = '';
+		if ( isset( $post_data['chart-img'] ) ) {
+			$chart_img = wp_unslash( $post_data['chart-img'] );
+			unset( $post_data['chart-img'] );
+		}
+
+		$post_data = map_deep(
+			$post_data,
+			'sanitize_textarea_field'
+		);
+
+		if ( '' !== $chart_img ) {
+			$post_data['chart-img'] = $chart_img;
+		}
+
+		return $post_data;
+	}
+
+	/**
 	 * Renders flattr script in the iframe <head>
 	 *
 	 * @since 1.4.2
@@ -1037,7 +1064,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * Used as a fallback when the URL path has no recognisable file extension
 	 * (e.g. SharePoint, signed S3 URLs, or "download?id=…" endpoints).
 	 *
-	 * Uses wp_safe_remote_get() to block requests to private/loopback addresses,
+	 * Uses the shared remote-fetch policy to block non-public destinations,
 	 * and streams the response to a temp file so no body data is held in memory
 	 * regardless of whether the server honours the Range header.
 	 *
@@ -1056,14 +1083,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return false;
 		}
 
-		$response = wp_safe_remote_get(
+		$response = Visualizer_Remote_Fetch::request(
 			$url,
 			array(
-				'timeout'    => 10,
-				'user-agent' => 'WordPress/' . get_bloginfo( 'version' ),
-				'headers'    => array( 'Range' => 'bytes=0-3' ),
-				'stream'     => true,
-				'filename'   => $tmpfile,
+				'timeout'             => 10,
+				'user-agent'          => 'WordPress/' . get_bloginfo( 'version' ),
+				'headers'             => array( 'Range' => 'bytes=0-3' ),
+				'stream'              => true,
+				'filename'            => $tmpfile,
+				'limit_response_size' => 4,
 			)
 		);
 
