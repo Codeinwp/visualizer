@@ -636,6 +636,38 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Test that the setup wizard import step builds per-row settings from the
+	 * decoded sample data, covering the decode_content() call in the wizard.
+	 */
+	public function test_wizard_import_chart_builds_settings_from_decoded_sample_data() {
+		wp_set_current_user( $this->admin_user_id );
+
+		$_POST = array(
+			'security'   => wp_create_nonce( VISUALIZER_ABSPATH ),
+			'step'       => 'step_2',
+			'chart_type' => 'pie',
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer_wizard_step_process' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// We expected this, do nothing.
+		}
+
+		// Skip any PHP notices emitted before the JSON payload.
+		$response = json_decode( substr( $this->_last_response, (int) strpos( $this->_last_response, '{' ) ) );
+		$this->assertSame( 1, $response->success );
+
+		// Data rows in the bundled sample = total lines minus label + type rows.
+		$expected_rows = count( array_filter( array_map( 'trim', file( VISUALIZER_ABSPATH . '/samples/pie.csv' ) ) ) ) - 2;
+		$settings      = get_post_meta( $response->chart_id, Visualizer_Plugin::CF_SETTINGS, true );
+
+		$this->assertGreaterThan( 0, $expected_rows );
+		$this->assertCount( $expected_rows, $settings['series'] );
+		$this->assertCount( $expected_rows, $settings['slices'] );
+	}
+
+	/**
 	 * Utility method to mock pro version.
 	 */
 	private function enable_pro() {

@@ -234,7 +234,7 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, $series );
 			update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, '' );
 
-			$data           = maybe_unserialize( $data );
+			$data           = Visualizer_Module::decode_content( $data );
 			$setting_series = array();
 			$setting_slices = array();
 			foreach ( $data as $s ) {
