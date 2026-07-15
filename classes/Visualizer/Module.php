@@ -788,7 +788,34 @@ class Visualizer_Module {
 	 * @return mixed The decoded value (array for valid chart data), or false.
 	 */
 	public static function decode_content( $content ) {
-		return is_string( $content ) ? unserialize( trim( $content ), array( 'allowed_classes' => false ) ) : false;
+		if ( ! is_string( $content ) ) {
+			return false;
+		}
+		return self::strip_incomplete_objects( unserialize( trim( $content ), array( 'allowed_classes' => false ) ) );
+	}
+
+	/**
+	 * Remove the __PHP_Incomplete_Class stubs the allowed_classes guard leaves
+	 * behind; they crash map_deep() when the decoded value is written back to
+	 * post meta. Legitimate chart content is nested arrays/scalars only.
+	 *
+	 * @param mixed $value The decoded value.
+	 * @return mixed The value without object stubs; false for a top-level stub.
+	 */
+	private static function strip_incomplete_objects( $value ) {
+		if ( $value instanceof __PHP_Incomplete_Class ) {
+			return false;
+		}
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				if ( $item instanceof __PHP_Incomplete_Class ) {
+					unset( $value[ $key ] );
+				} elseif ( is_array( $item ) ) {
+					$value[ $key ] = self::strip_incomplete_objects( $item );
+				}
+			}
+		}
+		return $value;
 	}
 
 	/**

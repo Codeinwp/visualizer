@@ -106,11 +106,11 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 			Visualizer_POI_Canary::$awoke,
 			'decode_content() must not instantiate objects from source content.'
 		);
-		$this->assertIsArray(
+		$this->assertSame(
+			array( 'marker' => 'decoded' ),
 			$result,
-			'decode_content() should still return the (neutralized) array.'
+			'decode_content() must keep legitimate data and strip object stubs entirely.'
 		);
-		$this->assertSame( 'decoded', $result['marker'] );
 	}
 
 	/**
@@ -154,7 +154,7 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 		$utility = Visualizer_Plugin::instance()->getModule( Visualizer_Module_Utility::NAME );
 		$result  = $utility->apply_global_style_settings( array(), $chart_id, 'pie' );
 
-		$this->assertCount( 3, $result['slices'], 'Palette size must match whitespace-wrapped chart data.' );
+		$this->assertCount( 2, $result['slices'], 'Palette size must match the legitimate rows in whitespace-wrapped chart data; object stubs are stripped.' );
 		$this->assertFalse(
 			Visualizer_POI_Canary::$awoke,
 			'Utility pie palette call site must not instantiate objects from post_content.'
@@ -194,7 +194,7 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 		Visualizer_Module_Utility::set_defaults( get_post( $chart_id ) );
 		$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
 
-		$this->assertCount( 3, $settings['slices'] );
+		$this->assertCount( 2, $settings['slices'] );
 		$this->assertFalse(
 			Visualizer_POI_Canary::$awoke,
 			'ChartJS defaults must not instantiate objects from post_content.'
