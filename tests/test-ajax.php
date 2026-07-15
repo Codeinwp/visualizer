@@ -636,6 +636,223 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Chart authorization validates both the object type and meta capability.
+	 */
+	public function test_chart_authorization_is_object_specific() {
+		$own_chart   = $this->create_chart_for_user( $this->contibutor_user_id );
+		$other_chart = $this->create_chart_for_user( $this->admin_user_id );
+		$regular_post = $this->factory->post->create(
+			array(
+				'post_author' => $this->contibutor_user_id,
+			)
+		);
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$this->assertTrue( Visualizer_Module::can_edit_chart( $own_chart ) );
+		$this->assertFalse( Visualizer_Module::can_edit_chart( $other_chart ) );
+		$this->assertFalse( Visualizer_Module::can_edit_chart( $regular_post ) );
+		$this->assertFalse( Visualizer_Module::can_edit_chart( PHP_INT_MAX ) );
+	}
+
+	/**
+	 * The chart editor rejects another user's chart before saving settings.
+	 */
+	public function test_edit_chart_denied_for_chart_user_cannot_edit() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		$original = array( 'title' => 'Original' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, $original );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_GET = array(
+			'chart' => $chart_id,
+			'tab'   => 'settings',
+			'nonce' => wp_create_nonce(),
+		);
+		$_POST = array(
+			'title' => 'Overwritten',
+			'save'  => 1,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_EDIT_CHART );
+			$this->fail( 'Expected the request to die for a chart the user cannot edit.' );
+		} catch ( WPAjaxDieStopException $e ) {
+			$this->assertStringContainsString( 'permission', $e->getMessage() );
+		}
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+
+		$this->assertSame( $original, get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true ) );
+	}
+
+	/**
+	 * Chart editors cannot update the site-wide map API key.
+	 */
+	public function test_edit_chart_map_api_key_requires_manage_options() {
+		$chart_id = $this->create_chart_for_user( $this->contibutor_user_id );
+		add_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'line' );
+		update_option( 'visualizer-map-api-key', 'original-key' );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_GET = array(
+			'chart' => $chart_id,
+			'tab'   => 'settings',
+			'nonce' => wp_create_nonce(),
+		);
+		$_POST = array(
+			'map_api_key' => 'attacker-key',
+			'save'        => 1,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_EDIT_CHART );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected when the editor response completes.
+		}
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+
+		$this->assertSame( 'original-key', get_option( 'visualizer-map-api-key' ) );
+	}
+
+	/**
+	 * Contributors only receive charts they own from the library endpoint.
+	 */
+	public function test_get_charts_only_lists_editable_scope_for_contributor() {
+		$own_chart   = $this->create_chart_for_user( $this->contibutor_user_id, 'publish' );
+		$other_chart = $this->create_chart_for_user( $this->admin_user_id, 'publish' );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_GET = array(
+			'nonce' => wp_create_nonce( Visualizer_Plugin::ACTION_GET_CHARTS ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_GET_CHARTS );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response  = json_decode( $this->_last_response, true );
+		$chart_ids = wp_list_pluck( $response['data'], 'id' );
+		$this->assertTrue( $response['success'] );
+		$this->assertContains( $own_chart, $chart_ids );
+		$this->assertNotContains( $other_chart, $chart_ids );
+	}
+
+	/**
+	 * A valid nonce does not permit deleting another user's chart.
+	 */
+	public function test_delete_chart_denied_for_chart_user_cannot_delete() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'chart' => $chart_id,
+			'nonce' => wp_create_nonce(),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_DELETE_CHART );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertNotNull( get_post( $chart_id ) );
+	}
+
+	/**
+	 * A valid nonce does not permit cloning another user's chart.
+	 */
+	public function test_clone_chart_denied_for_chart_user_cannot_edit() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_GET = array(
+			'chart' => $chart_id,
+			'nonce' => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
+		);
+		$before = wp_count_posts( Visualizer_Plugin::CPT_VISUALIZER )->draft;
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_CLONE_CHART );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected when the handler ends.
+		}
+
+		$this->assertSame( $before, wp_count_posts( Visualizer_Plugin::CPT_VISUALIZER )->draft );
+	}
+
+	/**
+	 * A user cannot alter another user's JSON refresh schedule.
+	 */
+	public function test_json_schedule_denied_for_chart_user_cannot_edit() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_POST = array(
+			'chart'    => $chart_id,
+			'time'     => 12,
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( '', get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, true ) );
+	}
+
+	/**
+	 * A user cannot replace another user's JSON chart data.
+	 */
+	public function test_json_set_data_denied_for_chart_user_cannot_edit() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_GET = array(
+			'chart'    => $chart_id,
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
+		);
+		$_POST = array(
+			'url'    => 'https://example.com/data.json',
+			'method' => 'GET',
+			'root'   => 'items',
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_DATA );
+			$this->fail( 'Expected the request to die for a chart the user cannot edit.' );
+		} catch ( WPAjaxDieStopException $e ) {
+			$this->assertStringContainsString( 'permission', $e->getMessage() );
+		}
+
+		$this->assertSame( '', get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true ) );
+	}
+
+	/**
+	 * A user cannot save filters on another user's chart.
+	 */
+	public function test_save_filter_denied_for_chart_user_cannot_edit() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_GET = array(
+			'chart'    => $chart_id,
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY . Visualizer_Plugin::VERSION ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+	}
+
+	/**
 	 * Test that the setup wizard import step builds per-row settings from the
 	 * decoded sample data, covering the decode_content() call in the wizard.
 	 */
@@ -665,6 +882,24 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		$this->assertGreaterThan( 0, $expected_rows );
 		$this->assertCount( $expected_rows, $settings['series'] );
 		$this->assertCount( $expected_rows, $settings['slices'] );
+	}
+
+	/**
+	 * Creates a chart owned by a specific user.
+	 *
+	 * @param int    $user_id User ID.
+	 * @param string $status Post status.
+	 * @return int
+	 */
+	private function create_chart_for_user( $user_id, $status = 'draft' ) {
+		return $this->factory->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'  => $status,
+				'post_author'  => $user_id,
+				'post_content' => wp_json_encode( array( 'data' => array(), 'metadata' => array() ) ),
+			)
+		);
 	}
 
 	/**

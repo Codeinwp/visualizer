@@ -723,6 +723,24 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Checks whether the current user may edit a specific chart.
+	 *
+	 * @param int $chart_id Chart ID.
+	 * @return bool
+	 */
+	public static function can_edit_chart( $chart_id ) {
+		$chart_id = absint( $chart_id );
+		if ( ! $chart_id ) {
+			return false;
+		}
+
+		$chart = get_post( $chart_id );
+		return $chart
+			&& Visualizer_Plugin::CPT_VISUALIZER === $chart->post_type
+			&& current_user_can( 'edit_post', $chart_id );
+	}
+
+	/**
 	 * Checks if the PRO version is active.
 	 *
 	 * @since 3.3.0

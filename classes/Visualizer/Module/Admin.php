@@ -437,7 +437,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 				'filters' => $chart_types,
 				'types'   => array_keys( $chart_types ),
 			),
-			'nonce'      => wp_create_nonce(),
+			'nonce'      => wp_create_nonce( Visualizer_Plugin::ACTION_GET_CHARTS ),
 			'buildurl'   => esc_url( add_query_arg( 'action', Visualizer_Plugin::ACTION_CREATE_CHART, admin_url( 'admin-ajax.php' ) ) ),
 		);
 

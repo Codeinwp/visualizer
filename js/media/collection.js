@@ -7,7 +7,8 @@
 				options = options || {};
 				options.type = 'GET';
 				options.data = _.extend( options.data || {}, {
-					action:  wp.media.view.l10n.visualizer.actions.get_charts
+					action: wp.media.view.l10n.visualizer.actions.get_charts,
+					nonce: wp.media.view.l10n.visualizer.nonce
 				});
 
 				return wp.media.ajax( options );
