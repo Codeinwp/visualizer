@@ -223,7 +223,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			if ( $meta ) {
 				foreach ( $meta as $key => $value ) {
 					if ( 0 === strpos( $key, 'visualizer' ) ) {
-						add_metadata( 'post', $revision_id, $key, maybe_unserialize( $value[0] ) );
+						add_metadata( 'post', $revision_id, $key, self::maybe_decode_content( $value[0] ) );
 					}
 				}
 			}
@@ -251,7 +251,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			if ( $meta ) {
 				foreach ( $meta as $key => $value ) {
 					if ( 0 === strpos( $key, 'visualizer' ) ) {
-						add_post_meta( $post_id, $key, maybe_unserialize( $value[0] ) );
+						add_post_meta( $post_id, $key, self::maybe_decode_content( $value[0] ) );
 					}
 				}
 			}

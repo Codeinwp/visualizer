@@ -614,7 +614,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						$chart_id  = $new_chart_id;
 						foreach ( $post_meta as $key => $value ) {
 							if ( strpos( $key, 'visualizer-' ) !== false ) {
-								add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+								add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 							}
 						}
 					}
@@ -1364,8 +1364,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( $source->fetch() ) {
 				$content    = $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 				$populate   = true;
-				if ( is_string( $content ) && is_array( unserialize( $content ) ) ) {
-					$json   = unserialize( $content );
+				$json = self::decode_content( $content );
+				if ( is_array( $json ) ) {
 					// if source exists, so should data. if source exists but data is blank, do not populate the chart.
 					// if we populate the data even if it is empty, the chart will show "Table has no columns".
 					if ( array_key_exists( 'source', $json ) && ! empty( $json['source'] ) && ( ! array_key_exists( 'data', $json ) || empty( $json['data'] ) ) ) {
@@ -1456,7 +1456,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$post_meta = get_post_meta( $chart_id );
 				foreach ( $post_meta as $key => $value ) {
 					if ( strpos( $key, 'visualizer-' ) !== false ) {
-						add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+						add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 					}
 				}
 				$redirect = esc_url(

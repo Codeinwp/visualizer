@@ -779,6 +779,56 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Safely unserialize chart/source content, blocking PHP object injection.
+	 *
+	 * Single guarded chokepoint shared by chart/source content sinks so the
+	 * allowed_classes guard cannot be dropped from one call site independently.
+	 *
+	 * @param mixed $content The serialized content (only strings are decoded).
+	 * @return mixed The decoded value (array for valid chart data), or false.
+	 */
+	public static function decode_content( $content ) {
+		if ( ! is_string( $content ) ) {
+			return false;
+		}
+		return self::strip_incomplete_objects( unserialize( trim( $content ), array( 'allowed_classes' => false ) ) );
+	}
+
+	/**
+	 * Remove the __PHP_Incomplete_Class stubs the allowed_classes guard leaves
+	 * behind; they crash map_deep() when the decoded value is written back to
+	 * post meta. Legitimate chart content is nested arrays/scalars only.
+	 *
+	 * @param mixed $value The decoded value.
+	 * @return mixed The value without object stubs; false for a top-level stub.
+	 */
+	private static function strip_incomplete_objects( $value ) {
+		if ( $value instanceof __PHP_Incomplete_Class ) {
+			return false;
+		}
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				if ( $item instanceof __PHP_Incomplete_Class ) {
+					unset( $value[ $key ] );
+				} elseif ( is_array( $item ) ) {
+					$value[ $key ] = self::strip_incomplete_objects( $item );
+				}
+			}
+		}
+		return $value;
+	}
+
+	/**
+	 * Object-injection-safe drop-in for maybe_unserialize().
+	 *
+	 * @param mixed $value Raw meta/content value.
+	 * @return mixed The decoded value for serialized input, the value unchanged otherwise.
+	 */
+	public static function maybe_decode_content( $value ) {
+		return is_serialized( $value ) ? self::decode_content( $value ) : $value;
+	}
+
+	/**
 	 * Gets the chart content after common manipulations.
 	 */
 	public static function get_chart_data( $chart, $type, $run_filter = true ) {
@@ -793,7 +843,7 @@ class Visualizer_Module {
 			},
 			$post_content
 		);
-		$data = unserialize( $post_content );
+		$data = self::decode_content( $post_content );
 		$altered = array();
 		if ( ! empty( $data ) ) {
 			foreach ( $data as $index => $array ) {

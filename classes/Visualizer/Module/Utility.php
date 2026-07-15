@@ -302,7 +302,8 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'pie':
 				$chart = get_post( $chart_id );
-				$data  = $chart instanceof WP_Post ? maybe_unserialize( $chart->post_content ) : array();
+				$raw   = $chart instanceof WP_Post ? $chart->post_content : array();
+				$data  = self::maybe_decode_content( $raw );
 				$name  = 'slices';
 				$max   = is_array( $data ) ? count( $data ) : $count;
 				// fall through.
@@ -434,7 +435,7 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 			case 'polarArea':
 				// fall through.
 			case 'pie':
-				$data   = unserialize( $chart->post_content );
+				$data   = self::decode_content( $chart->post_content );
 				$name   = 'slices';
 				$max    = count( $data );
 				// fall through.
