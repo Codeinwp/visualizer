@@ -108,6 +108,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 		);
 		add_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, 'line' );
 
+		$original_request_method   = isset( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : null;
 		$_SERVER['REQUEST_METHOD'] = 'POST';
 		$_GET = array(
 			'chart' => $chart_id,
@@ -126,6 +127,12 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( Visualizer_Plugin::ACTION_EDIT_CHART );
 		} catch ( WPAjaxDieContinueException $e ) {
 			// Expected.
+		} finally {
+			if ( null === $original_request_method ) {
+				unset( $_SERVER['REQUEST_METHOD'] );
+			} else {
+				$_SERVER['REQUEST_METHOD'] = $original_request_method;
+			}
 		}
 
 		$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
