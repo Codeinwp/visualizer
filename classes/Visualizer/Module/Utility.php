@@ -302,7 +302,10 @@ class Visualizer_Module_Utility extends Visualizer_Module {
 				// fall through.
 			case 'pie':
 				$chart = get_post( $chart_id );
-				$data  = $chart instanceof WP_Post ? maybe_unserialize( $chart->post_content ) : array();
+				$raw   = $chart instanceof WP_Post ? $chart->post_content : array();
+				// Object-injection-safe replacement for maybe_unserialize(); keeps
+				// the "return as-is when not serialized" behavior.
+				$data  = is_serialized( $raw ) ? self::decode_content( $raw ) : $raw;
 				$name  = 'slices';
 				$max   = is_array( $data ) ? count( $data ) : $count;
 				// fall through.

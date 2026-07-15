@@ -125,4 +125,37 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 			'decode_content() should still return the (neutralized) array.'
 		);
 	}
+
+	/**
+	 * The Utility pie/polarArea render palette call site must not instantiate objects.
+	 *
+	 * Drives the real sink (Visualizer_Module_Utility::apply_chartjs_palette),
+	 * which previously used maybe_unserialize() on post_content, with a chart
+	 * whose content is a serialized canary. Reverting that call site to an
+	 * unrestricted (maybe_)unserialize() would fail this test.
+	 */
+	public function test_utility_pie_palette_call_site_is_guarded() {
+		Visualizer_POI_Canary::$awoke = false;
+
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_content' => wp_slash( serialize( array( new Visualizer_POI_Canary() ) ) ),
+			)
+		);
+
+		$method = new ReflectionMethod( 'Visualizer_Module_Utility', 'apply_chartjs_palette' );
+		$method->setAccessible( true );
+
+		try {
+			$method->invoke( null, array(), 'pie', array(), $chart_id );
+		} catch ( \Throwable $e ) {
+			// Only the canary matters here.
+		}
+
+		$this->assertFalse(
+			Visualizer_POI_Canary::$awoke,
+			'Utility pie palette call site must not instantiate objects from post_content.'
+		);
+	}
 }

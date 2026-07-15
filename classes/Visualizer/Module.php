@@ -784,7 +784,7 @@ class Visualizer_Module {
 	 * Single guarded chokepoint shared by every unserialize() sink so the
 	 * allowed_classes guard cannot be dropped from one call site independently.
 	 *
-	 * @param string $content The serialized content.
+	 * @param mixed $content The serialized content (only strings are decoded).
 	 * @return mixed The decoded value (array for valid chart data), or false.
 	 */
 	public static function decode_content( $content ) {
