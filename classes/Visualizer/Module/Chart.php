@@ -1746,7 +1746,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @param string $base64_img Chart image.
 	 * @param int    $chart_id Chart ID.
 	 * @param bool   $save_attachment Save attachment.
-	 * @return attachment ID
+	 * @return int Attachment ID, or 0 when no attachment was saved.
 	 */
 	public function save_chart_image( $base64_img, $chart_id, $save_attachment = true ) {
 		// Delete old chart image.
