@@ -1052,7 +1052,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			'sanitize_textarea_field'
 		);
 
-		if ( '' !== $chart_img ) {
+		// The value is a client-side canvas export; keep it only when it is a
+		// base64 image data URI so nothing else is ever stored unsanitized.
+		if ( is_string( $chart_img ) && preg_match( '#^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/ ]+=*$#', $chart_img ) ) {
 			$post_data['chart-img'] = $chart_img;
 		}
 
@@ -1761,9 +1763,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$upload_dir  = wp_upload_dir();
 		$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
-		$img             = str_replace( 'data:image/png;base64,', '', $base64_img );
-		$img             = str_replace( ' ', '+', $img );
-		$decoded         = base64_decode( $img );
+		$img     = str_replace( 'data:image/png;base64,', '', (string) $base64_img );
+		$img     = str_replace( ' ', '+', $img );
+		$decoded = base64_decode( $img, true );
+		// The value comes from an untrusted request; only write real PNG bytes to uploads.
+		if ( false === $decoded || 0 !== strncmp( $decoded, "\x89PNG\r\n\x1a\n", 8 ) ) {
+			return 0;
+		}
 		$filename        = 'visualization-' . $chart_id . '.png';
 		$file_type       = 'image/png';
 		$hashed_filename = $filename;
