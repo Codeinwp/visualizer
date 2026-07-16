@@ -114,6 +114,25 @@ class Test_Security_Object_Injection extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The shared decoder must reject cyclic serialized arrays without recursing.
+	 *
+	 * The allowed_classes guard only blocks objects; a self-referential array
+	 * (R:/r: token) survives it and would drive strip_incomplete_objects() into
+	 * unbounded recursion. decode_content() must reject it up front.
+	 */
+	public function test_decode_content_rejects_cyclic_arrays() {
+		$this->assertFalse(
+			Visualizer_Module::decode_content( 'a:1:{i:0;R:1;}' ),
+			'decode_content() must reject cyclic arrays.'
+		);
+		$this->assertSame(
+			array( 'marker' => 'R:1;' ),
+			Visualizer_Module::decode_content( serialize( array( 'marker' => 'R:1;' ) ) ),
+			'Reference-like text inside strings must remain valid.'
+		);
+	}
+
+	/**
 	 * The Utility pie/polarArea render palette call site must not instantiate objects.
 	 *
 	 * Covers the public global-style filter seam and preserves the trimming
