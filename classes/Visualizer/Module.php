@@ -812,7 +812,36 @@ class Visualizer_Module {
 		if ( ! is_string( $content ) ) {
 			return false;
 		}
-		return self::strip_incomplete_objects( unserialize( trim( $content ), array( 'allowed_classes' => false ) ) );
+		$value = unserialize( trim( $content ), array( 'allowed_classes' => false ) );
+		if ( self::contains_references( $value ) ) {
+			return false;
+		}
+		return self::strip_incomplete_objects( $value );
+	}
+
+	/**
+	 * Check decoded arrays for references before recursively processing them.
+	 *
+	 * Cyclic serialized arrays necessarily contain a reference. Rejecting all
+	 * references also prevents shared references from becoming cycles later,
+	 * so strip_incomplete_objects() cannot recurse without terminating.
+	 *
+	 * @param mixed $value The decoded value.
+	 * @return bool Whether the value contains an array reference.
+	 */
+	private static function contains_references( $value ) {
+		if ( ! is_array( $value ) ) {
+			return false;
+		}
+		foreach ( array_keys( $value ) as $key ) {
+			if ( null !== ReflectionReference::fromArrayElement( $value, $key ) ) {
+				return true;
+			}
+			if ( is_array( $value[ $key ] ) && self::contains_references( $value[ $key ] ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
