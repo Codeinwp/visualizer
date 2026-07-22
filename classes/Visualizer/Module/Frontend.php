@@ -803,14 +803,20 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 
 			function visualizerLoadScripts() {
 				document.querySelectorAll("script[data-visualizer-script]").forEach(function(elem) {
-					jQuery.getScript( elem.getAttribute("data-visualizer-script") )
-					.done( function( script, textStatus ) {
-						elem.setAttribute("src", elem.getAttribute("data-visualizer-script"));
-						elem.removeAttribute("data-visualizer-script");
+					// Replace the placeholder with a real script tag using async=false:
+					// scripts download in parallel but execute in insertion order, which
+					// preserves the WordPress dependency order. Parallel jQuery.getScript
+					// calls could execute render-facade.js before the chart renderer had
+					// registered its render event listener, leaving charts blank.
+					var script = document.createElement("script");
+					script.src = elem.getAttribute("data-visualizer-script");
+					script.async = false;
+					script.onload = function() {
 						setTimeout( function() {
 							visualizerRefreshChart();
 						} );
-					} );
+					};
+					elem.parentNode.replaceChild(script, elem);
 				});
 			}
 

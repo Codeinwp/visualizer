@@ -1219,24 +1219,6 @@ parameters:
 			path: classes/Visualizer/Module/Chart.php
 
 		-
-			message: '#^Method Visualizer_Module_Chart\:\:save_chart_image\(\) has invalid return type attachment\.$#'
-			identifier: class.notFound
-			count: 1
-			path: classes/Visualizer/Module/Chart.php
-
-		-
-			message: '#^Method Visualizer_Module_Chart\:\:save_chart_image\(\) should return attachment but returns int\.$#'
-			identifier: return.type
-			count: 1
-			path: classes/Visualizer/Module/Chart.php
-
-		-
-			message: '#^Method Visualizer_Module_Chart\:\:save_chart_image\(\) should return attachment but returns int\<0, max\>\.$#'
-			identifier: return.type
-			count: 1
-			path: classes/Visualizer/Module/Chart.php
-
-		-
 			message: '#^Method Visualizer_Module_Chart\:\:setJsonData\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
