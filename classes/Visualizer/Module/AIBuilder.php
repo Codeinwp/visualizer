@@ -100,7 +100,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 	 * @param int $chart_id Chart ID.
 	 */
 	private function _verify_chart_access( $chart_id ): void {
-		if ( ! current_user_can( 'edit_post', $chart_id ) ) {
+		if ( ! self::can_edit_chart( $chart_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'visualizer' ) ), 403 );
 		}
 	}
@@ -502,6 +502,10 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 			}
 		}
 
+		if ( ! empty( $workflow_id ) ) {
+			set_transient( 'viz_ai_wf_' . $workflow_id, get_current_user_id(), 6 * HOUR_IN_SECONDS );
+		}
+
 		wp_send_json_success(
 			array(
 				'workflow_id' => $workflow_id,
@@ -522,6 +526,10 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 		$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_id'] ) ) : '';
 		if ( empty( $workflow_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Missing workflow ID.', 'visualizer' ) ) );
+		}
+
+		if ( (int) get_transient( 'viz_ai_wf_' . $workflow_id ) !== get_current_user_id() ) {
+			wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'visualizer' ) ), 403 );
 		}
 
 		$agents_url    = VISUALIZER_AGENTS_URL;
