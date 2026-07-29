@@ -280,7 +280,7 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 
 - Fixed broken candlestick chart
 - Updated dependencies
-- Enhanced security
+- Enhanced security (CVE-2026-65526 fixed)
 
 
 
