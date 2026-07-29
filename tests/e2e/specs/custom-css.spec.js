@@ -41,8 +41,10 @@ test.describe( 'Custom CSS sanitization', () => {
 
 		const styleBlock = page.locator( `#customcss-visualizer-${ chartId }` );
 		await expect( styleBlock ).toHaveCount( 1 );
-		// Legitimate rules survive sanitization.
-		await expect( styleBlock ).toContainText( 'font-size: 12px' );
+		// Legitimate rules survive sanitization. <style> has no innerText, so read textContent.
+		const css = await styleBlock.textContent();
+		expect( css ).toContain( 'font-size: 12px' );
+		expect( css ).not.toContain( '<script' );
 		// The injected script must not have executed.
 		expect( await page.evaluate( () => window.vizXss ) ).toBeUndefined();
 	} );
