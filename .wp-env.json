@@ -6,6 +6,7 @@
   ],
   "themes": [],
   "mappings": {
+    "wp-content/mu-plugins/visualizer-e2e-enable-database-source.php": "./tests/e2e/config/enable-database-source.php",
     "wp-content/mu-plugins/visualizer-e2e-force-lazy-render.php": "./tests/e2e/config/force-lazy-render.php"
   },
   "config": {
