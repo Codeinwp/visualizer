@@ -276,7 +276,7 @@ class Visualizer_Gutenberg_Block {
 	 * Get Post Meta Fields
 	 */
 	public function get_visualizer_data( $post ) {
-		if ( ! current_user_can( 'edit_post', $post['id'] ) ) {
+		if ( ! Visualizer_Module::can_edit_chart( $post['id'] ) ) {
 			return false;
 		}
 

@@ -22,6 +22,7 @@ class Test_Visualizer_Chart_Data_Permissions extends WP_UnitTestCase {
 		$chart_id = self::factory()->post->create(
 			array(
 				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'  => 'publish',
 				'post_author'  => $author_id,
 				'post_content' => wp_slash( serialize( array( array( 'Label' ), array( 'Value' ) ) ) ),
 			)
@@ -47,12 +48,27 @@ class Test_Visualizer_Chart_Data_Permissions extends WP_UnitTestCase {
 
 	/**
 	 * The chart author can still read their own chart configuration.
+	 *
+	 * Charts are always published on save, so a Contributor author must pass
+	 * the check even without the edit_published_posts capability.
 	 */
-	public function test_author_can_read_own_chart_data() {
-		$author_id = self::factory()->user->create( array( 'role' => 'editor' ) );
+	public function test_contributor_author_can_read_own_chart_data() {
+		$author_id = self::factory()->user->create( array( 'role' => 'contributor' ) );
 		$chart_id  = $this->create_chart( $author_id );
 
 		wp_set_current_user( $author_id );
+
+		$result = Visualizer_Gutenberg_Block::get_instance()->get_visualizer_data( array( 'id' => $chart_id ) );
+		$this->assertIsArray( $result );
+	}
+
+	/**
+	 * An editor can read any chart configuration.
+	 */
+	public function test_editor_can_read_others_chart_data() {
+		$chart_id = $this->create_chart( self::factory()->user->create( array( 'role' => 'contributor' ) ) );
+
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'editor' ) ) );
 
 		$result = Visualizer_Gutenberg_Block::get_instance()->get_visualizer_data( array( 'id' => $chart_id ) );
 		$this->assertIsArray( $result );
