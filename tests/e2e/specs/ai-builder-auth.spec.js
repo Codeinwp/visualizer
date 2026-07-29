@@ -12,15 +12,26 @@ let editorId;
 
 /**
  * Log in via wp-login in a fresh context and return the page.
+ *
+ * Uses a raw POST with redirects off: the auth cookie is set by the 302
+ * response, so we never have to load the wp-admin dashboard (which can
+ * stall on external feed widgets in CI).
  */
 async function loginAs( browser, baseURL, credentials ) {
 	const context = await browser.newContext( { baseURL } );
+	const response = await context.request.post( '/wp-login.php', {
+		form: {
+			log: credentials.username,
+			pwd: credentials.password,
+			'wp-submit': 'Log In',
+			testcookie: '1',
+		},
+		maxRedirects: 0,
+	} );
+	if ( response.status() !== 302 ) {
+		throw new Error( `Login as ${ credentials.username } failed with status ${ response.status() }` );
+	}
 	const page = await context.newPage();
-	await page.goto( '/wp-login.php' );
-	await page.fill( '#user_login', credentials.username );
-	await page.fill( '#user_pass', credentials.password );
-	await page.click( '#wp-submit' );
-	await page.waitForURL( '**/wp-admin/**' );
 	return { context, page };
 }
 
