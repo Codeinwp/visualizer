@@ -25,13 +25,20 @@ test.describe( 'Setup wizard authorization', () => {
 
 	test( 'denies wizard dismissal for non-admin users', async ( { browser } ) => {
 		const context = await browser.newContext( { baseURL: test.info().project.use.baseURL } );
-		const page = await context.newPage();
-		await page.goto( '/wp-login.php' );
-		await page.fill( '#user_login', CONTRIBUTOR.username );
-		await page.fill( '#user_pass', CONTRIBUTOR.password );
-		await page.click( '#wp-submit' );
-		await page.waitForURL( '**/wp-admin/**' );
+		// POST wp-login with redirects off: the auth cookie is set by the 302
+		// response, so we never load the wp-admin dashboard (can stall in CI).
+		const loginResponse = await context.request.post( '/wp-login.php', {
+			form: {
+				log: CONTRIBUTOR.username,
+				pwd: CONTRIBUTOR.password,
+				'wp-submit': 'Log In',
+				testcookie: '1',
+			},
+			maxRedirects: 0,
+		} );
+		expect( loginResponse.status() ).toBe( 302 );
 
+		const page = await context.newPage();
 		const response = await page.goto( '/wp-admin/admin.php?action=visualizer_dismiss_wizard&status=1' );
 		expect( response.status() ).toBe( 403 );
 
