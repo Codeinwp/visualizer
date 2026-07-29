@@ -245,6 +245,23 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 
 == Changelog ==
 
+##### [Version 4.0.6](https://github.com/Codeinwp/visualizer/compare/v4.0.5...v4.0.6) (2026-07-22)
+
+- Fixed scheduled imports from remote CSV files so charts continue to refresh automatically in the background.
+- Fixed an issue where charts using lazy rendering could remain blank when their scripts finished loading in the wrong order.
+- Improved the overall security of the product. Thanks to **creeper_kirby** for responsibly reporting the issue.
+- Updated dependencies.
+
+
+
+
+##### [Version 4.0.5](https://github.com/Codeinwp/visualizer/compare/v4.0.4...v4.0.5) (2026-07-10)
+
+- Enhanced security
+
+
+
+
 ##### [Version 4.0.4](https://github.com/Codeinwp/visualizer/compare/v4.0.3...v4.0.4) (2026-06-30)
 
 - Enhanced security
@@ -263,7 +280,7 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 
 - Fixed broken candlestick chart
 - Updated dependencies
-- Enhanced security
+- Enhanced security (CVE-2026-65526 fixed)
 
 
 

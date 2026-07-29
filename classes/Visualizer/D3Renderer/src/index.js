@@ -17,6 +17,22 @@ function ensurePngName( name ) {
 	return name.toLowerCase().endsWith( '.png' ) ? name : `${ name }.png`;
 }
 
+/**
+ * The image is produced inside a null-origin sandboxed iframe and returned over
+ * postMessage, so its `dataUrl` is untrusted. Only accept base64 image data URIs
+ * before it is opened, downloaded, or rendered; anything else could smuggle
+ * markup/script into the same-origin popup or an unexpected navigation target.
+ *
+ * @param {*} dataUrl Value received from the iframe.
+ * @return {boolean} Whether the value is a safe base64 image data URI.
+ */
+function isSafeImageDataUrl( dataUrl ) {
+	return (
+		typeof dataUrl === 'string' &&
+		/^data:image\/(png|jpeg|webp);base64,[a-z0-9+/]+=*$/i.test( dataUrl )
+	);
+}
+
 function downloadDataUrl( dataUrl, name ) {
 	const link = document.createElement( 'a' );
 	link.href = dataUrl;
@@ -110,11 +126,16 @@ function handleImageAction( id, name, action ) {
 		window.removeEventListener( 'message', onResult );
 
 		const dataUrl = msg.dataUrl;
-		if ( ! dataUrl ) return;
+		if ( ! isSafeImageDataUrl( dataUrl ) ) return;
 
 		if ( action === 'print' ) {
 			const win = window.open();
-			win.document.write( "<br><img src='" + dataUrl + "'/>" );
+			if ( ! win ) return;
+			// Build the node via the DOM API so the untrusted data URI is only
+			// ever an attribute value, never parsed as markup.
+			const img = win.document.createElement( 'img' );
+			img.src = dataUrl;
+			win.document.body.appendChild( img );
 			win.document.close();
 			win.onload = function () { win.print(); setTimeout( win.close, 500 ); };
 		} else {

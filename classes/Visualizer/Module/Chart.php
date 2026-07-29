@@ -108,19 +108,22 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function setJsonSchedule() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION, 'security' );
 
-		$chart_id = filter_input(
-			INPUT_POST,
-			'chart',
+		$chart_id = isset( $_POST['chart'] ) ? filter_var(
+			$_POST['chart'],
 			FILTER_VALIDATE_INT,
 			array(
 				'options' => array(
 					'min_range' => 1,
 				),
 			)
-		);
+		) : false;
 
 		if ( ! $chart_id ) {
 			wp_send_json_error();
+		}
+
+		if ( ! self::can_edit_chart( $chart_id ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'You do not have permission to perform this action.', 'visualizer' ) ), 403 );
 		}
 
 		$time = filter_input(
@@ -204,7 +207,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$chart_id = $params['chart'];
 
-		if ( empty( $chart_id ) ) {
+		$chart = $chart_id ? get_post( $chart_id ) : null;
+		if ( ! $chart || Visualizer_Plugin::CPT_VISUALIZER !== $chart->post_type || ! current_user_can( 'edit_post', $chart_id ) ) {
 			wp_die();
 		}
 
@@ -231,10 +235,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		check_ajax_referer( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION, 'security' );
 
 		$params = $_POST;
-		$chart_id = $_GET['chart'];
+		$chart_id = isset( $_GET['chart'] ) ? absint( $_GET['chart'] ) : 0;
 
-		if ( empty( $chart_id ) ) {
-			wp_die();
+		if ( ! self::can_edit_chart( $chart_id ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'visualizer' ), '', array( 'response' => 403 ) );
 		}
 
 		$chart  = get_post( $chart_id );
@@ -318,6 +322,12 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @access public
 	 */
 	public function getCharts() {
+		check_ajax_referer( Visualizer_Plugin::ACTION_GET_CHARTS, 'nonce' );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'You do not have permission to perform this action.', 'visualizer' ) ), 403 );
+		}
+
 		$query_args = array(
 			'post_type'      => Visualizer_Plugin::CPT_VISUALIZER,
 			'posts_per_page' => 9,
@@ -333,6 +343,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				)
 			),
 		);
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			$query_args['author'] = get_current_user_id();
+		}
 		$filter     = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
 		if ( empty( $filter ) ) {
 			// 'filter' is from the modal from the add media button.
@@ -453,24 +466,27 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function deleteChart() {
 		$is_post      = $_SERVER['REQUEST_METHOD'] === 'POST';
-		$input_method = $is_post ? INPUT_POST : INPUT_GET;
+		$input        = $is_post ? $_POST : $_GET;
 		$chart_id     = $success = false;
-		$nonce        = wp_verify_nonce( filter_input( $input_method, 'nonce' ) );
-		$capable      = current_user_can( 'delete_posts' );
-		if ( $nonce && $capable ) {
-			$chart_id = filter_input(
-				$input_method,
-				'chart',
+		$nonce        = isset( $input['nonce'] ) && wp_verify_nonce( $input['nonce'] );
+		if ( $nonce ) {
+			$chart_id = isset( $input['chart'] ) ? filter_var(
+				$input['chart'],
 				FILTER_VALIDATE_INT,
 				array(
 					'options' => array(
 						'min_range' => 1,
 					),
 				)
-			);
+			) : false;
 			if ( $chart_id ) {
 				$chart   = get_post( $chart_id );
-				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
+				$success = $chart
+					&& $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER
+					&& (
+						current_user_can( 'delete_post', $chart_id )
+						|| ( (int) $chart->post_author === get_current_user_id() && current_user_can( 'delete_posts' ) )
+					);
 			}
 		}
 		if ( $success ) {
@@ -553,6 +569,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$_POST = map_deep( $_POST, 'wp_strip_all_tags' );
 		}
 		$chart = $chart_id ? get_post( $chart_id ) : null;
+		if ( $chart && ! self::can_edit_chart( $chart_id ) ) {
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'visualizer' ), '', array( 'response' => 403 ) );
+		}
 		if ( ! $chart_id || ! $chart || $chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ) {
 			if ( empty( $_GET['lang'] ) || empty( $_GET['parent_chart_id'] ) ) {
 				$this->deleteOldCharts();
@@ -591,7 +610,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			} else {
 				$parent_chart_id = filter_var( $_GET['parent_chart_id'], FILTER_VALIDATE_INT );
 				$success = false;
-				if ( $parent_chart_id ) {
+				if ( $parent_chart_id && self::can_edit_chart( $parent_chart_id ) ) {
 					$parent_chart   = get_post( $parent_chart_id );
 					$success = $parent_chart && $parent_chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 				}
@@ -613,7 +632,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						$chart_id  = $new_chart_id;
 						foreach ( $post_meta as $key => $value ) {
 							if ( strpos( $key, 'visualizer-' ) !== false ) {
-								add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+								add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 							}
 						}
 					}
@@ -799,13 +818,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * Handle data and settings page
 	 */
 	private function _handleDataAndSettingsPage() {
-		if ( isset( $_POST['map_api_key'] ) ) {
-			update_option( 'visualizer-map-api-key', $_POST['map_api_key'] );
-		}
-
 		if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
 			$is_canceled      = isset( $_POST['cancel'] ) && 1 === intval( $_POST['cancel'] );
 			$is_newly_created = $this->_chart->post_status === 'auto-draft';
+
+			if ( isset( $_POST['map_api_key'] ) && current_user_can( 'manage_options' ) ) {
+				update_option( 'visualizer-map-api-key', sanitize_text_field( wp_unslash( $_POST['map_api_key'] ) ) );
+			}
 
 			if ( $is_newly_created && ! $is_canceled ) {
 				$this->_chart->post_status = 'publish';
@@ -823,6 +842,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				if ( isset( $existing['colors'] ) && is_array( $existing['colors'] ) && ! isset( $post_settings['colors'] ) ) {
 					$post_settings['colors'] = $existing['colors'];
 				}
+				$post_settings = $this->sanitizeSettings( $post_settings );
 				update_post_meta( $this->_chart->ID, Visualizer_Plugin::CF_SETTINGS, $post_settings );
 
 				// we will keep a parameter called 'internal_title' that will be set to the given title or, if empty, the chart ID
@@ -1015,6 +1035,33 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	}
 
 	/**
+	 * Sanitize settings data from the request.
+	 *
+	 * @param array<string, mixed> $post_data The POST data to sanitize.
+	 * @return array<string, mixed> The sanitized settings data.
+	 */
+	private function sanitizeSettings( $post_data ): array {
+		$chart_img = '';
+		if ( isset( $post_data['chart-img'] ) ) {
+			$chart_img = wp_unslash( $post_data['chart-img'] );
+			unset( $post_data['chart-img'] );
+		}
+
+		$post_data = map_deep(
+			$post_data,
+			'sanitize_textarea_field'
+		);
+
+		// The value is a client-side canvas export; keep it only when it is a
+		// base64 image data URI so nothing else is ever stored unsanitized.
+		if ( is_string( $chart_img ) && preg_match( '#^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/ ]+=*$#', $chart_img ) ) {
+			$post_data['chart-img'] = $chart_img;
+		}
+
+		return $post_data;
+	}
+
+	/**
 	 * Renders flattr script in the iframe <head>
 	 *
 	 * @since 1.4.2
@@ -1037,7 +1084,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * Used as a fallback when the URL path has no recognisable file extension
 	 * (e.g. SharePoint, signed S3 URLs, or "download?id=…" endpoints).
 	 *
-	 * Uses wp_safe_remote_get() to block requests to private/loopback addresses,
+	 * Uses the shared remote-fetch policy to block non-public destinations,
 	 * and streams the response to a temp file so no body data is held in memory
 	 * regardless of whether the server honours the Range header.
 	 *
@@ -1056,14 +1103,15 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			return false;
 		}
 
-		$response = wp_safe_remote_get(
+		$response = Visualizer_Remote_Fetch::request(
 			$url,
 			array(
-				'timeout'    => 10,
-				'user-agent' => 'WordPress/' . get_bloginfo( 'version' ),
-				'headers'    => array( 'Range' => 'bytes=0-3' ),
-				'stream'     => true,
-				'filename'   => $tmpfile,
+				'timeout'             => 10,
+				'user-agent'          => 'WordPress/' . get_bloginfo( 'version' ),
+				'headers'             => array( 'Range' => 'bytes=0-3' ),
+				'stream'              => true,
+				'filename'            => $tmpfile,
+				'limit_response_size' => 4,
 			)
 		);
 
@@ -1230,12 +1278,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		// if this is being called internally from pro and VISUALIZER_DO_NOT_DIE is set.
 		// otherwise, assume this is a normal web request.
 		$can_die    = ! ( defined( 'VISUALIZER_DO_NOT_DIE' ) && VISUALIZER_DO_NOT_DIE );
+		// $can_die also gates the capability checks below, so VISUALIZER_DO_NOT_DIE must stay internal-only (never set from request input or globally).
 
-		// validate nonce
+		// validate nonce; capability check applies to web requests only, not trusted internal calls.
 		if (
 			! isset( $_GET['nonce'] ) ||
 			! wp_verify_nonce( $_GET['nonce'], 'visualizer-upload-data' ) ||
-			! current_user_can( 'edit_posts' )
+			( $can_die && ! current_user_can( 'edit_posts' ) )
 		) {
 			if ( ! $can_die ) {
 				return;
@@ -1252,7 +1301,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			! $chart_id ||
 			! $chart ||
 			$chart->post_type !== Visualizer_Plugin::CPT_VISUALIZER ||
-			! current_user_can( 'edit_post', $chart_id )
+			( $can_die && ! current_user_can( 'edit_post', $chart_id ) )
 		) {
 			if ( ! $can_die ) {
 				return;
@@ -1336,8 +1385,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			if ( $source->fetch() ) {
 				$content    = $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 				$populate   = true;
-				if ( is_string( $content ) && is_array( unserialize( $content ) ) ) {
-					$json   = unserialize( $content );
+				$json = self::decode_content( $content );
+				if ( is_array( $json ) ) {
 					// if source exists, so should data. if source exists but data is blank, do not populate the chart.
 					// if we populate the data even if it is empty, the chart will show "Table has no columns".
 					if ( array_key_exists( 'source', $json ) && ! empty( $json['source'] ) && ( ! array_key_exists( 'data', $json ) || empty( $json['data'] ) ) ) {
@@ -1403,10 +1452,9 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function cloneChart() {
 		$chart_id = $success = false;
 		$nonce    = isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'], Visualizer_Plugin::ACTION_CLONE_CHART );
-		$capable  = current_user_can( 'edit_posts' );
-		if ( $nonce && $capable ) {
+		if ( $nonce ) {
 			$chart_id = isset( $_GET['chart'] ) ? filter_var( $_GET['chart'], FILTER_VALIDATE_INT ) : '';
-			if ( $chart_id ) {
+			if ( $chart_id && self::can_edit_chart( $chart_id ) ) {
 				$chart   = get_post( $chart_id );
 				$success = $chart && $chart->post_type === Visualizer_Plugin::CPT_VISUALIZER;
 			}
@@ -1428,7 +1476,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				$post_meta = get_post_meta( $chart_id );
 				foreach ( $post_meta as $key => $value ) {
 					if ( strpos( $key, 'visualizer-' ) !== false ) {
-						add_post_meta( $new_chart_id, $key, maybe_unserialize( $value[0] ) );
+						add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 					}
 				}
 				$redirect = esc_url(
@@ -1462,22 +1510,19 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 */
 	public function exportData() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_EXPORT_DATA . Visualizer_Plugin::VERSION, 'security' );
-		$capable  = current_user_can( 'edit_posts' );
-		if ( $capable ) {
-			$chart_id = isset( $_GET['chart'] ) ? filter_var(
-				$_GET['chart'],
-				FILTER_VALIDATE_INT,
-				array(
-					'options' => array(
-						'min_range' => 1,
-					),
-				)
-			) : '';
-			if ( $chart_id ) {
-				$data   = $this->_getDataAs( $chart_id, 'csv' );
-				if ( $data ) {
-					echo wp_send_json_success( $data );
-				}
+		$chart_id = isset( $_GET['chart'] ) ? filter_var(
+			$_GET['chart'],
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			)
+		) : '';
+		if ( $chart_id && self::can_edit_chart( $chart_id ) ) {
+			$data   = $this->_getDataAs( $chart_id, 'csv' );
+			if ( $data ) {
+				echo wp_send_json_success( $data );
 			}
 		}
 
@@ -1659,16 +1704,19 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	public function saveFilter() {
 		check_ajax_referer( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY . Visualizer_Plugin::VERSION, 'security' );
 
-		$chart_id   = filter_input(
-			INPUT_GET,
-			'chart',
+		$chart_id = isset( $_GET['chart'] ) ? filter_var(
+			$_GET['chart'],
 			FILTER_VALIDATE_INT,
 			array(
 				'options' => array(
 					'min_range' => 1,
 				),
 			)
-		);
+		) : false;
+
+		if ( ! self::can_edit_chart( $chart_id ) ) {
+			wp_send_json_error( array( 'msg' => esc_html__( 'You do not have permission to perform this action.', 'visualizer' ) ), 403 );
+		}
 
 		$hours = filter_input(
 			INPUT_POST,
@@ -1699,7 +1747,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @param string $base64_img Chart image.
 	 * @param int    $chart_id Chart ID.
 	 * @param bool   $save_attachment Save attachment.
-	 * @return attachment ID
+	 * @return int Attachment ID, or 0 when no attachment was saved.
 	 */
 	public function save_chart_image( $base64_img, $chart_id, $save_attachment = true ) {
 		// Delete old chart image.
@@ -1716,9 +1764,13 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$upload_dir  = wp_upload_dir();
 		$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
-		$img             = str_replace( 'data:image/png;base64,', '', $base64_img );
-		$img             = str_replace( ' ', '+', $img );
-		$decoded         = base64_decode( $img );
+		$img     = str_replace( 'data:image/png;base64,', '', (string) $base64_img );
+		$img     = str_replace( ' ', '+', $img );
+		$decoded = base64_decode( $img, true );
+		// The value comes from an untrusted request; only write real PNG bytes to uploads.
+		if ( false === $decoded || 0 !== strncmp( $decoded, "\x89PNG\r\n\x1a\n", 8 ) ) {
+			return 0;
+		}
 		$filename        = 'visualization-' . $chart_id . '.png';
 		$file_type       = 'image/png';
 		$hashed_filename = $filename;
