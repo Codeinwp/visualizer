@@ -650,7 +650,7 @@ class Visualizer_Module {
 				$class_name = $id . $name;
 				$properties = implode( ' !important; ', array_filter( $attributes ) );
 				if ( ! empty( $properties ) ) {
-					$css    .= '.' . $class_name . ' {' . $properties . ' !important;}';
+					$css    .= wp_strip_all_tags( '.' . $class_name . ' {' . $properties . ' !important;}' );
 					$classes[ $name ] = $class_name;
 				}
 			}

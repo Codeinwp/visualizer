@@ -6,12 +6,15 @@
  * @package Templates
  */
 
-$dashboard_url = add_query_arg(
-	array(
-		'action' => 'visualizer_dismiss_wizard',
-		'status' => 0,
+$dashboard_url = wp_nonce_url(
+	add_query_arg(
+		array(
+			'action' => 'visualizer_dismiss_wizard',
+			'status' => 0,
+		),
+		admin_url( 'admin.php' )
 	),
-	admin_url( 'admin.php' )
+	'visualizer_dismiss_wizard'
 );
 
 $chart_id           = ! empty( $this->wizard_data['chart_id'] ) ? (int) $this->wizard_data['chart_id'] : '';
