@@ -369,7 +369,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 
 			// ── Database query ────────────────────────────────────────────────
 			case 'db_query':
-				if ( ! current_user_can( 'manage_options' ) && ! is_super_admin() ) {
+				if ( ! current_user_can( 'manage_options' ) || ! is_super_admin() || ! Visualizer_Module::is_pro() ) {
 					wp_send_json_error( array( 'message' => __( 'Action not allowed for this user.', 'visualizer' ) ), 403 );
 				}
 				if ( empty( $_POST['db_query'] ) ) {
