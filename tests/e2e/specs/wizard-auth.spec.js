@@ -24,15 +24,22 @@ test.describe( 'Setup wizard authorization', () => {
 	} );
 
 	test( 'denies wizard dismissal for non-admin users', async ( { browser } ) => {
-		const context = await browser.newContext( { baseURL: test.info().project.use.baseURL } );
+		// Empty storage state: browser.newContext() otherwise inherits the
+		// project's admin cookies, so a login that silently failed would leave
+		// the request authenticated as admin and the assertion below moot.
+		const context = await browser.newContext( {
+			baseURL: test.info().project.use.baseURL,
+			storageState: { cookies: [], origins: [] },
+		} );
 		// POST wp-login with redirects off: the auth cookie is set by the 302
 		// response, so we never load the wp-admin dashboard (can stall in CI).
+		// No `testcookie` field: WP only accepts it when the context already
+		// holds wordpress_test_cookie, which this one deliberately does not.
 		const loginResponse = await context.request.post( '/wp-login.php', {
 			form: {
 				log: CONTRIBUTOR.username,
 				pwd: CONTRIBUTOR.password,
 				'wp-submit': 'Log In',
-				testcookie: '1',
 			},
 			maxRedirects: 0,
 		} );

@@ -7,6 +7,7 @@ const CONTRIBUTOR = { username: 'viz_contributor', password: 'viz-contributor-pa
 const EDITOR = { username: 'viz_editor', password: 'viz-editor-pass', email: 'viz-editor@example.com' };
 
 let adminChartId;
+let contributorChartId;
 let contributorId;
 let editorId;
 
@@ -16,15 +17,22 @@ let editorId;
  * Uses a raw POST with redirects off: the auth cookie is set by the 302
  * response, so we never have to load the wp-admin dashboard (which can
  * stall on external feed widgets in CI).
+ *
+ * The context starts with an empty storage state: browser.newContext()
+ * otherwise inherits the project's admin cookies, so a login that silently
+ * failed would leave these requests running as admin. That also means no
+ * wordpress_test_cookie, hence no `testcookie` field in the form.
  */
 async function loginAs( browser, baseURL, credentials ) {
-	const context = await browser.newContext( { baseURL } );
+	const context = await browser.newContext( {
+		baseURL,
+		storageState: { cookies: [], origins: [] },
+	} );
 	const response = await context.request.post( '/wp-login.php', {
 		form: {
 			log: credentials.username,
 			pwd: credentials.password,
 			'wp-submit': 'Log In',
-			testcookie: '1',
 		},
 		maxRedirects: 0,
 	} );
@@ -84,8 +92,10 @@ test.describe( 'AI Builder authorization', () => {
 	} );
 
 	test.afterAll( async ( { requestUtils } ) => {
-		if ( adminChartId ) {
-			await requestUtils.rest( { method: 'DELETE', path: `/wp/v2/visualizer/${ adminChartId }`, params: { force: true } } );
+		for ( const id of [ adminChartId, contributorChartId ] ) {
+			if ( id ) {
+				await requestUtils.rest( { method: 'DELETE', path: `/wp/v2/visualizer/${ id }`, params: { force: true } } );
+			}
 		}
 		for ( const [ id, user ] of [ [ contributorId, CONTRIBUTOR ], [ editorId, EDITOR ] ] ) {
 			if ( id ) {
@@ -128,9 +138,9 @@ test.describe( 'AI Builder authorization', () => {
 
 		const created = await aiAjax( page, 'visualizer-ai-create', { nonce } );
 		expect( created.body.success ).toBe( true );
-		const ownChartId = created.body.data.chart_id;
+		contributorChartId = created.body.data.chart_id;
 
-		const fetched = await aiAjax( page, 'visualizer-ai-fetch', { nonce, chart_id: ownChartId } );
+		const fetched = await aiAjax( page, 'visualizer-ai-fetch', { nonce, chart_id: contributorChartId } );
 		expect( fetched.body.success ).toBe( true );
 
 		await context.close();

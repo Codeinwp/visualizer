@@ -202,6 +202,257 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Test that a chart author keeps access to their own published chart, which
+	 * the edit_post meta capability alone denies for a contributor.
+	 */
+	public function test_ai_builder_allows_author_on_own_published_chart() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'publish',
+				'post_author' => $this->contibutor_user_id,
+			)
+		);
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$_POST = array(
+			'chart_id' => $chart_id,
+			'nonce'    => wp_create_nonce( 'visualizer-ai-builder' ),
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-chart-nonce' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_success().
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success );
+	}
+
+	/**
+	 * Test that the author bypass is bounded to charts: a post the user owns
+	 * but which is not a chart must not be reachable through the AI Builder.
+	 */
+	public function test_ai_builder_rejects_own_post_that_is_not_a_chart() {
+		$post_id = $this->factory->post->create(
+			array(
+				'post_type'   => 'post',
+				'post_status' => 'draft',
+				'post_author' => $this->contibutor_user_id,
+			)
+		);
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$_POST = array(
+			'chart_id' => $post_id,
+			'nonce'    => wp_create_nonce( 'visualizer-ai-builder' ),
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-chart-nonce' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Unauthorized.', $response->data->message );
+	}
+
+	/**
+	 * Test that a started workflow is bound to the user who started it: the
+	 * owner can poll its status, anybody else is rejected.
+	 */
+	public function test_ai_builder_binds_workflow_to_the_user_who_started_it() {
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'draft',
+				'post_author' => $this->contibutor_user_id,
+			)
+		);
+		wp_set_current_user( $this->contibutor_user_id );
+
+		$agents_response = function () {
+			return array(
+				'headers'  => array(),
+				'cookies'  => array(),
+				'body'     => wp_json_encode(
+					array(
+						'workflowId' => 'wf-test-1',
+						'status'     => 'completed',
+					)
+				),
+				'response' => array(
+					'code'    => 200,
+					'message' => 'OK',
+				),
+			);
+		};
+		add_filter( 'pre_http_request', $agents_response );
+
+		try {
+			$_POST = array(
+				'chart_id' => $chart_id,
+				'nonce'    => wp_create_nonce( 'visualizer-ai-builder' ),
+				'series'   => '[{"label":"Label","type":"string"}]',
+				'data'     => '[["A"]]',
+			);
+			try {
+				$this->_handleAjax( 'visualizer-ai-generate' );
+			} catch ( WPAjaxDieContinueException $e ) {
+				// Expected after wp_send_json_success().
+			}
+
+			$response = json_decode( $this->_last_response );
+			$this->assertTrue( $response->success );
+			$this->assertSame( 'wf-test-1', $response->data->workflow_id );
+			$this->assertSame( $this->contibutor_user_id, (int) get_transient( 'viz_ai_wf_wf-test-1' ) );
+
+			// The owner can poll it. dieHandler() appends to _last_response, so
+			// it has to be reset before each further call.
+			$this->_last_response = '';
+			$_POST                = array(
+				'workflow_id' => 'wf-test-1',
+				'nonce'       => wp_create_nonce( 'visualizer-ai-builder' ),
+			);
+			try {
+				$this->_handleAjax( 'visualizer-ai-status' );
+			} catch ( WPAjaxDieContinueException $e ) {
+				// Expected after wp_send_json_success().
+			}
+			$response = json_decode( $this->_last_response );
+			$this->assertTrue( $response->success );
+			$this->assertSame( 'completed', $response->data->status );
+
+			// Another user cannot.
+			wp_set_current_user( $this->admin_user_id );
+			$this->_last_response = '';
+			$_POST                = array(
+				'workflow_id' => 'wf-test-1',
+				'nonce'       => wp_create_nonce( 'visualizer-ai-builder' ),
+			);
+			try {
+				$this->_handleAjax( 'visualizer-ai-status' );
+			} catch ( WPAjaxDieContinueException $e ) {
+				// Expected after wp_send_json_error().
+			}
+			$response = json_decode( $this->_last_response );
+			$this->assertFalse( $response->success );
+			$this->assertSame( 'Unauthorized.', $response->data->message );
+		} finally {
+			remove_filter( 'pre_http_request', $agents_response );
+			delete_transient( 'viz_ai_wf_wf-test-1' );
+		}
+	}
+
+	/**
+	 * Test that the AI Builder database query source requires a Pro license.
+	 */
+	public function test_ai_builder_db_query_requires_pro() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'draft',
+				'post_author' => $this->admin_user_id,
+			)
+		);
+
+		add_filter( 'visualizer_is_pro', '__return_false' );
+
+		$_POST = array(
+			'chart_id'    => $chart_id,
+			'nonce'       => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
+			'source_type' => 'db_query',
+			'db_query'    => 'SELECT ID FROM ' . $GLOBALS['wpdb']->prefix . 'posts',
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-upload' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		} finally {
+			remove_filter( 'visualizer_is_pro', '__return_false' );
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Action not allowed for this user.', $response->data->message );
+	}
+
+	/**
+	 * Test that a non-super-admin cannot use the AI Builder database query
+	 * source even with an active Pro license.
+	 */
+	public function test_ai_builder_db_query_requires_super_admin() {
+		$this->enable_pro();
+		wp_set_current_user( $this->contibutor_user_id );
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'draft',
+				'post_author' => $this->contibutor_user_id,
+			)
+		);
+
+		$_POST = array(
+			'chart_id'    => $chart_id,
+			'nonce'       => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
+			'source_type' => 'db_query',
+			'db_query'    => 'SELECT ID FROM ' . $GLOBALS['wpdb']->prefix . 'posts',
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-upload' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_error().
+		} finally {
+			remove_filter( 'visualizer_is_pro', '__return_true' );
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( 'Action not allowed for this user.', $response->data->message );
+	}
+
+	/**
+	 * Test that a Pro super admin can use the AI Builder database query source.
+	 */
+	public function test_ai_builder_db_query_allows_pro_super_admin() {
+		$this->enable_pro();
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'draft',
+				'post_author' => $this->admin_user_id,
+			)
+		);
+
+		global $wpdb;
+		$_POST = array(
+			'chart_id'    => $chart_id,
+			'nonce'       => wp_create_nonce( 'visualizer-ai-upload-' . $chart_id ),
+			'source_type' => 'db_query',
+			'db_query'    => 'SELECT ID FROM ' . $wpdb->prefix . 'posts WHERE ID = ' . $chart_id,
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-upload' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after wp_send_json_success().
+		} finally {
+			remove_filter( 'visualizer_is_pro', '__return_true' );
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success );
+		$this->assertSame( 'Visualizer_Source_Query', get_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, true ) );
+	}
+
+	/**
 	 * Test the AJAX response for fetching the database data.
 	 */
 	public function test_ajax_response_get_query_data_valid_query() {
