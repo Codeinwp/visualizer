@@ -38,8 +38,11 @@ test.describe( 'Lazy rendered charts (frontend)', () => {
 	}
 
 	async function triggerLazyLoader( page ) {
-		// Scripts are swapped to `data-visualizer-script` placeholders.
-		await expect( page.locator( 'script[data-visualizer-script]' ).first() ).toBeAttached();
+		// Assert lazy rendering is on via the container class, not the
+		// `data-visualizer-script` placeholders: those are swapped away by the
+		// first user interaction, and Chromium fires a real `mouseover` right
+		// after navigation whenever the cursor sits over the page.
+		await expect( page.locator( '.visualizer-lazy-render' ).first() ).toBeAttached();
 
 		// The loader starts on the first user interaction.
 		await page.evaluate( () => window.dispatchEvent( new Event( 'scroll' ) ) );

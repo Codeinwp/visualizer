@@ -10,3 +10,6 @@ artifacts
 classes/Visualizer/Gutenberg/build
 classes/Visualizer/ChartBuilder/build
 classes/Visualizer/D3Renderer/build
+
+# Local wp-env port pinning (per-checkout).
+.wp-env.override.json
