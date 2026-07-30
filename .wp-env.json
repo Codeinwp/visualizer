@@ -6,7 +6,7 @@
   ],
   "themes": [],
   "mappings": {
-    "wp-content/mu-plugins/visualizer-e2e-force-lazy-render.php": "./tests/e2e/config/force-lazy-render.php"
+    "wp-content/mu-plugins": "./tests/e2e/config/mu-plugins"
   },
   "config": {
     "WP_DEBUG": true,

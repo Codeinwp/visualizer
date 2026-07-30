@@ -153,6 +153,12 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	 * @return bool|void
 	 */
 	public function dismissWizard( $redirect_to_dashboard = true ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'visualizer' ), '', array( 'response' => 403 ) );
+		}
+		if ( false !== $redirect_to_dashboard ) {
+			check_admin_referer( 'visualizer_dismiss_wizard' );
+		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$status = isset( $_REQUEST['status'] ) ? (int) $_REQUEST['status'] : 0;
 		update_option( 'visualizer_fresh_install', $status );
@@ -169,6 +175,9 @@ class Visualizer_Module_Wizard extends Visualizer_Module {
 	 */
 	public function visualizer_wizard_step_process() {
 		check_ajax_referer( VISUALIZER_ABSPATH, 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json( array( 'status' => 0 ), 403 );
+		}
 		$step = ! empty( $_POST['step'] ) ? sanitize_text_field( wp_unslash( $_POST['step'] ) ) : 1;
 		switch ( $step ) {
 			case 'step_2':
