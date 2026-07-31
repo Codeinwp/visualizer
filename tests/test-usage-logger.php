@@ -62,6 +62,33 @@ class Test_Visualizer_Usage_Logger extends WP_UnitTestCase {
 	}
 
 	/**
+	 * On pro, a permission entry that should be an array but is a string
+	 * must not abort usage collection with a count() TypeError.
+	 */
+	public function test_malformed_permissions_meta_does_not_crash_logger() {
+		// The stub stays defined for the rest of the PHPUnit process. That only
+		// affects code gating on class_exists( 'Visualizer_Pro' ) — the legacy
+		// license fallback in proFeaturesEnabled() — which no test exercises.
+		if ( ! class_exists( 'Visualizer_Pro' ) ) {
+			eval( 'class Visualizer_Pro { const CF_PERMISSIONS = "visualizer-permissions"; }' );
+		}
+
+		$chart_id = $this->create_chart( array() );
+		update_post_meta(
+			$chart_id,
+			Visualizer_Pro::CF_PERMISSIONS,
+			array( 'permissions' => array( 'edit-specific' => 'administrator' ) )
+		);
+
+		add_filter( 'visualizer_is_pro', '__return_true' );
+		$usage = apply_filters( 'visualizer_logger_data', array() );
+		remove_filter( 'visualizer_is_pro', '__return_true' );
+
+		$this->assertIsArray( $usage );
+		$this->assertSame( 0, $usage['permissions'] );
+	}
+
+	/**
 	 * Valid array settings still count manual configurations.
 	 */
 	public function test_manual_config_still_counted_for_array_settings() {

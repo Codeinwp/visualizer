@@ -132,7 +132,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				foreach ( $default_perms as $key => $val ) {
 					if ( ! is_array( $val ) && ! is_null( $val ) && isset( $permissions[ $key ] ) && $permissions[ $key ] !== $val ) {
 						$customized = true;
-					} elseif ( is_array( $val ) && ! is_null( $val ) && isset( $permissions[ $key ] ) && count( $permissions[ $key ] ) !== count( $val ) ) {
+					} elseif ( is_array( $val ) && ! is_null( $val ) && isset( $permissions[ $key ] ) && is_array( $permissions[ $key ] ) && count( $permissions[ $key ] ) !== count( $val ) ) {
 						$customized = true;
 					}
 				}

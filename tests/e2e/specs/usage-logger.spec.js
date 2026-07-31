@@ -4,6 +4,11 @@
 const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 
 /**
+ * Internal dependencies
+ */
+const { deleteAllCharts } = require( '../utils/common' );
+
+/**
  * Regression tests for https://github.com/Codeinwp/visualizer/issues/1359
  *
  * A published chart whose `visualizer-settings` meta is a string (instead of
@@ -16,6 +21,9 @@ test.describe( 'Usage logger', () => {
 	let manualId;
 
 	test.beforeAll( async ( { requestUtils } ) => {
+		// The assertions below count charts, so start from a clean library.
+		await deleteAllCharts( requestUtils );
+
 		// A chart whose settings meta is a corrupted string value.
 		const corrupted = await requestUtils.rest( {
 			method: 'POST',
