@@ -113,7 +113,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			$lib     = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_LIBRARY, true );
 			$charts['library'][ $lib ]    = isset( $charts['library'][ $lib ] ) ? $charts['library'][ $lib ] + 1 : 1;
 			$settings       = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
-			if ( array_key_exists( 'manual', $settings ) && ! empty( $settings['manual'] ) ) {
+			if ( is_array( $settings ) && ! empty( $settings['manual'] ) ) {
 				$charts['manual_config']    = $charts['manual_config'] + 1;
 			}
 
@@ -124,7 +124,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 			if ( Visualizer_Module::is_pro() ) {
 				$permissions = get_post_meta( $chart_id, Visualizer_Pro::CF_PERMISSIONS, true );
-				if ( empty( $permissions ) ) {
+				if ( ! is_array( $permissions ) || empty( $permissions['permissions'] ) ) {
 					continue;
 				}
 				$permissions = $permissions['permissions'];
