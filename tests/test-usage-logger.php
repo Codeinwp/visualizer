@@ -62,8 +62,9 @@ class Test_Visualizer_Usage_Logger extends WP_UnitTestCase {
 	}
 
 	/**
-	 * On pro, a permission entry that should be an array but is a string
-	 * must not abort usage collection with a count() TypeError.
+	 * On pro, permission meta that is not shaped like a map of arrays must not
+	 * abort usage collection — a string entry fatals on count(), and a nested
+	 * object fatals on the array offset read.
 	 */
 	public function test_malformed_permissions_meta_does_not_crash_logger() {
 		// The stub stays defined for the rest of the PHPUnit process. That only
@@ -79,6 +80,9 @@ class Test_Visualizer_Usage_Logger extends WP_UnitTestCase {
 			Visualizer_Pro::CF_PERMISSIONS,
 			array( 'permissions' => array( 'edit-specific' => 'administrator' ) )
 		);
+
+		$object_chart_id = $this->create_chart( array() );
+		update_post_meta( $object_chart_id, Visualizer_Pro::CF_PERMISSIONS, array( 'permissions' => new stdClass() ) );
 
 		add_filter( 'visualizer_is_pro', '__return_true' );
 		$usage = apply_filters( 'visualizer_logger_data', array() );

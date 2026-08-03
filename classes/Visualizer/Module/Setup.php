@@ -124,7 +124,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 			if ( Visualizer_Module::is_pro() ) {
 				$permissions = get_post_meta( $chart_id, Visualizer_Pro::CF_PERMISSIONS, true );
-				if ( ! is_array( $permissions ) || empty( $permissions['permissions'] ) ) {
+				if ( ! is_array( $permissions ) || empty( $permissions['permissions'] ) || ! is_array( $permissions['permissions'] ) ) {
 					continue;
 				}
 				$permissions = $permissions['permissions'];
