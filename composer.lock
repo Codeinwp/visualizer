@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "codeinwp/themeisle-sdk",
-            "version": "3.3.57",
+            "version": "3.3.58",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeinwp/themeisle-sdk.git",
-                "reference": "3c761b0bddda8d5963a47d14a40811869131030b"
+                "reference": "d6807c0b7308e323bd77cced667dee3f2d5e6a82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/3c761b0bddda8d5963a47d14a40811869131030b",
-                "reference": "3c761b0bddda8d5963a47d14a40811869131030b",
+                "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/d6807c0b7308e323bd77cced667dee3f2d5e6a82",
+                "reference": "d6807c0b7308e323bd77cced667dee3f2d5e6a82",
                 "shasum": ""
             },
             "require-dev": {
@@ -43,9 +43,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeinwp/themeisle-sdk/issues",
-                "source": "https://github.com/Codeinwp/themeisle-sdk/tree/v3.3.57"
+                "source": "https://github.com/Codeinwp/themeisle-sdk/tree/v3.3.58"
             },
-            "time": "2026-07-23T13:31:25+00:00"
+            "time": "2026-07-29T08:38:52+00:00"
         },
         {
             "name": "neitanod/forceutf8",
