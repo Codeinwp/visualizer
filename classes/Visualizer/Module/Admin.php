@@ -81,7 +81,6 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$this->_addFilter( 'media_view_strings', 'setupMediaViewStrings' );
 		$this->_addFilter( 'plugin_action_links', 'getPluginActionLinks', 10, 2 );
 		$this->_addFilter( 'plugin_row_meta', 'getPluginMetaLinks', 10, 2 );
-		$this->_addFilter( 'visualizer_logger_data', 'getLoggerData' );
 		$this->_addFilter( 'visualizer_feedback_review_trigger', 'feedbackReviewTrigger' );
 		$this->_addFilter( 'themeisle_sdk_blackfriday_data', 'add_black_friday_data' );
 
