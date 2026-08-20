@@ -2,7 +2,7 @@
 Contributors: codeinwp,themeisle,marius2012,marius_codeinwp,hardeepasrani,rozroz,Madalin_ThemeIsle
 Tags: charts, tables, datatable, data-visualization, ai-charts
 Requires at least: 5.2
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: trunk
 License: GPL v2.0 or later
