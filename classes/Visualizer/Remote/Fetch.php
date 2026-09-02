@@ -257,6 +257,15 @@ class Visualizer_Remote_Fetch {
 		$ips           = array();
 		$validated_url = wp_http_validate_url( $url );
 		if ( false === $validated_url ) {
+			// WordPress 7.1+ rejects non-public IP literals inside wp_http_validate_url()
+			// itself; older cores let them through to our is_global_ip() check below. Keep
+			// the distinct "unsafe destination" error on every core version so callers can
+			// tell a policy block from a malformed URL.
+			$scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
+			$host   = (string) wp_parse_url( $url, PHP_URL_HOST );
+			if ( in_array( $scheme, array( 'http', 'https' ), true ) && filter_var( $host, FILTER_VALIDATE_IP ) && ! self::is_global_ip( $host ) ) {
+				return new WP_Error( 'visualizer_unsafe_remote_url', 'The remote URL resolves to a non-public address.' );
+			}
 			return new WP_Error( 'visualizer_invalid_remote_url', 'The remote URL is not allowed.' );
 		}
 
