@@ -202,8 +202,25 @@ class Visualizer_Gutenberg_Block {
 	 * Hook server side rendering into render callback
 	 */
 	public function register_block_type() {
+		$asset_path = VISUALIZER_ABSPATH . '/classes/Visualizer/Gutenberg/build/index.asset.php';
+		$version    = $this->version;
+		if ( file_exists( $asset_path ) ) {
+			// @phpstan-ignore-next-line
+			$asset   = require $asset_path;
+			$version = isset( $asset['version'] ) ? $asset['version'] : $version;
+		}
+		if ( ! wp_style_is( 'visualizer-datatables', 'registered' ) ) {
+			wp_register_style( 'visualizer-datatables', VISUALIZER_ABSURL . 'css/lib/datatables.min.css', array(), Visualizer_Plugin::VERSION );
+		}
+		if ( ! wp_style_is( 'visualizer-gutenberg-block', 'registered' ) ) {
+			wp_register_style( 'visualizer-gutenberg-block', VISUALIZER_ABSURL . 'classes/Visualizer/Gutenberg/build/style-index.css', array( 'visualizer-datatables' ), $version );
+		}
 		register_block_type(
 			'visualizer/chart', array(
+				// The editor_style registration is what gets the stylesheet into the
+				// iframed editor canvas; styles enqueued via enqueue_block_editor_assets
+				// only reach the parent document.
+				'editor_style'    => 'visualizer-gutenberg-block',
 				'render_callback' => array( $this, 'gutenberg_block_callback' ),
 				'attributes'      => array(
 					'id' => array(
