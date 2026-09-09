@@ -314,6 +314,9 @@ class Visualizer_Gutenberg_Block {
 
 		// faetch and update settings
 		$data['visualizer-settings'] = get_post_meta( $post_id, Visualizer_Plugin::CF_SETTINGS, true );
+		if ( ! is_array( $data['visualizer-settings'] ) ) {
+			$data['visualizer-settings'] = array();
+		}
 		if ( empty( $data['visualizer-settings']['pagination'] ) ) {
 			$data['visualizer-settings']['pageSize'] = '';
 		}
