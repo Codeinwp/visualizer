@@ -254,7 +254,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
-		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, sanitize_text_field( $params['root'] ) );
+		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
 
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS );
 		$headers = array( 'method' => $params['method'] );
@@ -264,7 +264,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			$headers['auth'] = array( 'username' => $params['username'], 'password' => $params['password'] );
 		}
 
-		add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS, $this->sanitizeJsonHeaders( $headers ) );
+		add_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS, $headers );
 
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_PAGING );
 		if ( ! empty( $params['paging'] ) ) {
@@ -1032,16 +1032,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		wp_enqueue_style( 'visualizer-frame' );
 		wp_enqueue_script( 'visualizer-frame' );
 		wp_iframe( array( $render, 'render' ) );
-	}
-
-	/**
-	 * Sanitize the JSON data source headers before they are stored.
-	 *
-	 * @param array<string, mixed> $headers The JSON data source headers.
-	 * @return array<string, mixed> The sanitized headers.
-	 */
-	private function sanitizeJsonHeaders( array $headers ): array {
-		return map_deep( $headers, 'sanitize_text_field' );
 	}
 
 	/**

@@ -52,19 +52,6 @@ class Test_Visualizer_Json_Headers_Xss extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Invoke the private Visualizer_Module_Chart::sanitizeJsonHeaders().
-	 *
-	 * @param mixed $headers The raw headers.
-	 * @return array The sanitized headers.
-	 */
-	private function sanitize( $headers ) {
-		$module = new Visualizer_Module_Chart( Visualizer_Plugin::instance() );
-		$method = new ReflectionMethod( Visualizer_Module_Chart::class, 'sanitizeJsonHeaders' );
-		$method->setAccessible( true );
-		return $method->invoke( $module, $headers );
-	}
-
-	/**
 	 * Create a chart carrying the given JSON headers meta.
 	 *
 	 * @param array $headers The headers to store.
@@ -95,89 +82,43 @@ class Test_Visualizer_Json_Headers_Xss extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tag payloads are stripped from the credential fields on save.
+	 * Percent-encoded octets in a stored credential survive to the rendered value.
 	 *
-	 * The write boundary removes markup so the stored value is safe for consumers
-	 * that are not HTML attributes (the REST field the block editor reads). The
-	 * quote break-out itself is stopped by escaping at output, which is context
-	 * specific and must not be done on the way into the database.
+	 * Credentials are base64-encoded into the Authorization header, so the stored
+	 * bytes must be exact. sanitize_text_field() strips %XX octets and would turn
+	 * abc%2Fdef into abcdef, breaking authentication.
 	 */
-	public function test_sanitize_strips_tags_from_credentials() {
-		$result = $this->sanitize(
+	public function test_percent_encoded_credentials_render_intact() {
+		$chart_id = $this->create_chart_with_headers(
 			array(
 				'method' => 'get',
 				'auth'   => array(
-					'username' => '<script>alert(document.domain)</script>admin',
-					'password' => '<img src=x onerror=alert(document.cookie)>secret',
+					'username' => 'AKIA%2FEXAMPLE%2BKEY',
+					'password' => 'abc%2Fdef',
 				),
 			)
 		);
 
-		$this->assertStringNotContainsString( '<script', $result['auth']['username'] );
-		$this->assertStringNotContainsString( 'alert(document.domain)', $result['auth']['username'] );
-		$this->assertStringNotContainsString( '<img', $result['auth']['password'] );
-		$this->assertStringNotContainsString( 'onerror', $result['auth']['password'] );
+		$markup = $this->render_json_screen( $chart_id );
+
+		$this->assertStringContainsString( 'value="AKIA%2FEXAMPLE%2BKEY"', $markup );
+		$this->assertStringContainsString( 'value="abc%2Fdef"', $markup );
 	}
 
 	/**
-	 * The authorization-string form of auth is sanitized too.
+	 * A percent-encoded authorization string survives to the rendered value.
 	 */
-	public function test_sanitize_strips_tags_from_authorization_string() {
-		$result = $this->sanitize(
+	public function test_percent_encoded_authorization_renders_intact() {
+		$chart_id = $this->create_chart_with_headers(
 			array(
 				'method' => 'get',
-				'auth'   => '"><script>alert(1)</script>',
+				'auth'   => 'SharedKey acct:aGVsbG8%3D',
 			)
 		);
 
-		$this->assertStringNotContainsString( '<script', $result['auth'] );
-		$this->assertStringNotContainsString( 'alert(1)', $result['auth'] );
-	}
+		$markup = $this->render_json_screen( $chart_id );
 
-	/**
-	 * Newlines cannot be smuggled into the stored credential values.
-	 */
-	public function test_sanitize_strips_newlines_from_credentials() {
-		$result = $this->sanitize(
-			array(
-				'auth' => array(
-					'username' => "admin\nX-Injected: 1",
-					'password' => "secret\r\nX-Injected: 1",
-				),
-			)
-		);
-
-		$this->assertStringNotContainsString( "\n", $result['auth']['username'] );
-		$this->assertStringNotContainsString( "\r", $result['auth']['password'] );
-	}
-
-	/**
-	 * Legitimate credentials must survive sanitization byte for byte.
-	 */
-	public function test_sanitize_preserves_legitimate_credentials() {
-		$headers = array(
-			'method' => 'post',
-			'auth'   => array(
-				'username' => 'api_user-01@example.com',
-				'password' => 'p@ssw0rd!#$%^&*()_+=[]{};:,.?/|~',
-			),
-		);
-
-		$result = $this->sanitize( $headers );
-
-		$this->assertSame( $headers['auth']['username'], $result['auth']['username'] );
-		$this->assertSame( $headers['auth']['password'], $result['auth']['password'] );
-		$this->assertSame( 'post', $result['method'] );
-	}
-
-	/**
-	 * A shared-key authorization string must survive sanitization byte for byte.
-	 */
-	public function test_sanitize_preserves_shared_key_authorization() {
-		$auth   = 'SharedKey myaccount:aGVsbG8gd29ybGQ=';
-		$result = $this->sanitize( array( 'auth' => $auth ) );
-
-		$this->assertSame( $auth, $result['auth'] );
+		$this->assertStringContainsString( 'value="SharedKey acct:aGVsbG8%3D"', $markup );
 	}
 
 	/**
