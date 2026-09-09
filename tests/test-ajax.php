@@ -1110,6 +1110,124 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Mock the JSON endpoint so the set-data handler does not hit the network.
+	 *
+	 * @return callable The filter callback, for removal.
+	 */
+	private function mock_json_endpoint() {
+		$filter = function () {
+			return array(
+				'headers'  => array(),
+				'body'     => wp_json_encode( array( array( 'name' => 'a', 'value' => 1 ) ) ),
+				'response' => array( 'code' => 200, 'message' => '' ),
+				'cookies'  => array(),
+				'filename' => null,
+			);
+		};
+		add_filter( 'pre_http_request', $filter );
+		return $filter;
+	}
+
+	/**
+	 * Run the JSON set-data handler as the current user.
+	 *
+	 * @param int   $chart_id The chart being saved.
+	 * @param array $post     The POST fields to send on top of the defaults.
+	 */
+	private function handle_json_set_data( $chart_id, array $post ) {
+		$_GET = array(
+			'chart'    => $chart_id,
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
+		);
+		// empty header/type keeps the editable-table parsing out of the assertions.
+		$_POST = array_merge(
+			array(
+				'url'    => 'https://example.com/data.json',
+				'method' => 'get',
+				'root'   => 'items',
+				'header' => array(),
+				'type'   => array(),
+			),
+			$post
+		);
+
+		$filter = $this->mock_json_endpoint();
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected once the update page has rendered.
+		} catch ( WPAjaxDieStopException $e ) {
+			// Expected when the handler produced no output.
+		} finally {
+			remove_filter( 'pre_http_request', $filter );
+		}
+	}
+
+	/**
+	 * Saving a JSON data source must store sanitized credentials and root.
+	 *
+	 * Covers the write boundary end to end: without the sanitization in
+	 * setJsonData() the payload reaches the post meta verbatim.
+	 */
+	public function test_json_set_data_sanitizes_stored_credentials_meta() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$this->handle_json_set_data(
+			$chart_id,
+			array(
+				'root'     => 'items<script>alert(1)</script>',
+				'username' => '<script>alert(document.domain)</script>admin',
+				'password' => '<img src=x onerror=alert(document.cookie)>secret',
+			)
+		);
+
+		$headers = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		$this->assertIsArray( $headers );
+		$this->assertSame( 'admin', $headers['auth']['username'] );
+		$this->assertSame( 'secret', $headers['auth']['password'] );
+		$this->assertSame( 'items', get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true ) );
+	}
+
+	/**
+	 * The authorization-string form of the credentials is sanitized on save too.
+	 */
+	public function test_json_set_data_sanitizes_stored_authorization_string() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$this->handle_json_set_data( $chart_id, array( 'auth' => '"><script>alert(1)</script>' ) );
+
+		$headers = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		$this->assertIsArray( $headers );
+		$this->assertIsString( $headers['auth'] );
+		$this->assertStringNotContainsString( '<script', $headers['auth'] );
+		$this->assertStringNotContainsString( 'alert(', $headers['auth'] );
+	}
+
+	/**
+	 * Real credentials must reach the post meta unchanged.
+	 */
+	public function test_json_set_data_preserves_legitimate_credentials() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$this->handle_json_set_data(
+			$chart_id,
+			array(
+				'root'     => 'data.results',
+				'username' => 'api_user-01@example.com',
+				'password' => 'p@ssw0rd!#$^&*()_+=[]{};:,.?/|~',
+			)
+		);
+
+		$headers = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		$this->assertSame( 'api_user-01@example.com', $headers['auth']['username'] );
+		$this->assertSame( 'p@ssw0rd!#$^&*()_+=[]{};:,.?/|~', $headers['auth']['password'] );
+		$this->assertSame( 'data.results', get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true ) );
+	}
+
+	/**
 	 * A user cannot save filters on another user's chart.
 	 */
 	public function test_save_filter_denied_for_chart_user_cannot_edit() {
