@@ -152,7 +152,7 @@ function visualizer_launch() {
 
 	$action_scheduler_file = VISUALIZER_ABSPATH . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
 
-	if ( is_readable( $action_scheduler_file ) ) {
+	if ( visualizer_can_use_action_scheduler() && is_readable( $action_scheduler_file ) ) {
 		require_once $action_scheduler_file;
 	}
 
@@ -215,6 +215,21 @@ function visualizer_launch() {
 			}
 		);
 	}
+}
+
+/**
+ * Whether the bundled Action Scheduler can run against this wpdb.
+ *
+ * The bundled library calls wpdb::db_server_info() unguarded when it claims a
+ * queue batch, and core only added that method in WordPress 5.5. Loading it
+ * without the method available fatals, so those sites stay on WP-Cron instead.
+ *
+ * @return bool
+ */
+function visualizer_can_use_action_scheduler() {
+	global $wpdb;
+
+	return isset( $wpdb ) && is_callable( array( $wpdb, 'db_server_info' ) );
 }
 
 /**
