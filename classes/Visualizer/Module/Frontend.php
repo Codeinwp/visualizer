@@ -750,7 +750,7 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 			$series                = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true );
 			$is_woocommerce_report = get_post_meta( $chart->ID, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true );
 
-			if ( isset( $settings['series'] ) && ! ( count( $settings['series'] ) - count( $series ) > 1 ) ) {
+			if ( isset( $settings['series'] ) && is_array( $settings['series'] ) && is_array( $series ) && ! ( count( $settings['series'] ) - count( $series ) > 1 ) ) {
 				$diff_total_series = abs( count( $settings['series'] ) - count( $series ) );
 				if ( $diff_total_series ) {
 					foreach ( range( 1, $diff_total_series ) as $k => $diff_series ) {
