@@ -516,7 +516,11 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * the refresh. Re-arms WP-Cron in that case; no-op whenever the library is up.
 	 */
 	public function maybe_reschedule_refresh_db(): void {
-		if ( visualizer_can_use_action_scheduler() && function_exists( 'as_next_scheduled_action' ) ) {
+		if (
+			visualizer_can_use_action_scheduler()
+			&& function_exists( 'as_next_scheduled_action' )
+			&& function_exists( 'as_schedule_recurring_action' )
+		) {
 			return;
 		}
 
