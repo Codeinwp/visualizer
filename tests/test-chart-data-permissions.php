@@ -13,6 +13,20 @@
 class Test_Visualizer_Chart_Data_Permissions extends WP_UnitTestCase {
 
 	/**
+	 * A newly created REST chart has no settings metadata yet.
+	 */
+	public function test_rest_can_create_chart_without_settings_metadata() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		$request = new WP_REST_Request( 'POST', '/wp/v2/visualizer' );
+		$request->set_param( 'title', 'Empty chart' );
+		$request->set_param( 'status', 'publish' );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 201, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertIsArray( $data['chart_data']['visualizer-settings'] );
+	}
+
+	/**
 	 * Create a chart owned by the given user.
 	 *
 	 * @param int $author_id The chart author.
