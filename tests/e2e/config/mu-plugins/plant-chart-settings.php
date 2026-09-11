@@ -38,5 +38,21 @@ add_action(
 				},
 			)
 		);
+
+		// Runs the SDK usage logger on demand, so specs can verify it
+		// tolerates whatever chart meta they planted (issue #1359).
+		register_rest_route(
+			'visualizer-e2e/v1',
+			'/usage',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+				'callback'            => function () {
+					return apply_filters( 'visualizer_logger_data', array() );
+				},
+			)
+		);
 	}
 );

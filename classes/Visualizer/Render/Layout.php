@@ -188,8 +188,13 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 		}
 		$methods = apply_filters( 'visualizer_json_request_methods', array( 'GET', 'POST' ) );
 
+		$auth          = isset( $headers['auth'] ) ? $headers['auth'] : '';
+		$auth_username = is_array( $auth ) && isset( $auth['username'] ) ? $auth['username'] : '';
+		$auth_password = is_array( $auth ) && isset( $auth['password'] ) ? $auth['password'] : '';
+		$auth_string   = is_string( $auth ) ? $auth : '';
+
 		// open the headers by default?
-		$headers_open = $headers && array_key_exists( 'auth', $headers ) && ( array_key_exists( 'username', $headers['auth'] ) && ! empty( $headers['auth']['username'] ) ) || ( ! empty( $headers['auth'] ) && is_string( $headers['auth'] ) );
+		$headers_open = ! empty( $auth_username ) || ! empty( $auth_string );
 		?>
 		<div id="visualizer-json-screen" style="display: none">
 			<div class="visualizer-json-form">
@@ -242,7 +247,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											type="text"
 											id="vz-import-json-username"
 											name="username"
-											value="<?php echo ( array_key_exists( 'auth', $headers ) && array_key_exists( 'username', $headers['auth'] ) ? $headers['auth']['username'] : '' ); ?>"
+											value="<?php echo esc_attr( $auth_username ); ?>"
 											placeholder="<?php esc_html_e( 'Username/Access Key', 'visualizer' ); ?>"
 											class="json-form-element">
 										&
@@ -250,7 +255,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											type="password"
 											id="vz-import-json-password"
 											name="password"
-											value="<?php echo ( array_key_exists( 'auth', $headers ) && array_key_exists( 'password', $headers['auth'] ) ? $headers['auth']['password'] : '' ); ?>"
+											value="<?php echo esc_attr( $auth_password ); ?>"
 											placeholder="<?php esc_html_e( 'Password/Secret Key', 'visualizer' ); ?>"
 											class="json-form-element">
 									</div>
@@ -266,7 +271,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 											type="text"
 											id="vz-import-json-auth"
 											name="auth"
-											value="<?php echo ( array_key_exists( 'auth', $headers ) && is_string( $headers['auth'] ) ? $headers['auth'] : '' ); ?>"
+											value="<?php echo esc_attr( $auth_string ); ?>"
 											placeholder="<?php esc_html_e( 'e.g. SharedKey <AccountName>:<Signature>', 'visualizer' ); ?>"
 											class="visualizer-input json-form-element">
 									</div>
@@ -274,7 +279,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								<div class="json-wizard-header">
 									<div class="field-title"><?php esc_html_e( 'Additional headers', 'visualizer' ); ?></div>
 									<div>
-										<textarea name="additional_headers" class="visualizer-input" placeholder="<?php esc_html_e( 'Key:Value, Key2:Value2,...', 'visualizer' ); ?>"><?php echo isset( $headers['additional_headers'] ) ? $headers['additional_headers'] : ''; ?></textarea>
+										<textarea name="additional_headers" class="visualizer-input" placeholder="<?php esc_html_e( 'Key:Value, Key2:Value2,...', 'visualizer' ); ?>"><?php echo esc_textarea( isset( $headers['additional_headers'] ) ? $headers['additional_headers'] : '' ); ?></textarea>
 									</div>
 								</div>
 							</div>
@@ -289,7 +294,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 						<?php
 						if ( ! empty( $root ) ) {
 							?>
-							<option value="<?php echo esc_attr( $root ); ?>"><?php echo str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $root ); ?></option>
+							<option value="<?php echo esc_attr( $root ); ?>"><?php echo esc_html( str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $root ) ); ?></option>
 							<?php
 						}
 						?>
@@ -307,7 +312,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 								<?php
 								if ( ! empty( $paging ) ) {
 									?>
-									<option value="<?php echo esc_attr( $paging ); ?>"><?php echo sprintf( 'Get results from the first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ); ?></option>
+									<option value="<?php echo esc_attr( $paging ); ?>"><?php echo esc_html( sprintf( 'Get results from the first %d pages using %s', apply_filters( 'visualizer_json_fetch_pages', 5, $url ), str_replace( Visualizer_Source_Json::TAG_SEPARATOR, Visualizer_Source_Json::TAG_SEPARATOR_VIEW, $paging ) ) ); ?></option>
 									<?php
 								}
 								?>

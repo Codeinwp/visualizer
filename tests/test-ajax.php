@@ -1110,6 +1110,254 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Mock the JSON endpoint so the set-data handler does not hit the network.
+	 *
+	 * @return callable The filter callback, for removal.
+	 */
+	private function mock_json_endpoint() {
+		$filter = function () {
+			return array(
+				'headers'  => array(),
+				'body'     => wp_json_encode( array( array( 'name' => 'a', 'value' => 1 ) ) ),
+				'response' => array( 'code' => 200, 'message' => '' ),
+				'cookies'  => array(),
+				'filename' => null,
+			);
+		};
+		add_filter( 'pre_http_request', $filter );
+		return $filter;
+	}
+
+	/**
+	 * Run the JSON set-data handler as the current user.
+	 *
+	 * @param int   $chart_id The chart being saved.
+	 * @param array $post     The POST fields to send on top of the defaults.
+	 */
+	private function handle_json_set_data( $chart_id, array $post ) {
+		$_GET = array(
+			'chart'    => $chart_id,
+			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
+		);
+		// empty header/type keeps the editable-table parsing out of the assertions.
+		$_POST = array_merge(
+			array(
+				'url'    => 'https://example.com/data.json',
+				'method' => 'get',
+				'root'   => 'items',
+				'header' => array(),
+				'type'   => array(),
+			),
+			$post
+		);
+
+		$filter = $this->mock_json_endpoint();
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected once the update page has rendered.
+		} catch ( WPAjaxDieStopException $e ) {
+			// Expected when the handler produced no output.
+		} finally {
+			remove_filter( 'pre_http_request', $filter );
+		}
+	}
+
+	/**
+	 * Saving a JSON data source must store the credential bytes exactly as sent.
+	 *
+	 * The credentials are base64-encoded into the Authorization header, so any
+	 * transform on the way into the meta breaks authentication. sanitize_text_field()
+	 * strips %XX octets, which silently turns abc%2Fdef into abcdef.
+	 */
+	public function test_json_set_data_preserves_credential_bytes_in_meta() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$this->handle_json_set_data(
+			$chart_id,
+			array(
+				'root'     => 'data%2Fresults',
+				'username' => 'AKIA%2FEXAMPLE%2BKEY',
+				'password' => 'p%40ssw0rd!#$^&*()_+=[]{};:,.?/|~',
+			)
+		);
+
+		$headers = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		$this->assertIsArray( $headers );
+		$this->assertSame( 'AKIA%2FEXAMPLE%2BKEY', $headers['auth']['username'] );
+		$this->assertSame( 'p%40ssw0rd!#$^&*()_+=[]{};:,.?/|~', $headers['auth']['password'] );
+		$this->assertSame( 'data%2Fresults', get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, true ) );
+	}
+
+	/**
+	 * A percent-encoded authorization string is stored byte for byte.
+	 */
+	public function test_json_set_data_preserves_authorization_string_bytes() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$this->handle_json_set_data( $chart_id, array( 'auth' => 'SharedKey acct:aGVsbG8%3D' ) );
+
+		$headers = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		$this->assertSame( 'SharedKey acct:aGVsbG8%3D', $headers['auth'] );
+	}
+
+	/**
+	 * A markup payload is stored unmodified; escaping belongs to each output context.
+	 *
+	 * Guards against re-introducing write-time sanitization: the editor escaping is
+	 * covered by Test_Visualizer_Json_Headers_Xss.
+	 */
+	public function test_json_set_data_stores_markup_payload_unmodified() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$payload = '<script>alert(1)</script>admin';
+		$this->handle_json_set_data(
+			$chart_id,
+			array(
+				'username' => $payload,
+				'password' => $payload,
+			)
+		);
+
+		$headers = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		$this->assertSame( $payload, $headers['auth']['username'] );
+		$this->assertSame( $payload, $headers['auth']['password'] );
+	}
+
+	/**
+	 * Render the JSON parameters screen for a chart.
+	 *
+	 * The upsell markup calls into the themeisle SDK, which the test bootstrap does
+	 * not load, so it is unhooked for the render and restored afterwards.
+	 *
+	 * @param int $chart_id The chart to render.
+	 * @return string The rendered markup.
+	 */
+	private function render_json_screen( $chart_id ) {
+		global $wp_filter;
+		$callbacks = isset( $wp_filter['visualizer_pro_upsell'] ) ? $wp_filter['visualizer_pro_upsell']->callbacks : array();
+		remove_all_filters( 'visualizer_pro_upsell' );
+
+		ob_start();
+		Visualizer_Render_Layout::show( 'json-screen', $chart_id );
+		$markup = ob_get_clean();
+
+		if ( ! empty( $callbacks ) ) {
+			$wp_filter['visualizer_pro_upsell']            = new WP_Hook();
+			$wp_filter['visualizer_pro_upsell']->callbacks = $callbacks;
+		}
+
+		return $markup;
+	}
+
+	/**
+	 * Assert that an input carries the value as inert text and no injected behaviour.
+	 *
+	 * @param DOMXPath $xpath    The parsed markup.
+	 * @param string   $input_id The input to check.
+	 * @param string   $expected The value the browser should read back.
+	 */
+	private function assertInputIsInert( DOMXPath $xpath, $input_id, $expected ) {
+		$input = $xpath->query( '//input[@id="' . $input_id . '"]' )->item( 0 );
+		$this->assertNotNull( $input, $input_id . ' is missing from the rendered markup.' );
+
+		// the browser reads the payload back as one literal string, not as markup.
+		$this->assertSame( $expected, $input->getAttribute( 'value' ) );
+
+		$attributes = array();
+		foreach ( $input->attributes as $attribute ) {
+			$attributes[] = strtolower( $attribute->nodeName );
+		}
+
+		$handlers = array_values(
+			array_filter(
+				$attributes,
+				function ( $name ) {
+					return 0 === strpos( $name, 'on' );
+				}
+			)
+		);
+
+		$this->assertSame( array(), $handlers, 'Event handler attributes were injected into ' . $input_id . '.' );
+		$this->assertNotContains( 'autofocus', $attributes, 'An autofocus attribute was injected into ' . $input_id . '.' );
+	}
+
+	/**
+	 * A script payload saved through the handler is inert once the editor renders it.
+	 *
+	 * The bytes are stored verbatim, so this is what proves the payload cannot run:
+	 * the rendered markup carries no script element and the value stays a single
+	 * attribute string with no event handler broken out of it.
+	 *
+	 * @requires extension dom
+	 */
+	public function test_json_set_data_payload_is_inert_when_rendered() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$username_payload = 'x" autofocus onfocus="alert(document.domain)" x="';
+		$password_payload = '"><script>alert(document.cookie)</script>';
+
+		$this->handle_json_set_data(
+			$chart_id,
+			array(
+				'username' => $username_payload,
+				'password' => $password_payload,
+			)
+		);
+
+		$headers = get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true );
+		$this->assertSame( $username_payload, $headers['auth']['username'] );
+		$this->assertSame( $password_payload, $headers['auth']['password'] );
+
+		$markup = $this->render_json_screen( $chart_id );
+
+		$dom = new DOMDocument();
+		libxml_use_internal_errors( true );
+		$dom->loadHTML( '<html><head><meta charset="utf-8"></head><body>' . $markup . '</body></html>' );
+		libxml_clear_errors();
+		libxml_use_internal_errors( false );
+
+		$this->assertSame( 0, $dom->getElementsByTagName( 'script' )->length, 'The payload created a script element.' );
+		$this->assertSame( 0, $dom->getElementsByTagName( 'img' )->length, 'The payload created an img element.' );
+
+		$xpath = new DOMXPath( $dom );
+		$this->assertInputIsInert( $xpath, 'vz-import-json-username', $username_payload );
+		$this->assertInputIsInert( $xpath, 'vz-import-json-password', $password_payload );
+	}
+
+	/**
+	 * An authorization-string script payload is inert once the editor renders it.
+	 *
+	 * @requires extension dom
+	 */
+	public function test_json_set_data_authorization_payload_is_inert_when_rendered() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+
+		$payload = '" onmouseover="alert(1)" data-x="<script>alert(2)</script>';
+		$this->handle_json_set_data( $chart_id, array( 'auth' => $payload ) );
+
+		$this->assertSame( $payload, get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_HEADERS, true )['auth'] );
+
+		$markup = $this->render_json_screen( $chart_id );
+
+		$dom = new DOMDocument();
+		libxml_use_internal_errors( true );
+		$dom->loadHTML( '<html><head><meta charset="utf-8"></head><body>' . $markup . '</body></html>' );
+		libxml_clear_errors();
+		libxml_use_internal_errors( false );
+
+		$this->assertSame( 0, $dom->getElementsByTagName( 'script' )->length, 'The payload created a script element.' );
+
+		$xpath = new DOMXPath( $dom );
+		$this->assertInputIsInert( $xpath, 'vz-import-json-auth', $payload );
+	}
+
+	/**
 	 * A user cannot save filters on another user's chart.
 	 */
 	public function test_save_filter_denied_for_chart_user_cannot_edit() {
