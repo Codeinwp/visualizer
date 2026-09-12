@@ -1,3 +1,11 @@
+##### [Version 4.0.8](https://github.com/Codeinwp/visualizer/compare/v4.0.7...v4.0.8) (2026-09-11)
+
+- Fixed an error usage of a chart's settings were stored as a string instead of an array.
+- Update dependencies
+- Fixed frontend chart failures when saved series settings are invalid.
+- Fixed script execution from saved JSON chart credentials. Thanks Yaswanth Reddy Sunkara for the report.
+- Updated dependencies
+
 ##### [Version 4.0.7](https://github.com/Codeinwp/visualizer/compare/v4.0.6...v4.0.7) (2026-07-30)
 
 - Fixed charts using a database source saving the results of the previous query, so a saved chart no longer differs from the data shown in the editor.

@@ -317,7 +317,6 @@ class Visualizer_Gutenberg_Block {
 		if ( ! is_array( $data['visualizer-settings'] ) ) {
 			$data['visualizer-settings'] = array();
 		}
-
 		if ( empty( $data['visualizer-settings']['pagination'] ) ) {
 			$data['visualizer-settings']['pageSize'] = '';
 		}

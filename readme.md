@@ -2,7 +2,7 @@
 **Contributors:** [codeinwp](https://profiles.wordpress.org/codeinwp), [themeisle](https://profiles.wordpress.org/themeisle), [marius2012](https://profiles.wordpress.org/marius2012), [marius_codeinwp](https://profiles.wordpress.org/marius_codeinwp), [hardeepasrani](https://profiles.wordpress.org/hardeepasrani), [rozroz](https://profiles.wordpress.org/rozroz), [Madalin_ThemeIsle](https://profiles.wordpress.org/Madalin_ThemeIsle)  
 **Tags:** charts, tables, datatable, data-visualization, ai-charts  
 **Requires at least:** 5.2  
-**Tested up to:** 7.0  
+**Tested up to:** 7.1  
 **Requires PHP:** 7.4  
 **Stable tag:** trunk  
 **License:** GPL v2.0 or later  
@@ -244,6 +244,17 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 8. Block editor - Chart Library
 
 ## Changelog ##
+
+##### [Version 4.0.8](https://github.com/Codeinwp/visualizer/compare/v4.0.7...v4.0.8) (2026-09-11)
+
+- Fixed an error usage of a chart's settings were stored as a string instead of an array.
+- Update dependencies
+- Fixed frontend chart failures when saved series settings are invalid.
+- Fixed script execution from saved JSON chart credentials. Thanks Yaswanth Reddy Sunkara for the report.
+- Updated dependencies
+
+
+
 
 ##### [Version 4.0.7](https://github.com/Codeinwp/visualizer/compare/v4.0.6...v4.0.7) (2026-07-30)
 
