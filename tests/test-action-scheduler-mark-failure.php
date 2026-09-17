@@ -82,20 +82,55 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	 * @param callable $other_process Runs once, right before that UPDATE.
 	 */
 	private function mark_failures_racing( $action_id, callable $other_process ) {
-		global $wpdb;
-		$table  = $wpdb->actionscheduler_actions;
-		$filter = static function ( $sql ) use ( $action_id, $table, $other_process ) {
-			if ( 0 === stripos( ltrim( $sql ), 'UPDATE' ) && false !== strpos( $sql, $table ) && preg_match( '/action_id` = (\d+)/', $sql, $m ) && (int) $m[1] === $action_id ) {
+		$this->intercept_mark_failure_update(
+			$action_id,
+			static function ( $sql ) use ( $other_process ) {
 				$other_process();
+				return $sql;
+			}
+		);
+		( new ActionScheduler_QueueCleaner( $this->store ) )->mark_failures( 60 );
+	}
+
+	/**
+	 * Run `$intercept` once, on the UPDATE that marks `$action_id` failed, and
+	 * use its return value as the SQL to execute. Removed after the test.
+	 *
+	 * @param int      $action_id Action whose UPDATE is intercepted.
+	 * @param callable $intercept Receives the SQL, returns the SQL to run.
+	 */
+	private function intercept_mark_failure_update( $action_id, callable $intercept ) {
+		global $wpdb;
+		$table = $wpdb->actionscheduler_actions;
+		$done  = false;
+		// Queries issued inside $intercept re-enter this filter: run it once only.
+		$filter = static function ( $sql ) use ( $action_id, $table, $intercept, &$done ) {
+			if ( ! $done && 0 === stripos( ltrim( $sql ), 'UPDATE' ) && false !== strpos( $sql, $table ) && preg_match( '/action_id`?\s*=\s*\'?(\d+)/', $sql, $m ) && (int) $m[1] === $action_id ) {
+				$done = true;
+				return $intercept( $sql );
 			}
 			return $sql;
 		};
 		add_filter( 'query', $filter );
-		try {
-			( new ActionScheduler_QueueCleaner( $this->store ) )->mark_failures( 60 );
-		} finally {
+		$this->filters_to_remove[] = $filter;
+	}
+
+	/**
+	 * Query filters added by intercept_mark_failure_update().
+	 *
+	 * @var callable[]
+	 */
+	private $filters_to_remove = array();
+
+	/**
+	 * Remove the query filters even when a test throws.
+	 */
+	public function tear_down() {
+		foreach ( $this->filters_to_remove as $filter ) {
 			remove_filter( 'query', $filter );
 		}
+		$this->filters_to_remove = array();
+		parent::tear_down();
 	}
 
 	/**
@@ -169,5 +204,30 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 		( new ActionScheduler_QueueRunner( $this->store ) )->process_action( $action_id, 'test' );
 
 		$this->assertSame( ActionScheduler_Store::STATUS_FAILED, $this->status_of( $action_id ) );
+	}
+
+	/**
+	 * The guard is for the race only. A real database error while marking the
+	 * action failed must still surface, as it did before the patch.
+	 */
+	public function test_mark_failures_still_throws_on_a_database_error() {
+		global $wpdb;
+		$stale = $this->seed_stale_running_action();
+
+		// Break the UPDATE itself: the store gets `false`, not zero rows.
+		$this->intercept_mark_failure_update(
+			$stale,
+			static function ( $sql ) use ( $wpdb ) {
+				return str_replace( $wpdb->actionscheduler_actions, 'no_such_table', $sql );
+			}
+		);
+		$wpdb->suppress_errors( true );
+
+		$this->expectException( InvalidArgumentException::class );
+		try {
+			( new ActionScheduler_QueueCleaner( $this->store ) )->mark_failures( 60 );
+		} finally {
+			$wpdb->suppress_errors( false );
+		}
 	}
 }
