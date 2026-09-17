@@ -1,0 +1,31 @@
+--- a/classes/ActionScheduler_QueueCleaner.php
++++ b/classes/ActionScheduler_QueueCleaner.php
+@@ -222,7 +222,12 @@
+ 		);
+ 
+ 		foreach ( $actions_to_reset as $action_id ) {
+-			$this->store->mark_failure( $action_id );
++			try {
++				$this->store->mark_failure( $action_id );
++			} catch ( Exception $e ) {
++				// Deleted or changed by another process between the query and the update: nothing left to mark.
++				continue;
++			}
+ 			do_action( 'action_scheduler_failed_action', $action_id, $timeout );
+ 		}
+ 	}
+--- a/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php
++++ b/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php
+@@ -132,7 +132,11 @@
+ 	 */
+ 	private function handle_action_error( $action_id, $e, $context, $valid_action ) {
+ 		if ( $valid_action ) {
+-			$this->store->mark_failure( $action_id );
++			try {
++				$this->store->mark_failure( $action_id );
++			} catch ( Exception $ignored ) {
++				// Already marked failed by the queue cleaner, or deleted by another process: nothing left to mark.
++			}
+ 			/**
+ 			 * Runs when action execution fails.
+ 			 *
