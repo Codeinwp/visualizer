@@ -8,7 +8,7 @@
  		$timeout = apply_filters( 'action_scheduler_failure_period', $time_limit );
  
  		if ( $timeout < 0 ) {
-@@ -222,7 +223,15 @@
+@@ -222,7 +223,16 @@
  		);
  
  		foreach ( $actions_to_reset as $action_id ) {
@@ -16,6 +16,7 @@
 +			try {
 +				$this->store->mark_failure( $action_id );
 +			} catch ( InvalidArgumentException $e ) {
++				// last_error belongs to that UPDATE: wpdb::query() clears it before each statement.
 +				if ( ! empty( $wpdb->last_error ) ) {
 +					throw $e;
 +				}
@@ -27,7 +28,7 @@
  	}
 --- a/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php
 +++ b/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php
-@@ -131,8 +131,16 @@
+@@ -131,8 +131,17 @@
  	 * @return void
  	 */
  	private function handle_action_error( $action_id, $e, $context, $valid_action ) {
@@ -37,6 +38,7 @@
 +			try {
 +				$this->store->mark_failure( $action_id );
 +			} catch ( InvalidArgumentException $mark_failure_error ) {
++				// last_error belongs to that UPDATE: wpdb::query() clears it before each statement.
 +				if ( ! empty( $wpdb->last_error ) ) {
 +					throw $mark_failure_error;
 +				}

@@ -104,15 +104,31 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 		$table = $wpdb->actionscheduler_actions;
 		$done  = false;
 		// Queries issued inside $intercept re-enter this filter: run it once only.
-		$filter = static function ( $sql ) use ( $action_id, $table, $intercept, &$done ) {
-			if ( ! $done && 0 === stripos( ltrim( $sql ), 'UPDATE' ) && false !== strpos( $sql, $table ) && preg_match( '/action_id`?\s*=\s*\'?(\d+)/', $sql, $m ) && (int) $m[1] === $action_id ) {
-				$done = true;
-				return $intercept( $sql );
+		$filter = function ( $sql ) use ( $action_id, $table, $intercept, &$done ) {
+			if ( $done || ! $this->is_update_of_action( $sql, $table, $action_id ) ) {
+				return $sql;
 			}
-			return $sql;
+			$done = true;
+			return $intercept( $sql );
 		};
 		add_filter( 'query', $filter );
 		$this->filters_to_remove[] = $filter;
+	}
+
+	/**
+	 * Whether `$sql` is an UPDATE of `$table` scoped to `$action_id`.
+	 * Matches the SQL `wpdb::update()` builds with or without backticks and quotes.
+	 *
+	 * @param string $sql       SQL about to run.
+	 * @param string $table     Actions table name.
+	 * @param int    $action_id Action id.
+	 * @return bool
+	 */
+	private function is_update_of_action( $sql, $table, $action_id ) {
+		if ( 0 !== stripos( ltrim( $sql ), 'UPDATE' ) || false === strpos( $sql, $table ) ) {
+			return false;
+		}
+		return preg_match( '/action_id`?\s*=\s*\'?(\d+)/', $sql, $m ) && (int) $m[1] === $action_id;
 	}
 
 	/**
