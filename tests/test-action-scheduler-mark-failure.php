@@ -111,7 +111,7 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Whether `$sql` is an UPDATE of `$table` scoped to `$action_id`.
+	 * Whether `$sql` is the UPDATE that marks `$action_id` in `$table` failed.
 	 * Matches the SQL `wpdb::update()` builds with or without backticks and quotes.
 	 *
 	 * @param string $sql       SQL about to run.
@@ -121,6 +121,9 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	 */
 	private function is_update_of_action( $sql, $table, $action_id ) {
 		if ( 0 !== stripos( ltrim( $sql ), 'UPDATE' ) || false === strpos( $sql, $table ) ) {
+			return false;
+		}
+		if ( ! preg_match( '/status`?\s*=\s*\'' . ActionScheduler_Store::STATUS_FAILED . '\'/', $sql ) ) {
 			return false;
 		}
 		return preg_match( '/action_id`?\s*=\s*\'?(\d+)/', $sql, $m ) && (int) $m[1] === $action_id;
