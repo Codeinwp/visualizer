@@ -221,13 +221,13 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 				return str_replace( $wpdb->actionscheduler_actions, 'no_such_table', $sql );
 			}
 		);
-		$wpdb->suppress_errors( true );
+		$suppressed = $wpdb->suppress_errors( true );
 
 		$this->expectException( InvalidArgumentException::class );
 		try {
 			( new ActionScheduler_QueueCleaner( $this->store ) )->mark_failures( 60 );
 		} finally {
-			$wpdb->suppress_errors( false );
+			$wpdb->suppress_errors( $suppressed );
 		}
 	}
 }
