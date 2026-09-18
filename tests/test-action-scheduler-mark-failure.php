@@ -33,7 +33,7 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 
-		if ( ! class_exists( 'ActionScheduler_QueueCleaner' ) || ! defined( 'VISUALIZER_ABSPATH' ) ) {
+		if ( ! class_exists( 'ActionScheduler' ) || ! class_exists( 'ActionScheduler_QueueCleaner' ) || ! defined( 'VISUALIZER_ABSPATH' ) ) {
 			$this->markTestSkipped( 'Action Scheduler is not loaded.' );
 		}
 
@@ -48,30 +48,25 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Insert a stale in-progress action (last attempt two hours ago).
+	 * Save an action, then make it a stale in-progress one (last attempt two hours ago).
 	 *
+	 * @param string $hook Action hook.
 	 * @return int Action id.
 	 */
-	private function seed_stale_running_action() {
+	private function seed_stale_running_action( $hook = 'visualizer_schedule_refresh_db' ) {
 		global $wpdb;
-		$gmt = gmdate( 'Y-m-d H:i:s', time() - 2 * HOUR_IN_SECONDS );
-		$wpdb->insert(
+		$action_id = $this->store->save_action( new ActionScheduler_Action( $hook, array(), new ActionScheduler_SimpleSchedule( as_get_datetime_object( '-2 hours' ) ) ) );
+		$gmt       = gmdate( 'Y-m-d H:i:s', time() - 2 * HOUR_IN_SECONDS );
+		$wpdb->update(
 			$wpdb->actionscheduler_actions,
 			array(
-				'hook'                 => 'visualizer_schedule_refresh_db',
-				'status'               => ActionScheduler_Store::STATUS_RUNNING,
-				'scheduled_date_gmt'   => $gmt,
-				'scheduled_date_local' => $gmt,
-				'args'                 => '[]',
-				'schedule'             => '',
-				'group_id'             => 0,
-				'attempts'             => 1,
-				'last_attempt_gmt'     => $gmt,
-				'last_attempt_local'   => $gmt,
-				'claim_id'             => 0,
-			)
+				'status'             => ActionScheduler_Store::STATUS_RUNNING,
+				'last_attempt_gmt'   => $gmt,
+				'last_attempt_local' => $gmt,
+			),
+			array( 'action_id' => $action_id )
 		);
-		return (int) $wpdb->insert_id;
+		return (int) $action_id;
 	}
 
 	/**
@@ -245,5 +240,26 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 		} finally {
 			$wpdb->suppress_errors( $suppressed );
 		}
+	}
+
+	/**
+	 * Runner path, deletion variant: the action is removed while it runs, then it throws.
+	 */
+	public function test_process_action_survives_marking_a_deleted_action() {
+		global $wpdb;
+		$hook      = 'visualizer_test_throwing_action';
+		$action_id = $this->store->save_action( new ActionScheduler_Action( $hook, array(), new ActionScheduler_SimpleSchedule( as_get_datetime_object( '-1 minute' ) ) ) );
+
+		add_action(
+			$hook,
+			static function () use ( $wpdb, $action_id ) {
+				$wpdb->delete( $wpdb->actionscheduler_actions, array( 'action_id' => $action_id ) );
+				throw new RuntimeException( 'refresh failed' );
+			}
+		);
+
+		( new ActionScheduler_QueueRunner( $this->store ) )->process_action( $action_id, 'test' );
+
+		$this->assertNull( $this->status_of( $action_id ), 'the deleted action stays gone and the run survives' );
 	}
 }
