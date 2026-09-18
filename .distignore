@@ -35,5 +35,3 @@ skills
 classes/Visualizer/Gutenberg/src
 classes/Visualizer/ChartBuilder/src
 classes/Visualizer/D3Renderer/src
-patches
-vendor/cweagans

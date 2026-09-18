@@ -24,8 +24,7 @@
     "codeinwp/themeisle-sdk": "^3.3",
     "neitanod/forceutf8": "~2.0",
     "openspout/openspout": "^3.7",
-    "woocommerce/action-scheduler": "^3.8",
-    "cweagans/composer-patches": "^1.7"
+    "woocommerce/action-scheduler": "^3.8"
   },
   "autoload": {
     "files": [
@@ -46,8 +45,7 @@
       "php": "7.4"
     },
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "cweagans/composer-patches": true
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   },
   "require-dev": {
@@ -57,13 +55,5 @@
     "phpstan/phpstan": "^2.1",
     "szepeviktor/phpstan-wordpress": "^2.0",
     "yoast/phpunit-polyfills": "^4.0"
-  },
-  "extra": {
-    "patches": {
-      "woocommerce/action-scheduler": {
-        "Tolerate an action already failed or deleted by another process when marking it failed (#1369, upstream #970)": "patches/action-scheduler-1369-mark-failures.patch"
-      }
-    },
-    "composer-exit-on-patch-failure": true
   }
 }
