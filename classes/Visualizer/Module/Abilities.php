@@ -812,7 +812,7 @@ class Visualizer_Module_Abilities extends Visualizer_Module {
 			return new WP_Error( 'visualizer_invalid_source', __( 'source must be one of csv_url, json or db_query.', 'visualizer' ) );
 		}
 		if ( ! $this->isFeatureAvailable( $features[ $kind ] ) ) {
-			return new WP_Error( 'visualizer_feature_unavailable', __( 'This data source is not available on the current Visualizer plan.', 'visualizer' ) );
+			return $this->planError( 'visualizer_feature_unavailable', __( 'This data source is not available on the current Visualizer plan.', 'visualizer' ), $features[ $kind ] );
 		}
 
 		$schedule_types = array(
@@ -1405,7 +1405,7 @@ class Visualizer_Module_Abilities extends Visualizer_Module {
 			return new WP_Error( 'visualizer_invalid_type', sprintf( __( 'Unknown chart type. Available types: %s.', 'visualizer' ), implode( ', ', array_keys( $types ) ) ) );
 		}
 		if ( ! Visualizer_Module_Admin::checkChartStatus( $type ) ) {
-			return new WP_Error( 'visualizer_type_unavailable', __( 'This chart type is not available on the current Visualizer plan.', 'visualizer' ) );
+			return $this->planError( 'visualizer_type_unavailable', __( 'This chart type is not available on the current Visualizer plan.', 'visualizer' ), 'pro-chart-types' );
 		}
 
 		$supported = isset( $types[ $type ]['supports'] ) ? (array) $types[ $type ]['supports'] : array( 'Google Charts' );
@@ -1472,10 +1472,33 @@ class Visualizer_Module_Abilities extends Visualizer_Module {
 			}
 		}
 
+		/* translators: %s: list of intervals in hours. */
+		$message = sprintf( __( 'This refresh interval is not available on the current Visualizer plan. Allowed values (hours): %s.', 'visualizer' ), implode( ', ', $allowed ) );
+
+		// The plan is the limit only when it offers no recurring interval; otherwise the value itself is wrong.
+		if ( count( $allowed ) > 1 ) {
+			return new WP_Error( 'visualizer_interval_unavailable', $message );
+		}
+
+		return $this->planError( 'visualizer_interval_unavailable', $message, 'refresh-interval' );
+	}
+
+	/**
+	 * Builds the error for a request the active plan does not cover, with the upgrade link.
+	 *
+	 * @param string $code    The error code.
+	 * @param string $message The error message.
+	 * @param string $area    The gated feature, used as the campaign of the upgrade link.
+	 * @return WP_Error
+	 */
+	private function planError( $code, $message, $area ) {
+		$upgrade_url = tsdk_translate_link( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, $area, 'mcp' ) );
+
 		return new WP_Error(
-			'visualizer_interval_unavailable',
-			/* translators: %s: list of intervals in hours. */
-			sprintf( __( 'This refresh interval is not available on the current Visualizer plan. Allowed values (hours): %s.', 'visualizer' ), implode( ', ', $allowed ) )
+			$code,
+			/* translators: 1: the error message, 2: the upgrade URL. */
+			sprintf( __( '%1$s Upgrade: %2$s', 'visualizer' ), $message, $upgrade_url ),
+			array( 'upgrade_url' => $upgrade_url )
 		);
 	}
 
