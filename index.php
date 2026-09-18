@@ -145,6 +145,9 @@ function visualizer_launch() {
 	// AI Chart Builder module (AJAX endpoints for the React wizard).
 	$plugin->setModule( Visualizer_Module_AIBuilder::NAME );
 
+	// Abilities API integration (no-op when the API is not available).
+	$plugin->setModule( Visualizer_Module_Abilities::NAME );
+
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 	if ( is_readable( $vendor_file ) ) {
 		include_once $vendor_file;
