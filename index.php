@@ -183,6 +183,31 @@ function visualizer_launch() {
 			);
 		}
 	);
+	add_filter(
+		'visualizer_ai_connect_metadata',
+		function () {
+			return array(
+				'name'         => 'Visualizer',
+				'notice_cases' => array(
+					__( 'build a chart from your numbers', 'visualizer' ),
+					__( 'update a table with new data', 'visualizer' ),
+					__( 'refresh charts from their data source', 'visualizer' ),
+				),
+				'prompts'      => array(
+					__( 'List my Visualizer charts and tell me the type, data source and shortcode of each one.', 'visualizer' ),
+					__( 'Create a pie chart called "Traffic by channel" with Organic 5400, Direct 2100 and Social 1300, then give me its shortcode.', 'visualizer' ),
+					__( 'Go through all my charts and refresh the data of every one that pulls from a remote CSV, JSON or database source.', 'visualizer' ),
+				),
+				'abilities'    => array(
+					'visualizer/list-charts',
+					'visualizer/get-chart',
+					'visualizer/upsert-chart',
+					'visualizer/set-data-source',
+					'visualizer/refresh-chart-data',
+				),
+			);
+		}
+	);
 
 	if ( ! defined( 'TI_E2E_TESTING' ) && 'yes' === get_option( 'visualizer_logger_flag', 'no' ) ) {
 		add_filter( 'themeisle_sdk_enable_telemetry', '__return_true' );
