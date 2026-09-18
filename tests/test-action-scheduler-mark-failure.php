@@ -6,8 +6,8 @@
  * "Unidentified action" whenever its UPDATE changes no row: the action was
  * deleted, or an overlapping cleaner already marked it failed (WP-Cron and the
  * async runner can overlap; only the async runner takes a lock). Unguarded,
- * the whole queue run dies. The bundled copy is patched so both callers, the
- * queue cleaner loop and the runner's error path, skip that action and go on.
+ * the whole queue run dies. The bundled copy is patched so the store treats
+ * zero changed rows as already handled and throws only on a database error.
  *
  * @package     visualizer
  * @subpackage  Tests
@@ -15,7 +15,7 @@
  */
 
 /**
- * Both mark_failure() callers in the bundled Action Scheduler.
+ * mark_failure() through both of its runtime callers in the bundled Action Scheduler.
  */
 class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 

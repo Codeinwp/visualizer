@@ -1,49 +1,12 @@
---- a/classes/ActionScheduler_QueueCleaner.php
-+++ b/classes/ActionScheduler_QueueCleaner.php
-@@ -204,6 +204,7 @@
- 	 * @param int $time_limit The number of seconds to allow an action to run before it is considered to have failed. Default 300 (5 minutes).
- 	 */
- 	public function mark_failures( $time_limit = 300 ) {
-+		global $wpdb;
- 		$timeout = apply_filters( 'action_scheduler_failure_period', $time_limit );
- 
- 		if ( $timeout < 0 ) {
-@@ -222,7 +223,16 @@
+--- a/classes/data-stores/ActionScheduler_DBStore.php
++++ b/classes/data-stores/ActionScheduler_DBStore.php
+@@ -1227,7 +1227,8 @@
+ 			array( '%s' ),
+ 			array( '%d' )
  		);
- 
- 		foreach ( $actions_to_reset as $action_id ) {
--			$this->store->mark_failure( $action_id );
-+			try {
-+				$this->store->mark_failure( $action_id );
-+			} catch ( InvalidArgumentException $e ) {
-+				// last_error belongs to that UPDATE: wpdb::query() clears it before each statement.
-+				if ( ! empty( $wpdb->last_error ) ) {
-+					throw $e;
-+				}
-+				// No database error: another process deleted or already failed this action.
-+				continue;
-+			}
- 			do_action( 'action_scheduler_failed_action', $action_id, $timeout );
+-		if ( empty( $updated ) ) {
++		// Zero rows means another process deleted the action or already marked it failed: nothing left to mark.
++		if ( false === $updated ) {
+ 			/* translators: %s is the action ID */
+ 			throw new \InvalidArgumentException( sprintf( __( 'Unidentified action %s: we were unable to mark this action as having failed. It may may have been deleted by another process.', 'action-scheduler' ), $action_id ) );
  		}
- 	}
---- a/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php
-+++ b/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php
-@@ -131,8 +131,17 @@
- 	 * @return void
- 	 */
- 	private function handle_action_error( $action_id, $e, $context, $valid_action ) {
-+		global $wpdb;
- 		if ( $valid_action ) {
--			$this->store->mark_failure( $action_id );
-+			try {
-+				$this->store->mark_failure( $action_id );
-+			} catch ( InvalidArgumentException $mark_failure_error ) {
-+				// last_error belongs to that UPDATE: wpdb::query() clears it before each statement.
-+				if ( ! empty( $wpdb->last_error ) ) {
-+					throw $mark_failure_error;
-+				}
-+				// No database error: the cleaner already marked it failed, or another process deleted it.
-+			}
- 			/**
- 			 * Runs when action execution fails.
- 			 *
