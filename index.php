@@ -145,6 +145,9 @@ function visualizer_launch() {
 	// AI Chart Builder module (AJAX endpoints for the React wizard).
 	$plugin->setModule( Visualizer_Module_AIBuilder::NAME );
 
+	// Abilities API integration (no-op when the API is not available).
+	$plugin->setModule( Visualizer_Module_Abilities::NAME );
+
 	$vendor_file = VISUALIZER_ABSPATH . '/vendor/autoload.php';
 	if ( is_readable( $vendor_file ) ) {
 		include_once $vendor_file;
@@ -177,6 +180,31 @@ function visualizer_launch() {
 				'has_upgrade_menu' => ! Visualizer_Module::is_pro(),
 				'upgrade_text'     => esc_html__( 'Get Visualizer Pro', 'visualizer' ),
 				'upgrade_link'     => esc_url( tsdk_utmify( Visualizer_Plugin::PRO_TEASER_URL, 'sidebarMenuUpgrade', 'index' ) ),
+			);
+		}
+	);
+	add_filter(
+		'visualizer_ai_connect_metadata',
+		function () {
+			return array(
+				'name'         => 'Visualizer',
+				'notice_cases' => array(
+					__( 'build a chart from your numbers', 'visualizer' ),
+					__( 'update a table with new data', 'visualizer' ),
+					__( 'refresh charts from their data source', 'visualizer' ),
+				),
+				'prompts'      => array(
+					__( 'Create a Visualizer pie chart called "Traffic by channel" with Organic 5400, Direct 2100 and Social 1300, then give me its shortcode.', 'visualizer' ),
+					__( 'Go through all my charts and refresh the data of every one that pulls from a remote CSV, JSON or database source.', 'visualizer' ),
+					__( 'List my charts and tell me the type, data source and shortcode of each one.', 'visualizer' ),
+				),
+				'abilities'    => array(
+					'visualizer/list-charts',
+					'visualizer/get-chart',
+					'visualizer/upsert-chart',
+					'visualizer/set-data-source',
+					'visualizer/refresh-chart-data',
+				),
 			);
 		}
 	);
