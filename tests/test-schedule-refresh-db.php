@@ -282,6 +282,64 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A filtered interval key WP-Cron does not know must not drop the trigger.
+	 *
+	 * wp_schedule_event() returns false for an unregistered schedule, and the fallback used
+	 * to clear the old event first, so the refresh was left with nothing and the throttle
+	 * then held the retry off. get_schedule_interval_seconds() already copes with this.
+	 */
+	public function test_an_unknown_interval_key_still_leaves_a_trigger() {
+		add_filter(
+			'visualizer_chart_schedule_interval',
+			static function () {
+				return 'not_a_registered_schedule';
+			}
+		);
+		// force the WP-Cron fallback, which is the path that takes $interval_key.
+		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
+
+		$this->setup_module()->ensure_refresh_db_action();
+
+		$this->assertTrue( $this->has_trigger(), 'an unknown interval key must not leave the refresh with no trigger' );
+	}
+
+	/**
+	 * The start time must be a whole second, whatever gmt_offset holds.
+	 *
+	 * gmt_offset is a number, not an integer, so multiplying it makes the start time a float.
+	 * WP-Cron keys its array by that value and PHP then reports losing precision.
+	 */
+	public function test_a_fractional_offset_does_not_schedule_a_fractional_timestamp() {
+		add_filter(
+			'pre_option_gmt_offset',
+			static function () {
+				return 5.0001;
+			}
+		);
+		// force the WP-Cron fallback, which is where the value becomes an array key.
+		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
+
+		$lost = array();
+		set_error_handler(
+			static function ( $errno, $errstr ) use ( &$lost ) {
+				if ( false !== strpos( $errstr, 'loses precision' ) ) {
+					$lost[] = $errstr;
+				}
+				return true;
+			},
+			E_DEPRECATED
+		);
+
+		try {
+			$this->setup_module()->ensure_refresh_db_action();
+		} finally {
+			restore_error_handler();
+		}
+
+		$this->assertSame( array(), $lost, 'the start time must be a whole second' );
+	}
+
+	/**
 	 * Every pending refresh action.
 	 *
 	 * @return array

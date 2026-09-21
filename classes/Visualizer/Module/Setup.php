@@ -510,8 +510,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$hook         = self::REFRESH_DB_HOOK;
 		$group        = self::REFRESH_DB_GROUP;
 		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
-		$interval     = $this->get_schedule_interval_seconds( $interval_key );
-		$timestamp    = strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+
+		// wp_schedule_event() refuses a schedule WP-Cron does not know, and the fallback below
+		// clears the old event before it asks, so an unknown key would drop the refresh.
+		if ( ! isset( wp_get_schedules()[ $interval_key ] ) ) {
+			$interval_key = 'visualizer_ten_minutes';
+		}
+
+		$interval = $this->get_schedule_interval_seconds( $interval_key );
+		// gmt_offset is a number, not an integer, so the product can carry a fraction that
+		// WP-Cron would then lose when it keys its array by this value.
+		$timestamp = (int) ( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
 
 		// West of UTC that midnight has not arrived yet. Start from the one before it, so a
 		// recovered run is due immediately instead of later in the day.
