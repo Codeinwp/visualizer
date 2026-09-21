@@ -67,10 +67,19 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * Precondition: Action Scheduler is usable, otherwise the rest proves nothing.
+	 *
+	 * This one fails rather than skips, on purpose. set_up() skips the class when Action
+	 * Scheduler is absent, which is an environment this plugin supports. Present but not
+	 * initialized is not one: the library initializes on `init` at priority 1, so reaching a
+	 * test without it means the load order broke, and every as_* call in this class would
+	 * quietly return false and assert nothing.
 	 */
 	public function test_action_scheduler_is_available() {
 		$this->assertTrue( function_exists( 'as_schedule_recurring_action' ), 'Action Scheduler must be loaded' );
-		$this->assertTrue( ActionScheduler::is_initialized(), 'Action Scheduler must be initialized' );
+		$this->assertTrue(
+			ActionScheduler::is_initialized(),
+			'Action Scheduler is loaded but its data store is not initialized, so every other test in this class would assert nothing. Check that it is loaded before init.'
+		);
 	}
 
 	/**
