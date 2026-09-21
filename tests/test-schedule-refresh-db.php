@@ -130,13 +130,31 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 			}
 			return null;
 		};
-		add_filter( 'pre_as_schedule_recurring_action', $racer, 10, 9 );
+		add_filter( 'pre_as_schedule_recurring_action', $racer, 10, 8 );
 
 		$this->setup_module()->maybe_reschedule_refresh_db();
 		remove_filter( 'pre_as_schedule_recurring_action', $racer, 10 );
 
 		$this->assertTrue( $done, 'precondition: the race was actually simulated' );
 		$this->assertCount( 1, $this->pending_actions(), 'a lost race must not leave the refresh scheduled twice' );
+	}
+
+	/**
+	 * A WP-Cron event left beside an Action Scheduler action must go.
+	 *
+	 * Both schedulers fire the same hook, so a site that keeps both refreshes twice per
+	 * interval. A lost race between the fallback and a concurrent request can leave that pair.
+	 */
+	public function test_recovery_removes_a_wp_cron_event_left_beside_an_action_scheduler_action() {
+		as_schedule_recurring_action( time(), 600, self::HOOK, array(), self::GROUP, true );
+		wp_schedule_event( time(), 'visualizer_ten_minutes', self::HOOK );
+		$this->assertNotFalse( as_next_scheduled_action( self::HOOK, array(), self::GROUP ), 'precondition: Action Scheduler owns the refresh' );
+		$this->assertNotFalse( wp_next_scheduled( self::HOOK ), 'precondition: a WP-Cron event sits beside it' );
+
+		$this->setup_module()->maybe_reschedule_refresh_db();
+
+		$this->assertFalse( wp_next_scheduled( self::HOOK ), 'the refresh must not stay scheduled on both systems' );
+		$this->assertNotFalse( as_next_scheduled_action( self::HOOK, array(), self::GROUP ), 'the Action Scheduler action must survive' );
 	}
 
 	/**

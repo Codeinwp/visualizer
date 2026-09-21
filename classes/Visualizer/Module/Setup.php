@@ -32,6 +32,16 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	const NAME = __CLASS__;
 
 	/**
+	 * Hook that refreshes database charts.
+	 */
+	const REFRESH_DB_HOOK = 'visualizer_schedule_refresh_db';
+
+	/**
+	 * Action Scheduler group that owns the refresh.
+	 */
+	const REFRESH_DB_GROUP = 'visualizer';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -44,7 +54,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		register_activation_hook( VISUALIZER_BASEFILE, array( $this, 'activate' ) );
 		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
-		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
+		$this->_addAction( self::REFRESH_DB_HOOK, 'refreshDbChart' );
 		$this->_addAction( 'init', 'maybe_reschedule_refresh_db' );
 		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
 
@@ -485,8 +495,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * Schedule the recurring DB refresh action.
 	 */
 	private function schedule_refresh_db_action(): void {
-		$hook         = 'visualizer_schedule_refresh_db';
-		$group        = 'visualizer';
+		$hook         = self::REFRESH_DB_HOOK;
+		$group        = self::REFRESH_DB_GROUP;
 		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
 		$interval     = $this->get_schedule_interval_seconds( $interval_key );
 		$timestamp    = strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
@@ -502,11 +512,13 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				// recurrence once the current one completes, so a concurrent request can arrive
 				// while nothing is pending. Uniqueness is enforced in the insert itself.
 				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group, true );
+
+				// The call returns 0 and stores nothing when creation fails, so ask the store.
+				$next = as_next_scheduled_action( $hook, array(), $group );
 			}
 
-			// as_schedule_recurring_action() returns 0 and stores nothing when creation fails,
-			// so drop the WP-Cron fallback only once the action is really there to replace it.
-			if ( false !== as_next_scheduled_action( $hook, array(), $group ) ) {
+			// Drop the WP-Cron fallback only once the action is there to replace it.
+			if ( false !== $next ) {
 				wp_clear_scheduled_hook( $hook );
 				return;
 			}
@@ -531,14 +543,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * ponytail: two indexed queries per request; cache in a transient if a profile ever complains.
 	 */
 	public function maybe_reschedule_refresh_db(): void {
-		$hook = 'visualizer_schedule_refresh_db';
+		$hook = self::REFRESH_DB_HOOK;
 
 		if (
 			visualizer_can_use_action_scheduler()
 			&& function_exists( 'as_next_scheduled_action' )
 			&& function_exists( 'as_schedule_recurring_action' )
 		) {
-			$scheduled = false !== as_next_scheduled_action( $hook, array(), 'visualizer' );
+			// Settled only once Action Scheduler holds the action and no WP-Cron event fires
+			// the same hook beside it; a site keeping both refreshes twice per interval.
+			$scheduled = false !== as_next_scheduled_action( $hook, array(), self::REFRESH_DB_GROUP )
+				&& ! wp_next_scheduled( $hook );
 		} else {
 			$scheduled = (bool) wp_next_scheduled( $hook );
 		}
@@ -552,8 +567,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * Unschedule the recurring DB refresh action.
 	 */
 	private function unschedule_refresh_db_action(): void {
-		$hook  = 'visualizer_schedule_refresh_db';
-		$group = 'visualizer';
+		$hook  = self::REFRESH_DB_HOOK;
+		$group = self::REFRESH_DB_GROUP;
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
 			as_unschedule_all_actions( $hook, array(), $group );
 		}
