@@ -198,13 +198,7 @@ function visualizer_launch() {
 					__( 'Go through all my charts and refresh the data of every one that pulls from a remote CSV, JSON or database source.', 'visualizer' ),
 					__( 'List my charts and tell me the type, data source and shortcode of each one.', 'visualizer' ),
 				),
-				'abilities'    => array(
-					'visualizer/list-charts',
-					'visualizer/get-chart',
-					'visualizer/upsert-chart',
-					'visualizer/set-data-source',
-					'visualizer/refresh-chart-data',
-				),
+				'ability_prefix'    => 'visualizer',
 			);
 		}
 	);
