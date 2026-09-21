@@ -498,37 +498,54 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		) {
 			$next = as_next_scheduled_action( $hook, array(), $group );
 			if ( false === $next ) {
-				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group );
+				// Unique: this runs on every request, and Action Scheduler only creates the next
+				// recurrence once the current one completes, so a concurrent request can arrive
+				// while nothing is pending. Uniqueness is enforced in the insert itself.
+				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group, true );
 			}
-			wp_clear_scheduled_hook( $hook );
-			return;
+
+			// as_schedule_recurring_action() returns 0 and stores nothing when creation fails,
+			// so drop the WP-Cron fallback only once the action is really there to replace it.
+			if ( false !== as_next_scheduled_action( $hook, array(), $group ) ) {
+				wp_clear_scheduled_hook( $hook );
+				return;
+			}
 		}
 
-		wp_clear_scheduled_hook( $hook );
-		wp_schedule_event( $timestamp, $interval_key, $hook );
+		// Re-arm only what is missing or stale: this runs on every request while Action
+		// Scheduler keeps refusing, and resetting a live event would keep the refresh due.
+		$event = wp_get_scheduled_event( $hook );
+		if ( ! $event || $event->schedule !== $interval_key ) {
+			wp_clear_scheduled_hook( $hook );
+			wp_schedule_event( $timestamp, $interval_key, $hook );
+		}
 	}
 
 	/**
-	 * Keep the DB refresh scheduled when Action Scheduler is not available.
+	 * Keep the DB refresh scheduled on whichever scheduler the site can use.
 	 *
-	 * The migration to Action Scheduler clears the WP-Cron event, so a site that
-	 * already migrated and then lost the library would have nothing left running
-	 * the refresh. Re-arms WP-Cron in that case; no-op whenever the library is up.
+	 * This is the only way back: once the refresh hook has no trigger, nothing but a
+	 * reactivation used to restore it, and reactivation can fail the same way. Also covers
+	 * a site that lost Action Scheduler, and a legacy WP-Cron event that never migrated.
+	 *
+	 * ponytail: two indexed queries per request; cache in a transient if a profile ever complains.
 	 */
 	public function maybe_reschedule_refresh_db(): void {
+		$hook = 'visualizer_schedule_refresh_db';
+
 		if (
 			visualizer_can_use_action_scheduler()
 			&& function_exists( 'as_next_scheduled_action' )
 			&& function_exists( 'as_schedule_recurring_action' )
 		) {
-			return;
+			$scheduled = false !== as_next_scheduled_action( $hook, array(), 'visualizer' );
+		} else {
+			$scheduled = (bool) wp_next_scheduled( $hook );
 		}
 
-		if ( wp_next_scheduled( 'visualizer_schedule_refresh_db' ) ) {
-			return;
+		if ( ! $scheduled ) {
+			$this->schedule_refresh_db_action();
 		}
-
-		$this->schedule_refresh_db_action();
 	}
 
 	/**
