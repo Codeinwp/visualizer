@@ -574,8 +574,11 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return;
 		}
 
-		set_transient( self::REFRESH_DB_CHECK_TRANSIENT, 1, self::REFRESH_DB_CHECK_WINDOW );
-		$this->ensure_refresh_db_action();
+		// Only skip the check while there is something to skip it for. An attempt that
+		// established no trigger is retried on the next request, not after the window.
+		if ( $this->ensure_refresh_db_action() ) {
+			set_transient( self::REFRESH_DB_CHECK_TRANSIENT, 1, self::REFRESH_DB_CHECK_WINDOW );
+		}
 	}
 
 	/**
@@ -586,7 +589,25 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * ends there and nothing but a reactivation used to restore it. Also covers a site that
 	 * lost Action Scheduler, and a legacy WP-Cron event that never migrated.
 	 */
-	public function ensure_refresh_db_action(): void {
+	public function ensure_refresh_db_action(): bool {
+		if ( $this->refresh_db_is_scheduled() ) {
+			return true;
+		}
+
+		$this->schedule_refresh_db_action();
+
+		return $this->refresh_db_is_scheduled();
+	}
+
+	/**
+	 * Whether something will fire the refresh hook again.
+	 *
+	 * Settled only once Action Scheduler holds the action and no WP-Cron event fires the same
+	 * hook beside it; a site keeping both refreshes twice per interval.
+	 *
+	 * @return bool
+	 */
+	private function refresh_db_is_scheduled(): bool {
 		$hook = self::REFRESH_DB_HOOK;
 
 		if (
@@ -594,17 +615,11 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			&& function_exists( 'as_next_scheduled_action' )
 			&& function_exists( 'as_schedule_recurring_action' )
 		) {
-			// Settled only once Action Scheduler holds the action and no WP-Cron event fires
-			// the same hook beside it; a site keeping both refreshes twice per interval.
-			$scheduled = false !== as_next_scheduled_action( $hook, array(), self::REFRESH_DB_GROUP )
+			return false !== as_next_scheduled_action( $hook, array(), self::REFRESH_DB_GROUP )
 				&& ! wp_next_scheduled( $hook );
-		} else {
-			$scheduled = (bool) wp_next_scheduled( $hook );
 		}
 
-		if ( ! $scheduled ) {
-			$this->schedule_refresh_db_action();
-		}
+		return (bool) wp_next_scheduled( $hook );
 	}
 
 	/**

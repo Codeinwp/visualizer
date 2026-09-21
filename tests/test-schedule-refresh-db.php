@@ -345,6 +345,30 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A check that scheduled nothing must be retried, not cached.
+	 *
+	 * The window exists to skip work that is already done. Recording it after an attempt that
+	 * established no trigger leaves the site without one until the window expires.
+	 */
+	public function test_a_failed_check_is_retried_on_the_next_request() {
+		$module = $this->setup_module();
+
+		// refuse both schedulers.
+		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
+		add_filter( 'schedule_event', '__return_false' );
+
+		$module->maybe_reschedule_refresh_db();
+		$this->assertFalse( $this->has_trigger(), 'precondition: nothing could be scheduled' );
+
+		remove_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
+		remove_filter( 'schedule_event', '__return_false' );
+
+		$module->maybe_reschedule_refresh_db();
+
+		$this->assertTrue( $this->has_trigger(), 'a check that scheduled nothing must be retried on the next request' );
+	}
+
+	/**
 	 * Every pending refresh action.
 	 *
 	 * @return array
