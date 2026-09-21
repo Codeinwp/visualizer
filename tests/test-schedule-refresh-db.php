@@ -13,6 +13,11 @@
  * Action Scheduler returns 0 instead of throwing when it cannot create an action, so the
  * plugin used to drop the WP-Cron fallback for an action that was never stored, leaving
  * nothing scheduled and no way back.
+ *
+ * A filter added inside a test needs no removal. WP_UnitTestCase_Base::set_up() backs up
+ * $wp_filter and tear_down() restores it wholesale, so a filter cannot reach the next test.
+ * The tests here that do call remove_filter() call it mid test, because they still assert
+ * afterwards and need the filter gone first.
  */
 class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
