@@ -42,6 +42,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	const REFRESH_DB_GROUP = 'visualizer';
 
 	/**
+	 * When the refresh trigger was last checked.
+	 */
+	const REFRESH_DB_CHECK_OPTION = 'visualizer-refresh-db-checked';
+
+	/**
+	 * How long a check stays good for. Action Scheduler needs the same 300s to mark a
+	 * killed run failed, so a shorter window cannot recover one any sooner.
+	 */
+	const REFRESH_DB_CHECK_WINDOW = 300;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -56,6 +67,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
 		$this->_addAction( self::REFRESH_DB_HOOK, 'refreshDbChart' );
 		$this->_addAction( 'init', 'maybe_reschedule_refresh_db' );
+		$this->_addAction( 'action_scheduler_ensure_recurring_actions', 'ensure_refresh_db_action' );
 		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
 
 		$this->_addAction( 'admin_init', 'adminInit' );
@@ -535,15 +547,31 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	}
 
 	/**
-	 * Keep the DB refresh scheduled on whichever scheduler the site can use.
+	 * Check once per window that something still fires the refresh.
 	 *
-	 * This is the only way back: once the refresh hook has no trigger, nothing but a
-	 * reactivation used to restore it, and reactivation can fail the same way. Also covers
-	 * a site that lost Action Scheduler, and a legacy WP-Cron event that never migrated.
-	 *
-	 * ponytail: two indexed queries per request; cache in a transient if a profile ever complains.
+	 * Hooked to `init`, so it runs on every request. The timestamp is autoloaded and costs
+	 * no query, and the daily `action_scheduler_ensure_recurring_actions` hook is the floor
+	 * under it on a site that serves few requests.
 	 */
 	public function maybe_reschedule_refresh_db(): void {
+		$checked = (int) get_option( self::REFRESH_DB_CHECK_OPTION, 0 );
+		if ( time() - $checked < self::REFRESH_DB_CHECK_WINDOW ) {
+			return;
+		}
+
+		update_option( self::REFRESH_DB_CHECK_OPTION, time(), true );
+		$this->ensure_refresh_db_action();
+	}
+
+	/**
+	 * Keep the DB refresh scheduled on whichever scheduler the site can use.
+	 *
+	 * This is the only way back. Action Scheduler creates the next occurrence of a recurring
+	 * action inside schedule_next_instance(), which a killed run never reaches, so the chain
+	 * ends there and nothing but a reactivation used to restore it. Also covers a site that
+	 * lost Action Scheduler, and a legacy WP-Cron event that never migrated.
+	 */
+	public function ensure_refresh_db_action(): void {
 		$hook = self::REFRESH_DB_HOOK;
 
 		if (

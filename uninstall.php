@@ -27,3 +27,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // clean up after ourselves, that's a good plugin!
 delete_option( 'visualizer_fresh_install' );
 delete_option( 'visualizer_wizard_data' );
+delete_option( 'visualizer-refresh-db-checked' );

@@ -33,6 +33,9 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 		as_unschedule_all_actions( self::HOOK, array(), self::GROUP );
 		wp_clear_scheduled_hook( self::HOOK );
+
+		// the bootstrap activates the plugin, so `init` has already opened a check window.
+		delete_option( Visualizer_Module_Setup::REFRESH_DB_CHECK_OPTION );
 	}
 
 	/**
@@ -106,7 +109,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	public function test_recovery_does_not_drag_a_live_wp_cron_event_back_into_the_past() {
 		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
 
-		$this->setup_module()->maybe_reschedule_refresh_db();
+		$this->setup_module()->ensure_refresh_db_action();
 		$this->assertNotFalse( wp_next_scheduled( self::HOOK ), 'precondition: the fallback is armed' );
 
 		// mimic WP-Cron having run the event and rescheduled it forward.
@@ -114,7 +117,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 		$future = time() + 600;
 		wp_schedule_event( $future, 'visualizer_ten_minutes', self::HOOK );
 
-		$this->setup_module()->maybe_reschedule_refresh_db();
+		$this->setup_module()->ensure_refresh_db_action();
 		remove_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
 
 		$this->assertSame( $future, wp_next_scheduled( self::HOOK ), 'a later request must not make the refresh due again' );
@@ -162,6 +165,68 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 		$this->assertFalse( wp_next_scheduled( self::HOOK ), 'the refresh must not stay scheduled on both systems' );
 		$this->assertNotFalse( as_next_scheduled_action( self::HOOK, array(), self::GROUP ), 'the Action Scheduler action must survive' );
+	}
+
+	/**
+	 * A run killed mid flight must not end the recurring chain.
+	 *
+	 * Action Scheduler creates the next occurrence inside schedule_next_instance(), which a
+	 * host kill, fatal or timeout never reaches. The queue cleaner then marks the action
+	 * failed, and nothing succeeds it. This is the scenario confirmed on the reporting site.
+	 */
+	public function test_a_killed_run_does_not_end_the_recurring_chain() {
+		as_schedule_recurring_action( time(), 600, self::HOOK, array(), self::GROUP, true );
+		$pending   = $this->pending_actions();
+		$action_id = reset( $pending );
+
+		// what ActionScheduler_QueueCleaner::mark_failures() does to a run that never returned.
+		$store = ActionScheduler::store();
+		$store->log_execution( $action_id );
+		$store->mark_failure( $action_id );
+
+		$this->assertSame( ActionScheduler_Store::STATUS_FAILED, $store->get_status( $action_id ), 'precondition: the run was killed' );
+		$this->assertFalse( $this->has_trigger(), 'precondition: nothing succeeds the killed run' );
+
+		$this->setup_module()->maybe_reschedule_refresh_db();
+
+		$this->assertCount( 1, $this->pending_actions(), 'a killed run must get a successor' );
+	}
+
+	/**
+	 * Action Scheduler's own daily assurance hook must restore a missing action.
+	 *
+	 * This is the floor under the per-request check, and it runs even on a site that serves
+	 * no admin requests for a while.
+	 */
+	public function test_the_daily_action_scheduler_hook_restores_a_missing_action() {
+		$this->assertFalse( $this->has_trigger(), 'precondition: nothing is scheduled' );
+
+		do_action( 'action_scheduler_ensure_recurring_actions' );
+
+		$this->assertTrue( $this->has_trigger(), 'the daily assurance hook must restore the refresh' );
+	}
+
+	/**
+	 * The per-request check stands down inside its window, and the daily hook does not.
+	 *
+	 * The check runs on `init`, so it must not query Action Scheduler on every request of a
+	 * settled site. The daily assurance hook ignores the window and is the floor.
+	 */
+	public function test_the_per_request_check_is_throttled_and_the_daily_hook_is_the_floor() {
+		$module = $this->setup_module();
+
+		$module->maybe_reschedule_refresh_db();
+		$this->assertTrue( $this->has_trigger(), 'precondition: the first request scheduled the refresh' );
+
+		// the chain dies again, inside the window the first request opened.
+		as_unschedule_all_actions( self::HOOK, array(), self::GROUP );
+		$module->maybe_reschedule_refresh_db();
+
+		$this->assertFalse( $this->has_trigger(), 'inside the window the per-request check must stand down' );
+
+		do_action( 'action_scheduler_ensure_recurring_actions' );
+
+		$this->assertTrue( $this->has_trigger(), 'the daily assurance hook must repair it whatever the window says' );
 	}
 
 	/**
