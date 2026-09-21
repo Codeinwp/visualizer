@@ -45,6 +45,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		register_activation_hook( VISUALIZER_BASEFILE, array( $this, 'activate' ) );
 		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
 		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
+		$this->_addAction( 'init', 'maybe_reschedule_refresh_db' );
 		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
 
 		$this->_addAction( 'admin_init', 'adminInit' );
@@ -490,7 +491,11 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$interval     = $this->get_schedule_interval_seconds( $interval_key );
 		$timestamp    = strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
 
-		if ( function_exists( 'as_next_scheduled_action' ) && function_exists( 'as_schedule_recurring_action' ) ) {
+		if (
+			visualizer_can_use_action_scheduler()
+			&& function_exists( 'as_next_scheduled_action' )
+			&& function_exists( 'as_schedule_recurring_action' )
+		) {
 			$next = as_next_scheduled_action( $hook, array(), $group );
 			if ( false === $next ) {
 				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group );
@@ -501,6 +506,29 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		wp_clear_scheduled_hook( $hook );
 		wp_schedule_event( $timestamp, $interval_key, $hook );
+	}
+
+	/**
+	 * Keep the DB refresh scheduled when Action Scheduler is not available.
+	 *
+	 * The migration to Action Scheduler clears the WP-Cron event, so a site that
+	 * already migrated and then lost the library would have nothing left running
+	 * the refresh. Re-arms WP-Cron in that case; no-op whenever the library is up.
+	 */
+	public function maybe_reschedule_refresh_db(): void {
+		if (
+			visualizer_can_use_action_scheduler()
+			&& function_exists( 'as_next_scheduled_action' )
+			&& function_exists( 'as_schedule_recurring_action' )
+		) {
+			return;
+		}
+
+		if ( wp_next_scheduled( 'visualizer_schedule_refresh_db' ) ) {
+			return;
+		}
+
+		$this->schedule_refresh_db_action();
 	}
 
 	/**
