@@ -53,12 +53,16 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Fire a plugin lifecycle hook the way WordPress does.
+	 * Run what WordPress runs for a plugin lifecycle event.
+	 *
+	 * Calls the callback rather than firing the hook: plugin_basename() resolves differently
+	 * depending on where the plugin directory is loaded from, so the hook name is not stable
+	 * across environments.
 	 *
 	 * @param string $action Either `activate` or `deactivate`.
 	 */
 	private function lifecycle( string $action ) {
-		do_action( $action . '_' . plugin_basename( VISUALIZER_BASEFILE ), false );
+		$this->setup_module()->$action( false );
 	}
 
 	/**
