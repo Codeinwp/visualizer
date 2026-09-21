@@ -24,6 +24,13 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	 */
 	public function set_up() {
 		parent::set_up();
+
+		// index.php loads Action Scheduler only when visualizer_can_use_action_scheduler()
+		// passes, so skip rather than fatal on a host that cannot run it.
+		if ( ! function_exists( 'as_unschedule_all_actions' ) ) {
+			$this->markTestSkipped( 'Action Scheduler is not loaded on this environment.' );
+		}
+
 		as_unschedule_all_actions( self::HOOK, array(), self::GROUP );
 		wp_clear_scheduled_hook( self::HOOK );
 	}

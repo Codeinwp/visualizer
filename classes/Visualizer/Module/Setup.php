@@ -524,8 +524,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			}
 		}
 
-		// Re-arm only what is missing or stale: this runs on every request while Action
-		// Scheduler keeps refusing, and resetting a live event would keep the refresh due.
+		// Re-arm only when the event is missing or set to a different interval. This runs on
+		// every request while Action Scheduler keeps refusing, and re-arming a live event
+		// would pin it to a past timestamp and make the refresh due on every cron spawn.
 		$event = wp_get_scheduled_event( $hook );
 		if ( ! $event || $event->schedule !== $interval_key ) {
 			wp_clear_scheduled_hook( $hook );
