@@ -27,7 +27,11 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 		// index.php loads Action Scheduler only when visualizer_can_use_action_scheduler()
 		// passes, so skip rather than fatal on a host that cannot run it.
-		if ( ! function_exists( 'as_unschedule_all_actions' ) ) {
+		if (
+			! class_exists( 'ActionScheduler' )
+			|| ! class_exists( 'ActionScheduler_Store' )
+			|| ! function_exists( 'as_unschedule_all_actions' )
+		) {
 			$this->markTestSkipped( 'Action Scheduler is not loaded on this environment.' );
 		}
 
@@ -132,11 +136,17 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	 */
 	public function test_recovery_does_not_create_a_second_action_when_a_concurrent_request_wins_the_race() {
 		$done = false;
+		$seen = array();
 		// Stand in for another request that schedules between our lookup and our write.
-		$racer = function ( $pre, $timestamp, $interval, $hook, $args, $group, $priority, $unique ) use ( &$done ) {
+		// Action Scheduler passes $priority before $unique, see its functions.php:165.
+		$racer = function ( $pre, $timestamp, $interval, $hook, $args, $group, $priority, $unique ) use ( &$done, &$seen ) {
 			if ( ! $done ) {
 				$done = true;
-				as_schedule_recurring_action( $timestamp, $interval, $hook, $args, $group, $unique );
+				$seen = array(
+					'priority' => $priority,
+					'unique'   => $unique,
+				);
+				as_schedule_recurring_action( $timestamp, $interval, $hook, $args, $group, $unique, $priority );
 			}
 			return null;
 		};
@@ -145,6 +155,11 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 		$this->setup_module()->maybe_reschedule_refresh_db();
 		remove_filter( 'pre_as_schedule_recurring_action', $racer, 10 );
 
+		// The simulation only reproduces the race if the racer read the real arguments, so
+		// pin the order here rather than trusting the signature. Types alone separate the
+		// two, whatever value the code under test passes for $unique.
+		$this->assertIsInt( $seen['priority'], 'the filter must pass $priority before $unique' );
+		$this->assertIsBool( $seen['unique'], 'the filter must pass $priority before $unique' );
 		$this->assertTrue( $done, 'precondition: the race was actually simulated' );
 		$this->assertCount( 1, $this->pending_actions(), 'a lost race must not leave the refresh scheduled twice' );
 	}
@@ -240,7 +255,12 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 		// Far enough west that the computed midnight is ahead of us whatever the time of
 		// day. WordPress does not clamp gmt_offset, so this stays deterministic.
 		$hours_into_utc_day = ( time() - strtotime( 'midnight' ) ) / HOUR_IN_SECONDS;
-		update_option( 'gmt_offset', - ( $hours_into_utc_day + 1 ) );
+		add_filter(
+			'pre_option_gmt_offset',
+			function () use ( $hours_into_utc_day ) {
+				return - ( $hours_into_utc_day + 1 );
+			}
+		);
 
 		$this->setup_module()->ensure_refresh_db_action();
 
