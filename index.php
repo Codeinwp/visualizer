@@ -194,9 +194,9 @@ function visualizer_launch() {
 					__( 'refresh charts from their data source', 'visualizer' ),
 				),
 				'prompts'      => array(
-					__( 'Create a Visualizer pie chart called "Traffic by channel" with Organic 5400, Direct 2100 and Social 1300, then give me its shortcode.', 'visualizer' ),
-					__( 'Go through all my charts and refresh the data of every one that pulls from a remote CSV, JSON or database source.', 'visualizer' ),
-					__( 'List my charts and tell me the type, data source and shortcode of each one.', 'visualizer' ),
+					__( 'Create a Visualizer pie chart "Traffic by channel" with Organic 5400, Direct 2100 and Social 1300, and add it to my Analytics page.', 'visualizer' ),
+					__( 'Refresh every chart that pulls from a remote CSV, JSON or database source.', 'visualizer' ),
+					__( 'Change my "Monthly sales" chart to a bar chart and add September: 12,400.', 'visualizer' ),
 				),
 				'ability_prefix'    => 'visualizer',
 			);
