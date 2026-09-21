@@ -35,7 +35,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 		wp_clear_scheduled_hook( self::HOOK );
 
 		// the bootstrap activates the plugin, so `init` has already opened a check window.
-		delete_option( Visualizer_Module_Setup::REFRESH_DB_CHECK_OPTION );
+		delete_transient( Visualizer_Module_Setup::REFRESH_DB_CHECK_TRANSIENT );
 	}
 
 	/**
@@ -227,6 +227,25 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 		do_action( 'action_scheduler_ensure_recurring_actions' );
 
 		$this->assertTrue( $this->has_trigger(), 'the daily assurance hook must repair it whatever the window says' );
+	}
+
+	/**
+	 * Recovery must make the refresh due now, not at a midnight that has not happened yet.
+	 *
+	 * The start time is local midnight derived from `gmt_offset`. West of UTC that midnight
+	 * can still be ahead of us, which would park the recovered run hours into the future and
+	 * leave the charts stale for the rest of the day.
+	 */
+	public function test_recovery_does_not_park_the_next_run_in_the_future() {
+		// Far enough west that the computed midnight is ahead of us whatever the time of
+		// day. WordPress does not clamp gmt_offset, so this stays deterministic.
+		$hours_into_utc_day = ( time() - strtotime( 'midnight' ) ) / HOUR_IN_SECONDS;
+		update_option( 'gmt_offset', - ( $hours_into_utc_day + 1 ) );
+
+		$this->setup_module()->ensure_refresh_db_action();
+
+		$next = as_next_scheduled_action( self::HOOK, array(), self::GROUP );
+		$this->assertLessThanOrEqual( time(), $next, 'the recovered refresh must be due now, not hours from now' );
 	}
 
 	/**

@@ -42,9 +42,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	const REFRESH_DB_GROUP = 'visualizer';
 
 	/**
-	 * When the refresh trigger was last checked.
+	 * Marks the refresh trigger as checked recently.
 	 */
-	const REFRESH_DB_CHECK_OPTION = 'visualizer-refresh-db-checked';
+	const REFRESH_DB_CHECK_TRANSIENT = 'visualizer-refresh-db-checked';
 
 	/**
 	 * How long a check stays good for. Action Scheduler needs the same 300s to mark a
@@ -513,6 +513,12 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$interval     = $this->get_schedule_interval_seconds( $interval_key );
 		$timestamp    = strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
 
+		// West of UTC that midnight has not arrived yet. Start from the one before it, so a
+		// recovered run is due immediately instead of later in the day.
+		if ( $timestamp > time() ) {
+			$timestamp -= DAY_IN_SECONDS;
+		}
+
 		if (
 			visualizer_can_use_action_scheduler()
 			&& function_exists( 'as_next_scheduled_action' )
@@ -549,17 +555,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	/**
 	 * Check once per window that something still fires the refresh.
 	 *
-	 * Hooked to `init`, so it runs on every request. The timestamp is autoloaded and costs
-	 * no query, and the daily `action_scheduler_ensure_recurring_actions` hook is the floor
-	 * under it on a site that serves few requests.
+	 * Hooked to `init`, so it runs on every request. A transient keeps that to one cached
+	 * read instead of two Action Scheduler queries, and it expires on its own rather than
+	 * rewriting the autoloaded options blob every window. The daily
+	 * `action_scheduler_ensure_recurring_actions` hook is the floor under it.
 	 */
 	public function maybe_reschedule_refresh_db(): void {
-		$checked = (int) get_option( self::REFRESH_DB_CHECK_OPTION, 0 );
-		if ( time() - $checked < self::REFRESH_DB_CHECK_WINDOW ) {
+		if ( get_transient( self::REFRESH_DB_CHECK_TRANSIENT ) ) {
 			return;
 		}
 
-		update_option( self::REFRESH_DB_CHECK_OPTION, time(), true );
+		set_transient( self::REFRESH_DB_CHECK_TRANSIENT, 1, self::REFRESH_DB_CHECK_WINDOW );
 		$this->ensure_refresh_db_action();
 	}
 
