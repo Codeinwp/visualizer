@@ -395,6 +395,25 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A refused replacement must not take the old WP-Cron event with it.
+	 *
+	 * Changing interval used to clear the old event and then schedule the new one, so a
+	 * refused schedule left nothing. Same principle as the Action Scheduler path: nothing is
+	 * removed until what replaces it exists.
+	 */
+	public function test_a_refused_reschedule_keeps_the_old_wp_cron_event() {
+		// an event on another interval, with nothing to migrate it to.
+		wp_schedule_event( time() + HOUR_IN_SECONDS, 'hourly', self::HOOK );
+		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
+		// WP-Cron refuses the replacement.
+		add_filter( 'schedule_event', '__return_false' );
+
+		$this->setup_module()->ensure_refresh_db_action();
+
+		$this->assertNotFalse( wp_next_scheduled( self::HOOK ), 'the old event must survive a refused replacement' );
+	}
+
+	/**
 	 * Every pending refresh action.
 	 *
 	 * @return array
