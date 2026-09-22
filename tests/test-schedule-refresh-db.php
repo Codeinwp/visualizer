@@ -10,14 +10,7 @@
 /**
  * Database charts refresh only while `visualizer_schedule_refresh_db` has a live trigger.
  *
- * Action Scheduler returns 0 instead of throwing when it cannot create an action, so the
- * plugin used to drop the WP-Cron fallback for an action that was never stored, leaving
- * nothing scheduled and no way back.
- *
- * A filter added inside a test needs no removal. WP_UnitTestCase_Base::set_up() backs up
- * $wp_filter and tear_down() restores it wholesale, so a filter cannot reach the next test.
- * The tests here that do call remove_filter() call it mid test, because they still assert
- * afterwards and need the filter gone first.
+ * Filters added inside a test need no removal: tear_down() restores $wp_filter wholesale.
  */
 class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
@@ -30,8 +23,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 
-		// index.php loads Action Scheduler only when visualizer_can_use_action_scheduler()
-		// passes, so skip rather than fatal on a host that cannot run it.
+		// Skip rather than fatal where index.php did not load Action Scheduler.
 		if (
 			! class_exists( 'ActionScheduler' )
 			|| ! class_exists( 'ActionScheduler_Store' )
@@ -43,7 +35,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 		as_unschedule_all_actions( self::HOOK, array(), self::GROUP );
 		wp_clear_scheduled_hook( self::HOOK );
 
-		// the bootstrap activates the plugin, so `init` has already opened a check window.
+		// the bootstrap's init already opened a check window.
 		delete_transient( Visualizer_Module_Setup::REFRESH_DB_CHECK_TRANSIENT );
 	}
 
@@ -58,11 +50,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Run what WordPress runs for a plugin lifecycle event.
-	 *
-	 * Calls the callback rather than firing the hook: plugin_basename() resolves differently
-	 * depending on where the plugin directory is loaded from, so the hook name is not stable
-	 * across environments.
+	 * Call the lifecycle callback directly; plugin_basename() is not stable across environments.
 	 *
 	 * @param string $action Either `activate` or `deactivate`.
 	 */
@@ -71,19 +59,13 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Precondition: Action Scheduler is usable, otherwise the rest proves nothing.
-	 *
-	 * This one fails rather than skips, on purpose. set_up() skips the class when Action
-	 * Scheduler is absent, which is an environment this plugin supports. Present but not
-	 * initialized is not one: the library initializes on `init` at priority 1, so reaching a
-	 * test without it means the load order broke, and every as_* call in this class would
-	 * quietly return false and assert nothing.
+	 * Precondition. Fails rather than skips: loaded but uninitialized means the load order broke.
 	 */
 	public function test_action_scheduler_is_available() {
 		$this->assertTrue( function_exists( 'as_schedule_recurring_action' ), 'Action Scheduler must be loaded' );
 		$this->assertTrue(
 			ActionScheduler::is_initialized(),
-			'Action Scheduler is loaded but its data store is not initialized, so every other test in this class would assert nothing. Check that it is loaded before init.'
+			'Action Scheduler is loaded but not initialized; the other tests would assert nothing.'
 		);
 	}
 
@@ -124,9 +106,6 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * While Action Scheduler keeps refusing, later requests must leave the fallback alone.
-	 *
-	 * Re-arming it on every request pins the event to a past timestamp, so the refresh runs
-	 * on every cron spawn instead of every ten minutes.
 	 */
 	public function test_recovery_does_not_drag_a_live_wp_cron_event_back_into_the_past() {
 		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
@@ -147,16 +126,12 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * A concurrent request must not be able to create a second recurring action.
-	 *
-	 * Action Scheduler creates the next recurrence only after the current one completes, so
-	 * every interval there is a moment with nothing pending. A visitor arriving in that
-	 * window used to add a duplicate, and duplicates never go away on their own.
 	 */
 	public function test_recovery_does_not_create_a_second_action_when_a_concurrent_request_wins_the_race() {
 		$done = false;
 		$seen = array();
-		// Stand in for another request that schedules between our lookup and our write.
-		// Action Scheduler passes $priority before $unique, see its functions.php:165.
+		// Another request scheduling between our lookup and our write. Action Scheduler
+		// passes $priority before $unique, see its functions.php:165.
 		$racer = function ( $pre, $timestamp, $interval, $hook, $args, $group, $priority, $unique ) use ( &$done, &$seen ) {
 			if ( ! $done ) {
 				$done = true;
@@ -173,9 +148,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 		$this->setup_module()->maybe_reschedule_refresh_db();
 		remove_filter( 'pre_as_schedule_recurring_action', $racer, 10 );
 
-		// The simulation only reproduces the race if the racer read the real arguments, so
-		// pin the order here rather than trusting the signature. Types alone separate the
-		// two, whatever value the code under test passes for $unique.
+		// Pin the argument order by type, whatever value the code passes for $unique.
 		$this->assertIsInt( $seen['priority'], 'the filter must pass $priority before $unique' );
 		$this->assertIsBool( $seen['unique'], 'the filter must pass $priority before $unique' );
 		$this->assertTrue( $done, 'precondition: the race was actually simulated' );
@@ -183,10 +156,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
-	 * A WP-Cron event left beside an Action Scheduler action must go.
-	 *
-	 * Both schedulers fire the same hook, so a site that keeps both refreshes twice per
-	 * interval. A lost race between the fallback and a concurrent request can leave that pair.
+	 * A WP-Cron event left beside an Action Scheduler action must go; both fire the hook.
 	 */
 	public function test_recovery_removes_a_wp_cron_event_left_beside_an_action_scheduler_action() {
 		as_schedule_recurring_action( time(), 600, self::HOOK, array(), self::GROUP, true );
@@ -201,18 +171,14 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
-	 * A run killed mid flight must not end the recurring chain.
-	 *
-	 * Action Scheduler creates the next occurrence inside schedule_next_instance(), which a
-	 * host kill, fatal or timeout never reaches. The queue cleaner then marks the action
-	 * failed, and nothing succeeds it. This is the scenario confirmed on the reporting site.
+	 * A run killed mid flight must not end the recurring chain (the scenario on the reporting site).
 	 */
 	public function test_a_killed_run_does_not_end_the_recurring_chain() {
 		as_schedule_recurring_action( time(), 600, self::HOOK, array(), self::GROUP, true );
 		$pending   = $this->pending_actions();
 		$action_id = reset( $pending );
 
-		// what ActionScheduler_QueueCleaner::mark_failures() does to a run that never returned.
+		// what the queue cleaner does to a run that never returned.
 		$store = ActionScheduler::store();
 		$store->log_execution( $action_id );
 		$store->mark_failure( $action_id );
@@ -226,10 +192,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Action Scheduler's own daily assurance hook must restore a missing action.
-	 *
-	 * This is the floor under the per-request check, and it runs even on a site that serves
-	 * no admin requests for a while.
+	 * Action Scheduler's daily assurance hook must restore a missing action.
 	 */
 	public function test_the_daily_action_scheduler_hook_restores_a_missing_action() {
 		$this->assertFalse( $this->has_trigger(), 'precondition: nothing is scheduled' );
@@ -240,10 +203,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The per-request check stands down inside its window, and the daily hook does not.
-	 *
-	 * The check runs on `init`, so it must not query Action Scheduler on every request of a
-	 * settled site. The daily assurance hook ignores the window and is the floor.
+	 * The per-request check stands down inside its window; the daily hook does not.
 	 */
 	public function test_the_per_request_check_is_throttled_and_the_daily_hook_is_the_floor() {
 		$module = $this->setup_module();
@@ -264,14 +224,9 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * Recovery must make the refresh due now, not at a midnight that has not happened yet.
-	 *
-	 * The start time is local midnight derived from `gmt_offset`. West of UTC that midnight
-	 * can still be ahead of us, which would park the recovered run hours into the future and
-	 * leave the charts stale for the rest of the day.
 	 */
 	public function test_recovery_does_not_park_the_next_run_in_the_future() {
-		// Far enough west that the computed midnight is ahead of us whatever the time of
-		// day. WordPress does not clamp gmt_offset, so this stays deterministic.
+		// Far enough west that the computed midnight is always ahead of now.
 		$hours_into_utc_day = ( time() - strtotime( 'midnight' ) ) / HOUR_IN_SECONDS;
 		add_filter(
 			'pre_option_gmt_offset',
@@ -288,10 +243,6 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * A filtered interval key WP-Cron does not know must not drop the trigger.
-	 *
-	 * wp_schedule_event() returns false for an unregistered schedule, and the fallback used
-	 * to clear the old event first, so the refresh was left with nothing and the throttle
-	 * then held the retry off. get_schedule_interval_seconds() already copes with this.
 	 */
 	public function test_an_unknown_interval_key_still_leaves_a_trigger() {
 		add_filter(
@@ -300,7 +251,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 				return 'not_a_registered_schedule';
 			}
 		);
-		// force the WP-Cron fallback, which is the path that takes $interval_key.
+		// force the WP-Cron fallback.
 		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
 
 		$this->setup_module()->ensure_refresh_db_action();
@@ -310,9 +261,6 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * The start time must be a whole second, whatever gmt_offset holds.
-	 *
-	 * gmt_offset is a number, not an integer, so multiplying it makes the start time a float.
-	 * WP-Cron keys its array by that value and PHP then reports losing precision.
 	 */
 	public function test_a_fractional_offset_does_not_schedule_a_fractional_timestamp() {
 		add_filter(
@@ -321,7 +269,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 				return 5.0001;
 			}
 		);
-		// force the WP-Cron fallback, which is where the value becomes an array key.
+		// force the WP-Cron fallback.
 		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
 
 		$lost = array();
@@ -346,9 +294,6 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * A check that scheduled nothing must be retried, not cached.
-	 *
-	 * The window exists to skip work that is already done. Recording it after an attempt that
-	 * established no trigger leaves the site without one until the window expires.
 	 */
 	public function test_a_failed_check_is_retried_on_the_next_request() {
 		$module = $this->setup_module();
@@ -370,9 +315,6 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * A live WP-Cron fallback counts as scheduled, so the window still applies.
-	 *
-	 * Where Action Scheduler is present but refuses, the fallback is the trigger. Reporting
-	 * that as unscheduled makes every request retry the whole check and the refused insert.
 	 */
 	public function test_a_wp_cron_fallback_is_not_re_attempted_on_every_request() {
 		$attempts = 0;
@@ -396,13 +338,9 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 
 	/**
 	 * A refused replacement must not take the old WP-Cron event with it.
-	 *
-	 * Changing interval used to clear the old event and then schedule the new one, so a
-	 * refused schedule left nothing. Same principle as the Action Scheduler path: nothing is
-	 * removed until what replaces it exists.
 	 */
 	public function test_a_refused_reschedule_keeps_the_old_wp_cron_event() {
-		// an event on another interval, with nothing to migrate it to.
+		// an event on another interval.
 		wp_schedule_event( time() + HOUR_IN_SECONDS, 'hourly', self::HOOK );
 		add_filter( 'pre_as_schedule_recurring_action', '__return_zero' );
 		// WP-Cron refuses the replacement.

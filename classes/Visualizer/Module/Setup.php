@@ -47,8 +47,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	const REFRESH_DB_CHECK_TRANSIENT = 'visualizer-refresh-db-checked';
 
 	/**
-	 * How long a check stays good for. Action Scheduler needs the same 300s to mark a
-	 * killed run failed, so a shorter window cannot recover one any sooner.
+	 * Seconds a check stays valid; matches Action Scheduler's timeout for a killed run.
 	 */
 	const REFRESH_DB_CHECK_WINDOW = 300;
 
@@ -512,20 +511,16 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$schedules    = wp_get_schedules();
 		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
 
-		// wp_schedule_event() refuses a schedule WP-Cron does not know, and the fallback below
-		// clears the old event before it asks, so an unknown key would drop the refresh.
+		// wp_schedule_event() refuses an unregistered schedule.
 		if ( ! isset( $schedules[ $interval_key ]['interval'] ) ) {
 			$interval_key = 'visualizer_ten_minutes';
 		}
 
-		// The plugin registers that schedule itself; the literal only covers a filter removing it.
 		$interval = isset( $schedules[ $interval_key ]['interval'] ) ? (int) $schedules[ $interval_key ]['interval'] : 600;
-		// gmt_offset is a number, not an integer, so the product can carry a fraction that
-		// WP-Cron would then lose when it keys its array by this value.
+		// gmt_offset can be fractional, and WP-Cron keys its array by this value.
 		$timestamp = (int) ( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
 
-		// West of UTC that midnight has not arrived yet. Start from the one before it, so a
-		// recovered run is due immediately instead of later in the day.
+		// West of UTC that midnight is still ahead; start from the previous one.
 		if ( $timestamp > time() ) {
 			$timestamp -= DAY_IN_SECONDS;
 		}
@@ -537,51 +532,40 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		) {
 			$next = as_next_scheduled_action( $hook, array(), $group );
 			if ( false === $next ) {
-				// Unique: this runs on every request, and Action Scheduler only creates the next
-				// recurrence once the current one completes, so a concurrent request can arrive
-				// while nothing is pending. Uniqueness is enforced in the insert itself.
+				// Unique: a concurrent request can arrive while nothing is pending.
 				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group, true );
 
-				// The call returns 0 and stores nothing when creation fails, so ask the store.
+				// Returns 0 on failure, so ask the store.
 				$next = as_next_scheduled_action( $hook, array(), $group );
 			}
 
-			// Drop the WP-Cron fallback only once the action is there to replace it.
+			// Drop the WP-Cron fallback only once the action exists.
 			if ( false !== $next ) {
 				wp_clear_scheduled_hook( $hook );
 				return;
 			}
 		}
 
-		// Re-arm only when the event is missing or set to a different interval. This runs on
-		// every request while Action Scheduler keeps refusing, and re-arming a live event
-		// would pin it to a past timestamp and make the refresh due on every cron spawn.
+		// Re-arming a live event would pin it to a past timestamp and keep it due.
 		$event = wp_get_scheduled_event( $hook );
 		if ( $event && $event->schedule === $interval_key ) {
 			return;
 		}
 
-		// Schedule the replacement before touching the old event, so a refused schedule leaves
-		// the old one running. wp_clear_scheduled_hook() would take the new one with it, so
-		// remove the old event by its own timestamp. The same timestamp means the write above
-		// already replaced it in place.
+		// Schedule first so a refused replacement keeps the old event, then remove the old one
+		// by its timestamp: wp_clear_scheduled_hook() would take the new one too.
 		if ( false === wp_schedule_event( $timestamp, $interval_key, $hook ) ) {
 			return;
 		}
 
-		// The refresh is scheduled without arguments, so the old event has none to match.
+		// A matching timestamp was already overwritten in place.
 		if ( $event && $event->timestamp !== $timestamp ) {
 			wp_unschedule_event( $event->timestamp, $hook );
 		}
 	}
 
 	/**
-	 * Check once per window that something still fires the refresh.
-	 *
-	 * Hooked to `init`, so it runs on every request. A transient keeps that to one cached
-	 * read instead of two Action Scheduler queries, and it expires on its own rather than
-	 * rewriting the autoloaded options blob every window. The daily
-	 * `action_scheduler_ensure_recurring_actions` hook is the floor under it.
+	 * Check once per window, on init, that something still fires the refresh.
 	 */
 	public function maybe_reschedule_refresh_db(): void {
 		if ( get_transient( self::REFRESH_DB_CHECK_TRANSIENT ) ) {
@@ -590,20 +574,16 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		$this->ensure_refresh_db_action();
 
-		// Only skip the check while there is something to skip it for. An attempt that
-		// established no trigger is retried on the next request, not after the window.
+		// Cache only a check that left a trigger; a failed one retries next request.
 		if ( $this->has_refresh_db_trigger() ) {
 			set_transient( self::REFRESH_DB_CHECK_TRANSIENT, 1, self::REFRESH_DB_CHECK_WINDOW );
 		}
 	}
 
 	/**
-	 * Keep the DB refresh scheduled on whichever scheduler the site can use.
+	 * Keep the DB refresh scheduled.
 	 *
-	 * This is the only way back. Action Scheduler creates the next occurrence of a recurring
-	 * action inside schedule_next_instance(), which a killed run never reaches, so the chain
-	 * ends there and nothing but a reactivation used to restore it. Also covers a site that
-	 * lost Action Scheduler, and a legacy WP-Cron event that never migrated.
+	 * A killed run never reaches schedule_next_instance(), so Action Scheduler's chain ends there.
 	 */
 	public function ensure_refresh_db_action(): void {
 		if ( ! $this->refresh_db_is_settled() ) {
@@ -612,11 +592,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	}
 
 	/**
-	 * Whether the refresh sits on the scheduler this site should be using.
-	 *
-	 * Settled only once Action Scheduler holds the action and no WP-Cron event fires the same
-	 * hook beside it; a site keeping both refreshes twice per interval. Being unsettled is a
-	 * reason to act, not a sign that nothing runs.
+	 * Whether the refresh is on Action Scheduler with no WP-Cron event beside it.
 	 *
 	 * @return bool
 	 */
@@ -636,10 +612,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	}
 
 	/**
-	 * Whether anything at all will fire the refresh hook again.
-	 *
-	 * Where Action Scheduler is present but refuses, the WP-Cron fallback is the trigger, and
-	 * a site with one is not in trouble even though it is not settled.
+	 * Whether anything will fire the refresh hook again.
 	 *
 	 * @return bool
 	 */
