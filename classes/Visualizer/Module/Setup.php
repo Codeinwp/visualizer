@@ -574,9 +574,11 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return;
 		}
 
+		$this->ensure_refresh_db_action();
+
 		// Only skip the check while there is something to skip it for. An attempt that
 		// established no trigger is retried on the next request, not after the window.
-		if ( $this->ensure_refresh_db_action() ) {
+		if ( $this->has_refresh_db_trigger() ) {
 			set_transient( self::REFRESH_DB_CHECK_TRANSIENT, 1, self::REFRESH_DB_CHECK_WINDOW );
 		}
 	}
@@ -589,25 +591,22 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * ends there and nothing but a reactivation used to restore it. Also covers a site that
 	 * lost Action Scheduler, and a legacy WP-Cron event that never migrated.
 	 */
-	public function ensure_refresh_db_action(): bool {
-		if ( $this->refresh_db_is_scheduled() ) {
-			return true;
+	public function ensure_refresh_db_action(): void {
+		if ( ! $this->refresh_db_is_settled() ) {
+			$this->schedule_refresh_db_action();
 		}
-
-		$this->schedule_refresh_db_action();
-
-		return $this->refresh_db_is_scheduled();
 	}
 
 	/**
-	 * Whether something will fire the refresh hook again.
+	 * Whether the refresh sits on the scheduler this site should be using.
 	 *
 	 * Settled only once Action Scheduler holds the action and no WP-Cron event fires the same
-	 * hook beside it; a site keeping both refreshes twice per interval.
+	 * hook beside it; a site keeping both refreshes twice per interval. Being unsettled is a
+	 * reason to act, not a sign that nothing runs.
 	 *
 	 * @return bool
 	 */
-	private function refresh_db_is_scheduled(): bool {
+	private function refresh_db_is_settled(): bool {
 		$hook = self::REFRESH_DB_HOOK;
 
 		if (
@@ -617,6 +616,26 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		) {
 			return false !== as_next_scheduled_action( $hook, array(), self::REFRESH_DB_GROUP )
 				&& ! wp_next_scheduled( $hook );
+		}
+
+		return (bool) wp_next_scheduled( $hook );
+	}
+
+	/**
+	 * Whether anything at all will fire the refresh hook again.
+	 *
+	 * Where Action Scheduler is present but refuses, the WP-Cron fallback is the trigger, and
+	 * a site with one is not in trouble even though it is not settled.
+	 *
+	 * @return bool
+	 */
+	private function has_refresh_db_trigger(): bool {
+		$hook = self::REFRESH_DB_HOOK;
+
+		if ( visualizer_can_use_action_scheduler() && function_exists( 'as_next_scheduled_action' ) ) {
+			if ( false !== as_next_scheduled_action( $hook, array(), self::REFRESH_DB_GROUP ) ) {
+				return true;
+			}
 		}
 
 		return (bool) wp_next_scheduled( $hook );

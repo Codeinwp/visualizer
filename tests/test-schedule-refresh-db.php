@@ -369,6 +369,32 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A live WP-Cron fallback counts as scheduled, so the window still applies.
+	 *
+	 * Where Action Scheduler is present but refuses, the fallback is the trigger. Reporting
+	 * that as unscheduled makes every request retry the whole check and the refused insert.
+	 */
+	public function test_a_wp_cron_fallback_is_not_re_attempted_on_every_request() {
+		$attempts = 0;
+		$refuse   = function () use ( &$attempts ) {
+			++$attempts;
+			return 0;
+		};
+		add_filter( 'pre_as_schedule_recurring_action', $refuse );
+
+		$module = $this->setup_module();
+		$module->maybe_reschedule_refresh_db();
+
+		$this->assertNotFalse( wp_next_scheduled( self::HOOK ), 'precondition: the fallback is armed' );
+		$after_first = $attempts;
+
+		$module->maybe_reschedule_refresh_db();
+		remove_filter( 'pre_as_schedule_recurring_action', $refuse );
+
+		$this->assertSame( $after_first, $attempts, 'a live fallback must not be re-attempted on the next request' );
+	}
+
+	/**
 	 * Every pending refresh action.
 	 *
 	 * @return array
