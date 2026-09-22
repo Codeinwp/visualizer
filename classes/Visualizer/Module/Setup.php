@@ -569,8 +569,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			return;
 		}
 
+		// The refresh is scheduled without arguments, so the old event has none to match.
 		if ( $event && $event->timestamp !== $timestamp ) {
-			wp_unschedule_event( $event->timestamp, $hook, $event->args );
+			wp_unschedule_event( $event->timestamp, $hook );
 		}
 	}
 
