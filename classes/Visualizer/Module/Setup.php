@@ -509,15 +509,17 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	private function schedule_refresh_db_action(): void {
 		$hook         = self::REFRESH_DB_HOOK;
 		$group        = self::REFRESH_DB_GROUP;
+		$schedules    = wp_get_schedules();
 		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
 
 		// wp_schedule_event() refuses a schedule WP-Cron does not know, and the fallback below
 		// clears the old event before it asks, so an unknown key would drop the refresh.
-		if ( ! isset( wp_get_schedules()[ $interval_key ] ) ) {
+		if ( ! isset( $schedules[ $interval_key ]['interval'] ) ) {
 			$interval_key = 'visualizer_ten_minutes';
 		}
 
-		$interval = $this->get_schedule_interval_seconds( $interval_key );
+		// The plugin registers that schedule itself; the literal only covers a filter removing it.
+		$interval = isset( $schedules[ $interval_key ]['interval'] ) ? (int) $schedules[ $interval_key ]['interval'] : 600;
 		// gmt_offset is a number, not an integer, so the product can carry a fraction that
 		// WP-Cron would then lose when it keys its array by this value.
 		$timestamp = (int) ( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
@@ -651,20 +653,5 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			as_unschedule_all_actions( $hook, array(), $group );
 		}
 		wp_clear_scheduled_hook( $hook );
-	}
-
-	/**
-	 * Resolve a cron schedule key to seconds.
-	 *
-	 * @param string $interval_key Cron schedule key.
-	 * @return int Interval in seconds.
-	 */
-	private function get_schedule_interval_seconds( $interval_key ) {
-		$schedules = wp_get_schedules();
-		if ( isset( $schedules[ $interval_key ]['interval'] ) ) {
-			return (int) $schedules[ $interval_key ]['interval'];
-		}
-
-		return 600;
 	}
 }
