@@ -32,6 +32,26 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	const NAME = __CLASS__;
 
 	/**
+	 * Hook that refreshes database charts.
+	 */
+	const REFRESH_DB_HOOK = 'visualizer_schedule_refresh_db';
+
+	/**
+	 * Action Scheduler group that owns the refresh.
+	 */
+	const REFRESH_DB_GROUP = 'visualizer';
+
+	/**
+	 * Marks the refresh trigger as checked recently.
+	 */
+	const REFRESH_DB_CHECK_TRANSIENT = 'visualizer-refresh-db-checked';
+
+	/**
+	 * Seconds a check stays valid; matches Action Scheduler's timeout for a killed run.
+	 */
+	const REFRESH_DB_CHECK_WINDOW = 300;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -44,8 +64,9 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 
 		register_activation_hook( VISUALIZER_BASEFILE, array( $this, 'activate' ) );
 		register_deactivation_hook( VISUALIZER_BASEFILE, array( $this, 'deactivate' ) );
-		$this->_addAction( 'visualizer_schedule_refresh_db', 'refreshDbChart' );
+		$this->_addAction( self::REFRESH_DB_HOOK, 'refreshDbChart' );
 		$this->_addAction( 'init', 'maybe_reschedule_refresh_db' );
+		$this->_addAction( 'action_scheduler_ensure_recurring_actions', 'ensure_refresh_db_action' );
 		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
 
 		$this->_addAction( 'admin_init', 'adminInit' );
@@ -485,11 +506,24 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 	 * Schedule the recurring DB refresh action.
 	 */
 	private function schedule_refresh_db_action(): void {
-		$hook         = 'visualizer_schedule_refresh_db';
-		$group        = 'visualizer';
+		$hook         = self::REFRESH_DB_HOOK;
+		$group        = self::REFRESH_DB_GROUP;
+		$schedules    = wp_get_schedules();
 		$interval_key = apply_filters( 'visualizer_chart_schedule_interval', 'visualizer_ten_minutes' );
-		$interval     = $this->get_schedule_interval_seconds( $interval_key );
-		$timestamp    = strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+
+		// wp_schedule_event() refuses an unregistered schedule.
+		if ( ! isset( $schedules[ $interval_key ]['interval'] ) ) {
+			$interval_key = 'visualizer_ten_minutes';
+		}
+
+		$interval = isset( $schedules[ $interval_key ]['interval'] ) ? (int) $schedules[ $interval_key ]['interval'] : 600;
+		// gmt_offset can be fractional, and WP-Cron keys its array by this value.
+		$timestamp = (int) ( strtotime( 'midnight' ) - get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+
+		// West of UTC that midnight is still ahead; start from the previous one.
+		if ( $timestamp > time() ) {
+			$timestamp -= DAY_IN_SECONDS;
+		}
 
 		if (
 			visualizer_can_use_action_scheduler()
@@ -498,63 +532,111 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		) {
 			$next = as_next_scheduled_action( $hook, array(), $group );
 			if ( false === $next ) {
-				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group );
+				// Unique: a concurrent request can arrive while nothing is pending.
+				as_schedule_recurring_action( $timestamp, $interval, $hook, array(), $group, true );
+
+				// Returns 0 on failure, so ask the store.
+				$next = as_next_scheduled_action( $hook, array(), $group );
 			}
-			wp_clear_scheduled_hook( $hook );
+
+			// Drop the WP-Cron fallback only once the action exists.
+			if ( false !== $next ) {
+				wp_clear_scheduled_hook( $hook );
+				return;
+			}
+		}
+
+		// Re-arming a live event would pin it to a past timestamp and keep it due.
+		$event = wp_get_scheduled_event( $hook );
+		if ( $event && $event->schedule === $interval_key ) {
 			return;
 		}
 
-		wp_clear_scheduled_hook( $hook );
-		wp_schedule_event( $timestamp, $interval_key, $hook );
+		// Schedule first so a refused replacement keeps the old event, then remove the old one
+		// by its timestamp: wp_clear_scheduled_hook() would take the new one too.
+		if ( false === wp_schedule_event( $timestamp, $interval_key, $hook ) ) {
+			return;
+		}
+
+		// A matching timestamp was already overwritten in place.
+		if ( $event && $event->timestamp !== $timestamp ) {
+			wp_unschedule_event( $event->timestamp, $hook );
+		}
 	}
 
 	/**
-	 * Keep the DB refresh scheduled when Action Scheduler is not available.
-	 *
-	 * The migration to Action Scheduler clears the WP-Cron event, so a site that
-	 * already migrated and then lost the library would have nothing left running
-	 * the refresh. Re-arms WP-Cron in that case; no-op whenever the library is up.
+	 * Check once per window, on init, that something still fires the refresh.
 	 */
 	public function maybe_reschedule_refresh_db(): void {
+		if ( get_transient( self::REFRESH_DB_CHECK_TRANSIENT ) ) {
+			return;
+		}
+
+		$this->ensure_refresh_db_action();
+
+		// Cache only a check that left a trigger; a failed one retries next request.
+		if ( $this->has_refresh_db_trigger() ) {
+			set_transient( self::REFRESH_DB_CHECK_TRANSIENT, 1, self::REFRESH_DB_CHECK_WINDOW );
+		}
+	}
+
+	/**
+	 * Keep the DB refresh scheduled.
+	 *
+	 * A killed run never reaches schedule_next_instance(), so Action Scheduler's chain ends there.
+	 */
+	public function ensure_refresh_db_action(): void {
+		if ( ! $this->refresh_db_is_settled() ) {
+			$this->schedule_refresh_db_action();
+		}
+	}
+
+	/**
+	 * Whether the refresh is on Action Scheduler with no WP-Cron event beside it.
+	 *
+	 * @return bool
+	 */
+	private function refresh_db_is_settled(): bool {
+		$hook = self::REFRESH_DB_HOOK;
+
 		if (
 			visualizer_can_use_action_scheduler()
 			&& function_exists( 'as_next_scheduled_action' )
 			&& function_exists( 'as_schedule_recurring_action' )
 		) {
-			return;
+			return false !== as_next_scheduled_action( $hook, array(), self::REFRESH_DB_GROUP )
+				&& ! wp_next_scheduled( $hook );
 		}
 
-		if ( wp_next_scheduled( 'visualizer_schedule_refresh_db' ) ) {
-			return;
+		return (bool) wp_next_scheduled( $hook );
+	}
+
+	/**
+	 * Whether anything will fire the refresh hook again.
+	 *
+	 * @return bool
+	 */
+	private function has_refresh_db_trigger(): bool {
+		$hook = self::REFRESH_DB_HOOK;
+
+		if ( visualizer_can_use_action_scheduler() && function_exists( 'as_next_scheduled_action' ) ) {
+			if ( false !== as_next_scheduled_action( $hook, array(), self::REFRESH_DB_GROUP ) ) {
+				return true;
+			}
 		}
 
-		$this->schedule_refresh_db_action();
+		return (bool) wp_next_scheduled( $hook );
 	}
 
 	/**
 	 * Unschedule the recurring DB refresh action.
 	 */
 	private function unschedule_refresh_db_action(): void {
-		$hook  = 'visualizer_schedule_refresh_db';
-		$group = 'visualizer';
+		$hook  = self::REFRESH_DB_HOOK;
+		$group = self::REFRESH_DB_GROUP;
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
 			as_unschedule_all_actions( $hook, array(), $group );
 		}
 		wp_clear_scheduled_hook( $hook );
-	}
-
-	/**
-	 * Resolve a cron schedule key to seconds.
-	 *
-	 * @param string $interval_key Cron schedule key.
-	 * @return int Interval in seconds.
-	 */
-	private function get_schedule_interval_seconds( $interval_key ) {
-		$schedules = wp_get_schedules();
-		if ( isset( $schedules[ $interval_key ]['interval'] ) ) {
-			return (int) $schedules[ $interval_key ]['interval'];
-		}
-
-		return 600;
 	}
 }
