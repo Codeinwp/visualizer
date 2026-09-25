@@ -354,7 +354,7 @@ class Test_Visualizer_Schedule_Refresh_Db extends WP_UnitTestCase {
 	/**
 	 * Every pending refresh action.
 	 *
-	 * @return array
+	 * @return list<numeric-string>
 	 */
 	private function pending_actions(): array {
 		return as_get_scheduled_actions(
