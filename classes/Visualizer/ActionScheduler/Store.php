@@ -32,15 +32,18 @@ class Visualizer_ActionScheduler_Store extends ActionScheduler_DBStore {
 	public function mark_failure( $action_id ) {
 		global $wpdb;
 
-		try {
-			parent::mark_failure( $action_id );
-		} catch ( InvalidArgumentException $e ) {
-			// The parent throws on zero changed rows. `wpdb::query()` clears
-			// `last_error` before each statement, so an error set here belongs
-			// to that UPDATE; without one the row was deleted or already failed.
-			if ( ! empty( $wpdb->last_error ) ) {
-				throw $e;
-			}
+		// Same UPDATE as the parent. Zero rows means the row was deleted or
+		// already failed; only `false` is a database error.
+		$updated = $wpdb->update(
+			$wpdb->actionscheduler_actions,
+			array( 'status' => self::STATUS_FAILED ),
+			array( 'action_id' => $action_id ),
+			array( '%s' ),
+			array( '%d' )
+		);
+		if ( false === $updated ) {
+			/* translators: %s is the action ID */
+			throw new InvalidArgumentException( sprintf( __( 'Unable to mark action %s as failed.', 'visualizer' ), $action_id ) );
 		}
 	}
 }
