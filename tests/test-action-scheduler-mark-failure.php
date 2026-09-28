@@ -110,7 +110,7 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 
 	/**
 	 * Whether `$sql` is the UPDATE that marks `$action_id` in `$table` failed.
-	 * Matches the SQL `wpdb::update()` builds with or without backticks and quotes.
+	 * Matches the SQL `wpdb::update()` builds, with or without backticks, and a bare or quoted action id.
 	 *
 	 * @param string $sql       SQL about to run.
 	 * @param string $table     Actions table name.
