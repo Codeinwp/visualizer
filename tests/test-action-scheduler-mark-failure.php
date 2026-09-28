@@ -121,7 +121,7 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 		if ( 0 !== stripos( ltrim( $sql ), 'UPDATE' ) || false === strpos( $sql, $table ) ) {
 			return false;
 		}
-		if ( ! preg_match( '/status`?\s*=\s*\'' . ActionScheduler_Store::STATUS_FAILED . '\'/', $sql ) ) {
+		if ( ! preg_match( '/status`?\s*=\s*\'' . preg_quote( ActionScheduler_Store::STATUS_FAILED, '/' ) . '\'/', $sql ) ) {
 			return false;
 		}
 		return preg_match( '/action_id`?\s*=\s*\'?(\d+)/', $sql, $m ) && (int) $m[1] === $action_id;
