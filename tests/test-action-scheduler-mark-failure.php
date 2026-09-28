@@ -2,12 +2,7 @@
 /**
  * Marking an action failed must survive another process getting there first.
  *
- * Regression tests for #1369. `ActionScheduler_DBStore::mark_failure()` throws
- * "Unidentified action" whenever its UPDATE changes no row: the action was
- * deleted, or an overlapping cleaner already marked it failed (WP-Cron and the
- * async runner can overlap; only the async runner takes a lock). Unguarded,
- * the whole queue run dies. Visualizer_ActionScheduler_Store tolerates that and
- * still reports a database error.
+ * Regression tests for #1369; see Visualizer_ActionScheduler_Store.
  *
  * @package     visualizer
  * @subpackage  Tests
@@ -29,7 +24,7 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	/**
 	 * Query filters added during a test.
 	 *
-	 * @var callable[]
+	 * @var list<Closure(string): string>
 	 */
 	private $filters_to_remove = array();
 
@@ -61,12 +56,11 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	/**
 	 * Save an action, then make it a stale in-progress one (last attempt two hours ago).
 	 *
-	 * @param string $hook Action hook.
 	 * @return int Action id.
 	 */
-	private function seed_stale_running_action( $hook = 'visualizer_schedule_refresh_db' ) {
+	private function seed_stale_running_action() {
 		global $wpdb;
-		$action_id = $this->store->save_action( new ActionScheduler_Action( $hook, array(), new ActionScheduler_SimpleSchedule( as_get_datetime_object( '-2 hours' ) ) ) );
+		$action_id = $this->store->save_action( new ActionScheduler_Action( 'visualizer_schedule_refresh_db', array(), new ActionScheduler_SimpleSchedule( as_get_datetime_object( '-2 hours' ) ) ) );
 		$gmt       = gmdate( 'Y-m-d H:i:s', time() - 2 * HOUR_IN_SECONDS );
 		$wpdb->update(
 			$wpdb->actionscheduler_actions,
@@ -95,8 +89,8 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 	 * Run `$intercept` once, on the UPDATE that marks `$action_id` failed, and
 	 * use its return value as the SQL to execute.
 	 *
-	 * @param int      $action_id Action whose UPDATE is intercepted.
-	 * @param callable $intercept Receives the SQL, returns the SQL to run.
+	 * @param int                      $action_id Action whose UPDATE is intercepted.
+	 * @param callable(string): string $intercept Receives the SQL, returns the SQL to run.
 	 */
 	private function intercept_mark_failure_update( $action_id, callable $intercept ) {
 		global $wpdb;
@@ -140,6 +134,15 @@ class Test_Visualizer_Action_Scheduler_Mark_Failure extends WP_UnitTestCase {
 		$this->assertSame( 'Visualizer_ActionScheduler_Store', visualizer_action_scheduler_store_class( 'ActionScheduler_DBStore' ) );
 		$this->assertSame( 'Another_Plugin_Store', visualizer_action_scheduler_store_class( 'Another_Plugin_Store' ) );
 		$this->assertSame( 'ActionScheduler_HybridStore', visualizer_action_scheduler_store_class( 'ActionScheduler_HybridStore' ) );
+	}
+
+	/**
+	 * The filter runs after Action Scheduler's data controller, so its class wins.
+	 */
+	public function test_filter_runs_after_the_data_controller() {
+		update_option( 'action_scheduler_migration_status', 'complete' );
+
+		$this->assertSame( 'Visualizer_ActionScheduler_Store', apply_filters( 'action_scheduler_store_class', ActionScheduler_Store::DEFAULT_CLASS ) );
 	}
 
 	/**
