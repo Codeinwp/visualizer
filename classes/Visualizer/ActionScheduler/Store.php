@@ -42,8 +42,8 @@ class Visualizer_ActionScheduler_Store extends ActionScheduler_DBStore {
 			array( '%d' )
 		);
 		if ( false === $updated ) {
-			/* translators: %s is the action ID */
-			throw new InvalidArgumentException( sprintf( __( 'Unable to mark action %s as failed.', 'visualizer' ), $action_id ) );
+			/* translators: %d is the action ID */
+			throw new InvalidArgumentException( sprintf( __( 'Unable to mark action %d as failed.', 'visualizer' ), $action_id ) );
 		}
 	}
 }
