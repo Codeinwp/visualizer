@@ -21,7 +21,7 @@
     "source": "https://github.com/Codeinwp/visualizer"
   },
   "require": {
-    "codeinwp/themeisle-sdk": "^3.3",
+    "codeinwp/themeisle-sdk": "^3.3.65",
     "neitanod/forceutf8": "~2.0",
     "openspout/openspout": "^3.7",
     "woocommerce/action-scheduler": "^3.8"
