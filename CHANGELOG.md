@@ -1,3 +1,13 @@
+##### [Version 4.0.9](https://github.com/Codeinwp/visualizer/compare/v4.0.8...v4.0.9) (2026-09-30)
+
+- Fixed scheduled chart updates crashing on WordPress versions before 5.5.
+- Fixed the Visualizer readme with the current version and recent changelog entries.
+- Added AI agent support: let AI assistants read and change your Visualizer charts and settings.
+- Fixed database chart refreshes stopping after an interrupted run.
+- Improved Visualizer guidance for finding scheduled database refresh actions.
+- Updated dependencies
+- Added AI agent support: let AI assistants read and change your Visualizer charts and settings.
+
 ##### [Version 4.0.8](https://github.com/Codeinwp/visualizer/compare/v4.0.7...v4.0.8) (2026-09-11)
 
 - Fixed an error usage of a chart's settings were stored as a string instead of an array.

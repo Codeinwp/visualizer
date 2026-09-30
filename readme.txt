@@ -4,7 +4,7 @@ Tags: charts, tables, datatable, data-visualization, ai-charts
 Requires at least: 5.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.0.8
+Stable tag: 4.0.9
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
@@ -244,6 +244,19 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 8. Block editor - Chart Library
 
 == Changelog ==
+
+##### [Version 4.0.9](https://github.com/Codeinwp/visualizer/compare/v4.0.8...v4.0.9) (2026-09-30)
+
+- Fixed scheduled chart updates crashing on WordPress versions before 5.5.
+- Fixed the Visualizer readme with the current version and recent changelog entries.
+- Added AI agent support: let AI assistants read and change your Visualizer charts and settings.
+- Fixed database chart refreshes stopping after an interrupted run.
+- Improved Visualizer guidance for finding scheduled database refresh actions.
+- Updated dependencies
+- Added AI agent support: let AI assistants read and change your Visualizer charts and settings.
+
+
+
 
 ##### [Version 4.0.8](https://github.com/Codeinwp/visualizer/compare/v4.0.7...v4.0.8) (2026-09-11)
 
