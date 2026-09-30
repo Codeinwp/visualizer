@@ -18,6 +18,12 @@ module.exports = function (grunt) {
 					'package.json'
 				]
 			},
+			readmetxt: {
+				options: {
+					prefix: 'Stable tag:\\s*',
+				},
+				src: [ 'readme.txt' ],
+			},
 			style: {
 				options: {
 					prefix: 'Version\\:\\s'
