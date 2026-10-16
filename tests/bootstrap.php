@@ -32,6 +32,14 @@ function _manually_load_plugin() {
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
+
+// The framework snapshots hooks at the first test and restores that snapshot
+// after every test. WP_Ajax_UnitTestCase removes these once per class, which
+// only holds when an AJAX class runs first. Remove them here so no test file
+// order makes AJAX tests call api.wordpress.org.
+remove_action( 'admin_init', '_maybe_update_core' );
+remove_action( 'admin_init', '_maybe_update_plugins' );
+remove_action( 'admin_init', '_maybe_update_themes' );
 activate_plugin( 'visualizer/index.php' );
 global $current_user;
 $current_user = new WP_User( 1 );
