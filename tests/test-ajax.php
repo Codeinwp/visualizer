@@ -989,6 +989,45 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Request params the chart library reads the chart type filter from.
+	 *
+	 * @return array<string, array{0: string}>
+	 */
+	public function chart_type_filter_param_provider(): array {
+		return array(
+			'search box'  => array( 's' ),
+			'media modal' => array( 'filter' ),
+		);
+	}
+
+	/**
+	 * The chart library filters by the requested chart type.
+	 *
+	 * @dataProvider chart_type_filter_param_provider
+	 *
+	 * @param string $param Request param carrying the chart type.
+	 */
+	public function test_get_charts_filters_by_chart_type( string $param ): void {
+		$this->create_chart_for_user( $this->admin_user_id, 'publish' );
+		$pie_chart = $this->create_chart_for_user( $this->admin_user_id, 'publish' );
+		update_post_meta( $pie_chart, Visualizer_Plugin::CF_CHART_TYPE, 'pie' );
+		$_GET = array(
+			'nonce' => wp_create_nonce( Visualizer_Plugin::ACTION_GET_CHARTS ),
+			$param  => 'pie',
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_GET_CHARTS );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response, true );
+		$this->assertTrue( $response['success'] );
+		$this->assertSame( array( $pie_chart ), wp_list_pluck( $response['data'], 'id' ) );
+	}
+
+	/**
 	 * A valid nonce does not permit deleting another user's chart.
 	 */
 	public function test_delete_chart_denied_for_chart_user_cannot_delete() {
