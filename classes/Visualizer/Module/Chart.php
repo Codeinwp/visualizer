@@ -346,10 +346,10 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( ! current_user_can( 'edit_others_posts' ) ) {
 			$query_args['author'] = get_current_user_id();
 		}
-		$filter     = filter_input( INPUT_GET, 's', FILTER_SANITIZE_STRING );
+		$filter     = isset( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : '';
 		if ( empty( $filter ) ) {
 			// 'filter' is from the modal from the add media button.
-			$filter = filter_input( INPUT_GET, 'filter', FILTER_SANITIZE_STRING );
+			$filter = isset( $_GET['filter'] ) ? sanitize_text_field( wp_unslash( $_GET['filter'] ) ) : '';
 		}
 
 		if ( $filter && in_array( $filter, Visualizer_Plugin::getChartTypes(), true ) ) {
@@ -1259,7 +1259,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				foreach ( $exclude as $j ) {
 					unset( $row[ $j ] );
 				}
-				fputcsv( $handle, $row );
+				fputcsv( $handle, $row, ',', '"', VISUALIZER_CSV_ESCAPE );
 			}
 		}
 		$source = new Visualizer_Source_Csv( $tmpfile );

@@ -81,6 +81,9 @@ function visualizer_launch() {
 	if ( ! defined( 'VISUALIZER_CSV_ENCLOSURE' ) ) {
 		define( 'VISUALIZER_CSV_ENCLOSURE', '"' );
 	}
+	if ( ! defined( 'VISUALIZER_CSV_ESCAPE' ) ) {
+		define( 'VISUALIZER_CSV_ESCAPE', '\\' );
+	}
 	if ( ! defined( 'VISUALIZER_DEBUG' ) ) {
 		define( 'VISUALIZER_DEBUG', false );
 	}
@@ -158,6 +161,9 @@ function visualizer_launch() {
 	if ( visualizer_can_use_action_scheduler() && is_readable( $action_scheduler_file ) ) {
 		require_once $action_scheduler_file;
 	}
+
+	// After Action Scheduler's own data controller, which sets the class at 100.
+	add_filter( 'action_scheduler_store_class', 'visualizer_action_scheduler_store_class', 200 );
 
 	add_filter( 'themeisle_sdk_products', 'visualizer_register_sdk', 10, 1 );
 	add_filter( 'pirate_parrot_log', 'visualizer_register_parrot', 10, 1 );
@@ -252,6 +258,20 @@ function visualizer_can_use_action_scheduler() {
 	global $wpdb;
 
 	return isset( $wpdb ) && is_callable( array( $wpdb, 'db_server_info' ) );
+}
+
+/**
+ * Use a store that survives a lost race when marking an action failed.
+ *
+ * Only replaces Action Scheduler's own database store. Another plugin's store
+ * and the legacy post store, which does not have the problem, are left alone.
+ *
+ * @param string $class_name Store class Action Scheduler resolved.
+ *
+ * @return string
+ */
+function visualizer_action_scheduler_store_class( $class_name ) {
+	return 'ActionScheduler_DBStore' === $class_name ? 'Visualizer_ActionScheduler_Store' : $class_name;
 }
 
 /**
