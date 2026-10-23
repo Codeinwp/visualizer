@@ -1209,7 +1209,7 @@ class Visualizer_Module_Abilities extends Visualizer_Module {
 			return new WP_Error( 'visualizer_tmp_file', __( 'A temporary file could not be created.', 'visualizer' ) );
 		}
 		foreach ( $lines as $line ) {
-			fputcsv( $handle, $line, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+			fputcsv( $handle, $line, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE, VISUALIZER_CSV_ESCAPE );
 		}
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 

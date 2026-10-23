@@ -61,7 +61,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 	 */
 	private function _fetchSeries( &$handle ) {
 		// read column titles
-		$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+		$labels = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE, VISUALIZER_CSV_ESCAPE );
 		$types = null;
 
 		if ( false !== strpos( $this->_filename, 'tqx=out:csv' ) ) {
@@ -74,7 +74,7 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 
 		if ( is_null( $types ) ) {
 			// read series types
-			$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+			$types = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE, VISUALIZER_CSV_ESCAPE );
 		}
 
 		if ( ! is_array( $labels ) || ! is_array( $types ) ) {
@@ -155,10 +155,10 @@ class Visualizer_Source_Csv extends Visualizer_Source {
 		}
 
 		// fetch data
-		$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+		$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE, VISUALIZER_CSV_ESCAPE );
 		while ( $data !== false ) {
 			$this->_data[] = $this->_normalizeData( $data );
-			$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE );
+			$data = fgetcsv( $handle, 0, VISUALIZER_CSV_DELIMITER, VISUALIZER_CSV_ENCLOSURE, VISUALIZER_CSV_ESCAPE );
 		}
 
 		// close file handle
