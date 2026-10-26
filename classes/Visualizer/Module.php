@@ -285,11 +285,11 @@ class Visualizer_Module {
 		// support for MS Excel
 		fprintf( $fp, $bom );
 		foreach ( $rows as $row ) {
-			fputcsv( $fp, $row );
+			fputcsv( $fp, $row, ',', '"', VISUALIZER_CSV_ESCAPE );
 		}
 		rewind( $fp );
 		$csv = '';
-		$array = fgetcsv( $fp );
+		$array = fgetcsv( $fp, 0, ',', '"', VISUALIZER_CSV_ESCAPE );
 		while ( $array !== false ) {
 			if ( strlen( $csv ) > 0 ) {
 				$csv .= PHP_EOL;
@@ -307,7 +307,7 @@ class Visualizer_Module {
 				$array = $temp_array;
 			}
 			$csv  .= implode( ',', $array );
-			$array = fgetcsv( $fp );
+			$array = fgetcsv( $fp, 0, ',', '"', VISUALIZER_CSV_ESCAPE );
 		}
 		fclose( $fp );
 

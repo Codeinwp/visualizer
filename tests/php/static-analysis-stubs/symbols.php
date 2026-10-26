@@ -18,6 +18,9 @@ if ( ! defined( 'VISUALIZER_CSV_DELIMITER' ) ) {
 if ( ! defined( 'VISUALIZER_CSV_ENCLOSURE' ) ) {
     define( 'VISUALIZER_CSV_ENCLOSURE', '"' );
 }
+if ( ! defined( 'VISUALIZER_CSV_ESCAPE' ) ) {
+    define( 'VISUALIZER_CSV_ESCAPE', '\\' );
+}
 if ( ! defined( 'VISUALIZER_DEBUG' ) ) {
     define( 'VISUALIZER_DEBUG', false );
 }
