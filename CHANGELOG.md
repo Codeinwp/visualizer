@@ -1,3 +1,9 @@
+##### [Version 4.0.10](https://github.com/Codeinwp/visualizer/compare/v4.0.9...v4.0.10) (2026-10-26)
+
+- Fixed queue cleanup to skip actions another process removed or failed.
+- Improved compatibility with newest PHP versions
+- Updated dependencies
+
 ##### [Version 4.0.9](https://github.com/Codeinwp/visualizer/compare/v4.0.8...v4.0.9) (2026-09-30)
 
 - Fixed scheduled chart updates crashing on WordPress versions before 5.5.
