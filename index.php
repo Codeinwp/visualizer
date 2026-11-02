@@ -189,6 +189,7 @@ function visualizer_launch() {
 			);
 		}
 	);
+	add_filter( 'visualizer_support_hub_metadata', 'visualizer_support_hub_metadata' );
 	add_filter(
 		'visualizer_ai_connect_metadata',
 		function () {
@@ -272,6 +273,60 @@ function visualizer_can_use_action_scheduler() {
  */
 function visualizer_action_scheduler_store_class( $class_name ) {
 	return 'ActionScheduler_DBStore' === $class_name ? 'Visualizer_ActionScheduler_Store' : $class_name;
+}
+
+/**
+ * Opts into the SDK Support Hub: one Help button on the plugin's own screens,
+ * a setup nudge while the site has no chart, and the deactivation window.
+ *
+ * Visualizer Pro registers nothing here: it has no admin screens of its own
+ * and the SDK shows one Help button per screen, so the free plugin owns the
+ * hub for both and tags the message as pro from the Pro license status.
+ *
+ * The plugin screens need no `pages` entry: each one fires
+ * `themeisle_internal_page`, which the SDK already treats as a product screen.
+ *
+ * @return array{is_pro: bool, links: array<int, array{icon: string, text: string, url: string}>, setup_complete: callable}
+ */
+function visualizer_support_hub_metadata() {
+	return array(
+		'is_pro'         => Visualizer_Module::is_pro(),
+		'links'          => array(
+			array(
+				'icon' => 'book-alt',
+				'text' => __( 'Docs', 'visualizer' ),
+				'url'  => VISUALIZER_MAIN_DOC,
+			),
+			array(
+				'icon' => 'groups',
+				'text' => __( 'Forum', 'visualizer' ),
+				'url'  => 'https://wordpress.org/support/plugin/visualizer/',
+			),
+		),
+		'setup_complete' => 'visualizer_support_hub_setup_complete',
+	);
+}
+
+/**
+ * Whether the site has at least one chart, in any status except auto-draft
+ * and trash. Runs on the plugin's own screens for administrators only.
+ *
+ * @return bool
+ */
+function visualizer_support_hub_setup_complete() {
+	$charts = get_posts(
+		array(
+			'post_type'              => Visualizer_Plugin::CPT_VISUALIZER,
+			'post_status'            => 'any',
+			'posts_per_page'         => 1,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		)
+	);
+
+	return ! empty( $charts );
 }
 
 /**

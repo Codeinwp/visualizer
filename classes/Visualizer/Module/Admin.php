@@ -1119,6 +1119,8 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		}
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'wp-color-picker' );
+
+		do_action( 'themeisle_internal_page', VISUALIZER_DIRNAME, 'settings' );
 	}
 
 	/**
