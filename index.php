@@ -286,12 +286,13 @@ function visualizer_action_scheduler_store_class( $class_name ) {
  * The plugin screens need no `pages` entry: each one fires
  * `themeisle_internal_page`, which the SDK already treats as a product screen.
  *
- * @return array{is_pro: bool, links: array<int, array{icon: string, text: string, url: string}>, setup_complete: callable}
+ * @return array{is_pro: bool, license_namespace: string, links: array<int, array{icon: string, text: string, url: string}>, setup_complete: callable(): bool}
  */
 function visualizer_support_hub_metadata() {
 	return array(
-		'is_pro'         => Visualizer_Module::is_pro(),
-		'links'          => array(
+		'is_pro'            => Visualizer_Module::is_pro(),
+		'license_namespace' => 'visualizer',
+		'links'             => array(
 			array(
 				'icon' => 'book-alt',
 				'text' => __( 'Docs', 'visualizer' ),
@@ -303,7 +304,7 @@ function visualizer_support_hub_metadata() {
 				'url'  => 'https://wordpress.org/support/plugin/visualizer/',
 			),
 		),
-		'setup_complete' => 'visualizer_support_hub_setup_complete',
+		'setup_complete'    => 'visualizer_support_hub_setup_complete',
 	);
 }
 
