@@ -1409,7 +1409,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$is_black_friday = apply_filters( 'themeisle_sdk_is_black_friday_sale', false );
 			// knowledge base link
 			$plugin_meta[] = sprintf(
-				'<a href="' . VISUALIZER_MAIN_DOC . '" target="_blank">%s</a>',
+				'<a href="' . esc_url( tsdk_utmify( VISUALIZER_MAIN_DOC, 'documentation', 'pluginrow' ) ) . '" target="_blank">%s</a>',
 				esc_html__( 'Docs', 'visualizer' )
 			);
 			if ( ! $is_black_friday ) {
