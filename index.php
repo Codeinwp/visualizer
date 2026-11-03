@@ -276,8 +276,8 @@ function visualizer_action_scheduler_store_class( $class_name ) {
 }
 
 /**
- * Opts into the SDK Support Hub: one Help button on the plugin's own screens,
- * a setup nudge while the site has no chart, and the deactivation window.
+ * Opts into the SDK Support Hub: one Help button on the plugin's own screens
+ * and the deactivation window.
  *
  * Visualizer Pro registers nothing here: it has no admin screens of its own
  * and the SDK shows one Help button per screen, so the free plugin owns the
@@ -286,7 +286,7 @@ function visualizer_action_scheduler_store_class( $class_name ) {
  * The plugin screens need no `pages` entry: each one fires
  * `themeisle_internal_page`, which the SDK already treats as a product screen.
  *
- * @return array{is_pro: bool, license_namespace: string, links: array<int, array{icon: string, text: string, url: string}>, setup_complete: callable(): bool}
+ * @return array{is_pro: bool, license_namespace: string, links: array<int, array{icon: string, text: string, url: string}>}
  */
 function visualizer_support_hub_metadata() {
 	return array(
@@ -304,30 +304,7 @@ function visualizer_support_hub_metadata() {
 				'url'  => 'https://wordpress.org/support/plugin/visualizer/',
 			),
 		),
-		'setup_complete'    => 'visualizer_support_hub_setup_complete',
 	);
-}
-
-/**
- * Whether the site has at least one chart, in any status except auto-draft
- * and trash. Runs on the plugin's own screens for administrators only.
- *
- * @return bool
- */
-function visualizer_support_hub_setup_complete() {
-	$charts = get_posts(
-		array(
-			'post_type'              => Visualizer_Plugin::CPT_VISUALIZER,
-			'post_status'            => 'any',
-			'posts_per_page'         => 1,
-			'fields'                 => 'ids',
-			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
-			'update_post_term_cache' => false,
-		)
-	);
-
-	return ! empty( $charts );
 }
 
 /**

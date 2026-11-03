@@ -23,8 +23,7 @@ class Test_Visualizer_Support_Hub extends WP_UnitTestCase {
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( 'is_pro', $data );
 		$this->assertIsBool( $data['is_pro'] );
-		$this->assertArrayHasKey( 'setup_complete', $data );
-		$this->assertIsCallable( $data['setup_complete'] );
+		$this->assertArrayNotHasKey( 'setup_complete', $data, 'The setup nudge stays off for now.' );
 		$this->assertArrayNotHasKey( 'pages', $data, 'Screens are declared through themeisle_internal_page, not pages.' );
 		$this->assertArrayNotHasKey( 'primary_color', $data, 'The hub keeps the shared SDK accent.' );
 	}
@@ -54,45 +53,6 @@ class Test_Visualizer_Support_Hub extends WP_UnitTestCase {
 		add_filter( 'visualizer_is_pro', '__return_true' );
 		$this->assertTrue( apply_filters( 'visualizer_support_hub_metadata', array() )['is_pro'] );
 		remove_filter( 'visualizer_is_pro', '__return_true' );
-	}
-
-	/**
-	 * Setup counts as complete once the site has one chart, in any live status.
-	 */
-	public function test_setup_complete_needs_one_chart() {
-		$this->assertFalse( visualizer_support_hub_setup_complete() );
-
-		$chart_id = self::factory()->post->create(
-			array(
-				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
-				'post_status' => 'draft',
-			)
-		);
-		$this->assertTrue( visualizer_support_hub_setup_complete() );
-
-		wp_trash_post( $chart_id );
-		$this->assertFalse( visualizer_support_hub_setup_complete(), 'A trashed chart does not count.' );
-	}
-
-	/**
-	 * Auto-drafts (the editor's placeholder posts) do not count as a chart.
-	 */
-	public function test_setup_complete_ignores_auto_drafts() {
-		self::factory()->post->create(
-			array(
-				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
-				'post_status' => 'auto-draft',
-			)
-		);
-		$this->assertFalse( visualizer_support_hub_setup_complete() );
-
-		self::factory()->post->create(
-			array(
-				'post_type'   => 'post',
-				'post_status' => 'publish',
-			)
-		);
-		$this->assertFalse( visualizer_support_hub_setup_complete(), 'Other post types do not count.' );
 	}
 
 	/**
