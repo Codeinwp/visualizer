@@ -1609,7 +1609,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$pro_product_slug = defined( 'VISUALIZER_PRO_BASEFILE' ) ? basename( dirname( VISUALIZER_PRO_BASEFILE ) ) : '';
 
 		$is_pro  = 'valid' === $status;
-		$is_expired = 'expired' === $status || 'active-expired' === $status;
+		$is_expired = in_array( $status, array( 'expired', 'active_expired', 'active-expired' ), true );
 
 		if ( $is_pro ) {
 			// translators: %s is the discount percentage.
