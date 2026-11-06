@@ -155,7 +155,7 @@ abstract class Visualizer_Render_Sidebar_Google extends Visualizer_Render_Sideba
 				esc_html__( 'Determines whether the series has to be used for a special role as mentioned in %1$shere%2$s. You can view a few examples %3$shere%4$s.', 'visualizer' ),
 				'<a href="https://developers.google.com/chart/interactive/docs/roles#what-roles-are-available" target="_blank">',
 				'</a>',
-				'<a href="https://docs.themeisle.com/article/1160-roles-for-series-visualizer" target="_blank">',
+				'<a href="' . esc_url( tsdk_utmify( 'https://docs.themeisle.com/visualizer-charts-and-graphs/roles-for-series-visualizer', 'series-roles', 'chart-editor' ) ) . '" target="_blank">',
 				'</a>'
 			)
 		);
