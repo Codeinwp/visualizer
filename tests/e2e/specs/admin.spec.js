@@ -211,6 +211,41 @@ test.describe( 'Chart Library', () => {
         await expect( page.getByText(backendName) ).toBeVisible();
         await expect( page.locator('g').filter({ hasText: 'Test Chart Name' }).locator('rect') ).toBeVisible();
     } );
+
+    // frame.js rewrites the Google API link for the chart type. It must leave the
+    // "Common Snippets" docs link and its UTMs alone, on both libraries.
+    for ( const library of [ 'GoogleCharts', 'ChartJS' ] ) {
+        test( `manual configuration links (${ library })`, async ( { admin, page } ) => {
+            await admin.visitAdminPage( 'admin.php?page=visualizer&vaction=addnew' );
+            await page.waitForURL( '**/admin.php?page=visualizer&vaction=addnew' );
+            await expect( page.getByRole('button', { name: 'Classic Builder Step-by-step' }) ).toBeVisible({ timeout: 5000 });
+            await page.getByRole('button', { name: 'Classic Builder Step-by-step' }).click();
+            await page.waitForSelector('h1:text("Visualizer")');
+
+            const frame = page.frameLocator('iframe');
+            await frame.getByRole('combobox').selectOption({ value: library });
+            await selectChartAdmin( frame, CHART_JS_LABELS.pie );
+            await expect( frame.getByRole('button', { name: 'Create Chart' }) ).toBeVisible({ timeout: 5000 });
+
+            const snippets = frame.locator('span.viz-gvlink a').filter({ hasText: 'Common Snippets' });
+            await expect( snippets ).toHaveAttribute(
+                'href',
+                'https://docs.themeisle.com/visualizer-charts-and-graphs/manual-configuration?utm_source=wpadmin&utm_medium=chart-editor&utm_campaign=manual-configuration&utm_content=docsvisualizer-charts-and-graphsmanual-configuration'
+            );
+
+            if ( library === 'GoogleCharts' ) {
+                await expect( frame.locator('span.viz-gvlink a').filter({ hasText: 'Google Visualization API' }) ).toHaveAttribute(
+                    'href',
+                    'https://developers.google.com/chart/interactive/docs/gallery/piechart#configuration-options'
+                );
+                // The data filter box keeps its own text and link.
+                await expect( frame.locator('span.viz-gvlink a').filter({ hasText: 'Chart Controls API' }) ).toHaveAttribute(
+                    'href',
+                    'https://developers.google.com/chart/interactive/docs/gallery/controls#controls-gallery'
+                );
+            }
+        } );
+    }
 } );
 
 test.describe( 'Support', () => {
