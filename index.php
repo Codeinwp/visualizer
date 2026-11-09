@@ -94,11 +94,11 @@ function visualizer_launch() {
 	define( 'VISUALIZER_ENABLE_BETA_FEATURES', '' );
 
 	// the link to pre-build queries.
-	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/article/970-visualizer-sample-queries-to-generate-charts' );
-	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/category/657-visualizer' );
+	define( 'VISUALIZER_DB_QUERY_DOC_URL', 'https://docs.themeisle.com/visualizer-charts-and-graphs/visualizer-sample-queries-to-generate-charts' );
+	define( 'VISUALIZER_MAIN_DOC', 'https://docs.themeisle.com/visualizer-charts-and-graphs/' );
 	define( 'VISUALIZER_DOC_COLLECTION', 'https://docs.themeisle.com/visualizer-charts-and-graphs/?query=#' );
 	define( 'VISUALIZER_DEMO_URL', 'https://demo.themeisle.com/visualizer/#' );
-	define( 'VISUALIZER_CODE_SNIPPETS_URL', 'https://docs.themeisle.com/category/726-visualizer' );
+	define( 'VISUALIZER_CODE_SNIPPETS_URL', 'https://docs.themeisle.com/visualizer-charts-and-graphs/' );
 	define( 'VISUALIZER_SUBSCRIBE_API', 'https://api.themeisle.com/tracking/subscribe' );
 	define( 'VISUALIZER_AGENTS_URL', 'https://ai.themeisle.com' );
 
