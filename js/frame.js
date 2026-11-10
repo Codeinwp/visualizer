@@ -67,9 +67,11 @@
                 break;
         }
 
-        if($('span.viz-gvlink').length > 0) {
-            $('span.viz-gvlink').html($('span.viz-gvlink').html().replace('?', chart_type_in_api_link));
-        }
+        // Only the Google API link has the "gallery/?" placeholder. Other links in the
+        // description (e.g. Common Snippets) carry UTM query strings and must stay as they are.
+        $('span.viz-gvlink a[href*="/chart/interactive/docs/gallery/?"]').attr('href', function (i, href) {
+            return href.replace('gallery/?', 'gallery/' + chart_type_in_api_link);
+        });
 
         $('.type-radio').change(function () {
             $('.type-label-selected').removeClass('type-label-selected');

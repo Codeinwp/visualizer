@@ -1409,7 +1409,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 			$is_black_friday = apply_filters( 'themeisle_sdk_is_black_friday_sale', false );
 			// knowledge base link
 			$plugin_meta[] = sprintf(
-				'<a href="' . VISUALIZER_MAIN_DOC . '" target="_blank">%s</a>',
+				'<a href="' . esc_url( tsdk_utmify( VISUALIZER_MAIN_DOC, 'documentation', 'pluginrow' ) ) . '" target="_blank">%s</a>',
 				esc_html__( 'Docs', 'visualizer' )
 			);
 			if ( ! $is_black_friday ) {
@@ -1609,7 +1609,7 @@ class Visualizer_Module_Admin extends Visualizer_Module {
 		$pro_product_slug = defined( 'VISUALIZER_PRO_BASEFILE' ) ? basename( dirname( VISUALIZER_PRO_BASEFILE ) ) : '';
 
 		$is_pro  = 'valid' === $status;
-		$is_expired = 'expired' === $status || 'active-expired' === $status;
+		$is_expired = in_array( $status, array( 'expired', 'active_expired', 'active-expired' ), true );
 
 		if ( $is_pro ) {
 			// translators: %s is the discount percentage.
