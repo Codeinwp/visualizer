@@ -912,9 +912,30 @@ class Visualizer_Module {
 			$altered = $data;
 		}
 		if ( $run_filter ) {
-			return apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
+			$altered = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
 		}
-		return $altered;
+
+		return self::sanitize_chart_data( $altered );
+	}
+
+	/**
+	 * Sanitize chart data before passing it to HTML-capable renderers.
+	 *
+	 * @param mixed $data Chart data.
+	 * @return mixed Sanitized chart data.
+	 */
+	public static function sanitize_chart_data( $data ) {
+		// Preserve normal text and supported formatting while removing active
+		// markup from imports, scheduled remote sources, and filtered data.
+		return map_deep(
+			$data,
+			static function ( $value ) {
+				if ( ! is_string( $value ) || ! preg_match( '/<\s*\/?\s*[a-zA-Z!][^>]*>/s', $value ) ) {
+					return $value;
+				}
+				return wp_kses_post( $value );
+			}
+		);
 	}
 
 	/**
