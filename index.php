@@ -189,6 +189,7 @@ function visualizer_launch() {
 			);
 		}
 	);
+	add_filter( 'visualizer_support_hub_metadata', 'visualizer_support_hub_metadata' );
 	add_filter(
 		'visualizer_ai_connect_metadata',
 		function () {
@@ -272,6 +273,38 @@ function visualizer_can_use_action_scheduler() {
  */
 function visualizer_action_scheduler_store_class( $class_name ) {
 	return 'ActionScheduler_DBStore' === $class_name ? 'Visualizer_ActionScheduler_Store' : $class_name;
+}
+
+/**
+ * Opts into the SDK Support Hub: one Help button on the plugin's own screens
+ * and the deactivation window.
+ *
+ * Visualizer Pro registers nothing here: it has no admin screens of its own
+ * and the SDK shows one Help button per screen, so the free plugin owns the
+ * hub for both and tags the message as pro from the Pro license status.
+ *
+ * The plugin screens need no `pages` entry: each one fires
+ * `themeisle_internal_page`, which the SDK already treats as a product screen.
+ *
+ * @return array{is_pro: bool, license_namespace: string, links: array<int, array{icon: string, text: string, url: string}>}
+ */
+function visualizer_support_hub_metadata() {
+	return array(
+		'is_pro'            => Visualizer_Module::is_pro(),
+		'license_namespace' => 'visualizer',
+		'links'             => array(
+			array(
+				'icon' => 'book-alt',
+				'text' => __( 'Docs', 'visualizer' ),
+				'url'  => VISUALIZER_MAIN_DOC,
+			),
+			array(
+				'icon' => 'groups',
+				'text' => __( 'Forum', 'visualizer' ),
+				'url'  => 'https://wordpress.org/support/plugin/visualizer/',
+			),
+		),
+	);
 }
 
 /**
