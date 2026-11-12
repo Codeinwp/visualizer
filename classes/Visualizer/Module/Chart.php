@@ -138,16 +138,17 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		);
 
 		if ( Visualizer_Module::is_pro() ) {
-			$is_woocommerce_report = filter_input(
-				INPUT_POST,
-				'is_woocommerce_report',
-				FILTER_VALIDATE_BOOLEAN
-			);
+			$is_woocommerce_report = isset( $_POST['is_woocommerce_report'] ) ? filter_var( wp_unslash( $_POST['is_woocommerce_report'] ), FILTER_VALIDATE_BOOLEAN ) : false;
 
 			if ( $is_woocommerce_report ) {
+				if ( ! current_user_can( 'view_woocommerce_reports' ) ) {
+					wp_send_json_error( array( 'msg' => esc_html__( 'You do not have permission to access WooCommerce reports.', 'visualizer' ) ), 403 );
+				}
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, get_current_user_id() );
 			} else {
 				delete_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE );
+				delete_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER );
 			}
 		}
 

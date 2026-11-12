@@ -1123,6 +1123,62 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * A chart editor without report access cannot schedule a WooCommerce report import.
+	 *
+	 * @group ajax
+	 */
+	public function test_woocommerce_json_schedule_denied_without_report_capability() {
+		$this->enable_pro();
+		$chart_id = $this->create_chart_for_user( $this->contibutor_user_id );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_POST = array(
+			'chart'                 => $chart_id,
+			'time'                  => 12,
+			'is_woocommerce_report' => 'true',
+			'security'              => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( '', get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * A report-capable chart editor can authorize future scheduled imports.
+	 *
+	 * @group ajax
+	 */
+	public function test_woocommerce_json_schedule_records_authorizing_user() {
+		$this->enable_pro();
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->admin_user_id );
+		wp_get_current_user()->add_cap( 'view_woocommerce_reports' );
+		$this->assertTrue( current_user_can( 'view_woocommerce_reports' ) );
+		$_POST = array(
+			'chart'                 => $chart_id,
+			'time'                  => 12,
+			'is_woocommerce_report' => 'true',
+			'security'              => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success, $this->_last_response );
+		$this->assertSame( $this->admin_user_id, (int) get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
 	 * A user cannot replace another user's JSON chart data.
 	 */
 	public function test_json_set_data_denied_for_chart_user_cannot_edit() {

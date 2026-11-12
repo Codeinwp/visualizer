@@ -457,8 +457,13 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 		}
 
-		// Check if this is a WooCommerce endpoint request and add verification token.
+		// Check if this is an authorized WooCommerce endpoint request and add a verification token.
+		$can_fetch_woocommerce_reports = false;
 		if ( $this->is_woocommerce_request( $url ) ) {
+			$can_fetch_woocommerce_reports = current_user_can( 'view_woocommerce_reports' );
+			$can_fetch_woocommerce_reports = apply_filters( 'visualizer_can_fetch_woocommerce_reports', $can_fetch_woocommerce_reports, $url );
+		}
+		if ( ! empty( $can_fetch_woocommerce_reports ) ) {
 			// Generate a unique token for this specific request.
 			$token = wp_generate_password( 32, false );
 			set_transient( 'visualizer_wc_token_' . $token, time(), 60 );

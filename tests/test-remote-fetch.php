@@ -681,6 +681,59 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Chart editors without WooCommerce report access must not receive the internal token.
+	 */
+	public function test_json_source_does_not_mint_woocommerce_token_for_contributor() {
+		$user_id = self::factory()->user->create( array( 'role' => 'contributor' ) );
+		wp_set_current_user( $user_id );
+
+		$headers = $this->capture_woocommerce_request_headers();
+
+		$this->assertArrayNotHasKey( 'X-Visualizer-Token', $headers );
+	}
+
+	/**
+	 * Shop users with report access retain the WooCommerce chart source feature.
+	 */
+	public function test_json_source_mints_woocommerce_token_for_authorized_user() {
+		$user_id = self::factory()->user->create( array( 'role' => 'contributor' ) );
+		$user    = new WP_User( $user_id );
+		$user->add_cap( 'view_woocommerce_reports' );
+		wp_set_current_user( $user_id );
+
+		$headers = $this->capture_woocommerce_request_headers();
+
+		$this->assertArrayHasKey( 'X-Visualizer-Token', $headers );
+		$this->assertNotSame( '', $headers['X-Visualizer-Token'] );
+		delete_transient( 'visualizer_wc_token_' . $headers['X-Visualizer-Token'] );
+	}
+
+	/**
+	 * Captures the headers generated for a same-site WooCommerce reports request.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function capture_woocommerce_request_headers() {
+		$headers = array();
+		$filter  = function ( $preempt, $args ) use ( &$headers ) {
+			$headers = $args['headers'];
+			return $this->response( 200, array(), '[{"total_sales":"10.00"}]' );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$source = new Visualizer_Source_Json(
+			array(
+				'url'  => home_url( '/wp-json/wc/v3/reports/sales' ),
+				'root' => 'root',
+			)
+		);
+		$source->fetchRoots();
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		return $headers;
+	}
+
+	/**
 	 * Builds a WordPress HTTP response fixture.
 	 *
 	 * @param int    $code    Status code.
