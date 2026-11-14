@@ -70,6 +70,26 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 
 		$this->_addFilter( 'visualizer_get_sidebar', 'getSidebar', 10, 2 );
+
+		$this->_addAction( 'added_post_meta', 'recordJsonSourceUser', null, 10, 3 );
+		$this->_addAction( 'updated_post_meta', 'recordJsonSourceUser', null, 10, 3 );
+	}
+
+	/**
+	 * Records the user who set a chart's JSON endpoint as its WooCommerce report user.
+	 *
+	 * A scheduled refresh of that endpoint then uses this user's report access,
+	 * not the access of whoever authorized an earlier endpoint.
+	 *
+	 * @param int    $meta_id   The meta ID.
+	 * @param int    $object_id The post ID.
+	 * @param string $meta_key  The meta key.
+	 * @return void
+	 */
+	public function recordJsonSourceUser( $meta_id, $object_id, $meta_key ) {
+		if ( Visualizer_Plugin::CF_JSON_URL === $meta_key ) {
+			update_post_meta( $object_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, get_current_user_id() );
+		}
 	}
 
 	/**
@@ -148,7 +168,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, get_current_user_id() );
 			} else {
 				delete_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE );
-				delete_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER );
 			}
 		}
 
@@ -221,7 +240,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
 
-		$data   = Visualizer_Render_Layout::show( 'editor-table', $data, $chart_id, 'viz-json-table', false, false );
+		$data   = Visualizer_Render_Layout::show( 'editor-table', self::sanitize_chart_data( $data ), $chart_id, 'viz-json-table', false, false );
 		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'], 'paging' => $source->getPaginationElements() ) );
 	}
 
@@ -305,7 +324,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
-		$render->data   = json_encode( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
+		$render->data   = json_encode( self::sanitize_chart_data( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) ) );
 		$render->series = json_encode( $source->getSeries() );
 		$render->render();
 
@@ -1421,7 +1440,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				}
 
 				$render->id     = $chart->ID;
-				$render->data   = json_encode( $source->getRawData( get_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
+				$render->data   = json_encode( self::sanitize_chart_data( $source->getRawData( get_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) ) );
 				$render->series = json_encode( $source->getSeries() );
 				$render->settings = json_encode( $settings );
 			} else {
@@ -1683,7 +1702,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'post_content'  => $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ),
 					)
 				);
-				$render->data   = json_encode( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
+				$render->data   = json_encode( self::sanitize_chart_data( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) ) );
 				$render->series = json_encode( $source->getSeries() );
 				$render->id = $chart_id;
 			} else {

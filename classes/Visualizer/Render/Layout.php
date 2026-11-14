@@ -436,7 +436,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			}
 			$chart      = get_post( $chart_id );
 			$type       = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_TYPE, true );
-			$data       = Visualizer_Module::get_chart_data( $chart, $type );
+			$data       = Visualizer_Module::get_chart_data( $chart, $type, true, ! $editable_data );
 		} else {
 			$headers    = array_keys( $data[0] );
 		}

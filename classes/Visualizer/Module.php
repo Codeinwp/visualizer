@@ -190,7 +190,7 @@ class Visualizer_Module {
 			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
 			$rows   = array();
 			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-			$data = self::get_chart_data( $chart, $type, false );
+			$data = self::get_chart_data( $chart, $type, false, 'print' === $type );
 			if ( ! empty( $series ) ) {
 				$row = array();
 				foreach ( $series as $array ) {
@@ -880,8 +880,14 @@ class Visualizer_Module {
 
 	/**
 	 * Gets the chart content after common manipulations.
+	 *
+	 * @param WP_Post|object $chart      The chart post.
+	 * @param string         $type       The chart type passed to the data filter.
+	 * @param bool           $run_filter Whether to run the chart data filter.
+	 * @param bool           $sanitize   Whether to prepare the cells for HTML-capable renderers; exports and editors need the stored values.
+	 * @return mixed The chart data.
 	 */
-	public static function get_chart_data( $chart, $type, $run_filter = true ) {
+	public static function get_chart_data( $chart, $type, $run_filter = true, $sanitize = true ) {
 		// change HTML entities
 		$post_content = html_entity_decode( htmlentities( $chart->post_content ) );
 		$post_content = preg_replace_callback(
@@ -915,7 +921,7 @@ class Visualizer_Module {
 			$altered = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
 		}
 
-		return self::sanitize_chart_data( $altered );
+		return $sanitize ? self::sanitize_chart_data( $altered ) : $altered;
 	}
 
 	/**
@@ -930,7 +936,7 @@ class Visualizer_Module {
 		return map_deep(
 			$data,
 			static function ( $value ) {
-				if ( ! is_string( $value ) || ! preg_match( '/<\s*\/?\s*[a-zA-Z!][^>]*>/s', $value ) ) {
+				if ( ! is_string( $value ) || ! preg_match( '/<\s*\/?\s*[a-zA-Z!]/', $value ) ) {
 					return $value;
 				}
 				return wp_kses_post( $value );

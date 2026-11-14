@@ -138,7 +138,7 @@
             }
         }
 
-        // remove this so that the eval does not fail.
+        // internal_title is the chart's admin label, not a DataTables option.
         delete chart.settings['internal_title'];
 
         var additional = [];
