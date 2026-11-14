@@ -384,6 +384,8 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 				return $chart;
 		}
 
+		// Editable-table charts fetch again here, so check the error after this read.
+		$content    = $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) );
 		$error      = $source->get_error();
 		if ( empty( $error ) ) {
 			$this->disableRevisionsTemporarily();
@@ -406,7 +408,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 			wp_update_post(
 				array(
 					'ID'            => $chart_id,
-					'post_content'  => $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ),
+					'post_content'  => $content,
 				)
 			);
 

@@ -681,6 +681,196 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Chart editors without WooCommerce report access must not receive the internal token.
+	 */
+	public function test_json_source_does_not_mint_woocommerce_token_for_contributor() {
+		$user_id = self::factory()->user->create( array( 'role' => 'contributor' ) );
+		wp_set_current_user( $user_id );
+
+		$headers = $this->capture_woocommerce_request_headers();
+
+		$this->assertArrayNotHasKey( 'X-Visualizer-Token', $headers );
+	}
+
+	/**
+	 * Shop users with report access retain the WooCommerce chart source feature.
+	 */
+	public function test_json_source_mints_woocommerce_token_for_authorized_user() {
+		$user_id = self::factory()->user->create( array( 'role' => 'contributor' ) );
+		$user    = new WP_User( $user_id );
+		$user->add_cap( 'view_woocommerce_reports' );
+		wp_set_current_user( $user_id );
+
+		$headers = $this->capture_woocommerce_request_headers();
+
+		$this->assertArrayHasKey( 'X-Visualizer-Token', $headers );
+		$this->assertNotSame( '', $headers['X-Visualizer-Token'] );
+		delete_transient( 'visualizer_wc_token_' . $headers['X-Visualizer-Token'] );
+	}
+
+	/**
+	 * The report access filter can grant the token to a user without the capability.
+	 */
+	public function test_report_access_filter_can_grant_token() {
+		$user_id = self::factory()->user->create( array( 'role' => 'contributor' ) );
+		wp_set_current_user( $user_id );
+		add_filter( 'visualizer_can_fetch_woocommerce_reports', '__return_true' );
+
+		$headers = $this->capture_woocommerce_request_headers();
+
+		remove_filter( 'visualizer_can_fetch_woocommerce_reports', '__return_true' );
+		$this->assertArrayHasKey( 'X-Visualizer-Token', $headers );
+		delete_transient( 'visualizer_wc_token_' . $headers['X-Visualizer-Token'] );
+	}
+
+	/**
+	 * The report access filter can withhold the token from a user with the capability.
+	 */
+	public function test_report_access_filter_can_withhold_token() {
+		$user_id = self::factory()->user->create( array( 'role' => 'contributor' ) );
+		$user    = new WP_User( $user_id );
+		$user->add_cap( 'view_woocommerce_reports' );
+		wp_set_current_user( $user_id );
+		add_filter( 'visualizer_can_fetch_woocommerce_reports', '__return_false' );
+
+		$headers = $this->capture_woocommerce_request_headers();
+
+		remove_filter( 'visualizer_can_fetch_woocommerce_reports', '__return_false' );
+		$this->assertArrayNotHasKey( 'X-Visualizer-Token', $headers );
+	}
+
+	/**
+	 * A failed WooCommerce report fetch is reported as a failure.
+	 */
+	public function test_failed_woocommerce_fetch_returns_false() {
+		$filter = function () {
+			return $this->response( 401, array(), '{"code":"woocommerce_rest_cannot_view"}' );
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		$source = new Visualizer_Source_Json(
+			array(
+				'url'  => home_url( '/wp-json/wc/v3/reports/sales' ),
+				'root' => 'root',
+			)
+		);
+		$result = $source->fetch();
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertFalse( $result );
+		$this->assertNotEmpty( $source->get_error() );
+	}
+
+	/**
+	 * A visitor's live refresh of a WooCommerce report chart keeps the stored data when the fetch fails.
+	 */
+	public function test_visitor_refresh_keeps_stored_woocommerce_data() {
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $admin_id );
+		$content  = serialize( array( array( '10.00' ) ) );
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'  => 'publish',
+				'post_content' => wp_slash( $content ),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, 'Visualizer_Source_Json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, home_url( '/wp-json/wc/v3/reports/sales' ) );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, 'root' );
+		update_post_meta(
+			$chart_id,
+			Visualizer_Plugin::CF_SERIES,
+			array(
+				array(
+					'label' => 'total_sales',
+					'type'  => 'number',
+				),
+			)
+		);
+		wp_set_current_user( 0 );
+		$filter = function () {
+			return $this->response( 401, array(), '{"code":"woocommerce_rest_cannot_view"}' );
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		apply_filters( 'visualizer_schedule_refresh_chart', get_post( $chart_id ), $chart_id, false );
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertSame( $content, get_post_field( 'post_content', $chart_id, 'raw' ) );
+		$this->assertNotEmpty( get_post_meta( $chart_id, Visualizer_Plugin::CF_ERROR, true ) );
+	}
+
+	/**
+	 * An editable-table chart keeps its stored data when the second WooCommerce read fails.
+	 */
+	public function test_refresh_keeps_stored_data_when_second_woocommerce_read_fails() {
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $admin_id );
+		$content  = serialize( array( array( '10.00' ) ) );
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'  => 'publish',
+				'post_content' => wp_slash( $content ),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, 'Visualizer_Source_Json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, home_url( '/wp-json/wc/v3/reports/sales' ) );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, 'root' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true );
+		update_post_meta(
+			$chart_id,
+			Visualizer_Plugin::CF_SERIES,
+			array(
+				array(
+					'label' => 'total_sales',
+					'type'  => 'number',
+				),
+			)
+		);
+		$requests = 0;
+		$filter   = function () use ( &$requests ) {
+			++$requests;
+			return 1 === $requests
+				? $this->response( 200, array(), '[{"total_sales":"20.00"}]' )
+				: $this->response( 401, array(), '{"code":"woocommerce_rest_cannot_view"}' );
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		apply_filters( 'visualizer_schedule_refresh_chart', get_post( $chart_id ), $chart_id, false );
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertSame( 2, $requests );
+		$this->assertSame( $content, get_post_field( 'post_content', $chart_id, 'raw' ) );
+	}
+
+	/**
+	 * Captures the headers generated for a same-site WooCommerce reports request.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function capture_woocommerce_request_headers() {
+		$headers = array();
+		$filter  = function ( $preempt, $args ) use ( &$headers ) {
+			$headers = $args['headers'];
+			return $this->response( 200, array(), '[{"total_sales":"10.00"}]' );
+		};
+		add_filter( 'pre_http_request', $filter, 10, 2 );
+
+		$source = new Visualizer_Source_Json(
+			array(
+				'url'  => home_url( '/wp-json/wc/v3/reports/sales' ),
+				'root' => 'root',
+			)
+		);
+		$source->fetchRoots();
+
+		remove_filter( 'pre_http_request', $filter, 10 );
+		return $headers;
+	}
+
+	/**
 	 * Builds a WordPress HTTP response fixture.
 	 *
 	 * @param int    $code    Status code.

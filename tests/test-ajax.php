@@ -1123,6 +1123,375 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * A chart editor without report access cannot schedule a WooCommerce report import.
+	 */
+	public function test_woocommerce_json_schedule_denied_without_report_capability() {
+		$this->enable_pro();
+		$chart_id = $this->create_chart_for_user( $this->contibutor_user_id );
+		wp_set_current_user( $this->contibutor_user_id );
+		$_POST = array(
+			'chart'                 => $chart_id,
+			'time'                  => 12,
+			'is_woocommerce_report' => 'true',
+			'security'              => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertFalse( $response->success );
+		$this->assertSame( '', get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * A report-capable chart editor can authorize future scheduled imports.
+	 */
+	public function test_woocommerce_json_schedule_records_authorizing_user() {
+		$this->enable_pro();
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->admin_user_id );
+		wp_get_current_user()->add_cap( 'view_woocommerce_reports' );
+		$this->assertTrue( current_user_can( 'view_woocommerce_reports' ) );
+		$_POST = array(
+			'chart'                 => $chart_id,
+			'time'                  => 12,
+			'is_woocommerce_report' => 'true',
+			'security'              => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success, $this->_last_response );
+		$this->assertSame( $this->admin_user_id, (int) get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * Switching a chart to another JSON source keeps the recorded report user.
+	 */
+	public function test_json_schedule_for_other_source_keeps_report_user() {
+		$this->enable_pro();
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, $this->admin_user_id );
+		wp_set_current_user( $this->admin_user_id );
+		$_POST = array(
+			'chart'                 => $chart_id,
+			'time'                  => 12,
+			'is_woocommerce_report' => 'false',
+			'security'              => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE . Visualizer_Plugin::VERSION ),
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_SCHEDULE );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$this->assertSame( '', get_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true ) );
+		$this->assertSame( $this->admin_user_id, (int) get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * Saving a new JSON endpoint makes the saving user the chart's report user.
+	 */
+	public function test_json_source_change_records_saving_user() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, 'https://example.com/old.json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, $this->admin_user_id );
+		$editor_id = $this->factory->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $editor_id );
+
+		$this->handle_json_set_data( $chart_id, array( 'url' => 'https://example.com/new.json' ) );
+
+		$this->assertSame( 'https://example.com/new.json', get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true ) );
+		$this->assertSame( $editor_id, (int) get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * Saving the same JSON endpoint again keeps the recorded report user.
+	 */
+	public function test_json_source_resave_keeps_report_user() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, 'https://example.com/data.json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, $this->admin_user_id );
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'editor' ) ) );
+
+		$this->handle_json_set_data( $chart_id, array( 'url' => 'https://example.com/data.json' ) );
+
+		$this->assertSame( $this->admin_user_id, (int) get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * Restoring a revision keeps the recorded report user.
+	 */
+	public function test_revision_restore_keeps_report_user() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, 'https://example.com/data.json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, $this->admin_user_id );
+		$revision_id = $this->factory->post->create(
+			array(
+				'post_type'   => 'revision',
+				'post_parent' => $chart_id,
+				'post_status' => 'inherit',
+			)
+		);
+		add_metadata( 'post', $revision_id, Visualizer_Plugin::CF_JSON_URL, 'https://example.com/data.json' );
+		add_metadata( 'post', $revision_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, $this->admin_user_id );
+		$editor_id = $this->factory->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $editor_id );
+
+		( new Visualizer_Module_Admin( Visualizer_Plugin::instance() ) )->restoreRevision( $chart_id, $revision_id );
+
+		$this->assertSame( $this->admin_user_id, (int) get_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * A cloned chart does not carry the original chart's report user.
+	 */
+	public function test_clone_does_not_copy_report_user() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, 'https://example.com/data.json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, $this->admin_user_id );
+		$editor_id = $this->factory->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $editor_id );
+		$_GET = array(
+			'nonce' => wp_create_nonce( Visualizer_Plugin::ACTION_CLONE_CHART ),
+			'chart' => $chart_id,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_CLONE_CHART );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the redirect.
+		} catch ( WPAjaxDieStopException $e ) {
+			// Expected after the redirect.
+		}
+
+		$clones = get_posts(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'any',
+				'author'      => $editor_id,
+				'fields'      => 'ids',
+			)
+		);
+		$this->assertCount( 1, $clones );
+		$this->assertSame( 'https://example.com/data.json', get_post_meta( $clones[0], Visualizer_Plugin::CF_JSON_URL, true ) );
+		$this->assertSame( '', get_post_meta( $clones[0], Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * A translated copy of a chart does not carry the original chart's report user.
+	 */
+	public function test_translation_copy_does_not_copy_report_user() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, 'https://example.com/data.json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, $this->admin_user_id );
+		$editor_id = $this->factory->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $editor_id );
+		$_GET = array(
+			'lang'            => 'de',
+			'parent_chart_id' => $chart_id,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_CREATE_CHART );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the redirect.
+		} catch ( WPAjaxDieStopException $e ) {
+			// Expected after the redirect.
+		}
+
+		$copies = get_posts(
+			array(
+				'post_type'   => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status' => 'any',
+				'author'      => $editor_id,
+				'fields'      => 'ids',
+			)
+		);
+		$this->assertCount( 1, $copies );
+		$this->assertSame( 'https://example.com/data.json', get_post_meta( $copies[0], Visualizer_Plugin::CF_JSON_URL, true ) );
+		$this->assertSame( '', get_post_meta( $copies[0], Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, true ) );
+	}
+
+	/**
+	 * The AI builder edits the stored cell text.
+	 */
+	public function test_ai_builder_fetch_returns_stored_cells() {
+		wp_set_current_user( $this->admin_user_id );
+		$chart_id = $this->factory->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_author'  => $this->admin_user_id,
+				'post_content' => wp_slash( serialize( array( array( 'Q1<Q2 and Q3>Q4' ) ) ) ),
+			)
+		);
+		$_POST = array(
+			'nonce'    => wp_create_nonce( 'visualizer-ai-builder' ),
+			'chart_id' => $chart_id,
+		);
+
+		try {
+			$this->_handleAjax( 'visualizer-ai-fetch' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success, $this->_last_response );
+		$this->assertSame( 'Q1<Q2 and Q3>Q4', $response->data->data[0][0] );
+	}
+
+	/**
+	 * The JSON import preview prints endpoint keys as text.
+	 */
+	public function test_json_preview_escapes_endpoint_keys() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->admin_user_id );
+		$filter = $this->mock_json_endpoint( array( array( '<img src=x onerror=alert(1)>' => 'a' ) ) );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'url'    => 'https://example.com/data.json',
+			'method' => 'GET',
+			'chart'  => $chart_id,
+			'root'   => 'root',
+		);
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_GET_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		} finally {
+			remove_filter( 'pre_http_request', $filter );
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success, $this->_last_response );
+		$this->assertStringContainsString( '&lt;img', $response->data->table );
+		$this->assertStringNotContainsString( '<img', $response->data->table );
+	}
+
+	/**
+	 * The JSON import preview table carries no event attributes from the endpoint.
+	 */
+	public function test_json_preview_removes_event_attributes() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->admin_user_id );
+		$filter = $this->mock_json_endpoint( array( array( 'name' => '<img src=x onerror=alert(1)>' ) ) );
+
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_JSON_GET_DATA . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'url'    => 'https://example.com/data.json',
+			'method' => 'GET',
+			'chart'  => $chart_id,
+			'root'   => 'root',
+		);
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_GET_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		} finally {
+			remove_filter( 'pre_http_request', $filter );
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success, $this->_last_response );
+		$this->assertStringContainsString( '<img', $response->data->table );
+		$this->assertStringNotContainsString( 'onerror', $response->data->table );
+	}
+
+	/**
+	 * The preview rendered after saving a JSON import carries no event attributes.
+	 */
+	public function test_json_save_preview_removes_event_attributes() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->admin_user_id );
+
+		$this->handle_json_set_data(
+			$chart_id,
+			array(
+				'header' => array( 'name' ),
+				'type'   => array( 'name' => 'string' ),
+			),
+			array( array( 'name' => '<img src=x onerror=alert(1)>' ) )
+		);
+
+		$this->assertStringContainsString( 'canvas.data', $this->_last_response );
+		$this->assertStringNotContainsString( 'onerror', $this->_last_response );
+	}
+
+	/**
+	 * The preview rendered after a CSV upload carries no event attributes.
+	 */
+	public function test_csv_upload_preview_removes_event_attributes() {
+		$chart_id = $this->create_chart_for_user( $this->admin_user_id );
+		wp_set_current_user( $this->admin_user_id );
+		$file = wp_tempnam( 'visualizer.csv' );
+		file_put_contents( $file, "Name,Value\nstring,number\n\"<img src=x onerror=alert(1)>\",1\n" );
+		$_FILES = array(
+			'local_data' => array(
+				'tmp_name' => $file,
+				'name'     => 'data.csv',
+				'error'    => 0,
+			),
+		);
+		$_GET   = array(
+			'nonce' => wp_create_nonce( 'visualizer-upload-data' ),
+			'chart' => $chart_id,
+		);
+
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_UPLOAD_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected once the update page has rendered.
+		} catch ( WPAjaxDieStopException $e ) {
+			// Expected when the handler stops after rendering.
+		} finally {
+			unlink( $file );
+		}
+
+		$this->assertStringContainsString( 'canvas.data', $this->_last_response );
+		$this->assertStringNotContainsString( 'onerror', $this->_last_response );
+	}
+
+	/**
+	 * The database query preview table carries no event attributes from the results.
+	 */
+	public function test_query_preview_removes_event_attributes() {
+		$this->_setRole( 'administrator' );
+		$this->enable_pro();
+		$post_id = $this->factory->post->create( array( 'post_title' => '<img src=x onerror=alert(1)>' ) );
+		$this->assertStringContainsString( 'onerror', get_post_field( 'post_title', $post_id ) );
+
+		global $wpdb;
+		$_GET['security'] = wp_create_nonce( Visualizer_Plugin::ACTION_FETCH_DB_DATA . Visualizer_Plugin::VERSION );
+		$_POST['params']  = array(
+			'query'    => 'SELECT post_title FROM ' . $wpdb->prefix . 'posts WHERE ID = ' . $post_id,
+			'chart_id' => 1,
+		);
+		try {
+			$this->_handleAjax( Visualizer_Plugin::ACTION_FETCH_DB_DATA );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Expected after the JSON response.
+		}
+
+		$response = json_decode( $this->_last_response );
+		$this->assertTrue( $response->success, $this->_last_response );
+		$this->assertStringContainsString( '<img', $response->data->table );
+		$this->assertStringNotContainsString( 'onerror', $response->data->table );
+	}
+
+	/**
 	 * A user cannot replace another user's JSON chart data.
 	 */
 	public function test_json_set_data_denied_for_chart_user_cannot_edit() {
@@ -1151,13 +1520,14 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	/**
 	 * Mock the JSON endpoint so the set-data handler does not hit the network.
 	 *
+	 * @param array<int, array<string, mixed>> $rows The rows the endpoint returns.
 	 * @return callable The filter callback, for removal.
 	 */
-	private function mock_json_endpoint() {
-		$filter = function () {
+	private function mock_json_endpoint( array $rows = array( array( 'name' => 'a', 'value' => 1 ) ) ) {
+		$filter = function () use ( $rows ) {
 			return array(
 				'headers'  => array(),
-				'body'     => wp_json_encode( array( array( 'name' => 'a', 'value' => 1 ) ) ),
+				'body'     => wp_json_encode( $rows ),
 				'response' => array( 'code' => 200, 'message' => '' ),
 				'cookies'  => array(),
 				'filename' => null,
@@ -1170,10 +1540,11 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 	/**
 	 * Run the JSON set-data handler as the current user.
 	 *
-	 * @param int   $chart_id The chart being saved.
-	 * @param array $post     The POST fields to send on top of the defaults.
+	 * @param int                              $chart_id The chart being saved.
+	 * @param array                            $post     The POST fields to send on top of the defaults.
+	 * @param array<int, array<string, mixed>> $rows     The rows the endpoint returns.
 	 */
-	private function handle_json_set_data( $chart_id, array $post ) {
+	private function handle_json_set_data( $chart_id, array $post, array $rows = array( array( 'name' => 'a', 'value' => 1 ) ) ) {
 		$_GET = array(
 			'chart'    => $chart_id,
 			'security' => wp_create_nonce( Visualizer_Plugin::ACTION_JSON_SET_DATA . Visualizer_Plugin::VERSION ),
@@ -1190,7 +1561,7 @@ class Test_Visualizer_Ajax extends WP_Ajax_UnitTestCase {
 			$post
 		);
 
-		$filter = $this->mock_json_endpoint();
+		$filter = $this->mock_json_endpoint( $rows );
 		try {
 			$this->_handleAjax( Visualizer_Plugin::ACTION_JSON_SET_DATA );
 		} catch ( WPAjaxDieContinueException $e ) {

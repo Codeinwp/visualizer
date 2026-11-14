@@ -207,6 +207,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 	 * @since ?
 	 *
 	 * @access public
+	 * @return bool False when a WooCommerce report request failed, true otherwise.
 	 */
 	public function fetch() {
 		$url    = $this->_url;
@@ -285,7 +286,7 @@ class Visualizer_Source_Json extends Visualizer_Source {
 
 		do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, 'JSON endpoint data parsed.', 'debug', __FILE__, __LINE__ );
 
-		return true;
+		return empty( $this->_error );
 	}
 
 	/**
@@ -399,6 +400,10 @@ class Visualizer_Source_Json extends Visualizer_Source {
 		if ( is_wp_error( $response ) || ! in_array( intval( $response['response']['code'] ), array( 200, 201 ), true ) ) {
 			$error_code = is_wp_error( $response ) ? $response->get_error_code() : (string) wp_remote_retrieve_response_code( $response );
 			do_action( 'themeisle_log_event', Visualizer_Plugin::NAME, sprintf( 'Error while fetching JSON endpoint: %s', $error_code ), 'error', __FILE__, __LINE__ );
+			if ( $this->is_woocommerce_request( $url ) ) {
+				// Report access can be missing for this request, so keep the stored chart data.
+				$this->_error = esc_html__( 'Unable to fetch the WooCommerce report. The user who saved this chart needs access to WooCommerce reports.', 'visualizer' );
+			}
 			return null;
 		}
 
@@ -457,8 +462,13 @@ class Visualizer_Source_Json extends Visualizer_Source {
 			}
 		}
 
-		// Check if this is a WooCommerce endpoint request and add verification token.
+		// Check if this is an authorized WooCommerce endpoint request and add a verification token.
+		$can_fetch_woocommerce_reports = false;
 		if ( $this->is_woocommerce_request( $url ) ) {
+			$can_fetch_woocommerce_reports = current_user_can( 'view_woocommerce_reports' );
+			$can_fetch_woocommerce_reports = apply_filters( 'visualizer_can_fetch_woocommerce_reports', $can_fetch_woocommerce_reports, $url );
+		}
+		if ( ! empty( $can_fetch_woocommerce_reports ) ) {
 			// Generate a unique token for this specific request.
 			$token = wp_generate_password( 32, false );
 			set_transient( 'visualizer_wc_token_' . $token, time(), 60 );
