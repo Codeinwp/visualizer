@@ -925,6 +925,23 @@ class Visualizer_Module {
 	}
 
 	/**
+	 * Saves a chart's JSON endpoint, recording the user who changes it as the WooCommerce report user.
+	 *
+	 * A scheduled refresh of the endpoint then uses this user's report access,
+	 * not the access of whoever authorized an earlier endpoint.
+	 *
+	 * @param int    $chart_id The chart ID.
+	 * @param string $url      The JSON endpoint.
+	 * @return void
+	 */
+	public static function update_json_url( $chart_id, $url ) {
+		if ( get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true ) !== $url ) {
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, get_current_user_id() );
+		}
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, $url );
+	}
+
+	/**
 	 * Sanitize chart data before passing it to HTML-capable renderers.
 	 *
 	 * @param mixed $data Chart data.

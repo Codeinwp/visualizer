@@ -70,26 +70,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$this->_addAjaxAction( Visualizer_Plugin::ACTION_SAVE_FILTER_QUERY, 'saveFilter' );
 
 		$this->_addFilter( 'visualizer_get_sidebar', 'getSidebar', 10, 2 );
-
-		$this->_addAction( 'added_post_meta', 'recordJsonSourceUser', null, 10, 3 );
-		$this->_addAction( 'updated_post_meta', 'recordJsonSourceUser', null, 10, 3 );
-	}
-
-	/**
-	 * Records the user who set a chart's JSON endpoint as its WooCommerce report user.
-	 *
-	 * A scheduled refresh of that endpoint then uses this user's report access,
-	 * not the access of whoever authorized an earlier endpoint.
-	 *
-	 * @param int    $meta_id   The meta ID.
-	 * @param int    $object_id The post ID.
-	 * @param string $meta_key  The meta key.
-	 * @return void
-	 */
-	public function recordJsonSourceUser( $meta_id, $object_id, $meta_key ) {
-		if ( Visualizer_Plugin::CF_JSON_URL === $meta_key ) {
-			update_post_meta( $object_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, get_current_user_id() );
-		}
 	}
 
 	/**
@@ -273,7 +253,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
-		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
+		self::update_json_url( $chart->ID, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
 
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS );
@@ -651,7 +631,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						$post_meta = get_post_meta( $parent_chart_id );
 						$chart_id  = $new_chart_id;
 						foreach ( $post_meta as $key => $value ) {
-							if ( strpos( $key, 'visualizer-' ) !== false ) {
+							// A copy refreshes reports with its own author's access.
+							if ( strpos( $key, 'visualizer-' ) !== false && Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER !== $key ) {
 								add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 							}
 						}
@@ -1495,7 +1476,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			} else {
 				$post_meta = get_post_meta( $chart_id );
 				foreach ( $post_meta as $key => $value ) {
-					if ( strpos( $key, 'visualizer-' ) !== false ) {
+					// A copy refreshes reports with its own author's access.
+					if ( strpos( $key, 'visualizer-' ) !== false && Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER !== $key ) {
 						add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 					}
 				}

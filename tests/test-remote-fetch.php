@@ -802,6 +802,50 @@ class Test_Visualizer_Remote_Fetch extends WP_UnitTestCase {
 	}
 
 	/**
+	 * An editable-table chart keeps its stored data when the second WooCommerce read fails.
+	 */
+	public function test_refresh_keeps_stored_data_when_second_woocommerce_read_fails() {
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $admin_id );
+		$content  = serialize( array( array( '10.00' ) ) );
+		$chart_id = self::factory()->post->create(
+			array(
+				'post_type'    => Visualizer_Plugin::CPT_VISUALIZER,
+				'post_status'  => 'publish',
+				'post_content' => wp_slash( $content ),
+			)
+		);
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_SOURCE, 'Visualizer_Source_Json' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, home_url( '/wp-json/wc/v3/reports/sales' ) );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, 'root' );
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true );
+		update_post_meta(
+			$chart_id,
+			Visualizer_Plugin::CF_SERIES,
+			array(
+				array(
+					'label' => 'total_sales',
+					'type'  => 'number',
+				),
+			)
+		);
+		$requests = 0;
+		$filter   = function () use ( &$requests ) {
+			++$requests;
+			return 1 === $requests
+				? $this->response( 200, array(), '[{"total_sales":"20.00"}]' )
+				: $this->response( 401, array(), '{"code":"woocommerce_rest_cannot_view"}' );
+		};
+		add_filter( 'pre_http_request', $filter );
+
+		apply_filters( 'visualizer_schedule_refresh_chart', get_post( $chart_id ), $chart_id, false );
+
+		remove_filter( 'pre_http_request', $filter );
+		$this->assertSame( 2, $requests );
+		$this->assertSame( $content, get_post_field( 'post_content', $chart_id, 'raw' ) );
+	}
+
+	/**
 	 * Captures the headers generated for a same-site WooCommerce reports request.
 	 *
 	 * @return array<string, mixed>

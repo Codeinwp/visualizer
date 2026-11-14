@@ -411,7 +411,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 		}
 		?>
 		<div class="viz-simple-editor-type viz-text-editor">
-			<textarea id="edited_text"><?php echo $data; ?></textarea>
+			<textarea id="edited_text"><?php echo esc_textarea( $data ); ?></textarea>
 		</div>
 		<?php
 	}
@@ -463,7 +463,7 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			if ( $editable_data ) {
 				echo '<th><input type="text" name="header[]" value="' . esc_attr( $header ) . '"></th>';
 			} else {
-				echo '<th>' . $header . '</th>';
+				echo '<th>' . esc_html( $header ) . '</th>';
 			}
 		}
 		?>
@@ -479,8 +479,8 @@ ORDER BY YEAR(post_date) DESC, MONTH(post_date) DESC;';
 			if ( $editable_data ) {
 				echo '<select name="type[]">';
 			} else {
-				echo '<input name="header[]" type="hidden" value="' . $header . '">';
-				echo '<select name="type[' . $header . ']"  class="viz-select-data-type">';
+				echo '<input name="header[]" type="hidden" value="' . esc_attr( $header ) . '">';
+				echo '<select name="type[' . esc_attr( $header ) . ']"  class="viz-select-data-type">';
 			}
 			echo '<option value="" title="' . __( 'Exclude from chart', 'visualizer' ) . '">' . __( 'Exclude', 'visualizer' ) . '</option>';
 			echo '<option value="0" disabled title="' . __( 'Include in chart and select data type', 'visualizer' ) . '">--' . __( 'OR', 'visualizer' ) . '--</option>';

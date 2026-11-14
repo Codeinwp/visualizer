@@ -92,6 +92,32 @@ class Test_Visualizer_Chart_Data_Sanitization extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The text editor prints the stored cells as textarea text.
+	 */
+	public function test_text_editor_escapes_stored_cells() {
+		$chart_id = $this->create_chart( array( array( '</textarea><img src=x onerror=alert(1)>', '1' ) ) );
+
+		ob_start();
+		Visualizer_Render_Layout::show( 'text-editor', $chart_id );
+		$editor = ob_get_clean();
+
+		$this->assertStringNotContainsString( '</textarea><img', $editor );
+		$this->assertStringContainsString( '&lt;/textarea&gt;&lt;img', $editor );
+	}
+
+	/**
+	 * The chart abilities API returns the stored cell text for editing.
+	 */
+	public function test_get_chart_ability_returns_stored_cells() {
+		$chart_id = $this->create_chart( array( array( 'Q1<Q2 and Q3>Q4', '1' ) ) );
+		$module   = Visualizer_Plugin::instance()->getModule( Visualizer_Module_Abilities::NAME );
+
+		$result = $module->executeGetChart( array( 'chart_id' => $chart_id ) );
+
+		$this->assertSame( 'Q1<Q2 and Q3>Q4', $result['rows'][0][0] );
+	}
+
+	/**
 	 * Appends a row with a script cell.
 	 *
 	 * @param array<int, array<int, string>> $data The chart data.
