@@ -1,3 +1,9 @@
+##### [Version 4.0.11](https://github.com/Codeinwp/visualizer/compare/v4.0.10...v4.0.11) (2026-11-15)
+
+- Added a Help panel to make it easier to contact support and find answers
+- Enhanced security
+- Updated dependencies
+
 ##### [Version 4.0.10](https://github.com/Codeinwp/visualizer/compare/v4.0.9...v4.0.10) (2026-10-26)
 
 - Fixed queue cleanup to skip actions another process removed or failed.
