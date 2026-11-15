@@ -195,7 +195,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 		$this->_verify_chart_access( $chart_id );
 
 		$series   = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-		$data     = Visualizer_Module::get_chart_data( $chart, '', false );
+		$data     = Visualizer_Module::get_chart_data( $chart, '', false, false );
 		$code     = get_post_meta( $chart_id, self::CF_D3_CODE, true );
 		$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
 		$title    = ( is_array( $settings ) && ! empty( $settings['backend-title'] ) )
@@ -360,7 +360,7 @@ class Visualizer_Module_AIBuilder extends Visualizer_Module {
 				$source = new Visualizer_Source_Json( $params );
 
 				// Store config for sync
-				update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
+				Visualizer_Module::update_json_url( $chart_id, $params['url'] );
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
 				if ( ! empty( $_POST['json_schedule'] ) ) {
 					update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_SCHEDULE, intval( $_POST['json_schedule'] ) );
