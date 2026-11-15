@@ -108,6 +108,9 @@
         var select = {
             info: false
         };
+        var nestedSettings = {
+            select: select
+        };
         // we cannot use { select } below because https://github.com/Codeinwp/visualizer/issues/357
         $.extend( settings, { info: false } ); // jshint ignore:line
 
@@ -135,7 +138,7 @@
             }
         }
 
-        // remove this so that the eval does not fail.
+        // internal_title is the chart's admin label, not a DataTables option.
         delete chart.settings['internal_title'];
 
         var additional = [];
@@ -163,15 +166,15 @@
 
             // if the setting name has an '_' this means it is a sub-setting e.g. select_items means { select: { items: ... } }.
             var array = i.split('_');
-            if(array.length === 2){
-                i = eval( array[0] ); // jshint ignore:line
-                i[ array[1] ] = valoo;
-                additional[ array[0] ] = i;
+            if(array.length === 2 && Object.prototype.hasOwnProperty.call(nestedSettings, array[0])){
+                var nestedSetting = nestedSettings[ array[0] ];
+                nestedSetting[ array[1] ] = valoo;
+                additional[ array[0] ] = nestedSetting;
                 if(array[0] === 'select' && array[1] === 'info' ){
                     // enable main info or the selection info will not show.
                     $.extend( settings, {info: true} );
                 }
-            } else {
+            } else if(array.length === 1) {
                 settings[i] = valoo;
             }
         }

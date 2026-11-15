@@ -190,7 +190,7 @@ class Visualizer_Module {
 			$settings = get_post_meta( $chart_id, Visualizer_Plugin::CF_SETTINGS, true );
 			$rows   = array();
 			$series = get_post_meta( $chart_id, Visualizer_Plugin::CF_SERIES, true );
-			$data = self::get_chart_data( $chart, $type, false );
+			$data = self::get_chart_data( $chart, $type, false, 'print' === $type );
 			if ( ! empty( $series ) ) {
 				$row = array();
 				foreach ( $series as $array ) {
@@ -880,8 +880,14 @@ class Visualizer_Module {
 
 	/**
 	 * Gets the chart content after common manipulations.
+	 *
+	 * @param WP_Post|object $chart      The chart post.
+	 * @param string         $type       The chart type passed to the data filter.
+	 * @param bool           $run_filter Whether to run the chart data filter.
+	 * @param bool           $sanitize   Whether to prepare the cells for HTML-capable renderers; exports and editors need the stored values.
+	 * @return mixed The chart data.
 	 */
-	public static function get_chart_data( $chart, $type, $run_filter = true ) {
+	public static function get_chart_data( $chart, $type, $run_filter = true, $sanitize = true ) {
 		// change HTML entities
 		$post_content = html_entity_decode( htmlentities( $chart->post_content ) );
 		$post_content = preg_replace_callback(
@@ -912,9 +918,47 @@ class Visualizer_Module {
 			$altered = $data;
 		}
 		if ( $run_filter ) {
-			return apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
+			$altered = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_DATA, $altered, $chart->ID, $type );
 		}
-		return $altered;
+
+		return $sanitize ? self::sanitize_chart_data( $altered ) : $altered;
+	}
+
+	/**
+	 * Saves a chart's JSON endpoint, recording the user who changes it as the WooCommerce report user.
+	 *
+	 * A scheduled refresh of the endpoint then uses this user's report access,
+	 * not the access of whoever authorized an earlier endpoint.
+	 *
+	 * @param int    $chart_id The chart ID.
+	 * @param string $url      The JSON endpoint.
+	 * @return void
+	 */
+	public static function update_json_url( $chart_id, $url ) {
+		if ( get_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, true ) !== $url ) {
+			update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, get_current_user_id() );
+		}
+		update_post_meta( $chart_id, Visualizer_Plugin::CF_JSON_URL, $url );
+	}
+
+	/**
+	 * Sanitize chart data before passing it to HTML-capable renderers.
+	 *
+	 * @param mixed $data Chart data.
+	 * @return mixed Sanitized chart data.
+	 */
+	public static function sanitize_chart_data( $data ) {
+		// Preserve normal text and supported formatting while removing active
+		// markup from imports, scheduled remote sources, and filtered data.
+		return map_deep(
+			$data,
+			static function ( $value ) {
+				if ( ! is_string( $value ) || ! preg_match( '/<\s*\/?\s*[a-zA-Z!]/', $value ) ) {
+					return $value;
+				}
+				return wp_kses_post( $value );
+			}
+		);
 	}
 
 	/**

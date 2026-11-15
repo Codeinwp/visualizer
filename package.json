@@ -50,10 +50,10 @@
     "d3": "^7.9.0",
     "deep-filter": "^1.0.2",
     "is-plain-object": "^2.0.4",
-    "merge": "^1.2.1",
+    "merge": "^2.1.1",
     "react-google-charts": "^3.0.8",
     "topojson-client": "^3.1.0",
-    "uuid": "^8.3.2"
+    "uuid": "^11.1.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",

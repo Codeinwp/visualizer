@@ -138,14 +138,14 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		);
 
 		if ( Visualizer_Module::is_pro() ) {
-			$is_woocommerce_report = filter_input(
-				INPUT_POST,
-				'is_woocommerce_report',
-				FILTER_VALIDATE_BOOLEAN
-			);
+			$is_woocommerce_report = isset( $_POST['is_woocommerce_report'] ) ? filter_var( wp_unslash( $_POST['is_woocommerce_report'] ), FILTER_VALIDATE_BOOLEAN ) : false;
 
 			if ( $is_woocommerce_report ) {
+				if ( ! current_user_can( 'view_woocommerce_reports' ) ) {
+					wp_send_json_error( array( 'msg' => esc_html__( 'You do not have permission to access WooCommerce reports.', 'visualizer' ) ), 403 );
+				}
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE, true );
+				update_post_meta( $chart_id, Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER, get_current_user_id() );
 			} else {
 				delete_post_meta( $chart_id, Visualizer_Plugin::CF_IS_WOOCOMMERCE_SOURCE );
 			}
@@ -220,7 +220,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			wp_send_json_error( array( 'msg' => esc_html__( 'Unable to fetch data from the endpoint. Please try again.', 'visualizer' ) ) );
 		}
 
-		$data   = Visualizer_Render_Layout::show( 'editor-table', $data, $chart_id, 'viz-json-table', false, false );
+		$data   = Visualizer_Render_Layout::show( 'editor-table', self::sanitize_chart_data( $data ), $chart_id, 'viz-json-table', false, false );
 		wp_send_json_success( array( 'table' => $data, 'root' => $params['root'], 'url' => $params['url'], 'paging' => $source->getPaginationElements() ) );
 	}
 
@@ -253,7 +253,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, $source->getSeries() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_SOURCE, $source->getSourceName() );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_DEFAULT_DATA, 0 );
-		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
+		self::update_json_url( $chart->ID, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
 
 		delete_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_HEADERS );
@@ -304,7 +304,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 
 		$render         = new Visualizer_Render_Page_Update();
 		$render->id     = $chart->ID;
-		$render->data   = json_encode( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
+		$render->data   = json_encode( self::sanitize_chart_data( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) ) );
 		$render->series = json_encode( $source->getSeries() );
 		$render->render();
 
@@ -631,7 +631,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						$post_meta = get_post_meta( $parent_chart_id );
 						$chart_id  = $new_chart_id;
 						foreach ( $post_meta as $key => $value ) {
-							if ( strpos( $key, 'visualizer-' ) !== false ) {
+							// A copy refreshes reports with its own author's access.
+							if ( strpos( $key, 'visualizer-' ) !== false && Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER !== $key ) {
 								add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 							}
 						}
@@ -1420,7 +1421,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 				}
 
 				$render->id     = $chart->ID;
-				$render->data   = json_encode( $source->getRawData( get_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
+				$render->data   = json_encode( self::sanitize_chart_data( $source->getRawData( get_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) ) );
 				$render->series = json_encode( $source->getSeries() );
 				$render->settings = json_encode( $settings );
 			} else {
@@ -1475,7 +1476,8 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 			} else {
 				$post_meta = get_post_meta( $chart_id );
 				foreach ( $post_meta as $key => $value ) {
-					if ( strpos( $key, 'visualizer-' ) !== false ) {
+					// A copy refreshes reports with its own author's access.
+					if ( strpos( $key, 'visualizer-' ) !== false && Visualizer_Plugin::CF_WOOCOMMERCE_REPORT_USER !== $key ) {
 						add_post_meta( $new_chart_id, $key, self::maybe_decode_content( $value[0] ) );
 					}
 				}
@@ -1682,7 +1684,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 						'post_content'  => $source->getData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ),
 					)
 				);
-				$render->data   = json_encode( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) );
+				$render->data   = json_encode( self::sanitize_chart_data( $source->getRawData( get_post_meta( $chart_id, Visualizer_Plugin::CF_EDITABLE_TABLE, true ) ) ) );
 				$render->series = json_encode( $source->getSeries() );
 				$render->id = $chart_id;
 			} else {

@@ -598,7 +598,7 @@ class Visualizer_Module_Abilities extends Visualizer_Module {
 
 		$type     = (string) get_post_meta( $chart->ID, Visualizer_Plugin::CF_CHART_TYPE, true );
 		$series   = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SERIES, get_post_meta( $chart->ID, Visualizer_Plugin::CF_SERIES, true ), $chart->ID, $type );
-		$data     = self::get_chart_data( $chart, $type );
+		$data     = self::get_chart_data( $chart, $type, true, false );
 		$settings = get_post_meta( $chart->ID, Visualizer_Plugin::CF_SETTINGS, true );
 		$settings = apply_filters( Visualizer_Plugin::FILTER_GET_CHART_SETTINGS, $settings, $chart->ID, $type );
 		if ( ! is_array( $settings ) ) {
@@ -1048,7 +1048,7 @@ class Visualizer_Module_Abilities extends Visualizer_Module {
 		$this->clearSourceMeta( $chart->ID, true );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_EDITABLE_TABLE, true );
 		$this->persistSource( $chart->ID, $source );
-		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_URL, $params['url'] );
+		self::update_json_url( $chart->ID, $params['url'] );
 		update_post_meta( $chart->ID, Visualizer_Plugin::CF_JSON_ROOT, $params['root'] );
 
 		$headers = array( 'method' => $params['method'] );

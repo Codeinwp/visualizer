@@ -44,10 +44,10 @@ if (
 		<div class="pro-feature-inner">
 			<div class="pro-feature-features">
 				<h2>Documentation</h2>
-				<p>To get started with Visualizer, we recommend you first bookmark our main documentation page <a href="<?php echo VISUALIZER_MAIN_DOC; ?>" target="_blank">here</a>.</p>
+				<p>To get started with Visualizer, we recommend you first bookmark our main documentation page <a href="<?php echo esc_url( tsdk_utmify( VISUALIZER_MAIN_DOC, 'documentation', 'support-page' ) ); ?>" target="_blank">here</a>.</p>
 
 				<p>
-					Notably, you could take a look at this first introductory tutorial: <a href="https://docs.themeisle.com/article/597-create-chart" target="_blank">How to create my first chart</a>.
+					Notably, you could take a look at this first introductory tutorial: <a href="<?php echo esc_url( tsdk_utmify( 'https://docs.themeisle.com/visualizer-charts-and-graphs/create-chart', 'create-chart', 'support-page' ) ); ?>" target="_blank">How to create my first chart</a>.
 				</p>
 
 				<p>If you prefer learning through video, this could prove useful. It is a little dated however.</p>

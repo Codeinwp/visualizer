@@ -144,7 +144,7 @@ abstract class Visualizer_Render_Sidebar extends Visualizer_Render {
 				// translators: %1$s - HTML link tag, %2$s - HTML closing link tag, %3$s - HTML link tag, %4$s - HTML closing link tag.
 					__( 'Configure the graph by providing configuration variables right from the %1$sGoogle Visualization API%2$s. You can refer to %3$sCommon Snippets%4$s for examples.', 'visualizer' ), '<a href="https://developers.google.com/chart/interactive/docs/gallery/?#configuration-options" target="_blank">',
 					'</a>',
-					'<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">',
+					'<a href="' . esc_url( tsdk_utmify( 'https://docs.themeisle.com/visualizer-charts-and-graphs/manual-configuration', 'manual-configuration', 'chart-editor' ) ) . '" target="_blank">',
 					'</a>'
 				) . '</span>'
 			);

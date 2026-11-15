@@ -256,7 +256,7 @@ class Visualizer_Source_Query extends Visualizer_Source {
 	 * @return string
 	 */
 	private function html( $headers, $results ) {
-		return Visualizer_Render_Layout::show( 'db-wizard-results', $headers, $results );
+		return Visualizer_Render_Layout::show( 'db-wizard-results', Visualizer_Module::sanitize_chart_data( $headers ), Visualizer_Module::sanitize_chart_data( $results ) );
 	}
 
 	/**

@@ -393,7 +393,7 @@ abstract class Visualizer_Render_Sidebar_ChartJS extends Visualizer_Render_Sideb
 					__( 'Configure the graph by providing configuration variables right from the %1$sChartJS API%2$s. You can refer to %3$sCommon Snippets%4$s for examples.', 'visualizer' ),
 					'<a href="https://www.chartjs.org/docs/latest/configuration/" target="_blank">',
 					'</a>',
-					'<a href="https://docs.themeisle.com/article/728-manual-configuration" target="_blank">',
+					'<a href="' . esc_url( tsdk_utmify( 'https://docs.themeisle.com/visualizer-charts-and-graphs/manual-configuration', 'manual-configuration', 'chart-editor' ) ) . '" target="_blank">',
 					'</a>'
 				) . '</span>'
 			);
