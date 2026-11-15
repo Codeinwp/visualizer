@@ -4,7 +4,7 @@ Tags: charts, tables, datatable, data-visualization, ai-charts
 Requires at least: 5.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.0.10
+Stable tag: 4.0.11
 License: GPL v2.0 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 
@@ -244,6 +244,15 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 8. Block editor - Chart Library
 
 == Changelog ==
+
+##### [Version 4.0.11](https://github.com/Codeinwp/visualizer/compare/v4.0.10...v4.0.11) (2026-11-15)
+
+- Added a Help panel to make it easier to contact support and find answers
+- Enhanced security
+- Updated dependencies
+
+
+
 
 ##### [Version 4.0.10](https://github.com/Codeinwp/visualizer/compare/v4.0.9...v4.0.10) (2026-10-26)
 
