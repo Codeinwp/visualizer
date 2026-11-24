@@ -8,7 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
  */
 const {
 	Component,
-	Fragment
+	Fragment,
+	createRef
 } = wp.element;
 
 class DataTables extends Component {
@@ -19,6 +20,7 @@ class DataTables extends Component {
 		this.dataRenderer = this.dataRenderer.bind( this );
 
 		this.table;
+		this.tableRef = createRef();
 		this.uniqueId = uuidv4();
 	}
 
@@ -34,12 +36,12 @@ class DataTables extends Component {
 		if ( this.props !== prevProps ) {
 			if ( this.props.options.responsive_bool !== prevProps.options.responsive_bool ) {
 				if ( 'true' === prevProps.options.responsive_bool ) {
-					document.getElementById( `dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).classList.remove( 'collapsed' );
+					this.tableRef.current.classList.remove( 'collapsed' );
 				}
 			}
 
 			this.table.destroy();
-			document.getElementById( `dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).innerHTML = '';
+			this.tableRef.current.innerHTML = '';
 			this.initDataTable( this.props.columns, this.props.rows );
 		}
 	}
@@ -84,7 +86,7 @@ class DataTables extends Component {
 			return row;
 		});
 
-		this.table = jQuery( `#dataTable-instances-${ this.props.id }-${ this.uniqueId }` ).DataTable({
+		this.table = jQuery( this.tableRef.current ).DataTable({
 			destroy: true,
 			data: data,
 			columns: columns,
@@ -192,7 +194,7 @@ class DataTables extends Component {
 					</style>
 				) }
 
-				<table id={ `dataTable-instances-${ this.props.id }-${ this.uniqueId }` }></table>
+				<table id={ `dataTable-instances-${ this.props.id }-${ this.uniqueId }` } ref={ this.tableRef }></table>
 			</Fragment>
 		);
 	}

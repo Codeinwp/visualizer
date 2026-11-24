@@ -45,12 +45,16 @@ function downloadDataUrl( dataUrl, name ) {
 /**
  * Render a single D3 chart into its container element via a sandboxed iframe.
  *
- * @param {string} id    - DOM element ID of the container
- * @param {object} chart - chart entry from visualizer.charts
+ * @param {string}       id        - DOM element ID of the container
+ * @param {object}       chart     - chart entry from visualizer.charts
+ * @param {?HTMLElement} [element] - container element, needed when it lives in another document such as the editor iframe
  */
-function renderD3Chart( id, chart ) {
-	const container = document.getElementById( id );
+function renderD3Chart( id, chart, element ) {
+	const container = element || document.getElementById( id );
 	if ( ! container ) return;
+
+	// The sandbox posts to its parent window, which is the container's window.
+	const containerWindow = container.ownerDocument.defaultView;
 
 	const code = typeof chart.code === 'string' ? chart.code : null;
 
@@ -83,7 +87,7 @@ function renderD3Chart( id, chart ) {
 			'<body><div id="chart"></div>' +
 			'<script src="' + iframeJsUrl + '"><\/script></body></html>';
 
-		const iframe = document.createElement( 'iframe' );
+		const iframe = container.ownerDocument.createElement( 'iframe' );
 		iframe.setAttribute( 'sandbox', 'allow-scripts' );
 		iframe.setAttribute( 'srcdoc', srcdoc );
 		iframe.setAttribute( 'data-viz-id', id );
@@ -95,14 +99,14 @@ function renderD3Chart( id, chart ) {
 			if ( event.source !== iframe.contentWindow ) return;
 			const msg = event.data;
 			if ( ! msg || msg.type !== 'iframe-ready' ) return;
-			window.removeEventListener( 'message', onReady );
+			containerWindow.removeEventListener( 'message', onReady );
 			iframe.contentWindow.postMessage(
 				{ type: 'render', code, series: chart.series, data: chart.data },
 				'*'
 			);
 		}
 
-		window.addEventListener( 'message', onReady );
+		containerWindow.addEventListener( 'message', onReady );
 
 		container.innerHTML = '';
 		container.appendChild( iframe );
@@ -155,7 +159,7 @@ function handleImageAction( id, name, action ) {
 		if ( viz.id ) {
 			const chart = viz.charts[ viz.id ];
 			if ( chart && chart.library === 'd3' ) {
-				renderD3Chart( viz.id, chart );
+				renderD3Chart( viz.id, chart, viz.container );
 			}
 			return;
 		}
