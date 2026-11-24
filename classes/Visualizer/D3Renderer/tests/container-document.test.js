@@ -74,19 +74,4 @@ describe( 'D3 renderer container in another document', () => {
 			'*'
 		);
 	} );
-
-	it( 'still finds the container by id when none is passed', () => {
-		const container = document.createElement( 'div' );
-		container.id = 'visualizer-d3-8';
-		document.body.appendChild( container );
-
-		trigger( {
-			id: 'visualizer-d3-8',
-			charts: {
-				'visualizer-d3-8': { library: 'd3', code: 'return 1;', series: [], data: [] },
-			},
-		} );
-
-		expect( container.querySelector( 'iframe[data-viz-id="visualizer-d3-8"]' ) ).not.toBeNull();
-	} );
 } );

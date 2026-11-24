@@ -86,6 +86,8 @@ class DataTables extends Component {
 			return row;
 		});
 
+		const responsive = !! this.props.chartsScreen || 'true' === settings.responsive_bool;
+
 		this.table = jQuery( this.tableRef.current ).DataTable({
 			destroy: true,
 			data: data,
@@ -97,13 +99,18 @@ class DataTables extends Component {
 			fixedHeader: 'true' === settings.fixedHeader_bool ? true : false,
 			scrollCollapse: !! this.props.chartsScreen || 'true' === settings.scrollCollapse_bool ? true : false,
 			scrollY: this.props.chartsScreen && 180 || ( 'true' === settings.scrollCollapse_bool && Number( settings.scrollY_int ) || false ),
-			responsive: !! this.props.chartsScreen || 'true' === settings.responsive_bool ? true : false,
+			responsive,
 			searching: false,
 			select: false,
 			lengthChange: false,
 			bFilter: false,
 			bInfo: false
 		});
+
+		// Responsive starts from a handler on the global document, which a table in the editor iframe never reaches.
+		if ( responsive && ! this.table.settings()[0]._responsive ) {
+			new jQuery.fn.dataTable.Responsive( this.table, {} );
+		}
 	}
 
 	dataRenderer( type, index ) {

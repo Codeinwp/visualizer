@@ -117,6 +117,7 @@ test.describe( 'Charts with Gutenberg Editor', () => {
 
         const preview = editor.canvas.locator('.visualizer-settings__charts-single[data-chart-type="tabular"]').first();
         await expect( preview.locator('table.dataTable tbody tr').first() ).toBeVisible();
+        await expect( preview.locator('td.dtr-control').first() ).toBeVisible();
 
         await preview.locator('.visualizer-settings__charts-controls').click();
         await editor.canvas.getByRole('button', { name: 'Done' }).click();
