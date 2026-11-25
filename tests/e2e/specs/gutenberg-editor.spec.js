@@ -6,7 +6,7 @@ const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 /**
  * Internal dependencies
  */
-const { createChartWithAdmin, deleteAllCharts } = require('../utils/common');
+const { CHART_JS_LABELS, createChartWithAdmin, deleteAllCharts } = require('../utils/common');
 
 test.describe( 'Charts with Gutenberg Editor', () => {
 
@@ -88,6 +88,42 @@ test.describe( 'Charts with Gutenberg Editor', () => {
         //await page.goto('http://localhost:8889/wp-admin/post.php?post=29&action=edit');
         await expect(page.getByLabel('Visualizer', { exact: true }).locator('h1')).toContainText('Visualizer');
         await page.getByRole('button', { name: 'Close dialog' }).click();
+    } );
+
+    test( 'draws Google charts inside the editor canvas', async ( { admin, editor, page } ) => {
+        await createChartWithAdmin( admin, page );
+
+        await admin.createNewPost();
+        await editor.insertBlock( { name: 'visualizer/chart'} );
+        await editor.canvas.locator('div').filter({ hasText: /^Display an existing chart$/ }).click();
+
+        const preview = editor.canvas.locator('.visualizer-settings__charts-single[data-chart-type="PieChart"]').first();
+        await expect( preview.locator('svg').first() ).toBeVisible();
+
+        await preview.locator('.visualizer-settings__charts-controls').click();
+        await expect( editor.canvas.locator('.visualizer-settings__chart svg').first() ).toBeVisible();
+
+        await editor.canvas.getByRole('button', { name: 'Done' }).click();
+        await expect( editor.canvas.locator('.wp-block-visualizer-chart svg').first() ).toBeVisible();
+        await expect( editor.canvas.locator('.block-editor-warning') ).toHaveCount( 0 );
+    } );
+
+    test( 'draws DataTable charts inside the editor canvas', async ( { admin, editor, page } ) => {
+        await createChartWithAdmin( admin, page, CHART_JS_LABELS.table );
+
+        await admin.createNewPost();
+        await editor.insertBlock( { name: 'visualizer/chart'} );
+        await editor.canvas.locator('div').filter({ hasText: /^Display an existing chart$/ }).click();
+
+        const preview = editor.canvas.locator('.visualizer-settings__charts-single[data-chart-type="tabular"]').first();
+        await expect( preview.locator('table.dataTable tbody tr').first() ).toBeVisible();
+        await expect( preview.locator('td.dtr-control').first() ).toBeVisible();
+
+        await preview.locator('.visualizer-settings__charts-controls').click();
+        await editor.canvas.getByRole('button', { name: 'Done' }).click();
+
+        await expect( editor.canvas.locator('.wp-block-visualizer-chart table.dataTable tbody tr').first() ).toBeVisible();
+        await expect( editor.canvas.locator('.block-editor-warning') ).toHaveCount( 0 );
     } );
 
     test( 'check widgets', async ( { admin, editor, page } ) => {

@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Chart } from 'react-google-charts';
+import GoogleChart from './GoogleChart.js';
 
 import DataTable from './DataTable.js';
 
@@ -18,7 +18,8 @@ const { apiFetch } = wp;
 
 const {
 	Component,
-	Fragment
+	Fragment,
+	createRef
 } = wp.element;
 
 const {
@@ -36,6 +37,7 @@ class Charts extends Component {
 
 		this.loadMoreCharts = this.loadMoreCharts.bind( this );
 		this.renderD3Charts = this.renderD3Charts.bind( this );
+		this.grid = createRef();
 
 		this.state = {
 			charts: null,
@@ -102,6 +104,7 @@ class Charts extends Component {
 			const code = data['visualizer-d3-code'] || data.code || '';
 			const payload = {
 				id: containerId,
+				container: this.grid.current.querySelector( `#${ containerId }` ),
 				charts: {
 					[ containerId ]: {
 						library: 'd3',
@@ -123,7 +126,7 @@ class Charts extends Component {
 		const { charts, isBusy, chartsLoaded, perPage } = this.state;
 
 		return (
-			<div className="visualizer-settings__charts">
+			<div className="visualizer-settings__charts" ref={ this.grid }>
 				<Notice
 					status="warning"
 					isDismissible={ false }
@@ -203,7 +206,7 @@ class Charts extends Component {
 														options={ data['visualizer-settings'] }
 													/>
 												) : (
-													<Chart
+													<GoogleChart
 														chartVersion={ chartVersion }
 														chartType={ chart }
 														rows={ data['visualizer-data'] }
