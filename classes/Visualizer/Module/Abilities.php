@@ -1202,6 +1202,10 @@ class Visualizer_Module_Abilities extends Visualizer_Module {
 			return $errors;
 		}
 
+		// REST and MCP requests do not load the admin file helpers.
+		if ( ! function_exists( 'wp_tempnam' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
 		$tmpfile = wp_tempnam( Visualizer_Plugin::NAME );
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$handle = $tmpfile ? fopen( $tmpfile, 'w' ) : false;
