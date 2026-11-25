@@ -4,7 +4,7 @@
 **Requires at least:** 5.2  
 **Tested up to:** 7.1  
 **Requires PHP:** 7.4  
-**Stable tag:** 4.0.11  
+**Stable tag:** 4.0.12  
 **License:** GPL v2.0 or later  
 **License URI:** http://www.opensource.org/licenses/gpl-license.php  
 
@@ -244,6 +244,15 @@ Please follow the reporting protocols outlined on our [Security Page](https://th
 8. Block editor - Chart Library
 
 ## Changelog ##
+
+##### [Version 4.0.12](https://github.com/Codeinwp/visualizer/compare/v4.0.11...v4.0.12) (2026-11-25)
+
+- Fixed chart creation through the upsert-chart ability
+- Fixed rendering of block charts inside editor iframe
+- Updated dependencies
+
+
+
 
 ##### [Version 4.0.11](https://github.com/Codeinwp/visualizer/compare/v4.0.10...v4.0.11) (2026-11-15)
 
