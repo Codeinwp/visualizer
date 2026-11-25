@@ -1,3 +1,9 @@
+##### [Version 4.0.12](https://github.com/Codeinwp/visualizer/compare/v4.0.11...v4.0.12) (2026-11-25)
+
+- Fixed chart creation through the upsert-chart ability
+- Fixed rendering of block charts inside editor iframe
+- Updated dependencies
+
 ##### [Version 4.0.11](https://github.com/Codeinwp/visualizer/compare/v4.0.10...v4.0.11) (2026-11-15)
 
 - Added a Help panel to make it easier to contact support and find answers
