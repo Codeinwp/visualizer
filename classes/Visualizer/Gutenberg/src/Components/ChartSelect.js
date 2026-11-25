@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Chart } from 'react-google-charts';
+import GoogleChart from './GoogleChart.js';
 
 import DataTable from './DataTable.js';
 
@@ -22,7 +22,8 @@ const { Button } = wp.components;
 
 const {
 	Component,
-	Fragment
+	Fragment,
+	createRef
 } = wp.element;
 
 const { InspectorControls } = wp.blockEditor || wp.editor;
@@ -81,6 +82,12 @@ visualizerMediaView.Chart = wp.media.view.MediaFrame.extend(
 );
 
 class ChartSelect extends Component {
+	constructor() {
+		super( ...arguments );
+
+		this.d3Container = createRef();
+	}
+
 	getD3ContainerId() {
 		return `visualizer-d3-select-${ this.props.id }`;
 	}
@@ -104,6 +111,7 @@ class ChartSelect extends Component {
 		const code = chart['visualizer-d3-code'] || chart.code || '';
 		const payload = {
 			id: containerId,
+			container: this.d3Container.current,
 			charts: {
 				[ containerId ]: {
 					library: 'd3',
@@ -209,6 +217,7 @@ class ChartSelect extends Component {
 						isD3 ? (
 							<div
 								id={ this.getD3ContainerId() }
+								ref={ this.d3Container }
 								className="visualizer-d3-preview"
 								style={ { height: '500px' } }
 							/>
@@ -220,7 +229,7 @@ class ChartSelect extends Component {
 								options={ data['visualizer-settings'] }
 							/>
                         ) : (
-							<Chart
+							<GoogleChart
 								chartVersion={ chartVersion }
 								chartType={ chart }
 								rows={ data['visualizer-data'] }
