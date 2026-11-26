@@ -126,6 +126,10 @@ class Visualizer_Source_Query extends Visualizer_Source {
 			'SAVEPOINT',
 			'TRANSACTION',
 			'SET',
+
+			'INTO\s+OUTFILE',
+			'INTO\s+DUMPFILE',
+			'LOAD_FILE',
 		);
 		$disallow_regex = implode(
 			'|',
