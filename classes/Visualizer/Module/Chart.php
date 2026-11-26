@@ -651,7 +651,7 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		$_POST['save_chart_image'] = isset( $_POST['save_chart_image'] ) && 'yes' === $_POST['save_chart_image'] ? true : false;
 		$_POST['lazy_load_chart']  = isset( $_POST['lazy_load_chart'] ) && 'yes' === $_POST['lazy_load_chart'] ? true : false;
 
-		if ( isset( $_POST['chart-img'] ) && ! empty( $_POST['chart-img'] ) ) {
+		if ( ! empty( $_POST['chart-img'] ) && isset( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'] ) ) {
 			$attachment_id = $this->save_chart_image( $_POST['chart-img'], $chart_id, $_POST['save_chart_image'] );
 			if ( $attachment_id ) {
 				update_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, $attachment_id );
@@ -1752,9 +1752,11 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 	 * @return int Attachment ID, or 0 when no attachment was saved.
 	 */
 	public function save_chart_image( $base64_img, $chart_id, $save_attachment = true ) {
-		// Delete old chart image.
-		$old_attachment_id = get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, true );
-		if ( $old_attachment_id ) {
+		$filename = 'visualization-' . $chart_id . '.png';
+
+		// Delete the old chart image, but only a file that this method made for this chart.
+		$old_attachment_id = (int) get_post_meta( $chart_id, Visualizer_Plugin::CF_CHART_IMAGE, true );
+		if ( $old_attachment_id && basename( (string) get_attached_file( $old_attachment_id ) ) === $filename ) {
 			wp_delete_attachment( $old_attachment_id, true );
 		}
 
@@ -1773,7 +1775,6 @@ class Visualizer_Module_Chart extends Visualizer_Module {
 		if ( false === $decoded || 0 !== strncmp( $decoded, "\x89PNG\r\n\x1a\n", 8 ) ) {
 			return 0;
 		}
-		$filename        = 'visualization-' . $chart_id . '.png';
 		$file_type       = 'image/png';
 		$hashed_filename = $filename;
 
