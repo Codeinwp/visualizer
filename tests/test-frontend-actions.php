@@ -45,4 +45,25 @@ class Test_Visualizer_Frontend_Actions extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'onfocus', $markup );
 		$this->assertStringContainsString( 'data-visualizer-type="csv"', $markup );
 	}
+
+	/**
+	 * The key and the title of an action that a filter adds stay inside their attributes.
+	 */
+	public function test_filtered_action_key_and_title_cannot_add_an_attribute() {
+		add_filter(
+			'visualizer_action_buttons',
+			function ( $actions ) {
+				$actions['share" data-x="1'] = array(
+					'label' => 'Share',
+					'title' => 'Share" onfocus="alert(1)',
+				);
+				return $actions;
+			}
+		);
+
+		$markup = $this->render_chart_with_actions( array( 'share" data-x="1' ) );
+
+		$this->assertStringContainsString( 'data-visualizer-type="share&quot; data-x=&quot;1"', $markup );
+		$this->assertStringContainsString( 'title="Share&quot; onfocus=&quot;alert(1)"', $markup );
+	}
 }
