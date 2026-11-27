@@ -52,7 +52,7 @@ test.describe( 'AI Chart Builder preview', () => {
 		await admin.visitAdminPage( 'admin.php?page=visualizer' );
 		await waitForLibraryToLoad( page );
 
-		// Save a chart whose code changes the title of the top window when it can reach it.
+		// Save a chart whose code changes the title of the top window when it can reach it. The sandbox refuses that access.
 		const chartId = await page.evaluate( async () => {
 			const { ajaxUrl, nonce } = window.vizAIBuilder;
 			const post = async ( fields ) => {
@@ -66,7 +66,7 @@ test.describe( 'AI Chart Builder preview', () => {
 				nonce,
 				chart_id: created.chart_id,
 				title: 'Sandbox check',
-				code: 'd3.select( container ).append( "svg" ).append( "rect" ); window.top.document.title = "code ran in the admin page";',
+				code: 'd3.select( container ).append( "svg" ).append( "rect" ); try { window.top.document.title = "code ran in the admin page"; } catch ( e ) {}',
 			} );
 			return created.chart_id;
 		} );
