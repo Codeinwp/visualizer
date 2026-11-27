@@ -475,9 +475,12 @@ class Visualizer_Module_Frontend extends Visualizer_Module {
 					$key        = $array[0];
 					$mime       = end( $array );
 				}
+				if ( ! isset( $actions[ $key ] ) ) {
+					continue;
+				}
 				$label          = $actions[ $key ]['label'];
 				$title          = $actions[ $key ]['title'];
-				$actions_div    .= sprintf( '<a href="#" class="visualizer-action visualizer-action-%s" data-visualizer-type="%s" data-visualizer-chart-id="%s" data-visualizer-container-id="%s" data-visualizer-mime="%s" title="%s"', $key, $key, $atts['id'], $id, $mime, $title );
+				$actions_div    .= sprintf( '<a href="#" class="visualizer-action visualizer-action-%s" data-visualizer-type="%s" data-visualizer-chart-id="%s" data-visualizer-container-id="%s" data-visualizer-mime="%s" title="%s"', esc_attr( $key ), esc_attr( $key ), esc_attr( $atts['id'] ), esc_attr( $id ), esc_attr( $mime ), esc_attr( $title ) );
 
 				if ( 'copy' === $key ) {
 					$copy           = $this->_getDataAs( $atts['id'], 'csv' );
