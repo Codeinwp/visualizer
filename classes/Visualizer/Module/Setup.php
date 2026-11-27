@@ -68,6 +68,7 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		$this->_addAction( 'init', 'maybe_reschedule_refresh_db' );
 		$this->_addAction( 'action_scheduler_ensure_recurring_actions', 'ensure_refresh_db_action' );
 		$this->_addFilter( 'visualizer_schedule_refresh_chart', 'refresh_db_for_chart', 10, 3 );
+		$this->_addFilter( 'is_protected_meta', 'protect_chart_meta', 10, 3 );
 
 		$this->_addAction( 'admin_init', 'adminInit' );
 		$this->_addAction( 'init', 'setupCustomPostTypes' );
@@ -310,6 +311,22 @@ class Visualizer_Module_Setup extends Visualizer_Module {
 		}
 	}
 
+
+	/**
+	 * Marks the chart meta as protected.
+	 *
+	 * Chart meta selects the data source and holds its query, URL and credentials. A protected key
+	 * cannot be written through the Custom Fields panel, XML-RPC or the REST API, so only the plugin sets it.
+	 *
+	 * @param bool   $is_protected Whether the key is protected.
+	 * @param string $meta_key     Meta key.
+	 * @param string $meta_type    Type of the object the meta belongs to.
+	 *
+	 * @return bool
+	 */
+	public function protect_chart_meta( $is_protected, $meta_key, $meta_type ) {
+		return $is_protected || ( 'post' === $meta_type && 0 === strpos( (string) $meta_key, 'visualizer-' ) );
+	}
 
 	/**
 	 * Refresh the specific chart from the db.
