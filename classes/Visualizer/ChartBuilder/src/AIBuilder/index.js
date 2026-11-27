@@ -8,36 +8,87 @@
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Box, Flex, Spinner, Text } from '@chakra-ui/react';
-import * as d3 from 'd3';
-import * as topojson from 'topojson-client';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { createChart, getChartNonce, fetchChart, saveChart, generateChart, pollStatus, uploadCsvString } from './api';
 import DataSource from './DataSource';
 
-/** Convert Visualizer series + data arrays to plain objects for D3. */
-function toD3Values( series, data ) {
-	return data.map( ( row ) => {
-		const obj = {};
-		series.forEach( ( col, i ) => { obj[ col.label ] = row[ i ]; } );
-		return obj;
+/** How long the sandbox gets to answer before the render counts as failed. */
+const RENDER_TIMEOUT_MS = 10000;
+
+/**
+ * Run D3 code for a container, inside the sandboxed iframe of the D3 renderer.
+ *
+ * Chart code is saved by any user who can create charts, so it never runs in the wp-admin document.
+ *
+ * @param {string}      code      Chart code.
+ * @param {HTMLElement} container Element that receives the iframe. It must be in the document.
+ * @param {Array}       series    Chart series.
+ * @param {Array}       data      Chart rows.
+ * @return {Promise<?string>} The error message when the code fails, otherwise null.
+ */
+function renderD3( code, container, series, data ) {
+	if ( ! code || ! container ) return Promise.resolve( null );
+	container.innerHTML = '';
+
+	const iframeJsUrl = window.vizD3Renderer && window.vizD3Renderer.iframeJsUrl;
+	if ( ! iframeJsUrl ) {
+		return Promise.resolve( 'Chart error: the chart renderer is not loaded.' );
+	}
+
+	return new Promise( ( resolve ) => {
+		const view = container.ownerDocument.defaultView;
+		const iframe = container.ownerDocument.createElement( 'iframe' );
+		iframe.setAttribute( 'sandbox', 'allow-scripts' );
+		iframe.setAttribute(
+			'srcdoc',
+			'<!DOCTYPE html><html><head><meta charset="utf-8">' +
+			'<style>*{margin:0;padding:0;box-sizing:border-box}body{overflow:hidden}' +
+			'#chart{width:100%;height:100vh}</style></head>' +
+			'<body><div id="chart"></div>' +
+			'<script src="' + iframeJsUrl + '"><\/script></body></html>'
+		);
+		iframe.style.cssText = 'border:0;width:100%;height:100%;min-height:320px;display:block;';
+
+		let timer = null;
+		function finish( error ) {
+			view.removeEventListener( 'message', onMessage );
+			clearTimeout( timer );
+			resolve( error );
+		}
+		function onMessage( event ) {
+			if ( event.source !== iframe.contentWindow || ! event.data ) return;
+			if ( event.data.type === 'iframe-ready' ) {
+				iframe.contentWindow.postMessage( { type: 'render', code, series, data }, '*' );
+			}
+			if ( event.data.type === 'render-result' ) {
+				finish( typeof event.data.error === 'string' ? `Chart error: ${ event.data.error }` : null );
+			}
+		}
+		timer = setTimeout( () => finish( 'Chart error: the preview did not answer.' ), RENDER_TIMEOUT_MS );
+
+		view.addEventListener( 'message', onMessage );
+		container.appendChild( iframe );
 	} );
 }
 
-/** Execute D3 code in a container element. Returns an error message if it fails. */
-function renderD3( code, container, series, data ) {
-	if ( ! code || ! container ) return;
-	const values = toD3Values( series, data );
-	container.innerHTML = '';
-	try {
-		// eslint-disable-next-line no-new-func
-		new Function( 'd3', 'topojson', 'container', 'data', code )( d3, topojson, container, values );
-		return null;
-	} catch ( err ) {
-		const msg = `Chart error: ${ err.message }`;
-		container.innerHTML = `<p style="color:#c00;padding:12px">${ msg }</p>`;
-		return msg;
-	}
+/**
+ * Run D3 code out of sight, to learn whether it works with the given data.
+ *
+ * @param {string} code   Chart code.
+ * @param {Array}  series Chart series.
+ * @param {Array}  data   Chart rows.
+ * @return {Promise<?string>} The error message when the code fails, otherwise null.
+ */
+function testD3( code, series, data ) {
+	const host = document.createElement( 'div' );
+	host.style.cssText = 'position:absolute;left:-9999px;top:0;width:800px;height:400px;visibility:hidden;';
+	document.body.appendChild( host );
+
+	return renderD3( code, host, series, data ).then( ( error ) => {
+		host.remove();
+		return error;
+	} );
 }
 
 // ── Palette (matches ChooserModal / WP-admin style) ───────────────────────────
@@ -239,20 +290,27 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 			previewRef.current.innerHTML = '';
 			return;
 		}
-		const err = renderD3( activeCode, previewRef.current, previewSeries, previewData );
-		if ( editOpen ) {
-			setEditorError( err || null );
-			return;
-		}
-		if ( err ) {
-			setRenderError( err );
-			if ( codeOriginRef.current === 'agent' && ! fixing && ! fixAttemptedRef.current ) {
-				fixAttemptedRef.current = true;
-				autoFix( err );
+		let stale = false;
+		renderD3( activeCode, previewRef.current, previewSeries, previewData ).then( ( err ) => {
+			if ( stale ) return;
+			if ( editOpen ) {
+				setEditorError( err || null );
+				return;
 			}
-		} else {
-			setRenderError( null );
-		}
+			if ( err ) {
+				setRenderError( err );
+				if ( codeOriginRef.current === 'agent' && ! fixing && ! fixAttemptedRef.current ) {
+					fixAttemptedRef.current = true;
+					autoFix( err );
+				}
+			} else {
+				setRenderError( null );
+			}
+		} );
+
+		return () => {
+			stale = true;
+		};
 	}, [ code, draftCode, editOpen, previewSeries, previewData ] );
 
 	// Fullscreen render
@@ -285,16 +343,16 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 			setDataIncompatible( __( 'The column headers changed. Please regenerate to update the chart.', 'visualizer' ) );
 			setRenderError( null );
 		} else if ( code ) {
-			const testContainer = document.createElement( 'div' );
-			const err = renderD3( code, testContainer, newSeries, newData );
-			if ( err ) {
-				setDataIncompatible( __( 'These data changes do not match the current chart. Please regenerate to update the preview.', 'visualizer' ) );
-				setRenderError( null );
-			} else {
-				setPreviewSeries( newSeries );
-				setPreviewData( newData );
-				setDataIncompatible( null );
-			}
+			testD3( code, newSeries, newData ).then( ( err ) => {
+				if ( err ) {
+					setDataIncompatible( __( 'These data changes do not match the current chart. Please regenerate to update the preview.', 'visualizer' ) );
+					setRenderError( null );
+				} else {
+					setPreviewSeries( newSeries );
+					setPreviewData( newData );
+					setDataIncompatible( null );
+				}
+			} );
 		} else {
 			setPreviewSeries( newSeries );
 			setPreviewData( newData );
@@ -484,23 +542,23 @@ export default function AIBuilder( { onClose, initialChartId = null } ) {
 
 	function saveEditor() {
 		if ( ! draftCode ) return;
-		if ( dataLoaded && Array.isArray( series ) && Array.isArray( data ) && series.length ) {
-			const testContainer = document.createElement( 'div' );
-			const err = renderD3( draftCode, testContainer, series, data );
+		const hasData = dataLoaded && Array.isArray( series ) && Array.isArray( data ) && series.length;
+		const tested = hasData ? testD3( draftCode, series, data ) : Promise.resolve( null );
+		tested.then( ( err ) => {
 			if ( err ) {
 				setEditorError( err );
 				return;
 			}
-		}
-		setCode( draftCode );
-		codeOriginRef.current = 'manual';
-		setPreviewSeries( series );
-		setPreviewData( data );
-		setDataIncompatible( null );
-		setEditorError( null );
-		setRenderError( null );
-		fixAttemptedRef.current = false;
-		setEditOpen( false );
+			setCode( draftCode );
+			codeOriginRef.current = 'manual';
+			setPreviewSeries( series );
+			setPreviewData( data );
+			setDataIncompatible( null );
+			setEditorError( null );
+			setRenderError( null );
+			fixAttemptedRef.current = false;
+			setEditOpen( false );
+		} );
 	}
 
 	// ── Init / error states ───────────────────────────────────────────────────
