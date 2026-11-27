@@ -12,6 +12,7 @@
  *
  * Sends postMessage replies to the parent:
  *   { type: 'iframe-ready' }
+ *   { type: 'render-result', error }   error is null, or the message of the error the code threw
  *   { type: 'export-image-result', dataUrl }
  */
 import * as d3 from 'd3';
@@ -65,13 +66,16 @@ window.addEventListener( 'message', function ( event ) {
 		if ( ! code || ! container ) return;
 
 		const values = toD3Values( series, data );
+		let error = null;
 		try {
 			// eslint-disable-next-line no-new-func
 			new Function( 'd3', 'topojson', 'container', 'data', code )( d3, topojson, container, values );
 		} catch ( err ) {
+			error = String( err && err.message ? err.message : err );
 			container.innerHTML =
-				'<p style="color:#c00;padding:12px">Chart render error: ' + err.message + '</p>';
+				'<p style="color:#c00;padding:12px">Chart render error: ' + error + '</p>';
 		}
+		event.source.postMessage( { type: 'render-result', error }, '*' );
 	}
 
 	if ( msg.type === 'export-image' ) {

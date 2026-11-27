@@ -46,3 +46,38 @@ test.describe( 'AI Chart Builder chooser', () => {
 		await expect( page.locator( '.viz-ai-builder-modal' ) ).toHaveCount( 0 );
 	} );
 } );
+
+test.describe( 'AI Chart Builder preview', () => {
+	test( 'runs saved chart code in the sandbox, not in the admin page', async ( { admin, page } ) => {
+		await admin.visitAdminPage( 'admin.php?page=visualizer' );
+		await waitForLibraryToLoad( page );
+
+		// Save a chart whose code changes the title of the top window when it can reach it.
+		const chartId = await page.evaluate( async () => {
+			const { ajaxUrl, nonce } = window.vizAIBuilder;
+			const post = async ( fields ) => {
+				const response = await fetch( ajaxUrl, { method: 'POST', credentials: 'same-origin', body: new URLSearchParams( fields ) } );
+				return ( await response.json() ).data;
+			};
+			const created = await post( { action: 'visualizer-ai-create', nonce } );
+			await post( { action: 'visualizer-ai-upload', nonce: created.upload_nonce, chart_id: created.chart_id, source_type: 'csv_string', csv_data: 'a,b\nstring,number\nx,1' } );
+			await post( {
+				action: 'visualizer-ai-save',
+				nonce,
+				chart_id: created.chart_id,
+				title: 'Sandbox check',
+				code: 'd3.select( container ).append( "svg" ).append( "rect" ); window.top.document.title = "code ran in the admin page";',
+			} );
+			return created.chart_id;
+		} );
+
+		await admin.visitAdminPage( 'admin.php?page=visualizer' );
+		await waitForLibraryToLoad( page );
+		const title = await page.title();
+		await page.locator( `.visualizer-chart-edit[data-chart="${ chartId }"]` ).click();
+
+		const preview = page.frameLocator( '.viz-ai-builder-modal iframe[sandbox="allow-scripts"]' );
+		await expect( preview.locator( 'svg rect' ) ).toHaveCount( 1 );
+		expect( await page.title() ).toBe( title );
+	} );
+} );
